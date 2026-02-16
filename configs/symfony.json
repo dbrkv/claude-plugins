@@ -1,7 +1,7 @@
 {
   "name": "symfony",
   "description": "Symfony framework",
-  "base_url": "https://symfony.com/doc",
+  "base_url": "https://symfony.com/doc/7.4",
   "url_patterns": {
     "include": ["/doc/7.4/"],
     "exclude": ["/doc/7.4/contributing/", "/doc/cloud/", "/doc/7.4/cloud/"]
