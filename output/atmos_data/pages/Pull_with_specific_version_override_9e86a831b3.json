@@ -1,0 +1,8 @@
+{
+  "title": "Pull with specific version override",
+  "content": "atmos vendor pull --component vpc --version 2.2.0",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#pull-with-specific-version-override",
+  "links": []
+}

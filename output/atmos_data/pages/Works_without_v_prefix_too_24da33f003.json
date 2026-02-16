@@ -1,0 +1,24 @@
+{
+  "title": "Works without 'v' prefix too",
+  "content": "$ atmos version show 1.95.0\nbash",
+  "code_samples": [
+    {
+      "code": "## Why This Matters\n\n### For Platform Engineers\n\nBefore, discovering Atmos releases meant context-switching to GitHub:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h3",
+      "text": "For Platform Engineers",
+      "id": "for-platform-engineers"
+    }
+  ],
+  "url": "llms-txt#works-without-'v'-prefix-too",
+  "links": []
+}

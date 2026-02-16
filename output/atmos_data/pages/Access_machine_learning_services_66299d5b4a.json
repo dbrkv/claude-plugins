@@ -1,0 +1,13 @@
+{
+  "title": "Access machine learning services",
+  "content": "atmos auth console --destination sagemaker\natmos auth console --destination bedrock\nshell",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#access-machine-learning-services",
+  "links": []
+}

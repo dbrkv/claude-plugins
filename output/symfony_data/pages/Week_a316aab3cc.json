@@ -1,0 +1,87 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Week.html",
+  "title": "Week",
+  "content": "The Week constraint was introduced in Symfony 7.2.\n\nValidates that a given string (or an object implementing the Stringable PHP interface) represents a valid week number according to the ISO-8601 standard (e.g. 2025-W01).\n\nIf you wanted to ensure that the startWeek property of an OnlineCourse class is between the first and the twentieth week of the year 2022, you could do the following:\n\nThis constraint not only checks that the value matches the week number pattern, but it also verifies that the specified week actually exists in the calendar. According to the ISO-8601 standard, years can have either 52 or 53 weeks. For example, 2022-W53 is not valid because 2022 only had 52 weeks; but 2020-W53 is valid because 2020 had 53 weeks.\n\ntype: string default: null\n\nThe minimum week number that the value must match.\n\ntype: string default: null\n\nThe maximum week number that the value must match.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: This value does not represent a valid week in the ISO 8601 format.\n\nThis is the message that will be shown if the value does not match the ISO 8601 week format.\n\ntype: string default: The week \"{{ value }}\" is not a valid week.\n\nThis is the message that will be shown if the value does not match a valid week number.\n\nYou can use the following parameters in this message:\n\ntype: string default: The value should not be before week \"{{ min }}\".\n\nThis is the message that will be shown if the value is lower than the minimum week number.\n\nYou can use the following parameters in this message:\n\ntype: string default: The value should not be after week \"{{ max }}\".\n\nThis is the message that will be shown if the value is higher than the maximum week number.\n\nYou can use the following parameters in this message:\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Week",
+      "id": "week"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "min",
+      "id": "min"
+    },
+    {
+      "level": "h3",
+      "text": "max",
+      "id": "max"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "invalidFormatMessage",
+      "id": "invalidformatmessage"
+    },
+    {
+      "level": "h3",
+      "text": "invalidWeekNumberMessage",
+      "id": "invalidweeknumbermessage"
+    },
+    {
+      "level": "h3",
+      "text": "tooLowMessage",
+      "id": "toolowmessage"
+    },
+    {
+      "level": "h3",
+      "text": "tooHighMessage",
+      "id": "toohighmessage"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/OnlineCourse.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass OnlineCourse\n{\n    #[Assert\\Week(min: '2022-W01', max: '2022-W20')]\n    protected string $startWeek;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\OnlineCourse:\n    properties:\n        startWeek:\n            - Week:\n                min: '2022-W01'\n                max: '2022-W20'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\OnlineCourse\">\n        <property name=\"startWeek\">\n            <constraint name=\"Week\">\n                <option name=\"min\">2022-W01</option>\n                <option name=\"max\">2022-W20</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/OnlineCourse.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass OnlineCourse\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('startWeek', new Assert\\Week(\n            min: '2022-W01',\n            max: '2022-W20',\n        ));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Week.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

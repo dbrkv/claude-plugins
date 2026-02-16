@@ -1,0 +1,23 @@
+{
+  "title": "component stack",
+  "content": "components:\n  terraform:\n    my-app:\n      env:\n        # From stack manifest globals\n        AWS_REGION: !env REGION\n\n# From OS environment (with default)\n        AWS_PROFILE: !env AWS_PROFILE default-profile\nyaml\n  # `app_name` will be set to the default value `my app` if the environment variable `APP_NAME` is not present in the environment\n  app_name: !env 'APP_NAME \"my app\"'\n\n# `app_description` will be set to the default value `my app description` if the environment variable `APP_DESCRIPTION` is not present in the environment\n  app_description: !env 'APP_DESCRIPTION \"my app description\"'\nyaml",
+  "code_samples": [
+    {
+      "code": "## Handling default values with spaces\n\nIf you need to provide default values with spaces, enclose them in double quotes and use single quotes around the whole expression.\n\nFor example:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Handling Nested Quotes**\n\nIf your default value contains both single and double quotes, wrap the entire function call in single quotes while keeping any required double quotes inside the expression:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Handling default values with spaces",
+      "id": "handling-default-values-with-spaces"
+    }
+  ],
+  "url": "llms-txt#component-stack",
+  "links": []
+}

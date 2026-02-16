@@ -1,0 +1,8 @@
+{
+  "title": "CPU profile (30-second sample)",
+  "content": "go tool pprof http://localhost:6060/debug/pprof/profile",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cpu-profile-(30-second-sample)",
+  "links": []
+}

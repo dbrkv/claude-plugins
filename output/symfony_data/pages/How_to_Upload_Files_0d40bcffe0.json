@@ -1,0 +1,75 @@
+{
+  "url": "https://symfony.com/doc/7.3/controller/upload_file.html",
+  "title": "How to Upload Files",
+  "content": "Instead of handling file uploading yourself, you may consider using the VichUploaderBundle community bundle. This bundle provides all the common operations (such as file renaming, saving and deleting) and it's tightly integrated with Doctrine ORM, MongoDB ODM, PHPCR ODM and Propel.\n\nImagine that you have a Product entity in your application and you want to add a PDF brochure for each product. To do so, add a new property called brochureFilename in the Product entity:\n\nNote that the type of the brochureFilename column is string instead of binary or blob because it only stores the PDF file name instead of the file contents.\n\nThe next step is to add a new field to the form that manages the Product entity. This must be a FileType field so the browsers can display the file upload widget. The trick to make it work is to add the form field as \"unmapped\", so Symfony doesn't try to get/set its value from the related entity:\n\nNow, update the template that renders the form to display the new brochure field (the exact template code to add depends on the method used by your application to customize form rendering):\n\nFinally, you need to update the code of the controller that handles the form:\n\nThere are some important things to consider in the code of the above controller:\n\nIf a directory was uploaded, getClientOriginalPath() will contain the webkitRelativePath as provided by the browser. Otherwise this value will be identical to getClientOriginalName().\n\nThe getClientOriginalPath() method was introduced in Symfony 7.1.\n\nYou can use the following code to link to the PDF brochure of a product:\n\nWhen creating a form to edit an already persisted item, the file form type still expects a File instance. As the persisted entity now contains only the relative file path, you first have to concatenate the configured upload path with the stored filename and create a new File class:\n\nTo avoid logic in controllers, making them big, you can extract the upload logic to a separate service:\n\nIn addition to the generic FileException class there are other exception classes to handle failed file uploads: CannotWriteFileException, ExtensionFileException, FormSizeFileException, IniSizeFileException, NoFileException, NoTmpDirFileException, and PartialFileException.\n\nThen, define a service for this class:\n\nNow you're ready to use this service in the controller:\n\nThe previous versions of this article explained how to handle file uploads using Doctrine listeners. However, this is no longer recommended, because Doctrine events shouldn't be used for your domain logic.\n\nMoreover, Doctrine listeners are often dependent on internal Doctrine behavior which may change in future versions. Also, they can introduce performance issues unwillingly (because your listener persists entities which cause other entities to be changed and persisted).\n\nAs an alternative, you can use Symfony events, listeners and subscribers.\n\nMeasure & Improve Symfony Code Performance\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Upload Files",
+      "id": "how-to-upload-files"
+    },
+    {
+      "level": "h2",
+      "text": "Creating an Uploader Service",
+      "id": "creating-an-uploader-service"
+    },
+    {
+      "level": "h2",
+      "text": "Using a Doctrine Listener",
+      "id": "using-a-doctrine-listener"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Product.php\nnamespace App\\Entity;\n\nuse Doctrine\\ORM\\Mapping as ORM;\n\nclass Product\n{\n    // ...\n\n    #[ORM\\Column(type: 'string')]\n    private string $brochureFilename;\n\n    public function getBrochureFilename(): string\n    {\n        return $this->brochureFilename;\n    }\n\n    public function setBrochureFilename(string $brochureFilename): self\n    {\n        $this->brochureFilename = $brochureFilename;\n\n        return $this;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/ProductType.php\nnamespace App\\Form;\n\nuse App\\Entity\\Product;\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\nuse Symfony\\Component\\Validator\\Constraints\\File;\n\nclass ProductType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder\n            // ...\n            ->add('brochure', FileType::class, [\n                'label' => 'Brochure (PDF file)',\n\n                // unmapped means that this field is not associated to any entity property\n                'mapped' => false,\n\n                // make it optional so you don't have to re-upload the PDF file\n                // every time you edit the Product details\n                'required' => false,\n\n                // unmapped fields can't define their validation using attributes\n                // in the associated entity, so you can use the PHP constraint classes\n                'constraints' => [\n                    new File(\n                        maxSize: '1024k',\n                        extensions: ['pdf'],\n                        extensionsMessage: 'Please upload a valid PDF document',\n                    )\n                ],\n            ])\n            // ...\n        ;\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'data_class' => Product::class,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "{# templates/product/new.html.twig #}\n<h1>Adding a new product</h1>\n\n{{ form_start(form) }}\n    {# ... #}\n\n    {{ form_row(form.brochure) }}\n{{ form_end(form) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/ProductController.php\nnamespace App\\Controller;\n\nuse App\\Entity\\Product;\nuse App\\Form\\ProductType;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autowire;\nuse Symfony\\Component\\HttpFoundation\\File\\Exception\\FileException;\nuse Symfony\\Component\\HttpFoundation\\File\\UploadedFile;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\nuse Symfony\\Component\\String\\Slugger\\SluggerInterface;\n\nclass ProductController extends AbstractController\n{\n    #[Route('/product/new', name: 'app_product_new')]\n    public function new(\n        Request $request,\n        SluggerInterface $slugger,\n        #[Autowire('%kernel.project_dir%/public/uploads/brochures')] string $brochuresDirectory\n    ): Response\n    {\n        $product = new Product();\n        $form = $this->createForm(ProductType::class, $product);\n        $form->handleRequest($request);\n\n        if ($form->isSubmitted() && $form->isValid()) {\n            /** @var UploadedFile $brochureFile */\n            $brochureFile = $form->get('brochure')->getData();\n\n            // this condition is needed because the 'brochure' field is not required\n            // so the PDF file must be processed only when a file is uploaded\n            if ($brochureFile) {\n                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);\n                // this is needed to safely include the file name as part of the URL\n                $safeFilename = $slugger->slug($originalFilename);\n                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();\n\n                // Move the file to the directory where brochures are stored\n                try {\n                    $brochureFile->move($brochuresDirectory, $newFilename);\n                } catch (FileException $e) {\n                    // ... handle exception if something happens during file upload\n                }\n\n                // updates the 'brochureFilename' property to store the PDF file name\n                // instead of its contents\n                $product->setBrochureFilename($newFilename);\n            }\n\n            // ... persist the $product variable or any other work\n\n            return $this->redirectToRoute('app_product_list');\n        }\n\n        return $this->render('product/new.html.twig', [\n            'form' => $form,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "<a href=\"{{ asset('uploads/brochures/' ~ product.brochureFilename) }}\">View brochure (PDF)</a>",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\File\\File;\n// ...\n\n$product->setBrochureFilename(\n    new File($brochuresDirectory.DIRECTORY_SEPARATOR.$product->getBrochureFilename())\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Service/FileUploader.php\nnamespace App\\Service;\n\nuse Symfony\\Component\\HttpFoundation\\File\\Exception\\FileException;\nuse Symfony\\Component\\HttpFoundation\\File\\UploadedFile;\nuse Symfony\\Component\\String\\Slugger\\SluggerInterface;\n\nclass FileUploader\n{\n    public function __construct(\n        private string $targetDirectory,\n        private SluggerInterface $slugger,\n    ) {\n    }\n\n    public function upload(UploadedFile $file): string\n    {\n        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);\n        $safeFilename = $this->slugger->slug($originalFilename);\n        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();\n\n        try {\n            $file->move($this->getTargetDirectory(), $fileName);\n        } catch (FileException $e) {\n            // ... handle exception if something happens during file upload\n        }\n\n        return $fileName;\n    }\n\n    public function getTargetDirectory(): string\n    {\n        return $this->targetDirectory;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Service\\FileUploader:\n        arguments:\n            $targetDirectory: '%brochures_directory%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n    <!-- ... -->\n\n    <service id=\"App\\Service\\FileUploader\">\n        <argument>%brochures_directory%</argument>\n    </service>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Service\\FileUploader;\n\nreturn static function (ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(FileUploader::class)\n        ->arg('$targetDirectory', '%brochures_directory%')\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Controller/ProductController.php\nnamespace App\\Controller;\n\nuse App\\Service\\FileUploader;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\n// ...\npublic function new(Request $request, FileUploader $fileUploader): Response\n{\n    // ...\n\n    if ($form->isSubmitted() && $form->isValid()) {\n        /** @var UploadedFile $brochureFile */\n        $brochureFile = $form->get('brochure')->getData();\n        if ($brochureFile) {\n            $brochureFileName = $fileUploader->upload($brochureFile);\n            $product->setBrochureFilename($brochureFileName);\n        }\n\n        // ...\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/controller/upload_file.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html",
+    "https://symfony.com/doc/7.3/doctrine/events.html",
+    "https://symfony.com/doc/7.3/event_dispatcher.html"
+  ]
+}

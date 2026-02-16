@@ -1,0 +1,8 @@
+{
+  "title": "Use a specific identity",
+  "content": "atmos auth shell --identity prod-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-a-specific-identity",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Revert the specific commit",
+  "content": "git revert <commit-sha>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#revert-the-specific-commit",
+  "links": []
+}

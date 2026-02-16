@@ -1,0 +1,8 @@
+{
+  "title": "With filtering: manageable",
+  "content": "$ atmos terraform plan vpc --stack <TAB>\ndev-us-east-1  staging-us-east-1  prod-us-east-1",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#with-filtering:-manageable",
+  "links": []
+}

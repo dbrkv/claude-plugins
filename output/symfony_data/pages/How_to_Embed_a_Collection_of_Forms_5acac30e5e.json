@@ -1,0 +1,152 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/form_collections.html",
+  "title": "How to Embed a Collection of Forms",
+  "content": "Symfony Forms can embed a collection of many other forms, which is useful to edit related entities in a single form. In this article, you'll create a form to edit a Task class and, right inside the same form, you'll be able to edit, create and remove many Tag objects related to that Task.\n\nLet's start by creating a Task entity:\n\nThe ArrayCollection is specific to Doctrine and is similar to a PHP array but provides many utility methods.\n\nNow, create a Tag class. As you saw above, a Task can have many Tag objects:\n\nThen, create a form class so that a Tag object can be modified by the user:\n\nNext, let's create a form for the Task entity, using a CollectionType field of TagType forms. This will allow us to modify all the Tag elements of a Task right inside the task form itself:\n\nIn your controller, you'll create a new form from the TaskType:\n\nIn the template, you can now iterate over the existing TagType forms to render them:\n\nWhen the user submits the form, the submitted data for the tags field is used to construct an ArrayCollection of Tag objects. The collection is then set on the tag field of the Task and can be accessed via $task->getTags().\n\nSo far, this works great, but only to edit existing tags. It doesn't allow us yet to add new tags or delete existing ones.\n\nYou can embed nested collections as many levels down as you like. However, if you use Xdebug, you may receive a Maximum function nesting level of '100' reached, aborting! error. To fix this, increase the xdebug.max_nesting_level PHP setting, or render each form field by hand using form_row() instead of rendering the whole form at once (e.g form_widget(form)).\n\nPreviously you added two tags to your task in the controller. Now let the users add as many tag forms as they need directly in the browser. This requires a bit of JavaScript code.\n\nInstead of writing the needed JavaScript code yourself, you can use Symfony UX to implement this feature with only PHP and Twig code. See the Symfony UX Demo of Form Collections.\n\nBut first, you need to let the form collection know that instead of exactly two, it will receive an unknown number of tags. Otherwise, you'll see a \"This form should not contain extra fields\" error. This is done with the allow_add option:\n\nThe allow_add option also makes a prototype variable available to you. This \"prototype\" is a little \"template\" that contains all the HTML needed to dynamically create any new \"tag\" forms with JavaScript.\n\nLet's start with plain JavaScript (Vanilla JS) – if you're using Stimulus, see below.\n\nTo render the prototype, add the following data-prototype attribute to the existing <ul> in your template:\n\nOn the rendered page, the result will look something like this:\n\nNow add a button to dynamically add a new tag:\n\nIf you want to customize the HTML code in the prototype, see How to Work with Form Themes.\n\nThe form.tags.vars.prototype is a form element that looks and feels just like the individual form_widget(tag.*) elements inside your for loop. This means that you can call form_widget(), form_row() or form_label() on it. You could even choose to render only one of its fields (e.g. the name field):\n\nIf you render your whole \"tags\" sub-form at once (e.g. form_row(form.tags)), the data-prototype attribute is automatically added to the containing div, and you need to adjust the following JavaScript accordingly.\n\nNow add some JavaScript to read this attribute and dynamically add new tag forms when the user clicks the \"Add a tag\" link. Add a <script> tag somewhere on your page to include the required functionality with JavaScript:\n\nThe addFormToCollection() function's job will be to use the data-prototype attribute to dynamically add a new form when this link is clicked. The data-prototype HTML contains the tag's text input element with a name of task[tags][__name__][name] and id of task_tags___name___name. The __name__ is a placeholder, which you'll replace with a unique, incrementing number (e.g. task[tags][3][name]):\n\nNow, each time a user clicks the Add a tag link, a new sub form will appear on the page. When the form is submitted, any new tag forms will be converted into new Tag objects and added to the tags property of the Task object.\n\nYou can find a working example in this JSFiddle.\n\nIf you're using Stimulus, wrap everything in a <div>:\n\nThen create the controller:\n\nTo make handling these new tags easier, add an \"adder\" and a \"remover\" method for the tags in the Task class:\n\nNext, add a by_reference option to the tags field and set it to false:\n\nWith these two changes, when the form is submitted, each new Tag object is added to the Task class by calling the addTag() method. Before this change, they were added internally by the form by calling $task->getTags()->add($tag). That was fine, but forcing the use of the \"adder\" method makes handling these new Tag objects easier (especially if you're using Doctrine, which you will learn about next!).\n\nYou have to create both addTag() and removeTag() methods, otherwise the form will still use setTag() even if by_reference is false. You'll learn more about the removeTag() method later in this article.\n\nSymfony can only make the plural-to-singular conversion (e.g. from the tags property to the addTag() method) for English words. Code written in any other language won't work as expected.\n\nDoctrine: Cascading Relations and saving the \"Inverse\" side\n\nTo save the new tags with Doctrine, you need to consider a couple more things. First, unless you iterate over all of the new Tag objects and call $entityManager->persist($tag) on each, you'll receive an error from Doctrine:\n\nTo fix this, you may choose to \"cascade\" the persist operation automatically from the Task object to any related tags. To do this, add the cascade option to your ManyToMany metadata:\n\nA second potential issue deals with the Owning Side and Inverse Side of Doctrine relationships. In this example, if the \"owning\" side of the relationship is \"Task\", then persistence will work fine as the tags are properly added to the Task. However, if the owning side is on \"Tag\", then you'll need to do a little bit more work to ensure that the correct side of the relationship is modified.\n\nThe trick is to make sure that the single \"Task\" is set on each \"Tag\". One way to do this is to add some extra logic to addTag(), which is called by the form type since by_reference is set to false:\n\nIf you're going for addTask(), make sure you have an appropriate method that looks something like this:\n\nThe next step is to allow the deletion of a particular item in the collection. The solution is similar to allowing tags to be added.\n\nStart by adding the allow_delete option in the form Type:\n\nNow, you need to put some code into the removeTag() method of Task:\n\nThe allow_delete option means that if an item of a collection isn't sent on submission, the related data is removed from the collection on the server. In order for this to work in an HTML form, you must remove the DOM element for the collection item to be removed, before submitting the form.\n\nIn the JavaScript code, add a \"delete\" button to each existing tag on the page. Then, append the \"add delete button\" method in the function that adds the new tags:\n\nThe addTagFormDeleteLink() function will look something like this:\n\nWhen a tag form is removed from the DOM and submitted, the removed Tag object will not be included in the collection passed to setTags(). Depending on your persistence layer, this may or may not be enough to actually remove the relationship between the removed Tag and Task object.\n\nDoctrine: Ensuring the database persistence\n\nWhen removing objects in this way, you may need to do a little bit more work to ensure that the relationship between the Task and the removed Tag is properly removed.\n\nIn Doctrine, you have two sides of the relationship: the owning side and the inverse side. Normally in this case you'll have a many-to-one relationship and the deleted tags will disappear and persist correctly (adding new tags also works effortlessly).\n\nBut if you have a one-to-many relationship or a many-to-many relationship with a mappedBy on the Task entity (meaning Task is the \"inverse\" side), you'll need to do more work for the removed tags to persist correctly.\n\nIn this case, you can modify the controller to remove the relationship on the removed tag. This assumes that you have some edit() action which is handling the \"update\" of your Task:\n\nAs you can see, adding and removing the elements correctly can be tricky. Unless you have a many-to-many relationship where Task is the \"owning\" side, you'll need to do extra work to make sure that the relationship is properly updated (whether you're adding new tags or removing existing tags) on each Tag object itself.\n\nThe Symfony community has created some JavaScript packages that provide the functionality needed to add, edit and delete elements of the collection. Check out the @a2lix/symfony-collection or search on GitHub for other recent packages.\n\nMeasure & Improve Symfony Code Performance\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Embed a Collection of Forms",
+      "id": "how-to-embed-a-collection-of-forms"
+    },
+    {
+      "level": "h2",
+      "text": "Allowing \"new\" Tags with the \"Prototype\"",
+      "id": "allowing-new-tags-with-the-prototype"
+    },
+    {
+      "level": "h3",
+      "text": "JavaScript with Stimulus",
+      "id": "javascript-with-stimulus"
+    },
+    {
+      "level": "h3",
+      "text": "Handling the new Tags in PHP",
+      "id": "handling-the-new-tags-in-php"
+    },
+    {
+      "level": "h2",
+      "text": "Allowing Tags to be Removed",
+      "id": "allowing-tags-to-be-removed"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Task.php\nnamespace App\\Entity;\n\nuse Doctrine\\Common\\Collections\\Collection;\n\nclass Task\n{\n    protected string $description;\n    protected Collection $tags;\n\n    public function __construct()\n    {\n        $this->tags = new ArrayCollection();\n    }\n\n    public function getDescription(): string\n    {\n        return $this->description;\n    }\n\n    public function setDescription(string $description): void\n    {\n        $this->description = $description;\n    }\n\n    public function getTags(): Collection\n    {\n        return $this->tags;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Tag.php\nnamespace App\\Entity;\n\nclass Tag\n{\n    private string $name;\n\n    public function getName(): string\n    {\n        return $this->name;\n    }\n\n    public function setName(string $name): void\n    {\n        $this->name = $name;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/TagType.php\nnamespace App\\Form;\n\nuse App\\Entity\\Tag;\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass TagType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder->add('name');\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'data_class' => Tag::class,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Form/TaskType.php\nnamespace App\\Form;\n\nuse App\\Entity\\Task;\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\CollectionType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass TaskType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder->add('description');\n\n        $builder->add('tags', CollectionType::class, [\n            'entry_type' => TagType::class,\n            'entry_options' => ['label' => false],\n        ]);\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'data_class' => Task::class,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Controller/TaskController.php\nnamespace App\\Controller;\n\nuse App\\Entity\\Tag;\nuse App\\Entity\\Task;\nuse App\\Form\\TaskType;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass TaskController extends AbstractController\n{\n    public function new(Request $request): Response\n    {\n        $task = new Task();\n\n        // dummy code - add some example tags to the task\n        // (otherwise, the template will render an empty list of tags)\n        $tag1 = new Tag();\n        $tag1->setName('tag1');\n        $task->getTags()->add($tag1);\n        $tag2 = new Tag();\n        $tag2->setName('tag2');\n        $task->getTags()->add($tag2);\n        // end dummy code\n\n        $form = $this->createForm(TaskType::class, $task);\n\n        $form->handleRequest($request);\n\n        if ($form->isSubmitted() && $form->isValid()) {\n            // ... do your form processing, like saving the Task and Tag entities\n        }\n\n        return $this->render('task/new.html.twig', [\n            'form' => $form,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "{# templates/task/new.html.twig #}\n\n{# ... #}\n\n{{ form_start(form) }}\n    {{ form_row(form.description) }}\n\n    <h3>Tags</h3>\n    <ul class=\"tags\">\n        {% for tag in form.tags %}\n            <li>{{ form_row(tag.name) }}</li>\n        {% endfor %}\n    </ul>\n{{ form_end(form) }}\n\n{# ... #}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Form/TaskType.php\n\n// ...\n\npublic function buildForm(FormBuilderInterface $builder, array $options): void\n{\n    // ...\n\n    $builder->add('tags', CollectionType::class, [\n        'entry_type' => TagType::class,\n        'entry_options' => ['label' => false],\n        'allow_add' => true,\n    ]);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "{# the data-index attribute is required for the JavaScript code below #}\n<ul class=\"tags\"\n    data-index=\"{{ form.tags|length > 0 ? form.tags|last.vars.name + 1 : 0 }}\"\n    data-prototype=\"{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}\"\n></ul>",
+      "language": "unknown"
+    },
+    {
+      "code": "<ul class=\"tags\"\n    data-index=\"0\"\n    data-prototype=\"&lt;div&gt;&lt;label class=&quot; required&quot;&gt;__name__&lt;/label&gt;&lt;div id=&quot;task_tags___name__&quot;&gt;&lt;div&gt;&lt;label for=&quot;task_tags___name___name&quot; class=&quot; required&quot;&gt;Name&lt;/label&gt;&lt;input type=&quot;text&quot; id=&quot;task_tags___name___name&quot; name=&quot;task[tags][__name__][name]&quot; required=&quot;required&quot; maxlength=&quot;255&quot; /&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;\"\n></ul>",
+      "language": "unknown"
+    },
+    {
+      "code": "<button type=\"button\" class=\"add_item_link\" data-collection-holder-class=\"tags\">Add a tag</button>",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ form_widget(form.tags.vars.prototype.name)|e }}",
+      "language": "unknown"
+    },
+    {
+      "code": "document\n  .querySelectorAll('.add_item_link')\n  .forEach(btn => {\n      btn.addEventListener(\"click\", addFormToCollection)\n  });",
+      "language": "javascript"
+    },
+    {
+      "code": "function addFormToCollection(e) {\n  const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);\n\n  const item = document.createElement('li');\n\n  item.innerHTML = collectionHolder\n    .dataset\n    .prototype\n    .replace(\n      /__name__/g,\n      collectionHolder.dataset.index\n    );\n\n  collectionHolder.appendChild(item);\n\n  collectionHolder.dataset.index++;\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "<div {{ stimulus_controller('form-collection') }}\n    data-form-collection-index-value=\"{{ form.tags|length > 0 ? form.tags|last.vars.name + 1 : 0 }}\"\n    data-form-collection-prototype-value=\"{{ form_widget(form.tags.vars.prototype)|e('html_attr') }}\"\n>\n    <ul {{ stimulus_target('form-collection', 'collectionContainer') }}></ul>\n    <button type=\"button\" {{ stimulus_action('form-collection', 'addCollectionElement') }}>Add a tag</button>\n</div>",
+      "language": "unknown"
+    },
+    {
+      "code": "// assets/controllers/form-collection_controller.js\n\nimport { Controller } from '@hotwired/stimulus';\n\nexport default class extends Controller {\n    static targets = [\"collectionContainer\"]\n\n    static values = {\n        index    : Number,\n        prototype: String,\n    }\n\n    addCollectionElement(event)\n    {\n        const item = document.createElement('li');\n        item.innerHTML = this.prototypeValue.replace(/__name__/g, this.indexValue);\n        this.collectionContainerTarget.appendChild(item);\n        this.indexValue++;\n    }\n}",
+      "language": "python"
+    },
+    {
+      "code": "// src/Entity/Task.php\nnamespace App\\Entity;\n\n// ...\nclass Task\n{\n    // ...\n\n    public function addTag(Tag $tag): void\n    {\n        $this->tags->add($tag);\n    }\n\n    public function removeTag(Tag $tag): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/TaskType.php\n\n// ...\npublic function buildForm(FormBuilderInterface $builder, array $options): void\n{\n    // ...\n\n    $builder->add('tags', CollectionType::class, [\n        // ...\n        'by_reference' => false,\n    ]);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "A new entity was found through the relationship\n``App\\Entity\\Task#tags`` that was not configured to\ncascade persist operations for entity...",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Task.php\n\n// ...\n\n#[ORM\\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]\nprotected Collection $tags;",
+      "language": "unknown"
+    },
+    {
+      "code": "# src/Resources/config/doctrine/Task.orm.yaml\nApp\\Entity\\Task:\n    type: entity\n    # ...\n    oneToMany:\n        tags:\n            targetEntity: App\\Entity\\Tag\n            cascade:      [persist]",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- src/Resources/config/doctrine/Task.orm.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<doctrine-mapping xmlns=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\n                    https://doctrine-project.org/schemas/orm/doctrine-mapping.xsd\">\n\n    <entity name=\"App\\Entity\\Task\">\n        <!-- ... -->\n        <one-to-many field=\"tags\" target-entity=\"Tag\">\n            <cascade>\n                <cascade-persist/>\n            </cascade>\n        </one-to-many>\n    </entity>\n</doctrine-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Task.php\n\n// ...\npublic function addTag(Tag $tag): void\n{\n    // for a many-to-many association:\n    $tag->addTask($this);\n\n    // for a many-to-one association:\n    $tag->setTask($this);\n\n    $this->tags->add($tag);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Tag.php\n\n// ...\npublic function addTask(Task $task): void\n{\n    if (!$this->tasks->contains($task)) {\n        $this->tasks->add($task);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Form/TaskType.php\n\n// ...\npublic function buildForm(FormBuilderInterface $builder, array $options): void\n{\n    // ...\n\n    $builder->add('tags', CollectionType::class, [\n        // ...\n        'allow_delete' => true,\n    ]);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Entity/Task.php\n\n// ...\nclass Task\n{\n    // ...\n\n    public function removeTag(Tag $tag): void\n    {\n        $this->tags->removeElement($tag);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "document\n    .querySelectorAll('ul.tags li')\n    .forEach((tag) => {\n        addTagFormDeleteLink(tag)\n    })\n\n// ... the rest of the block from above\n\nfunction addFormToCollection(e) {\n    // ...\n\n    // add a delete link to the new form\n    addTagFormDeleteLink(item);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "function addTagFormDeleteLink(item) {\n    const removeFormButton = document.createElement('button');\n    removeFormButton.innerText = 'Delete this tag';\n\n    item.append(removeFormButton);\n\n    removeFormButton.addEventListener('click', (e) => {\n        e.preventDefault();\n        // remove the li for the tag form\n        item.remove();\n    });\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Controller/TaskController.php\n\n// ...\nuse App\\Entity\\Task;\nuse Doctrine\\Common\\Collections\\ArrayCollection;\n\nclass TaskController extends AbstractController\n{\n    public function edit(Task $task, Request $request, EntityManagerInterface $entityManager): Response\n    {\n        $originalTags = new ArrayCollection();\n\n        // Create an ArrayCollection of the current Tag objects in the database\n        foreach ($task->getTags() as $tag) {\n            $originalTags->add($tag);\n        }\n\n        $editForm = $this->createForm(TaskType::class, $task);\n\n        $editForm->handleRequest($request);\n\n        if ($editForm->isSubmitted() && $editForm->isValid()) {\n            // remove the relationship between the tag and the Task\n            foreach ($originalTags as $tag) {\n                if (false === $task->getTags()->contains($tag)) {\n                    // remove the Task from the Tag\n                    $tag->getTasks()->removeElement($task);\n\n                    // if it was a many-to-one relationship, remove the relationship like this\n                    // $tag->setTask(null);\n\n                    $entityManager->persist($tag);\n\n                    // if you wanted to delete the Tag entirely, you can also do that\n                    // $entityManager->remove($tag);\n                }\n            }\n\n            $entityManager->persist($task);\n            $entityManager->flush();\n\n            // redirect back to some edit page\n            return $this->redirectToRoute('task_edit', ['id' => $id]);\n        }\n\n        // ... render some form template\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/form_collections.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/collection.html",
+    "https://symfony.com/doc/7.3/form/form_themes.html"
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "title": "Using short form",
+  "content": "atmos auth logout -i dev-admin\n\nLogging out from identity: dev-admin\n\nBuilding authentication chain...\n  â Chain: aws-sso â dev-org-admin â dev-admin\n\nRemoving credentials...\n  â Keyring: aws-sso\n  â Keyring: dev-org-admin\n  â Keyring: dev-admin\n  â Files: ~/.config/atmos/aws/aws-sso/ (XDG-compliant)\n\nSuccessfully logged out from 3 identities\n\nâ ï¸  Note: This only removes local credentials. Your browser session\n   may still be active. Visit your identity provider to end your\n   browser session.\nshell\natmos auth logout --all\n\nLogging out from all identities...\n\nRemoving all credentials...\n  â Keyring: aws-sso\n  â Keyring: dev-org-admin\n  â Keyring: dev-admin\n  â Keyring: prod-admin\n  â Files: ~/.config/atmos/aws/aws-sso/ (XDG-compliant)\n\nSuccessfully logged out from 4 identities\n\nâ ï¸  Note: This only removes local credentials. Your browser session\n   may still be active. Visit your identity provider to end your\n   browser session.\nshell\natmos auth logout --provider aws-sso\n\nLogging out from provider: aws-sso\n\nRemoving all credentials for provider...\n  â Keyring: aws-sso\n  â Keyring: dev-org-admin (via aws-sso)\n  â Keyring: dev-admin (via aws-sso)\n  â Keyring: prod-admin (via aws-sso)\n  â Files: ~/.config/atmos/aws/aws-sso/ (XDG-compliant)\n\nSuccessfully logged out from 4 identities\nshell\natmos auth logout\n\n? Choose what to logout from:\n  â¯ Identity: dev-admin\n    Identity: prod-admin\n    Identity: dev-readonly\n    Provider: aws-sso (removes all identities)\n    All identities (complete logout)\nshell\natmos auth logout dev-admin --dry-run\n\nDry run mode: No credentials will be removed\n\nWould remove from identity: dev-admin\n  â¢ Keyring: aws-sso\n  â¢ Keyring: dev-org-admin\n  â¢ Keyring: dev-admin\n  â¢ Files: ~/.config/atmos/aws/aws-sso/credentials\n  â¢ Files: ~/.config/atmos/aws/aws-sso/config\n\n3 identities would be logged out\nshell\natmos auth logout --all --dry-run\n\nDry run mode: No credentials will be removed\n\nWould remove:\n  â¢ All identity keyring entries\n  â¢ All provider keyring entries\n  â¢ Files:\n    - ~/.config/atmos/aws/aws-sso/\n    - ~/.config/atmos/aws/backup-provider/\nshell",
+  "code_samples": [
+    {
+      "code": "This removes only this identity's credentials from the system keyring and removes only this identity's profile from AWS config files. Other identities using the same provider are **not affected** and remain usable. The identity configuration in `atmos.yaml` is preserved and can be re-authenticated by running `atmos auth login`.\n\n**Example output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Logout from All Identities",
+      "language": "unknown"
+    },
+    {
+      "code": "This removes all identity credentials from the system keyring and removes all identity profiles from AWS config files for all providers. All identity configurations remain in `atmos.yaml` and can be re-authenticated. This is useful when troubleshooting authentication issues or performing a complete credential cleanup.\n\n**Example output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Logout from Specific Provider",
+      "language": "unknown"
+    },
+    {
+      "code": "This removes all credentials from the system keyring for the provider and all identities that use it, and deletes the entire AWS config directory for the provider (all files). This is the most thorough cleanup and is useful when completely switching providers or AWS organizations.\n\n**Example output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Interactive Mode",
+      "language": "unknown"
+    },
+    {
+      "code": "When run without arguments, presents an interactive menu to choose what to logout from:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Dry Run Mode",
+      "language": "unknown"
+    },
+    {
+      "code": "Preview what would be removed without actually deleting anything:",
+      "language": "unknown"
+    },
+    {
+      "code": "You can also use `--dry-run` with `--all` to preview a complete logout:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "### Delete Keychain Credentials (Destructive)\n\nBy default, logout preserves keychain credentials for instant re-authentication. Use `--keychain` to permanently delete them:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Logout from All Identities",
+      "id": "logout-from-all-identities"
+    },
+    {
+      "level": "h3",
+      "text": "Logout from Specific Provider",
+      "id": "logout-from-specific-provider"
+    },
+    {
+      "level": "h3",
+      "text": "Interactive Mode",
+      "id": "interactive-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Dry Run Mode",
+      "id": "dry-run-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Delete Keychain Credentials (Destructive)",
+      "id": "delete-keychain-credentials-(destructive)"
+    }
+  ],
+  "url": "llms-txt#using-short-form",
+  "links": []
+}

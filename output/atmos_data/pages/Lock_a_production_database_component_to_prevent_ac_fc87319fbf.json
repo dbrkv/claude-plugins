@@ -1,0 +1,19 @@
+{
+  "title": "Lock a production database component to prevent accidental changes",
+  "content": "components:\n  terraform:\n    rds:\n      metadata:\n        locked: true\n      vars:\n        name: production-database\nyaml",
+  "code_samples": [
+    {
+      "code": "Using the `metadata.locked` flag helps protect critical infrastructure from unintended modifications while still allowing teams to inspect and review the configuration.\n\n### Versioning Components with `metadata.component`\n\nThe `metadata.component` parameter specifies which component implementation to use when provisioning infrastructure. This is how you manage component versions in Atmosâby pointing to different component folders organized by version.\n\nBy default, if `metadata.component` is not specified, Atmos uses the component's name as the path. However, you can explicitly reference different versions or implementations by setting this parameter to point to versioned component folders.\n\n#### Continuous Version Deployment\n\nAll environments point to the same component folder and converge to the same version. Versions are rolled out to each environment with release controls like approval gates in your deployment pipeline, decoupling release from deployment. This is the recommended default approach.\n\n<Tabs>\n<TabItem value=\"dev\" label=\"Development\">\n\n**Release Control**: Automatically deployed when changes merge to main. No approval required.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Versioning Components with `metadata.component`",
+      "id": "versioning-components-with-`metadata.component`"
+    }
+  ],
+  "url": "llms-txt#lock-a-production-database-component-to-prevent-accidental-changes",
+  "links": []
+}

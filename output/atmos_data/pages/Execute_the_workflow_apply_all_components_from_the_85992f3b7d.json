@@ -1,0 +1,319 @@
+{
+  "title": "Execute the workflow `apply-all-components` from the workflow manifest `networking`",
+  "content": "atmos workflow apply-all-components -f networking\nbash\nmkdir -p components/terraform/weather\nconsole\nstack name pattern must be provided in 'stacks.name_pattern' config or 'ATMOS_STACKS_NAME_PATTERN' ENV variable\nyaml\nstacks:\n  name_pattern: \"{tenant}-{environment}-{stage}\"\nconsole\nThe stack name pattern '{tenant}-{environment}-{stage}' specifies 'tenant', but the stack ue1-prod does not have a tenant defined\nyaml\nstacks:\n  name_pattern: \"{tenant}-{environment}-{stage}\"\nconsole\ndecoding: depends_on expected a map, got slice\nyaml\ncomponents:\n  terraform:\n    top-level-component2:\n      metadata:\n        component: \"top-level-component1\"\n      settings:\n        spacelift:\n          workspace_enabled: false\n        depends_on:\n          1:\n            # If the `context` (namespace, tenant, environment, stage) is not provided,\n            # the `component` is from the same Atmos stack as this component\n            component: \"test/test-component\"\n          2:\n            # If the `context` (namespace, tenant, environment, stage) is not provided,\n            # the `component` is from the same Atmos stack as this component\n            component: \"test/test2/test-component-2\"\n          3:\n            file: \"tests/fixtures/scenarios/complete/components/terraform/mixins/introspection.mixin.tf\"\n          4:\n            folder: \"tests/fixtures/scenarios/complete/components/helmfile/infra/infra-server\"\n      vars:\n        enabled: true\nconsole\nA change in the backend configuration has been detected, which may require migrating existing state\nconsole\nDo you want to copy existing state to the new backend?\nEnter \"yes\" to copy and \"no\" to start with an empty state.\nyaml\ncomponents:\n  terraform:\n    # Can also be set using 'ATMOS_COMPONENTS_TERRAFORM_INIT_RUN_RECONFIGURE' ENV var, or '--init-run-reconfigure' command-line argument\n    init_run_reconfigure: true\nshell",
+  "code_samples": [
+    {
+      "code": "## Stack Search Algorithm\n\nLooking at the commands above, you might have a question \"How does Atmos find the component in the stack and all the variables?\"\n\nLet's consider what Atmos does when executing the command `atmos terraform apply station -s prod`:\n\n- Atmos uses the `stacks.name_pattern` defined in the [CLI config](/quick-start/advanced/configure-cli). In this example, we have defined a simple name based on `stacks.name_pattern: \"{stage}\"`. This means that the stack name is just the `stage` part of the stack name.\n\n- Atmos searches for the stack configuration file (in the `stacks` folder and all sub-folders) where `stage: prod` is defined (inline or via imports). During the search, Atmos processes all parent (top-level) config files and compares the context variables specified in the command (`-s` flag) with the context variables defined in the stack configurations, finally finding the matching stack\n\n- Atmos finds the component `station` in the stack, processing all the inline configs and all the imports\n\n- Atmos deep-merges all the catalog imports for the `station` component and then deep-merges all the variables for the component defined in all sections (global `vars`, terraform `vars`, base components `vars`, component `vars`), producing the final variables for the `station` component in the `prod` stack\n\n- And lastly, Atmos writes the final deep-merged variables into a `.tfvar.json` file in the component directory and then\n  executes `terraform apply -var-file ...` command\n\n<ActionCard title=\"Ready to take the next step?\">\n     Now that youâve seen Atmos in action, you can explore the extra credit!\n\n     Or take a moment to explore its core concepts. You have only just scratched the surface of Atmos. Atmos is a powerful enterprise-grade framework with so **much more to offer**!\n\n    \n      <PrimaryCTA to=\"/quick-start/simple/extra-credit\">Extra Credit</PrimaryCTA>\n      <SecondaryCTA to=\"/core-concepts\">Deep Dive</SecondaryCTA>\n    \n</ActionCard>\n\n---\n\n## Simple Atmos Tutorial\n\nimport PillBox from '@site/src/components/PillBox'\nimport DocCardList from '@theme/DocCardList'\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Intro from '@site/src/components/Intro'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\n\n<PillBox>Easy</PillBox>\n\n<Intro>\nIn this simple example, we will show you, how you can Terraform the weather. We wonât focus on more advanced concepts like configuring state backends or integrating with specific cloud providers,\nallowing us to concentrate on the core concepts of Atmos.\n</Intro>\n\nYou're about to discover [a new way to think about terraform...](/quick-start/mindset)\n\n<KeyPoints>\n1. How to set up a project repository to organize your Terraform code and configurations\n2. How to configure the Atmos CLI to work with the project\n3. Write a simple Terraform root module\n4. How to create stacks and configure the root module as a component of a stack\n5. Finally, how to deploy everything using Atmos\n</KeyPoints>\n\n**Spoiler alert** You canât actually change the weather with Terraform, but you can certainly ask for it.\n\nWeâll [use this example](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-simple) to avoid relying on complicated cloud credentials, which can vary based on your organizational context and cloud provider. Instead, we want to focus on Terraform and how to utilize it effectively as a component within Atmos. Once you understand this, youâll see how to tailor your Terraform \"root modules\" to work seamlessly with Atmos.\n\n__NOTE:__ This tutorial is for those who prefer hands-on learning and want to create something tangible quickly.\nIf you prefer to learn theory and concepts first, start with the [Core Concepts](/core-concepts).\n\n## Prerequisites\n\nHere's what you'll need to get started with this tutorial.\n\n- [Install Atmos](/install)\n- [Install Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)\n\n:::tip Use GitHub Codespaces\n\n**You can try out `atmos` directly in your browser using GitHub Codespaces**\n\nWe bundle all the examples and tools you need to get started with Atmos in a GitHub Codespace. Click the button below to start a new Codespace with the Atmos repository (it's FREE).\n\n[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=cloudposse/atmos&skip_quickstart=true)\n<sub>Already start one? Find it [here](https://github.com/codespaces).</sub>\n\n:::\n\nThen, when you're ready for a deeper understanding of using Atmos with Terraform, handling state management and working with\nAWS authentication, please refer to our [advanced quick start guide](/quick-start/advanced).\n\n## Extra Credit\n\nAfter you finish mastering the basics, maybe check out the \"Extra Credit\" exercises to learn how to...\n\n- [Deploy additional instances of your components](/quick-start/simple/extra-credit/add-another-component)\n- [Automate common operations with workflows](/quick-start/simple/extra-credit/create-workflows)\n- [Customize the Atmos CLI by adding your own commands](/quick-start/simple/extra-credit/add-custom-commands)\n- [Vendor your dependencies for proper Immutable Infrastructure](/quick-start/simple/extra-credit/vendor-components)\n\n## What's Included\n\nStart your first project in 5 easy steps. After this, you can configure and provision infrastructure with Terraform using Atmos.\n\n<DocCardList/>\n\n<ActionCard>\n    Start with the first step, which is configuring your project for Atmos.\n    <PrimaryCTA to=\"/quick-start/simple/configure-project\">Configure Project</PrimaryCTA>\n</ActionCard>\n\n---\n\n## Where to go from here...\n\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Intro from '@site/src/components/Intro'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\n\n<Intro>\nAtmos provides unlimited flexibility in defining and configuring stacks and components in the stacks.\n</Intro>\n\n<KeyPoints title=\"What you have learned\">\n- Terraform \"root modules\" are deployed as components that are organized in sub-folders within `components/terraform` by type, team, operations, or any other category.\n- Stacks define the configuration of your \"root modules\", and can have arbitrary names and located anywhere in the `stacks/` directory; Atmos finds stacks using a \"slug\".\n- Terraform components can be reused any number of times by giving them unique names in the stack configurations\n  and pointing them to the same Terraform root module.\n</KeyPoints>\n\nAll the above makes Atmos an ideal framework for organizing infrastructure, designing for organizational complexity, and provisioning multi-account environments for very complex organizations.\n\nAs you continue to poke around, here are some suggestions for what to do next:\n\n1. [Review Atmos Design Patterns](/design-patterns)\n2. [Use GitHub Actions](/integrations/github-actions)\n3. [Try the Advanced Tutorial](/quick-start/advanced)\n\n<ActionCard title=\"Next Steps\">\n    Now that youâve seen Atmos in action, take a moment to explore its core concepts.\n\n    You have only just scratched the surface of Atmos. Atmos is a powerful enterprise-grade framework with so **much more to offer**!\n    <PrimaryCTA to=\"/core-concepts\">Learn Core Concepts</PrimaryCTA>\n</ActionCard>\n\n---\n\n## Write Some Components\n\nimport EmbedFile from '@site/src/components/EmbedFile'\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Screengrab from '@site/src/components/Screengrab'\nimport LatestRelease from '@site/src/components/LatestRelease'\nimport Step from '@site/src/components/Step'\nimport StepNumber from '@site/src/components/StepNumber'\nimport Intro from '@site/src/components/Intro'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\nimport SecondaryCTA from '@site/src/components/SecondaryCTA'\nimport Note from '@site/src/components/Note'\n\n<Intro>\nWhen you [design cloud architectures with Atmos](/quick-start/mindset), you will first break them apart into pieces called [components](/core-concepts/components). Then, you will implement [Terraform \"root modules\"](/core-concepts/components/terraform) for each of those components.\n</Intro>\n\nAfter we're done with this, we'll show you [how you connect your components using stacks](/quick-start/simple/configure-stacks), so that everything comes together.\n\n<KeyPoints>\n- Where to place your components\n- How to write a suitable Terraform root module to use as a component\n- How to make your components reusable and other considerations\n</KeyPoints>\n\n<Step>\n## <StepNumber/> Decide what your component should do\n\nOnce we consider our infrastructure in terms of components, we need to determine the specific functions each component must perform.\n\nWe recommend following the [Single Responsibility Principle (SRP)](https://en.wikipedia.org/wiki/Single-responsibility_principle). That is, design components to serve a single purpose, making them the smallest possible unit of infrastructure in a typical software development lifecycle (SDLC). Group pieces usually change together as one component and separate those that change independently (or seldom).\n\nWe discuss some of the [best practices for components](/best-practices/components) in our documentation.\n\nIn this case, since our goal is to retrieve the current weather, let's create a component that will do just that.\n\n</Step>\n\n<Step>\n## <StepNumber/> Create a Directory for Your Component\n\nThe implementation for the component (e.g. HCL code) will be stored in a directory under the `components/` folder corresponding to the toolchain used (e.g. `terraform/`). For Terraform, place your component in the `components/terraform` directory. Inside this directory, create a folder to store your componentâs Terraform code, which serves as the root module. Since our component is a simple Terraform root module, we will create a directory called `weather` to store the Terraform code for our weather component.",
+      "language": "unknown"
+    },
+    {
+      "code": "</Step>\n\n<Step>\n## <StepNumber/> Write a Terraform Root Module\n\nIn the following descriptions, youâll see that everything is just plain Terraform (HCL) with nothing specific to Atmos. Thatâs intentional: we want to demonstrate that Atmos works seamlessly with plain Terraform. Atmos introduces conventions around how you use Terraform with its framework, which will become more evident in the subsequent lessons.\n\nTo write our Terraform root module, weâll follow Terraform's standard conventions:\n<dl>\n  <dt>`variables.tf`</dt>\n  <dd>Defines variables</dd>\n\n  <dt>`outputs.tf`</dt>\n  <dd>Defines outputs</dd>\n\n  <dt>`versions.tf`</dt>\n  <dd>Specifies required provider versions</dd>\n\n  <dt>`providers.tf`</dt>\n  <dd>Specifies providers</dd>\n\n  <dt>`main.tf`</dt>\n  <dd>Implements main functionality</dd>\n</dl>\n\nSo, letâs start by defining our root module as usual.\n\n### Implement `variables.tf`\n\nTo make the best use of Atmos, ensure your root modules are highly reusable by accepting parameters, allowing them to be deployed multiple times without conflicts. This also usually means provisioning resources with unique names.\n\n<EmbedFile filePath=\"examples/quick-start-simple/components/terraform/weather/variables.tf\" />\n\n### Implement `main.tf`\n\nThe `main.tf` file is where the main implementation of your component resides. This is where you define all the business logic for what youâre trying to achieveâthe core functionality of your root module. If this file becomes too large or complex, you can break it into multiple files in a way that makes sense. However, sometimes that is also a red flag, indicating that the component is trying to do too much and should be broken down into smaller components.\n\nIn this example, we define a local variable that creates a URL using the variable inputs we receive. We also set up a data source to perform an HTTP request to that endpoint and retrieve the current weather. Additionally, we write this output to a file to demonstrate a stateful resource.\n\n<EmbedFile filePath=\"examples/quick-start-simple/components/terraform/weather/main.tf\" />\n\n<details>\n<summary>How do we recommend ensuring unique resource names?</summary>\n\nCloud Posse's [`terraform-null-label`](https://github.com/cloudposse/terraform-null-label) module makes this easier by turning naming into a standardized, programmatically enforced convention. Setting the null label parameters ensures unique resource names and enforces consistency across your team and organization.\n\n<Note>In our example, we will keep it simple to focus on the basics, so we will not use this module.</Note>\n</details>\n\nFor the purpose of this quickstart, weâll assume you have minimal experience with Terraform. Some of this information might be obvious to more experienced users, but weâre including it here to ensure a smooth learning experience for everyone.\n\n### Implement `versions.tf`\n\nThe `versions.tf` file is where provider pinning is typically defined. Provider pinning increases the stability of your components and ensures consistency between deployments in multiple environments.\n\n<EmbedFile filePath=\"examples/quick-start-simple/components/terraform/weather/versions.tf\" />\n\n### Implement `outputs.tf`\n\nThe `outputs.tf` file is where, by convention in Terraform, you place any outputs you want to expose from your root module. Outputs are essential for passing state between your root modules and can be used in conjunction with [remote state](/core-concepts/share-data/remote-state) or the [Atmos function to retrieve the state](/functions/template) of any other component.\nIn object-oriented parlance, think of your outputs as the âpublicâ attributes of the module that are intended to be accessed by other modules. This convention helps maintain clarity and organization within your Terraform configurations.\n\n<EmbedFile filePath=\"examples/quick-start-simple/components/terraform/weather/outputs.tf\" />\n<Note>Technically outputs can be placed in any file, but the standard convention in Terraform is to place them usually in `outputs.tf`.</Note>\n</Step>\n\n<ActionCard title=\"Ready to take the next step?\">\n    Now that you have a Terraform \"root module\", you can use it as a component in your Atmos stacks, and deploy it any number of times, tweaking the configuration as needed.\n\n    We will show you [how to do that in the next step](/quick-start/simple/configure-stacks).\n    \n      <PrimaryCTA to=\"/quick-start/simple/configure-stacks\">Next Step</PrimaryCTA>\n      <SecondaryCTA to=\"/core-concepts/components/terraform\">Deep Dive</SecondaryCTA>\n    \n</ActionCard>\n\n---\n\n## Atmos Alternatives & Inspirations\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nTo better understand where Atmos fits in, it may be helpful to understand some of the tooling that has inspired its design or serve as possible alternatives to its approach.\n</Intro>\n\n## Conceptual Inspiration\n\nAtmos is inspired by the follow frameworks or tooling.\n\n### React for JavaScript\n\nhttps://react.dev/\n\n[Reactâs](https://react.dev/) component-based architecture serves as a key inspiration for Atmos. By breaking down UIs into reusable components, React simplifies the development of complex applications. Similarly, Atmos promotes modularity in infrastructure as code, allowing components to be reused across different environments and projects. For example, in Atmos, any Terraform \"root module\" may be used as a component.\n\n### Kustomize for Kubernetes\n\nhttps://kustomize.io/\n\n[Kustomize](https://kustomize.io/) introduces a template-free way to customize Kubernetes configurations, focusing on overlays and inheritance to manage configuration variations. Atmos adopts a similar approach, enabling users to import, overlay, and override configurations efficiently, thereby simplifying the management of complex infrastructure setups, all without relying on templating.\n\nHowever, due to popular demand, Atmos now supports advanced templating and data sources in addition to the original template-free configurations. Templating complicates configurations and should be used solely as an escape hatch for when the first-class concepts of imports and inheritance are insufficient.\n\n### Helmfile for Helm Charts\n\nhttps://helmfile.com\n\n[Helmfile](https://helmfile.com) manages collections of Helm charts with declarative syntax, combining them into a \"stack\" for deployment to Kubernetes. It handles environmental configuration, deep merging it, and evaluating templates with a Go template engine before passing the values files to Helm.\n\nAtmos draws from Helmfileâs ability to orchestrate multiple Helm charts, applying the concept to Terraform root modules to manage interdependencies and deployment order. It supports environmental configuration through stack configurations that define all the environmental configurations for Terraform root modules. Atmos generates the necessary Terraform `.tfvar` files, much like Helmfile generates Helm values files, ensuring consistent and efficient deployment of Terraform infrastructure.\n\n### Helm Charts for Configuration\n\nhttps://helm.sh/\n\n[Helm Charts](https://helm.sh/) provide a packaging format for deploying applications on Kubernetes, simplifying the processes of defining, installing, and upgrading even the most complex applications. Similarly, Atmos organizes Terraform configurations into reusable, versioned modules, facilitating consistent and repeatable infrastructure deployments.\n\nThe concept is that if your root modules are sufficiently parameterized, they function much like Helm charts. You only need to supply the appropriate values to achieve the desired configuration.\n\n### Vendir by Tanzu\n\nhttps://github.com/carvel-dev/vendir\n\nAtmos Vendoring was heavily inspired by [Vendir from VMWare Tanzu](https://github.com/carvel-dev/vendir), which served as the basis for our initial implementation. However, after using it, we realized we only needed a simpler subset of Vendirâs full functionality. Therefore, we implemented our own version using [HashiCorpâs GoGetter (MPL-2.0) library](https://github.com/hashicorp/go-getter). Additionally, weâve added support for OCI, allowing Vendoring to pull configurations from anywhere. This advanced feature enables consistent and declarative pulling of configurations not just for components, but also for stack configurations or any dependencies you have.\n\n## General Alternatives\n\nThere are many tools in the general category of \"task runners\" or \"workflow automation\".\nHere are some of the alternatives to Atmos, many of which inspired core functionality in Atmos.\n\n### Make (Makefile) by Free Software Foundation\n\nhttps://www.gnu.org/software/make/\n\nMany companies (including Cloud Posse) started by leveraging `make` with `Makefile` and targets to call `terraform`. Using `make` is a popular method of orchestrating tools, but it has trouble scaling up to support large projects. We know this because [Cloud Posse](https://cloudposse.com/) used it for 3+ years. The problem we ran into is that `make` targets do not support \"natural\" parameterization, which leads to a proliferation of environment variables that are difficult to validate or hacks like overloading make-targets and parsing them (e.g. `make apply/prod`). Makefiles are unintuitive for newcomers because they are first evaluated as a template and then executed as a script where each line of a target runs in a separate process space. Spaces matter too, and it's made worse with inconsistent rules using tabs in some places and spaces in others.\n\n### Mage (Magefile)\n\nhttps://magefile.org/\n\nMage is a make/rake-like build tool using native Golang and plain-old `Go` functions. Mage then automatically provides a CLI to call them as\nMakefile-like runnable targets.\n\n### Task (Taskfile)\n\nhttps://github.com/go-task/task\n\nTask is a task runner and build tool that aims to be simpler and easier to use than GNU Make.\n\n:::info\nAtmos supports native [workflows](/core-concepts/workflows) that have very similar schema to \"Taskfile\", only they can be defined together\nwith [Stacks](/core-concepts/stacks) or as standalone workflow files.\n:::\n\n### Variant\n\nhttps://github.com/mumoshu/variant\nhttps://github.com/mumoshu/variant2 (second generation)\n\nVariant lets you wrap all your scripts and CLIs into a modern CLI and a single-executable that can run anywhere.\n\n:::info\nThe earliest versions of `atmos` were built on top of [`variant2`](https://github.com/mumoshu/variant2) until we decided to rewrite it from the ground\nup in pure Go. Atmos supports native [workflows](/core-concepts/workflows) which provide similar benefits.\n:::\n\n### AppBuilder by Choria\n\nhttps://github.com/choria-io/appbuilder\n\nAppBuilder is a tool built in Golang to create a friendly CLI command that wraps your operational tools.\n\n:::info\nAtmos is heavily inspired by the excellent schema provided by AppBuilder and has implemented a similar interface as part of\nour [Custom Commands](/core-concepts/custom-commands).\n:::\n\n## Terraform-specific Tooling Alternatives\n\nThere are many tools explicitly designed around how to deploy with Terraform.\n\nThe following is a list of tools that only support Terraform.\n\n:::tip Atmos Differentiators\nAtmos supports Terraform and can also be used to manage any command-line tool. For example, by combining [Custom commands](/core-concepts/custom-commands) and [workflows](/core-concepts/workflows), it's possible to support any CLI tool (even the ones listed below) or even reimplement the core functionality of Atmos. That's how extensible it is.\n:::\n\n### Terragrunt by Gruntwork\n\nhttps://github.com/gruntwork-io/terragrunt\n\nTerragrunt is a tool built in Golang that is a thin wrapper for Terraform that provides extra tools for working with multiple Terraform modules.\n\n### Terramate by Mineros\n\nhttps://github.com/mineiros-io/terramate\n\nTerramate is a tool built in Golang for managing multiple Terraform stacks with support for change detection and code generation.\n\n### Terraspace (Terrafile) by Bolt Ops\n\nhttps://github.com/boltops-tools/terraspace\n\nTerrapsace is a tool built in Ruby that provides an opinionated framework for working with Terraform.\n\n### Terraplate by Verifa\n\nhttps://github.com/verifa/terraplate\n\nTerraplate is a tool built in Golang that is a lightweight wrapper for Terraform the focused on code generation.\n\n### Astro by Uber (abandoned)\n\nhttps://github.com/uber/astro\n\nAstro is a tool built in Golang that provides a YAML DSL for defining all your terraform projects and then running them.\n\n### Opta by Run X\n\nhttps://github.com/run-x/opta\n\nOpta is a tool built in Python that makes Terraform easier by providing high-level constructs and not getting stuck with low-level cloud configurations.\n\n### pterradactyl by Nike\n\nhttps://github.com/Nike-Inc/pterradactyl\n\nPterradactyl is a library developed to abstract Terraform configuration from the Terraform environment setup.\n\n### Leverage by Binbash\n\nThe Leverage CLI is written in Python and intended to orchestrate Leverage Reference Architecture for AWS\n\nhttps://github.com/binbashar/leverage\n\n---\n\n## Reference\n\nimport DocCardList from '@theme/DocCardList'\n\n<DocCardList/>\n\n---\n\n## Slides\n\nimport Slides from \"@site/src/components/Slides\";\n\n<Slides/>\n\n---\n\n## Debugging\n\n:::note\nTODO\n:::\n\n---\n\n## Common Errors\n\n## Error Monitoring\n\nFor organizations running Atmos at scale, consider enabling [Error Handling & Monitoring](/cli/configuration/errors) to track failures across your infrastructure pipelines with Sentry integration.\n\n## Common Mistakes\n\n* Running out of date version of `atmos` with newer configuration parameters\n* An `atmos.yaml` with incorrect `stacks.stack_name` pattern (often due to copy pasta)\n\n## Common Errors\n\nHere are some common errors that can come up.\n\n### Error: `stack name pattern must be provided`",
+      "language": "unknown"
+    },
+    {
+      "code": "This means that you are probably missing a section like this in your `atmos.yml`. See the instructions on CLI Configuration for more details.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Error: `The stack name pattern ... does not have a tenant defined`",
+      "language": "unknown"
+    },
+    {
+      "code": "This means that your `name_pattern` declares a `tenant` is required, but not specified in the Stack configurations. Either specify a `tenant` in\nyour `vars` for the Stack configuration, or remove the `{tenant}` from the `name_pattern`.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Error: `depends_on expected a map, got slice`",
+      "language": "unknown"
+    },
+    {
+      "code": "The `depends_on` functionality originally existed only under `settings.spacelift.depends_on` and was a list of other components that the current\ncomponent depends on.\n\nWe have since updated `depends_on` to be more generic and be directly under `settings.depends_on` (so it can also be used in GitHub Actions and other\ntools).\n\nThe updated key is now a map (rather than a list). If you see this error, it means that someone put a `depends_on`\nblock directly under `settings` but added it as a list (rather than a map as the new config requires).\n\nThe solution is to move it under `settings.spacelift.depends_on` (legacy, deprecated, not recommended) or update the dependencies to be a map.",
+      "language": "unknown"
+    },
+    {
+      "code": ":::tip\n\nFor more information, refer to:\n\n- [`atmos describe affected` CLI command](/cli/commands/describe/affected)\n- [`atmos describe dependents` CLI command](/cli/commands/describe/dependents)\n\n:::\n\n### Error: `A change in the backend configuration has been detected, which may require migrating existing state`",
+      "language": "unknown"
+    },
+    {
+      "code": "The Terraform/OpenTofu error means Terraform noticed that your backend configuration (the section in your code that\ndefines where and how Terraform stores state) has changed compared to whatâs currently in use..\n\n#### Why it happens\n\nTerraform keeps its state in a backend (for example, S3, local, remote, Terraform Cloud, etc.).\nIf you update the backend configuration in your code â for example:\n\n- Switching from local to s3\n- Changing the bucket, key, or region for an S3 backend\n- Modifying a prefix or workspace config in Terraform Cloud\n- Adjusting encryption or locking settings\n- Terraform detects that the state might need to be migrated from the old backend to the new one.\n\n#### What Terraform expects\n\nWhen this happens, Terraform doesnât automatically move state â it prompts you to confirm migration.\nTypically, youâll see a message like:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you type `yes`, Terraform migrates the state (so you keep your existing resources).\nIf you type `no`, Terraform initializes a fresh, empty state in the new backend (dangerous unless intentional).\n\n#### How to resolve\n\nIn `atmos.yaml`, set `components.terraform.init_run_reconfigure` to `true`:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will tell Atmos to run `terraform init -reconfigure` when executing Terraform commands.\nThe `-reconfigure` option disregards any existing backend configuration and configures a new backend,\npreventing migration of any existing state.\n\n:::tip\n\nFor more information, refer to:\n\n- [`terraform init` command](https://developer.hashicorp.com/terraform/cli/commands/init)\n- [Terraform Backend Initialization](https://developer.hashicorp.com/terraform/cli/commands/init#backend-initialization)\n- [Atmos CLI configuration](/cli/configuration/)\n- [Atmos Terraform/OpenTofu commands](/cli/commands/terraform/usage/)\n\n:::\n\n---\n\n## Performance Profiling\n\nimport Terminal from '@site/src/components/Terminal'\nimport File from '@site/src/components/File'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\n    Atmos provides comprehensive performance profiling capabilities through two complementary approaches: a lightweight\n    interactive heatmap for quick performance insights, and deep `pprof` integration for detailed runtime analysis.\n</Intro>\n\n## Profiling Approaches\n\nAtmos offers two methods for performance analysis, each suited to different use cases:\n\n### Performance Heatmap (Quick Analysis)\n\nA lightweight, built-in visualization tool that provides real-time performance metrics with minimal overhead:\n\n- **Function-level metrics**: Call counts, execution times, and percentile statistics\n- **Interactive visualization**: Multiple display modes (bar charts, sparklines, tables)\n- **Zero setup**: Single CLI flag (`--heatmap`) enables tracking\n- **Microsecond precision**: Captures fast function executions\n- **Best for**: Quick performance checks, development workflow, identifying hot paths\n\n### pprof Profiling (Deep Analysis)\n\nGo's comprehensive profiling toolkit for detailed runtime performance analysis:\n\n- **Multiple profile types**: CPU, memory (heap/allocs), goroutines, blocking, mutex contention\n- **Line-level profiling**: Pinpoint exact code locations\n- **Flame graphs**: Visual call stack analysis\n- **Persistent data**: Export profiles for historical comparison\n- **Best for**: Deep performance investigation, memory leak detection, production debugging\n\n## Performance Heatmap\n\n### Quick Start\n\nDisplay the performance heatmap after any Atmos command:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Stack Search Algorithm",
+      "id": "stack-search-algorithm"
+    },
+    {
+      "level": "h2",
+      "text": "Simple Atmos Tutorial",
+      "id": "simple-atmos-tutorial"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h2",
+      "text": "Extra Credit",
+      "id": "extra-credit"
+    },
+    {
+      "level": "h2",
+      "text": "What's Included",
+      "id": "what's-included"
+    },
+    {
+      "level": "h2",
+      "text": "Where to go from here...",
+      "id": "where-to-go-from-here..."
+    },
+    {
+      "level": "h2",
+      "text": "Write Some Components",
+      "id": "write-some-components"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Decide what your component should do",
+      "id": "<stepnumber/>-decide-what-your-component-should-do"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Create a Directory for Your Component",
+      "id": "<stepnumber/>-create-a-directory-for-your-component"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Write a Terraform Root Module",
+      "id": "<stepnumber/>-write-a-terraform-root-module"
+    },
+    {
+      "level": "h3",
+      "text": "Implement `variables.tf`",
+      "id": "implement-`variables.tf`"
+    },
+    {
+      "level": "h3",
+      "text": "Implement `main.tf`",
+      "id": "implement-`main.tf`"
+    },
+    {
+      "level": "h3",
+      "text": "Implement `versions.tf`",
+      "id": "implement-`versions.tf`"
+    },
+    {
+      "level": "h3",
+      "text": "Implement `outputs.tf`",
+      "id": "implement-`outputs.tf`"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos Alternatives & Inspirations",
+      "id": "atmos-alternatives-&-inspirations"
+    },
+    {
+      "level": "h2",
+      "text": "Conceptual Inspiration",
+      "id": "conceptual-inspiration"
+    },
+    {
+      "level": "h3",
+      "text": "React for JavaScript",
+      "id": "react-for-javascript"
+    },
+    {
+      "level": "h3",
+      "text": "Kustomize for Kubernetes",
+      "id": "kustomize-for-kubernetes"
+    },
+    {
+      "level": "h3",
+      "text": "Helmfile for Helm Charts",
+      "id": "helmfile-for-helm-charts"
+    },
+    {
+      "level": "h3",
+      "text": "Helm Charts for Configuration",
+      "id": "helm-charts-for-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Vendir by Tanzu",
+      "id": "vendir-by-tanzu"
+    },
+    {
+      "level": "h2",
+      "text": "General Alternatives",
+      "id": "general-alternatives"
+    },
+    {
+      "level": "h3",
+      "text": "Make (Makefile) by Free Software Foundation",
+      "id": "make-(makefile)-by-free-software-foundation"
+    },
+    {
+      "level": "h3",
+      "text": "Mage (Magefile)",
+      "id": "mage-(magefile)"
+    },
+    {
+      "level": "h3",
+      "text": "Task (Taskfile)",
+      "id": "task-(taskfile)"
+    },
+    {
+      "level": "h3",
+      "text": "Variant",
+      "id": "variant"
+    },
+    {
+      "level": "h3",
+      "text": "AppBuilder by Choria",
+      "id": "appbuilder-by-choria"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform-specific Tooling Alternatives",
+      "id": "terraform-specific-tooling-alternatives"
+    },
+    {
+      "level": "h3",
+      "text": "Terragrunt by Gruntwork",
+      "id": "terragrunt-by-gruntwork"
+    },
+    {
+      "level": "h3",
+      "text": "Terramate by Mineros",
+      "id": "terramate-by-mineros"
+    },
+    {
+      "level": "h3",
+      "text": "Terraspace (Terrafile) by Bolt Ops",
+      "id": "terraspace-(terrafile)-by-bolt-ops"
+    },
+    {
+      "level": "h3",
+      "text": "Terraplate by Verifa",
+      "id": "terraplate-by-verifa"
+    },
+    {
+      "level": "h3",
+      "text": "Astro by Uber (abandoned)",
+      "id": "astro-by-uber-(abandoned)"
+    },
+    {
+      "level": "h3",
+      "text": "Opta by Run X",
+      "id": "opta-by-run-x"
+    },
+    {
+      "level": "h3",
+      "text": "pterradactyl by Nike",
+      "id": "pterradactyl-by-nike"
+    },
+    {
+      "level": "h3",
+      "text": "Leverage by Binbash",
+      "id": "leverage-by-binbash"
+    },
+    {
+      "level": "h2",
+      "text": "Reference",
+      "id": "reference"
+    },
+    {
+      "level": "h2",
+      "text": "Slides",
+      "id": "slides"
+    },
+    {
+      "level": "h2",
+      "text": "Debugging",
+      "id": "debugging"
+    },
+    {
+      "level": "h2",
+      "text": "Common Errors",
+      "id": "common-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Error Monitoring",
+      "id": "error-monitoring"
+    },
+    {
+      "level": "h2",
+      "text": "Common Mistakes",
+      "id": "common-mistakes"
+    },
+    {
+      "level": "h2",
+      "text": "Common Errors",
+      "id": "common-errors"
+    },
+    {
+      "level": "h3",
+      "text": "Error: `stack name pattern must be provided`",
+      "id": "error:-`stack-name-pattern-must-be-provided`"
+    },
+    {
+      "level": "h3",
+      "text": "Error: `The stack name pattern ... does not have a tenant defined`",
+      "id": "error:-`the-stack-name-pattern-...-does-not-have-a-tenant-defined`"
+    },
+    {
+      "level": "h3",
+      "text": "Error: `depends_on expected a map, got slice`",
+      "id": "error:-`depends_on-expected-a-map,-got-slice`"
+    },
+    {
+      "level": "h3",
+      "text": "Error: `A change in the backend configuration has been detected, which may require migrating existing state`",
+      "id": "error:-`a-change-in-the-backend-configuration-has-been-detected,-which-may-require-migrating-existing-state`"
+    },
+    {
+      "level": "h2",
+      "text": "Performance Profiling",
+      "id": "performance-profiling"
+    },
+    {
+      "level": "h2",
+      "text": "Profiling Approaches",
+      "id": "profiling-approaches"
+    },
+    {
+      "level": "h3",
+      "text": "Performance Heatmap (Quick Analysis)",
+      "id": "performance-heatmap-(quick-analysis)"
+    },
+    {
+      "level": "h3",
+      "text": "pprof Profiling (Deep Analysis)",
+      "id": "pprof-profiling-(deep-analysis)"
+    },
+    {
+      "level": "h2",
+      "text": "Performance Heatmap",
+      "id": "performance-heatmap"
+    },
+    {
+      "level": "h3",
+      "text": "Quick Start",
+      "id": "quick-start"
+    }
+  ],
+  "url": "llms-txt#execute-the-workflow-`apply-all-components`-from-the-workflow-manifest-`networking`",
+  "links": []
+}

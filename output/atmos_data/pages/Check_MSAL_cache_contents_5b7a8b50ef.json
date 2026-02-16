@@ -1,0 +1,8 @@
+{
+  "title": "Check MSAL cache contents",
+  "content": "cat ~/.azure/msal_token_cache.json | jq '.AccessToken | keys[]'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-msal-cache-contents",
+  "links": []
+}

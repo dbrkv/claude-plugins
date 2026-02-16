@@ -1,0 +1,19 @@
+{
+  "title": "Run commands without interactive features",
+  "content": "atmos terraform apply --auto-approve\nbash",
+  "code_samples": [
+    {
+      "code": "### Profiling Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Profiling Examples",
+      "id": "profiling-examples"
+    }
+  ],
+  "url": "llms-txt#run-commands-without-interactive-features",
+  "links": []
+}

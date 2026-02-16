@@ -1,0 +1,78 @@
+{
+  "title": "Stack-specific configuration",
+  "content": "terraform:\n  vars:\n    environment: prod\n    region: us-east-2\n\ncomponents:\n  terraform:\n    vpc:\n      vars:\n        cidr_block: \"10.0.0.0/16\"\nmermaid\ngraph TD\n    A[us-east-2.yaml] -->|imports| B[prod/_defaults.yaml]\n    B -->|imports| C[core/_defaults.yaml]\n    C -->|imports| D[acme/_defaults.yaml]\n\nstyle A fill:#e1f5fe\n    style B fill:#fff3e0\n    style C fill:#fff3e0\n    style D fill:#fff3e0\nyaml title=\"stacks/orgs/acme/_defaults.yaml\"",
+  "code_samples": [
+    {
+      "code": "## Import Chain Example\n\nHere's how a typical import chain works with the `_defaults.yaml` convention:",
+      "language": "unknown"
+    },
+    {
+      "code": "Each level explicitly imports its parent's defaults, creating a clear inheritance chain.\n\n## Why Not Just Call Them \"defaults.yaml\"?\n\nWithout the underscore prefix:\n- Files would be sorted alphabetically mixed with other files\n- Harder to distinguish defaults from other configurations at a glance\n- Still need to be excluded from stack discovery (just with a different pattern)\n\nThe underscore is a small detail that provides significant organizational benefits.\n\n## Alternative Naming Conventions\n\nTeams can choose different conventions if preferred:\n- `defaults.yaml` (without underscore)\n- `.defaults.yaml` (hidden file on Unix systems)\n- `base.yaml`\n- `common.yaml`\n\nJust remember to:\n1. Update `excluded_paths` in `atmos.yaml` to match your pattern\n2. Be consistent across your project\n3. Document your choice for your team\n\n## Common Misunderstandings\n\n### â Myth: Atmos automatically processes `_defaults.yaml` files\n**Reality**: Atmos has no special knowledge of this naming pattern. These files must be explicitly imported like any other YAML file.\n\n### â Myth: The underscore has special meaning to Atmos\n**Reality**: The underscore is purely for lexicographic sorting and visual distinction. Atmos treats `_defaults.yaml` the same as `defaults.yaml` or any other name.\n\n### â Myth: `_defaults.yaml` files are always inherited\n**Reality**: Nothing is inherited unless explicitly imported. You have complete control over what gets imported and when.\n\n### â Myth: Files must be named `_defaults.yaml` for inheritance to work\n**Reality**: You can import any YAML file. The `_defaults.yaml` name is just a helpful convention.\n\n## Best Practices\n\n### Do's\n- **Be Explicit**: Always explicitly import parent defaults\n- **Document Import Chains**: Comment your imports to show the inheritance hierarchy\n- **Keep It Simple**: Don't create too many levels of defaults (typically 3-4 levels maximum)\n- **Stay Consistent**: Use the same naming convention throughout your project\n- **Order Imports Logically**: Import parent defaults before child defaults or mixins\n\n### Don'ts\n- **Don't Assume Auto-Import**: Never assume `_defaults.yaml` files are automatically imported\n- **Don't Create Circular Imports**: Avoid import cycles which will cause errors\n- **Don't Override Everything**: Override only what needs to change at each level\n- **Don't Mix Conventions**: Pick one naming convention and stick with it\n\n## Example: Multi-Tenant, Multi-Region Setup\n\nHere's a real-world example showing how the convention organizes a complex infrastructure:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Import Chain Example",
+      "id": "import-chain-example"
+    },
+    {
+      "level": "h2",
+      "text": "Why Not Just Call Them \"defaults.yaml\"?",
+      "id": "why-not-just-call-them-\"defaults.yaml\"?"
+    },
+    {
+      "level": "h2",
+      "text": "Alternative Naming Conventions",
+      "id": "alternative-naming-conventions"
+    },
+    {
+      "level": "h2",
+      "text": "Common Misunderstandings",
+      "id": "common-misunderstandings"
+    },
+    {
+      "level": "h3",
+      "text": "â Myth: Atmos automatically processes `_defaults.yaml` files",
+      "id": "â-myth:-atmos-automatically-processes-`_defaults.yaml`-files"
+    },
+    {
+      "level": "h3",
+      "text": "â Myth: The underscore has special meaning to Atmos",
+      "id": "â-myth:-the-underscore-has-special-meaning-to-atmos"
+    },
+    {
+      "level": "h3",
+      "text": "â Myth: `_defaults.yaml` files are always inherited",
+      "id": "â-myth:-`_defaults.yaml`-files-are-always-inherited"
+    },
+    {
+      "level": "h3",
+      "text": "â Myth: Files must be named `_defaults.yaml` for inheritance to work",
+      "id": "â-myth:-files-must-be-named-`_defaults.yaml`-for-inheritance-to-work"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Do's",
+      "id": "do's"
+    },
+    {
+      "level": "h3",
+      "text": "Don'ts",
+      "id": "don'ts"
+    },
+    {
+      "level": "h2",
+      "text": "Example: Multi-Tenant, Multi-Region Setup",
+      "id": "example:-multi-tenant,-multi-region-setup"
+    }
+  ],
+  "url": "llms-txt#stack-specific-configuration",
+  "links": []
+}

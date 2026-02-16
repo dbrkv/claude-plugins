@@ -1,0 +1,330 @@
+{
+  "title": "Office Hours Registration",
+  "content": "<HubspotForm\n    portalId='2197148'\n    region=\"na1\"\n    formId='bbcd46fe-0b11-43aa-9214-33f319e52a01'\n    onSubmit={() => console.log('Submit!')}\n    onReady={(form) => console.log('Form ready!')}\n    loading={Loading...}\n/>\n\n## Join our Slack Community!\n\nAtmos has a great community of active users who are all more than willing to help each other out. So, join us!\n\n<iframe src=\"https://slack.cloudposse.com/?theme=dark&background=00000000\"\n        marginWidth=\"0\"\n        marginHeight=\"0\"\n        hspace=\"0\"\n        vspace=\"0\"\n        width=\"300\"\n        height=\"330\"\n        scrolling=\"no\"\n        frameBorder=\"0\"\n        allowtransparency=\"true\"\n        style={{ borderRadius: '6px', display: 'flex', marginRight: 'auto', marginLeft: 'auto'}}\n        ></iframe>\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nAs contributors and maintainers of the Atmos project by [Cloud Posse](https://cloudposse.com), we pledge to respect everyone who contributes by posting issues, updating documentation, submitting pull requests, providing feedback in comments, and any other activities.\n</Intro>\n\nCommunication through any of Cloud Posse's channels ([GitHub](https://github.com/cloudposse), [Slack](https://slack.cloudposse.com), [mailing lists](https://cloudposse.com/newsletter), [Twitter](https://twitter.com/cloudposse), etc.) must be constructive and never resort to personal attacks, trolling, public or private harassment, insults, or other unprofessional conduct.\n\nWe promise to extend courtesy and respect to everyone involved in this project regardless of gender, gender identity,\nsexual orientation, disability, age, race, ethnicity, religion, or level of experience. We expect anyone contributing to the Atmos project to do the same.\n\nIf any member of the community violates this code of conduct, the maintainers of the Atmos project may take action,\nremoving issues, comments, and PRs or blocking accounts as deemed appropriate.\n\nimport DocCardList from '@theme/DocCardList'\n\nThanks for the interest in contributing to the Atmos project!\n\n## Contributing Etiquette\n\nPlease see the [Contributor Code of Conduct](/contribute/coc) for information on the rules of conduct.\n\n- It is required that you clearly describe the steps necessary to reproduce the issue you are running into. Although we would love to help our users\n  as much as possible, diagnosing issues without clear reproduction steps is extremely time-consuming and simply not sustainable.\n\n- The issue list of the [atmos](https://github.com/cloudposse/atmos) repository is exclusively for bug reports and feature requests. Non-conforming\n  issues will be closed immediately.\n\n- Issues with no clear steps to reproduce will not be triaged. If an issue is labeled with \"needs: reply\" and receives no further replies from the\n  author of the issue for more than 14 days, it will be closed.\n\n- If you think you have found a bug, or have a new feature idea, please start by making sure it hasn't already\n  been [reported](https://github.com/cloudposse/atmos/issues?utf8=%E2%9C%93&q=is%3Aissue). You can search through existing issues to see if there is a\n  similar one reported. Include closed issues as it may have been closed with a solution.\n\n- Next, [create a new issue](https://github.com/cloudposse/atmos/issues/new/choose) that thoroughly explains the problem. Please fill out the\n  populated issue form before submitting the issue.\n\n## Creating a Good Code Reproduction\n\n### What is a Code Reproduction?\n\nA code reproduction is a small application that demonstrates a particular issue. The code reproduction should contain the minimum amount of code needed to reproduce the issue and should focus on a single issue.\n\n### Why Should You Create a Reproduction?\n\nA code reproduction of the issue you are experiencing helps us better isolate the cause of the problem. This is an important first step to getting any bug fixed!\n\nWithout a reliable code reproduction, it is unlikely we will be able to resolve the issue, leading to it being closed. In other words, creating a code reproduction of the issue helps us help you.\n\n## Creating a Pull Request\n\n- We appreciate you taking the time to contribute! Before submitting a pull request, we ask that you please [create an issue](#creating-an-issue) explaining the bug or feature request and let us know that you plan on making a pull request. If an issue already exists, please comment on that issue letting us know you would like to submit a pull request for it. This helps us to keep track of the pull request and make sure there isn't duplicated effort.\n\n- Looking for an issue to fix? Make sure to look through our issues with the [help wanted](https://github.com/cloudposse/atmos/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22) label!\n\nBy contributing your code to the `cloudposse/atmos` GitHub Repository, you agree to license your contribution under\nthe [Apache license](http://www.apache.org/licenses).\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nA component library is a collection of reusable \"components\" that are reused any number of times from within [Stacks](/core-concepts/stacks).  It's helpful to think of these \"building blocks\" as the essentials of infrastructure, like VPCs, clusters or databases. They should all be kept in a library.\n</Intro>\n\n:::tip\nGet a head start by utilizing Cloud Posse's free [Terraform components for AWS](https://github.com/cloudposse/terraform-aws-components), available on GitHub.\n:::\n\n- **Developer Productivity** Create a component library of vetted terraform root modules that should be used by teams anytime they need to spin\n  up infrastructure for VPCs, clusters, and databases.\n- **Compliance and Governance:** Establish a component library to enforce infrastructure standards, security policies, and compliance requirements.\n  By using pre-approved modules, organizations can maintain control over their infrastructure's configuration, reducing the risk of non-compliance.\n- **Rapid Prototyping and Scalability:** Utilize a component library to quickly prototype and scale applications. Pre-built modules for common\n  infrastructure patterns allow teams to focus on application development rather than infrastructure setup, accelerating time-to-market and ensuring scalability from the outset.\n\n## Filesystem Layouts\n\nThere's no \"one way\" to organize your components, since it's configurable based on your needs in the [CLI Configuration](/cli/configuration). However, here are some popular ways we've seen components organized.\n\n### Simple Filesystem Layout by Toolchain\n\nBy convention, we recommend placing components in a folder organized by the tool, within the `components/` folder.\nIn the following example, our toolchain consists of `docker`, `helmfile` and `terraform`, so a folder is created for each one, with the code\nfor that component inside of it.\n\nIf using `terraform` with multiple clouds, use the [multi-cloud filesystem layout](#multi-cloud-filesystem-layout).\n\n:::tip\nOrganizing the components on the filesystem is configurable in the [Atmos CLI configuration](/cli/configuration/#configuration-file-atmosyaml).\n:::\n\n### Multi-Cloud Filesystem Layout\n\nOne good way to organize components is by the cloud provider for multi-cloud architectures.\n\nFor example, if an architecture consists of infrastructure in AWS, GCP, and Azure, it would look like this:\n\n## Terraform Conventions\n\nFor terraform, we recommend placing the terraform \"root\" modules in the `components/terraform` folder. If the root modules depend on other child modules that are not hosted by a registry, we recommend placing them in a subfolder called `modules/`.\n\nMake your Terraform components small, so they are easily reusable, but not so small that they only do to provide a single resource, which results in large, complicated configurations. A good rule of thumb is they should do one thing well. For example, provision a VPC along with all the subnets, NAT gateways, Internet gateways, NACLs, etc.\n\nUse multiple component to break infrastructure apart into smaller pieces based on how their lifecycles are connected. For example, a single component seldom provides a VPC and a Kubernetes cluster. That's because we should be able to destroy the Kubernetes cluster without destroying the VPC and all the other resources provisioned inside of the VPC (e.g. databases). The VPC, Kubernetes cluster and Databases all have different lifecycles. Similarly, we should be able to deploy a database and destroy it without also destroying all associated backups. Therefore the backups of a database should be a separate component from the database itself.\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nWhen you design cloud architectures with Atmos, you start by breaking them apart into pieces called components. Then, you [implement Terraform \"root modules\"](/core-concepts/components/terraform) for each of those components, and [compose them with Stack configurations](/core-concepts/stacks).\n</Intro>\n\nThe most common use-case for Atmos is using implementing components using [Terraform \"root modules\"](https://developer.hashicorp.com/terraform/language/modules#the-root-module). But since Atmos was designed to be tool-agnostic, [custom commands](/core-concepts/custom-commands) can be used to implement components for any type of tooling.\n\nComponents can be as small as you'd like (but we don't recommend too small), or as large as a [Terralith](/terms/terralith) (but we don't recommend that either). See our [best practices for components](/best-practices/components) to get a sense of what we recommend.\n\nTypical components of an architecture are things like VPCs, clusters, databases, buckets, load balancers, and applications. Implement components using [Terraform \"root\" modules](https://developer.hashicorp.com/terraform/language/modules#the-root-module).\n\nComponents offer a multitude of applications across various business scenarios. Cloud Posse publishes its AWS components for free, so you can see some [technical use-cases for Terraform components](https://docs.cloudposse.com/components/category/aws/).\n\n- **Accelerate Development Cycles:** By reusing components, development teams can significantly shorten the time from concept to deployment, facilitating faster product iterations and quicker responses to market changes.\n\n- **Security policies and compliance controls** DevOps and SecOps teams implement components to uniformly apply security policies and compliance controls across all cloud environments, ensuring regulatory adherence.\n\n- **Enhance Collaboration Across Teams:** Components foster a shared understanding and approach to infrastructure, promoting collaboration between development, operations, and security teams, leading to more cohesive and secure product development.\n\n## Flavors of Components\n\nAtmos natively supports two kinds of components, but using [custom commands](/core-concepts/custom-commands), the [CLI](/cli) can be extended to support anything (e.g. `docker`, `packer`, `ansible`, etc.)\n\n1. [Terraform](/core-concepts/components/terraform): These are stand-alone \"root modules\" that implement some piece of your infrastructure. For example, typical components might be an\n   EKS cluster, RDS cluster, EFS filesystem, S3 bucket, DynamoDB table, etc. You can find\n   the [full library of SweetOps Terraform components on GitHub](https://github.com/cloudposse/terraform-aws-components). By convention, we store\n   components in the `components/terraform/` directory within the infrastructure repository.\n\n2. [Helmfiles](/core-concepts/components/helmfile): These are stand-alone applications deployed using [`helmfile`](https://github.com/helmfile) to Kubernetes. For example, typical\n   helmfiles might deploy the DataDog agent, `cert-manager` controller, `nginx-ingress` controller, etc. By convention, we store these types of components in the `components/helmfile/` directory within the infrastructure repository.\n\n## Terraform Components\n\nOne important distinction about components that is worth noting about Terraform components is they should be opinionated Terraform \"root\" modules that typically call other child modules. Components are the building blocks of your infrastructure. This is where you define all the business logic for provisioning some common piece of infrastructure like ECR repos (with the [ecr](https://github.com/cloudposse/terraform-aws-components/tree/main/modules/ecr) component) or EKS clusters (with the [eks/cluster](https://github.com/cloudposse/terraform-aws-components/tree/main/modules/eks/cluster) component). Our convention is to stick Terraform components in the `components/terraform/` directory.\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nAtmos natively supports opinionated workflows for [Helmfile](https://github.com/helmfile/helmfile). Helmfile provides a declarative specification for deploying helm charts.\n</Intro>\n\nFor a complete list of supported commands, please see the Atmos [helmfile](/cli/commands/helmfile/usage) documentation.\n\n## Example: Provision Helmfile Component\n\nTo provision a helmfile component using the `atmos` CLI, run the following commands in the container shell:\n\n- `nginx-ingress` is the helmfile component to provision (from the `components/helmfile` folder)\n- `--stack=ue2-dev` is the stack to provision the component into\n\nShort versions of the command-line arguments can be used:\n\n## Example: Helmfile Diff\n\nTo execute `diff` and `apply` in one step, use `helmfile deploy` command:\n\n## Terraform/OpenTofu Backends\n\nimport Terminal from '@site/src/components/Terminal'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nBackends define where [Terraform](https://opentofu.org/docs/language/state/) and\n[OpenTofu](https://opentofu.org/docs/language/state/) store its state.\n</Intro>\n\nAtmos supports all the backends supported by Terraform:\n\n- [local](https://developer.hashicorp.com/terraform/language/settings/backends/local)\n- [s3](https://developer.hashicorp.com/terraform/language/settings/backends/s3)\n- [azurerm](https://developer.hashicorp.com/terraform/language/settings/backends/azurerm)\n- [gcs](https://developer.hashicorp.com/terraform/language/settings/backends/gcs)\n- [remote](https://developer.hashicorp.com/terraform/language/settings/backends/remote)\n- [consul](https://developer.hashicorp.com/terraform/language/settings/backends/consul)\n- [cos](https://developer.hashicorp.com/terraform/language/settings/backends/cos)\n- [http](https://developer.hashicorp.com/terraform/language/settings/backends/http)\n- [kubernetes](https://developer.hashicorp.com/terraform/language/settings/backends/kubernetes)\n- [oss](https://developer.hashicorp.com/terraform/language/settings/backends/oss)\n- [pg](https://developer.hashicorp.com/terraform/language/settings/backends/pg)\n- [cloud](https://developer.hashicorp.com/terraform/cli/cloud/settings)\n\nAtmos supports all the backends supported by OpenTofu:\n\n- [local](https://opentofu.org/docs/language/settings/backends/local)\n- [s3](https://opentofu.org/docs/language/settings/backends/s3)\n- [azurerm](https://opentofu.org/docs/language/settings/backends/azurerm)\n- [gcs](https://opentofu.org/docs/language/settings/backends/gcs)\n- [remote](https://opentofu.org/docs/language/settings/backends/remote)\n- [consul](https://opentofu.org/docs/language/settings/backends/consul)\n- [cos](https://opentofu.org/docs/language/settings/backends/cos)\n- [http](https://opentofu.org/docs/language/settings/backends/http)\n- [kubernetes](https://opentofu.org/docs/language/settings/backends/kubernetes)\n- [oss](https://opentofu.org/docs/language/settings/backends/oss)\n- [pg](https://opentofu.org/docs/language/settings/backends/pg)\n\nBy default, Terraform will use a backend called [local](https://developer.hashicorp.com/terraform/language/settings/backends/local), which stores\nTerraform state on the local filesystem, locks that state using system APIs, and performs operations locally.\n\nTerraform's local backend is designed for development and testing purposes and is generally not recommended for production use. There are several reasons why using the local backend in a production environment may not be suitable:\n\n- **Not Suitable for Collaboration**: Local backend doesn't support easy state sharing.\n- **No Concurrency and Locking**: Local backend lacks locking, leading to race conditions when multiple users modify the state.\n- **Lacks Durability and Backup**: Local backend has no durability or backup. Machine failures can lead to data loss.\n- **Unsuitable for CI/CD**: Local backend isn't ideal for CI/CD pipelines.\n\nTo address these concerns, it's recommended to use one of the supported remote backends, such as Amazon S3, Azure Storage, Google Cloud Storage, HashiCorp Consul, or Terraform Cloud, for production environments. Remote backends provide better scalability, collaboration support, and durability, making them more suitable for managing infrastructure at scale in production environments.\n\nTerraform's [S3](https://developer.hashicorp.com/terraform/language/settings/backends/s3) backend is a popular remote\nbackend for storing Terraform state files in an Amazon Simple Storage Service (S3) bucket. Using S3 as a backend offers\nmany advantages, particularly in production environments.\n\nTo configure Terraform to use an S3 backend, you typically provide the S3 bucket name and an optional key prefix in your Terraform configuration.\nHere's a simplified example:\n\nIn the example, `terraform_locks` is a DynamoDB table used for state locking. DynamoDB is recommended for locking when using the S3 backend to ensure\nsafe concurrent access.\n\nOnce the S3 bucket and DynamoDB table are provisioned, you can start using them to store Terraform state for the Terraform components.\nThere are two ways of doing this:\n\n- Manually create `backend.tf` file in each component's folder with the following content:\n\n<Terminal title=\"components/terraform/vpc/backend.tf\">\n\n- Configure Terraform S3 backend with Atmos to automatically generate a backend file for each Atmos component. This is the recommended way\nof configuring Terraform state backend since it offers many advantages and will save you from manually creating a backend configuration file for\neach component\n\nConfiguring Terraform S3 backend with Atmos consists of three steps:\n\n- Set `auto_generate_backend_file` to `true` in the `atmos.yaml` CLI config file in the `components.terraform` section:\n\n<Terminal title=\"atmos.yaml\">\n\n- Configure the S3 backend in one of the `_defaults.yaml` manifests. You can configure it for the entire Organization, or per OU/tenant, or per\nregion, or per account.\n\n:::note\nThe `_defaults.yaml` stack manifests contain the default settings for Organizations, Organizational Units, and accounts.\n:::\n\n:::info\nThe `_defaults.yaml` stack manifests are not imported into other Atmos manifests automatically.\nYou need to explicitly import them using [imports](/core-concepts/stacks/imports).\n:::\n\nTo configure the S3 backend for the entire Organization, add the following config in `stacks/orgs/acme/_defaults.yaml`:\n\n<Terminal title=\"stacks/orgs/acme/_defaults.yaml\">\n\n- (This step is optional) For each component, you can add `workspace_key_prefix` similar to the following:\n\n<Terminal title=\"stacks/catalog/vpc.yaml\">\n\nNote that this is optional. If you donât add `backend.s3.workspace_key_prefix` to the component manifest, the Atmos component name will be used\nautomatically (which is this example is `vpc`). `/` (slash) in the Atmos component name will be replaced with `-` (dash).\n\nWe usually donât specify `workspace_key_prefix` for each component and let Atmos use the component name as `workspace_key_prefix`.\n\nOnce all the above is configured, when you run the commands `atmos terraform plan vpc -s <stack>`\nor `atmos terraform apply vpc -s <stack>`, before executing the Terraform commands, Atmos will [deep-merge](#backend-inheritance)\nthe backend configurations from the `_defaults.yaml` manifest and from the component itself, and will generate a backend\nconfig JSON file `backend.tf.json` in the component's folder, similar to the following example:\n\n<Terminal title=\"backend.tf.json\">\n\nYou can also generate the backend configuration file for a component in a stack by executing the\ncommand [atmos terraform generate backend](/cli/commands/terraform/generate-backend). Or generate the backend configuration files for all components\nby executing the command [atmos terraform generate backends](/cli/commands/terraform/generate-backends).\n\n## Azure Blob Storage Backend\n\n[`azurerm`](https://developer.hashicorp.com/terraform/language/settings/backends/azurerm) backend stores the state as a\nBlob with the given Key within the Blob Container within the Blob Storage Account. This backend supports state locking\nand consistency checking with Azure Blob Storage native capabilities.\n\nTo configure the [Azure Blob Storage backend](https://developer.hashicorp.com/terraform/language/settings/backends/azurerm)\nin Atmos, add the following config to an Atmos manifest in `_defaults.yaml`:\n\n<Terminal title=\"_defaults.yaml\">\n\nFor each component, you can optionally add the `key` parameter similar to the following:\n\nIf the `key` is not specified for a component, Atmos will use the component name (`my-component` in the example above)\nto auto-generate the `key` parameter in the format `<component-name>.terraform.tfstate` replacing `<component-name>`\nwith the Atmos component name. In `<component-name>`, all occurrences of `/` (slash) will be replaced with `-` (dash).\n\nIf `auto_generate_backend_file` is set to `true` in the `atmos.yaml` CLI config file in the `components.terraform` section,\nAtmos will [deep-merge](#backend-inheritance) the backend configurations from the `_defaults.yaml` manifests and\nfrom the component itself, and will generate a backend config JSON file `backend.tf.json` in the component's folder,\nsimilar to the following example:\n\n<Terminal title=\"backend.tf.json\">\n\n## Google Cloud Storage Backend\n\n[`gcs`](https://developer.hashicorp.com/terraform/language/settings/backends/gcs) backend stores the state as an object\nin a configurable `prefix` in a pre-existing bucket on Google Cloud Storage (GCS).\nThe bucket must exist prior to configuring the backend. The backend supports state locking.\n\nTo configure the [Google Cloud Storage backend](https://developer.hashicorp.com/terraform/language/settings/backends/gcs)\nin Atmos, add the following config to an Atmos manifest in `_defaults.yaml`:\n\n<Terminal title=\"_defaults.yaml\">\n\nFor each component, you can optionally add the `prefix` parameter similar to the following:\n\nIf the `prefix` is not specified for a component, Atmos will use the component name (`my-component` in the example above)\nto auto-generate the `prefix`. In the component name, all occurrences of `/` (slash) will be replaced with `-` (dash).\n\nIf `auto_generate_backend_file` is set to `true` in the `atmos.yaml` CLI config file in the `components.terraform` section,\nAtmos will [deep-merge](#backend-inheritance) the backend configurations from the `_defaults.yaml` manifests and\nfrom the component itself, and will generate a backend config JSON file `backend.tf.json` in the component's folder,\nsimilar to the following example:\n\n<Terminal title=\"backend.tf.json\">\n\n## Terraform Cloud Backend\n\n[Terraform Cloud](https://developer.hashicorp.com/terraform/cli/cloud/settings) backend uses a `cloud` block to specify\nwhich organization and workspace(s) to use.\n\nTo configure the [Terraform Cloud backend](https://developer.hashicorp.com/terraform/cli/cloud/settings)\nin Atmos, add the following config to an Atmos manifest in `_defaults.yaml`:\n\n<Terminal title=\"_defaults.yaml\">\n\nFor each component, you can optionally specify the `workspaces.name` parameter similar to the following:\n\nIf `auto_generate_backend_file` is set to `true` in the `atmos.yaml` CLI config file in the `components.terraform` section,\nAtmos will [deep-merge](#backend-inheritance) the backend configurations from the `_defaults.yaml` manifests and\nfrom the component itself, and will generate a backend config JSON file `backend.tf.json` in the component's folder,\nsimilar to the following example:\n\n<Terminal title=\"backend.tf.json\">\n\nInstead of specifying the `workspaces.name` parameter for each component in the component manifests, you can use\nthe `{terraform_workspace}` token in the `cloud` backend config in the `_defaults.yaml` manifest.\nThe token `{terraform_workspace}` will be automatically replaced by Atmos with the Terraform workspace for each component.\nThis will make the entire configuration DRY.\n\n<Terminal title=\"_defaults.yaml\">\n\n:::tip\nRefer to [Terraform Workspaces in Atmos](/core-concepts/components/terraform/workspaces) for more information on how\nAtmos calculates Terraform workspaces for components, and how workspaces can be overridden for each component.\n:::\n\n## Backend Inheritance\n\nSuppose that for security and audit reasons, you want to use different Terraform backends for `dev`, `staging` and `prod`.\nEach account needs to have a separate S3 bucket, DynamoDB table, and IAM role with different permissions\n(for example, the `development` Team should be able to access the Terraform backend only in the `dev` account, but not in `staging` and `prod`).\n\nAtmos supports this use-case by using deep-merging of stack manifests, [Imports](/core-concepts/stacks/imports)\nand [Inheritance](/core-concepts/stacks/inheritance), which makes the backend configuration reusable and DRY.\n\nWe'll split the backend config between the Organization and the accounts.\n\nAdd the following config to the Organization stack manifest in `stacks/orgs/acme/_defaults.yaml`:\n\n<Terminal title=\"stacks/orgs/acme/_defaults.yaml\">\n\nAdd the following config to the `dev` stack manifest in `stacks/orgs/acme/plat/dev/_defaults.yaml`:\n\n<Terminal title=\"stacks/orgs/acme/plat/dev/_defaults.yaml\">\n\nAdd the following config to the `staging` stack manifest in `stacks/orgs/acme/plat/staging/_defaults.yaml`:\n\n<Terminal title=\"stacks/orgs/acme/plat/staging/_defaults.yaml\">\n\nAdd the following config to the `prod` stack manifest in `stacks/orgs/acme/plat/prod/_defaults.yaml`:\n\n<Terminal title=\"stacks/orgs/acme/plat/prod/_defaults.yaml\">\n\nWhen you provision the `vpc` component into the `dev` account (by executing the command `atmos terraform apply vpc -s plat-ue2-dev`), Atmos will\ndeep-merge the backend configuration from the Organization-level manifest with the configuration from the `dev` manifest, and will automatically\nadd `workspace_key_prefix` for the component, generating the following final deep-merged backend config for the `vpc` component in the `dev` account:\n\nIn the same way, you can create different Terraform backends per Organizational Unit, per region, per account (or a group of accounts, e.g. `prod`\nand `non-prod`), or even per component or a set of components (e.g. root-level components like `account` and IAM roles can have a separate backend),\nand then configure parts of the backend config in the corresponding Atmos stack manifests. Atmos will deep-merge all the parts from the\ndifferent scopes and generate the final backend config for the components in the stacks.\n\n## Terraform/OpenTofu Backend with Multiple Component Instances\n\nWe mentioned before that you can configure the Terraform backend for the components manually (by creating a file `backend.tf` in each Terraform\ncomponent's folder), or you can set up Atmos to generate the backend configuration for each component in the stacks automatically. While\nauto-generating the backend config file is helpful and saves you from creating the backend files for each component, it becomes a requirement\nwhen you provision multiple instances of a Terraform component into the same environment (same account and region).\n\nYou can provision more than one instance of the same Terraform component (with the same or different settings) into the same environment by defining\nmany Atmos components that provide configuration for the Terraform component.\n\n:::tip\nFor more information on configuring and provision multiple instances of a Terraform component,\nrefer to [Multiple Component Instances Atmos Design Patterns](/design-patterns/multiple-component-instances)\n:::\n\nFor example, the following config shows how to define two Atmos\ncomponents, `vpc/1` and `vpc/2`, which both point to the same Terraform component `vpc`:\n\nIf we manually create a `backend.tf` file for the `vpc` Terraform component in the `components/terraform/vpc` folder\nusing `workspace_key_prefix: \"vpc\"`, then both `vpc/1` and `vpc/2` Atmos components will use the same `workspace_key_prefix`, and they will\nnot function correctly.\n\nOn the other hand, if we configure Atmos to auto-generate the backend config file, then each component will have a different `workspace_key_prefix`\nauto-generated by Atmos by using the Atmos component name (or you can override this behavior by specifying `workspace_key_prefix` for each component\nin the component manifest in the `backend.s3.workspace_key_prefix` section).\n\nFor example, when the command `atmos terraform apply vpc/1 -s plat-ue2-dev` is executed, the following `backend.tf.json` file is generated in the\n`components/terraform/vpc` folder:\n\nSimilarly, when the command `atmos terraform apply vpc/2 -s plat-ue2-dev` is executed, the following `backend.tf.json` file is generated in the\n`components/terraform/vpc` folder:\n\nThe generated files will have different `workspace_key_prefix` attribute auto-generated by Atmos.\n\nFor this reason, configuring Atmos to auto-generate the backend configuration for the components in the stacks is recommended\nfor all supported backend types.\n\n- [Terraform Backend Configuration](https://developer.hashicorp.com/terraform/language/settings/backends/configuration)\n- [OpenTofu Backend Configuration](https://opentofu.org/docs/language/settings/backends/configuration)\n- [Terraform Cloud Settings](https://developer.hashicorp.com/terraform/cli/cloud/settings)\n- [Multiple Component Instances Atmos Design Patterns](/design-patterns/multiple-component-instances)\n\n## Brownfield Considerations\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nThere are some considerations you should be aware of when adopting Atmos in a brownfield environment. Atmos works best when you adopt the [Atmos mindset](/quick-start/mindset).\n</Intro>\n\nThe term \"brownfield\" comes from urban planning and refers to the redevelopment of land that was previously used and may need cleaning or modification. As it relates to infrastructure, [Brownfield development](https://en.wikipedia.org/wiki/Brownfield_(software_development)) describes the development and deployment of new software systems in the presence of existing (legacy) software applications/systems. Anytime this happens, new software architectures must take into account and coexist with the existing software.\n\nAtmos is not just a tool; it is a framework that provides a set of opinionated conventions, methodologies, design patterns, and best practices to ensure teams succeed with Terraform from the start. It can be hard to shoehorn existing systems that are not designed according to the [Atmos mindset](/quick-start/mindset).\n\n- **Decomposition**: Not only do you have challenges around how to decompose your architecture, but also the difficulty of making changes to live systems.\n- **Technical Debt:** You may have significant technical debt that needs to be addressed\n- **Knowledge Gaps**: There may be gaps in knowledge within the team regarding Atmos conventions and methodologies.\n\nBy understanding these challenges, teams can better prepare for a smooth transition to using Atmos effectively.\n\n## Brownfield Development in Atmos\n\nAtmos is easier for new organizations or \"greenfield\" environments because you need to architect Terraform according to\nour [best practices](/best-practices/components) to get all the benefits of Atmos. For example, when using our [Terraform components](https://github.com/cloudposse/terraform-aws-components), we frequently use [Terraform Remote State](/core-concepts/share-data/remote-state) to retrieve the outputs from other components.\n\nThis works well when you use our components but less so when you operate in a \"brownfield\" environment, for example,\nwith an existing VPC, S3 bucket, or IAM role.\n\nWhen you approach brownfield development with Atmos, begin by designing what your architecture could look like if you break it down into various pieces. Then devise a plan to decompose those pieces into components you implement as Terraform \"root modules\".\n\nThe process of configuring Atmos components and stacks for the existing, already provisioned resources, will depend on how easy or hard this decomposition will be. Working on and updating existing infrastructure rather than creating a new one from scratch, known as \"greenfield\" development, will always be more difficult.\n\nThe process needs to respect the existing systems' constraints while progressively introducing improvements and modern practices. This will ultimately lead to more robust, flexible, and efficient systems.\n\n## Remote State in Brownfield Development\n\nSo what happens when infrastructure wasn't provisioned by Atmos or predates your infrastructure? Then there's no way to retrieve that state in Terraform.\n\nFor this reason, we support something we refer to as the `static` remote state backend. Using the static remote state backend, you can\npopulate a virtual state backend with the outputs as though it had been provisioned with Terraform. You can use this\ntechnique anytime you want to use the remote state functionality in Atmos, but when the remote state was provisioned\nelsewhere.\n\n### Hacking Remote State with `static` Backends\n\nAtmos supports brownfield configuration by using the remote state of type `static`.\n\nSuppose that we need to provision\nthe [`vpc`](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/components/terraform/vpc)\nTerraform component and, instead of provisioning an S3 bucket for VPC Flow Logs, we want to use an existing bucket.\n\nThe `vpc` Terraform component needs the outputs from the `vpc-flow-logs-bucket` Terraform component to\nconfigure [VPC Flow Logs](https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html).\n\nLet's redesign the example with the `vpc` and `vpc-flow-logs-bucket` components described in\n[Terraform Component Remote State](/core-concepts/share-data/remote-state) and configure the `static` remote state for\nthe `vpc-flow-logs-bucket` component to use an existing S3 bucket.\n\n### Configure the `vpc-flow-logs-bucket` Component\n\nIn the `stacks/catalog/vpc-flow-logs-bucket.yaml` file, add the following configuration for\nthe `vpc-flow-logs-bucket/defaults` Atmos component:\n\nIn the `stacks/ue2-dev.yaml` stack config file, add the following config for the `vpc-flow-logs-bucket-1` Atmos\ncomponent in the `ue2-dev` Atmos stack:\n\n```yaml title=\"stacks/ue2-dev.yaml\"",
+  "code_samples": [
+    {
+      "code": "âââ components/\n    âââ docker/\n    âÂ Â  âââ Dockerfile\n    âââ helmfile/\n    âÂ Â  âââ example-app\n    âÂ Â      âââ helmfile.yaml\n    âââ terraform/\n        âââ example/                  # This is a terraform \"root\" module\n            âââ main.tf\n            âââ outputs.tf\n            âââ modules/              # You can include submodules inside the component folder,\n            âÂ Â  âââ bar/              # and then reference them inside the of your root module.\n            âÂ Â  âââ foo/              # e.g.\n            âÂ Â      âââ main.tf       # module \"foo\" {\n            âÂ Â      âââ outputs.tf    #   source = \"./modules/foo\"\n            âÂ Â      âââ variables.tf  #   ...\n            âââ variables.tf          # }",
+      "language": "console"
+    },
+    {
+      "code": "âââ components/\n    âââ terraform/\n        âââ aws/                   # Components for Amazon Web Services (AWS)\n        â   âââ example/\n        â       âââ main.tf\n        â       âââ outputs.tf\n        â       âââ variables.tf\n        âââ gcp/                   # Components for Google Cloud (GCP)\n        â   âââ example/\n        â       âââ main.tf\n        â       âââ outputs.tf\n        â       âââ variables.tf\n        âââ azure/                 # Components for Microsoft Azure (Azure)\n            âââ example/\n                âââ main.tf\n                âââ outputs.tf\n                âââ variables.tf",
+      "language": "console"
+    },
+    {
+      "code": "atmos helmfile diff nginx-ingress --stack=ue2-dev\natmos helmfile apply nginx-ingress --stack=ue2-dev",
+      "language": "shell"
+    },
+    {
+      "code": "atmos helmfile diff nginx-ingress -s ue2-dev\natmos helmfile apply nginx-ingress -s ue2-dev",
+      "language": "shell"
+    },
+    {
+      "code": "atmos helmfile deploy nginx-ingress -s ue2-dev",
+      "language": "shell"
+    },
+    {
+      "code": "terraform {\n    backend \"s3\" {\n        acl            = \"bucket-owner-full-control\"\n        bucket         = \"your-s3-bucket-name\"\n        key            = \"path/to/terraform.tfstate\"\n        region         = \"your-aws-region\"\n        encrypt        = true\n        dynamodb_table = \"terraform_locks\"\n    }\n}",
+      "language": "hcl"
+    },
+    {
+      "code": "terraform {\n    backend \"s3\" {\n        acl                  = \"bucket-owner-full-control\"\n        bucket               = \"your-s3-bucket-name\"\n        dynamodb_table       = \"your-dynamodb-table-name\"\n        encrypt              = true\n        key                  = \"terraform.tfstate\"\n        region               = \"your-aws-region\"\n        role_arn             = \"arn:aws:iam::xxxxxxxx:role/IAM Role with permissions to access the Terraform backend\"\n        workspace_key_prefix = \"component name, e.g. `vpc` or `vpc-flow-logs-bucket`\"\n  }\n}",
+      "language": "hcl"
+    },
+    {
+      "code": "components:\n  terraform:\n    # Can also be set using 'ATMOS_COMPONENTS_TERRAFORM_AUTO_GENERATE_BACKEND_FILE' ENV var, or '--auto-generate-backend-file' command-line argument\n    auto_generate_backend_file: true",
+      "language": "yaml"
+    },
+    {
+      "code": "terraform:\n  backend_type: s3\n  backend:\n    s3:\n      acl: \"bucket-owner-full-control\"\n      encrypt: true\n      bucket: \"your-s3-bucket-name\"\n      dynamodb_table: \"your-dynamodb-table-name\"\n      key: \"terraform.tfstate\"\n      region: \"your-aws-region\"\n      role_arn: \"arn:aws:iam::xxxxxxxx:role/IAM Role with permissions to access the Terraform backend\"",
+      "language": "yaml"
+    },
+    {
+      "code": "components:\n  terraform:\n    # `vpc` is the Atmos component name\n    vpc:\n      # Optional backend configuration for the component\n      backend:\n        s3:\n          workspace_key_prefix: vpc\n      metadata:\n        # Point to the Terraform component\n        component: vpc\n      settings: {}\n      vars: {}\n      env: {}",
+      "language": "yaml"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"backend\": {\n      \"s3\": {\n        \"acl\": \"bucket-owner-full-control\",\n        \"bucket\": \"your-s3-bucket-name\",\n        \"dynamodb_table\": \"your-dynamodb-table-name\",\n        \"encrypt\": true,\n        \"key\": \"terraform.tfstate\",\n        \"region\": \"your-aws-region\",\n        \"role_arn\": \"arn:aws:iam::xxxxxxxx:role/IAM Role with permissions to access the Terraform backend\",\n        \"workspace_key_prefix\": \"vpc\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "terraform:\n  backend_type: azurerm\n  backend:\n    azurerm:\n      resource_group_name: \"StorageAccount-ResourceGroup\"\n      storage_account_name: \"abcd1234\"\n      container_name: \"tfstate\"\n      # Other parameters",
+      "language": "yaml"
+    },
+    {
+      "code": "components:\n  terraform:\n    my-component:\n      # Optional backend configuration for the component\n      backend:\n        azurerm:\n          key: \"my-component\"",
+      "language": "yaml"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"backend\": {\n      \"azurerm\": {\n        \"resource_group_name\": \"StorageAccount-ResourceGroup\",\n        \"storage_account_name\": \"abcd1234\",\n        \"container_name\": \"tfstate\",\n        \"key\": \"my-component.terraform.tfstate\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "terraform:\n  backend_type: gcs\n  backend:\n    gcs:\n      bucket: \"tf-state\"\n      # Other parameters",
+      "language": "yaml"
+    },
+    {
+      "code": "components:\n  terraform:\n    my-component:\n      # Optional backend configuration for the component\n      backend:\n        gcp:\n          prefix: \"my-component\"",
+      "language": "yaml"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"backend\": {\n      \"gcp\": {\n        \"bucket\": \"tf-state\",\n        \"prefix\": \"my-component\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "terraform:\n  backend_type: cloud\n  backend:\n    cloud:\n      organization: \"my-org\"\n      hostname: \"app.terraform.io\"\n      workspaces:\n        # Parameters for workspaces",
+      "language": "yaml"
+    },
+    {
+      "code": "components:\n  terraform:\n    my-component:\n      # Optional backend configuration for the component\n      backend:\n        cloud:\n          workspaces:\n            name: \"my-component-workspace\"",
+      "language": "yaml"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"cloud\": {\n      \"hostname\": \"app.terraform.io\",\n      \"organization\": \"my-org\",\n      \"workspaces\": {\n        \"name\": \"my-component-workspace\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "terraform:\n  backend_type: cloud\n  backend:\n    cloud:\n      organization: \"my-org\"\n      hostname: \"app.terraform.io\"\n      workspaces:\n        # The token `{terraform_workspace}` will be automatically replaced with the\n        # Terraform workspace for each Atmos component\n        name: \"{terraform_workspace}\"",
+      "language": "yaml"
+    },
+    {
+      "code": "terraform:\n  backend_type: s3\n  backend:\n    s3:\n      acl: \"bucket-owner-full-control\"\n      encrypt: true\n      key: \"terraform.tfstate\"\n      region: \"your-aws-region\"",
+      "language": "yaml"
+    },
+    {
+      "code": "terraform:\n  backend_type: s3\n  backend:\n    s3:\n      bucket: \"your-dev-s3-bucket-name\"\n      dynamodb_table: \"your-dev-dynamodb-table-name\"\n      role_arn: \"IAM Role with permissions to access the 'dev' Terraform backend\"",
+      "language": "yaml"
+    },
+    {
+      "code": "terraform:\n  backend_type: s3\n  backend:\n    s3:\n      bucket: \"your-staging-s3-bucket-name\"\n      dynamodb_table: \"your-staging-dynamodb-table-name\"\n      role_arn: \"IAM Role with permissions to access the 'staging' Terraform backend\"",
+      "language": "yaml"
+    },
+    {
+      "code": "terraform:\n  backend_type: s3\n  backend:\n    s3:\n      bucket: \"your-prod-s3-bucket-name\"\n      dynamodb_table: \"your-prod-dynamodb-table-name\"\n      role_arn: \"IAM Role with permissions to access the 'prod' Terraform backend\"",
+      "language": "yaml"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"backend\": {\n      \"s3\": {\n        \"acl\": \"bucket-owner-full-control\",\n        \"bucket\": \"your-dev-s3-bucket-name\",\n        \"dynamodb_table\": \"your-dev-dynamodb-table-name\",\n        \"encrypt\": true,\n        \"key\": \"terraform.tfstate\",\n        \"region\": \"your-aws-region\",\n        \"role_arn\": \"<IAM Role with permissions to access the `dev` Terraform backend>\",\n        \"workspace_key_prefix\": \"vpc\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "import:\n  # Import the defaults for all VPC components\n  - catalog/vpc/defaults\n\ncomponents:\n  terraform:\n    # Atmos component `vpc/1`\n    vpc/1:\n      metadata:\n        # Point to the Terraform component in `components/terraform/vpc`\n        component: vpc\n        # Inherit the defaults for all VPC components\n        inherits:\n          - vpc/defaults\n      # Define variables specific to this `vpc/1` component\n      vars:\n        name: vpc-1\n        ipv4_primary_cidr_block: 10.9.0.0/18\n      # Optional backend configuration for the component\n      # If not specified, the Atmos component name `vpc/1` will be used (`/` will be replaced with `-`)\n      backend:\n        s3:\n          workspace_key_prefix: vpc-1\n\n    # Atmos component `vpc/2`\n    vpc/2:\n      metadata:\n        # Point to the Terraform component in `components/terraform/vpc`\n        component: vpc\n        # Inherit the defaults for all VPC components\n        inherits:\n          - vpc/defaults\n      # Define variables specific to this `vpc/2` component\n      vars:\n        name: vpc-2\n        ipv4_primary_cidr_block: 10.10.0.0/18\n      # Optional backend configuration for the component\n      # If not specified, the Atmos component name `vpc/2` will be used (`/` will be replaced with `-`)\n      backend:\n        s3:\n          workspace_key_prefix: vpc-2",
+      "language": "yaml"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"backend\": {\n      \"s3\": {\n        \"acl\": \"bucket-owner-full-control\",\n        \"bucket\": \"your-dev-s3-bucket-name\",\n        \"dynamodb_table\": \"your-dev-dynamodb-table-name\",\n        \"encrypt\": true,\n        \"key\": \"terraform.tfstate\",\n        \"region\": \"your-aws-region\",\n        \"role_arn\": \"<IAM Role with permissions to access the `dev` Terraform backend>\",\n        \"workspace_key_prefix\": \"vpc-1\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "{\n  \"terraform\": {\n    \"backend\": {\n      \"s3\": {\n        \"acl\": \"bucket-owner-full-control\",\n        \"bucket\": \"your-dev-s3-bucket-name\",\n        \"dynamodb_table\": \"your-dev-dynamodb-table-name\",\n        \"encrypt\": true,\n        \"key\": \"terraform.tfstate\",\n        \"region\": \"your-aws-region\",\n        \"role_arn\": \"<IAM Role with permissions to access the `dev` Terraform backend>\",\n        \"workspace_key_prefix\": \"vpc-2\"\n      }\n    }\n  }\n}",
+      "language": "json"
+    },
+    {
+      "code": "In the `stacks/ue2-dev.yaml` stack config file, add the following config for the `vpc-flow-logs-bucket-1` Atmos\ncomponent in the `ue2-dev` Atmos stack:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "#atmos",
+      "id": "#atmos"
+    },
+    {
+      "level": "h2",
+      "text": "Join our Slack Community!",
+      "id": "join-our-slack-community!"
+    },
+    {
+      "level": "h2",
+      "text": "Code of Conduct",
+      "id": "code-of-conduct"
+    },
+    {
+      "level": "h2",
+      "text": "Contributing",
+      "id": "contributing"
+    },
+    {
+      "level": "h2",
+      "text": "How to Contribute",
+      "id": "how-to-contribute"
+    },
+    {
+      "level": "h2",
+      "text": "Contributing Etiquette",
+      "id": "contributing-etiquette"
+    },
+    {
+      "level": "h2",
+      "text": "Creating an Issue",
+      "id": "creating-an-issue"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a Good Code Reproduction",
+      "id": "creating-a-good-code-reproduction"
+    },
+    {
+      "level": "h3",
+      "text": "What is a Code Reproduction?",
+      "id": "what-is-a-code-reproduction?"
+    },
+    {
+      "level": "h3",
+      "text": "Why Should You Create a Reproduction?",
+      "id": "why-should-you-create-a-reproduction?"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a Pull Request",
+      "id": "creating-a-pull-request"
+    },
+    {
+      "level": "h2",
+      "text": "License",
+      "id": "license"
+    },
+    {
+      "level": "h2",
+      "text": "Component Library",
+      "id": "component-library"
+    },
+    {
+      "level": "h2",
+      "text": "Use-cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Filesystem Layouts",
+      "id": "filesystem-layouts"
+    },
+    {
+      "level": "h3",
+      "text": "Simple Filesystem Layout by Toolchain",
+      "id": "simple-filesystem-layout-by-toolchain"
+    },
+    {
+      "level": "h3",
+      "text": "Multi-Cloud Filesystem Layout",
+      "id": "multi-cloud-filesystem-layout"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform Conventions",
+      "id": "terraform-conventions"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos Components",
+      "id": "atmos-components"
+    },
+    {
+      "level": "h2",
+      "text": "Use-cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Flavors of Components",
+      "id": "flavors-of-components"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform Components",
+      "id": "terraform-components"
+    },
+    {
+      "level": "h2",
+      "text": "Using Helmfiles",
+      "id": "using-helmfiles"
+    },
+    {
+      "level": "h2",
+      "text": "Example: Provision Helmfile Component",
+      "id": "example:-provision-helmfile-component"
+    },
+    {
+      "level": "h2",
+      "text": "Example: Helmfile Diff",
+      "id": "example:-helmfile-diff"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform/OpenTofu Backends",
+      "id": "terraform/opentofu-backends"
+    },
+    {
+      "level": "h2",
+      "text": "Local Backend",
+      "id": "local-backend"
+    },
+    {
+      "level": "h2",
+      "text": "AWS S3 Backend",
+      "id": "aws-s3-backend"
+    },
+    {
+      "level": "h2",
+      "text": "Azure Blob Storage Backend",
+      "id": "azure-blob-storage-backend"
+    },
+    {
+      "level": "h2",
+      "text": "Google Cloud Storage Backend",
+      "id": "google-cloud-storage-backend"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform Cloud Backend",
+      "id": "terraform-cloud-backend"
+    },
+    {
+      "level": "h2",
+      "text": "Backend Inheritance",
+      "id": "backend-inheritance"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform/OpenTofu Backend with Multiple Component Instances",
+      "id": "terraform/opentofu-backend-with-multiple-component-instances"
+    },
+    {
+      "level": "h2",
+      "text": "References",
+      "id": "references"
+    },
+    {
+      "level": "h2",
+      "text": "Brownfield Considerations",
+      "id": "brownfield-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Brownfield Development in Atmos",
+      "id": "brownfield-development-in-atmos"
+    },
+    {
+      "level": "h2",
+      "text": "Remote State in Brownfield Development",
+      "id": "remote-state-in-brownfield-development"
+    },
+    {
+      "level": "h3",
+      "text": "Hacking Remote State with `static` Backends",
+      "id": "hacking-remote-state-with-`static`-backends"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Configure the `vpc-flow-logs-bucket` Component",
+      "id": "configure-the-`vpc-flow-logs-bucket`-component"
+    }
+  ],
+  "url": "llms-txt#office-hours-registration",
+  "links": []
+}

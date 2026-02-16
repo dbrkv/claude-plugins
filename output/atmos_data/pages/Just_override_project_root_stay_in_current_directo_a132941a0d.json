@@ -1,0 +1,8 @@
+{
+  "title": "Just override project root (stay in current directory)",
+  "content": "atmos --base-path=/custom/location terraform plan vpc -s prod",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#just-override-project-root-(stay-in-current-directory)",
+  "links": []
+}

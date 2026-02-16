@@ -1,0 +1,19 @@
+{
+  "title": "Safe and predictable - the function receives and returns proper YAML types",
+  "content": "vpc_id: !terraform.output vpc.vpc_id\nenvironment: !env AWS_ENVIRONMENT\nconfig: !include common-config.yaml\nyaml",
+  "code_samples": [
+    {
+      "code": "### Template Functions (Use with Caution) â ï¸\n\nTemplate functions use Go's text templating to **manipulate the raw text** before YAML parsing. They operate on the document as a string, not as structured data.\n\n**Disadvantages:**\n- **Error-prone**: Can easily generate invalid YAML syntax\n- **Type-unsafe**: Work with text, not data types\n- **Fragile**: Whitespace and indentation issues are common\n- **Hard to debug**: Errors appear as YAML parsing failures\n- **Side effects**: Can accidentally modify unintended parts of the document\n\n**Example of potential issues:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Template Functions (Use with Caution) â ï¸",
+      "id": "template-functions-(use-with-caution)-â ï¸"
+    }
+  ],
+  "url": "llms-txt#safe-and-predictable---the-function-receives-and-returns-proper-yaml-types",
+  "links": []
+}

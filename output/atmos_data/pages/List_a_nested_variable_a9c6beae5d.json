@@ -1,0 +1,13 @@
+{
+  "title": "List a nested variable",
+  "content": "atmos list vars vpc --query .vars.settings.vpc\nshell",
+  "code_samples": [
+    {
+      "code": "Filter by stack pattern:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#list-a-nested-variable",
+  "links": []
+}

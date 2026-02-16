@@ -1,0 +1,150 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/alias_private.html",
+  "title": "How to Create Service Aliases and Mark Services as Private",
+  "content": "When defining a service, it can be made to be public or private. If a service is public, it means that you can access it directly from the container at runtime. For example, the doctrine service is a public service:\n\nBut typically, services are accessed using dependency injection. And in this case, those services do not need to be public.\n\nSo unless you specifically need to access a service directly from the container via $container->get(), the best-practice is to make your services private. In fact, All services are private by default.\n\nYou can also control the public option on a service-by-service basis:\n\nIt is also possible to define a service as public thanks to the #[Autoconfigure] attribute. This attribute must be used directly on the class of the service you want to configure:\n\nPrivate services are special because they allow the container to optimize whether and how they are instantiated. This increases the container's performance. It also gives you better errors: if you try to reference a non-existent service, you will get a clear error when you refresh any page, even if the problematic code would not have run on that page.\n\nNow that the service is private, you must not fetch the service directly from the container:\n\nThus, a service can be marked as private if you do not want to access it directly from your code. However, if a service has been marked as private, you can still alias it (see below) to access this service (via the alias).\n\nYou may sometimes want to use shortcuts to access some services. You can do so by aliasing them and, furthermore, you can even alias non-public services.\n\nThis means that when using the container directly, you can access the PhpMailer service by asking for the app.mailer service like this:\n\nIn YAML, you can also use a shortcut to alias a service:\n\nThe #[AsAlias] attribute can also be limited to one or more specific config environments using the when argument:\n\nThe when argument of the #[AsAlias] attribute was introduced in Symfony 7.3.\n\nWhen using #[AsAlias] attribute, you may omit passing id argument if the class implements exactly one interface. MailerInterface will be alias of PhpMailer:\n\nIf you decide to deprecate the use of a service alias (because it is outdated or you decided not to maintain it anymore), you can deprecate its definition:\n\nNow, every time this service alias is used, a deprecation warning is triggered, advising you to stop or to change your uses of that alias.\n\nThe message is actually a message template, which replaces occurrences of the %alias_id% placeholder by the service alias id. You must have at least one occurrence of the %alias_id% placeholder in your template.\n\nIn some cases, you may want to prevent a service being used as a dependency of other services. This can be achieved by creating an anonymous service. These services are like regular services but they don't define an ID and they are created where they are used.\n\nThe following example shows how to inject an anonymous service into another service:\n\nAnonymous services do NOT inherit the definitions provided from the defaults defined in the configuration. So you'll need to explicitly mark service as autowired or autoconfigured when doing an anonymous service e.g.: inline_service(Foo::class)->autowire()->autoconfigure().\n\nUsing an anonymous service as a factory looks like this:\n\nOnce you have decided to deprecate the use of a service (because it is outdated or you decided not to maintain it anymore), you can deprecate its definition:\n\nNow, every time this service is used, a deprecation warning is triggered, advising you to stop or to change your uses of that service.\n\nThe message is actually a message template, which replaces occurrences of the %service_id% placeholder by the service's id. You must have at least one occurrence of the %service_id% placeholder in your template.\n\nThe deprecation message is optional. If not set, Symfony will show this default message: The \"%service_id%\" service is deprecated. You should stop using it, as it will soon be removed..\n\nIt is strongly recommended that you define a custom message because the default one is too generic. A good message informs when this service was deprecated, until when it will be maintained and the alternative services to use (if any).\n\nFor service decorators (see How to Decorate Services), if the definition does not modify the deprecated status, it will inherit the status from the definition that is decorated.\n\nMeasure & Improve Symfony Code Performance\n\nOnline Symfony certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Create Service Aliases and Mark Services as Private",
+      "id": "how-to-create-service-aliases-and-mark-services-as-private"
+    },
+    {
+      "level": "h2",
+      "text": "Marking Services as Public / Private",
+      "id": "marking-services-as-public-private"
+    },
+    {
+      "level": "h2",
+      "text": "Aliasing",
+      "id": "aliasing"
+    },
+    {
+      "level": "h3",
+      "text": "Deprecating Service Aliases",
+      "id": "deprecating-service-aliases"
+    },
+    {
+      "level": "h2",
+      "text": "Anonymous Services",
+      "id": "anonymous-services"
+    },
+    {
+      "level": "h2",
+      "text": "Deprecating Services",
+      "id": "deprecating-services"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// only public services can be accessed in this way\n$doctrine = $container->get('doctrine');",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Service\\Foo:\n        public: true",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Service\\Foo\" public=\"true\"/>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Service\\Foo;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Foo::class)\n        ->public();\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Service/Foo.php\nnamespace App\\Service;\n\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure;\n\n#[Autoconfigure(public: true)]\nclass Foo\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Service\\Foo;\n\n$container->get(Foo::class);",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Mail/PhpMailer.php\nnamespace App\\Mail;\n\n// ...\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsAlias;\n\n#[AsAlias(id: 'app.mailer', public: true)]\nclass PhpMailer\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n    App\\Mail\\PhpMailer:\n        public: false\n\n    app.mailer:\n        alias: App\\Mail\\PhpMailer\n        public: true",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Mail\\PhpMailer\" public=\"false\"/>\n\n        <service id=\"app.mailer\" alias=\"App\\Mail\\PhpMailer\"/>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Mail\\PhpMailer;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(PhpMailer::class)\n        ->private();\n\n    $services->alias('app.mailer', PhpMailer::class);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "$container->get('app.mailer'); // Would return a PhpMailer instance",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n    app.mailer: '@App\\Mail\\PhpMailer'",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Mail/PhpMailer.php\nnamespace App\\Mail;\n\n// ...\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsAlias;\n\n#[AsAlias(id: 'app.mailer', when: 'dev')]\nclass PhpMailer\n{\n    // ...\n}\n\n// pass an array to apply it in multiple config environments\n#[AsAlias(id: 'app.mailer', when: ['dev', 'test'])]\nclass PhpMailer\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Mail/PhpMailer.php\nnamespace App\\Mail;\n\n// ...\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsAlias;\nuse Symfony\\Component\\Mailer\\MailerInterface;\n\n#[AsAlias]\nclass PhpMailer implements MailerInterface\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "app.mailer:\n    alias: 'App\\Mail\\PhpMailer'\n\n    # this outputs the following generic deprecation message:\n    # Since acme/package 1.2: The \"app.mailer\" service alias is deprecated. You should stop using it, as it will be removed in the future\n    deprecated:\n        package: 'acme/package'\n        version: '1.2'\n\n    # you can also define a custom deprecation message (%alias_id% placeholder is available)\n    deprecated:\n        package: 'acme/package'\n        version: '1.2'\n        message: 'The \"%alias_id%\" alias is deprecated. Do not use it anymore.'",
+      "language": "unknown"
+    },
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-Instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"app.mailer\" alias=\"App\\Mail\\PhpMailer\">\n            <!-- this outputs the following generic deprecation message:\n                 Since acme/package 1.2: The \"app.mailer\" service alias is deprecated. You should stop using it, as it will be removed in the future -->\n            <deprecated package=\"acme/package\" version=\"1.2\"/>\n\n            <!-- you can also define a custom deprecation message (%alias_id% placeholder is available) -->\n            <deprecated package=\"acme/package\" version=\"1.2\">\n                The \"%alias_id%\" service alias is deprecated. Don't use it anymore.\n            </deprecated>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "$container\n    ->setAlias('app.mailer', 'App\\Mail\\PhpMailer')\n\n    // this outputs the following generic deprecation message:\n    // Since acme/package 1.2: The \"app.mailer\" service alias is deprecated. You should stop using it, as it will be removed in the future\n    ->setDeprecated('acme/package', '1.2')\n\n    // you can also define a custom deprecation message (%alias_id% placeholder is available)\n    ->setDeprecated(\n        'acme/package',\n        '1.2',\n        'The \"%alias_id%\" service alias is deprecated. Don\\'t use it anymore.'\n    )\n;",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Foo:\n        arguments:\n            - !service\n                class: App\\AnonymousBar",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"foo\" class=\"App\\Foo\">\n            <argument type=\"service\">\n                <service class=\"App\\AnonymousBar\"/>\n            </argument>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\AnonymousBar;\nuse App\\Foo;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Foo::class)\n        ->args([inline_service(AnonymousBar::class)]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Foo:\n        factory: [ !service { class: App\\FooFactory }, 'constructFoo' ]",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"foo\" class=\"App\\Foo\">\n            <factory method=\"constructFoo\">\n                <service class=\"App\\FooFactory\"/>\n            </factory>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\AnonymousBar;\nuse App\\Foo;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Foo::class)\n        ->factory([inline_service(AnonymousBar::class), 'constructFoo']);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nApp\\Service\\OldService:\n    deprecated:\n        package: 'vendor-name/package-name'\n        version: '2.8'\n        message: The \"%service_id%\" service is deprecated since vendor-name/package-name 2.8 and will be removed in 3.0.",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-Instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Service\\OldService\">\n            <deprecated package=\"vendor-name/package-name\" version=\"2.8\">The \"%service_id%\" service is deprecated since vendor-name/package-name 2.8 and will be removed in 3.0.</deprecated>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Service\\OldService;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(OldService::class)\n        ->deprecate(\n            'vendor-name/package-name',\n            '2.8',\n            'The \"%service_id%\" service is deprecated since vendor-name/package-name 2.8 and will be removed in 3.0.'\n        );\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/alias_private.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/service_container/service_decoration.html"
+  ]
+}

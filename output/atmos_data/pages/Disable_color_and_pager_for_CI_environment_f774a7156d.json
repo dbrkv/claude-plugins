@@ -1,0 +1,8 @@
+{
+  "title": "Disable color and pager for CI environment",
+  "content": "atmos describe config --no-color --pager=off",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#disable-color-and-pager-for-ci-environment",
+  "links": []
+}

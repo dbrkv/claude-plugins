@@ -1,0 +1,8 @@
+{
+  "title": "Fails when auth not configured but --identity provided",
+  "content": "atmos describe stacks --identity my-identity",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#fails-when-auth-not-configured-but---identity-provided",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "File-based CPU profiling (default profile type)",
+  "content": "atmos terraform plan vpc -s prod --profile-file=cpu.prof",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#file-based-cpu-profiling-(default-profile-type)",
+  "links": []
+}

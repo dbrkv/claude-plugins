@@ -1,0 +1,72 @@
+{
+  "url": "https://symfony.com/doc/7.3/web_link.html",
+  "title": "Asset Preloading and Resource Hints with HTTP/2 and WebLink",
+  "content": "Symfony provides native support (via the WebLink component) for managing Link HTTP headers, which are the key to improve the application performance when using HTTP/2 and preloading capabilities of modern web browsers.\n\nLink headers are used in HTTP/2 Server Push and W3C's Resource Hints to push resources (e.g. CSS and JavaScript files) to clients before they even know that they need them. WebLink also enables other optimizations that work with HTTP 1.x:\n\nSomething important to consider is that all these HTTP/2 features require a secure HTTPS connection, even when working on your local machine. The main web servers (Apache, nginx, Caddy, etc.) support this, but you can also use the Docker installer and runtime for Symfony created by Kévin Dunglas, from the Symfony community.\n\nIn applications using Symfony Flex, run the following command to install the WebLink feature before using it:\n\nImagine that your application includes a web page like this:\n\nIn a traditional HTTP workflow, when this page is loaded, browsers make one request for the HTML document and another for the linked CSS file. However, with HTTP/2, your application can send the CSS file's contents to the browser before it requests them.\n\nTo achieve this, update your template to use the preload() Twig function provided by WebLink. Note that the \"as\" attribute is required, as browsers use it to prioritize resources correctly and comply with the content security policy:\n\nIf you reload the page, the perceived performance will improve because the server responded with both the HTML page and the CSS file when the browser only requested the HTML page.\n\nWhen using the AssetMapper component to link to assets (e.g. importmap('app')), there's no need to add the <link rel=\"preload\"> tag. The importmap() Twig function automatically adds the Link HTTP header for you when the WebLink component is available.\n\nYou can preload an asset by wrapping it with the preload() function:\n\nAdditionally, according to the Priority Hints specification, you can signal the priority of the resource to download using the importance attribute:\n\nThe WebLink component manages the Link HTTP headers added to the response. When using the preload() function in the previous example, the following header was added to the response: Link </app.css>; rel=\"preload\"; as=\"style\" According to the Preload specification, when an HTTP/2 server detects that the original (HTTP 1.x) response contains this HTTP header, it will automatically trigger a push for the related file in the same HTTP/2 connection.\n\nPopular proxy services and CDNs including Cloudflare, Fastly and Akamai also leverage this feature. It means that you can push resources to clients and improve performance of your applications in production right now.\n\nIf you want to prevent the push but let the browser preload the resource by issuing an early separate HTTP request, use the nopush option:\n\nResource Hints are used by applications to help browsers when deciding which resources should be downloaded, preprocessed or connected to first.\n\nThe WebLink component provides the following Twig functions to send those hints:\n\nThe component also supports sending HTTP links not related to performance and any link implementing the PSR-13 standard. For instance, any link defined in the HTML specification:\n\nThe previous snippet will result in this HTTP header being sent to the client: Link: </index.jsonld>; rel=\"alternate\",</app.css>; rel=\"preload\"; nopush\n\nYou can also add links to the HTTP response directly from controllers and services:\n\nThe possible values of link relations ('preload', 'preconnect', etc.) are also defined as constants in the Link class (e.g. Link::REL_PRELOAD, Link::REL_PRECONNECT, etc.).\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Asset Preloading and Resource Hints with HTTP/2 and WebLink",
+      "id": "asset-preloading-and-resource-hints-with-http-2-and-weblink"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Preloading Assets",
+      "id": "preloading-assets"
+    },
+    {
+      "level": "h3",
+      "text": "How does it work?",
+      "id": "how-does-it-work"
+    },
+    {
+      "level": "h2",
+      "text": "Resource Hints",
+      "id": "resource-hints"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/web-link",
+      "language": "unknown"
+    },
+    {
+      "code": "<!DOCTYPE html>\n<html>\n<head>\n    <meta charset=\"UTF-8\">\n    <title>My Application</title>\n    <link rel=\"stylesheet\" href=\"/app.css\">\n</head>\n<body>\n    <main role=\"main\" class=\"container\">\n        <!-- ... -->\n    </main>\n</body>\n</html>",
+      "language": "unknown"
+    },
+    {
+      "code": "<head>\n    <!-- ... -->\n    {# note that you must add two <link> tags per asset:\n       one to link to it and the other one to tell the browser to preload it #}\n    <link rel=\"preload\" href=\"{{ preload('/app.css', {as: 'style'}) }}\" as=\"style\">\n    <link rel=\"stylesheet\" href=\"/app.css\">\n</head>",
+      "language": "unknown"
+    },
+    {
+      "code": "<head>\n    <!-- ... -->\n    <link rel=\"preload\" href=\"{{ preload(asset('build/app.css')) }}\" as=\"style\">\n    <!-- ... -->\n</head>",
+      "language": "unknown"
+    },
+    {
+      "code": "<head>\n    <!-- ... -->\n    <link rel=\"preload\" href=\"{{ preload('/app.css', {as: 'style', importance: 'low'}) }}\" as=\"style\">\n    <!-- ... -->\n</head>",
+      "language": "unknown"
+    },
+    {
+      "code": "<head>\n    <!-- ... -->\n    <link rel=\"preload\" href=\"{{ preload('/app.css', {as: 'style', nopush: true}) }}\" as=\"style\">\n    <!-- ... -->\n</head>",
+      "language": "unknown"
+    },
+    {
+      "code": "<head>\n    <!-- ... -->\n    <link rel=\"alternate\" href=\"{{ link('/index.jsonld', 'alternate') }}\">\n    <link rel=\"preload\" href=\"{{ preload('/app.css', {as: 'style', nopush: true}) }}\" as=\"style\">\n    <!-- ... -->\n</head>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/BlogController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\WebLink\\GenericLinkProvider;\nuse Symfony\\Component\\WebLink\\Link;\n\nclass BlogController extends AbstractController\n{\n    public function index(Request $request): Response\n    {\n        // using the addLink() shortcut provided by AbstractController\n        $this->addLink($request, (new Link('preload', '/app.css'))->withAttribute('as', 'style'));\n\n        // alternative if you don't want to use the addLink() shortcut\n        $linkProvider = $request->attributes->get('_links', new GenericLinkProvider());\n        $request->attributes->set('_links', $linkProvider->withLink(\n            (new Link('preload', '/app.css'))->withAttribute('as', 'style')\n        ));\n\n        return $this->render('...');\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/web_link.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/frontend/asset_mapper.html"
+  ]
+}

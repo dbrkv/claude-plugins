@@ -1,0 +1,98 @@
+{
+  "title": "Terminal 3: Development work",
+  "content": "atmos auth shell --identity dev-sandbox\naws s3 cp ./test-data s3://dev-uploads/\nyaml\nauth:\n  providers:\n    - type: aws\n      name: aws-sso\n      config:\n        sso_start_url: https://your-org.awsapps.com/start\n        sso_region: us-east-1\n\nidentities:\n    - name: dev-user\n      provider: aws-sso\n      config:\n        account_id: \"123456789012\"\n        role_name: DeveloperRole\n\n- name: prod-admin\n      provider: aws-sso\n      config:\n        account_id: \"987654321098\"\n        role_name: AdminRole\nshell\natmos auth shell --identity dev-user\nshell\natmos auth list\nshell\natmos auth list --format tree\nshell\natmos auth list --format json | jq '.identities'\natmos auth list --format yaml > auth-config.yml\nshell\natmos auth list --format graphviz > auth-chain.dot\natmos auth list --format mermaid > auth-chain.mmd\natmos auth list --format markdown > docs/auth-config.md\nshell",
+  "code_samples": [
+    {
+      "code": "Each terminal has **exactly one set of credentials**. No confusion, no accidents.\n\n## How It Works\n\nUnder the hood, `atmos auth shell`:\n\n1. **Authenticates** with your configured identity provider\n2. **Retrieves** temporary credentials from your cloud provider\n3. **Writes** credentials to Atmos-managed configuration files\n4. **Sets** environment variables pointing to these config files (e.g., `AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`, `AWS_PROFILE`)\n5. **Sets** `ATMOS_IDENTITY` to track which identity is active\n6. **Launches** your preferred shell with all environment variables configured\n7. **Propagates** the shell's exit code back to Atmos when you exit\n\n## Comparison to AWS Vault\n\nIf you're familiar with `aws-vault exec`, you'll recognize this pattern. Both tools prioritize **temporary credentials** and **session isolation**:\n\n| Feature | aws-vault exec | atmos auth shell |\n|---------|---------------|------------------|\n| **Temporary credentials** | â Yes | â Yes |\n| **Isolated subshells** | â Yes | â Yes |\n| **Session boundaries** | â Return to parent shell on exit | â Return to parent shell on exit |\n| **Cloud providers** | AWS only | AWS, Azure, GCP, GitHub, SAML, and more |\n| **Integration** | Standalone tool | Part of Atmos infrastructure workflow |\n| **Identity management** | IAM profiles | Atmos identities (unified across clouds) |\n\n`atmos auth shell` brings the same security-first philosophy to **all your cloud identities**, not just AWS. If you manage infrastructure across multiple cloud providers, you get consistent, isolated authentication for everythingâAWS SSO, Azure AD, GCP service accounts, GitHub Apps, and more.\n\n## Environment Variables\n\nWhen you're in an `atmos auth shell` session, you'll have access to:\n\n<dl>\n  <dt><code>ATMOS_IDENTITY</code></dt>\n  <dd>The name of the active identity</dd>\n\n  <dt><code>ATMOS_SHLVL</code></dt>\n  <dd>Shell nesting level (increments for nested shells)</dd>\n\n  <dt><code>AWS_SHARED_CREDENTIALS_FILE</code></dt>\n  <dd>Path to Atmos-managed credentials file (AWS identities only)</dd>\n\n  <dt><code>AWS_CONFIG_FILE</code></dt>\n  <dd>Path to Atmos-managed config file (AWS identities only)</dd>\n\n  <dt><code>AWS_PROFILE</code></dt>\n  <dd>Profile name corresponding to your identity (AWS identities only)</dd>\n</dl>\n\nThese environment variables work seamlessly with any tool that uses the AWS SDK, such as Terraform, the AWS CLI, kubectl with AWS authentication, and more. Credentials are never exposed directly in environment variablesâonly secure file paths are set.\n\n## When to Use `atmos auth shell` vs `atmos auth env`\n\nBoth commands serve important but different purposes:\n\n**Use `atmos auth shell` when:**\n- You need **session isolation** for security\n- Working with production or sensitive environments\n- Running multiple concurrent sessions with different identities\n- You want credentials to **automatically expire** when you exit\n- You need clear boundaries between different cloud contexts\n\n**Use `atmos auth env` when:**\n- Integrating with CI/CD pipelines that need to export variables\n- Writing scripts that source environment variables\n- You need credentials in a specific format (bash, fish, etc.)\n- Automating workflows where a subshell isn't appropriate\n\nThink of it this way: `atmos auth shell` is for **interactive work** where safety and isolation matter. `atmos auth env` is for **automation and integration** where you need to export credentials to your existing environment.\n\n## Getting Started\n\nThe `atmos auth shell` command is available now in the latest version of Atmos. To start using it:\n\n1. **Configure your identity** in `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. **Launch your authenticated shell**:",
+      "language": "unknown"
+    },
+    {
+      "code": "3. **Start working** with your cloud resources!\n\n## Learn More\n\n- [PR #1640](https://github.com/cloudposse/atmos/pull/1640)\n\n## What's Next?\n\nWe're continuously improving Atmos authentication capabilities. Future enhancements may include:\n\n- Session duration customization\n- Automatic credential refresh\n- Multi-cloud authentication in a single shell\n- Integration with external secret managers\n\nHave feedback or suggestions? [Open an issue](https://github.com/cloudposse/atmos/issues) or join the discussion in our community!\n\n---\n\nHappy authenticating! ð\n\n---\n\n## Introducing atmos auth list: Visualize Your Authentication Configuration\n\nWe're excited to announce a powerful new command for managing authentication in Atmos: `atmos auth list`. This command provides comprehensive visibility into your authentication configuration, making it easier than ever to understand and manage complex authentication chains across multiple cloud providers and identities.\n\n<!--truncate-->\n\n## Why atmos auth list?\n\nAs cloud infrastructure grows more complex, so does authentication management. Modern teams often work with:\n\n- **Multiple cloud providers** (AWS, Azure, GCP, Okta)\n- **Complex role assumption chains** (SSO â base role â admin role â specific account)\n- **Multiple identities per environment** (dev, staging, production)\n- **Team-specific access patterns** (developer, operator, security auditor)\n\nWithout proper tooling, it becomes difficult to answer simple questions like:\n- \"What authentication providers do we have configured?\"\n- \"Which identities can I use to access production?\"\n- \"How does this identity authenticate? Through which provider?\"\n- \"What's the complete authentication chain for this admin role?\"\n\n`atmos auth list` solves these challenges by providing clear, actionable visibility into your entire authentication configuration.\n\n## Key Features\n\n### ð¨ Multiple Output Formats\n\n**Table Format (Default)**\nPerfect for quick overviews with formatted tables showing key attributes:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Tree Format**\nVisualize hierarchical relationships and authentication chains:",
+      "language": "unknown"
+    },
+    {
+      "code": "**JSON/YAML Export**\nIntegrate with scripts and automation tools:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Graph Visualization**\nGenerate diagrams for documentation:",
+      "language": "unknown"
+    },
+    {
+      "code": "### ð Smart Filtering\n\nFilter by providers or identities to focus on what matters:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Comparison to AWS Vault",
+      "id": "comparison-to-aws-vault"
+    },
+    {
+      "level": "h2",
+      "text": "Environment Variables",
+      "id": "environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "When to Use `atmos auth shell` vs `atmos auth env`",
+      "id": "when-to-use-`atmos-auth-shell`-vs-`atmos-auth-env`"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Learn More",
+      "id": "learn-more"
+    },
+    {
+      "level": "h2",
+      "text": "What's Next?",
+      "id": "what's-next?"
+    },
+    {
+      "level": "h2",
+      "text": "Introducing atmos auth list: Visualize Your Authentication Configuration",
+      "id": "introducing-atmos-auth-list:-visualize-your-authentication-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Why atmos auth list?",
+      "id": "why-atmos-auth-list?"
+    },
+    {
+      "level": "h2",
+      "text": "Key Features",
+      "id": "key-features"
+    },
+    {
+      "level": "h3",
+      "text": "ð¨ Multiple Output Formats",
+      "id": "ð¨-multiple-output-formats"
+    },
+    {
+      "level": "h3",
+      "text": "ð Smart Filtering",
+      "id": "ð-smart-filtering"
+    }
+  ],
+  "url": "llms-txt#terminal-3:-development-work",
+  "links": []
+}

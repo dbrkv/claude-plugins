@@ -1,0 +1,8 @@
+{
+  "title": "Every single time in CI",
+  "content": "atmos terraform apply vpc -s prod \\\n  --identity github-oidc \\\n  --no-color \\\n  --logs-level info \\\n  --sentry-enabled true",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#every-single-time-in-ci",
+  "links": []
+}

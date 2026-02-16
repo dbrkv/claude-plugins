@@ -1,0 +1,8 @@
+{
+  "title": "Validate 'vpc' component using OPA policy in the 'plat-ue2-prod' stack",
+  "content": "atmos validate component vpc -s plat-ue2-prod --schema-path vpc/validate-vpc-component.rego --schema-type opa",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#validate-'vpc'-component-using-opa-policy-in-the-'plat-ue2-prod'-stack",
+  "links": []
+}

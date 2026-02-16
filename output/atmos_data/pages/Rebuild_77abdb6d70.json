@@ -1,0 +1,8 @@
+{
+  "title": "Rebuild",
+  "content": "cd providers/terraform-provider-myprovider\ngo build -o bin/terraform-provider-myprovider",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#rebuild",
+  "links": []
+}

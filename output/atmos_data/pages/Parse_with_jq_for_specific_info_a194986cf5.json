@@ -1,0 +1,19 @@
+{
+  "title": "Parse with jq for specific info",
+  "content": "$ atmos version list --format json | \\\n  jq -r '.releases[] | \"\\(.version) - \\(.published_at)\"'\nbash",
+  "code_samples": [
+    {
+      "code": "### Check Release Artifacts Before Downloading",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Check Release Artifacts Before Downloading",
+      "id": "check-release-artifacts-before-downloading"
+    }
+  ],
+  "url": "llms-txt#parse-with-jq-for-specific-info",
+  "links": []
+}

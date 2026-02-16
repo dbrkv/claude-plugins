@@ -1,0 +1,8 @@
+{
+  "title": "Find the merge commit to revert",
+  "content": "git log --oneline --merges channels/prod",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#find-the-merge-commit-to-revert",
+  "links": []
+}

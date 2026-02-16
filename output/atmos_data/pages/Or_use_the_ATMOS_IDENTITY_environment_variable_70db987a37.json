@@ -1,0 +1,23 @@
+{
+  "title": "Or use the ATMOS_IDENTITY environment variable",
+  "content": "export ATMOS_IDENTITY=dev-admin\natmos terraform plan mycomponent -s mystack\nyaml\nauth:\n  identities:\n    Dev-Admin:  # Original case preserved\n      provider: aws-sso\nbash",
+  "code_samples": [
+    {
+      "code": "When both are set, the `--identity` flag takes precedence over the `ATMOS_IDENTITY` environment variable.\n\nThis brings terraform commands up to parity with other auth commands (`auth shell`, `auth exec`, etc.) that already supported interactive selection. For more details on authentication flags and behavior, see the [CLI authentication documentation](/cli/commands/auth/usage).\n\n## Case-Insensitive Identity Names\n\nIdentity names are now matched case-insensitively while preserving the original case from your `atmos.yaml` for display:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Case-Insensitive Identity Names",
+      "id": "case-insensitive-identity-names"
+    }
+  ],
+  "url": "llms-txt#or-use-the-atmos_identity-environment-variable",
+  "links": []
+}

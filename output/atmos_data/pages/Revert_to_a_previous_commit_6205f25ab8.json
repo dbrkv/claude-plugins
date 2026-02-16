@@ -1,0 +1,8 @@
+{
+  "title": "Revert to a previous commit",
+  "content": "git checkout <previous-commit> -- components/terraform/vpc/",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#revert-to-a-previous-commit",
+  "links": []
+}

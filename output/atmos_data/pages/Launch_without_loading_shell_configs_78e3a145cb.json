@@ -1,0 +1,8 @@
+{
+  "title": "Launch without loading shell configs",
+  "content": "atmos auth shell -- --norc",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#launch-without-loading-shell-configs",
+  "links": []
+}

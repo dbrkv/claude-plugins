@@ -1,0 +1,100 @@
+{
+  "title": "Example interactive session:",
+  "content": "? Choose an identity to configure: emergency-user\n? AWS Access Key ID: AKIAIOSFODNN7EXAMPLE\n? AWS Secret Access Key: ****************************************\n? AWS User MFA ARN (optional): arn:aws:iam::123456789012:mfa/username\n? Session Duration (optional, default: 12h): 24h\nâ Saved credentials to keyring\nâ Session duration configured: 24h\nbash\n$ atmos auth login --identity emergency-user\nâ­ââââââââââââââââââââââââââââââââââââââââââââââââââââââ®\nâ Enter MFA Token                                     â\nâââââââââââââââââââââââââââââââââââââââââââââââââââââââ¤\nâ MFA Device: arn:aws:iam::123456789012:mfa/user     â\nâ                                                     â\nâ ââââââââââââââââââââââââââââââââââââââââââââââââ   â\nâ â 123456                                       â   â\nâ ââââââââââââââââââââââââââââââââââââââââââââââââ   â\nâ°ââââââââââââââââââââââââââââââââââââââââââââââââââââââ¯\nyaml\nauth:\n  identities:\n    emergency-user:\n      kind: aws/user\n      credentials:\n        # Omit access_key_id and secret_access_key to use keychain\n        mfa_arn: arn:aws:iam::123456789012:mfa/username\n        # OR use environment variable\n        mfa_arn: !env AWS_MFA_ARN\n        region: us-east-1\nyaml\nauth:\n  identities:\n    emergency-user:\n      kind: aws/user\n      session:\n        duration: \"24h\"  # Formats: integers (seconds), Go durations (\"1h\"), or days (\"1d\")\nshell\natmos auth validate [--verbose]\nshell",
+  "code_samples": [
+    {
+      "code": "## Multi-Factor Authentication (MFA) for AWS\n\n:::note\nThis section describes MFA implementation for AWS IAM users. Other cloud providers will have their own MFA implementations in future releases.\n:::\n\n### Why Configure MFA ARN?\n\nWhen you configure an AWS MFA device ARN, Atmos will require a time-based one-time password (TOTP) during authentication. This provides:\n\n- **Enhanced security** - Two-factor authentication for privileged access\n- **Compliance** - Meet security requirements for production access\n- **Defense-in-depth** - Protection against compromised credentials\n\n### Finding Your MFA Device ARN\n\n1. Log into the AWS Console\n2. Navigate to **IAM** â **Users** â **[Your Username]**\n3. Click the **\"Security credentials\"** tab\n4. In the **\"Assigned MFA device\"** section, copy the ARN\n5. The ARN format is: `arn:aws:iam::ACCOUNT_ID:mfa/USERNAME`\n\n### Authentication Flow with MFA\n\nAfter configuring an MFA device ARN, when you authenticate:",
+      "language": "unknown"
+    },
+    {
+      "code": "Atmos will:\n1. Retrieve your long-lived credentials from the keychain\n2. Prompt for a 6-digit TOTP code from your authenticator app (Google Authenticator, Authy, etc.)\n3. Call AWS STS `GetSessionToken` with your credentials, MFA ARN, and TOTP code\n4. Store temporary session credentials (valid for configured duration, default: 12 hours)\n\n### Security Considerations\n\n- **MFA ARN is not a secret** - It's an identifier, not a credential\n- **TOTP codes are never stored** - You must enter them for each authentication session\n- **Session tokens are cached** - Valid for configured duration (default: 12h, max: 36h with MFA)\n- **Long-lived credentials stay in keychain** - Never written to plain text files\n\n### Alternative: MFA ARN in YAML\n\nInstead of storing the MFA ARN in the keychain, you can configure it in `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "This is useful when:\n- Multiple team members share the same identity configuration\n- MFA device ARN is organization-standard\n- You want version-controlled authentication configuration\n\n## Session Duration Configuration\n\nThe interactive command prompts for session duration, or you can configure it in YAML:",
+      "language": "unknown"
+    },
+    {
+      "code": "**AWS limits**: 15m-12h (no MFA) or 15m-36h (with MFA). Default: 12h. YAML configuration takes precedence over keyring.\n\n## Notes\n\n- Learn how to [configure an `aws/user` identity](/cli/commands/auth/usage#aws-user-break-glass) in `atmos.yaml` before running this command\n- See the [MFA documentation](/cli/commands/auth/usage#multi-factor-authentication-mfa-for-aws) for detailed information about MFA configuration and usage\n\n---\n\n## atmos auth user\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nManage static cloud user credentials (currently AWS IAM users) and store them securely in your system keychain. These credentials can then be referenced by other `atmos auth` commands when an identity requires static keys.\n</Intro>\n\n## Subcommands\n\n- [configure](./auth-user-configure): Configure static AWS user credentials and store them securely in your system keychain.\n\n---\n\n## atmos auth validate\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to validate your `auth` configuration in `atmos.yaml`.\n</Intro>\n\n<Screengrab title=\"atmos auth validate --help\" slug=\"atmos-auth-validate--help\" />\n\n## Usage",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n  <dt>n/a</dt>\n  <dd>No positional arguments.</dd>\n</dl>\n\n## Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Multi-Factor Authentication (MFA) for AWS",
+      "id": "multi-factor-authentication-(mfa)-for-aws"
+    },
+    {
+      "level": "h3",
+      "text": "Why Configure MFA ARN?",
+      "id": "why-configure-mfa-arn?"
+    },
+    {
+      "level": "h3",
+      "text": "Finding Your MFA Device ARN",
+      "id": "finding-your-mfa-device-arn"
+    },
+    {
+      "level": "h3",
+      "text": "Authentication Flow with MFA",
+      "id": "authentication-flow-with-mfa"
+    },
+    {
+      "level": "h3",
+      "text": "Security Considerations",
+      "id": "security-considerations"
+    },
+    {
+      "level": "h3",
+      "text": "Alternative: MFA ARN in YAML",
+      "id": "alternative:-mfa-arn-in-yaml"
+    },
+    {
+      "level": "h2",
+      "text": "Session Duration Configuration",
+      "id": "session-duration-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Notes",
+      "id": "notes"
+    },
+    {
+      "level": "h2",
+      "text": "atmos auth user",
+      "id": "atmos-auth-user"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos auth validate",
+      "id": "atmos-auth-validate"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#example-interactive-session:",
+  "links": []
+}

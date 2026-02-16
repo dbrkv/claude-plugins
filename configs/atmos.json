@@ -1,0 +1,8 @@
+{
+	"name": "atmos",
+	"description": "Atmos is a cloud architecture framework for native Terraform",
+	"base_url": "https://atmos.tools",
+	"categories": {},
+	"rate_limit": 0.3,
+	"max_pages": 500
+}

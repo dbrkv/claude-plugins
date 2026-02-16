@@ -1,0 +1,13 @@
+{
+  "title": "Other defaults for the `core` tenant/OU",
+  "content": "yaml\nvars:\n  tenant: plat",
+  "code_samples": [
+    {
+      "code": "</File>\n\nIn `stacks/mixins/tenant/plat.yaml`, add the following config:\n\n<File title=\"stacks/mixins/tenant/plat.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#other-defaults-for-the-`core`-tenant/ou",
+  "links": []
+}

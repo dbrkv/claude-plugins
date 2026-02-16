@@ -1,0 +1,60 @@
+{
+  "title": "Allow ingress only from the allowed CIDR blocks",
+  "content": "security_group_ingress_cidrs: !template '{{ toJson .settings.allowed_ingress_cidrs }}'\nyaml\nallowed_cidr_blocks: !template '{{ toJson (concat .settings.allowed_ingress_cidrs (list \"172.20.0.0/16\")) }}'\nyaml\n  # Get the `output` of the `component` in the current stack\n  !terraform.output <component> <output>\n\n# Get the `output` of the `component` in the provided `stack`\n  !terraform.output <component> <stack> <output>\n\n# Get the output of the `component` by evaluating the YQ expression\n  !terraform.output <component> <yq-expression>\n\n# Get the output of the `component` in the provided `stack` by evaluating the YQ expression\n  !terraform.output <component> <stack> <yq-expression>\nyaml\nsubnet_id1: !terraform.output vpc .private_subnet_ids[0]\nyaml\nusername: !terraform.output config .config_map.username\nyaml",
+  "code_samples": [
+    {
+      "code": "The `!template` function and the `'{{ toJson .settings.allowed_ingress_cidrs }}'` expression allows you to\nuse the global `allowed_ingress_cidrs` variable and the same template even if the components have different\nvariable names for the allowed CIDR blocks (which would be difficult to implement using\n[Atmos inheritance](/core-concepts/stacks/inheritance) or other [Atmos design patterns](/design-patterns)).\n\n:::tip\nTo append additional CIDRs to the template itself, use the `list` and [Sprig](https://masterminds.github.io/sprig/lists.html)\n`concat` functions:",
+      "language": "unknown"
+    },
+    {
+      "code": ":::\n\n---\n\n## !terraform.output\n\nimport File from '@site/src/components/File'\nimport Intro from '@site/src/components/Intro'\nimport Terminal from '@site/src/components/Terminal'\n\n<Intro>\nThe `!terraform.output` YAML function allows reading the outputs ([remote state](/core-concepts/share-data/remote-state))\nof components directly in Atmos stack manifests by internally executing a\n[`terraform output`](https://developer.hashicorp.com/terraform/cli/commands/output) or\n[`tofu output`](https://opentofu.org/docs/cli/commands/output/) command.\n</Intro>\n\n## Usage\n\nThe `!terraform.output` function can be called with either two or three parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n  <dt>`component`</dt>\n  <dd>Atmos component name</dd>\n\n  <dt>`stack`</dt>\n  <dd>(Optional) Atmos stack name</dd>\n\n  <dt>`output` or `yq-expression`</dt>\n  <dd>Terraform output or [YQ](https://mikefarah.gitbook.io/yq) expression to evaluate the output</dd>\n</dl>\n\n:::tip\nYou can use [Atmos Stack Manifest Templating](/core-concepts/stacks/templates) in the `!terraform.output` YAML function expressions.\nAtmos processes the templates first, and then executes the `!terraform.output` function, allowing you to provide the parameters to\nthe function dynamically.\n:::\n\n## `!terraform.output` Function Execution Flow\n\nWhen processing the `!terraform.output` YAML function for a component in a stack, Atmos executes the following steps:\n\n- **Stack and Component Context Resolution**\nAtmos resolves the full context for the specified component within the given stack, including all inherited and merged\nconfiguration layers (globals, environment and component-level config).\n\n- **Terraform/OpenTofu Variables**\nBased on the resolved context, Atmos generates a `varfile` with all the variables for the component in the stack.\n\n- **Terraform/OpenTofu Backend**\nAtmos generates a backend configuration file for the component in the stack based on the resolved context.\n\n- **Terraform/OpenTofu Provider Overrides**\nAtmos generates a provider override file for the component in the stack (if provider overrides are configured in the stack manifests).\n\n- **Terraform/OpenTofu Workspace**\nBased on the resolved context, Atmos selects (or creates new) Terraform/OpenTofu workspace by executing\n`terraform/tofu workspace` commands.\n\n- **Terraform/OpenTofu Init**\nAtmos executes a `terraform/tofu init` command to initialize the component and download all Terraform/OpenTofu modules and\nproviders (if they are not present in the cache).\n\n- **Terraform/OpenTofu Output**\nAtmos executes a `terraform/tofu output` command to read the outputs of the component in the stack.\n\n- **Output Parsing and Interpolation**\nThe relevant output variable is extracted from the state file (using a [YQ](https://mikefarah.gitbook.io/yq/) parser).\nAtmos parses and interpolates the value into the final configuration structure, replacing the `!terraform.output`\ndirective in the YAML stack manifest with the final value.\n\n:::tip\nSince Atmos executes the `terraform/tofu init` and `terraform/tofu output` commands when processing the `!terraform.output`\nYAML functions, it can significantly impact performance because it requires initializing the components,\nwhich initializes all Terraform/OpenTofu modules and downloads all Terraform/OpenTofu providers (if they are not present in the cache).\n\nTo improve performance, consider using the [__`!store`__](/functions/yaml/store)\nor [__`!terraform.state`__](/functions/yaml/terraform.state)\nYAML function.\n\nTo understand the performance implications of the `!terraform.output` and `!terraform.state` functions,\ncompare the [!terraform.output Execution Flow](/functions/yaml/terraform.output#terraformoutput-function-execution-flow) with the\n[!terraform.state Execution Flow](/functions/yaml/terraform.state#terraformstate-function-execution-flow).\n:::\n\n## Using YQ Expressions to retrieve items from complex output types\n\nTo retrieve items from complex output types such as maps and lists, or do any kind of filtering or querying,\nyou can utilize [YQ](https://mikefarah.gitbook.io/yq) expressions.\n\nFor example:\n\n- Retrieve the first item from a list",
+      "language": "unknown"
+    },
+    {
+      "code": "- Read a key from a map",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, review the following docs:\n\n- [YQ Guide](https://mikefarah.gitbook.io/yq)\n- [YQ Recipes](https://mikefarah.gitbook.io/yq/recipes)\n\n## Handling YQ Expressions with Bracket Notation and Quotes\n\nWhen you access map keys that contain special characters (such as hyphens) by using YQ bracket notation, you must wrap the key in double quotes like `[\"github-dependabot\"]`. This often clashes with the surrounding quotes that protect the entire expression in YAML.\n\nTo avoid conflicting quotes, wrap the entire YQ expression in single quotes while keeping the double quotes inside the brackets:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "!terraform.output",
+      "id": "!terraform.output"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "`!terraform.output` Function Execution Flow",
+      "id": "`!terraform.output`-function-execution-flow"
+    },
+    {
+      "level": "h2",
+      "text": "Using YQ Expressions to retrieve items from complex output types",
+      "id": "using-yq-expressions-to-retrieve-items-from-complex-output-types"
+    },
+    {
+      "level": "h2",
+      "text": "Handling YQ Expressions with Bracket Notation and Quotes",
+      "id": "handling-yq-expressions-with-bracket-notation-and-quotes"
+    }
+  ],
+  "url": "llms-txt#allow-ingress-only-from-the-allowed-cidr-blocks",
+  "links": []
+}

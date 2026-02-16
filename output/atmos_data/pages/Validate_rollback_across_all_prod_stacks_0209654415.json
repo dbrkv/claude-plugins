@@ -1,0 +1,8 @@
+{
+  "title": "Validate rollback across all prod stacks",
+  "content": "atmos validate stacks | grep prod",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#validate-rollback-across-all-prod-stacks",
+  "links": []
+}

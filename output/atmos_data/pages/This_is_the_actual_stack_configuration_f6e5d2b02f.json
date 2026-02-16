@@ -1,0 +1,24 @@
+{
+  "title": "This is the actual stack configuration",
+  "content": "components:\n  terraform:\n    vpc:\n      vars:\n        availability_zones: [\"us-west-2a\", \"us-west-2b\"]\nbash",
+  "code_samples": [
+    {
+      "code": "## Troubleshooting\n\n### My defaults aren't being applied\n\n**Check these common issues:**\n1. **Missing Import**: Ensure you've explicitly imported the `_defaults.yaml` file\n2. **Wrong Path Style**: Verify you're using the correct path style (base-relative vs file-relative)\n3. **Path Typo**: Check for typos in the import path\n4. **File Location**: Confirm the `_defaults.yaml` file exists where expected\n\n**Debug with:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "My defaults aren't being applied",
+      "id": "my-defaults-aren't-being-applied"
+    }
+  ],
+  "url": "llms-txt#this-is-the-actual-stack-configuration",
+  "links": []
+}

@@ -1,0 +1,48 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/adapters/couchbasebucket_adapter.html",
+  "title": "Couchbase Bucket Cache Adapter",
+  "content": "The CouchbaseBucketAdapter is deprecated since Symfony 7.1, use the CouchbaseCollectionAdapter instead.\n\nThis adapter stores the values in-memory using one (or more) Couchbase server instances. Unlike the APCu adapter, and similarly to the Memcached adapter, it is not limited to the current server's shared memory; you can store contents independent of your PHP environment. The ability to utilize a cluster of servers to provide redundancy and/or fail-over is also available.\n\nRequirements: The Couchbase PHP extension as well as a Couchbase server must be installed, active, and running to use this adapter. Version 2.6 or less than 3.0 of the Couchbase PHP extension is required for this adapter.\n\nThis adapter expects a Couchbase Bucket instance to be passed as the first parameter. A namespace and default cache lifetime can optionally be passed as the second and third parameters:\n\nThe createConnection() helper method allows creating and configuring a Couchbase Bucket class instance using a Data Source Name (DSN) or an array of DSNs:\n\nThe createConnection() helper method also accepts an array of options as its second argument. The expected format is an associative array of key => value pairs representing option names and their respective values:\n\nReference the Couchbase Bucket extension's predefined constants documentation for additional information about the available options.\n\nOnline Sylius certification, take it now!\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Couchbase Bucket Cache Adapter",
+      "id": "couchbase-bucket-cache-adapter"
+    },
+    {
+      "level": "h2",
+      "text": "Configure the Connection",
+      "id": "configure-the-connection"
+    },
+    {
+      "level": "h2",
+      "text": "Configure the Options",
+      "id": "configure-the-options"
+    },
+    {
+      "level": "h3",
+      "text": "Available Options",
+      "id": "available-options"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\CouchbaseBucketAdapter;\n\n$cache = new CouchbaseBucketAdapter(\n    // the client object that sets options and adds the server instance(s)\n    $client,\n\n    // the name of bucket\n    $bucket,\n\n    // a string prefixed to the keys of the items stored in this cache\n    $namespace,\n\n    // the default lifetime (in seconds) for cache items that do not define their\n    // own lifetime, with a value 0 causing items to be stored indefinitely\n    $defaultLifetime\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\CouchbaseBucketAdapter;\n\n// pass a single DSN string to register a single server with the client\n$client = CouchbaseBucketAdapter::createConnection(\n    'couchbase://localhost'\n    // the DSN can include config options (pass them as a query string):\n    // 'couchbase://localhost:11210?operationTimeout=10'\n    // 'couchbase://localhost:11210?operationTimeout=10&configTimeout=20'\n);\n\n// pass an array of DSN strings to register multiple servers with the client\n$client = CouchbaseBucketAdapter::createConnection([\n    'couchbase://10.0.0.100',\n    'couchbase://10.0.0.101',\n    'couchbase://10.0.0.102',\n    // etc...\n]);\n\n// a single DSN can define multiple servers using the following syntax:\n// host[hostname-or-IP:port] (where port is optional). Sockets must include a trailing ':'\n$client = CouchbaseBucketAdapter::createConnection(\n    'couchbase:?host[localhost]&host[localhost:12345]'\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\CouchbaseBucketAdapter;\n\n$client = CouchbaseBucketAdapter::createConnection(\n    // a DSN string or an array of DSN strings\n    [],\n\n    // associative array of configuration options\n    [\n        'username' => 'xxxxxx',\n        'password' => 'yyyyyy',\n        'configTimeout' => '100',\n    ]\n);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/adapters/couchbasebucket_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/adapters/couchbasecollection_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/adapters/apcu_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/adapters/memcached_adapter.html"
+  ]
+}

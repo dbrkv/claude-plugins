@@ -1,0 +1,23 @@
+{
+  "title": "This will fail and send an error to Sentry",
+  "content": "atmos terraform plan invalid-component -s nonexistent-stack\nyaml\nerrors:\n  sentry:\n    enabled: true\n    dsn: \"https://your-public-key@o0.ingest.sentry.io/project-id\"\n\n# Use environment variable for dynamic environment name\n    # Set ATMOS_ENVIRONMENT in your CI/CD pipeline\n    environment: !env ATMOS_ENVIRONMENT\n\n# Set release from CI/CD pipeline\n    # Example: \"v1.2.3\" or \"commit-abc123\"\n    release: !env CI_COMMIT_TAG\n\n# Reduce noise in development\n    sample_rate: 0.1  # Only 10% of errors in dev\nyaml",
+  "code_samples": [
+    {
+      "code": "5. **Verify in Sentry** that the error appears in your project's Issues dashboard\n\n### Environment-Specific Configuration\n\nConfigure different Sentry settings per environment:\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nThen in your CI/CD pipeline:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Environment-Specific Configuration",
+      "id": "environment-specific-configuration"
+    }
+  ],
+  "url": "llms-txt#this-will-fail-and-send-an-error-to-sentry",
+  "links": []
+}

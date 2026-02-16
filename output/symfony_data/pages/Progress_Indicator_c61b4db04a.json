@@ -1,0 +1,71 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/console/helpers/progressindicator.html",
+  "title": "Progress Indicator",
+  "content": "Progress indicators are useful to let users know that a command isn't stalled. Unlike progress bars, these indicators are used when the command duration is indeterminate (e.g. long-running commands, unquantifiable tasks, etc.)\n\nThey work by instantiating the ProgressIndicator class and advancing the progress as the command executes:\n\nBy default, the information rendered on a progress indicator depends on the current level of verbosity of the OutputInterface instance:\n\nCall a command with the quiet flag (-q) to not display any progress indicator.\n\nInstead of relying on the verbosity mode of the current command, you can also force a format via the second argument of the ProgressIndicator constructor:\n\nThe built-in formats are the following:\n\nIf your terminal doesn't support ANSI, use the no_ansi variants:\n\nInstead of using the built-in indicator values, you can also set your own:\n\nThe progress indicator will now look like this:\n\nOnce the progress finishes, it displays a special finished indicator (which defaults to ✔). You can replace it with your own:\n\nThe progress indicator will now look like this:\n\nThe finishedIndicator parameter for the constructor was introduced in Symfony 7.2. The finishedIndicator parameter for method finish() was introduced in Symfony 7.2.\n\nA progress indicator uses placeholders (a name enclosed with the % character) to determine the output format. Here is a list of the built-in placeholders:\n\nFor example, this is how you can customize the message placeholder:\n\nPlaceholders customization is applied globally, which means that any progress indicator displayed after the setPlaceholderFormatterDefinition() call will be affected.\n\nMeasure & Improve Symfony Code Performance\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Progress Indicator",
+      "id": "progress-indicator"
+    },
+    {
+      "level": "h2",
+      "text": "Customizing the Progress Indicator",
+      "id": "customizing-the-progress-indicator"
+    },
+    {
+      "level": "h3",
+      "text": "Built-in Formats",
+      "id": "built-in-formats"
+    },
+    {
+      "level": "h3",
+      "text": "Custom Indicator Values",
+      "id": "custom-indicator-values"
+    },
+    {
+      "level": "h3",
+      "text": "Customize Placeholders",
+      "id": "customize-placeholders"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Console\\Helper\\ProgressIndicator;\n\n// creates a new progress indicator\n$progressIndicator = new ProgressIndicator($output);\n\n// starts and displays the progress indicator with a custom message\n$progressIndicator->start('Processing...');\n\n$i = 0;\nwhile ($i++ < 50) {\n    // ... do some work\n\n    // advances the progress indicator\n    $progressIndicator->advance();\n}\n\n// ensures that the progress indicator shows a final message\n$progressIndicator->finish('Finished');",
+      "language": "unknown"
+    },
+    {
+      "code": "# OutputInterface::VERBOSITY_NORMAL (CLI with no verbosity flag)\n \\ Processing...\n | Processing...\n / Processing...\n - Processing...\n ✔ Finished\n\n# OutputInterface::VERBOSITY_VERBOSE (-v)\n \\ Processing... (1 sec)\n | Processing... (1 sec)\n / Processing... (1 sec)\n - Processing... (1 sec)\n ✔ Finished (1 sec)\n\n# OutputInterface::VERBOSITY_VERY_VERBOSE (-vv) and OutputInterface::VERBOSITY_DEBUG (-vvv)\n \\ Processing... (1 sec, 6.0 MiB)\n | Processing... (1 sec, 6.0 MiB)\n / Processing... (1 sec, 6.0 MiB)\n - Processing... (1 sec, 6.0 MiB)\n ✔ Finished (1 sec, 6.0 MiB)",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressIndicator = new ProgressIndicator($output, 'verbose');",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressIndicator = new ProgressIndicator($output, 'verbose', 100, ['⠏', '⠛', '⠹', '⢸', '⣰', '⣤', '⣆', '⡇']);",
+      "language": "unknown"
+    },
+    {
+      "code": "⠏ Processing...\n⠛ Processing...\n⠹ Processing...\n⢸ Processing...\n✔ Finished",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressIndicator = new ProgressIndicator($output, finishedIndicatorValue: '🎉');\n\ntry {\n    /* do something */\n    $progressIndicator->finish('Finished');\n} catch (\\Exception) {\n    $progressIndicator->finish('Failed', '🚨');\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "\\ Processing...\n| Processing...\n/ Processing...\n- Processing...\n🎉 Finished",
+      "language": "unknown"
+    },
+    {
+      "code": "ProgressIndicator::setPlaceholderFormatterDefinition(\n    'message',\n    static function (ProgressIndicator $progressIndicator): string {\n        // Return any arbitrary string\n        return 'My custom message';\n    }\n);",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/console/helpers/progressindicator.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/progressbar.html"
+  ]
+}

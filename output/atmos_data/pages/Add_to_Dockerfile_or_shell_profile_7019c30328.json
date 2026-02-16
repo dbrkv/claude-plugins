@@ -1,0 +1,13 @@
+{
+  "title": "Add to Dockerfile or shell profile",
+  "content": "export ATMOS_XDG_CONFIG_HOME=\"$HOME/.config\"\nexport ATMOS_XDG_DATA_HOME=\"$HOME/.local/share\"\nexport ATMOS_XDG_CACHE_HOME=\"$HOME/.cache\"\nbash\nls -la ~/.config/atmos/aws/",
+  "code_samples": [
+    {
+      "code": "Verify the credentials are now in the correct location:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#add-to-dockerfile-or-shell-profile",
+  "links": []
+}

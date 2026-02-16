@@ -1,0 +1,8 @@
+{
+  "title": "Check binary exists and is executable",
+  "content": "ls -la /path/to/providers/bin/terraform-provider-mycloud",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-binary-exists-and-is-executable",
+  "links": []
+}

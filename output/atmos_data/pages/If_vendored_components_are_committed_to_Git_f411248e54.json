@@ -1,0 +1,136 @@
+{
+  "title": "If vendored components are committed to Git",
+  "content": "git diff HEAD~1 components/terraform/vpc/ # Review changes\ngit checkout HEAD~1 -- components/terraform/vpc/ # Rollback\n\ncomponents/terraform/\n  vpc/\n    1.0.0/      # Initial stable release\n    1.1.0/      # Added IPv6 support (backward compatible)\n    1.1.1/      # Fixed subnet calculation bug\n    2.0.0/      # Breaking: Changed variable names\n\ncomponents/terraform/\n  vpc/\n    2024.10.1/  # First release in October 2024\n    2024.10.2/  # Second release in October 2024\n    2024.11.1/  # First release in November 2024\n\ncomponents/terraform/\n  vpc/\n    v1/   # First version\n    v2/   # Second version\n    v3/   # Third version\n\ncomponents/terraform/\n  vpc/\n    1.0/   # First major version\n    1.1/   # Added features\n    2.0/   # Breaking changes\n\ncomponents/terraform/\n  alpha/\n    vpc/     # Experimental, may change\n    eks/     # Latest features, higher risk\n  beta/\n    vpc/     # Release candidate, stabilizing\n    eks/     # Pre-production testing\n  stable/\n    vpc/     # Production-ready\n    eks/     # Proven, minimal changes\n\ncomponents/terraform/\n  dev/\n    vpc/     # Development track\n    eks/     # Latest changes land here\n  staging/\n    vpc/     # Pre-production validation\n    eks/     # Production candidate\n  prod/\n    vpc/     # Production track\n    eks/     # Stable, proven versions\n\ncomponents/terraform/\n  prod-v1.2.3/     # Production at version 1.2.3\n  staging-v1.3.0/  # Staging testing version 1.3.0\n  dev-v1.4.0/      # Development working on 1.4.0\n\ncomponents/terraform/\n  2024.10-stable/  # October 2024 stable release\n  2024.11-beta/    # November 2024 beta\n  2024.12-alpha/   # December 2024 alpha",
+  "code_samples": [
+    {
+      "code": ":::warning Local Modifications\nIf you have local modifications, ensure they're preserved during rollback or reapplied afterward.\n:::\n\n## Summary\n\nVendoring Components provides maximum control over external dependencies at the cost of increased maintenance responsibility. It's ideal for organizations with strict compliance requirements, those needing predictable update windows, or teams that must maintain custom patches. While it increases repository size and maintenance burden, the benefits of local control, audit capability, and resilience often justify these trade-offs for critical infrastructure components.\n\n:::tip Key Takeaway\nVendoring is about taking ownership of your dependencies. Use it when external code is critical to your infrastructure and you need full control over when and how it changes.\n:::\n\n## Related Patterns\n\n- [Versioning Schemes](./versioning-schemes) - Works with any scheme - vendor to SemVer folders, maturity tracks, etc.\n- [Folder-Based Versioning](./folder-based-versioning) - Version through repository structure\n- [Release Tracks/Channels](./release-tracks-channels) - Abstract version management\n- [Component Catalog](/design-patterns/component-catalog) - Organizing vendored components\n- [Component Inheritance](/design-patterns/component-inheritance) - Extending vendored components\n\n---\n\n## Versioning Schemes\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport KeyPoints from '@site/src/components/KeyPoints'\n\n<PillBox>Atmos Reference</PillBox>\n<Intro>\n**Versioning Schemes** are naming conventions used to identify different versions of infrastructure components. This reference documents common schemes and when to use each. Different [version management patterns](/design-patterns/version-management) work best with specific schemes.\n</Intro>\n\nChoosing the right versioning scheme depends on your operational model and how you track component evolution. Schemes fall into two broad categories: **number-based** (fixed points representing immutable versions) and **label-based** (moving targets representing stages or channels).\n\n<KeyPoints>\n- Number-based schemes (SemVer, CalVer) create immutable version identifiers\n- Label-based schemes (Maturity Levels, Environment Names) represent stages that evolve\n- Different patterns work best with specific schemes\n- Schemes can be mixed for different operational needs\n</KeyPoints>\n\n## Number-Based Schemes\n\nNumber-based schemes create **fixed points** - each identifier refers to a specific, immutable version. These work well with [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning) where you need explicit version tracking.\n\n### Semantic Versioning (SemVer)\n\nUses `MAJOR.MINOR.PATCH` format (e.g., `1.2.3`, `2.0.0`) following [semver.org](https://semver.org) conventions:\n- **MAJOR**: Breaking changes, incompatible API changes\n- **MINOR**: New features, backward compatible\n- **PATCH**: Bug fixes, backward compatible\n\n<File title=\"SemVer Example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**When to use:**\n- Vendoring from external sources with semantic versioning\n- Managing component libraries with clear API contracts\n- Need to communicate change impact (breaking vs. non-breaking)\n\n**Examples:**\n- `vpc/1.2.3` - VPC component version 1.2.3\n- `eks/2.0.0` - EKS component version 2.0.0 (breaking changes from 1.x)\n- `rds/1.14.2` - RDS component version 1.14.2\n\n### Calendar Versioning (CalVer)\n\nUses date-based formats (e.g., `2024.10.1`, `2024-10-01`) where version reflects when it was created:\n- **YYYY.MM.DD**: Full date format\n- **YYYY.MM.MICRO**: Year.Month with incrementing counter\n- **YY.MM**: Short year and month\n\n<File title=\"CalVer Example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**When to use:**\n- Time-based release cycles (monthly updates, quarterly releases)\n- Compliance requirements for temporal tracking\n- Want to immediately see age of component versions\n\n**Examples:**\n- `vpc/2024.10.1` - VPC component from October 2024, first release\n- `platform/2024-Q4-1` - Platform component from Q4 2024\n- `security/24.10` - Security component from October 2024\n\n### Sequential Versioning\n\nSimple incrementing numbers (e.g., `v1`, `v2`, `v3`) without semantic meaning:\n\n<File title=\"Sequential Example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**When to use:**\n- Rapid prototyping where semantic versioning is overhead\n- Internal components without strict API contracts\n- Simple progression without communicating change type\n\n**Examples:**\n- `vpc/v1`, `vpc/v2`, `vpc/v3`\n- `app/r1`, `app/r2` (using \"r\" for release)\n\n### Major/Minor Versioning\n\nSimplified SemVer using only `MAJOR.MINOR` (e.g., `1.0`, `2.0`, `1.1`):\n\n<File title=\"Major/Minor Example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**When to use:**\n- Want semantic meaning without patch-level granularity\n- Smaller teams with less frequent releases\n- Balance between simplicity and meaning\n\n**Examples:**\n- `vpc/1.0` - VPC major version 1\n- `eks/2.1` - EKS version 2.1 with enhancements\n- `platform/3.0` - Platform version 3 (breaking changes)\n\n## Label-Based Schemes\n\nLabel-based schemes create **moving targets** - the label stays the same but points to different versions over time. These work well with [Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels) where environments follow stages that evolve.\n\n### Maturity Levels\n\nUses stability indicators (e.g., `alpha`, `beta`, `stable`, `rc`) showing component readiness:\n\n<File title=\"Maturity Levels Example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**Common maturity levels:**\n- **alpha**: Experimental, frequent changes, not production-ready\n- **beta**: Feature complete, stabilizing, release candidate\n- **rc** (Release Candidate): Final testing before stable\n- **stable**: Production-ready, minimal changes\n- **lts** (Long-Term Support): Extended support window\n\n**When to use:**\n- Technology-focused teams comfortable with software release terms\n- Need clear stability expectations independent of environments\n- Components at different maturity levels\n\n**Examples:**\n- `alpha/vpc` - VPC in alpha testing\n- `beta/platform` - Platform in beta stage\n- `stable/security` - Stable security components\n\n### Environment Names\n\nUses deployment stage names (e.g., `dev`, `staging`, `prod`) aligned with infrastructure tiers:\n\n<File title=\"Environment Names Example\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**Common environment names:**\n- **dev** / **development**: Development environment track\n- **staging** / **preprod**: Pre-production validation\n- **prod** / **production**: Production environment track\n- **sandbox**: Experimental playground\n- **qa**: Quality assurance/testing\n\n**When to use:**\n- Direct mapping to infrastructure environments\n- Teams think in terms of deployment stages\n- Idiomatic with [Git Flow](/design-patterns/version-management/git-flow-branches-as-channels) where branches map to environments\n\n**Examples:**\n- `dev/vpc` - VPC for development environments\n- `staging/platform` - Platform for staging\n- `prod/security` - Security for production\n\n## Hybrid Approaches\n\nCombining schemes for specific operational needs:\n\n### Version + Stage\nCombine number with label for explicit tracking within stages:\n\n<File title=\"Hybrid: Version + Stage\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### Date + Maturity\nCombine CalVer with maturity for temporal and stability tracking:\n\n<File title=\"Hybrid: Date + Maturity\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**When to use hybrids:**\n- Need both temporal tracking AND stability indication\n- Complex compliance requirements\n- Multiple teams with different needs\n\n## Choosing a Versioning Scheme\n\nConsider these factors when selecting a scheme:\n\n| Factor | Number-Based (SemVer, CalVer) | Label-Based (Maturity, Environment) |\n|--------|-------------------------------|-------------------------------------|\n| **Immutability** | Fixed versions never change | Labels point to evolving versions |\n| **Use Case** | Strict version pinning | Release tracks/channels |\n| **Rollback** | Pin to specific version number | Revert entire track/channel |\n| **Promotion** | Update pins to new version | Promote version to next label |\n| **Overhead** | Track many version numbers | Manage fewer labels |\n| **Pattern Fit** | [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning) | [Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels) |\n\n### Pattern-Specific Recommendations\n\nDifferent [version management patterns](/design-patterns/version-management) work best with specific schemes:\n\n**[Strict Version Pinning](/design-patterns/version-management/strict-version-pinning)**\n- **Recommended**: SemVer, CalVer, Major/Minor, Sequential\n- Creates immutable version folders\n- Example: `vpc/1.2.3`, `platform/2024.10.1`\n\n**[Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels)**\n- **Recommended**: Maturity Levels, Environment Names\n- Creates moving track folders\n- Example: `alpha/vpc`, `dev/platform`\n\n**[Git Flow: Branches as Channels](/design-patterns/version-management/git-flow-branches-as-channels)**\n- **Recommended**: Environment Names (branches ARE environments)\n- Branches carry version semantics\n- Example: `channels/dev`, `channels/staging`, `channels/prod`\n\n**[Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning)**\n- **Recommended**: Simple naming, Sequential if needed\n- Explicit folder structure without complex versioning\n- Example: `vpc/`, `eks/`, or `vpc-v1/`, `vpc-v2/`\n\n## Best Practices\n\n### 1. Be Consistent Within Components\nUse the same scheme across all versions of a component:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Versioning Schemes",
+      "id": "versioning-schemes"
+    },
+    {
+      "level": "h2",
+      "text": "Number-Based Schemes",
+      "id": "number-based-schemes"
+    },
+    {
+      "level": "h3",
+      "text": "Semantic Versioning (SemVer)",
+      "id": "semantic-versioning-(semver)"
+    },
+    {
+      "level": "h3",
+      "text": "Calendar Versioning (CalVer)",
+      "id": "calendar-versioning-(calver)"
+    },
+    {
+      "level": "h3",
+      "text": "Sequential Versioning",
+      "id": "sequential-versioning"
+    },
+    {
+      "level": "h3",
+      "text": "Major/Minor Versioning",
+      "id": "major/minor-versioning"
+    },
+    {
+      "level": "h2",
+      "text": "Label-Based Schemes",
+      "id": "label-based-schemes"
+    },
+    {
+      "level": "h3",
+      "text": "Maturity Levels",
+      "id": "maturity-levels"
+    },
+    {
+      "level": "h3",
+      "text": "Environment Names",
+      "id": "environment-names"
+    },
+    {
+      "level": "h2",
+      "text": "Hybrid Approaches",
+      "id": "hybrid-approaches"
+    },
+    {
+      "level": "h3",
+      "text": "Version + Stage",
+      "id": "version-+-stage"
+    },
+    {
+      "level": "h3",
+      "text": "Date + Maturity",
+      "id": "date-+-maturity"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing a Versioning Scheme",
+      "id": "choosing-a-versioning-scheme"
+    },
+    {
+      "level": "h3",
+      "text": "Pattern-Specific Recommendations",
+      "id": "pattern-specific-recommendations"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "1. Be Consistent Within Components",
+      "id": "1.-be-consistent-within-components"
+    }
+  ],
+  "url": "llms-txt#if-vendored-components-are-committed-to-git",
+  "links": []
+}

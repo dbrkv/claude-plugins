@@ -1,0 +1,8 @@
+{
+  "title": "Long form",
+  "content": "atmos --chdir=/path/to/infrastructure describe stacks",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#long-form",
+  "links": []
+}

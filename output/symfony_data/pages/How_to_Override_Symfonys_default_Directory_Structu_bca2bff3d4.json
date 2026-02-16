@@ -1,0 +1,121 @@
+{
+  "url": "https://symfony.com/doc/7.3/configuration/override_dir_structure.html",
+  "title": "How to Override Symfony's default Directory Structure",
+  "content": "Symfony applications have the following default directory structure, but you can override it to create your own structure:\n\nBy default, the .env configuration file is located at the root directory of the project. If you store it in a different location, define the runtime.dotenv_path option in the composer.json file:\n\nThen, update your Composer files (running composer dump-autoload, for instance), so that the vendor/autoload_runtime.php files gets regenerated with the new .env path.\n\nYou can also set up different .env paths for your console and web server calls. Edit the public/index.php and/or bin/console files to define the new file path.\n\nWeb front-controller:\n\nThe configuration directory is the only one which cannot be overridden in a Symfony application. Its location is hardcoded as the config/ directory at your project root directory.\n\nChanging the cache directory can be achieved by overriding the getCacheDir() method in the Kernel class of your application:\n\nIn this code, $this->environment is the current environment (i.e. dev). In this case you have changed the location of the cache directory to var/{environment}/cache/.\n\nYou can also change the cache directory by defining an environment variable named APP_CACHE_DIR whose value is the full path of the cache folder.\n\nYou should keep the cache directory different for each environment, otherwise some unexpected behavior may happen. Each environment generates its own cached configuration files, and so each needs its own directory to store those cache files.\n\nOverriding the var/log/ directory is almost the same as overriding the var/cache/ directory.\n\nYou can do it overriding the getLogDir() method in the Kernel class of your application:\n\nHere you have changed the location of the directory to var/{environment}/log/.\n\nYou can also change the log directory defining an environment variable named APP_LOG_DIR whose value is the full path of the log folder.\n\nIf your templates are not stored in the default templates/ directory, use the twig.default_path configuration option to define your own templates directory (use twig.paths for multiple directories):\n\nIf your translation files are not stored in the default translations/ directory, use the framework.translator.default_path configuration option to define your own translations directory (use framework.translator.paths for multiple directories):\n\nIf you need to rename or move your public/ directory, the only thing you need to guarantee is that the path to the vendor/ directory is still correct in your index.php front controller. If you renamed the directory, you're fine. But if you moved it in some way, you may need to modify these paths inside those files:\n\nYou also need to change the extra.public-dir option in the composer.json file:\n\nSome shared hosts have a public_html/ web directory root. Renaming your web directory from public/ to public_html/ is one way to make your Symfony project work on your shared host. Another way is to deploy your application to a directory outside of your web root, delete your public_html/ directory, and then replace it with a symbolic link to the public/ dir in your project.\n\nTo override the vendor/ directory, you need to define the vendor-dir option in your composer.json file like this:\n\nThis modification can be of interest if you are working in a virtual environment and cannot use NFS - for example, if you're running a Symfony application using Vagrant/VirtualBox in a guest operating system.\n\nCode consumes server resources. Blackfire tells you how\n\nTake the exam at home",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Override Symfony's default Directory Structure",
+      "id": "how-to-override-symfony-s-default-directory-structure"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Environment (DotEnv) Files Directory",
+      "id": "override-the-environment-dotenv-files-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Configuration Directory",
+      "id": "override-the-configuration-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Cache Directory",
+      "id": "override-the-cache-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Log Directory",
+      "id": "override-the-log-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Templates Directory",
+      "id": "override-the-templates-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Translations Directory",
+      "id": "override-the-translations-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Public Directory",
+      "id": "override-the-public-directory"
+    },
+    {
+      "level": "h2",
+      "text": "Override the Vendor Directory",
+      "id": "override-the-vendor-directory"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "your-project/\n├─ assets/\n├─ bin/\n│  └─ console\n├─ config/\n├─ public/\n│  └─ index.php\n├─ src/\n│  └─ ...\n├─ templates/\n├─ tests/\n├─ translations/\n├─ var/\n│  ├─ cache/\n│  ├─ log/\n│  └─ ...\n├─ vendor/\n└─ .env",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n    \"...\": \"...\",\n    \"extra\": {\n        \"...\": \"...\",\n        \"runtime\": {\n            \"dotenv_path\": \"my/custom/path/to/.env\"\n        }\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// bin/console\n\n// ...\n$_SERVER['APP_RUNTIME_OPTIONS']['dotenv_path'] = 'some/custom/path/to/.env';\n\nrequire_once dirname(__DIR__).'/vendor/autoload_runtime.php';\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "// public/index.php\n\n// ...\n$_SERVER['APP_RUNTIME_OPTIONS']['dotenv_path'] = 'another/custom/path/to/.env';\n\nrequire_once dirname(__DIR__).'/vendor/autoload_runtime.php';\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Kernel.php\n\n// ...\nclass Kernel extends BaseKernel\n{\n    // ...\n\n    public function getCacheDir(): string\n    {\n        return dirname(__DIR__).'/var/'.$this->environment.'/cache';\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Kernel.php\n\n// ...\nclass Kernel extends BaseKernel\n{\n    // ...\n\n    public function getLogDir(): string\n    {\n        return dirname(__DIR__).'/var/'.$this->environment.'/log';\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/twig.yaml\ntwig:\n    # ...\n    default_path: \"%kernel.project_dir%/resources/views\"",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/twig.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig\n        https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <twig:config>\n        <twig:default-path>%kernel.project_dir%/resources/views</twig:default-path>\n    </twig:config>\n\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/twig.php\nuse Symfony\\Config\\TwigConfig;\n\nreturn static function (TwigConfig $twig): void {\n    $twig->defaultPath('%kernel.project_dir%/resources/views');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    translator:\n        # ...\n        default_path: \"%kernel.project_dir%/i18n\"",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig\n        https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <framework:config>\n        <framework:translator>\n            <framework:default-path>%kernel.project_dir%/i18n</framework:default-path>\n        </framework:translator>\n    </framework:config>\n\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translation.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->translator()\n        ->defaultPath('%kernel.project_dir%/i18n')\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "require_once __DIR__.'/../path/to/vendor/autoload_runtime.php';",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n    \"...\": \"...\",\n    \"extra\": {\n        \"...\": \"...\",\n        \"public-dir\": \"my_new_public_dir\"\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n    \"config\": {\n        \"bin-dir\": \"bin\",\n        \"vendor-dir\": \"/some/dir/vendor\"\n    }\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/configuration/override_dir_structure.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/reference/configuration/twig.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html"
+  ]
+}

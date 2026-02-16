@@ -1,0 +1,26 @@
+{
+  "url": "https://symfony.com/doc/7.3/controller/forwarding.html",
+  "title": "How to Forward Requests to another Controller",
+  "content": "Though not very common, you can also forward to another controller internally with the forward() method provided by the AbstractController class.\n\nInstead of redirecting the user's browser, this makes an \"internal\" sub-request and calls the defined controller. The forward() method returns the Response object that is returned from that controller:\n\nThe array passed to the method becomes the arguments for the resulting controller. The target controller method might look something like this:\n\nLike when creating a controller for a route, the order of the arguments of the fancy() method doesn't matter: the matching is done by name.\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Forward Requests to another Controller",
+      "id": "how-to-forward-requests-to-another-controller"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "public function index(string $name): Response\n{\n    $response = $this->forward('App\\Controller\\OtherController::fancy', [\n        'name'  => $name,\n        'color' => 'green',\n    ]);\n\n    // ... further modify the response or return it directly\n\n    return $response;\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "public function fancy(string $name, string $color): Response\n{\n    // ... create and return a Response object\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/controller/forwarding.html"
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "title": "Support both old and new variable names during transition",
+  "content": "variable \"enable_nat\" {\n  description = \"DEPRECATED: Use enable_nat_gateway instead\"\n  type        = bool\n  default     = null\n}\n\nvariable \"enable_nat_gateway\" {\n  description = \"Enable NAT Gateway\"\n  type        = bool\n  default     = false\n}\n\nlocals {\n  # Use new variable if set, fall back to old variable\n  nat_gateway_enabled = coalesce(\n    var.enable_nat_gateway,\n    var.enable_nat,\n    false\n  )\n}\ntext\nterraform/\nâââ vpc/                    # Trunk-based - all envs converge\nâââ eks/                    # Trunk-based - all envs converge\nâââ monitoring/             # Trunk-based - all envs converge\nâââ database/\n    âââ v1/                # PostgreSQL 13 (prod pinned here)\n    âââ v2/                # PostgreSQL 15 (dev/staging testing)\nyaml\ncomponents:\n  terraform:\n    # Most components converge continuously\n    vpc:\n      metadata:\n        component: vpc  # Uses trunk\n\n# Database has planned divergence\n    database:\n      metadata:\n        component: database/v2  # Testing new version\n      settings:\n        workspace_key_prefix: \"database\"  # Stable across versions\n      vars:\n        engine: \"postgres\"\n        engine_version: \"15.4\"\nyaml\ncomponents:\n  terraform:\n    # Most components converge continuously\n    vpc:\n      metadata:\n        component: vpc  # Uses trunk\n\n# Database pinned during migration\n    database:\n      metadata:\n        component: database/v1  # Stable on old version\n      settings:\n        workspace_key_prefix: \"database\"  # Stable across versions\n      vars:\n        engine: \"postgres\"\n        engine_version: \"13.11\"\nyaml\ncomponents:\n  terraform:\n    database:\n      settings:\n        # Use tracks for coordinated multi-component migrations\n        release_track: stable  # or: beta, canary\nyaml\ncomponents:\n  terraform:\n    critical-service:\n      metadata:\n        # Pin to specific commit by pointing to a vendored version-specific path\n        # The component must be vendored to this path with the specific commit/tag\n        component: critical-service-v1.2.3\n      # Or use a vendored path that includes the commit SHA:\n      # component: critical-service-abc123d\nyaml\nspec:\n  sources:\n    # Vendor the specific commit to a version-specific path\n    - component: critical-service-v1.2.3\n      source: \"git::https://github.com/acme/components.git//components/terraform/critical-service?ref=v1.2.3\"\n      targets:\n        - \"components/terraform/critical-service-v1.2.3\"\nyaml\ncomponents:\n  terraform:\n    critical-fix:\n      metadata:\n        # Temporarily use a different component version\n        component: vpc-hotfix\n      settings:\n        workspace_key_prefix: \"vpc\"  # Keep stable during hotfix\n      vars:\n        # Emergency configuration\nyaml\n  # Reusable base configuration in catalog\n  components:\n    terraform:\n      vpc-base:\n        metadata:\n          type: abstract\n        vars:\n          enable_dns_hostnames: true\n          enable_dns_support: true\n          # Shared configuration\n  yaml\n  # Import catalog configuration\n  import:\n    - catalog/vpc-base\n\n# Then customize minimally per environment\n  components:\n    terraform:\n      vpc:\n        metadata:\n          inherits:\n            - vpc-base\n        vars:\n          # Only environment-specific overrides\n          cidr_block: \"10.2.0.0/16\"\n  text\ncomponents/\n  terraform/\n    vpc/\n      v1/                   # Version 1 implementation\n        main.tf\n        variables.tf\n        outputs.tf\n        README.md\n      v2/                   # Version 2 implementation\n        main.tf\n        variables.tf\n        outputs.tf\n        README.md\n        MIGRATION.md        # Migration guide from v1\n      v3-preview/           # Version 3 in development\n        main.tf\n        variables.tf\n        outputs.tf\n        README.md\n    rds/\n      standard/             # Standard RDS version\n        main.tf\n      aurora/               # Aurora variant\n        main.tf\n      v2-deprecated/        # Deprecated version\n        main.tf\n        DEPRECATED.md\nyaml\ncomponents:\n  terraform:\n    vpc:\n      metadata:\n        component: vpc/v2  # Reference v2 folder for development\n      settings:\n        # CRITICAL: Don't include version in workspace key\n        workspace_key_prefix: \"vpc\"\n      vars:\n        name: \"dev-use1-vpc\"\n        cidr_block: \"10.0.0.0/16\"\nyaml\ncomponents:\n  terraform:\n    vpc:\n      metadata:\n        component: vpc/v1  # Production still on stable v1\n      settings:\n        # Same workspace key as dev - enables migration\n        workspace_key_prefix: \"prod/vpc\"\n      vars:\n        name: \"prod-use1-vpc\"\n        cidr_block: \"10.2.0.0/16\"\ntext\ncomponents/\n  terraform/\n    vpc/\n      v1/                    # Semantic versioning\n      v2/\n      v3-preview/\n\nrds/\n      standard/              # Feature-based versioning\n      aurora/\n      serverless/\n\neks/\n      stable/                # Release-channel versioning\n      beta/\n      deprecated/\n\nlambda/\n      2023/                  # Date-based versioning\n      2024/\n      2025/\nyaml",
+  "code_samples": [
+    {
+      "code": "</File>\n\n## Planned Divergence\n\nWhile this pattern promotes automatic convergence for most components, there are scenarios where environments need to intentionally diverge for extended periods. This is **planned divergence**âstrategic, controlled separation that serves specific business or technical needs.\n\n### Operational vs. Planned Divergence\n\nIt's important to distinguish between two types of divergence:\n\n**Operational Divergence** (covered earlier):\n- **Duration**: Minutes to hours during progressive rollout\n- **Purpose**: Safe deployment through testing gates and approvals\n- **Outcome**: Automatic convergence when pipeline completes\n- **Example**: Dev on commit abc123, prod still on xyz789 while staging validates\n\n**Planned Divergence** (this section):\n- **Duration**: Weeks to months for strategic reasons\n- **Purpose**: Extended parallel operation during migrations, experiments, or high-risk changes\n- **Outcome**: Intentional separation with manual convergence when ready\n- **Example**: Prod on PostgreSQL 13, dev/staging testing PostgreSQL 15 upgrade for 6 weeks\n\n### Use Cases for Planned Divergence\n\nPlanned divergence is appropriate when changes are too risky or complex for progressive rollout, requiring extended parallel testing before committing all environments.\n\n**Breaking Changes with Extended Testing**:\nMajor architectural changes that require weeks or months of validation before production deployment.\n\n**Database Engine Upgrades**:\nMajor version upgrades within the same database engine (e.g., PostgreSQL 13 â 15, MySQL 5.7 â 8.0) that need extended parallel operation and testing. Note that migrations between different engines would be separate components (e.g., a `postgres` component and an `aurora` component), not versions of the same component.\n\n**Major Terraform Provider Updates**:\nUpgrading to new major versions of Terraform providers that include breaking changes requiring extensive validation.\n\n**Architectural Changes to Components**:\nSignificant restructuring of component implementations that changes resource dependencies or state structure.\n\n**Regulatory Compliance Staging**:\nWhen regulations require frozen production versions during audit periods while development continues.\n\n**Major Kubernetes Version Upgrades**:\nTesting k8s 1.27 â 1.30 upgrades in isolated environments before production rollout.\n\n**Experimental Features & Skunk Works**:\nTrying new Terraform providers, modules, or architectural patterns without risking production stability. Isolated experimentation before committing to production rollout.\n\n### Combining Strategies\n\nThe power of Atmos is that you can mix strategies per component based on its needs:\n\n**Most Components**: Use continuous deployment from trunk (this pattern)\n**Strategic Components**: Use versioned folders or release tracks for planned divergence\n\n<File title=\"components/terraform/\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### Strategy Combinations\n\n**With [Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning)**:\n\nCreate explicit version boundaries through folder structure. Environments reference specific version folders during the divergence period.\n\n<Tabs>\n<TabItem value=\"dev\" label=\"Development\" default>\n<File title=\"stacks/dev/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n</TabItem>\n\n<TabItem value=\"prod\" label=\"Production\">\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n</TabItem>\n</Tabs>\n\n**With [Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels)**:\n\nUse tracks to coordinate planned divergence across multiple components. Useful when several components need synchronized version progression.\n\n<File title=\"stacks/catalog/database.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**With [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning)**:\n\nTemporarily pin critical environments during high-risk periods, then return to continuous deployment after validation.\n\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"vendor.yaml (for pinned version)\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### When to Use Planned Divergence\n\nChoose planned divergence when:\n\nâ **Migration requires weeks/months** of parallel operation and testing\n\nâ **Risk is too high** for progressive rollout without extended validation\n\nâ **Rollback would be complex** or impossible (data migrations, schema changes)\n\nâ **Need production-scale testing** before committing all environments\n\nâ **Regulatory approval process** requires frozen versions during review\n\nâ **Breaking API changes** affect multiple downstream consumers\n\n### Managing the Convergence Path\n\nEven with planned divergence, you should have a clear path back to convergence:\n\n**Set a Convergence Timeline**:\nDefine when environments will reconverge (e.g., \"8 weeks after v2 deployment to staging\").\n\n**Document the Divergence**:\nMaintain clear documentation on why divergence exists, what's being tested, and convergence criteria.\n\n**Monitor Both Versions**:\nTrack metrics for both versions to make data-driven convergence decisions.\n\n**Plan the Cutover**:\nDefine success criteria and cutover procedures before starting the divergence period.\n\n**Automate When Possible**:\nEven planned divergence can use automationâjust with longer gates and explicit approval requirements.\n\n## Advanced Patterns\n\n### Emergency Overrides\n\nSupport emergency overrides when needed:\n\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Comparison with Other Patterns\n\n<Tabs>\n<TabItem value=\"strict-pinning\" label=\"vs. Strict Version Pinning\" default>\n\n| Aspect | Strict Pinning | Continuous Version Deployment |\n|--------|----------------|-------------------------------|\n| **Operational Overhead** | High - manage individual pins per environment | Low - single trunk for all environments |\n| **Feedback Loops** | Weak - issues surface late | Strong - immediate visibility across environments |\n| **Convergence** | Promotes divergence | Automatic convergence via pipeline |\n| **Reproducibility** | Strong - explicit pins | Good - via Git history |\n\n**When to prefer Strict Pinning:** Compliance requirements demand cryptographic proof of exact versions deployed.\n\n</TabItem>\n<TabItem value=\"release-tracks\" label=\"vs. Release Tracks\">\n\n| Aspect | Release Tracks | Continuous Version Deployment |\n|--------|----------------|-------------------------------|\n| **Track Management** | Must manage track definitions | No track management needed |\n| **Abstraction** | Additional layer of indirection | Direct and simple |\n| **Gradual Rollout** | Built into track progression | Achieved via CI/CD pipeline |\n| **Flexibility** | Grouped environment control | Individual pipeline control |\n\n**When to prefer Release Tracks:** Many environments need coordinated version progression with clear promotion stages.\n\n</TabItem>\n<TabItem value=\"git-flow\" label=\"vs. Git Flow\">\n\n| Aspect | Git Flow | Continuous Version Deployment |\n|--------|----------|-------------------------------|\n| **Branch Management** | Complex - maintain multiple long-lived branches | Simple - trunk-based development |\n| **Merge Conflicts** | Frequent conflicts between branches | No branch conflicts |\n| **Integration Speed** | Slower - changes isolated in branches | Fast - frequent integration to main |\n| **Deployment Model** | Branches represent environments | Automation controls deployment |\n\n**When to prefer Git Flow:** Legacy systems where branch-per-environment is deeply embedded in processes.\n\n</TabItem>\n</Tabs>\n\n## When to Use This Pattern\n\nThis pattern is ideal when:\n\nâ **You want simplicity**: Minimal concepts to understand and operate\n\nâ **You have good automation**: Strong CI/CD pipelines and testing\n\nâ **You value convergence**: Want environments to stay in sync\n\nâ **You practice trunk-based development**: Frequent integration to main\n\nâ **You can roll forward**: Culture supports fixing forward vs. rollback\n\nâ **You're starting fresh**: New projects without legacy constraints\n\n## When Not to Use This Pattern\n\nConsider alternatives when:\n\nâ **Strict compliance requirements**: Need cryptographic proof of deployments\n\nâ **No automation infrastructure**: Can't build robust pipelines\n\nâ **Very slow release cycles**: Months between production deployments\n\nâ **Multiple teams with conflicts**: Need isolation between team changes\n\nâ **Legacy migration**: Existing complex versioning must be maintained\n\n## Best Practices\n\n- **Comprehensive Testing:** Invest in thorough testing at each stage including unit tests (component-level), integration tests (cross-component), smoke tests (basic functionality), performance tests (load and scale), security scans (vulnerability assessment), and chaos testing (resilience validation).\n\n- **Rollback Considerations:** Rollbacks without a tracking mechanism to store the last commit for each environment are impractical. Modern DevOps practice favors **roll-forward** over rollbackâfixing issues by deploying new code rather than reverting. When rollback is necessary: revert the problematic commit on main and re-run the pipeline to apply the previous state consistently across all environments. Environment-specific configuration allows you to disable features per environment and redeploy if needed, though redeployment is still required.\n\n- **Environment Parity:** Keep environments as similar as possible by using inheritance for shared configuration and minimizing environment-specific overrides.\n\n  <File title=\"stacks/catalog/vpc-base.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n  <File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Troubleshooting\n\n### Common Issues\n\n**Problem**: Afraid to deploy to production\n**Solution**: Increase test coverage and implement better monitoring\n\n**Problem**: Changes break multiple environments\n**Solution**: Add environment-specific validation and configuration to control behavior per environment\n\n**Problem**: Rollback is difficult\n**Solution**: Automate rollback procedures and practice them regularly\n\n**Problem**: Compliance requires deployment records\n**Solution**: Generate deployment artifacts from your CI/CD system\n\n## Summary\n\nContinuous Version Deployment represents the ideal balance for most teamsâsimple to understand, easy to operate, yet powerful enough for complex scenarios. By embracing trunk-based development and leveraging automation for safety, teams can move fast with confidence while maintaining visibility and control over their infrastructure.\n\nThe pattern's strength lies not in complex version management, but in robust automation, progressive rollout, and automatic convergence. This approach aligns with modern DevOps practices and scales well from small teams to large organizations. Environments naturally diverge during deployment windows, then automatically converge through your CI/CD pipeline.\n\n:::tip Key Takeaway\nDon't solve deployment challenges with version control gymnastics. Use automation, testing, and progressive rollout strategies to maintain safety while keeping operations simple. Deploy from trunk, converge automatically.\n:::\n\n## See Also\n\n- **[Versioning Schemes](/design-patterns/version-management/versioning-schemes)** - Choose naming conventions that work with your folder organization approach\n- **[Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning)** - Combine with this pattern for components requiring planned divergence during breaking changes or extended migrations.\n- **[Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels)** - Use alongside trunk-based deployment when coordinating multi-component migrations across many environments.\n- **[Strict Version Pinning](/design-patterns/version-management/strict-version-pinning)** - Temporarily apply to specific components during high-risk periods while others use continuous deployment.\n\n---\n\n## Folder-Based Versioning\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Tabs from '@theme/Tabs'\nimport TabItem from '@theme/TabItem'\n\n<PillBox>Atmos Design Pattern</PillBox>\n<Intro>\n**Folder-Based Versioning** is the foundational folder organization approach within [Continuous Version Deployment](/design-patterns/version-management/continuous-version-deployment). Components are organized in simple, explicit folders (`vpc/`, `eks/`, `rds/`) on the main branch. What you see is what you getâno magic, no hidden versioning. This straightforward structure makes divergence visible and patching any version straightforward.\n</Intro>\n\nThis is the recommended starting point for most teams and what most components use. The explicit folder structure provides clarity: you can see at a glance which components exist and how they're organized. All subsequent folder organization approaches ([Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels) and [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning)) build on this foundation.\n\n<KeyPoints>\n- No magic: what you see in the folder structure is what you get\n- Explicit divergence visibility through folder organization\n- Straightforward patchingâmodify the component folder directly\n- Foundation that other folder organization approaches build upon\n- Clear separation between different components\n</KeyPoints>\n\n## Use Cases\n\nUse the **Folder-Based Versioning** pattern when:\n\n- You need **significant component rework** that will take time to stabilize\n- You want **explicit version boundaries** visible in the repository\n- You need to **run multiple versions side-by-side** for extended periods\n- You're making **breaking changes** that require careful migration\n- You want **clear separation** between stable and experimental code\n- You need **gradual migration paths** for complex components\n\n## Problem\n\nMajor component changes often require extended development periods and careful migration strategies. Traditional versioning approaches can create challenges:\n\n- **In-place changes** destabilize existing deployments\n- **Feature flags** add complexity and technical debt\n- **Branch-based development** delays integration and feedback\n- **Hidden versioning** makes it hard to understand what's deployed where\n\nFolder-Based Versioning addresses these issues by making versions first-class citizens in the repository structure.\n\n## Solution\n\nCreate separate folders for each major version of a component. Environments explicitly reference the folder containing their desired version, making version selection transparent and reversible.\n\n### Core Principles\n\n1. **Versions as Folders**: Each major version gets its own directory\n2. **Explicit References**: Stacks explicitly choose which folder/version to use\n3. **Parallel Development**: Multiple versions can evolve independently\n4. **Stable State Keys**: Workspace keys remain constant across version switches\n5. **Clear Deprecation**: Old versions are clearly marked and eventually removed\n\n## Implementation\n\n### Directory Structure\n\nOrganize components with version-specific folders:\n\n<File title=\"Directory Structure\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### Stack Configuration\n\nEnvironments reference specific version folders:\n\n<Tabs>\n<TabItem value=\"dev\" label=\"Development\" default>\n<File title=\"stacks/dev/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n</TabItem>\n\n<TabItem value=\"prod\" label=\"Production\">\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n</TabItem>\n</Tabs>\n\n### Version Naming Conventions\n\nChoose clear, consistent naming patterns within your component folders:\n\n<File title=\"components/terraform directory structure\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Workspace Key Management\n\n:::warning Workspace Key Configuration\nThis pattern works best with Atmos auto-generated [backend configuration](/core-concepts/components/terraform/backends). The `workspace_key_prefix` must remain stable across version changes to prevent state conflicts:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Planned Divergence",
+      "id": "planned-divergence"
+    },
+    {
+      "level": "h3",
+      "text": "Operational vs. Planned Divergence",
+      "id": "operational-vs.-planned-divergence"
+    },
+    {
+      "level": "h3",
+      "text": "Use Cases for Planned Divergence",
+      "id": "use-cases-for-planned-divergence"
+    },
+    {
+      "level": "h3",
+      "text": "Combining Strategies",
+      "id": "combining-strategies"
+    },
+    {
+      "level": "h3",
+      "text": "Strategy Combinations",
+      "id": "strategy-combinations"
+    },
+    {
+      "level": "h3",
+      "text": "When to Use Planned Divergence",
+      "id": "when-to-use-planned-divergence"
+    },
+    {
+      "level": "h3",
+      "text": "Managing the Convergence Path",
+      "id": "managing-the-convergence-path"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Patterns",
+      "id": "advanced-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "Emergency Overrides",
+      "id": "emergency-overrides"
+    },
+    {
+      "level": "h2",
+      "text": "Comparison with Other Patterns",
+      "id": "comparison-with-other-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "When to Use This Pattern",
+      "id": "when-to-use-this-pattern"
+    },
+    {
+      "level": "h2",
+      "text": "When Not to Use This Pattern",
+      "id": "when-not-to-use-this-pattern"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Common Issues",
+      "id": "common-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "See Also",
+      "id": "see-also"
+    },
+    {
+      "level": "h2",
+      "text": "Folder-Based Versioning",
+      "id": "folder-based-versioning"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Problem",
+      "id": "problem"
+    },
+    {
+      "level": "h2",
+      "text": "Solution",
+      "id": "solution"
+    },
+    {
+      "level": "h3",
+      "text": "Core Principles",
+      "id": "core-principles"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation",
+      "id": "implementation"
+    },
+    {
+      "level": "h3",
+      "text": "Directory Structure",
+      "id": "directory-structure"
+    },
+    {
+      "level": "h3",
+      "text": "Stack Configuration",
+      "id": "stack-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Version Naming Conventions",
+      "id": "version-naming-conventions"
+    },
+    {
+      "level": "h2",
+      "text": "Workspace Key Management",
+      "id": "workspace-key-management"
+    }
+  ],
+  "url": "llms-txt#support-both-old-and-new-variable-names-during-transition",
+  "links": []
+}

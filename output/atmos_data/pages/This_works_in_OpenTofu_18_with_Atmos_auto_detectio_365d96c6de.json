@@ -1,0 +1,64 @@
+{
+  "title": "This works in OpenTofu 1.8+ with Atmos auto-detection",
+  "content": "module \"example\" {\n  source = \"${var.module_path}\"  # Automatically supported\n}\nconsole\n   tofu version\n   # Should output: OpenTofu v1.8.x\n   yaml\n   components:\n     terraform:\n       command: \"tofu\"  # Must contain \"tofu\" or be a path to tofu\n       init:\n         pass_vars: true  # Required for module source interpolation\n   console\n   export ATMOS_LOGS_LEVEL=Trace\n   atmos terraform plan my-component -s my-stack\n   yaml\ncomponents:\n  packer:\n    # The executable to be called by Atmos when running Packer commands\n    command: \"packer\"  # or `/usr/bin/packer`\n    # Can also be set using 'ATMOS_COMPONENTS_PACKER_BASE_PATH' ENV var, or '--packer-dir' command-line argument\n    # Supports both absolute and relative paths\n    base_path: \"components/packer\"\nyaml\ncomponents:\n  packer:\n    bastion:\n      # Use Packer v1.14.1 to provision the `bastion` component\n      command: \"/usr/local/bin/packer-1.14.1\"\nyaml\nbase_path: \"./\"\n\ncomponents:\n  packer:\n    # Can also be set using 'ATMOS_COMPONENTS_PACKER_COMMAND' ENV var, or '--packer-command' command-line argument\n    command: packer\n    # Can also be set using 'ATMOS_COMPONENTS_PACKER_BASE_PATH' ENV var, or '--packer-dir' command-line argument\n    base_path: \"components/packer\"\n\nstacks:\n  base_path: \"stacks\"\n  included_paths:\n    - \"deploy/**/*\"\n  excluded_paths:\n    - \"**/_defaults.yaml\"\n  name_template: \"{{ .vars.stage }}\"\n\nlogs:\n  file: \"/dev/stderr\"\n  level: Info",
+  "code_samples": [
+    {
+      "code": "No configuration changes needed in Atmos - the auto-detection handles it automatically when `command: \"tofu\"` is configured.\n\n### Troubleshooting\n\nIf you encounter validation errors with OpenTofu-specific syntax:\n\n1. **Verify OpenTofu detection**:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. **Check Atmos configuration**:",
+      "language": "unknown"
+    },
+    {
+      "code": "3. **Enable debug logging** to see detection details:",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details on this feature, see the [OpenTofu 1.8.0 release notes](https://opentofu.org/blog/opentofu-1-8-0/).\n\n---\n\n## Configure Packer\n\nimport useBaseUrl from '@docusaurus/useBaseUrl';\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Intro from '@site/src/components/Intro'\nimport File from '@site/src/components/File'\nimport Terminal from '@site/src/components/Terminal'\n\n<Intro>\nAtmos natively supports [HashiCorp Packer](https://developer.hashicorp.com/packer) and lets you create identical\nmachine images for multiple platforms from a single source template using the power of Atmos components,\nstacks, imports, inheritance, templating and YAML functions.\nIt's compatible with every version of Packer and designed to work with multiple different versions of it concurrently.\n\n</Intro>\n\n<KeyPoints>\n- How to configure Atmos to use Packer to build machine images\n- Example Packer and Atmos configurations to build an AWS bastion AMI from an Amazon Linux 2023 base image\n</KeyPoints>\n\nKeep in mind that Atmos does not handle the downloading or installation\nof Packer; it assumes that any required binaries for the commands are already installed on your system.\n\n## CLI Configuration (`atmos.yaml`)\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<dl>\n    <dt>`components.packer.command`</dt>\n    <dd>The executable to be called by Atmos when running Packer commands</dd>\n\n    <dt>`components.packer.base_path`</dt>\n    <dd>The root directory where the Packer components and configurations are located. This path serves as the starting point for resolving any relative paths within the Packer setup.</dd>\n</dl>\n\n## Stack Configuration for Components\n\nSettings for Packer can also be specified in Atmos stack configurations, where they are compatible with inheritance.\nThis feature allows projects to tailor behavior according to individual component needs.\n\nWhile defaults for everything are defined in the `atmos.yaml`, the same settings can be overridden by Stack configurations at any level:\n\n- `packer`\n- `components.packer`\n- `components.packer._component_`\n\nFor instance, you can modify the command executed for a specific component by overriding the `command` parameter.\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Example: Configure and Provision a Packer Component with Atmos\n\n### Configure Packer in `atmos.yaml`\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h2",
+      "text": "Configure Packer",
+      "id": "configure-packer"
+    },
+    {
+      "level": "h2",
+      "text": "CLI Configuration (`atmos.yaml`)",
+      "id": "cli-configuration-(`atmos.yaml`)"
+    },
+    {
+      "level": "h2",
+      "text": "Stack Configuration for Components",
+      "id": "stack-configuration-for-components"
+    },
+    {
+      "level": "h2",
+      "text": "Example: Configure and Provision a Packer Component with Atmos",
+      "id": "example:-configure-and-provision-a-packer-component-with-atmos"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Packer in `atmos.yaml`",
+      "id": "configure-packer-in-`atmos.yaml`"
+    }
+  ],
+  "url": "llms-txt#this-works-in-opentofu-1.8+-with-atmos-auto-detection",
+  "links": []
+}

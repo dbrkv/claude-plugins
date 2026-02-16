@@ -1,0 +1,47 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/service_closures.html",
+  "title": "Service Closures",
+  "content": "This feature wraps the injected service into a closure allowing it to be lazily loaded when and if needed. This is useful if the service being injected is a bit heavy to instantiate or is used only in certain cases. The service is instantiated the first time the closure is called, while all subsequent calls return the same instance, unless the service is not shared:\n\nTo define a service closure and inject it to another service, create an argument of type service_closure:\n\nThe @> shortcut syntax for YAML was introduced in Symfony 7.3.\n\nService closures can be injected by using autowiring and its dedicated attributes.\n\nAnother way to inject services lazily is via a service locator.\n\nIn compiler passes you can create a service closure by wrapping the service reference into an instance of ServiceClosureArgument:\n\nCode consumes server resources. Blackfire tells you how\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Service Closures",
+      "id": "service-closures"
+    },
+    {
+      "level": "h2",
+      "text": "Using a Service Closure in a Compiler Pass",
+      "id": "using-a-service-closure-in-a-compiler-pass"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Service/MyService.php\nnamespace App\\Service;\n\nuse Symfony\\Component\\Mailer\\MailerInterface;\n\nclass MyService\n{\n    /**\n     * @param callable(): MailerInterface\n     */\n    public function __construct(\n        private \\Closure $mailer,\n    ) {\n    }\n\n    public function doSomething(): void\n    {\n        // ...\n\n        $this->getMailer()->send($email);\n    }\n\n    private function getMailer(): MailerInterface\n    {\n        return ($this->mailer)();\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Service\\MyService:\n        arguments: [!service_closure '@mailer']\n\n        # In case the dependency is optional\n        # arguments: [!service_closure '@?mailer']\n\n    # you can also use the special '@>' syntax as a shortcut of '!service_closure'\n    App\\Service\\AnotherService:\n        arguments: ['@>mailer']\n\n        # the shortcut also works for optional dependencies\n        # arguments: ['@>?mailer']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Service\\MyService\">\n            <argument type=\"service_closure\" id=\"mailer\"/>\n\n            <!--\n            In case the dependency is optional\n            <argument type=\"service_closure\" id=\"mailer\" on-invalid=\"ignore\"/>\n            -->\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Service\\MyService;\n\nreturn function (ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(MyService::class)\n        ->args([service_closure('mailer')]);\n\n    // In case the dependency is optional\n    // $services->set(MyService::class)\n    //     ->args([service_closure('mailer')->ignoreOnInvalid()]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "use Symfony\\Component\\DependencyInjection\\Argument\\ServiceClosureArgument;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\DependencyInjection\\Reference;\n\npublic function process(ContainerBuilder $container): void\n{\n    // ...\n\n    $myService->addArgument(new ServiceClosureArgument(new Reference('mailer')));\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/service_closures.html",
+    "https://symfony.com/doc/7.3/service_container/shared.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html",
+    "https://symfony.com/doc/7.3/service_container/service_subscribers_locators.html",
+    "https://symfony.com/doc/7.3/service_container/compiler_passes.html"
+  ]
+}

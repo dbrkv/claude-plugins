@@ -1,0 +1,13 @@
+{
+  "title": "atmos.yaml (or set ATMOS_KEYRING_TYPE=memory)",
+  "content": "auth:\n  keyring:\n    type: memory\nyaml",
+  "code_samples": [
+    {
+      "code": "**Best for**: Unit tests, integration tests, and CI/CD pipelines where you need fast, isolated credential storage without external dependencies.\n\n**Features**:\n- â No external dependencies\n- â Thread-safe concurrent access\n- â Supports listing all stored credentials\n- â Perfect for testing\n- â ï¸ Not persistent (ephemeral)\n- â ï¸ Not encrypted (testing only!)\n\n**CI/CD Example**:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#atmos.yaml-(or-set-atmos_keyring_type=memory)",
+  "links": []
+}

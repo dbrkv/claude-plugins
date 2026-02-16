@@ -1,0 +1,5129 @@
+{
+  "name": "atmos",
+  "total_pages": 1280,
+  "base_url": "https://atmos.tools",
+  "llms_txt_detected": true,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "atmos",
+      "url": "llms-txt#atmos"
+    },
+    {
+      "title": "1. Set environment variables for an identity",
+      "url": "llms-txt#1.-set-environment-variables-for-an-identity"
+    },
+    {
+      "title": "2. Authenticate (when needed) - opens browser for SSO",
+      "url": "llms-txt#2.-authenticate-(when-needed)---opens-browser-for-sso"
+    },
+    {
+      "title": "3. Use AWS CLI, Terraform, or other tools",
+      "url": "llms-txt#3.-use-aws-cli,-terraform,-or-other-tools"
+    },
+    {
+      "title": "Configure shell for the default identity (bash format)",
+      "url": "llms-txt#configure-shell-for-the-default-identity-(bash-format)"
+    },
+    {
+      "title": "Interactively select identity",
+      "url": "llms-txt#interactively-select-identity"
+    },
+    {
+      "title": "JSON format for a specific identity",
+      "url": "llms-txt#json-format-for-a-specific-identity"
+    },
+    {
+      "title": "Dotenv format",
+      "url": "llms-txt#dotenv-format"
+    },
+    {
+      "title": "Automatically login if credentials don't exist or are expired",
+      "url": "llms-txt#automatically-login-if-credentials-don't-exist-or-are-expired"
+    },
+    {
+      "title": "Use with identity selection and auto-login",
+      "url": "llms-txt#use-with-identity-selection-and-auto-login"
+    },
+    {
+      "title": "Add to ~/.zshrc or ~/.bashrc",
+      "url": "llms-txt#add-to-~/.zshrc-or-~/.bashrc"
+    },
+    {
+      "title": "Helper function for Atmos auth integration",
+      "url": "llms-txt#helper-function-for-atmos-auth-integration"
+    },
+    {
+      "title": "Usage: use-identity [identity-name] [other atmos auth env flags]",
+      "url": "llms-txt#usage:-use-identity-[identity-name]-[other-atmos-auth-env-flags]"
+    },
+    {
+      "title": "This uses Atmos auth to authenticate and set credentials in the environment",
+      "url": "llms-txt#this-uses-atmos-auth-to-authenticate-and-set-credentials-in-the-environment"
+    },
+    {
+      "title": "If called with no arguments, it brings up the identity selector",
+      "url": "llms-txt#if-called-with-no-arguments,-it-brings-up-the-identity-selector"
+    },
+    {
+      "title": "Interactively select identity and login",
+      "url": "llms-txt#interactively-select-identity-and-login"
+    },
+    {
+      "title": "Use specific identity with automatic login",
+      "url": "llms-txt#use-specific-identity-with-automatic-login"
+    },
+    {
+      "title": "Use specific identity with custom format",
+      "url": "llms-txt#use-specific-identity-with-custom-format"
+    },
+    {
+      "title": "Run terraform with authenticated env (uses default identity)",
+      "url": "llms-txt#run-terraform-with-authenticated-env-(uses-default-identity)"
+    },
+    {
+      "title": "Interactively select identity",
+      "url": "llms-txt#interactively-select-identity"
+    },
+    {
+      "title": "Use a specific identity",
+      "url": "llms-txt#use-a-specific-identity"
+    },
+    {
+      "title": "Inspect env",
+      "url": "llms-txt#inspect-env"
+    },
+    {
+      "title": "List all providers and identities in table format (default)",
+      "url": "llms-txt#list-all-providers-and-identities-in-table-format-(default)"
+    },
+    {
+      "title": "Show only providers",
+      "url": "llms-txt#show-only-providers"
+    },
+    {
+      "title": "Show only specific providers",
+      "url": "llms-txt#show-only-specific-providers"
+    },
+    {
+      "title": "Show only identities",
+      "url": "llms-txt#show-only-identities"
+    },
+    {
+      "title": "Show specific identities",
+      "url": "llms-txt#show-specific-identities"
+    },
+    {
+      "title": "Display as hierarchical tree",
+      "url": "llms-txt#display-as-hierarchical-tree"
+    },
+    {
+      "title": "Export as JSON for programmatic access",
+      "url": "llms-txt#export-as-json-for-programmatic-access"
+    },
+    {
+      "title": "Export as YAML",
+      "url": "llms-txt#export-as-yaml"
+    },
+    {
+      "title": "Generate Graphviz diagram",
+      "url": "llms-txt#generate-graphviz-diagram"
+    },
+    {
+      "title": "Generate Mermaid diagram",
+      "url": "llms-txt#generate-mermaid-diagram"
+    },
+    {
+      "title": "Generate Markdown with embedded Mermaid",
+      "url": "llms-txt#generate-markdown-with-embedded-mermaid"
+    },
+    {
+      "title": "PNG image",
+      "url": "llms-txt#png-image"
+    },
+    {
+      "title": "SVG (scalable)",
+      "url": "llms-txt#svg-(scalable)"
+    },
+    {
+      "title": "PDF document",
+      "url": "llms-txt#pdf-document"
+    },
+    {
+      "title": "Install latest version",
+      "url": "llms-txt#install-latest-version"
+    },
+    {
+      "title": "Verify version",
+      "url": "llms-txt#verify-version"
+    },
+    {
+      "title": "Use default identity (prompts if no default is configured)",
+      "url": "llms-txt#use-default-identity-(prompts-if-no-default-is-configured)"
+    },
+    {
+      "title": "Interactively select identity (even if default is configured)",
+      "url": "llms-txt#interactively-select-identity-(even-if-default-is-configured)"
+    },
+    {
+      "title": "Use specific identity",
+      "url": "llms-txt#use-specific-identity"
+    },
+    {
+      "title": "Use short form of identity flag",
+      "url": "llms-txt#use-short-form-of-identity-flag"
+    },
+    {
+      "title": "Interactive selection with short form",
+      "url": "llms-txt#interactive-selection-with-short-form"
+    },
+    {
+      "title": "Launch default shell with default identity",
+      "url": "llms-txt#launch-default-shell-with-default-identity"
+    },
+    {
+      "title": "Interactively select identity (even if default is configured)",
+      "url": "llms-txt#interactively-select-identity-(even-if-default-is-configured)"
+    },
+    {
+      "title": "Use a specific identity",
+      "url": "llms-txt#use-a-specific-identity"
+    },
+    {
+      "title": "Use short form of identity flag",
+      "url": "llms-txt#use-short-form-of-identity-flag"
+    },
+    {
+      "title": "Interactive selection with short form",
+      "url": "llms-txt#interactive-selection-with-short-form"
+    },
+    {
+      "title": "Override shell program",
+      "url": "llms-txt#override-shell-program"
+    },
+    {
+      "title": "Pass custom shell arguments",
+      "url": "llms-txt#pass-custom-shell-arguments"
+    },
+    {
+      "title": "Launch without loading shell configs",
+      "url": "llms-txt#launch-without-loading-shell-configs"
+    },
+    {
+      "title": "Combine options",
+      "url": "llms-txt#combine-options"
+    },
+    {
+      "title": "Configure credentials for an aws/user identity",
+      "url": "llms-txt#configure-credentials-for-an-aws/user-identity"
+    },
+    {
+      "title": "Example interactive session:",
+      "url": "llms-txt#example-interactive-session:"
+    },
+    {
+      "title": "Basic validation",
+      "url": "llms-txt#basic-validation"
+    },
+    {
+      "title": "Verbose output",
+      "url": "llms-txt#verbose-output"
+    },
+    {
+      "title": "Show current identity (human-friendly)",
+      "url": "llms-txt#show-current-identity-(human-friendly)"
+    },
+    {
+      "title": "Interactively select identity to inspect",
+      "url": "llms-txt#interactively-select-identity-to-inspect"
+    },
+    {
+      "title": "Show a specific identity",
+      "url": "llms-txt#show-a-specific-identity"
+    },
+    {
+      "title": "Use short form of identity flag",
+      "url": "llms-txt#use-short-form-of-identity-flag"
+    },
+    {
+      "title": "Interactive selection with short form",
+      "url": "llms-txt#interactive-selection-with-short-form"
+    },
+    {
+      "title": "JSON output (redacts home directory from paths)",
+      "url": "llms-txt#json-output-(redacts-home-directory-from-paths)"
+    },
+    {
+      "title": "Open console with default identity",
+      "url": "llms-txt#open-console-with-default-identity"
+    },
+    {
+      "title": "Interactively select identity",
+      "url": "llms-txt#interactively-select-identity"
+    },
+    {
+      "title": "Open console with specific identity",
+      "url": "llms-txt#open-console-with-specific-identity"
+    },
+    {
+      "title": "Use short form of identity flag",
+      "url": "llms-txt#use-short-form-of-identity-flag"
+    },
+    {
+      "title": "Interactive selection with short form",
+      "url": "llms-txt#interactive-selection-with-short-form"
+    },
+    {
+      "title": "Open AWS S3 console (shorthand)",
+      "url": "llms-txt#open-aws-s3-console-(shorthand)"
+    },
+    {
+      "title": "Open AWS EC2 console",
+      "url": "llms-txt#open-aws-ec2-console"
+    },
+    {
+      "title": "Open AWS Lambda console",
+      "url": "llms-txt#open-aws-lambda-console"
+    },
+    {
+      "title": "Open AWS CloudFormation console",
+      "url": "llms-txt#open-aws-cloudformation-console"
+    },
+    {
+      "title": "Open AWS RDS console",
+      "url": "llms-txt#open-aws-rds-console"
+    },
+    {
+      "title": "Open AWS DynamoDB console",
+      "url": "llms-txt#open-aws-dynamodb-console"
+    },
+    {
+      "title": "Open AWS S3 console (full URL)",
+      "url": "llms-txt#open-aws-s3-console-(full-url)"
+    },
+    {
+      "title": "Open AWS EC2 console with longer session",
+      "url": "llms-txt#open-aws-ec2-console-with-longer-session"
+    },
+    {
+      "title": "Custom issuer name (appears in AWS console URL)",
+      "url": "llms-txt#custom-issuer-name-(appears-in-aws-console-url)"
+    },
+    {
+      "title": "Print URL to stdout without opening browser",
+      "url": "llms-txt#print-url-to-stdout-without-opening-browser"
+    },
+    {
+      "title": "Copy URL to clipboard (macOS)",
+      "url": "llms-txt#copy-url-to-clipboard-(macos)"
+    },
+    {
+      "title": "Copy URL to clipboard (Linux)",
+      "url": "llms-txt#copy-url-to-clipboard-(linux)"
+    },
+    {
+      "title": "Generate URL but don't auto-open browser",
+      "url": "llms-txt#generate-url-but-don't-auto-open-browser"
+    },
+    {
+      "title": "Combine options for specific use case (using alias)",
+      "url": "llms-txt#combine-options-for-specific-use-case-(using-alias)"
+    },
+    {
+      "title": "Access machine learning services",
+      "url": "llms-txt#access-machine-learning-services"
+    },
+    {
+      "title": "Security and compliance services",
+      "url": "llms-txt#security-and-compliance-services"
+    },
+    {
+      "title": "Rapidly access production AWS console during an incident",
+      "url": "llms-txt#rapidly-access-production-aws-console-during-an-incident"
+    },
+    {
+      "title": "Switch between different account consoles",
+      "url": "llms-txt#switch-between-different-account-consoles"
+    },
+    {
+      "title": "Generate console URL in CI/CD for manual verification",
+      "url": "llms-txt#generate-console-url-in-ci/cd-for-manual-verification"
+    },
+    {
+      "title": "Use custom issuer to track which team opened the console",
+      "url": "llms-txt#use-custom-issuer-to-track-which-team-opened-the-console"
+    },
+    {
+      "title": "Using positional argument",
+      "url": "llms-txt#using-positional-argument"
+    },
+    {
+      "title": "Using --identity flag",
+      "url": "llms-txt#using---identity-flag"
+    },
+    {
+      "title": "Using short form",
+      "url": "llms-txt#using-short-form"
+    },
+    {
+      "title": "Interactive mode with confirmation",
+      "url": "llms-txt#interactive-mode-with-confirmation"
+    },
+    {
+      "title": "Bypass confirmation with --force",
+      "url": "llms-txt#bypass-confirmation-with---force"
+    },
+    {
+      "title": "On Linux:",
+      "url": "llms-txt#on-linux:"
+    },
+    {
+      "title": "On macOS:",
+      "url": "llms-txt#on-macos:"
+    },
+    {
+      "title": "Logout from specific provider",
+      "url": "llms-txt#logout-from-specific-provider"
+    },
+    {
+      "title": "Or logout from all identities",
+      "url": "llms-txt#or-logout-from-all-identities"
+    },
+    {
+      "title": "Then visit your identity provider and sign out",
+      "url": "llms-txt#then-visit-your-identity-provider-and-sign-out"
+    },
+    {
+      "title": "Authenticate interactively",
+      "url": "llms-txt#authenticate-interactively"
+    },
+    {
+      "title": "Use with Terraform",
+      "url": "llms-txt#use-with-terraform"
+    },
+    {
+      "title": "Set secret via environment variable",
+      "url": "llms-txt#set-secret-via-environment-variable"
+    },
+    {
+      "title": "Authenticate",
+      "url": "llms-txt#authenticate"
+    },
+    {
+      "title": "Run Terraform",
+      "url": "llms-txt#run-terraform"
+    },
+    {
+      "title": "Deploy to dev",
+      "url": "llms-txt#deploy-to-dev"
+    },
+    {
+      "title": "Deploy to staging",
+      "url": "llms-txt#deploy-to-staging"
+    },
+    {
+      "title": "Deploy to prod",
+      "url": "llms-txt#deploy-to-prod"
+    },
+    {
+      "title": "Check current authentication status",
+      "url": "llms-txt#check-current-authentication-status"
+    },
+    {
+      "title": "Re-authenticate if expired",
+      "url": "llms-txt#re-authenticate-if-expired"
+    },
+    {
+      "title": "Check MSAL cache contents",
+      "url": "llms-txt#check-msal-cache-contents"
+    },
+    {
+      "title": "Should see entries for:",
+      "url": "llms-txt#should-see-entries-for:"
+    },
+    {
+      "title": "- management.azure.com",
+      "url": "llms-txt#--management.azure.com"
+    },
+    {
+      "title": "- graph.microsoft.com",
+      "url": "llms-txt#--graph.microsoft.com"
+    },
+    {
+      "title": "- vault.azure.net",
+      "url": "llms-txt#--vault.azure.net"
+    },
+    {
+      "title": "Check environment",
+      "url": "llms-txt#check-environment"
+    },
+    {
+      "title": "Should show:",
+      "url": "llms-txt#should-show:"
+    },
+    {
+      "title": "ARM_USE_CLI=true",
+      "url": "llms-txt#arm_use_cli=true"
+    },
+    {
+      "title": "ARM_SUBSCRIPTION_ID=...",
+      "url": "llms-txt#arm_subscription_id=..."
+    },
+    {
+      "title": "ARM_TENANT_ID=...",
+      "url": "llms-txt#arm_tenant_id=..."
+    },
+    {
+      "title": "Example: Grant Contributor role to a subscription",
+      "url": "llms-txt#example:-grant-contributor-role-to-a-subscription"
+    },
+    {
+      "title": "Atmos auth configuration",
+      "url": "llms-txt#atmos-auth-configuration"
+    },
+    {
+      "title": "Set the default identity to use when launching Geodesic",
+      "url": "llms-txt#set-the-default-identity-to-use-when-launching-geodesic"
+    },
+    {
+      "title": "Override Geodesic's system XDG paths to use home directory",
+      "url": "llms-txt#override-geodesic's-system-xdg-paths-to-use-home-directory"
+    },
+    {
+      "title": "This ensures Atmos credentials are stored in mounted directories",
+      "url": "llms-txt#this-ensures-atmos-credentials-are-stored-in-mounted-directories"
+    },
+    {
+      "title": "Inside Geodesic or on your host",
+      "url": "llms-txt#inside-geodesic-or-on-your-host"
+    },
+    {
+      "title": "Override Geodesic's system XDG paths to use home directory",
+      "url": "llms-txt#override-geodesic's-system-xdg-paths-to-use-home-directory"
+    },
+    {
+      "title": "This ensures Atmos credentials are stored in mounted directories",
+      "url": "llms-txt#this-ensures-atmos-credentials-are-stored-in-mounted-directories"
+    },
+    {
+      "title": "Atmos auth configuration",
+      "url": "llms-txt#atmos-auth-configuration"
+    },
+    {
+      "title": "Geodesic AWS configuration for assume-role",
+      "url": "llms-txt#geodesic-aws-configuration-for-assume-role"
+    },
+    {
+      "title": "Your other Geodesic configuration...",
+      "url": "llms-txt#your-other-geodesic-configuration..."
+    },
+    {
+      "title": "This is the base identity managed by Atmos",
+      "url": "llms-txt#this-is-the-base-identity-managed-by-atmos"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "aws-config-teams",
+      "url": "llms-txt#aws-config-teams"
+    },
+    {
+      "title": "Add to Dockerfile or shell profile",
+      "url": "llms-txt#add-to-dockerfile-or-shell-profile"
+    },
+    {
+      "title": "Should show your provider directories (e.g., acme-sso/)",
+      "url": "llms-txt#should-show-your-provider-directories-(e.g.,-acme-sso/)"
+    },
+    {
+      "title": "Validate configuration",
+      "url": "llms-txt#validate-configuration"
+    },
+    {
+      "title": "Login with default identity",
+      "url": "llms-txt#login-with-default-identity"
+    },
+    {
+      "title": "Check authentication status",
+      "url": "llms-txt#check-authentication-status"
+    },
+    {
+      "title": "Use with Terraform",
+      "url": "llms-txt#use-with-terraform"
+    },
+    {
+      "title": "Validate configuration",
+      "url": "llms-txt#validate-configuration"
+    },
+    {
+      "title": "Authenticate with the default identity",
+      "url": "llms-txt#authenticate-with-the-default-identity"
+    },
+    {
+      "title": "Authenticate with a specific identity",
+      "url": "llms-txt#authenticate-with-a-specific-identity"
+    },
+    {
+      "title": "Print environment variables in JSON",
+      "url": "llms-txt#print-environment-variables-in-json"
+    },
+    {
+      "title": "Execute a command with authentication context",
+      "url": "llms-txt#execute-a-command-with-authentication-context"
+    },
+    {
+      "title": "Show current authentication status",
+      "url": "llms-txt#show-current-authentication-status"
+    },
+    {
+      "title": "Use default identity",
+      "url": "llms-txt#use-default-identity"
+    },
+    {
+      "title": "Use specific identity",
+      "url": "llms-txt#use-specific-identity"
+    },
+    {
+      "title": "Atmos automatically handles authentication",
+      "url": "llms-txt#atmos-automatically-handles-authentication"
+    },
+    {
+      "title": "Direct ARN (suitable for shared team configurations)",
+      "url": "llms-txt#direct-arn-(suitable-for-shared-team-configurations)"
+    },
+    {
+      "title": "Environment variable reference (suitable for personal configurations)",
+      "url": "llms-txt#environment-variable-reference-(suitable-for-personal-configurations)"
+    },
+    {
+      "title": "Stored in keychain (via atmos auth user configure)",
+      "url": "llms-txt#stored-in-keychain-(via-atmos-auth-user-configure)"
+    },
+    {
+      "title": "The mfa_arn field can be omitted from YAML if stored in keychain",
+      "url": "llms-txt#the-mfa_arn-field-can-be-omitted-from-yaml-if-stored-in-keychain"
+    },
+    {
+      "title": "Validate auth configuration",
+      "url": "llms-txt#validate-auth-configuration"
+    },
+    {
+      "title": "Login (authenticate and cache credentials)",
+      "url": "llms-txt#login-(authenticate-and-cache-credentials)"
+    },
+    {
+      "title": "Check current authentication status",
+      "url": "llms-txt#check-current-authentication-status"
+    },
+    {
+      "title": "Get environment variables",
+      "url": "llms-txt#get-environment-variables"
+    },
+    {
+      "title": "Execute command with authentication",
+      "url": "llms-txt#execute-command-with-authentication"
+    },
+    {
+      "title": "Configure AWS user credentials",
+      "url": "llms-txt#configure-aws-user-credentials"
+    },
+    {
+      "title": "In your component configuration",
+      "url": "llms-txt#in-your-component-configuration"
+    },
+    {
+      "title": "Output:",
+      "url": "llms-txt#output:"
+    },
+    {
+      "title": "Output:",
+      "url": "llms-txt#output:"
+    },
+    {
+      "title": "Output:",
+      "url": "llms-txt#output:"
+    },
+    {
+      "title": "Disable via CLI flag",
+      "url": "llms-txt#disable-via-cli-flag"
+    },
+    {
+      "title": "Disable via environment variable",
+      "url": "llms-txt#disable-via-environment-variable"
+    },
+    {
+      "title": "Use your personal cloud provider profile temporarily (e.g., AWS profile)",
+      "url": "llms-txt#use-your-personal-cloud-provider-profile-temporarily-(e.g.,-aws-profile)"
+    },
+    {
+      "title": "Or inline",
+      "url": "llms-txt#or-inline"
+    },
+    {
+      "title": "atmos.yaml (optional - this is the default)",
+      "url": "llms-txt#atmos.yaml-(optional---this-is-the-default)"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "Interactive mode - prompts for password",
+      "url": "llms-txt#interactive-mode---prompts-for-password"
+    },
+    {
+      "title": "Automation mode - password from environment",
+      "url": "llms-txt#automation-mode---password-from-environment"
+    },
+    {
+      "title": "Custom XDG data directory",
+      "url": "llms-txt#custom-xdg-data-directory"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "Override for Atmos only",
+      "url": "llms-txt#override-for-atmos-only"
+    },
+    {
+      "title": "Override for all XDG-compliant tools",
+      "url": "llms-txt#override-for-all-xdg-compliant-tools"
+    },
+    {
+      "title": "Check current status",
+      "url": "llms-txt#check-current-status"
+    },
+    {
+      "title": "Re-authenticate",
+      "url": "llms-txt#re-authenticate"
+    },
+    {
+      "title": "Check with verbose output",
+      "url": "llms-txt#check-with-verbose-output"
+    },
+    {
+      "title": "Verify identity configuration",
+      "url": "llms-txt#verify-identity-configuration"
+    },
+    {
+      "title": "Check assumed role/permissions",
+      "url": "llms-txt#check-assumed-role/permissions"
+    },
+    {
+      "title": "Check what variables are set",
+      "url": "llms-txt#check-what-variables-are-set"
+    },
+    {
+      "title": "Test environment",
+      "url": "llms-txt#test-environment"
+    },
+    {
+      "title": "Verbose CLI output",
+      "url": "llms-txt#verbose-cli-output"
+    },
+    {
+      "title": "Set log level explicitly",
+      "url": "llms-txt#set-log-level-explicitly"
+    },
+    {
+      "title": "atmos.yaml workflows section",
+      "url": "llms-txt#atmos.yaml-workflows-section"
+    },
+    {
+      "title": "Commands",
+      "url": "llms-txt#commands"
+    },
+    {
+      "title": "Enable Atmos CLI completion",
+      "url": "llms-txt#enable-atmos-cli-completion"
+    },
+    {
+      "title": "Initialize Zsh completion system",
+      "url": "llms-txt#initialize-zsh-completion-system"
+    },
+    {
+      "title": "Enable Atmos CLI completion",
+      "url": "llms-txt#enable-atmos-cli-completion"
+    },
+    {
+      "title": "Improve completion behavior",
+      "url": "llms-txt#improve-completion-behavior"
+    },
+    {
+      "title": "Ensure the Tab key triggers autocompletion",
+      "url": "llms-txt#ensure-the-tab-key-triggers-autocompletion"
+    },
+    {
+      "title": "Authenticate before describing (when YAML functions require credentials)",
+      "url": "llms-txt#authenticate-before-describing-(when-yaml-functions-require-credentials)"
+    },
+    {
+      "title": "Disable authentication (use AWS SDK defaults)",
+      "url": "llms-txt#disable-authentication-(use-aws-sdk-defaults)"
+    },
+    {
+      "title": "Example Output",
+      "url": "llms-txt#example-output"
+    },
+    {
+      "title": "Authenticate before describing (when YAML functions require credentials)",
+      "url": "llms-txt#authenticate-before-describing-(when-yaml-functions-require-credentials)"
+    },
+    {
+      "title": "Disable authentication (use AWS SDK defaults)",
+      "url": "llms-txt#disable-authentication-(use-aws-sdk-defaults)"
+    },
+    {
+      "title": "Authenticate before describing (when YAML functions require credentials)",
+      "url": "llms-txt#authenticate-before-describing-(when-yaml-functions-require-credentials)"
+    },
+    {
+      "title": "Disable authentication (use AWS SDK defaults)",
+      "url": "llms-txt#disable-authentication-(use-aws-sdk-defaults)"
+    },
+    {
+      "title": "Authenticate before describing (when YAML functions require credentials)",
+      "url": "llms-txt#authenticate-before-describing-(when-yaml-functions-require-credentials)"
+    },
+    {
+      "title": "Disable authentication (use AWS SDK defaults)",
+      "url": "llms-txt#disable-authentication-(use-aws-sdk-defaults)"
+    },
+    {
+      "title": "Usage",
+      "url": "llms-txt#usage"
+    },
+    {
+      "title": "In atmos.yaml",
+      "url": "llms-txt#in-atmos.yaml"
+    },
+    {
+      "title": "List metadata for dev stacks",
+      "url": "llms-txt#list-metadata-for-dev-stacks"
+    },
+    {
+      "title": "List metadata for production stacks",
+      "url": "llms-txt#list-metadata-for-production-stacks"
+    },
+    {
+      "title": "Query component names",
+      "url": "llms-txt#query-component-names"
+    },
+    {
+      "title": "Query component types",
+      "url": "llms-txt#query-component-types"
+    },
+    {
+      "title": "Query component versions",
+      "url": "llms-txt#query-component-versions"
+    },
+    {
+      "title": "JSON format for machine processing",
+      "url": "llms-txt#json-format-for-machine-processing"
+    },
+    {
+      "title": "YAML format for configuration files",
+      "url": "llms-txt#yaml-format-for-configuration-files"
+    },
+    {
+      "title": "CSV format for spreadsheet compatibility",
+      "url": "llms-txt#csv-format-for-spreadsheet-compatibility"
+    },
+    {
+      "title": "TSV format with tab delimiters",
+      "url": "llms-txt#tsv-format-with-tab-delimiters"
+    },
+    {
+      "title": "In atmos.yaml, under the appropriate scope (values, vars, settings, or metadata)",
+      "url": "llms-txt#in-atmos.yaml,-under-the-appropriate-scope-(values,-vars,-settings,-or-metadata)"
+    },
+    {
+      "title": "List settings for dev stacks",
+      "url": "llms-txt#list-settings-for-dev-stacks"
+    },
+    {
+      "title": "List settings for production stacks",
+      "url": "llms-txt#list-settings-for-production-stacks"
+    },
+    {
+      "title": "Query template settings",
+      "url": "llms-txt#query-template-settings"
+    },
+    {
+      "title": "Query validation settings",
+      "url": "llms-txt#query-validation-settings"
+    },
+    {
+      "title": "Query specific template configurations",
+      "url": "llms-txt#query-specific-template-configurations"
+    },
+    {
+      "title": "JSON format for machine processing",
+      "url": "llms-txt#json-format-for-machine-processing"
+    },
+    {
+      "title": "YAML format for configuration files",
+      "url": "llms-txt#yaml-format-for-configuration-files"
+    },
+    {
+      "title": "CSV format for spreadsheet compatibility",
+      "url": "llms-txt#csv-format-for-spreadsheet-compatibility"
+    },
+    {
+      "title": "TSV format with tab delimiters",
+      "url": "llms-txt#tsv-format-with-tab-delimiters"
+    },
+    {
+      "title": "In atmos.yaml, under the appropriate scope (values, vars, settings, or metadata)",
+      "url": "llms-txt#in-atmos.yaml,-under-the-appropriate-scope-(values,-vars,-settings,-or-metadata)"
+    },
+    {
+      "title": "In atmos.yaml",
+      "url": "llms-txt#in-atmos.yaml"
+    },
+    {
+      "title": "Query specific variables",
+      "url": "llms-txt#query-specific-variables"
+    },
+    {
+      "title": "Query environment settings",
+      "url": "llms-txt#query-environment-settings"
+    },
+    {
+      "title": "Query network configuration",
+      "url": "llms-txt#query-network-configuration"
+    },
+    {
+      "title": "JSON format for machine processing",
+      "url": "llms-txt#json-format-for-machine-processing"
+    },
+    {
+      "title": "CSV format for spreadsheet compatibility",
+      "url": "llms-txt#csv-format-for-spreadsheet-compatibility"
+    },
+    {
+      "title": "TSV format with tab delimiters",
+      "url": "llms-txt#tsv-format-with-tab-delimiters"
+    },
+    {
+      "title": "Note: Use JSON or CSV formats when dealing with wide datasets",
+      "url": "llms-txt#note:-use-json-or-csv-formats-when-dealing-with-wide-datasets"
+    },
+    {
+      "title": "The table format will show a width error if the data is too wide for your terminal",
+      "url": "llms-txt#the-table-format-will-show-a-width-error-if-the-data-is-too-wide-for-your-terminal"
+    },
+    {
+      "title": "In atmos.yaml, under the appropriate scope (values, vars, settings, or metadata)",
+      "url": "llms-txt#in-atmos.yaml,-under-the-appropriate-scope-(values,-vars,-settings,-or-metadata)"
+    },
+    {
+      "title": "List specific variable",
+      "url": "llms-txt#list-specific-variable"
+    },
+    {
+      "title": "List a nested variable",
+      "url": "llms-txt#list-a-nested-variable"
+    },
+    {
+      "title": "List variables for dev stacks",
+      "url": "llms-txt#list-variables-for-dev-stacks"
+    },
+    {
+      "title": "List variables for production stacks",
+      "url": "llms-txt#list-variables-for-production-stacks"
+    },
+    {
+      "title": "JSON format for machine processing",
+      "url": "llms-txt#json-format-for-machine-processing"
+    },
+    {
+      "title": "YAML format for configuration files",
+      "url": "llms-txt#yaml-format-for-configuration-files"
+    },
+    {
+      "title": "CSV format for spreadsheet compatibility",
+      "url": "llms-txt#csv-format-for-spreadsheet-compatibility"
+    },
+    {
+      "title": "TSV format with tab delimiters",
+      "url": "llms-txt#tsv-format-with-tab-delimiters"
+    },
+    {
+      "title": "In atmos.yaml, under the appropriate scope (values, vars, settings, or metadata)",
+      "url": "llms-txt#in-atmos.yaml,-under-the-appropriate-scope-(values,-vars,-settings,-or-metadata)"
+    },
+    {
+      "title": "JSON format for machine processing",
+      "url": "llms-txt#json-format-for-machine-processing"
+    },
+    {
+      "title": "YAML format for configuration files",
+      "url": "llms-txt#yaml-format-for-configuration-files"
+    },
+    {
+      "title": "CSV format for spreadsheet compatibility",
+      "url": "llms-txt#csv-format-for-spreadsheet-compatibility"
+    },
+    {
+      "title": "TSV format with tab delimiters",
+      "url": "llms-txt#tsv-format-with-tab-delimiters"
+    },
+    {
+      "title": "In atmos.yaml",
+      "url": "llms-txt#in-atmos.yaml"
+    },
+    {
+      "title": "In atmos.yaml",
+      "url": "llms-txt#in-atmos.yaml"
+    },
+    {
+      "title": "In atmos.yaml",
+      "url": "llms-txt#in-atmos.yaml"
+    },
+    {
+      "title": "In atmos.yaml",
+      "url": "llms-txt#in-atmos.yaml"
+    },
+    {
+      "title": "Use a YQ expression to get a specific section or attribute from the Packer manifest,",
+      "url": "llms-txt#use-a-yq-expression-to-get-a-specific-section-or-attribute-from-the-packer-manifest,"
+    },
+    {
+      "title": "in this case, the `artifact_id` from the first build.",
+      "url": "llms-txt#in-this-case,-the-`artifact_id`-from-the-first-build."
+    },
+    {
+      "title": "Use a YQ expression to get a specific section or attribute from the Packer manifest,",
+      "url": "llms-txt#use-a-yq-expression-to-get-a-specific-section-or-attribute-from-the-packer-manifest,"
+    },
+    {
+      "title": "in this case, the AMI (second part after the `:`) from the `artifact_id` from the first build.",
+      "url": "llms-txt#in-this-case,-the-ami-(second-part-after-the-`:`)-from-the-`artifact_id`-from-the-first-build."
+    },
+    {
+      "title": "Set custom Terraform data directory (defaults to .terraform)",
+      "url": "llms-txt#set-custom-terraform-data-directory-(defaults-to-.terraform)"
+    },
+    {
+      "title": "Delete all Terraform-related files for all components (with confirmation)",
+      "url": "llms-txt#delete-all-terraform-related-files-for-all-components-(with-confirmation)"
+    },
+    {
+      "title": "Force delete all Terraform-related files for all components (no confirmation)",
+      "url": "llms-txt#force-delete-all-terraform-related-files-for-all-components-(no-confirmation)"
+    },
+    {
+      "title": "terraform plan-diff",
+      "url": "llms-txt#terraform-plan-diff"
+    },
+    {
+      "title": "Your plan might include data sources like:",
+      "url": "llms-txt#your-plan-might-include-data-sources-like:"
+    },
+    {
+      "title": "data.aws_ami.example",
+      "url": "llms-txt#data.aws_ami.example"
+    },
+    {
+      "title": "data.aws_vpc.main",
+      "url": "llms-txt#data.aws_vpc.main"
+    },
+    {
+      "title": "aws_instance.web_server",
+      "url": "llms-txt#aws_instance.web_server"
+    },
+    {
+      "title": "aws_s3_bucket.storage",
+      "url": "llms-txt#aws_s3_bucket.storage"
+    },
+    {
+      "title": "The diff will only show managed resources:",
+      "url": "llms-txt#the-diff-will-only-show-managed-resources:"
+    },
+    {
+      "title": "Basic: Show stack and component",
+      "url": "llms-txt#basic:-show-stack-and-component"
+    },
+    {
+      "title": "Output: atmos [tenant1-ue2-dev] vpc $",
+      "url": "llms-txt#output:-atmos-[tenant1-ue2-dev]-vpc-$"
+    },
+    {
+      "title": "Bash: With username and hostname",
+      "url": "llms-txt#bash:-with-username-and-hostname"
+    },
+    {
+      "title": "Output: erik@macbook [tenant1-ue2-dev] vpc $",
+      "url": "llms-txt#output:-erik@macbook-[tenant1-ue2-dev]-vpc-$"
+    },
+    {
+      "title": "Bash: With colors",
+      "url": "llms-txt#bash:-with-colors"
+    },
+    {
+      "title": "Output: (colored) erik@macbook:tenant1-ue2-dev [vpc] $",
+      "url": "llms-txt#output:-(colored)-erik@macbook:tenant1-ue2-dev-[vpc]-$"
+    },
+    {
+      "title": "Zsh: With username and colors",
+      "url": "llms-txt#zsh:-with-username-and-colors"
+    },
+    {
+      "title": "Output: (colored) erik@macbook:tenant1-ue2-dev [vpc] %",
+      "url": "llms-txt#output:-(colored)-erik@macbook:tenant1-ue2-dev-[vpc]-%"
+    },
+    {
+      "title": "Minimal",
+      "url": "llms-txt#minimal"
+    },
+    {
+      "title": "Output: [vpc] $",
+      "url": "llms-txt#output:-[vpc]-$"
+    },
+    {
+      "title": "Emoji",
+      "url": "llms-txt#emoji"
+    },
+    {
+      "title": "Output: ð vpc @ tenant1-ue2-dev $",
+      "url": "llms-txt#output:-ð-vpc-@-tenant1-ue2-dev-$"
+    },
+    {
+      "title": "Execute `terraform <command>` on a `component` in a `stack`",
+      "url": "llms-txt#execute-`terraform-<command>`-on-a-`component`-in-a-`stack`"
+    },
+    {
+      "title": "Execute `terraform <command>` on all components in the stack `prod`",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-components-in-the-stack-`prod`"
+    },
+    {
+      "title": "Execute `terraform <command>` on components `component-1` and `component-2` in all stacks",
+      "url": "llms-txt#execute-`terraform-<command>`-on-components-`component-1`-and-`component-2`-in-all-stacks"
+    },
+    {
+      "title": "Execute `terraform <command>` on components `component-1` and `component-2` in the stack `prod`",
+      "url": "llms-txt#execute-`terraform-<command>`-on-components-`component-1`-and-`component-2`-in-the-stack-`prod`"
+    },
+    {
+      "title": "Execute `terraform <command>` on all components in all stacks",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-components-in-all-stacks"
+    },
+    {
+      "title": "Execute `terraform <command>` on all components in the stack `prod`",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-components-in-the-stack-`prod`"
+    },
+    {
+      "title": "Execute `terraform <command>` on all the directly affected components in all stacks in dependency order",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-the-directly-affected-components-in-all-stacks-in-dependency-order"
+    },
+    {
+      "title": "(if component dependencies are configured)",
+      "url": "llms-txt#(if-component-dependencies-are-configured)"
+    },
+    {
+      "title": "Execute `terraform <command>` on all the directly affected components in the `prod` stack in dependency order",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-the-directly-affected-components-in-the-`prod`-stack-in-dependency-order"
+    },
+    {
+      "title": "(if component dependencies are configured)",
+      "url": "llms-txt#(if-component-dependencies-are-configured)"
+    },
+    {
+      "title": "Execute `terraform <command>` on all the directly affected components in all stacks in dependency order.",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-the-directly-affected-components-in-all-stacks-in-dependency-order."
+    },
+    {
+      "title": "For each directly affected component, detect the dependent components and process them in dependency order, recursively.",
+      "url": "llms-txt#for-each-directly-affected-component,-detect-the-dependent-components-and-process-them-in-dependency-order,-recursively."
+    },
+    {
+      "title": "Dependents are components that are indirectly affected, meaning that nothing in the current branch modifies their code",
+      "url": "llms-txt#dependents-are-components-that-are-indirectly-affected,-meaning-that-nothing-in-the-current-branch-modifies-their-code"
+    },
+    {
+      "title": "or configs, but they are configured as dependencies of the components that are modified",
+      "url": "llms-txt#or-configs,-but-they-are-configured-as-dependencies-of-the-components-that-are-modified"
+    },
+    {
+      "title": "Execute `terraform <command>` on all the directly affected components in the `prod` stack in dependency order.",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-the-directly-affected-components-in-the-`prod`-stack-in-dependency-order."
+    },
+    {
+      "title": "For each directly affected component, detect the dependent components and process them in dependency order, recursively.",
+      "url": "llms-txt#for-each-directly-affected-component,-detect-the-dependent-components-and-process-them-in-dependency-order,-recursively."
+    },
+    {
+      "title": "Execute `terraform <command>` on all components that have `vars.tags.team == \"data\"`, in all stacks",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-components-that-have-`vars.tags.team-==-\"data\"`,-in-all-stacks"
+    },
+    {
+      "title": "Execute `terraform <command>` on all components that have `vars.tags.team == \"eks\"`, in the stack `prod`",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-components-that-have-`vars.tags.team-==-\"eks\"`,-in-the-stack-`prod`"
+    },
+    {
+      "title": "Execute `terraform <command>` on all components that have `settings.context.account_id == 12345`, in all stacks",
+      "url": "llms-txt#execute-`terraform-<command>`-on-all-components-that-have-`settings.context.account_id-==-12345`,-in-all-stacks"
+    },
+    {
+      "title": "Clean all components (with confirmation)",
+      "url": "llms-txt#clean-all-components-(with-confirmation)"
+    },
+    {
+      "title": "Clean a specific component",
+      "url": "llms-txt#clean-a-specific-component"
+    },
+    {
+      "title": "Clean a specific component in a stack",
+      "url": "llms-txt#clean-a-specific-component-in-a-stack"
+    },
+    {
+      "title": "Clean without confirmation prompt",
+      "url": "llms-txt#clean-without-confirmation-prompt"
+    },
+    {
+      "title": "Execute the `terraform apply` command on all components in all stacks",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-components-in-all-stacks"
+    },
+    {
+      "title": "Execute the `terraform apply` command on all components in the `prod` stack",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-components-in-the-`prod`-stack"
+    },
+    {
+      "title": "Execute the `terraform apply` command on all components in the `prod` stack",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-components-in-the-`prod`-stack"
+    },
+    {
+      "title": "Execute the `terraform apply` command on the `vpc` and `eks/cluster` components",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-the-`vpc`-and-`eks/cluster`-components"
+    },
+    {
+      "title": "in all stacks.",
+      "url": "llms-txt#in-all-stacks."
+    },
+    {
+      "title": "Execute the `terraform apply` command on the `vpc` and `eks/cluster` components",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-the-`vpc`-and-`eks/cluster`-components"
+    },
+    {
+      "title": "in the `prod` stack.",
+      "url": "llms-txt#in-the-`prod`-stack."
+    },
+    {
+      "title": "Execute the `terraform apply` command on the components filtered by the query expression,",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-the-components-filtered-by-the-query-expression,"
+    },
+    {
+      "title": "in all stacks.",
+      "url": "llms-txt#in-all-stacks."
+    },
+    {
+      "title": "Execute the `terraform apply` command on the components filtered by the query expression,",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-the-components-filtered-by-the-query-expression,"
+    },
+    {
+      "title": "in the `prod` stack.",
+      "url": "llms-txt#in-the-`prod`-stack."
+    },
+    {
+      "title": "Execute the `terraform apply` command on all components affected by the changes",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-components-affected-by-the-changes"
+    },
+    {
+      "title": "in the current branch, in all stacks, in dependency order.",
+      "url": "llms-txt#in-the-current-branch,-in-all-stacks,-in-dependency-order."
+    },
+    {
+      "title": "Assume that the components `vpc` and `eks/cluster` in all stacks are affected (e.g. just added).",
+      "url": "llms-txt#assume-that-the-components-`vpc`-and-`eks/cluster`-in-all-stacks-are-affected-(e.g.-just-added)."
+    },
+    {
+      "title": "Execute the `terraform apply` command on all components affected by the changes",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-components-affected-by-the-changes"
+    },
+    {
+      "title": "in the current branch, in the `prod` stack, in dependency order.",
+      "url": "llms-txt#in-the-current-branch,-in-the-`prod`-stack,-in-dependency-order."
+    },
+    {
+      "title": "Assume that the components `vpc` and `eks/cluster` in the `prod` stack are affected (e.g. just added).",
+      "url": "llms-txt#assume-that-the-components-`vpc`-and-`eks/cluster`-in-the-`prod`-stack-are-affected-(e.g.-just-added)."
+    },
+    {
+      "title": "Execute the `terraform apply` command on all the components affected by the changes",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-the-components-affected-by-the-changes"
+    },
+    {
+      "title": "in the current branch, in all stacks.",
+      "url": "llms-txt#in-the-current-branch,-in-all-stacks."
+    },
+    {
+      "title": "For each directly affected component, detect the dependent components and process",
+      "url": "llms-txt#for-each-directly-affected-component,-detect-the-dependent-components-and-process"
+    },
+    {
+      "title": "them in dependency order, recursively.",
+      "url": "llms-txt#them-in-dependency-order,-recursively."
+    },
+    {
+      "title": "Dependents are components that are indirectly affected, meaning that nothing in the",
+      "url": "llms-txt#dependents-are-components-that-are-indirectly-affected,-meaning-that-nothing-in-the"
+    },
+    {
+      "title": "current branch modifies their code or configs, but they are configured as",
+      "url": "llms-txt#current-branch-modifies-their-code-or-configs,-but-they-are-configured-as"
+    },
+    {
+      "title": "dependencies of the components that are modified.",
+      "url": "llms-txt#dependencies-of-the-components-that-are-modified."
+    },
+    {
+      "title": "Execute the `terraform apply` command on all the components affected by the changes",
+      "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-the-components-affected-by-the-changes"
+    },
+    {
+      "title": "in the current branch, in the `prod` stack.",
+      "url": "llms-txt#in-the-current-branch,-in-the-`prod`-stack."
+    },
+    {
+      "title": "For each directly affected component, detect the dependent components and process",
+      "url": "llms-txt#for-each-directly-affected-component,-detect-the-dependent-components-and-process"
+    },
+    {
+      "title": "them in dependency order, recursively.",
+      "url": "llms-txt#them-in-dependency-order,-recursively."
+    },
+    {
+      "title": "Dependents are components that are indirectly affected, meaning that nothing in the",
+      "url": "llms-txt#dependents-are-components-that-are-indirectly-affected,-meaning-that-nothing-in-the"
+    },
+    {
+      "title": "current branch modifies their code or configs, but they are configured as",
+      "url": "llms-txt#current-branch-modifies-their-code-or-configs,-but-they-are-configured-as"
+    },
+    {
+      "title": "dependencies of the components that are modified.",
+      "url": "llms-txt#dependencies-of-the-components-that-are-modified."
+    },
+    {
+      "title": "Browse Available Themes",
+      "url": "llms-txt#browse-available-themes"
+    },
+    {
+      "title": "List all available themes",
+      "url": "llms-txt#list-all-available-themes"
+    },
+    {
+      "title": "Show only recommended themes for best compatibility",
+      "url": "llms-txt#show-only-recommended-themes-for-best-compatibility"
+    },
+    {
+      "title": "Preview the Dracula theme",
+      "url": "llms-txt#preview-the-dracula-theme"
+    },
+    {
+      "title": "Preview the Solarized Dark theme",
+      "url": "llms-txt#preview-the-solarized-dark-theme"
+    },
+    {
+      "title": "Preview the GitHub Dark theme",
+      "url": "llms-txt#preview-the-github-dark-theme"
+    },
+    {
+      "title": "List all available themes",
+      "url": "llms-txt#list-all-available-themes"
+    },
+    {
+      "title": "Show only recommended themes",
+      "url": "llms-txt#show-only-recommended-themes"
+    },
+    {
+      "title": "Preview a specific theme",
+      "url": "llms-txt#preview-a-specific-theme"
+    },
+    {
+      "title": "Set a theme via environment variable",
+      "url": "llms-txt#set-a-theme-via-environment-variable"
+    },
+    {
+      "title": "Or configure permanently in atmos.yaml",
+      "url": "llms-txt#or-configure-permanently-in-atmos.yaml"
+    },
+    {
+      "title": "Use the default (embedded) JSON Schema",
+      "url": "llms-txt#use-the-default-(embedded)-json-schema"
+    },
+    {
+      "title": "Point to the JSON Schema on the local filesystem",
+      "url": "llms-txt#point-to-the-json-schema-on-the-local-filesystem"
+    },
+    {
+      "title": "Point to the remote JSON Schema",
+      "url": "llms-txt#point-to-the-remote-json-schema"
+    },
+    {
+      "title": "Using GitHub CLI (recommended)",
+      "url": "llms-txt#using-github-cli-(recommended)"
+    },
+    {
+      "title": "Or set GITHUB_TOKEN directly",
+      "url": "llms-txt#or-set-github_token-directly"
+    },
+    {
+      "title": "or explicitly",
+      "url": "llms-txt#or-explicitly"
+    },
+    {
+      "title": "Using GitHub CLI (recommended)",
+      "url": "llms-txt#using-github-cli-(recommended)"
+    },
+    {
+      "title": "Or set GITHUB_TOKEN directly",
+      "url": "llms-txt#or-set-github_token-directly"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "CLI Configuration",
+      "url": "llms-txt#cli-configuration"
+    },
+    {
+      "title": "https://atmos.tools/core-concepts/stacks/templates",
+      "url": "llms-txt#https://atmos.tools/core-concepts/stacks/templates"
+    },
+    {
+      "title": "https://pkg.go.dev/text/template",
+      "url": "llms-txt#https://pkg.go.dev/text/template"
+    },
+    {
+      "title": "Repository structure:",
+      "url": "llms-txt#repository-structure:"
+    },
+    {
+      "title": "/repo/",
+      "url": "llms-txt#/repo/"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "components/terraform/vpc/",
+      "url": "llms-txt#components/terraform/vpc/"
+    },
+    {
+      "title": "main.tf",
+      "url": "llms-txt#main.tf"
+    },
+    {
+      "title": "Works from any subdirectory",
+      "url": "llms-txt#works-from-any-subdirectory"
+    },
+    {
+      "title": "Forward slashes work on all platforms including Windows",
+      "url": "llms-txt#forward-slashes-work-on-all-platforms-including-windows"
+    },
+    {
+      "title": "Double backslashes to escape them in YAML",
+      "url": "llms-txt#double-backslashes-to-escape-them-in-yaml"
+    },
+    {
+      "title": "Single quotes treat backslashes as literal characters",
+      "url": "llms-txt#single-quotes-treat-backslashes-as-literal-characters"
+    },
+    {
+      "title": "Unquoted paths with forward slashes also work",
+      "url": "llms-txt#unquoted-paths-with-forward-slashes-also-work"
+    },
+    {
+      "title": "â WRONG: Single backslashes get interpreted as escape sequences",
+      "url": "llms-txt#â-wrong:-single-backslashes-get-interpreted-as-escape-sequences"
+    },
+    {
+      "title": "Integrations",
+      "url": "llms-txt#integrations"
+    },
+    {
+      "title": "Validation schemas (for validating atmos stacks and components)",
+      "url": "llms-txt#validation-schemas-(for-validating-atmos-stacks-and-components)"
+    },
+    {
+      "title": "NOTE: These messages are printed to `/dev/stderr`",
+      "url": "llms-txt#note:-these-messages-are-printed-to-`/dev/stderr`"
+    },
+    {
+      "title": "NOTE: This JSON output is printed to `/dev/stdout`",
+      "url": "llms-txt#note:-this-json-output-is-printed-to-`/dev/stdout`"
+    },
+    {
+      "title": "Capture and analyze CPU profile",
+      "url": "llms-txt#capture-and-analyze-cpu-profile"
+    },
+    {
+      "title": "Capture and analyze memory profile",
+      "url": "llms-txt#capture-and-analyze-memory-profile"
+    },
+    {
+      "title": "Generate a web-based visualization",
+      "url": "llms-txt#generate-a-web-based-visualization"
+    },
+    {
+      "title": "CLI command aliases",
+      "url": "llms-txt#cli-command-aliases"
+    },
+    {
+      "title": "https://pkg.go.dev/text/template",
+      "url": "llms-txt#https://pkg.go.dev/text/template"
+    },
+    {
+      "title": "Error Handling & Monitoring",
+      "url": "llms-txt#error-handling-&-monitoring"
+    },
+    {
+      "title": "Enable verbose errors for a single command",
+      "url": "llms-txt#enable-verbose-errors-for-a-single-command"
+    },
+    {
+      "title": "Or set it globally in your shell",
+      "url": "llms-txt#or-set-it-globally-in-your-shell"
+    },
+    {
+      "title": "Error",
+      "url": "llms-txt#error"
+    },
+    {
+      "title": "This will fail and send an error to Sentry",
+      "url": "llms-txt#this-will-fail-and-send-an-error-to-sentry"
+    },
+    {
+      "title": "GitHub Actions example",
+      "url": "llms-txt#github-actions-example"
+    },
+    {
+      "title": "Don't commit DSN to version control",
+      "url": "llms-txt#don't-commit-dsn-to-version-control"
+    },
+    {
+      "title": "Use environment variables instead",
+      "url": "llms-txt#use-environment-variables-instead"
+    },
+    {
+      "title": "Development (local machine)",
+      "url": "llms-txt#development-(local-machine)"
+    },
+    {
+      "title": "Production (CI/CD)",
+      "url": "llms-txt#production-(ci/cd)"
+    },
+    {
+      "title": "Markdown Styling",
+      "url": "llms-txt#markdown-styling"
+    },
+    {
+      "title": "Built-in default theme",
+      "url": "llms-txt#built-in-default-theme"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "Disable masking for debugging",
+      "url": "llms-txt#disable-masking-for-debugging"
+    },
+    {
+      "title": "Explicitly enable masking (default)",
+      "url": "llms-txt#explicitly-enable-masking-(default)"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "Run deployment - secrets automatically masked",
+      "url": "llms-txt#run-deployment---secrets-automatically-masked"
+    },
+    {
+      "title": "See full output for troubleshooting",
+      "url": "llms-txt#see-full-output-for-troubleshooting"
+    },
+    {
+      "title": "Generate screenshots with masked secrets",
+      "url": "llms-txt#generate-screenshots-with-masked-secrets"
+    },
+    {
+      "title": "Generate screenshot with consistent output",
+      "url": "llms-txt#generate-screenshot-with-consistent-output"
+    },
+    {
+      "title": "Using environment variables",
+      "url": "llms-txt#using-environment-variables"
+    },
+    {
+      "title": "Normal piped output - automatically disables color",
+      "url": "llms-txt#normal-piped-output---automatically-disables-color"
+    },
+    {
+      "title": "Force color when piping to color-aware tool",
+      "url": "llms-txt#force-color-when-piping-to-color-aware-tool"
+    },
+    {
+      "title": "Screenshot generation",
+      "url": "llms-txt#screenshot-generation"
+    },
+    {
+      "title": "Display config in YAML format with syntax highlighting",
+      "url": "llms-txt#display-config-in-yaml-format-with-syntax-highlighting"
+    },
+    {
+      "title": "Display config in JSON format with syntax highlighting",
+      "url": "llms-txt#display-config-in-json-format-with-syntax-highlighting"
+    },
+    {
+      "title": "Syntax highlighting is disabled when piping",
+      "url": "llms-txt#syntax-highlighting-is-disabled-when-piping"
+    },
+    {
+      "title": "Global Flags",
+      "url": "llms-txt#global-flags"
+    },
+    {
+      "title": "Disable color and pager for CI environment",
+      "url": "llms-txt#disable-color-and-pager-for-ci-environment"
+    },
+    {
+      "title": "Use specific pager with custom log level",
+      "url": "llms-txt#use-specific-pager-with-custom-log-level"
+    },
+    {
+      "title": "Multiple config files with base path",
+      "url": "llms-txt#multiple-config-files-with-base-path"
+    },
+    {
+      "title": "Change to infrastructure directory before running command",
+      "url": "llms-txt#change-to-infrastructure-directory-before-running-command"
+    },
+    {
+      "title": "Use short form (-C) for brevity",
+      "url": "llms-txt#use-short-form-(-c)-for-brevity"
+    },
+    {
+      "title": "Relative path from current directory",
+      "url": "llms-txt#relative-path-from-current-directory"
+    },
+    {
+      "title": "Use with other flags - chdir processes first",
+      "url": "llms-txt#use-with-other-flags---chdir-processes-first"
+    },
+    {
+      "title": "Environment variable for scripting",
+      "url": "llms-txt#environment-variable-for-scripting"
+    },
+    {
+      "title": "Development workflow - point dev binary at different repo",
+      "url": "llms-txt#development-workflow---point-dev-binary-at-different-repo"
+    },
+    {
+      "title": "CI/CD pipeline example",
+      "url": "llms-txt#ci/cd-pipeline-example"
+    },
+    {
+      "title": "Enable pager (multiple ways)",
+      "url": "llms-txt#enable-pager-(multiple-ways)"
+    },
+    {
+      "title": "Disable pager (explicit)",
+      "url": "llms-txt#disable-pager-(explicit)"
+    },
+    {
+      "title": "Disable pager using NO_PAGER (standard CLI convention)",
+      "url": "llms-txt#disable-pager-using-no_pager-(standard-cli-convention)"
+    },
+    {
+      "title": "Default behavior (no flag = pager disabled)",
+      "url": "llms-txt#default-behavior-(no-flag-=-pager-disabled)"
+    },
+    {
+      "title": "Multiple ways to disable color",
+      "url": "llms-txt#multiple-ways-to-disable-color"
+    },
+    {
+      "title": "Explicitly enable color (overrides config file setting)",
+      "url": "llms-txt#explicitly-enable-color-(overrides-config-file-setting)"
+    },
+    {
+      "title": "Set environment variables",
+      "url": "llms-txt#set-environment-variables"
+    },
+    {
+      "title": "Commands will use these settings",
+      "url": "llms-txt#commands-will-use-these-settings"
+    },
+    {
+      "title": "Typical CI/CD settings",
+      "url": "llms-txt#typical-ci/cd-settings"
+    },
+    {
+      "title": "Run commands without interactive features",
+      "url": "llms-txt#run-commands-without-interactive-features"
+    },
+    {
+      "title": "File-based CPU profiling (default profile type)",
+      "url": "llms-txt#file-based-cpu-profiling-(default-profile-type)"
+    },
+    {
+      "title": "File-based memory heap profiling",
+      "url": "llms-txt#file-based-memory-heap-profiling"
+    },
+    {
+      "title": "File-based execution trace profiling",
+      "url": "llms-txt#file-based-execution-trace-profiling"
+    },
+    {
+      "title": "Server-based profiling for interactive analysis",
+      "url": "llms-txt#server-based-profiling-for-interactive-analysis"
+    },
+    {
+      "title": "Environment variable configuration",
+      "url": "llms-txt#environment-variable-configuration"
+    },
+    {
+      "title": "Multiple profile types for comprehensive analysis",
+      "url": "llms-txt#multiple-profile-types-for-comprehensive-analysis"
+    },
+    {
+      "title": "These environment variables work across many tools, not just Atmos",
+      "url": "llms-txt#these-environment-variables-work-across-many-tools,-not-just-atmos"
+    },
+    {
+      "title": "Run various CLI tools - all respect the same env vars",
+      "url": "llms-txt#run-various-cli-tools---all-respect-the-same-env-vars"
+    },
+    {
+      "title": "Community Resources",
+      "url": "llms-txt#community-resources"
+    },
+    {
+      "title": "Office Hours Registration",
+      "url": "llms-txt#office-hours-registration"
+    },
+    {
+      "title": "Import the base Atmos component configuration from the `catalog`.",
+      "url": "llms-txt#import-the-base-atmos-component-configuration-from-the-`catalog`."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Import the base component configuration from the `catalog`.",
+      "url": "llms-txt#import-the-base-component-configuration-from-the-`catalog`."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Don't commit developer-specific CLI config",
+      "url": "llms-txt#don't-commit-developer-specific-cli-config"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "subcommands",
+      "url": "llms-txt#subcommands"
+    },
+    {
+      "title": "subcommands",
+      "url": "llms-txt#subcommands"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Use the identity from command config",
+      "url": "llms-txt#use-the-identity-from-command-config"
+    },
+    {
+      "title": "Override with a different identity",
+      "url": "llms-txt#override-with-a-different-identity"
+    },
+    {
+      "title": "Use no identity (skip authentication even if configured)",
+      "url": "llms-txt#use-no-identity-(skip-authentication-even-if-configured)"
+    },
+    {
+      "title": "Other stacks here",
+      "url": "llms-txt#other-stacks-here"
+    },
+    {
+      "title": "CLI command aliases",
+      "url": "llms-txt#cli-command-aliases"
+    },
+    {
+      "title": "This will fail in Terraform",
+      "url": "llms-txt#this-will-fail-in-terraform"
+    },
+    {
+      "title": "This works in OpenTofu 1.8+ with Atmos auto-detection",
+      "url": "llms-txt#this-works-in-opentofu-1.8+-with-atmos-auto-detection"
+    },
+    {
+      "title": "`Go` templates in Atmos manifests",
+      "url": "llms-txt#`go`-templates-in-atmos-manifests"
+    },
+    {
+      "title": "https://atmos.tools/core-concepts/stacks/templates",
+      "url": "llms-txt#https://atmos.tools/core-concepts/stacks/templates"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/docs/templates/hcl_templates/blocks/source",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/docs/templates/hcl_templates/blocks/source"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/integrations/hashicorp/amazon/latest/components/builder/ebs",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/integrations/hashicorp/amazon/latest/components/builder/ebs"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/integrations/hashicorp/amazon",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/integrations/hashicorp/amazon"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/tutorials/docker-get-started/docker-get-started-post-processors",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/tutorials/docker-get-started/docker-get-started-post-processors"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/tutorials/aws-get-started",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/tutorials/aws-get-started"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication"
+    },
+    {
+      "title": "yaml-language-server: $schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json",
+      "url": "llms-txt#yaml-language-server:-$schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json"
+    },
+    {
+      "title": "yaml-language-server: $schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json",
+      "url": "llms-txt#yaml-language-server:-$schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json"
+    },
+    {
+      "title": "yaml-language-server: $schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json",
+      "url": "llms-txt#yaml-language-server:-$schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/docs/commands/validate",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/docs/commands/validate"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/docs/commands/inspect",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/docs/commands/inspect"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/docs/commands/init",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/docs/commands/init"
+    },
+    {
+      "title": "https://developer.hashicorp.com/packer/docs/commands/build",
+      "url": "llms-txt#https://developer.hashicorp.com/packer/docs/commands/build"
+    },
+    {
+      "title": "`atmos packer output` command is specific to Atmos (Packer itself does not have an `output` command)",
+      "url": "llms-txt#`atmos-packer-output`-command-is-specific-to-atmos-(packer-itself-does-not-have-an-`output`-command)"
+    },
+    {
+      "title": "The command is used to get an output from a Packer manifest",
+      "url": "llms-txt#the-command-is-used-to-get-an-output-from-a-packer-manifest"
+    },
+    {
+      "title": "The manifest is generated by Packer when executing a `packer build` command",
+      "url": "llms-txt#the-manifest-is-generated-by-packer-when-executing-a-`packer-build`-command"
+    },
+    {
+      "title": "`atmos packer output` command is specific to Atmos (Packer itself does not have an `output` command)",
+      "url": "llms-txt#`atmos-packer-output`-command-is-specific-to-atmos-(packer-itself-does-not-have-an-`output`-command)"
+    },
+    {
+      "title": "The command is used to get an output from a Packer manifest",
+      "url": "llms-txt#the-command-is-used-to-get-an-output-from-a-packer-manifest"
+    },
+    {
+      "title": "The manifest is generated by Packer when executing a `packer build` command",
+      "url": "llms-txt#the-manifest-is-generated-by-packer-when-executing-a-`packer-build`-command"
+    },
+    {
+      "title": "Use a YQ expression to get a specific section or attribute from the Packer manifest,",
+      "url": "llms-txt#use-a-yq-expression-to-get-a-specific-section-or-attribute-from-the-packer-manifest,"
+    },
+    {
+      "title": "in this case, the `artifact_id` from the first build.",
+      "url": "llms-txt#in-this-case,-the-`artifact_id`-from-the-first-build."
+    },
+    {
+      "title": "`atmos packer output` command is specific to Atmos (Packer itself does not have an `output` command).",
+      "url": "llms-txt#`atmos-packer-output`-command-is-specific-to-atmos-(packer-itself-does-not-have-an-`output`-command)."
+    },
+    {
+      "title": "The command is used to get an output from a Packer manifest.",
+      "url": "llms-txt#the-command-is-used-to-get-an-output-from-a-packer-manifest."
+    },
+    {
+      "title": "The manifest is generated by Packer when executing a `packer build` command.",
+      "url": "llms-txt#the-manifest-is-generated-by-packer-when-executing-a-`packer-build`-command."
+    },
+    {
+      "title": "Use a YQ expression to get a specific section or attribute from the Packer manifest,",
+      "url": "llms-txt#use-a-yq-expression-to-get-a-specific-section-or-attribute-from-the-packer-manifest,"
+    },
+    {
+      "title": "in this case, the AMI (second part after the `:`) from the `artifact_id` from the first build.",
+      "url": "llms-txt#in-this-case,-the-ami-(second-part-after-the-`:`)-from-the-`artifact_id`-from-the-first-build."
+    },
+    {
+      "title": "Import the base Atmos component configuration from the `catalog`.",
+      "url": "llms-txt#import-the-base-atmos-component-configuration-from-the-`catalog`."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Import the base component configuration from the `catalog`.",
+      "url": "llms-txt#import-the-base-component-configuration-from-the-`catalog`."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Disable a component in a specific environment",
+      "url": "llms-txt#disable-a-component-in-a-specific-environment"
+    },
+    {
+      "title": "Lock a production database component to prevent accidental changes",
+      "url": "llms-txt#lock-a-production-database-component-to-prevent-accidental-changes"
+    },
+    {
+      "title": "stacks/dev/us-east-1.yaml",
+      "url": "llms-txt#stacks/dev/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/staging/us-east-1.yaml",
+      "url": "llms-txt#stacks/staging/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/prod/us-east-1.yaml",
+      "url": "llms-txt#stacks/prod/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/dev/us-east-1.yaml",
+      "url": "llms-txt#stacks/dev/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/staging/us-east-1.yaml",
+      "url": "llms-txt#stacks/staging/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/prod/us-east-1.yaml",
+      "url": "llms-txt#stacks/prod/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/dev/us-east-1.yaml",
+      "url": "llms-txt#stacks/dev/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/staging/us-east-1.yaml",
+      "url": "llms-txt#stacks/staging/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/prod/us-east-1.yaml",
+      "url": "llms-txt#stacks/prod/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/dev/us-east-1.yaml",
+      "url": "llms-txt#stacks/dev/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/staging/us-east-1.yaml",
+      "url": "llms-txt#stacks/staging/us-east-1.yaml"
+    },
+    {
+      "title": "stacks/prod/us-east-1.yaml",
+      "url": "llms-txt#stacks/prod/us-east-1.yaml"
+    },
+    {
+      "title": "`Go` templates in Atmos manifests",
+      "url": "llms-txt#`go`-templates-in-atmos-manifests"
+    },
+    {
+      "title": "stacks/catalog/vpc/_defaults.yaml (global)",
+      "url": "llms-txt#stacks/catalog/vpc/_defaults.yaml-(global)"
+    },
+    {
+      "title": "stacks/orgs/acme/plat/prod/_defaults.yaml (terraform)",
+      "url": "llms-txt#stacks/orgs/acme/plat/prod/_defaults.yaml-(terraform)"
+    },
+    {
+      "title": "stacks/orgs/acme/plat/prod/us-east-2.yaml (component)",
+      "url": "llms-txt#stacks/orgs/acme/plat/prod/us-east-2.yaml-(component)"
+    },
+    {
+      "title": "Imports can also be parameterized using `Go` templates",
+      "url": "llms-txt#imports-can-also-be-parameterized-using-`go`-templates"
+    },
+    {
+      "title": "Understanding Inheritance",
+      "url": "llms-txt#understanding-inheritance"
+    },
+    {
+      "title": "Import the base component configuration from the `catalog`.",
+      "url": "llms-txt#import-the-base-component-configuration-from-the-`catalog`."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Import all the base components and mixins we want to inherit from.",
+      "url": "llms-txt#import-all-the-base-components-and-mixins-we-want-to-inherit-from."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "Global overrides.",
+      "url": "llms-txt#global-overrides."
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "Terraform overrides.",
+      "url": "llms-txt#terraform-overrides."
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the Terraform components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-terraform-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "The Terraform `overrides` are deep-merged with the global `overrides`",
+      "url": "llms-txt#the-terraform-`overrides`-are-deep-merged-with-the-global-`overrides`"
+    },
+    {
+      "title": "and takes higher priority (it will override the same keys from the global `overrides`).",
+      "url": "llms-txt#and-takes-higher-priority-(it-will-override-the-same-keys-from-the-global-`overrides`)."
+    },
+    {
+      "title": "Helmfile overrides.",
+      "url": "llms-txt#helmfile-overrides."
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the Helmfile components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-helmfile-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "The Helmfile `overrides` are deep-merged with the global `overrides`",
+      "url": "llms-txt#the-helmfile-`overrides`-are-deep-merged-with-the-global-`overrides`"
+    },
+    {
+      "title": "and takes higher priority (it will override the same keys from the global `overrides`).",
+      "url": "llms-txt#and-takes-higher-priority-(it-will-override-the-same-keys-from-the-global-`overrides`)."
+    },
+    {
+      "title": "Final deep-merged `overrides` from all the global `overrides` and Terraform `overrides` sections",
+      "url": "llms-txt#final-deep-merged-`overrides`-from-all-the-global-`overrides`-and-terraform-`overrides`-sections"
+    },
+    {
+      "title": "The `command` was overridden with the value from `terraform.overrides.command`",
+      "url": "llms-txt#the-`command`-was-overridden-with-the-value-from-`terraform.overrides.command`"
+    },
+    {
+      "title": "The `command` is not overridden",
+      "url": "llms-txt#the-`command`-is-not-overridden"
+    },
+    {
+      "title": "The component does not get the `overrides` section since it's not defined",
+      "url": "llms-txt#the-component-does-not-get-the-`overrides`-section-since-it's-not-defined"
+    },
+    {
+      "title": "for the components managed by the `devops` Team",
+      "url": "llms-txt#for-the-components-managed-by-the-`devops`-team"
+    },
+    {
+      "title": "Global overrides",
+      "url": "llms-txt#global-overrides"
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "Terraform overrides",
+      "url": "llms-txt#terraform-overrides"
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the Terraform components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-terraform-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "The Terraform `overrides` are deep-merged with the global `overrides`",
+      "url": "llms-txt#the-terraform-`overrides`-are-deep-merged-with-the-global-`overrides`"
+    },
+    {
+      "title": "and takes higher priority (it will override the same keys from the global `overrides`).",
+      "url": "llms-txt#and-takes-higher-priority-(it-will-override-the-same-keys-from-the-global-`overrides`)."
+    },
+    {
+      "title": "The `overrides` in this stack manifest take precedence over the `overrides` imported from `teams/testing-overrides`",
+      "url": "llms-txt#the-`overrides`-in-this-stack-manifest-take-precedence-over-the-`overrides`-imported-from-`teams/testing-overrides`"
+    },
+    {
+      "title": "Global overrides",
+      "url": "llms-txt#global-overrides"
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "Terraform overrides",
+      "url": "llms-txt#terraform-overrides"
+    },
+    {
+      "title": "Override the variables, env, command and settings ONLY in the Terraform components managed by the `testing` Team.",
+      "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-terraform-components-managed-by-the-`testing`-team."
+    },
+    {
+      "title": "The Terraform `overrides` are deep-merged with the global `overrides`",
+      "url": "llms-txt#the-terraform-`overrides`-are-deep-merged-with-the-global-`overrides`"
+    },
+    {
+      "title": "and takes higher priority (it will override the same keys from the global `overrides`).",
+      "url": "llms-txt#and-takes-higher-priority-(it-will-override-the-same-keys-from-the-global-`overrides`)."
+    },
+    {
+      "title": "Configurations that should get deep-merged into this one",
+      "url": "llms-txt#configurations-that-should-get-deep-merged-into-this-one"
+    },
+    {
+      "title": "Top-level variables that are inherited by every single component.",
+      "url": "llms-txt#top-level-variables-that-are-inherited-by-every-single-component."
+    },
+    {
+      "title": "Use these wisely. Too many global vars will pollute the variable namespace.",
+      "url": "llms-txt#use-these-wisely.-too-many-global-vars-will-pollute-the-variable-namespace."
+    },
+    {
+      "title": "There can then be global variables for each type of component.",
+      "url": "llms-txt#there-can-then-be-global-variables-for-each-type-of-component."
+    },
+    {
+      "title": "Here we set global variables for any \"terraform\" component.",
+      "url": "llms-txt#here-we-set-global-variables-for-any-\"terraform\"-component."
+    },
+    {
+      "title": "Here we set global variables for any \"helmfile\" component.",
+      "url": "llms-txt#here-we-set-global-variables-for-any-\"helmfile\"-component."
+    },
+    {
+      "title": "Components are the building blocks of reusable infrastructure.",
+      "url": "llms-txt#components-are-the-building-blocks-of-reusable-infrastructure."
+    },
+    {
+      "title": "They can be anything. Atmos natively supports \"terraform\" and \"helmfile\".",
+      "url": "llms-txt#they-can-be-anything.-atmos-natively-supports-\"terraform\"-and-\"helmfile\"."
+    },
+    {
+      "title": "Global settings",
+      "url": "llms-txt#global-settings"
+    },
+    {
+      "title": "Global Terraform config",
+      "url": "llms-txt#global-terraform-config"
+    },
+    {
+      "title": "Atmos component configurations",
+      "url": "llms-txt#atmos-component-configurations"
+    },
+    {
+      "title": "https://pkg.go.dev/text/template",
+      "url": "llms-txt#https://pkg.go.dev/text/template"
+    },
+    {
+      "title": "Validate all files in the current project using EditorConfig",
+      "url": "llms-txt#validate-all-files-in-the-current-project-using-editorconfig"
+    },
+    {
+      "title": "EditorConfig is awesome: https://editorconfig.org",
+      "url": "llms-txt#editorconfig-is-awesome:-https://editorconfig.org"
+    },
+    {
+      "title": "Validate 'vpc' component using JSON Schema in the 'plat-ue2-prod' stack",
+      "url": "llms-txt#validate-'vpc'-component-using-json-schema-in-the-'plat-ue2-prod'-stack"
+    },
+    {
+      "title": "Validation schemas (for validating atmos stacks and components)",
+      "url": "llms-txt#validation-schemas-(for-validating-atmos-stacks-and-components)"
+    },
+    {
+      "title": "Validate 'vpc' component using OPA policy in the 'plat-ue2-prod' stack",
+      "url": "llms-txt#validate-'vpc'-component-using-opa-policy-in-the-'plat-ue2-prod'-stack"
+    },
+    {
+      "title": "Validate 'vpc' component using OPA policy in the 'plat-ue2-dev' stack with additional module paths 'catalog/constants'",
+      "url": "llms-txt#validate-'vpc'-component-using-opa-policy-in-the-'plat-ue2-dev'-stack-with-additional-module-paths-'catalog/constants'"
+    },
+    {
+      "title": "Validate 'vpc' component using OPA policy in the 'plat-ue2-dev' stack with additional module paths 'catalog'",
+      "url": "llms-txt#validate-'vpc'-component-using-opa-policy-in-the-'plat-ue2-dev'-stack-with-additional-module-paths-'catalog'"
+    },
+    {
+      "title": "Validate 'vpc' component in the 'plat-ue2-prod' stack",
+      "url": "llms-txt#validate-'vpc'-component-in-the-'plat-ue2-prod'-stack"
+    },
+    {
+      "title": "Validate 'vpc' component in the 'plat-ue2-dev' stack",
+      "url": "llms-txt#validate-'vpc'-component-in-the-'plat-ue2-dev'-stack"
+    },
+    {
+      "title": "Validate 'vpc' component in the 'plat-ue2-dev' stack with a timeout of 15 seconds",
+      "url": "llms-txt#validate-'vpc'-component-in-the-'plat-ue2-dev'-stack-with-a-timeout-of-15-seconds"
+    },
+    {
+      "title": "Validation schemas for OPA for validating atmos stacks and components",
+      "url": "llms-txt#validation-schemas-for-opa-for-validating-atmos-stacks-and-components"
+    },
+    {
+      "title": "'package atmos' is required in all Atmos OPA policies",
+      "url": "llms-txt#'package-atmos'-is-required-in-all-atmos-opa-policies"
+    },
+    {
+      "title": "Atmos looks for the 'errors' (array of strings) output from all OPA policies",
+      "url": "llms-txt#atmos-looks-for-the-'errors'-(array-of-strings)-output-from-all-opa-policies"
+    },
+    {
+      "title": "If the 'errors' output contains one or more error messages, Atmos considers the policy failed",
+      "url": "llms-txt#if-the-'errors'-output-contains-one-or-more-error-messages,-atmos-considers-the-policy-failed"
+    },
+    {
+      "title": "Don't allow `terraform apply` if the `foo` variable is set to `foo`",
+      "url": "llms-txt#don't-allow-`terraform-apply`-if-the-`foo`-variable-is-set-to-`foo`"
+    },
+    {
+      "title": "The `input` map contains the `cli_args` attribute (a list of the command line arguments and flags)",
+      "url": "llms-txt#the-`input`-map-contains-the-`cli_args`-attribute-(a-list-of-the-command-line-arguments-and-flags)"
+    },
+    {
+      "title": "Block operations if running in production without proper approval",
+      "url": "llms-txt#block-operations-if-running-in-production-without-proper-approval"
+    },
+    {
+      "title": "Ensure required environment variables are set",
+      "url": "llms-txt#ensure-required-environment-variables-are-set"
+    },
+    {
+      "title": "Validate AWS region restrictions",
+      "url": "llms-txt#validate-aws-region-restrictions"
+    },
+    {
+      "title": "Validate instance types passed via CLI",
+      "url": "llms-txt#validate-instance-types-passed-via-cli"
+    },
+    {
+      "title": "Validate JSON configuration passed via CLI",
+      "url": "llms-txt#validate-json-configuration-passed-via-cli"
+    },
+    {
+      "title": "Ensure sensitive variables are not passed via CLI",
+      "url": "llms-txt#ensure-sensitive-variables-are-not-passed-via-cli"
+    },
+    {
+      "title": "Validate numeric ranges for CLI variables",
+      "url": "llms-txt#validate-numeric-ranges-for-cli-variables"
+    },
+    {
+      "title": "Block dangerous flags in TF_CLI_ARGS",
+      "url": "llms-txt#block-dangerous-flags-in-tf_cli_args"
+    },
+    {
+      "title": "Require planfile for apply (positional, not a flag)",
+      "url": "llms-txt#require-planfile-for-apply-(positional,-not-a-flag)"
+    },
+    {
+      "title": "Validate parallelism settings",
+      "url": "llms-txt#validate-parallelism-settings"
+    },
+    {
+      "title": "Validate environment-specific constraints",
+      "url": "llms-txt#validate-environment-specific-constraints"
+    },
+    {
+      "title": "Validate complex JSON configurations from TF_CLI_ARGS",
+      "url": "llms-txt#validate-complex-json-configurations-from-tf_cli_args"
+    },
+    {
+      "title": "Cross-validate CLI args and environment variables",
+      "url": "llms-txt#cross-validate-cli-args-and-environment-variables"
+    },
+    {
+      "title": "Validate resource naming conventions from environment variables",
+      "url": "llms-txt#validate-resource-naming-conventions-from-environment-variables"
+    },
+    {
+      "title": "Ensure cost controls are in place",
+      "url": "llms-txt#ensure-cost-controls-are-in-place"
+    },
+    {
+      "title": "Comprehensive validation combining all context sources",
+      "url": "llms-txt#comprehensive-validation-combining-all-context-sources"
+    },
+    {
+      "title": "Helper rule for production approval",
+      "url": "llms-txt#helper-rule-for-production-approval"
+    },
+    {
+      "title": "Validate consistency across all variable sources",
+      "url": "llms-txt#validate-consistency-across-all-variable-sources"
+    },
+    {
+      "title": "Helper function to check if all elements in array are equal",
+      "url": "llms-txt#helper-function-to-check-if-all-elements-in-array-are-equal"
+    },
+    {
+      "title": "Validate resource limits based on environment context",
+      "url": "llms-txt#validate-resource-limits-based-on-environment-context"
+    },
+    {
+      "title": "Helper to get environment from any source",
+      "url": "llms-txt#helper-to-get-environment-from-any-source"
+    },
+    {
+      "title": "Helper to calculate total instances from all sources",
+      "url": "llms-txt#helper-to-calculate-total-instances-from-all-sources"
+    },
+    {
+      "title": "Validation schemas",
+      "url": "llms-txt#validation-schemas"
+    },
+    {
+      "title": "'package atmos' is required in all `atmos` OPA policies",
+      "url": "llms-txt#'package-atmos'-is-required-in-all-`atmos`-opa-policies"
+    },
+    {
+      "title": "Atmos looks for the 'errors' (array of strings) output from all OPA policies.",
+      "url": "llms-txt#atmos-looks-for-the-'errors'-(array-of-strings)-output-from-all-opa-policies."
+    },
+    {
+      "title": "If the 'errors' output contains one or more error messages, Atmos considers the policy failed.",
+      "url": "llms-txt#if-the-'errors'-output-contains-one-or-more-error-messages,-atmos-considers-the-policy-failed."
+    },
+    {
+      "title": "This will fail validation",
+      "url": "llms-txt#this-will-fail-validation"
+    },
+    {
+      "title": "This will pass validation",
+      "url": "llms-txt#this-will-pass-validation"
+    },
+    {
+      "title": "Define allowed environment values",
+      "url": "llms-txt#define-allowed-environment-values"
+    },
+    {
+      "title": "Ensure that if a variable is set via TF_CLI_ARGS, it cannot be overridden via command line",
+      "url": "llms-txt#ensure-that-if-a-variable-is-set-via-tf_cli_args,-it-cannot-be-overridden-via-command-line"
+    },
+    {
+      "title": "Require either TF_CLI_ARGS variable OR command-line variable, but not both",
+      "url": "llms-txt#require-either-tf_cli_args-variable-or-command-line-variable,-but-not-both"
+    },
+    {
+      "title": "Require at least one method of setting the environment",
+      "url": "llms-txt#require-at-least-one-method-of-setting-the-environment"
+    },
+    {
+      "title": "Validate that instance_count is a valid number",
+      "url": "llms-txt#validate-that-instance_count-is-a-valid-number"
+    },
+    {
+      "title": "Validate that tags is a valid object",
+      "url": "llms-txt#validate-that-tags-is-a-valid-object"
+    },
+    {
+      "title": "Validate specific object structure",
+      "url": "llms-txt#validate-specific-object-structure"
+    },
+    {
+      "title": "Validation schemas (for validating atmos stacks and components)",
+      "url": "llms-txt#validation-schemas-(for-validating-atmos-stacks-and-components)"
+    },
+    {
+      "title": "This is an example of how to download a Terraform component from an OCI registry (https://opencontainers.org), e.g. AWS Public ECR",
+      "url": "llms-txt#this-is-an-example-of-how-to-download-a-terraform-component-from-an-oci-registry-(https://opencontainers.org),-e.g.-aws-public-ecr"
+    },
+    {
+      "title": "'component.yaml' in the component folder is processed by the 'atmos' commands:",
+      "url": "llms-txt#'component.yaml'-in-the-component-folder-is-processed-by-the-'atmos'-commands:"
+    },
+    {
+      "title": "'atmos vendor pull -c infra/vpc' or 'atmos vendor pull --component infra/vpc'",
+      "url": "llms-txt#'atmos-vendor-pull--c-infra/vpc'-or-'atmos-vendor-pull---component-infra/vpc'"
+    },
+    {
+      "title": "Old syntax (still works but deprecated)",
+      "url": "llms-txt#old-syntax-(still-works-but-deprecated)"
+    },
+    {
+      "title": "New syntax (explicit and clear)",
+      "url": "llms-txt#new-syntax-(explicit-and-clear)"
+    },
+    {
+      "title": "Simple - implicit HTTPS, root directory",
+      "url": "llms-txt#simple---implicit-https,-root-directory"
+    },
+    {
+      "title": "Clone and extract specific subdirectory",
+      "url": "llms-txt#clone-and-extract-specific-subdirectory"
+    },
+    {
+      "title": "Explicit git protocol",
+      "url": "llms-txt#explicit-git-protocol"
+    },
+    {
+      "title": "SSH protocol (requires SSH key setup)",
+      "url": "llms-txt#ssh-protocol-(requires-ssh-key-setup)"
+    },
+    {
+      "title": "Or SCP-style shorthand",
+      "url": "llms-txt#or-scp-style-shorthand"
+    },
+    {
+      "title": "HTTPS with embedded credentials (not recommended, use tokens)",
+      "url": "llms-txt#https-with-embedded-credentials-(not-recommended,-use-tokens)"
+    },
+    {
+      "title": "Simple - implicit HTTPS",
+      "url": "llms-txt#simple---implicit-https"
+    },
+    {
+      "title": "Extract specific directory",
+      "url": "llms-txt#extract-specific-directory"
+    },
+    {
+      "title": "Simple - implicit HTTPS",
+      "url": "llms-txt#simple---implicit-https"
+    },
+    {
+      "title": "Extract specific directory",
+      "url": "llms-txt#extract-specific-directory"
+    },
+    {
+      "title": "Azure DevOps Git repositories",
+      "url": "llms-txt#azure-devops-git-repositories"
+    },
+    {
+      "title": "Any self-hosted Git server",
+      "url": "llms-txt#any-self-hosted-git-server"
+    },
+    {
+      "title": "With explicit HTTPS",
+      "url": "llms-txt#with-explicit-https"
+    },
+    {
+      "title": "Method 1: Authenticate with Docker (works for any registry)",
+      "url": "llms-txt#method-1:-authenticate-with-docker-(works-for-any-registry)"
+    },
+    {
+      "title": "Enter your token when prompted",
+      "url": "llms-txt#enter-your-token-when-prompted"
+    },
+    {
+      "title": "Method 2: Use environment variables for GHCR",
+      "url": "llms-txt#method-2:-use-environment-variables-for-ghcr"
+    },
+    {
+      "title": "Method 3: GitHub Actions (automatic)",
+      "url": "llms-txt#method-3:-github-actions-(automatic)"
+    },
+    {
+      "title": "GITHUB_TOKEN and GITHUB_ACTOR are automatically available",
+      "url": "llms-txt#github_token-and-github_actor-are-automatically-available"
+    },
+    {
+      "title": "Relative to vendor.yaml location",
+      "url": "llms-txt#relative-to-vendor.yaml-location"
+    },
+    {
+      "title": "Absolute filesystem path",
+      "url": "llms-txt#absolute-filesystem-path"
+    },
+    {
+      "title": "file:// URI (gets converted to absolute path)",
+      "url": "llms-txt#file://-uri-(gets-converted-to-absolute-path)"
+    },
+    {
+      "title": "Download and extract archives",
+      "url": "llms-txt#download-and-extract-archives"
+    },
+    {
+      "title": "Download a single file",
+      "url": "llms-txt#download-a-single-file"
+    },
+    {
+      "title": "SSH with default key (~/.ssh/id_rsa)",
+      "url": "llms-txt#ssh-with-default-key-(~/.ssh/id_rsa)"
+    },
+    {
+      "title": "SSH with custom key",
+      "url": "llms-txt#ssh-with-custom-key"
+    },
+    {
+      "title": "Not recommended: credentials in URL",
+      "url": "llms-txt#not-recommended:-credentials-in-url"
+    },
+    {
+      "title": "â Extract specific subdirectory from a repository",
+      "url": "llms-txt#â-extract-specific-subdirectory-from-a-repository"
+    },
+    {
+      "title": "â Use root directory (no subdirectory needed)",
+      "url": "llms-txt#â-use-root-directory-(no-subdirectory-needed)"
+    },
+    {
+      "title": "Set GitHub token",
+      "url": "llms-txt#set-github-token"
+    },
+    {
+      "title": "Or use standard GitHub token",
+      "url": "llms-txt#or-use-standard-github-token"
+    },
+    {
+      "title": "â OCI for container images and binary artifacts",
+      "url": "llms-txt#â-oci-for-container-images-and-binary-artifacts"
+    },
+    {
+      "title": "â Git for source code",
+      "url": "llms-txt#â-git-for-source-code"
+    },
+    {
+      "title": "â Correct: Use //. for root",
+      "url": "llms-txt#â-correct:-use-//.-for-root"
+    },
+    {
+      "title": "â Avoid: Triple-slash (deprecated)",
+      "url": "llms-txt#â-avoid:-triple-slash-(deprecated)"
+    },
+    {
+      "title": "atmos vendor pull",
+      "url": "llms-txt#atmos-vendor-pull"
+    },
+    {
+      "title": "atmos vendor pull --everything",
+      "url": "llms-txt#atmos-vendor-pull---everything"
+    },
+    {
+      "title": "atmos vendor pull --component vpc-mixin-1",
+      "url": "llms-txt#atmos-vendor-pull---component-vpc-mixin-1"
+    },
+    {
+      "title": "atmos vendor pull -c vpc-mixin-2",
+      "url": "llms-txt#atmos-vendor-pull--c-vpc-mixin-2"
+    },
+    {
+      "title": "atmos vendor pull -c vpc-mixin-3",
+      "url": "llms-txt#atmos-vendor-pull--c-vpc-mixin-3"
+    },
+    {
+      "title": "atmos vendor pull -c vpc-mixin-4",
+      "url": "llms-txt#atmos-vendor-pull--c-vpc-mixin-4"
+    },
+    {
+      "title": "atmos vendor pull --tags test",
+      "url": "llms-txt#atmos-vendor-pull---tags-test"
+    },
+    {
+      "title": "atmos vendor pull --tags networking,storage",
+      "url": "llms-txt#atmos-vendor-pull---tags-networking,storage"
+    },
+    {
+      "title": "Method 1: Use docker login (recommended for local development)",
+      "url": "llms-txt#method-1:-use-docker-login-(recommended-for-local-development)"
+    },
+    {
+      "title": "Enter your GitHub token when prompted",
+      "url": "llms-txt#enter-your-github-token-when-prompted"
+    },
+    {
+      "title": "Method 2: Use environment variables",
+      "url": "llms-txt#method-2:-use-environment-variables"
+    },
+    {
+      "title": "Method 3: Configure in atmos.yaml",
+      "url": "llms-txt#method-3:-configure-in-atmos.yaml"
+    },
+    {
+      "title": "settings:",
+      "url": "llms-txt#settings:"
+    },
+    {
+      "title": "github_username: \"your_username\"",
+      "url": "llms-txt#github_username:-\"your_username\""
+    },
+    {
+      "title": "This is an example of how to download a Terraform component from an OCI registry (https://opencontainers.org), e.g. AWS Public ECR",
+      "url": "llms-txt#this-is-an-example-of-how-to-download-a-terraform-component-from-an-oci-registry-(https://opencontainers.org),-e.g.-aws-public-ecr"
+    },
+    {
+      "title": "Base path for components, stacks and workflows configurations.",
+      "url": "llms-txt#base-path-for-components,-stacks-and-workflows-configurations."
+    },
+    {
+      "title": "Can also be set using 'ATMOS_BASE_PATH' ENV var, or '--base-path' command-line argument.",
+      "url": "llms-txt#can-also-be-set-using-'atmos_base_path'-env-var,-or-'--base-path'-command-line-argument."
+    },
+    {
+      "title": "Supports both absolute and relative paths.",
+      "url": "llms-txt#supports-both-absolute-and-relative-paths."
+    },
+    {
+      "title": "If not provided or is an empty string, 'components.terraform.base_path', 'components.helmfile.base_path', 'stacks.base_path'",
+      "url": "llms-txt#if-not-provided-or-is-an-empty-string,-'components.terraform.base_path',-'components.helmfile.base_path',-'stacks.base_path'"
+    },
+    {
+      "title": "and 'workflows.base_path' are independent settings (supporting both absolute and relative paths).",
+      "url": "llms-txt#and-'workflows.base_path'-are-independent-settings-(supporting-both-absolute-and-relative-paths)."
+    },
+    {
+      "title": "If 'base_path' is provided, 'components.terraform.base_path', 'components.helmfile.base_path', 'stacks.base_path'",
+      "url": "llms-txt#if-'base_path'-is-provided,-'components.terraform.base_path',-'components.helmfile.base_path',-'stacks.base_path'"
+    },
+    {
+      "title": "and 'workflows.base_path' are considered paths relative to 'base_path'.",
+      "url": "llms-txt#and-'workflows.base_path'-are-considered-paths-relative-to-'base_path'."
+    },
+    {
+      "title": "Apply superadmin identity to all steps without their own identity",
+      "url": "llms-txt#apply-superadmin-identity-to-all-steps-without-their-own-identity"
+    },
+    {
+      "title": "Other defaults for the `us-east-2` region",
+      "url": "llms-txt#other-defaults-for-the-`us-east-2`-region"
+    },
+    {
+      "title": "Other defaults for the `us-west-2` region",
+      "url": "llms-txt#other-defaults-for-the-`us-west-2`-region"
+    },
+    {
+      "title": "Benefits",
+      "url": "llms-txt#benefits"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Override the configurations of all the components in this layer",
+      "url": "llms-txt#override-the-configurations-of-all-the-components-in-this-layer"
+    },
+    {
+      "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+      "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags"
+    },
+    {
+      "title": "Organization-wide defaults",
+      "url": "llms-txt#organization-wide-defaults"
+    },
+    {
+      "title": "OU-specific defaults",
+      "url": "llms-txt#ou-specific-defaults"
+    },
+    {
+      "title": "Stack-specific configuration",
+      "url": "llms-txt#stack-specific-configuration"
+    },
+    {
+      "title": "Organization defaults",
+      "url": "llms-txt#organization-defaults"
+    },
+    {
+      "title": "This is the actual stack configuration",
+      "url": "llms-txt#this-is-the-actual-stack-configuration"
+    },
+    {
+      "title": "Show the final configuration with all imports processed",
+      "url": "llms-txt#show-the-final-configuration-with-all-imports-processed"
+    },
+    {
+      "title": "`dev` stack",
+      "url": "llms-txt#`dev`-stack"
+    },
+    {
+      "title": "Import the component default configurations",
+      "url": "llms-txt#import-the-component-default-configurations"
+    },
+    {
+      "title": "Import the component default configurations",
+      "url": "llms-txt#import-the-component-default-configurations"
+    },
+    {
+      "title": "Import the component default configurations",
+      "url": "llms-txt#import-the-component-default-configurations"
+    },
+    {
+      "title": "`dev` stack",
+      "url": "llms-txt#`dev`-stack"
+    },
+    {
+      "title": "`staging` stack",
+      "url": "llms-txt#`staging`-stack"
+    },
+    {
+      "title": "`prod` stack",
+      "url": "llms-txt#`prod`-stack"
+    },
+    {
+      "title": "Other defaults for the `core` tenant/OU",
+      "url": "llms-txt#other-defaults-for-the-`core`-tenant/ou"
+    },
+    {
+      "title": "Other defaults for the `plat` tenant/OU",
+      "url": "llms-txt#other-defaults-for-the-`plat`-tenant/ou"
+    },
+    {
+      "title": "Other defaults for the `us-east-2` region",
+      "url": "llms-txt#other-defaults-for-the-`us-east-2`-region"
+    },
+    {
+      "title": "Other defaults for the `us-west-2` region",
+      "url": "llms-txt#other-defaults-for-the-`us-west-2`-region"
+    },
+    {
+      "title": "Other defaults for the `dev` stage/account",
+      "url": "llms-txt#other-defaults-for-the-`dev`-stage/account"
+    },
+    {
+      "title": "Other defaults for the `prod` stage/account",
+      "url": "llms-txt#other-defaults-for-the-`prod`-stage/account"
+    },
+    {
+      "title": "Other defaults for the `staging` stage/account",
+      "url": "llms-txt#other-defaults-for-the-`staging`-stage/account"
+    },
+    {
+      "title": "`dev` account, `us-east-2` region",
+      "url": "llms-txt#`dev`-account,-`us-east-2`-region"
+    },
+    {
+      "title": "`dev` account, `us-west-2` region",
+      "url": "llms-txt#`dev`-account,-`us-west-2`-region"
+    },
+    {
+      "title": "`staging` account, `us-east-2` region",
+      "url": "llms-txt#`staging`-account,-`us-east-2`-region"
+    },
+    {
+      "title": "`staging` account, `us-west-2` region",
+      "url": "llms-txt#`staging`-account,-`us-west-2`-region"
+    },
+    {
+      "title": "`prod` account, `us-east-2` region",
+      "url": "llms-txt#`prod`-account,-`us-east-2`-region"
+    },
+    {
+      "title": "`prod` account, `us-west-2` region",
+      "url": "llms-txt#`prod`-account,-`us-west-2`-region"
+    },
+    {
+      "title": "`dev` account, `us-east-2` region",
+      "url": "llms-txt#`dev`-account,-`us-east-2`-region"
+    },
+    {
+      "title": "`dev` account, `us-west-2` region",
+      "url": "llms-txt#`dev`-account,-`us-west-2`-region"
+    },
+    {
+      "title": "`staging` account, `us-east-2` region",
+      "url": "llms-txt#`staging`-account,-`us-east-2`-region"
+    },
+    {
+      "title": "`staging` account, `us-west-2` region",
+      "url": "llms-txt#`staging`-account,-`us-west-2`-region"
+    },
+    {
+      "title": "`prod` account, `us-east-2` region",
+      "url": "llms-txt#`prod`-account,-`us-east-2`-region"
+    },
+    {
+      "title": "`prod` account, `us-west-2` region",
+      "url": "llms-txt#`prod`-account,-`us-west-2`-region"
+    },
+    {
+      "title": "Navigate to provider directory",
+      "url": "llms-txt#navigate-to-provider-directory"
+    },
+    {
+      "title": "Edit provider code",
+      "url": "llms-txt#edit-provider-code"
+    },
+    {
+      "title": "Build provider binary",
+      "url": "llms-txt#build-provider-binary"
+    },
+    {
+      "title": "Navigate to infrastructure directory",
+      "url": "llms-txt#navigate-to-infrastructure-directory"
+    },
+    {
+      "title": "Test with Atmos (uses local provider via dev_overrides)",
+      "url": "llms-txt#test-with-atmos-(uses-local-provider-via-dev_overrides)"
+    },
+    {
+      "title": "Repeat: edit code â build â test",
+      "url": "llms-txt#repeat:-edit-code-â-build-â-test"
+    },
+    {
+      "title": "Don't commit developer-specific CLI config with local paths",
+      "url": "llms-txt#don't-commit-developer-specific-cli-config-with-local-paths"
+    },
+    {
+      "title": "Copy this file to .terraformrc and update paths for your environment",
+      "url": "llms-txt#copy-this-file-to-.terraformrc-and-update-paths-for-your-environment"
+    },
+    {
+      "title": "Developer working on provider",
+      "url": "llms-txt#developer-working-on-provider"
+    },
+    {
+      "title": "Developer using published version",
+      "url": "llms-txt#developer-using-published-version"
+    },
+    {
+      "title": "(no environment variable set)",
+      "url": "llms-txt#(no-environment-variable-set)"
+    },
+    {
+      "title": "Verify environment variable",
+      "url": "llms-txt#verify-environment-variable"
+    },
+    {
+      "title": "Check binary exists and is executable",
+      "url": "llms-txt#check-binary-exists-and-is-executable"
+    },
+    {
+      "title": "Test with verbose logging",
+      "url": "llms-txt#test-with-verbose-logging"
+    },
+    {
+      "title": "Copy this to .terraformrc and update the path for your environment",
+      "url": "llms-txt#copy-this-to-.terraformrc-and-update-the-path-for-your-environment"
+    },
+    {
+      "title": "Navigate to provider directory",
+      "url": "llms-txt#navigate-to-provider-directory"
+    },
+    {
+      "title": "Edit provider source code",
+      "url": "llms-txt#edit-provider-source-code"
+    },
+    {
+      "title": "Build and install provider binary",
+      "url": "llms-txt#build-and-install-provider-binary"
+    },
+    {
+      "title": "Run integration test with Atmos",
+      "url": "llms-txt#run-integration-test-with-atmos"
+    },
+    {
+      "title": "Test with different stack configurations",
+      "url": "llms-txt#test-with-different-stack-configurations"
+    },
+    {
+      "title": "On a feature branch, see impact everywhere",
+      "url": "llms-txt#on-a-feature-branch,-see-impact-everywhere"
+    },
+    {
+      "title": "All plans show the same changes (modulo configuration)",
+      "url": "llms-txt#all-plans-show-the-same-changes-(modulo-configuration)"
+    },
+    {
+      "title": "Support both old and new variable names during transition",
+      "url": "llms-txt#support-both-old-and-new-variable-names-during-transition"
+    },
+    {
+      "title": "WRONG - Version in workspace key causes state problems",
+      "url": "llms-txt#wrong---version-in-workspace-key-causes-state-problems"
+    },
+    {
+      "title": "CORRECT - Stable workspace key across versions",
+      "url": "llms-txt#correct---stable-workspace-key-across-versions"
+    },
+    {
+      "title": "Week 1: Development environments",
+      "url": "llms-txt#week-1:-development-environments"
+    },
+    {
+      "title": "Week 2: Staging environments",
+      "url": "llms-txt#week-2:-staging-environments"
+    },
+    {
+      "title": "Week 3: Production canary",
+      "url": "llms-txt#week-3:-production-canary"
+    },
+    {
+      "title": "Week 4: All production",
+      "url": "llms-txt#week-4:-all-production"
+    },
+    {
+      "title": "Before upgrade - verify current state",
+      "url": "llms-txt#before-upgrade---verify-current-state"
+    },
+    {
+      "title": "Update stack configuration to point to new version",
+      "url": "llms-txt#update-stack-configuration-to-point-to-new-version"
+    },
+    {
+      "title": "Edit: metadata.component from \"vpc/v1\" to \"vpc/v2\"",
+      "url": "llms-txt#edit:-metadata.component-from-\"vpc/v1\"-to-\"vpc/v2\""
+    },
+    {
+      "title": "Plan with new version - should show intended changes",
+      "url": "llms-txt#plan-with-new-version---should-show-intended-changes"
+    },
+    {
+      "title": "Apply the upgrade",
+      "url": "llms-txt#apply-the-upgrade"
+    },
+    {
+      "title": "stacks/prod/us-east-1.yaml",
+      "url": "llms-txt#stacks/prod/us-east-1.yaml"
+    },
+    {
+      "title": "Validate the rollback",
+      "url": "llms-txt#validate-the-rollback"
+    },
+    {
+      "title": "Review the changes - should show reverting to v1 behavior",
+      "url": "llms-txt#review-the-changes---should-show-reverting-to-v1-behavior"
+    },
+    {
+      "title": "Apply the rollback",
+      "url": "llms-txt#apply-the-rollback"
+    },
+    {
+      "title": "Quick sanity check - verify stack config points to correct folder",
+      "url": "llms-txt#quick-sanity-check---verify-stack-config-points-to-correct-folder"
+    },
+    {
+      "title": "Should show: component: vpc/v1",
+      "url": "llms-txt#should-show:-component:-vpc/v1"
+    },
+    {
+      "title": "TRUE VERIFICATION - plan should show no changes",
+      "url": "llms-txt#true-verification---plan-should-show-no-changes"
+    },
+    {
+      "title": "Should output: No changes. Your infrastructure matches the configuration.",
+      "url": "llms-txt#should-output:-no-changes.-your-infrastructure-matches-the-configuration."
+    },
+    {
+      "title": "Find the merge commit to revert",
+      "url": "llms-txt#find-the-merge-commit-to-revert"
+    },
+    {
+      "title": "Create a revert branch",
+      "url": "llms-txt#create-a-revert-branch"
+    },
+    {
+      "title": "Push and create PR",
+      "url": "llms-txt#push-and-create-pr"
+    },
+    {
+      "title": "Reset to previous known good state",
+      "url": "llms-txt#reset-to-previous-known-good-state"
+    },
+    {
+      "title": "Force push (requires permissions)",
+      "url": "llms-txt#force-push-(requires-permissions)"
+    },
+    {
+      "title": "If the previous state is tagged",
+      "url": "llms-txt#if-the-previous-state-is-tagged"
+    },
+    {
+      "title": "WRONG: Version in workspace key",
+      "url": "llms-txt#wrong:-version-in-workspace-key"
+    },
+    {
+      "title": "CORRECT: Stable workspace key",
+      "url": "llms-txt#correct:-stable-workspace-key"
+    },
+    {
+      "title": "WRONG: All channels overwrite each other",
+      "url": "llms-txt#wrong:-all-channels-overwrite-each-other"
+    },
+    {
+      "title": "CORRECT: Each channel has its own path",
+      "url": "llms-txt#correct:-each-channel-has-its-own-path"
+    },
+    {
+      "title": "WRONG: Version in workspace key",
+      "url": "llms-txt#wrong:-version-in-workspace-key"
+    },
+    {
+      "title": "CORRECT: Stable workspace key",
+      "url": "llms-txt#correct:-stable-workspace-key"
+    },
+    {
+      "title": "WRONG: Inconsistent conventions",
+      "url": "llms-txt#wrong:-inconsistent-conventions"
+    },
+    {
+      "title": "CORRECT: Consistent track-first",
+      "url": "llms-txt#correct:-consistent-track-first"
+    },
+    {
+      "title": "OR: Consistent component-first",
+      "url": "llms-txt#or:-consistent-component-first"
+    },
+    {
+      "title": "Vendor components to track-specific folders",
+      "url": "llms-txt#vendor-components-to-track-specific-folders"
+    },
+    {
+      "title": "Vendor new version to alpha track",
+      "url": "llms-txt#vendor-new-version-to-alpha-track"
+    },
+    {
+      "title": "Test in alpha environments",
+      "url": "llms-txt#test-in-alpha-environments"
+    },
+    {
+      "title": "Vendor promoted version to beta track",
+      "url": "llms-txt#vendor-promoted-version-to-beta-track"
+    },
+    {
+      "title": "Validate in staging environments",
+      "url": "llms-txt#validate-in-staging-environments"
+    },
+    {
+      "title": "Vendor promoted version to prod track",
+      "url": "llms-txt#vendor-promoted-version-to-prod-track"
+    },
+    {
+      "title": "Deploy to production environments",
+      "url": "llms-txt#deploy-to-production-environments"
+    },
+    {
+      "title": "vendor.yaml - Revert prod track to previous version",
+      "url": "llms-txt#vendor.yaml---revert-prod-track-to-previous-version"
+    },
+    {
+      "title": "Re-vendor the track folder with previous version",
+      "url": "llms-txt#re-vendor-the-track-folder-with-previous-version"
+    },
+    {
+      "title": "Validate rollback across all prod stacks",
+      "url": "llms-txt#validate-rollback-across-all-prod-stacks"
+    },
+    {
+      "title": "Apply rollback to production",
+      "url": "llms-txt#apply-rollback-to-production"
+    },
+    {
+      "title": "WRONG - Will cause state migration issues",
+      "url": "llms-txt#wrong---will-cause-state-migration-issues"
+    },
+    {
+      "title": "CORRECT - Stable across version changes",
+      "url": "llms-txt#correct---stable-across-version-changes"
+    },
+    {
+      "title": "VPC Component Version History",
+      "url": "llms-txt#vpc-component-version-history"
+    },
+    {
+      "title": "stacks/prod/us-east-1.yaml",
+      "url": "llms-txt#stacks/prod/us-east-1.yaml"
+    },
+    {
+      "title": "Find the commit that introduced the problematic version",
+      "url": "llms-txt#find-the-commit-that-introduced-the-problematic-version"
+    },
+    {
+      "title": "Revert the specific commit",
+      "url": "llms-txt#revert-the-specific-commit"
+    },
+    {
+      "title": "Or reset to a known good state",
+      "url": "llms-txt#or-reset-to-a-known-good-state"
+    },
+    {
+      "title": "Validate the rollback",
+      "url": "llms-txt#validate-the-rollback"
+    },
+    {
+      "title": "Plan to see what will change",
+      "url": "llms-txt#plan-to-see-what-will-change"
+    },
+    {
+      "title": "Apply the rollback",
+      "url": "llms-txt#apply-the-rollback"
+    },
+    {
+      "title": "Quick sanity check - verify stack config points to correct folder",
+      "url": "llms-txt#quick-sanity-check---verify-stack-config-points-to-correct-folder"
+    },
+    {
+      "title": "Should show: component: vpc/v1.12.3",
+      "url": "llms-txt#should-show:-component:-vpc/v1.12.3"
+    },
+    {
+      "title": "TRUE VERIFICATION - plan should show no changes",
+      "url": "llms-txt#true-verification---plan-should-show-no-changes"
+    },
+    {
+      "title": "Should output: No changes. Your infrastructure matches the configuration.",
+      "url": "llms-txt#should-output:-no-changes.-your-infrastructure-matches-the-configuration."
+    },
+    {
+      "title": "Vendor manifest for component management",
+      "url": "llms-txt#vendor-manifest-for-component-management"
+    },
+    {
+      "title": "Vendor manifest tracking all component sources and versions",
+      "url": "llms-txt#vendor-manifest-tracking-all-component-sources-and-versions"
+    },
+    {
+      "title": "Pull all configured components",
+      "url": "llms-txt#pull-all-configured-components"
+    },
+    {
+      "title": "Pull specific component",
+      "url": "llms-txt#pull-specific-component"
+    },
+    {
+      "title": "Pull with specific version override",
+      "url": "llms-txt#pull-with-specific-version-override"
+    },
+    {
+      "title": "Dry run to see what would be vendored",
+      "url": "llms-txt#dry-run-to-see-what-would-be-vendored"
+    },
+    {
+      "title": "Local Modifications",
+      "url": "llms-txt#local-modifications"
+    },
+    {
+      "title": "Update all vendored components",
+      "url": "llms-txt#update-all-vendored-components"
+    },
+    {
+      "title": "Update specific component",
+      "url": "llms-txt#update-specific-component"
+    },
+    {
+      "title": "Update with specific version",
+      "url": "llms-txt#update-with-specific-version"
+    },
+    {
+      "title": "Dry run to preview changes",
+      "url": "llms-txt#dry-run-to-preview-changes"
+    },
+    {
+      "title": "vendor.yaml - Update component version",
+      "url": "llms-txt#vendor.yaml---update-component-version"
+    },
+    {
+      "title": "Track all component sources in vendor.yaml",
+      "url": "llms-txt#track-all-component-sources-in-vendor.yaml"
+    },
+    {
+      "title": "Divergence Documentation",
+      "url": "llms-txt#divergence-documentation"
+    },
+    {
+      "title": "Check Git history for the vendored component",
+      "url": "llms-txt#check-git-history-for-the-vendored-component"
+    },
+    {
+      "title": "Revert to a previous commit",
+      "url": "llms-txt#revert-to-a-previous-commit"
+    },
+    {
+      "title": "Or use Git to revert the vendor pull",
+      "url": "llms-txt#or-use-git-to-revert-the-vendor-pull"
+    },
+    {
+      "title": "Validate the rollback",
+      "url": "llms-txt#validate-the-rollback"
+    },
+    {
+      "title": "Apply the rollback",
+      "url": "llms-txt#apply-the-rollback"
+    },
+    {
+      "title": "vendor.yaml - Specify the previous version",
+      "url": "llms-txt#vendor.yaml---specify-the-previous-version"
+    },
+    {
+      "title": "Re-vendor the previous version",
+      "url": "llms-txt#re-vendor-the-previous-version"
+    },
+    {
+      "title": "This will overwrite local changes - use with caution!",
+      "url": "llms-txt#this-will-overwrite-local-changes---use-with-caution!"
+    },
+    {
+      "title": "If vendored components are committed to Git",
+      "url": "llms-txt#if-vendored-components-are-committed-to-git"
+    },
+    {
+      "title": "GOOD: Consistent SemVer",
+      "url": "llms-txt#good:-consistent-semver"
+    },
+    {
+      "title": "BAD: Mixing schemes",
+      "url": "llms-txt#bad:-mixing-schemes"
+    },
+    {
+      "title": "Versioning Policy",
+      "url": "llms-txt#versioning-policy"
+    },
+    {
+      "title": "Safe and predictable - the function receives and returns proper YAML types",
+      "url": "llms-txt#safe-and-predictable---the-function-receives-and-returns-proper-yaml-types"
+    },
+    {
+      "title": "DANGEROUS - template functions can break YAML structure",
+      "url": "llms-txt#dangerous---template-functions-can-break-yaml-structure"
+    },
+    {
+      "title": "If the template returns multi-line text or special characters, YAML parsing fails",
+      "url": "llms-txt#if-the-template-returns-multi-line-text-or-special-characters,-yaml-parsing-fails"
+    },
+    {
+      "title": "Global `settings` section",
+      "url": "llms-txt#global-`settings`-section"
+    },
+    {
+      "title": "It will be added and deep-merged to the `settings` section of all components",
+      "url": "llms-txt#it-will-be-added-and-deep-merged-to-the-`settings`-section-of-all-components"
+    },
+    {
+      "title": "Read a simple value (string, number, boolean) from the store",
+      "url": "llms-txt#read-a-simple-value-(string,-number,-boolean)-from-the-store"
+    },
+    {
+      "title": "Read a complex object (e.g. map) from the store and get an individual value (attribute) from the result",
+      "url": "llms-txt#read-a-complex-object-(e.g.-map)-from-the-store-and-get-an-individual-value-(attribute)-from-the-result"
+    },
+    {
+      "title": "`Go` templates in Atmos manifests",
+      "url": "llms-txt#`go`-templates-in-atmos-manifests"
+    },
+    {
+      "title": "WRONG - Template output may break indentation",
+      "url": "llms-txt#wrong---template-output-may-break-indentation"
+    },
+    {
+      "title": "BETTER - Use YAML function",
+      "url": "llms-txt#better---use-yaml-function"
+    },
+    {
+      "title": "WRONG - Colons and quotes in output break YAML",
+      "url": "llms-txt#wrong---colons-and-quotes-in-output-break-yaml"
+    },
+    {
+      "title": "BETTER - Use proper quoting or YAML functions",
+      "url": "llms-txt#better---use-proper-quoting-or-yaml-functions"
+    },
+    {
+      "title": "WRONG - Template always returns strings",
+      "url": "llms-txt#wrong---template-always-returns-strings"
+    },
+    {
+      "title": "BETTER - Use YAML for proper types",
+      "url": "llms-txt#better---use-yaml-for-proper-types"
+    },
+    {
+      "title": "globals.yaml",
+      "url": "llms-txt#globals.yaml"
+    },
+    {
+      "title": "In your component stack",
+      "url": "llms-txt#in-your-component-stack"
+    },
+    {
+      "title": "globals.yaml",
+      "url": "llms-txt#globals.yaml"
+    },
+    {
+      "title": "component stack",
+      "url": "llms-txt#component-stack"
+    },
+    {
+      "title": "globals.yaml",
+      "url": "llms-txt#globals.yaml"
+    },
+    {
+      "title": "dev.yaml",
+      "url": "llms-txt#dev.yaml"
+    },
+    {
+      "title": "globals.yaml",
+      "url": "llms-txt#globals.yaml"
+    },
+    {
+      "title": "component stack",
+      "url": "llms-txt#component-stack"
+    },
+    {
+      "title": "Use single quotes to wrap expressions containing double quotes",
+      "url": "llms-txt#use-single-quotes-to-wrap-expressions-containing-double-quotes"
+    },
+    {
+      "title": "Keep default values with mixed quotes readable by surrounding the expression with single quotes",
+      "url": "llms-txt#keep-default-values-with-mixed-quotes-readable-by-surrounding-the-expression-with-single-quotes"
+    },
+    {
+      "title": "Extension is detected as .json (query string ignored)",
+      "url": "llms-txt#extension-is-detected-as-.json-(query-string-ignored)"
+    },
+    {
+      "title": "Extension is detected as .yaml (fragment ignored)",
+      "url": "llms-txt#extension-is-detected-as-.yaml-(fragment-ignored)"
+    },
+    {
+      "title": "Extension is detected from the path (query/fragment ignored)",
+      "url": "llms-txt#extension-is-detected-from-the-path-(query/fragment-ignored)"
+    },
+    {
+      "title": "The `config` folder is relative to the `base_path` setting in `atmos.yaml`",
+      "url": "llms-txt#the-`config`-folder-is-relative-to-the-`base_path`-setting-in-`atmos.yaml`"
+    },
+    {
+      "title": "Download the remote file using `go-getter` and assign the `components.terraform.component-1.settings` section",
+      "url": "llms-txt#download-the-remote-file-using-`go-getter`-and-assign-the-`components.terraform.component-1.settings`-section"
+    },
+    {
+      "title": "from the file to the `settings` section in the current stack",
+      "url": "llms-txt#from-the-file-to-the-`settings`-section-in-the-current-stack"
+    },
+    {
+      "title": "Extract a field from a JSON object",
+      "url": "llms-txt#extract-a-field-from-a-json-object"
+    },
+    {
+      "title": "Get the first item from an array",
+      "url": "llms-txt#get-the-first-item-from-an-array"
+    },
+    {
+      "title": "Extract nested values with a default",
+      "url": "llms-txt#extract-nested-values-with-a-default"
+    },
+    {
+      "title": "Process the output of type list from the `atmos.Component` template function in the provided stack",
+      "url": "llms-txt#process-the-output-of-type-list-from-the-`atmos.component`-template-function-in-the-provided-stack"
+    },
+    {
+      "title": "Process the output of type map from the `atmos.Component` template function in the current stack",
+      "url": "llms-txt#process-the-output-of-type-map-from-the-`atmos.component`-template-function-in-the-current-stack"
+    },
+    {
+      "title": "EKS cluster",
+      "url": "llms-txt#eks-cluster"
+    },
+    {
+      "title": "Allow ingress only from the allowed CIDR blocks",
+      "url": "llms-txt#allow-ingress-only-from-the-allowed-cidr-blocks"
+    },
+    {
+      "title": "RDS cluster",
+      "url": "llms-txt#rds-cluster"
+    },
+    {
+      "title": "Allow ingress only from the allowed CIDR blocks",
+      "url": "llms-txt#allow-ingress-only-from-the-allowed-cidr-blocks"
+    },
+    {
+      "title": "Istio Ingress Gateway",
+      "url": "llms-txt#istio-ingress-gateway"
+    },
+    {
+      "title": "Allow ingress only from the allowed CIDR blocks",
+      "url": "llms-txt#allow-ingress-only-from-the-allowed-cidr-blocks"
+    },
+    {
+      "title": "Use single quotes around the expression to allow double quotes inside brackets",
+      "url": "llms-txt#use-single-quotes-around-the-expression-to-allow-double-quotes-inside-brackets"
+    },
+    {
+      "title": "Access map keys with special characters",
+      "url": "llms-txt#access-map-keys-with-special-characters"
+    },
+    {
+      "title": "Access nested maps with special characters in multiple levels",
+      "url": "llms-txt#access-nested-maps-with-special-characters-in-multiple-levels"
+    },
+    {
+      "title": "Combine with stack templating",
+      "url": "llms-txt#combine-with-stack-templating"
+    },
+    {
+      "title": "atmos.yaml CLI config",
+      "url": "llms-txt#atmos.yaml-cli-config"
+    },
+    {
+      "title": "Integrations",
+      "url": "llms-txt#integrations"
+    },
+    {
+      "title": "Why Does Atmos Exist?",
+      "url": "llms-txt#why-does-atmos-exist?"
+    },
+    {
+      "title": "What stage are you at?",
+      "url": "llms-txt#what-stage-are-you-at?"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Advanced Tutorial",
+      "url": "llms-txt#advanced-tutorial"
+    },
+    {
+      "title": "CLI config is loaded from the following locations (from lowest to highest priority):",
+      "url": "llms-txt#cli-config-is-loaded-from-the-following-locations-(from-lowest-to-highest-priority):"
+    },
+    {
+      "title": "system dir ('/usr/local/etc/atmos' on Linux, '%LOCALAPPDATA%/atmos' on Windows)",
+      "url": "llms-txt#system-dir-('/usr/local/etc/atmos'-on-linux,-'%localappdata%/atmos'-on-windows)"
+    },
+    {
+      "title": "home dir (~/.atmos)",
+      "url": "llms-txt#home-dir-(~/.atmos)"
+    },
+    {
+      "title": "current directory",
+      "url": "llms-txt#current-directory"
+    },
+    {
+      "title": "ENV vars",
+      "url": "llms-txt#env-vars"
+    },
+    {
+      "title": "Command-line arguments",
+      "url": "llms-txt#command-line-arguments"
+    },
+    {
+      "title": "It supports POSIX-style Globs for file names/paths (double-star '**' is supported)",
+      "url": "llms-txt#it-supports-posix-style-globs-for-file-names/paths-(double-star-'**'-is-supported)"
+    },
+    {
+      "title": "https://en.wikipedia.org/wiki/Glob_(programming)",
+      "url": "llms-txt#https://en.wikipedia.org/wiki/glob_(programming)"
+    },
+    {
+      "title": "Base path for components, stacks and workflows configurations.",
+      "url": "llms-txt#base-path-for-components,-stacks-and-workflows-configurations."
+    },
+    {
+      "title": "Can also be set using 'ATMOS_BASE_PATH' ENV var, or '--base-path' command-line argument.",
+      "url": "llms-txt#can-also-be-set-using-'atmos_base_path'-env-var,-or-'--base-path'-command-line-argument."
+    },
+    {
+      "title": "Supports both absolute and relative paths.",
+      "url": "llms-txt#supports-both-absolute-and-relative-paths."
+    },
+    {
+      "title": "If not provided or is an empty string, 'components.terraform.base_path', 'components.helmfile.base_path', 'stacks.base_path'",
+      "url": "llms-txt#if-not-provided-or-is-an-empty-string,-'components.terraform.base_path',-'components.helmfile.base_path',-'stacks.base_path'"
+    },
+    {
+      "title": "and 'workflows.base_path' are independent settings (supporting both absolute and relative paths).",
+      "url": "llms-txt#and-'workflows.base_path'-are-independent-settings-(supporting-both-absolute-and-relative-paths)."
+    },
+    {
+      "title": "If 'base_path' is provided, 'components.terraform.base_path', 'components.helmfile.base_path', 'stacks.base_path'",
+      "url": "llms-txt#if-'base_path'-is-provided,-'components.terraform.base_path',-'components.helmfile.base_path',-'stacks.base_path'"
+    },
+    {
+      "title": "and 'workflows.base_path' are considered paths relative to 'base_path'.",
+      "url": "llms-txt#and-'workflows.base_path'-are-considered-paths-relative-to-'base_path'."
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Integrations",
+      "url": "llms-txt#integrations"
+    },
+    {
+      "title": "Validation schemas (for validating atmos stacks and components)",
+      "url": "llms-txt#validation-schemas-(for-validating-atmos-stacks-and-components)"
+    },
+    {
+      "title": "Validation schemas (for validating atmos stacks and components)",
+      "url": "llms-txt#validation-schemas-(for-validating-atmos-stacks-and-components)"
+    },
+    {
+      "title": "Other defaults for the `core` tenant/OU",
+      "url": "llms-txt#other-defaults-for-the-`core`-tenant/ou"
+    },
+    {
+      "title": "Other defaults for the `plat` tenant/OU",
+      "url": "llms-txt#other-defaults-for-the-`plat`-tenant/ou"
+    },
+    {
+      "title": "Other defaults for the `us-east-2` region",
+      "url": "llms-txt#other-defaults-for-the-`us-east-2`-region"
+    },
+    {
+      "title": "Other defaults for the `us-west-2` region",
+      "url": "llms-txt#other-defaults-for-the-`us-west-2`-region"
+    },
+    {
+      "title": "Other defaults for the `dev` stage/account",
+      "url": "llms-txt#other-defaults-for-the-`dev`-stage/account"
+    },
+    {
+      "title": "Other defaults for the `prod` stage/account",
+      "url": "llms-txt#other-defaults-for-the-`prod`-stage/account"
+    },
+    {
+      "title": "Other defaults for the `staging` stage/account",
+      "url": "llms-txt#other-defaults-for-the-`staging`-stage/account"
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Import the tenant and region mixins, and the defaults for the components from the `catalog`.",
+      "url": "llms-txt#import-the-tenant-and-region-mixins,-and-the-defaults-for-the-components-from-the-`catalog`."
+    },
+    {
+      "title": "`import` supports POSIX-style Globs for file names/paths (double-star `**` is supported).",
+      "url": "llms-txt#`import`-supports-posix-style-globs-for-file-names/paths-(double-star-`**`-is-supported)."
+    },
+    {
+      "title": "File extensions are optional (if not specified, `.yaml` is used by default).",
+      "url": "llms-txt#file-extensions-are-optional-(if-not-specified,-`.yaml`-is-used-by-default)."
+    },
+    {
+      "title": "Execute the workflow `plan-all-vpc-flow-logs` from the workflow manifest `networking.yaml`",
+      "url": "llms-txt#execute-the-workflow-`plan-all-vpc-flow-logs`-from-the-workflow-manifest-`networking.yaml`"
+    },
+    {
+      "title": "Execute the workflow `plan-all-vpc` from the workflow manifest `networking.yaml`",
+      "url": "llms-txt#execute-the-workflow-`plan-all-vpc`-from-the-workflow-manifest-`networking.yaml`"
+    },
+    {
+      "title": "Execute the workflow `apply-all-components` from the workflow manifest `networking.yaml`",
+      "url": "llms-txt#execute-the-workflow-`apply-all-components`-from-the-workflow-manifest-`networking.yaml`"
+    },
+    {
+      "title": "Execute the workflow `validate-all-vpc-flow-logs` from the workflow manifest `validation.yaml`",
+      "url": "llms-txt#execute-the-workflow-`validate-all-vpc-flow-logs`-from-the-workflow-manifest-`validation.yaml`"
+    },
+    {
+      "title": "Execute the workflow `validate-all-vpc` from the workflow manifest `validation.yaml`",
+      "url": "llms-txt#execute-the-workflow-`validate-all-vpc`-from-the-workflow-manifest-`validation.yaml`"
+    },
+    {
+      "title": "`plat` OU, `dev` account, `us-east-2` and `us-west-2` regions",
+      "url": "llms-txt#`plat`-ou,-`dev`-account,-`us-east-2`-and-`us-west-2`-regions"
+    },
+    {
+      "title": "`plat` OU, `staging` account, `us-east-2` and `us-west-2` regions",
+      "url": "llms-txt#`plat`-ou,-`staging`-account,-`us-east-2`-and-`us-west-2`-regions"
+    },
+    {
+      "title": "`plat` OU, `prod` account, `us-east-2` and `us-west-2` regions",
+      "url": "llms-txt#`plat`-ou,-`prod`-account,-`us-east-2`-and-`us-west-2`-regions"
+    },
+    {
+      "title": "`plat` OU, `dev` account, `us-east-2` and `us-west-2` regions",
+      "url": "llms-txt#`plat`-ou,-`dev`-account,-`us-east-2`-and-`us-west-2`-regions"
+    },
+    {
+      "title": "`plat` OU, `staging` account, `us-east-2` and `us-west-2` regions",
+      "url": "llms-txt#`plat`-ou,-`staging`-account,-`us-east-2`-and-`us-west-2`-regions"
+    },
+    {
+      "title": "`plat` OU, `prod` account, `us-east-2` and `us-west-2` regions",
+      "url": "llms-txt#`plat`-ou,-`prod`-account,-`us-east-2`-and-`us-west-2`-regions"
+    },
+    {
+      "title": "Execute the workflow `apply-all-components` from the workflow manifest `networking`",
+      "url": "llms-txt#execute-the-workflow-`apply-all-components`-from-the-workflow-manifest-`networking`"
+    },
+    {
+      "title": "Provision the first weather station",
+      "url": "llms-txt#provision-the-first-weather-station"
+    },
+    {
+      "title": "Provision the second weather station",
+      "url": "llms-txt#provision-the-second-weather-station"
+    },
+    {
+      "title": "Custom CLI commands",
+      "url": "llms-txt#custom-cli-commands"
+    },
+    {
+      "title": "Use Nested Custom Commands",
+      "url": "llms-txt#use-nested-custom-commands"
+    },
+    {
+      "title": "Execute the workflow `plan-all-vpc-flow-logs` from the workflow manifest `weather.yaml`",
+      "url": "llms-txt#execute-the-workflow-`plan-all-vpc-flow-logs`-from-the-workflow-manifest-`weather.yaml`"
+    },
+    {
+      "title": "Execute the workflow `apply-all-components` from the workflow manifest `weather.yaml`",
+      "url": "llms-txt#execute-the-workflow-`apply-all-components`-from-the-workflow-manifest-`weather.yaml`"
+    },
+    {
+      "title": "Execute the workflow `apply-all-components` from the workflow manifest `networking`",
+      "url": "llms-txt#execute-the-workflow-`apply-all-components`-from-the-workflow-manifest-`networking`"
+    },
+    {
+      "title": "Run any Atmos command with the --heatmap flag",
+      "url": "llms-txt#run-any-atmos-command-with-the---heatmap-flag"
+    },
+    {
+      "title": "Track which functions consume the most time",
+      "url": "llms-txt#track-which-functions-consume-the-most-time"
+    },
+    {
+      "title": "Focus on functions with high CPU Time",
+      "url": "llms-txt#focus-on-functions-with-high-cpu-time"
+    },
+    {
+      "title": "Baseline measurement",
+      "url": "llms-txt#baseline-measurement"
+    },
+    {
+      "title": "After optimization",
+      "url": "llms-txt#after-optimization"
+    },
+    {
+      "title": "Compare results",
+      "url": "llms-txt#compare-results"
+    },
+    {
+      "title": "Capture performance in automated pipelines",
+      "url": "llms-txt#capture-performance-in-automated-pipelines"
+    },
+    {
+      "title": "Parse for regression detection",
+      "url": "llms-txt#parse-for-regression-detection"
+    },
+    {
+      "title": "Create an alias for convenient usage",
+      "url": "llms-txt#create-an-alias-for-convenient-usage"
+    },
+    {
+      "title": "Use during development",
+      "url": "llms-txt#use-during-development"
+    },
+    {
+      "title": "CPU profiling (default)",
+      "url": "llms-txt#cpu-profiling-(default)"
+    },
+    {
+      "title": "Memory heap profiling",
+      "url": "llms-txt#memory-heap-profiling"
+    },
+    {
+      "title": "Execution trace profiling",
+      "url": "llms-txt#execution-trace-profiling"
+    },
+    {
+      "title": "Goroutine profiling",
+      "url": "llms-txt#goroutine-profiling"
+    },
+    {
+      "title": "CPU profile (30-second sample)",
+      "url": "llms-txt#cpu-profile-(30-second-sample)"
+    },
+    {
+      "title": "Memory allocation profile",
+      "url": "llms-txt#memory-allocation-profile"
+    },
+    {
+      "title": "Goroutine profile",
+      "url": "llms-txt#goroutine-profile"
+    },
+    {
+      "title": "Web interface",
+      "url": "llms-txt#web-interface"
+    },
+    {
+      "title": "Interactive text mode",
+      "url": "llms-txt#interactive-text-mode"
+    },
+    {
+      "title": "Web interface (requires Graphviz: brew install graphviz)",
+      "url": "llms-txt#web-interface-(requires-graphviz:-brew-install-graphviz)"
+    },
+    {
+      "title": "Direct text output",
+      "url": "llms-txt#direct-text-output"
+    },
+    {
+      "title": "Use go tool trace for execution traces",
+      "url": "llms-txt#use-go-tool-trace-for-execution-traces"
+    },
+    {
+      "title": "Opens web interface showing:",
+      "url": "llms-txt#opens-web-interface-showing:"
+    },
+    {
+      "title": "- Timeline view of goroutines",
+      "url": "llms-txt#--timeline-view-of-goroutines"
+    },
+    {
+      "title": "- Network blocking profile",
+      "url": "llms-txt#--network-blocking-profile"
+    },
+    {
+      "title": "- Synchronization blocking profile",
+      "url": "llms-txt#--synchronization-blocking-profile"
+    },
+    {
+      "title": "- System call blocking profile",
+      "url": "llms-txt#--system-call-blocking-profile"
+    },
+    {
+      "title": "Profile CPU usage in slow operations",
+      "url": "llms-txt#profile-cpu-usage-in-slow-operations"
+    },
+    {
+      "title": "Profile memory usage",
+      "url": "llms-txt#profile-memory-usage"
+    },
+    {
+      "title": "Profile detailed execution",
+      "url": "llms-txt#profile-detailed-execution"
+    },
+    {
+      "title": "Analyze results",
+      "url": "llms-txt#analyze-results"
+    },
+    {
+      "title": "File-based memory profiling",
+      "url": "llms-txt#file-based-memory-profiling"
+    },
+    {
+      "title": "Analyze",
+      "url": "llms-txt#analyze"
+    },
+    {
+      "title": "Server-based memory profiling",
+      "url": "llms-txt#server-based-memory-profiling"
+    },
+    {
+      "title": "In another terminal",
+      "url": "llms-txt#in-another-terminal"
+    },
+    {
+      "title": "Combine for comprehensive analysis",
+      "url": "llms-txt#combine-for-comprehensive-analysis"
+    },
+    {
+      "title": "View quick heatmap summary",
+      "url": "llms-txt#view-quick-heatmap-summary"
+    },
+    {
+      "title": "Then deep dive with pprof",
+      "url": "llms-txt#then-deep-dive-with-pprof"
+    },
+    {
+      "title": "Ensure you're using the latest Atmos version",
+      "url": "llms-txt#ensure-you're-using-the-latest-atmos-version"
+    },
+    {
+      "title": "Ensure directory exists",
+      "url": "llms-txt#ensure-directory-exists"
+    },
+    {
+      "title": "Check supported types",
+      "url": "llms-txt#check-supported-types"
+    },
+    {
+      "title": "Use text-based analysis instead",
+      "url": "llms-txt#use-text-based-analysis-instead"
+    },
+    {
+      "title": "Use different port",
+      "url": "llms-txt#use-different-port"
+    },
+    {
+      "title": "Quick performance check with heatmap",
+      "url": "llms-txt#quick-performance-check-with-heatmap"
+    },
+    {
+      "title": "Deep analysis with pprof if issues found",
+      "url": "llms-txt#deep-analysis-with-pprof-if-issues-found"
+    },
+    {
+      "title": "ci-performance-check.sh",
+      "url": "llms-txt#ci-performance-check.sh"
+    },
+    {
+      "title": "Run with heatmap for quick metrics",
+      "url": "llms-txt#run-with-heatmap-for-quick-metrics"
+    },
+    {
+      "title": "Extract elapsed time",
+      "url": "llms-txt#extract-elapsed-time"
+    },
+    {
+      "title": "Check for regression (e.g., > 500ms)",
+      "url": "llms-txt#check-for-regression-(e.g.,->-500ms)"
+    },
+    {
+      "title": "Use both tools for comprehensive analysis",
+      "url": "llms-txt#use-both-tools-for-comprehensive-analysis"
+    },
+    {
+      "title": "View heatmap summary immediately",
+      "url": "llms-txt#view-heatmap-summary-immediately"
+    },
+    {
+      "title": "Then analyze with pprof",
+      "url": "llms-txt#then-analyze-with-pprof"
+    },
+    {
+      "title": "Run our docker image",
+      "url": "llms-txt#run-our-docker-image"
+    },
+    {
+      "title": "Run our docker image",
+      "url": "llms-txt#run-our-docker-image"
+    },
+    {
+      "title": "Check the plan looks good and doesn't have 'TODO' anywhere if so, be sure to run `bin/random-pet.sh`)",
+      "url": "llms-txt#check-the-plan-looks-good-and-doesn't-have-'todo'-anywhere-if-so,-be-sure-to-run-`bin/random-pet.sh`)"
+    },
+    {
+      "title": "Authenticate once",
+      "url": "llms-txt#authenticate-once"
+    },
+    {
+      "title": "Verify who you are",
+      "url": "llms-txt#verify-who-you-are"
+    },
+    {
+      "title": "Use with Terraform, Helmfile, or any tool",
+      "url": "llms-txt#use-with-terraform,-helmfile,-or-any-tool"
+    },
+    {
+      "title": "Terraform",
+      "url": "llms-txt#terraform"
+    },
+    {
+      "title": "Helmfile",
+      "url": "llms-txt#helmfile"
+    },
+    {
+      "title": "Export credentials for other tools",
+      "url": "llms-txt#export-credentials-for-other-tools"
+    },
+    {
+      "title": "Just for authentication",
+      "url": "llms-txt#just-for-authentication"
+    },
+    {
+      "title": "Now use any AWS tool",
+      "url": "llms-txt#now-use-any-aws-tool"
+    },
+    {
+      "title": "Traditional workflow - credentials persist indefinitely",
+      "url": "llms-txt#traditional-workflow---credentials-persist-indefinitely"
+    },
+    {
+      "title": "... hours later, you forget which identity is active ...",
+      "url": "llms-txt#...-hours-later,-you-forget-which-identity-is-active-..."
+    },
+    {
+      "title": "Terminal 1: Production operations",
+      "url": "llms-txt#terminal-1:-production-operations"
+    },
+    {
+      "title": "Terminal 2: Staging testing",
+      "url": "llms-txt#terminal-2:-staging-testing"
+    },
+    {
+      "title": "Terminal 3: Development work",
+      "url": "llms-txt#terminal-3:-development-work"
+    },
+    {
+      "title": "Now in authenticated shell, scoped ONLY to production",
+      "url": "llms-txt#now-in-authenticated-shell,-scoped-only-to-production"
+    },
+    {
+      "title": "Back to parent shellâcredentials never existed here",
+      "url": "llms-txt#back-to-parent-shellâcredentials-never-existed-here"
+    },
+    {
+      "title": "Isolated shell with ONLY dev credentials",
+      "url": "llms-txt#isolated-shell-with-only-dev-credentials"
+    },
+    {
+      "title": "Run multiple migration steps without re-authenticating",
+      "url": "llms-txt#run-multiple-migration-steps-without-re-authenticating"
+    },
+    {
+      "title": "Terminal 1: Monitoring production",
+      "url": "llms-txt#terminal-1:-monitoring-production"
+    },
+    {
+      "title": "Terminal 2: Testing in staging",
+      "url": "llms-txt#terminal-2:-testing-in-staging"
+    },
+    {
+      "title": "Terminal 3: Development work",
+      "url": "llms-txt#terminal-3:-development-work"
+    },
+    {
+      "title": "Show only AWS SSO providers",
+      "url": "llms-txt#show-only-aws-sso-providers"
+    },
+    {
+      "title": "View specific identities",
+      "url": "llms-txt#view-specific-identities"
+    },
+    {
+      "title": "Show all providers (no identities)",
+      "url": "llms-txt#show-all-providers-(no-identities)"
+    },
+    {
+      "title": "Export to JSON for CI/CD validation",
+      "url": "llms-txt#export-to-json-for-ci/cd-validation"
+    },
+    {
+      "title": "Generate documentation",
+      "url": "llms-txt#generate-documentation"
+    },
+    {
+      "title": "Check if specific provider exists",
+      "url": "llms-txt#check-if-specific-provider-exists"
+    },
+    {
+      "title": "Provenance Legend:",
+      "url": "llms-txt#provenance-legend:"
+    },
+    {
+      "title": "â [1] Defined in parent stack",
+      "url": "llms-txt#â-[1]-defined-in-parent-stack"
+    },
+    {
+      "title": "â [N] Inherited/imported (N=2+ levels deep)",
+      "url": "llms-txt#â-[n]-inherited/imported-(n=2+-levels-deep)"
+    },
+    {
+      "title": "â´ Computed/templated",
+      "url": "llms-txt#â´-computed/templated"
+    },
+    {
+      "title": "View provenance for any component",
+      "url": "llms-txt#view-provenance-for-any-component"
+    },
+    {
+      "title": "Save to file",
+      "url": "llms-txt#save-to-file"
+    },
+    {
+      "title": "Find specific values with grep",
+      "url": "llms-txt#find-specific-values-with-grep"
+    },
+    {
+      "title": "JSON format",
+      "url": "llms-txt#json-format"
+    },
+    {
+      "title": "Morning: Login for the day",
+      "url": "llms-txt#morning:-login-for-the-day"
+    },
+    {
+      "title": "Evening: Logout for security",
+      "url": "llms-txt#evening:-logout-for-security"
+    },
+    {
+      "title": "Switch from dev to prod",
+      "url": "llms-txt#switch-from-dev-to-prod"
+    },
+    {
+      "title": "Later: Switch back",
+      "url": "llms-txt#later:-switch-back"
+    },
+    {
+      "title": "Check current status",
+      "url": "llms-txt#check-current-status"
+    },
+    {
+      "title": "Clear and re-authenticate",
+      "url": "llms-txt#clear-and-re-authenticate"
+    },
+    {
+      "title": "Verify",
+      "url": "llms-txt#verify"
+    },
+    {
+      "title": "Interactive review of what to remove",
+      "url": "llms-txt#interactive-review-of-what-to-remove"
+    },
+    {
+      "title": "Select \"All identities\" to clear everything",
+      "url": "llms-txt#select-\"all-identities\"-to-clear-everything"
+    },
+    {
+      "title": "Audit logs show complete cleanup",
+      "url": "llms-txt#audit-logs-show-complete-cleanup"
+    },
+    {
+      "title": "Interactive mode",
+      "url": "llms-txt#interactive-mode"
+    },
+    {
+      "title": "Or logout from specific identity",
+      "url": "llms-txt#or-logout-from-specific-identity"
+    },
+    {
+      "title": "See all options",
+      "url": "llms-txt#see-all-options"
+    },
+    {
+      "title": "No identity specified - shows interactive selector",
+      "url": "llms-txt#no-identity-specified---shows-interactive-selector"
+    },
+    {
+      "title": "Use arrow keys to navigate and Enter to select:",
+      "url": "llms-txt#use-arrow-keys-to-navigate-and-enter-to-select:"
+    },
+    {
+      "title": "View the latest release",
+      "url": "llms-txt#view-the-latest-release"
+    },
+    {
+      "title": "View a specific version",
+      "url": "llms-txt#view-a-specific-version"
+    },
+    {
+      "title": "Works without 'v' prefix too",
+      "url": "llms-txt#works-without-'v'-prefix-too"
+    },
+    {
+      "title": "Old workflow",
+      "url": "llms-txt#old-workflow"
+    },
+    {
+      "title": "Now open browser, navigate to GitHub releases...",
+      "url": "llms-txt#now-open-browser,-navigate-to-github-releases..."
+    },
+    {
+      "title": "Scroll through releases, click around...",
+      "url": "llms-txt#scroll-through-releases,-click-around..."
+    },
+    {
+      "title": "Copy version number...",
+      "url": "llms-txt#copy-version-number..."
+    },
+    {
+      "title": "New workflow",
+      "url": "llms-txt#new-workflow"
+    },
+    {
+      "title": "View releases in a formatted table",
+      "url": "llms-txt#view-releases-in-a-formatted-table"
+    },
+    {
+      "title": "Read release notes with 'atmos version show'",
+      "url": "llms-txt#read-release-notes-with-'atmos-version-show'"
+    },
+    {
+      "title": "All without leaving your terminal",
+      "url": "llms-txt#all-without-leaving-your-terminal"
+    },
+    {
+      "title": "Export release data for compliance",
+      "url": "llms-txt#export-release-data-for-compliance"
+    },
+    {
+      "title": "Script version discovery in CI/CD",
+      "url": "llms-txt#script-version-discovery-in-ci/cd"
+    },
+    {
+      "title": "Quickly review recent changes before upgrading",
+      "url": "llms-txt#quickly-review-recent-changes-before-upgrading"
+    },
+    {
+      "title": "Compare current version to latest",
+      "url": "llms-txt#compare-current-version-to-latest"
+    },
+    {
+      "title": "Check that your release published correctly",
+      "url": "llms-txt#check-that-your-release-published-correctly"
+    },
+    {
+      "title": "Inspect release artifacts and download URLs",
+      "url": "llms-txt#inspect-release-artifacts-and-download-urls"
+    },
+    {
+      "title": "Show 20 releases",
+      "url": "llms-txt#show-20-releases"
+    },
+    {
+      "title": "Skip first 10, show next 10",
+      "url": "llms-txt#skip-first-10,-show-next-10"
+    },
+    {
+      "title": "Show releases since specific date (ISO 8601 format)",
+      "url": "llms-txt#show-releases-since-specific-date-(iso-8601-format)"
+    },
+    {
+      "title": "By default, only stable releases are shown",
+      "url": "llms-txt#by-default,-only-stable-releases-are-shown"
+    },
+    {
+      "title": "Use this flag to include prereleases",
+      "url": "llms-txt#use-this-flag-to-include-prereleases"
+    },
+    {
+      "title": "JSON output",
+      "url": "llms-txt#json-output"
+    },
+    {
+      "title": "YAML output",
+      "url": "llms-txt#yaml-output"
+    },
+    {
+      "title": "Get your token from GitHub CLI",
+      "url": "llms-txt#get-your-token-from-github-cli"
+    },
+    {
+      "title": "Or set GITHUB_TOKEN directly",
+      "url": "llms-txt#or-set-github_token-directly"
+    },
+    {
+      "title": "List last 5 releases",
+      "url": "llms-txt#list-last-5-releases"
+    },
+    {
+      "title": "View details on the latest",
+      "url": "llms-txt#view-details-on-the-latest"
+    },
+    {
+      "title": "Export all releases to JSON",
+      "url": "llms-txt#export-all-releases-to-json"
+    },
+    {
+      "title": "Parse with jq for specific info",
+      "url": "llms-txt#parse-with-jq-for-specific-info"
+    },
+    {
+      "title": "View release details with platform-specific artifacts",
+      "url": "llms-txt#view-release-details-with-platform-specific-artifacts"
+    },
+    {
+      "title": "See artifact sizes and download URLs",
+      "url": "llms-txt#see-artifact-sizes-and-download-urls"
+    },
+    {
+      "title": "Check your current version",
+      "url": "llms-txt#check-your-current-version"
+    },
+    {
+      "title": "Browse available releases",
+      "url": "llms-txt#browse-available-releases"
+    },
+    {
+      "title": "View details on latest",
+      "url": "llms-txt#view-details-on-latest"
+    },
+    {
+      "title": "atmos.yaml (optional - this is the default)",
+      "url": "llms-txt#atmos.yaml-(optional---this-is-the-default)"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "Interactive mode - you'll be prompted for password",
+      "url": "llms-txt#interactive-mode---you'll-be-prompted-for-password"
+    },
+    {
+      "title": "Automation mode - password from environment",
+      "url": "llms-txt#automation-mode---password-from-environment"
+    },
+    {
+      "title": "atmos.yaml (or set ATMOS_KEYRING_TYPE=memory)",
+      "url": "llms-txt#atmos.yaml-(or-set-atmos_keyring_type=memory)"
+    },
+    {
+      "title": ".github/workflows/test.yml",
+      "url": "llms-txt#.github/workflows/test.yml"
+    },
+    {
+      "title": "Override to memory keyring for this session",
+      "url": "llms-txt#override-to-memory-keyring-for-this-session"
+    },
+    {
+      "title": "atmos.yaml (no keyring config needed)",
+      "url": "llms-txt#atmos.yaml-(no-keyring-config-needed)"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "docker-compose.yml or devcontainer.json",
+      "url": "llms-txt#docker-compose.yml-or-devcontainer.json"
+    },
+    {
+      "title": ".github/workflows/integration.yml",
+      "url": "llms-txt#.github/workflows/integration.yml"
+    },
+    {
+      "title": "Test with memory keyring (no persistence)",
+      "url": "llms-txt#test-with-memory-keyring-(no-persistence)"
+    },
+    {
+      "title": "Test with file keyring",
+      "url": "llms-txt#test-with-file-keyring"
+    },
+    {
+      "title": "atmos.yaml",
+      "url": "llms-txt#atmos.yaml"
+    },
+    {
+      "title": "Long form",
+      "url": "llms-txt#long-form"
+    },
+    {
+      "title": "Short form (preferred for brevity)",
+      "url": "llms-txt#short-form-(preferred-for-brevity)"
+    },
+    {
+      "title": "Relative paths work too",
+      "url": "llms-txt#relative-paths-work-too"
+    },
+    {
+      "title": "Build your changes",
+      "url": "llms-txt#build-your-changes"
+    },
+    {
+      "title": "Point the dev binary at your infrastructure repo",
+      "url": "llms-txt#point-the-dev-binary-at-your-infrastructure-repo"
+    },
+    {
+      "title": "No need to change directories or modify PATH",
+      "url": "llms-txt#no-need-to-change-directories-or-modify-path"
+    },
+    {
+      "title": "Before: Manual directory management",
+      "url": "llms-txt#before:-manual-directory-management"
+    },
+    {
+      "title": "After: Explicit and clear",
+      "url": "llms-txt#after:-explicit-and-clear"
+    },
+    {
+      "title": "All atmos commands now run in that directory",
+      "url": "llms-txt#all-atmos-commands-now-run-in-that-directory"
+    },
+    {
+      "title": "Use the default",
+      "url": "llms-txt#use-the-default"
+    },
+    {
+      "title": "Override for specific command",
+      "url": "llms-txt#override-for-specific-command"
+    },
+    {
+      "title": "Change to /infra directory, then look for atmos.yaml in ./config subdirectory",
+      "url": "llms-txt#change-to-/infra-directory,-then-look-for-atmos.yaml-in-./config-subdirectory"
+    },
+    {
+      "title": "This is equivalent to:",
+      "url": "llms-txt#this-is-equivalent-to:"
+    },
+    {
+      "title": "cd /infra",
+      "url": "llms-txt#cd-/infra"
+    },
+    {
+      "title": "atmos --base-path=./config terraform plan vpc -s dev",
+      "url": "llms-txt#atmos---base-path=./config-terraform-plan-vpc--s-dev"
+    },
+    {
+      "title": "Just change working directory (atmos.yaml is in the root)",
+      "url": "llms-txt#just-change-working-directory-(atmos.yaml-is-in-the-root)"
+    },
+    {
+      "title": "Just override project root (stay in current directory)",
+      "url": "llms-txt#just-override-project-root-(stay-in-current-directory)"
+    },
+    {
+      "title": "Both: change directory AND override project root",
+      "url": "llms-txt#both:-change-directory-and-override-project-root"
+    },
+    {
+      "title": "Check production infrastructure",
+      "url": "llms-txt#check-production-infrastructure"
+    },
+    {
+      "title": "Compare with staging",
+      "url": "llms-txt#compare-with-staging"
+    },
+    {
+      "title": "All without leaving your current directory",
+      "url": "llms-txt#all-without-leaving-your-current-directory"
+    },
+    {
+      "title": "Test local changes against test environment",
+      "url": "llms-txt#test-local-changes-against-test-environment"
+    },
+    {
+      "title": "Once satisfied, use installed version for production",
+      "url": "llms-txt#once-satisfied,-use-installed-version-for-production"
+    },
+    {
+      "title": "Script can stay in your tools repo while operating on infrastructure",
+      "url": "llms-txt#script-can-stay-in-your-tools-repo-while-operating-on-infrastructure"
+    },
+    {
+      "title": "Upgrade to the latest version",
+      "url": "llms-txt#upgrade-to-the-latest-version"
+    },
+    {
+      "title": "or download from GitHub releases",
+      "url": "llms-txt#or-download-from-github-releases"
+    },
+    {
+      "title": "Start using the flag immediately",
+      "url": "llms-txt#start-using-the-flag-immediately"
+    },
+    {
+      "title": "Or set it as an environment variable for your session",
+      "url": "llms-txt#or-set-it-as-an-environment-variable-for-your-session"
+    },
+    {
+      "title": "Quick console access",
+      "url": "llms-txt#quick-console-access"
+    },
+    {
+      "title": "Access specific AWS services",
+      "url": "llms-txt#access-specific-aws-services"
+    },
+    {
+      "title": "Longer sessions for complex tasks",
+      "url": "llms-txt#longer-sessions-for-complex-tasks"
+    },
+    {
+      "title": "Print URL for scripts",
+      "url": "llms-txt#print-url-for-scripts"
+    },
+    {
+      "title": "S3 Console (using alias)",
+      "url": "llms-txt#s3-console-(using-alias)"
+    },
+    {
+      "title": "EC2 Console (using alias)",
+      "url": "llms-txt#ec2-console-(using-alias)"
+    },
+    {
+      "title": "CloudFormation Console (using alias)",
+      "url": "llms-txt#cloudformation-console-(using-alias)"
+    },
+    {
+      "title": "Lambda Console (using alias)",
+      "url": "llms-txt#lambda-console-(using-alias)"
+    },
+    {
+      "title": "DynamoDB Console (using alias)",
+      "url": "llms-txt#dynamodb-console-(using-alias)"
+    },
+    {
+      "title": "Full URL format",
+      "url": "llms-txt#full-url-format"
+    },
+    {
+      "title": "Print URL without opening browser",
+      "url": "llms-txt#print-url-without-opening-browser"
+    },
+    {
+      "title": "Copy to clipboard (macOS)",
+      "url": "llms-txt#copy-to-clipboard-(macos)"
+    },
+    {
+      "title": "Copy to clipboard (Linux)",
+      "url": "llms-txt#copy-to-clipboard-(linux)"
+    },
+    {
+      "title": "Use in scripts",
+      "url": "llms-txt#use-in-scripts"
+    },
+    {
+      "title": "2-hour session for extended work",
+      "url": "llms-txt#2-hour-session-for-extended-work"
+    },
+    {
+      "title": "Maximum AWS session (12 hours)",
+      "url": "llms-txt#maximum-aws-session-(12-hours)"
+    },
+    {
+      "title": "Rapidly access production console during an incident",
+      "url": "llms-txt#rapidly-access-production-console-during-an-incident"
+    },
+    {
+      "title": "Quickly switch between different account consoles",
+      "url": "llms-txt#quickly-switch-between-different-account-consoles"
+    },
+    {
+      "title": "Generate console URL in CI/CD for manual verification",
+      "url": "llms-txt#generate-console-url-in-ci/cd-for-manual-verification"
+    },
+    {
+      "title": "Use custom issuer to track which team accessed the console",
+      "url": "llms-txt#use-custom-issuer-to-track-which-team-accessed-the-console"
+    },
+    {
+      "title": "Must initialize Terraform for each dependency",
+      "url": "llms-txt#must-initialize-terraform-for-each-dependency"
+    },
+    {
+      "title": "Direct blob storage access",
+      "url": "llms-txt#direct-blob-storage-access"
+    },
+    {
+      "title": "Before",
+      "url": "llms-txt#before"
+    },
+    {
+      "title": "After",
+      "url": "llms-txt#after"
+    },
+    {
+      "title": "Before: Required store configuration",
+      "url": "llms-txt#before:-required-store-configuration"
+    },
+    {
+      "title": "After: Direct state access",
+      "url": "llms-txt#after:-direct-state-access"
+    },
+    {
+      "title": "Check your version",
+      "url": "llms-txt#check-your-version"
+    },
+    {
+      "title": "Describe a component using Azure backend",
+      "url": "llms-txt#describe-a-component-using-azure-backend"
+    },
+    {
+      "title": "Use !terraform.state in your stack configs",
+      "url": "llms-txt#use-!terraform.state-in-your-stack-configs"
+    },
+    {
+      "title": "(See examples above)",
+      "url": "llms-txt#(see-examples-above)"
+    },
+    {
+      "title": "Component A references Component B",
+      "url": "llms-txt#component-a-references-component-b"
+    },
+    {
+      "title": "Component B references Component A",
+      "url": "llms-txt#component-b-references-component-a"
+    },
+    {
+      "title": "Re-login to store credentials in new location",
+      "url": "llms-txt#re-login-to-store-credentials-in-new-location"
+    },
+    {
+      "title": "Add to ~/.zshrc or ~/.bash_profile",
+      "url": "llms-txt#add-to-~/.zshrc-or-~/.bash_profile"
+    },
+    {
+      "title": "Override Geodesic's system XDG paths to use home directory",
+      "url": "llms-txt#override-geodesic's-system-xdg-paths-to-use-home-directory"
+    },
+    {
+      "title": "Linux",
+      "url": "llms-txt#linux"
+    },
+    {
+      "title": "macOS (new)",
+      "url": "llms-txt#macos-(new)"
+    },
+    {
+      "title": "Same path on both platforms!",
+      "url": "llms-txt#same-path-on-both-platforms!"
+    },
+    {
+      "title": "atmos.yaml - minimal config for auth only",
+      "url": "llms-txt#atmos.yaml---minimal-config-for-auth-only"
+    },
+    {
+      "title": "Get authenticated credentials",
+      "url": "llms-txt#get-authenticated-credentials"
+    },
+    {
+      "title": "Or export credentials for your scripts",
+      "url": "llms-txt#or-export-credentials-for-your-scripts"
+    },
+    {
+      "title": "List all vendored components",
+      "url": "llms-txt#list-all-vendored-components"
+    },
+    {
+      "title": "Pull component updates",
+      "url": "llms-txt#pull-component-updates"
+    },
+    {
+      "title": "View component documentation",
+      "url": "llms-txt#view-component-documentation"
+    },
+    {
+      "title": "Still sees progress on stderr:",
+      "url": "llms-txt#still-sees-progress-on-stderr:"
+    },
+    {
+      "title": "â¹ Loading configuration...",
+      "url": "llms-txt#â¹-loading-configuration..."
+    },
+    {
+      "title": "â Output retrieved!",
+      "url": "llms-txt#â-output-retrieved!"
+    },
+    {
+      "title": "Interactive selector appears",
+      "url": "llms-txt#interactive-selector-appears"
+    },
+    {
+      "title": "Or use the ATMOS_IDENTITY environment variable",
+      "url": "llms-txt#or-use-the-atmos_identity-environment-variable"
+    },
+    {
+      "title": "All of these work and display \"Dev-Admin\"",
+      "url": "llms-txt#all-of-these-work-and-display-\"dev-admin\""
+    },
+    {
+      "title": "Clear only dev-admin cached credentials (keyring + files)",
+      "url": "llms-txt#clear-only-dev-admin-cached-credentials-(keyring-+-files)"
+    },
+    {
+      "title": "Other identities using the same provider remain authenticated",
+      "url": "llms-txt#other-identities-using-the-same-provider-remain-authenticated"
+    },
+    {
+      "title": "Use dev-account for all steps that don't specify their own identity",
+      "url": "llms-txt#use-dev-account-for-all-steps-that-don't-specify-their-own-identity"
+    },
+    {
+      "title": "Override the configured identity at runtime",
+      "url": "llms-txt#override-the-configured-identity-at-runtime"
+    },
+    {
+      "title": "Use production credentials instead of developer",
+      "url": "llms-txt#use-production-credentials-instead-of-developer"
+    },
+    {
+      "title": "Authenticate to an identity",
+      "url": "llms-txt#authenticate-to-an-identity"
+    },
+    {
+      "title": "Use in workflows",
+      "url": "llms-txt#use-in-workflows"
+    },
+    {
+      "title": "Use in custom commands",
+      "url": "llms-txt#use-in-custom-commands"
+    },
+    {
+      "title": "Use auth shell (now with proper environment variables!)",
+      "url": "llms-txt#use-auth-shell-(now-with-proper-environment-variables!)"
+    },
+    {
+      "title": "Build provider",
+      "url": "llms-txt#build-provider"
+    },
+    {
+      "title": "Test with Atmos",
+      "url": "llms-txt#test-with-atmos"
+    },
+    {
+      "title": "Edit provider code",
+      "url": "llms-txt#edit-provider-code"
+    },
+    {
+      "title": "Rebuild",
+      "url": "llms-txt#rebuild"
+    },
+    {
+      "title": "Test with Atmos",
+      "url": "llms-txt#test-with-atmos"
+    },
+    {
+      "title": "stacks/dev.yaml",
+      "url": "llms-txt#stacks/dev.yaml"
+    },
+    {
+      "title": "stacks/prod.yaml",
+      "url": "llms-txt#stacks/prod.yaml"
+    },
+    {
+      "title": "Without filtering: overwhelming",
+      "url": "llms-txt#without-filtering:-overwhelming"
+    },
+    {
+      "title": "With filtering: manageable",
+      "url": "llms-txt#with-filtering:-manageable"
+    },
+    {
+      "title": "Only the 3 stacks that actually have the vpc component",
+      "url": "llms-txt#only-the-3-stacks-that-actually-have-the-vpc-component"
+    },
+    {
+      "title": "Custom command definition",
+      "url": "llms-txt#custom-command-definition"
+    },
+    {
+      "title": "User runs with double spaces",
+      "url": "llms-txt#user-runs-with-double-spaces"
+    },
+    {
+      "title": "Before fix: Shell saw",
+      "url": "llms-txt#before-fix:-shell-saw"
+    },
+    {
+      "title": "After fix: Shell sees",
+      "url": "llms-txt#after-fix:-shell-sees"
+    },
+    {
+      "title": "Dangerous input",
+      "url": "llms-txt#dangerous-input"
+    },
+    {
+      "title": "Before fix: Shell parsed as TWO commands",
+      "url": "llms-txt#before-fix:-shell-parsed-as-two-commands"
+    },
+    {
+      "title": "After fix: Shell sees ONE safe command",
+      "url": "llms-txt#after-fix:-shell-sees-one-safe-command"
+    },
+    {
+      "title": "If you were doing this to preserve double spaces:",
+      "url": "llms-txt#if-you-were-doing-this-to-preserve-double-spaces:"
+    },
+    {
+      "title": "After fix, this becomes:",
+      "url": "llms-txt#after-fix,-this-becomes:"
+    },
+    {
+      "title": "Change to:",
+      "url": "llms-txt#change-to:"
+    },
+    {
+      "title": "If you had complex nested quoting to work around the bug:",
+      "url": "llms-txt#if-you-had-complex-nested-quoting-to-work-around-the-bug:"
+    },
+    {
+      "title": "This still works, but you can now simplify to:",
+      "url": "llms-txt#this-still-works,-but-you-can-now-simplify-to:"
+    },
+    {
+      "title": "Test whitespace preservation",
+      "url": "llms-txt#test-whitespace-preservation"
+    },
+    {
+      "title": "Should output: hello  world (with 2 spaces)",
+      "url": "llms-txt#should-output:-hello--world-(with-2-spaces)"
+    },
+    {
+      "title": "Test special characters stay literal",
+      "url": "llms-txt#test-special-characters-stay-literal"
+    },
+    {
+      "title": "Should output: $HOME (literal, not expanded)",
+      "url": "llms-txt#should-output:-$home-(literal,-not-expanded)"
+    },
+    {
+      "title": "Test semicolons are safe",
+      "url": "llms-txt#test-semicolons-are-safe"
+    },
+    {
+      "title": "Should output: foo;bar (not execute 'bar' as command)",
+      "url": "llms-txt#should-output:-foo;bar-(not-execute-'bar'-as-command)"
+    },
+    {
+      "title": "This always worked and continues to work",
+      "url": "llms-txt#this-always-worked-and-continues-to-work"
+    },
+    {
+      "title": "Before: Spaces might have been lost",
+      "url": "llms-txt#before:-spaces-might-have-been-lost"
+    },
+    {
+      "title": "After: Spaces are preserved correctly",
+      "url": "llms-txt#after:-spaces-are-preserved-correctly"
+    },
+    {
+      "title": "Stack configuration contains YAML function",
+      "url": "llms-txt#stack-configuration-contains-yaml-function"
+    },
+    {
+      "title": "components:",
+      "url": "llms-txt#components:"
+    },
+    {
+      "title": "terraform:",
+      "url": "llms-txt#terraform:"
+    },
+    {
+      "title": "app:",
+      "url": "llms-txt#app:"
+    },
+    {
+      "title": "vars:",
+      "url": "llms-txt#vars:"
+    },
+    {
+      "title": "vpc_id: !terraform.output vpc.vpc_id",
+      "url": "llms-txt#vpc_id:-!terraform.output-vpc.vpc_id"
+    },
+    {
+      "title": "Command fails with timeout",
+      "url": "llms-txt#command-fails-with-timeout"
+    },
+    {
+      "title": "Shows interactive selector to choose from configured identities",
+      "url": "llms-txt#shows-interactive-selector-to-choose-from-configured-identities"
+    },
+    {
+      "title": "Describe stacks with specific identity",
+      "url": "llms-txt#describe-stacks-with-specific-identity"
+    },
+    {
+      "title": "Describe component with identity (shorthand)",
+      "url": "llms-txt#describe-component-with-identity-(shorthand)"
+    },
+    {
+      "title": "Describe affected components with authentication",
+      "url": "llms-txt#describe-affected-components-with-authentication"
+    },
+    {
+      "title": "Describe dependents with identity",
+      "url": "llms-txt#describe-dependents-with-identity"
+    },
+    {
+      "title": "Use --identity without a value for interactive selection",
+      "url": "llms-txt#use---identity-without-a-value-for-interactive-selection"
+    },
+    {
+      "title": "Atmos shows selector:",
+      "url": "llms-txt#atmos-shows-selector:"
+    },
+    {
+      "title": "Authenticate and filter results",
+      "url": "llms-txt#authenticate-and-filter-results"
+    },
+    {
+      "title": "Authenticate and query specific values",
+      "url": "llms-txt#authenticate-and-query-specific-values"
+    },
+    {
+      "title": "Authenticate when describing affected components",
+      "url": "llms-txt#authenticate-when-describing-affected-components"
+    },
+    {
+      "title": "Disable YAML function processing",
+      "url": "llms-txt#disable-yaml-function-processing"
+    },
+    {
+      "title": "Disable Go template processing",
+      "url": "llms-txt#disable-go-template-processing"
+    },
+    {
+      "title": "Disable both",
+      "url": "llms-txt#disable-both"
+    },
+    {
+      "title": "Development environment",
+      "url": "llms-txt#development-environment"
+    },
+    {
+      "title": "Production environment (read-only)",
+      "url": "llms-txt#production-environment-(read-only)"
+    },
+    {
+      "title": "In GitHub Actions, GitLab CI, etc.",
+      "url": "llms-txt#in-github-actions,-gitlab-ci,-etc."
+    },
+    {
+      "title": "Component references outputs from another component",
+      "url": "llms-txt#component-references-outputs-from-another-component"
+    },
+    {
+      "title": "vars:",
+      "url": "llms-txt#vars:"
+    },
+    {
+      "title": "vpc_id: !terraform.output vpc.vpc_id",
+      "url": "llms-txt#vpc_id:-!terraform.output-vpc.vpc_id"
+    },
+    {
+      "title": "Describe with authentication",
+      "url": "llms-txt#describe-with-authentication"
+    },
+    {
+      "title": "Get all stack configurations with resolved YAML functions",
+      "url": "llms-txt#get-all-stack-configurations-with-resolved-yaml-functions"
+    },
+    {
+      "title": "Works when auth not configured - uses ambient credentials",
+      "url": "llms-txt#works-when-auth-not-configured---uses-ambient-credentials"
+    },
+    {
+      "title": "Fails when auth not configured but --identity provided",
+      "url": "llms-txt#fails-when-auth-not-configured-but---identity-provided"
+    },
+    {
+      "title": "Error: authentication not configured in atmos.yaml",
+      "url": "llms-txt#error:-authentication-not-configured-in-atmos.yaml"
+    },
+    {
+      "title": "the --identity flag requires authentication to be configured in atmos.yaml with at least one identity",
+      "url": "llms-txt#the---identity-flag-requires-authentication-to-be-configured-in-atmos.yaml-with-at-least-one-identity"
+    },
+    {
+      "title": "Good: CI/CD with explicit identity",
+      "url": "llms-txt#good:-ci/cd-with-explicit-identity"
+    },
+    {
+      "title": "Better: Use flag for clarity",
+      "url": "llms-txt#better:-use-flag-for-clarity"
+    },
+    {
+      "title": "These are equivalent:",
+      "url": "llms-txt#these-are-equivalent:"
+    },
+    {
+      "title": "Interactive identity selection",
+      "url": "llms-txt#interactive-identity-selection"
+    },
+    {
+      "title": "Specific identity",
+      "url": "llms-txt#specific-identity"
+    },
+    {
+      "title": "In CI/CD",
+      "url": "llms-txt#in-ci/cd"
+    },
+    {
+      "title": "Create service principal and assign Contributor role",
+      "url": "llms-txt#create-service-principal-and-assign-contributor-role"
+    },
+    {
+      "title": "Output includes:",
+      "url": "llms-txt#output-includes:"
+    },
+    {
+      "title": "{",
+      "url": "llms-txt#{"
+    },
+    {
+      "title": "\"appId\": \"YOUR_CLIENT_ID\",",
+      "url": "llms-txt#\"appid\":-\"your_client_id\","
+    },
+    {
+      "title": "\"displayName\": \"atmos-automation\",",
+      "url": "llms-txt#\"displayname\":-\"atmos-automation\","
+    },
+    {
+      "title": "\"password\": \"YOUR_CLIENT_SECRET\",",
+      "url": "llms-txt#\"password\":-\"your_client_secret\","
+    },
+    {
+      "title": "\"tenant\": \"YOUR_TENANT_ID\"",
+      "url": "llms-txt#\"tenant\":-\"your_tenant_id\""
+    },
+    {
+      "title": "}",
+      "url": "llms-txt#}"
+    },
+    {
+      "title": "Set credentials in environment",
+      "url": "llms-txt#set-credentials-in-environment"
+    },
+    {
+      "title": "Authenticate",
+      "url": "llms-txt#authenticate"
+    },
+    {
+      "title": "Run Terraform",
+      "url": "llms-txt#run-terraform"
+    },
+    {
+      "title": "Deploy to dev",
+      "url": "llms-txt#deploy-to-dev"
+    },
+    {
+      "title": "Deploy to staging",
+      "url": "llms-txt#deploy-to-staging"
+    },
+    {
+      "title": "Deploy to prod",
+      "url": "llms-txt#deploy-to-prod"
+    },
+    {
+      "title": "Example: Grant Contributor role to a service principal",
+      "url": "llms-txt#example:-grant-contributor-role-to-a-service-principal"
+    },
+    {
+      "title": "Configure Azure authentication in atmos.yaml",
+      "url": "llms-txt#configure-azure-authentication-in-atmos.yaml"
+    },
+    {
+      "title": "(See examples above)",
+      "url": "llms-txt#(see-examples-above)"
+    },
+    {
+      "title": "Authenticate to Azure",
+      "url": "llms-txt#authenticate-to-azure"
+    },
+    {
+      "title": "Check your authentication status",
+      "url": "llms-txt#check-your-authentication-status"
+    },
+    {
+      "title": "Use with Terraform",
+      "url": "llms-txt#use-with-terraform"
+    },
+    {
+      "title": "List all configured identities",
+      "url": "llms-txt#list-all-configured-identities"
+    },
+    {
+      "title": "Get environment variables for an identity",
+      "url": "llms-txt#get-environment-variables-for-an-identity"
+    },
+    {
+      "title": "Spawn a shell with Azure credentials",
+      "url": "llms-txt#spawn-a-shell-with-azure-credentials"
+    },
+    {
+      "title": "Via CLI flag",
+      "url": "llms-txt#via-cli-flag"
+    },
+    {
+      "title": "Via environment variable",
+      "url": "llms-txt#via-environment-variable"
+    },
+    {
+      "title": "Error: Could not find atmos.yaml",
+      "url": "llms-txt#error:-could-not-find-atmos.yaml"
+    },
+    {
+      "title": "Error",
+      "url": "llms-txt#error"
+    },
+    {
+      "title": "Workflow Error",
+      "url": "llms-txt#workflow-error"
+    },
+    {
+      "title": "Override config file settings",
+      "url": "llms-txt#override-config-file-settings"
+    },
+    {
+      "title": "Use environment variable",
+      "url": "llms-txt#use-environment-variable"
+    },
+    {
+      "title": "CLI flag overrides environment variable",
+      "url": "llms-txt#cli-flag-overrides-environment-variable"
+    },
+    {
+      "title": "Every single time in CI",
+      "url": "llms-txt#every-single-time-in-ci"
+    },
+    {
+      "title": "Every single time as a developer",
+      "url": "llms-txt#every-single-time-as-a-developer"
+    },
+    {
+      "title": "Developer: One flag replaces 5+ configuration settings",
+      "url": "llms-txt#developer:-one-flag-replaces-5+-configuration-settings"
+    },
+    {
+      "title": "CI: Set once in your workflow",
+      "url": "llms-txt#ci:-set-once-in-your-workflow"
+    },
+    {
+      "title": "Platform Engineer: One flag, consistent settings",
+      "url": "llms-txt#platform-engineer:-one-flag,-consistent-settings"
+    },
+    {
+      "title": "profiles/developer/auth.yaml",
+      "url": "llms-txt#profiles/developer/auth.yaml"
+    },
+    {
+      "title": "profiles/developer/settings.yaml",
+      "url": "llms-txt#profiles/developer/settings.yaml"
+    },
+    {
+      "title": "profiles/ci/auth.yaml",
+      "url": "llms-txt#profiles/ci/auth.yaml"
+    },
+    {
+      "title": "profiles/ci/settings.yaml",
+      "url": "llms-txt#profiles/ci/settings.yaml"
+    },
+    {
+      "title": ".github/workflows/deploy.yml",
+      "url": "llms-txt#.github/workflows/deploy.yml"
+    },
+    {
+      "title": "Base security settings + developer overrides",
+      "url": "llms-txt#base-security-settings-+-developer-overrides"
+    },
+    {
+      "title": "Hope you don't forget any of these",
+      "url": "llms-txt#hope-you-don't-forget-any-of-these"
+    },
+    {
+      "title": "stacks/catalog/myapp.yaml",
+      "url": "llms-txt#stacks/catalog/myapp.yaml"
+    },
+    {
+      "title": "stacks/ue1-prod.yaml",
+      "url": "llms-txt#stacks/ue1-prod.yaml"
+    },
+    {
+      "title": "End of day",
+      "url": "llms-txt#end-of-day"
+    },
+    {
+      "title": "Next morning - instant re-authentication",
+      "url": "llms-txt#next-morning---instant-re-authentication"
+    }
+  ]
+}

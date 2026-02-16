@@ -1,0 +1,28 @@
+{
+  "title": "Inspect release artifacts and download URLs",
+  "content": "atmos version show v1.95.0\nbash\n$ atmos version list\nbash",
+  "code_samples": [
+    {
+      "code": "## How to Use It\n\n### Basic Usage\n\nList the last 10 releases (default):",
+      "language": "unknown"
+    },
+    {
+      "code": "List more releases with pagination:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How to Use It",
+      "id": "how-to-use-it"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    }
+  ],
+  "url": "llms-txt#inspect-release-artifacts-and-download-urls",
+  "links": []
+}

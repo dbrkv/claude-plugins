@@ -1,0 +1,23 @@
+{
+  "title": "- System call blocking profile",
+  "content": "(pprof) top\n    Showing nodes accounting for 230ms, 95.83% of 240ms total\n    Dropped 15 nodes (cum <= 1.20ms)\n    flat flat% sum% cum cum%\n    80ms 33.33% 33.33% 80ms 33.33% github.com/cloudposse/atmos/internal/exec.processStackConfig\n    60ms 25.00% 58.33% 60ms 25.00% gopkg.in/yaml.v3.(*Decoder).Decode\n    40ms 16.67% 75.00% 40ms 16.67% github.com/cloudposse/atmos/pkg/utils.ProcessTmplWithDatasources\n    30ms 12.50% 87.50% 30ms 12.50% encoding/json.(*Decoder).Decode\n    20ms 8.33% 95.83% 20ms 8.33% github.com/cloudposse/atmos/pkg/stack.ProcessStackConfig\n    shell",
+  "code_samples": [
+    {
+      "code": "<Terminal title=\"Sample pprof output\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n**Understanding pprof Data:**\n- **flat**: Time spent in the function itself\n- **cum**: Cumulative time (function + callees)\n- **flat%**: Percentage of total execution time\n- **sum%**: Cumulative percentage up to this function\n\nFocus optimization on functions with high **flat** time and **flat%**.\n\n### Common Scenarios\n\n**Performance Optimization:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Common Scenarios",
+      "id": "common-scenarios"
+    }
+  ],
+  "url": "llms-txt#--system-call-blocking-profile",
+  "links": []
+}

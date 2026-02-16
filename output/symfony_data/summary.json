@@ -1,0 +1,1753 @@
+{
+  "name": "symfony",
+  "total_pages": 436,
+  "base_url": "https://symfony.com/doc",
+  "llms_txt_detected": false,
+  "llms_txt_variant": null,
+  "pages": [
+    {
+      "title": "Symfony Documentation",
+      "url": "https://symfony.com/doc"
+    },
+    {
+      "title": "Installing & Setting up the Symfony Framework",
+      "url": "https://symfony.com/doc/7.3/setup.html"
+    },
+    {
+      "title": "Create your First Page in Symfony",
+      "url": "https://symfony.com/doc/7.3/page_creation.html"
+    },
+    {
+      "title": "Controller",
+      "url": "https://symfony.com/doc/7.3/controller.html"
+    },
+    {
+      "title": "Routing",
+      "url": "https://symfony.com/doc/7.3/routing.html"
+    },
+    {
+      "title": "Creating and Using Templates",
+      "url": "https://symfony.com/doc/7.3/templates.html"
+    },
+    {
+      "title": "Configuring Symfony",
+      "url": "https://symfony.com/doc/7.3/configuration.html"
+    },
+    {
+      "title": "Configuring in the Kernel",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/kernel.html"
+    },
+    {
+      "title": "The HttpKernel Component",
+      "url": "https://symfony.com/doc/7.3/components/http_kernel.html"
+    },
+    {
+      "title": "Events and Event Listeners",
+      "url": "https://symfony.com/doc/7.3/event_dispatcher.html"
+    },
+    {
+      "title": "The Bundle System",
+      "url": "https://symfony.com/doc/7.3/bundles.html"
+    },
+    {
+      "title": "The Contracts Component",
+      "url": "https://symfony.com/doc/7.3/components/contracts.html"
+    },
+    {
+      "title": "Service Container",
+      "url": "https://symfony.com/doc/7.3/service_container.html"
+    },
+    {
+      "title": "Databases and the Doctrine ORM",
+      "url": "https://symfony.com/doc/7.3/doctrine.html"
+    },
+    {
+      "title": "Forms",
+      "url": "https://symfony.com/doc/7.3/forms.html"
+    },
+    {
+      "title": "Sessions",
+      "url": "https://symfony.com/doc/7.3/session.html"
+    },
+    {
+      "title": "Testing",
+      "url": "https://symfony.com/doc/7.3/testing.html"
+    },
+    {
+      "title": "How to Customize Error Pages",
+      "url": "https://symfony.com/doc/7.3/controller/error_pages.html"
+    },
+    {
+      "title": "Logging",
+      "url": "https://symfony.com/doc/7.3/logging.html"
+    },
+    {
+      "title": "Cache",
+      "url": "https://symfony.com/doc/7.3/cache.html"
+    },
+    {
+      "title": "Console Commands",
+      "url": "https://symfony.com/doc/7.3/console.html"
+    },
+    {
+      "title": "Sending Emails with Mailer",
+      "url": "https://symfony.com/doc/7.3/mailer.html"
+    },
+    {
+      "title": "Validation",
+      "url": "https://symfony.com/doc/7.3/validation.html"
+    },
+    {
+      "title": "Messenger: Sync & Queued Message Handling",
+      "url": "https://symfony.com/doc/7.3/messenger.html"
+    },
+    {
+      "title": "Scheduler",
+      "url": "https://symfony.com/doc/7.3/scheduler.html"
+    },
+    {
+      "title": "Security",
+      "url": "https://symfony.com/doc/7.3/security.html"
+    },
+    {
+      "title": "Translations",
+      "url": "https://symfony.com/doc/7.3/translation.html"
+    },
+    {
+      "title": "How to Use the Serializer",
+      "url": "https://symfony.com/doc/7.3/serializer.html"
+    },
+    {
+      "title": "Creating and Sending Notifications",
+      "url": "https://symfony.com/doc/7.3/notifier.html"
+    },
+    {
+      "title": "Password Hashing and Verification",
+      "url": "https://symfony.com/doc/7.3/security/passwords.html"
+    },
+    {
+      "title": "Authenticating against an LDAP server",
+      "url": "https://symfony.com/doc/7.3/security/ldap.html"
+    },
+    {
+      "title": "Front-end Tools: Handling CSS & JavaScript",
+      "url": "https://symfony.com/doc/7.3/frontend.html"
+    },
+    {
+      "title": "How to Implement CSRF Protection",
+      "url": "https://symfony.com/doc/7.3/security/csrf.html"
+    },
+    {
+      "title": "Webpack Encore Documentation",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/index.html"
+    },
+    {
+      "title": "HTTP Client",
+      "url": "https://symfony.com/doc/7.3/http_client.html"
+    },
+    {
+      "title": "Asset Preloading and Resource Hints with HTTP/2 and WebLink",
+      "url": "https://symfony.com/doc/7.3/web_link.html"
+    },
+    {
+      "title": "AssetMapper: Simple, Modern CSS & JS Management",
+      "url": "https://symfony.com/doc/7.3/frontend/asset_mapper.html"
+    },
+    {
+      "title": "The Filesystem Component",
+      "url": "https://symfony.com/doc/7.3/components/filesystem.html"
+    },
+    {
+      "title": "The ExpressionLanguage Component",
+      "url": "https://symfony.com/doc/7.3/components/expression_language.html"
+    },
+    {
+      "title": "The Lock Component",
+      "url": "https://symfony.com/doc/7.3/components/lock.html"
+    },
+    {
+      "title": "Workflow",
+      "url": "https://symfony.com/doc/7.3/workflow.html"
+    },
+    {
+      "title": "Webhook",
+      "url": "https://symfony.com/doc/7.3/webhook.html"
+    },
+    {
+      "title": "The UID Component",
+      "url": "https://symfony.com/doc/7.3/components/uid.html"
+    },
+    {
+      "title": "The Yaml Component",
+      "url": "https://symfony.com/doc/7.3/components/yaml.html"
+    },
+    {
+      "title": "Creating and Manipulating Strings",
+      "url": "https://symfony.com/doc/7.3/components/string.html"
+    },
+    {
+      "title": "How to Deploy a Symfony Application",
+      "url": "https://symfony.com/doc/7.3/deployment.html"
+    },
+    {
+      "title": "Performance",
+      "url": "https://symfony.com/doc/7.3/performance.html"
+    },
+    {
+      "title": "HTTP Cache",
+      "url": "https://symfony.com/doc/7.3/http_cache.html"
+    },
+    {
+      "title": "Setting up or Fixing File Permissions",
+      "url": "https://symfony.com/doc/7.3/setup/file_permissions.html"
+    },
+    {
+      "title": "Configuring a Web Server",
+      "url": "https://symfony.com/doc/7.3/setup/web_server_configuration.html"
+    },
+    {
+      "title": "Using Docker with Symfony",
+      "url": "https://symfony.com/doc/7.3/setup/docker.html"
+    },
+    {
+      "title": "Upgrading Existing Applications to Symfony Flex",
+      "url": "https://symfony.com/doc/7.3/setup/flex.html"
+    },
+    {
+      "title": "Symfony CLI",
+      "url": "https://symfony.com/doc/7.3/setup/symfony_cli.html"
+    },
+    {
+      "title": "Using Symfony with Homestead/Vagrant",
+      "url": "https://symfony.com/doc/7.3/setup/homestead.html"
+    },
+    {
+      "title": "Upgrading a Third-Party Bundle for a Major Symfony Version",
+      "url": "https://symfony.com/doc/7.3/setup/bundles.html"
+    },
+    {
+      "title": "How To Configure and Use Flex Private Recipe Repositories",
+      "url": "https://symfony.com/doc/7.3/setup/flex_private_recipes.html"
+    },
+    {
+      "title": "How to Install or Upgrade to the Latest, Unreleased Symfony Version",
+      "url": "https://symfony.com/doc/7.3/setup/unstable_versions.html"
+    },
+    {
+      "title": "Upgrading a Patch Version (e.g. 6.0.0 to 6.0.1)",
+      "url": "https://symfony.com/doc/7.3/setup/upgrade_patch.html"
+    },
+    {
+      "title": "Upgrading a Major Version (e.g. 6.4.0 to 7.0.0)",
+      "url": "https://symfony.com/doc/7.3/setup/upgrade_major.html"
+    },
+    {
+      "title": "Symfony and HTTP Fundamentals",
+      "url": "https://symfony.com/doc/7.3/introduction/http_fundamentals.html"
+    },
+    {
+      "title": "Upgrading a Minor Version (e.g. 6.3.0 to 6.4.0)",
+      "url": "https://symfony.com/doc/7.3/setup/upgrade_minor.html"
+    },
+    {
+      "title": "Symfony versus Flat PHP",
+      "url": "https://symfony.com/doc/7.3/introduction/from_flat_php_to_symfony.html"
+    },
+    {
+      "title": "Extending Action Argument Resolving",
+      "url": "https://symfony.com/doc/7.3/controller/value_resolver.html"
+    },
+    {
+      "title": "Defining Services Dependencies Automatically (Autowiring)",
+      "url": "https://symfony.com/doc/7.3/service_container/autowiring.html"
+    },
+    {
+      "title": "How to Define Controllers as Services",
+      "url": "https://symfony.com/doc/7.3/controller/service.html"
+    },
+    {
+      "title": "The Symfony Framework Best Practices",
+      "url": "https://symfony.com/doc/7.3/best_practices.html"
+    },
+    {
+      "title": "How to Forward Requests to another Controller",
+      "url": "https://symfony.com/doc/7.3/controller/forwarding.html"
+    },
+    {
+      "title": "The HttpFoundation Component",
+      "url": "https://symfony.com/doc/7.3/components/http_foundation.html"
+    },
+    {
+      "title": "How to Upload Files",
+      "url": "https://symfony.com/doc/7.3/controller/upload_file.html"
+    },
+    {
+      "title": "The Expression Syntax",
+      "url": "https://symfony.com/doc/7.3/reference/formats/expression_language.html"
+    },
+    {
+      "title": "Framework Configuration Reference (FrameworkBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/framework.html"
+    },
+    {
+      "title": "How to Create a custom Route Loader",
+      "url": "https://symfony.com/doc/7.3/routing/custom_route_loader.html"
+    },
+    {
+      "title": "Environment Variable Processors",
+      "url": "https://symfony.com/doc/7.3/configuration/env_var_processors.html"
+    },
+    {
+      "title": "The Clock Component",
+      "url": "https://symfony.com/doc/7.3/components/clock.html"
+    },
+    {
+      "title": "How to Retrieve the Request from the Service Container",
+      "url": "https://symfony.com/doc/7.3/service_container/request.html"
+    },
+    {
+      "title": "How to Force HTTPS or HTTP for different URLs",
+      "url": "https://symfony.com/doc/7.3/security/force_https.html"
+    },
+    {
+      "title": "How to Configure Symfony to Work behind a Load Balancer or a Reverse Proxy",
+      "url": "https://symfony.com/doc/7.3/deployment/proxies.html"
+    },
+    {
+      "title": "Looking up Routes from a Database: Symfony CMF DynamicRouter",
+      "url": "https://symfony.com/doc/7.3/routing/routing_from_database.html"
+    },
+    {
+      "title": "Twig Extensions Defined by Symfony",
+      "url": "https://symfony.com/doc/7.3/reference/twig_reference.html"
+    },
+    {
+      "title": "Twig Configuration Reference (TwigBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/twig.html"
+    },
+    {
+      "title": "The Asset Component",
+      "url": "https://symfony.com/doc/7.3/components/asset.html"
+    },
+    {
+      "title": "How to Override any Part of a Bundle",
+      "url": "https://symfony.com/doc/7.3/bundles/override.html"
+    },
+    {
+      "title": "Working with Edge Side Includes",
+      "url": "https://symfony.com/doc/7.3/http_cache/esi.html"
+    },
+    {
+      "title": "Understanding how the Front Controller, Kernel and Environments Work together",
+      "url": "https://symfony.com/doc/7.3/configuration/front_controllers_and_kernel.html"
+    },
+    {
+      "title": "The VarDumper Component",
+      "url": "https://symfony.com/doc/7.3/components/var_dumper.html"
+    },
+    {
+      "title": "How to Work with Service Tags",
+      "url": "https://symfony.com/doc/7.3/service_container/tags.html"
+    },
+    {
+      "title": "Reference Documents",
+      "url": "https://symfony.com/doc/7.3/reference/index.html"
+    },
+    {
+      "title": "The Config Component",
+      "url": "https://symfony.com/doc/7.3/components/config.html"
+    },
+    {
+      "title": "The YAML Format",
+      "url": "https://symfony.com/doc/7.3/reference/formats/yaml.html"
+    },
+    {
+      "title": "How to Keep Sensitive Information Secret",
+      "url": "https://symfony.com/doc/7.3/configuration/secrets.html"
+    },
+    {
+      "title": "How to Work with Compiler Passes",
+      "url": "https://symfony.com/doc/7.3/service_container/compiler_passes.html"
+    },
+    {
+      "title": "The Runtime Component",
+      "url": "https://symfony.com/doc/7.3/components/runtime.html"
+    },
+    {
+      "title": "Profiler",
+      "url": "https://symfony.com/doc/7.3/profiler.html"
+    },
+    {
+      "title": "Building your own Framework with the MicroKernelTrait",
+      "url": "https://symfony.com/doc/7.3/configuration/micro_kernel_trait.html"
+    },
+    {
+      "title": "How to Create Multiple Symfony Applications with a Single Kernel",
+      "url": "https://symfony.com/doc/7.3/configuration/multiple_kernels.html"
+    },
+    {
+      "title": "How to Override Symfony's default Directory Structure",
+      "url": "https://symfony.com/doc/7.3/configuration/override_dir_structure.html"
+    },
+    {
+      "title": "Using Parameters within a Dependency Injection Class",
+      "url": "https://symfony.com/doc/7.3/configuration/using_parameters_in_dic.html"
+    },
+    {
+      "title": "Introduction",
+      "url": "https://symfony.com/doc/7.3/create_framework/introduction.html"
+    },
+    {
+      "title": "Built-in Symfony Events",
+      "url": "https://symfony.com/doc/7.3/reference/events.html"
+    },
+    {
+      "title": "How to Install and Use the Symfony Components",
+      "url": "https://symfony.com/doc/7.3/components/using_components.html"
+    },
+    {
+      "title": "The EventDispatcher Component",
+      "url": "https://symfony.com/doc/7.3/components/event_dispatcher.html"
+    },
+    {
+      "title": "How to Create Friendly Configuration for a Bundle",
+      "url": "https://symfony.com/doc/7.3/bundles/configuration.html"
+    },
+    {
+      "title": "Best Practices for Reusable Bundles",
+      "url": "https://symfony.com/doc/7.3/bundles/best_practices.html"
+    },
+    {
+      "title": "How to Load Service Configuration inside a Bundle",
+      "url": "https://symfony.com/doc/7.3/bundles/extension.html"
+    },
+    {
+      "title": "How to Simplify Configuration of Multiple Bundles",
+      "url": "https://symfony.com/doc/7.3/bundles/prepend_extension.html"
+    },
+    {
+      "title": "How to Create Service Aliases and Mark Services as Private",
+      "url": "https://symfony.com/doc/7.3/service_container/alias_private.html"
+    },
+    {
+      "title": "How to Debug the Service Container & List Services",
+      "url": "https://symfony.com/doc/7.3/service_container/debug.html"
+    },
+    {
+      "title": "Compiling the Container",
+      "url": "https://symfony.com/doc/7.3/components/dependency_injection/compilation.html"
+    },
+    {
+      "title": "Service Subscribers & Locators",
+      "url": "https://symfony.com/doc/7.3/service_container/service_subscribers_locators.html"
+    },
+    {
+      "title": "Service Method Calls and Setter Injection",
+      "url": "https://symfony.com/doc/7.3/service_container/calls.html"
+    },
+    {
+      "title": "How to Configure a Service with a Configurator",
+      "url": "https://symfony.com/doc/7.3/service_container/configurators.html"
+    },
+    {
+      "title": "How to Inject Values Based on Complex Expressions",
+      "url": "https://symfony.com/doc/7.3/service_container/expression_language.html"
+    },
+    {
+      "title": "How to work with Service Definition Objects",
+      "url": "https://symfony.com/doc/7.3/service_container/definitions.html"
+    },
+    {
+      "title": "Types of Injection",
+      "url": "https://symfony.com/doc/7.3/service_container/injection_types.html"
+    },
+    {
+      "title": "Lazy Services",
+      "url": "https://symfony.com/doc/7.3/service_container/lazy_services.html"
+    },
+    {
+      "title": "Using a Factory to Create Services",
+      "url": "https://symfony.com/doc/7.3/service_container/factories.html"
+    },
+    {
+      "title": "How to Import Configuration Files/Resources",
+      "url": "https://symfony.com/doc/7.3/service_container/import.html"
+    },
+    {
+      "title": "How to Make Service Arguments/References Optional",
+      "url": "https://symfony.com/doc/7.3/service_container/optional_dependencies.html"
+    },
+    {
+      "title": "How to Manage Common Dependencies with Parent Services",
+      "url": "https://symfony.com/doc/7.3/service_container/parent_services.html"
+    },
+    {
+      "title": "How to Decorate Services",
+      "url": "https://symfony.com/doc/7.3/service_container/service_decoration.html"
+    },
+    {
+      "title": "Service Closures",
+      "url": "https://symfony.com/doc/7.3/service_container/service_closures.html"
+    },
+    {
+      "title": "How to Define Non Shared Services",
+      "url": "https://symfony.com/doc/7.3/service_container/shared.html"
+    },
+    {
+      "title": "NotNull",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NotNull.html"
+    },
+    {
+      "title": "How to Inject Instances into the Container",
+      "url": "https://symfony.com/doc/7.3/service_container/synthetic_services.html"
+    },
+    {
+      "title": "How to Use Doctrine DBAL",
+      "url": "https://symfony.com/doc/7.3/doctrine/dbal.html"
+    },
+    {
+      "title": "The PropertyInfo Component",
+      "url": "https://symfony.com/doc/7.3/components/property_info.html"
+    },
+    {
+      "title": "Type",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Type.html"
+    },
+    {
+      "title": "Length",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Length.html"
+    },
+    {
+      "title": "UniqueEntity",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/UniqueEntity.html"
+    },
+    {
+      "title": "Referencing Entities with Abstract Classes and Interfaces",
+      "url": "https://symfony.com/doc/7.3/doctrine/resolve_target_entity.html"
+    },
+    {
+      "title": "How to Work with Doctrine Associations / Relations",
+      "url": "https://symfony.com/doc/7.3/doctrine/associations.html"
+    },
+    {
+      "title": "Validation Constraints Reference",
+      "url": "https://symfony.com/doc/7.3/reference/constraints.html"
+    },
+    {
+      "title": "Doctrine Configuration Reference (DoctrineBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/doctrine.html"
+    },
+    {
+      "title": "How to Test a Doctrine Repository",
+      "url": "https://symfony.com/doc/7.3/testing/database.html"
+    },
+    {
+      "title": "Doctrine Events",
+      "url": "https://symfony.com/doc/7.3/doctrine/events.html"
+    },
+    {
+      "title": "How to Register custom DQL Functions",
+      "url": "https://symfony.com/doc/7.3/doctrine/custom_dql_functions.html"
+    },
+    {
+      "title": "How to Work with Multiple Entity Managers and Connections",
+      "url": "https://symfony.com/doc/7.3/doctrine/multiple_entity_managers.html"
+    },
+    {
+      "title": "How to Customize Form Rendering",
+      "url": "https://symfony.com/doc/7.3/form/form_customization.html"
+    },
+    {
+      "title": "Form Types Reference",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types.html"
+    },
+    {
+      "title": "How to Create a Custom Form Field Type",
+      "url": "https://symfony.com/doc/7.3/form/create_custom_field_type.html"
+    },
+    {
+      "title": "How to Embed Forms",
+      "url": "https://symfony.com/doc/7.3/form/embedded.html"
+    },
+    {
+      "title": "Bootstrap 5 Form Theme",
+      "url": "https://symfony.com/doc/7.3/form/bootstrap5.html"
+    },
+    {
+      "title": "How to Work with Form Themes",
+      "url": "https://symfony.com/doc/7.3/form/form_themes.html"
+    },
+    {
+      "title": "How to Use the submit() Function to Handle Form Submissions",
+      "url": "https://symfony.com/doc/7.3/form/direct_submit.html"
+    },
+    {
+      "title": "FormType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/form.html"
+    },
+    {
+      "title": "When and How to Use Data Mappers",
+      "url": "https://symfony.com/doc/7.3/form/data_mappers.html"
+    },
+    {
+      "title": "How to Use Data Transformers",
+      "url": "https://symfony.com/doc/7.3/form/data_transformers.html"
+    },
+    {
+      "title": "How to Use a Form without a Data Class",
+      "url": "https://symfony.com/doc/7.3/form/without_class.html"
+    },
+    {
+      "title": "Configuring Validation Groups in Forms",
+      "url": "https://symfony.com/doc/7.3/form/validation_groups.html"
+    },
+    {
+      "title": "Creating a custom Type Guesser",
+      "url": "https://symfony.com/doc/7.3/form/type_guesser.html"
+    },
+    {
+      "title": "How to Create a Form Type Extension",
+      "url": "https://symfony.com/doc/7.3/form/create_form_type_extension.html"
+    },
+    {
+      "title": "Tailwind CSS Form Theme",
+      "url": "https://symfony.com/doc/7.3/form/tailwindcss.html"
+    },
+    {
+      "title": "Bootstrap 4 Form Theme",
+      "url": "https://symfony.com/doc/7.3/form/bootstrap4.html"
+    },
+    {
+      "title": "How to Disable the Validation of Submitted Data",
+      "url": "https://symfony.com/doc/7.3/form/disabling_validation.html"
+    },
+    {
+      "title": "Form Events",
+      "url": "https://symfony.com/doc/7.3/form/events.html"
+    },
+    {
+      "title": "How to Dynamically Modify Forms Using Form Events",
+      "url": "https://symfony.com/doc/7.3/form/dynamic_form_modification.html"
+    },
+    {
+      "title": "How to Embed a Collection of Forms",
+      "url": "https://symfony.com/doc/7.3/form/form_collections.html"
+    },
+    {
+      "title": "How to Submit a Form with Multiple Buttons",
+      "url": "https://symfony.com/doc/7.3/form/multiple_buttons.html"
+    },
+    {
+      "title": "How to Reduce Code Duplication with \"inherit_data\"",
+      "url": "https://symfony.com/doc/7.3/form/inherit_data_option.html"
+    },
+    {
+      "title": "How to Configure empty Data for a Form Class",
+      "url": "https://symfony.com/doc/7.3/form/use_empty_data.html"
+    },
+    {
+      "title": "How to Unit Test your Forms",
+      "url": "https://symfony.com/doc/7.3/form/unit_testing.html"
+    },
+    {
+      "title": "How to Use the Profiler in a Functional Test",
+      "url": "https://symfony.com/doc/7.3/testing/profiling.html"
+    },
+    {
+      "title": "User Providers",
+      "url": "https://symfony.com/doc/7.3/security/user_providers.html"
+    },
+    {
+      "title": "How to Customize the Bootstrap Process before Running Tests",
+      "url": "https://symfony.com/doc/7.3/testing/bootstrap.html"
+    },
+    {
+      "title": "The DOM Crawler",
+      "url": "https://symfony.com/doc/7.3/testing/dom_crawler.html"
+    },
+    {
+      "title": "The DomCrawler Component",
+      "url": "https://symfony.com/doc/7.3/components/dom_crawler.html"
+    },
+    {
+      "title": "End-to-End Testing",
+      "url": "https://symfony.com/doc/7.3/testing/end_to_end.html"
+    },
+    {
+      "title": "The CssSelector Component",
+      "url": "https://symfony.com/doc/7.3/components/css_selector.html"
+    },
+    {
+      "title": "How to Test the Interaction of several Clients",
+      "url": "https://symfony.com/doc/7.3/testing/insulating_clients.html"
+    },
+    {
+      "title": "How to Configure Monolog to Email Errors",
+      "url": "https://symfony.com/doc/7.3/logging/monolog_email.html"
+    },
+    {
+      "title": "Using the Logger",
+      "url": "https://symfony.com/doc/7.3/components/console/logger.html"
+    },
+    {
+      "title": "How to Log Messages to different Files",
+      "url": "https://symfony.com/doc/7.3/logging/channels_handlers.html"
+    },
+    {
+      "title": "Built-in Symfony Service Tags",
+      "url": "https://symfony.com/doc/7.3/reference/dic_tags.html"
+    },
+    {
+      "title": "How to Add extra Data to Log Messages via a Processor",
+      "url": "https://symfony.com/doc/7.3/logging/processors.html"
+    },
+    {
+      "title": "How to Define a Custom Logging Formatter",
+      "url": "https://symfony.com/doc/7.3/logging/formatter.html"
+    },
+    {
+      "title": "Handlers",
+      "url": "https://symfony.com/doc/7.3/logging/handlers.html"
+    },
+    {
+      "title": "How to Configure Monolog to Exclude Specific HTTP Codes from the Log",
+      "url": "https://symfony.com/doc/7.3/logging/monolog_exclude_http_codes.html"
+    },
+    {
+      "title": "The Cache Component",
+      "url": "https://symfony.com/doc/7.3/components/cache.html"
+    },
+    {
+      "title": "Array Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/array_cache_adapter.html"
+    },
+    {
+      "title": "APCu Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/apcu_adapter.html"
+    },
+    {
+      "title": "How to Configure Monolog to Display Console Messages",
+      "url": "https://symfony.com/doc/7.3/logging/monolog_console.html"
+    },
+    {
+      "title": "Doctrine DBAL Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/doctrine_dbal_adapter.html"
+    },
+    {
+      "title": "Memcached Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/memcached_adapter.html"
+    },
+    {
+      "title": "Filesystem Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/filesystem_adapter.html"
+    },
+    {
+      "title": "PDO Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/pdo_adapter.html"
+    },
+    {
+      "title": "The Messenger Component",
+      "url": "https://symfony.com/doc/7.3/components/messenger.html"
+    },
+    {
+      "title": "Redis Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/redis_adapter.html"
+    },
+    {
+      "title": "Proxy Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/proxy_adapter.html"
+    },
+    {
+      "title": "The Console Component",
+      "url": "https://symfony.com/doc/7.3/components/console.html"
+    },
+    {
+      "title": "Console Input (Arguments & Options)",
+      "url": "https://symfony.com/doc/7.3/console/input.html"
+    },
+    {
+      "title": "Table Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/table.html"
+    },
+    {
+      "title": "Progress Bar",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/progressbar.html"
+    },
+    {
+      "title": "Building a single Command Application",
+      "url": "https://symfony.com/doc/7.3/components/console/single_command_tool.html"
+    },
+    {
+      "title": "How to Call a Command from a Controller",
+      "url": "https://symfony.com/doc/7.3/console/command_in_controller.html"
+    },
+    {
+      "title": "Using Events",
+      "url": "https://symfony.com/doc/7.3/components/console/events.html"
+    },
+    {
+      "title": "How to Call Other Commands",
+      "url": "https://symfony.com/doc/7.3/console/calling_commands.html"
+    },
+    {
+      "title": "How to Color and Style the Console Output",
+      "url": "https://symfony.com/doc/7.3/console/coloring.html"
+    },
+    {
+      "title": "How to Define Commands as Services",
+      "url": "https://symfony.com/doc/7.3/console/commands_as_services.html"
+    },
+    {
+      "title": "How to Hide Console Commands",
+      "url": "https://symfony.com/doc/7.3/console/hide_commands.html"
+    },
+    {
+      "title": "How to Make Commands Lazily Loaded",
+      "url": "https://symfony.com/doc/7.3/console/lazy_commands.html"
+    },
+    {
+      "title": "Prevent Running the Same Console Command Multiple Times",
+      "url": "https://symfony.com/doc/7.3/console/lockable_trait.html"
+    },
+    {
+      "title": "How to Style a Console Command",
+      "url": "https://symfony.com/doc/7.3/console/style.html"
+    },
+    {
+      "title": "Verbosity Levels",
+      "url": "https://symfony.com/doc/7.3/console/verbosity.html"
+    },
+    {
+      "title": "Question Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/questionhelper.html"
+    },
+    {
+      "title": "Formatter Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/formatterhelper.html"
+    },
+    {
+      "title": "Debug Formatter Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/debug_formatter.html"
+    },
+    {
+      "title": "Progress Indicator",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/progressindicator.html"
+    },
+    {
+      "title": "Process Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/processhelper.html"
+    },
+    {
+      "title": "Cursor Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/cursor.html"
+    },
+    {
+      "title": "The Mime Component",
+      "url": "https://symfony.com/doc/7.3/components/mime.html"
+    },
+    {
+      "title": "Blank",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Blank.html"
+    },
+    {
+      "title": "Tree Helper",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/tree.html"
+    },
+    {
+      "title": "The OptionsResolver Component",
+      "url": "https://symfony.com/doc/7.3/components/options_resolver.html"
+    },
+    {
+      "title": "IsFalse",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/IsFalse.html"
+    },
+    {
+      "title": "IsNull",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/IsNull.html"
+    },
+    {
+      "title": "IsTrue",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/IsTrue.html"
+    },
+    {
+      "title": "NotBlank",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NotBlank.html"
+    },
+    {
+      "title": "Charset",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Charset.html"
+    },
+    {
+      "title": "Email",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Email.html"
+    },
+    {
+      "title": "CssColor",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/CssColor.html"
+    },
+    {
+      "title": "Cidr",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Cidr.html"
+    },
+    {
+      "title": "ExpressionSyntax",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/ExpressionSyntax.html"
+    },
+    {
+      "title": "Hostname",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Hostname.html"
+    },
+    {
+      "title": "Ip",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Ip.html"
+    },
+    {
+      "title": "Json",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Json.html"
+    },
+    {
+      "title": "PasswordStrength",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/PasswordStrength.html"
+    },
+    {
+      "title": "MacAddress",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/MacAddress.html"
+    },
+    {
+      "title": "NotCompromisedPassword",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NotCompromisedPassword.html"
+    },
+    {
+      "title": "NoSuspiciousCharacters",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NoSuspiciousCharacters.html"
+    },
+    {
+      "title": "Regex",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Regex.html"
+    },
+    {
+      "title": "Twig Constraint",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Twig.html"
+    },
+    {
+      "title": "ULID",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Ulid.html"
+    },
+    {
+      "title": "Url",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Url.html"
+    },
+    {
+      "title": "Yaml",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Yaml.html"
+    },
+    {
+      "title": "WordCount",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/WordCount.html"
+    },
+    {
+      "title": "UserPassword",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/UserPassword.html"
+    },
+    {
+      "title": "UUID",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Uuid.html"
+    },
+    {
+      "title": "DivisibleBy",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/DivisibleBy.html"
+    },
+    {
+      "title": "EqualTo",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/EqualTo.html"
+    },
+    {
+      "title": "GreaterThan",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/GreaterThan.html"
+    },
+    {
+      "title": "GreaterThanOrEqual",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/GreaterThanOrEqual.html"
+    },
+    {
+      "title": "LessThan",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/LessThan.html"
+    },
+    {
+      "title": "LessThanOrEqual",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/LessThanOrEqual.html"
+    },
+    {
+      "title": "IdenticalTo",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/IdenticalTo.html"
+    },
+    {
+      "title": "NotEqualTo",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NotEqualTo.html"
+    },
+    {
+      "title": "NotIdenticalTo",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NotIdenticalTo.html"
+    },
+    {
+      "title": "Range",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Range.html"
+    },
+    {
+      "title": "Unique",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Unique.html"
+    },
+    {
+      "title": "Negative",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Negative.html"
+    },
+    {
+      "title": "PositiveOrZero",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/PositiveOrZero.html"
+    },
+    {
+      "title": "NegativeOrZero",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/NegativeOrZero.html"
+    },
+    {
+      "title": "Date",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Date.html"
+    },
+    {
+      "title": "Positive",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Positive.html"
+    },
+    {
+      "title": "Timezone",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Timezone.html"
+    },
+    {
+      "title": "DateTime",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/DateTime.html"
+    },
+    {
+      "title": "Time",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Time.html"
+    },
+    {
+      "title": "Week",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Week.html"
+    },
+    {
+      "title": "Language",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Language.html"
+    },
+    {
+      "title": "Locale",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Locale.html"
+    },
+    {
+      "title": "Choice",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Choice.html"
+    },
+    {
+      "title": "Country",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Country.html"
+    },
+    {
+      "title": "File",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/File.html"
+    },
+    {
+      "title": "Bic",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Bic.html"
+    },
+    {
+      "title": "Image",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Image.html"
+    },
+    {
+      "title": "CardScheme",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/CardScheme.html"
+    },
+    {
+      "title": "Isin",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Isin.html"
+    },
+    {
+      "title": "Currency",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Currency.html"
+    },
+    {
+      "title": "Isbn",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Isbn.html"
+    },
+    {
+      "title": "IBAN",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Iban.html"
+    },
+    {
+      "title": "Luhn",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Luhn.html"
+    },
+    {
+      "title": "Issn",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Issn.html"
+    },
+    {
+      "title": "DisableAutoMapping",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/DisableAutoMapping.html"
+    },
+    {
+      "title": "EnableAutoMapping",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/EnableAutoMapping.html"
+    },
+    {
+      "title": "All",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/All.html"
+    },
+    {
+      "title": "AtLeastOneOf",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/AtLeastOneOf.html"
+    },
+    {
+      "title": "Cascade",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Cascade.html"
+    },
+    {
+      "title": "Callback",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Callback.html"
+    },
+    {
+      "title": "Compound",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Compound.html"
+    },
+    {
+      "title": "Collection",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Collection.html"
+    },
+    {
+      "title": "Count",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Count.html"
+    },
+    {
+      "title": "Expression",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Expression.html"
+    },
+    {
+      "title": "Sequentially",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Sequentially.html"
+    },
+    {
+      "title": "Traverse",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Traverse.html"
+    },
+    {
+      "title": "How to Sequentially Apply Validation Groups",
+      "url": "https://symfony.com/doc/7.3/validation/sequence_provider.html"
+    },
+    {
+      "title": "Valid",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/Valid.html"
+    },
+    {
+      "title": "When",
+      "url": "https://symfony.com/doc/7.3/reference/constraints/When.html"
+    },
+    {
+      "title": "How to Create a Custom Validation Constraint",
+      "url": "https://symfony.com/doc/7.3/validation/custom_constraint.html"
+    },
+    {
+      "title": "How to Validate Raw Values (Scalar Values and Arrays)",
+      "url": "https://symfony.com/doc/7.3/validation/raw_values.html"
+    },
+    {
+      "title": "How to Apply only a Subset of all Your Validation Constraints (Validation Groups)",
+      "url": "https://symfony.com/doc/7.3/validation/groups.html"
+    },
+    {
+      "title": "How to Create Your own Messenger Transport",
+      "url": "https://symfony.com/doc/7.3/messenger/custom-transport.html"
+    },
+    {
+      "title": "Rate Limiter",
+      "url": "https://symfony.com/doc/7.3/rate_limiter.html"
+    },
+    {
+      "title": "How to Translate Validation Constraint Messages",
+      "url": "https://symfony.com/doc/7.3/validation/translations.html"
+    },
+    {
+      "title": "How to Handle Different Error Levels",
+      "url": "https://symfony.com/doc/7.3/validation/severity.html"
+    },
+    {
+      "title": "The Process Component",
+      "url": "https://symfony.com/doc/7.3/components/process.html"
+    },
+    {
+      "title": "The Validator Component",
+      "url": "https://symfony.com/doc/7.3/components/validator.html"
+    },
+    {
+      "title": "How to Add \"Remember Me\" Login Functionality",
+      "url": "https://symfony.com/doc/7.3/security/remember_me.html"
+    },
+    {
+      "title": "How to Impersonate a User",
+      "url": "https://symfony.com/doc/7.3/security/impersonating_user.html"
+    },
+    {
+      "title": "How to Restrict Firewalls to a Request",
+      "url": "https://symfony.com/doc/7.3/security/firewall_restriction.html"
+    },
+    {
+      "title": "Security Configuration Reference (SecurityBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/security.html"
+    },
+    {
+      "title": "How to Customize Access Denied Responses",
+      "url": "https://symfony.com/doc/7.3/security/access_denied_handler.html"
+    },
+    {
+      "title": "How to Write a Custom Authenticator",
+      "url": "https://symfony.com/doc/7.3/security/custom_authenticator.html"
+    },
+    {
+      "title": "Customizing the Form Login Authenticator Responses",
+      "url": "https://symfony.com/doc/7.3/security/form_login.html"
+    },
+    {
+      "title": "How to use Passwordless Login Link Authentication",
+      "url": "https://symfony.com/doc/7.3/security/login_link.html"
+    },
+    {
+      "title": "How to use Access Token Authentication",
+      "url": "https://symfony.com/doc/7.3/security/access_token.html"
+    },
+    {
+      "title": "How to Use Voters to Check User Permissions",
+      "url": "https://symfony.com/doc/7.3/security/voters.html"
+    },
+    {
+      "title": "How Does the Security access_control Work?",
+      "url": "https://symfony.com/doc/7.3/security/access_control.html"
+    },
+    {
+      "title": "How to Create and Enable Custom User Checkers",
+      "url": "https://symfony.com/doc/7.3/security/user_checkers.html"
+    },
+    {
+      "title": "Using Expressions in Security Access Controls",
+      "url": "https://symfony.com/doc/7.3/security/expressions.html"
+    },
+    {
+      "title": "The Entry Point: Helping Users Start Authentication",
+      "url": "https://symfony.com/doc/7.3/security/entry_point.html"
+    },
+    {
+      "title": "How to Translate Messages using the ICU MessageFormat",
+      "url": "https://symfony.com/doc/7.3/reference/formats/message_format.html"
+    },
+    {
+      "title": "Serializer Encoders",
+      "url": "https://symfony.com/doc/7.3/serializer/encoders.html"
+    },
+    {
+      "title": "The PropertyAccess Component",
+      "url": "https://symfony.com/doc/7.3/components/property_access.html"
+    },
+    {
+      "title": "The XLIFF format",
+      "url": "https://symfony.com/doc/7.3/reference/formats/xliff.html"
+    },
+    {
+      "title": "How to Create your Custom Normalizer",
+      "url": "https://symfony.com/doc/7.3/serializer/custom_normalizer.html"
+    },
+    {
+      "title": "How to Create your Custom Name Converter",
+      "url": "https://symfony.com/doc/7.3/serializer/custom_name_converter.html"
+    },
+    {
+      "title": "Streaming JSON",
+      "url": "https://symfony.com/doc/7.3/serializer/streaming_json.html"
+    },
+    {
+      "title": "How to Create your Custom Context Builder",
+      "url": "https://symfony.com/doc/7.3/serializer/custom_context_builders.html"
+    },
+    {
+      "title": "Create a UX bundle",
+      "url": "https://symfony.com/doc/7.3/frontend/create_ux_bundle.html"
+    },
+    {
+      "title": "How to Use a Custom Version Strategy for Assets",
+      "url": "https://symfony.com/doc/7.3/frontend/custom_version_strategy.html"
+    },
+    {
+      "title": "Installing Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/installation.html"
+    },
+    {
+      "title": "Passing Information from Twig to JavaScript",
+      "url": "https://symfony.com/doc/7.3/frontend/server-data.html"
+    },
+    {
+      "title": "Encore: Setting up your Project",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/simple-example.html"
+    },
+    {
+      "title": "CSS Preprocessors: Sass, etc. with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/css-preprocessors.html"
+    },
+    {
+      "title": "Enabling React.js with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/reactjs.html"
+    },
+    {
+      "title": "PostCSS and autoprefixing (postcss-loader) with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/postcss.html"
+    },
+    {
+      "title": "Enabling Vue.js (vue-loader) with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/vuejs.html"
+    },
+    {
+      "title": "Copying & Referencing Images with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/copy-files.html"
+    },
+    {
+      "title": "Configuring Babel with Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/babel.html"
+    },
+    {
+      "title": "Enabling Source Maps with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/sourcemaps.html"
+    },
+    {
+      "title": "Async Code Splitting with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/code-splitting.html"
+    },
+    {
+      "title": "Using a CDN with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/cdn.html"
+    },
+    {
+      "title": "Enabling TypeScript (ts-loader) with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/typescript.html"
+    },
+    {
+      "title": "Asset Versioning with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/versioning.html"
+    },
+    {
+      "title": "Preventing Duplication by \"Splitting\" Shared Code with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/split-chunks.html"
+    },
+    {
+      "title": "Using Bootstrap CSS & JS with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/bootstrap.html"
+    },
+    {
+      "title": "jQuery Plugins and Legacy Applications with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/legacy-applications.html"
+    },
+    {
+      "title": "Advanced Webpack Config",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/advanced-config.html"
+    },
+    {
+      "title": "Using Encore in a Virtual Machine",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/virtual-machine.html"
+    },
+    {
+      "title": "Using webpack-dev-server and HMR",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/dev-server.html"
+    },
+    {
+      "title": "Adding Custom Loaders & Plugins with Webpack Encore",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/custom-loaders-plugins.html"
+    },
+    {
+      "title": "WebpackEncore: FAQ and Common Issues",
+      "url": "https://symfony.com/doc/7.3/frontend/encore/faq.html"
+    },
+    {
+      "title": "The BrowserKit Component",
+      "url": "https://symfony.com/doc/7.3/components/browser_kit.html"
+    },
+    {
+      "title": "Dealing with Concurrency with Locks",
+      "url": "https://symfony.com/doc/7.3/lock.html"
+    },
+    {
+      "title": "Workflows and State Machines",
+      "url": "https://symfony.com/doc/7.3/workflow/workflow-and-state-machine.html"
+    },
+    {
+      "title": "How to Dump Workflows",
+      "url": "https://symfony.com/doc/7.3/workflow/dumping-workflows.html"
+    },
+    {
+      "title": "How to Use Varnish to Speed up my Website",
+      "url": "https://symfony.com/doc/7.3/http_cache/varnish.html"
+    },
+    {
+      "title": "Cache Invalidation",
+      "url": "https://symfony.com/doc/7.3/http_cache/cache_invalidation.html"
+    },
+    {
+      "title": "Varying the Response for HTTP Cache",
+      "url": "https://symfony.com/doc/7.3/http_cache/cache_vary.html"
+    },
+    {
+      "title": "HTTP Cache Expiration",
+      "url": "https://symfony.com/doc/7.3/http_cache/expiration.html"
+    },
+    {
+      "title": "The Form Component",
+      "url": "https://symfony.com/doc/7.3/components/form.html"
+    },
+    {
+      "title": "The PHPUnit Bridge",
+      "url": "https://symfony.com/doc/7.3/components/phpunit_bridge.html"
+    },
+    {
+      "title": "Working with Server Side Includes",
+      "url": "https://symfony.com/doc/7.3/http_cache/ssi.html"
+    },
+    {
+      "title": "HTTP Cache Validation",
+      "url": "https://symfony.com/doc/7.3/http_cache/validation.html"
+    },
+    {
+      "title": "The PSR-7 Bridge",
+      "url": "https://symfony.com/doc/7.3/components/psr7.html"
+    },
+    {
+      "title": "Profiler Configuration Reference (WebProfilerBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/web_profiler.html"
+    },
+    {
+      "title": "Cache Pools and Supported Adapters",
+      "url": "https://symfony.com/doc/7.3/components/cache/cache_pools.html"
+    },
+    {
+      "title": "HTML Sanitizer",
+      "url": "https://symfony.com/doc/7.3/html_sanitizer.html"
+    },
+    {
+      "title": "Debug Configuration Reference (DebugBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/debug.html"
+    },
+    {
+      "title": "Logging Configuration Reference (MonologBundle)",
+      "url": "https://symfony.com/doc/7.3/reference/configuration/monolog.html"
+    },
+    {
+      "title": "Symfony Attributes Overview",
+      "url": "https://symfony.com/doc/7.3/reference/attributes.html"
+    },
+    {
+      "title": "Caching based on Resources",
+      "url": "https://symfony.com/doc/7.3/components/config/caching.html"
+    },
+    {
+      "title": "Defining and Processing Configuration Values",
+      "url": "https://symfony.com/doc/7.3/components/config/definition.html"
+    },
+    {
+      "title": "Loading Resources",
+      "url": "https://symfony.com/doc/7.3/components/config/resources.html"
+    },
+    {
+      "title": "The HttpFoundation Component",
+      "url": "https://symfony.com/doc/7.3/create_framework/http_foundation.html"
+    },
+    {
+      "title": "The Finder Component",
+      "url": "https://symfony.com/doc/7.3/components/finder.html"
+    },
+    {
+      "title": "The Generic Event Object",
+      "url": "https://symfony.com/doc/7.3/components/event_dispatcher/generic_event.html"
+    },
+    {
+      "title": "The Immutable Event Dispatcher",
+      "url": "https://symfony.com/doc/7.3/components/event_dispatcher/immutable_dispatcher.html"
+    },
+    {
+      "title": "Create your own PHP Framework",
+      "url": "https://symfony.com/doc/7.3/create_framework/index.html"
+    },
+    {
+      "title": "The Traceable Event Dispatcher",
+      "url": "https://symfony.com/doc/7.3/components/event_dispatcher/traceable_dispatcher.html"
+    },
+    {
+      "title": "The DependencyInjection Component",
+      "url": "https://symfony.com/doc/7.3/components/dependency_injection.html"
+    },
+    {
+      "title": "TextType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/text.html"
+    },
+    {
+      "title": "TextareaType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/textarea.html"
+    },
+    {
+      "title": "EmailType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/email.html"
+    },
+    {
+      "title": "NumberType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/number.html"
+    },
+    {
+      "title": "IntegerType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/integer.html"
+    },
+    {
+      "title": "MoneyType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/money.html"
+    },
+    {
+      "title": "PasswordType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/password.html"
+    },
+    {
+      "title": "PercentType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/percent.html"
+    },
+    {
+      "title": "UrlType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/url.html"
+    },
+    {
+      "title": "SearchType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/search.html"
+    },
+    {
+      "title": "ColorType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/color.html"
+    },
+    {
+      "title": "TelType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/tel.html"
+    },
+    {
+      "title": "ChoiceType Field (select drop-downs, radio buttons & checkboxes)",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/choice.html"
+    },
+    {
+      "title": "RangeType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/range.html"
+    },
+    {
+      "title": "EnumType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/enum.html"
+    },
+    {
+      "title": "EntityType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/entity.html"
+    },
+    {
+      "title": "LanguageType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/language.html"
+    },
+    {
+      "title": "CountryType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/country.html"
+    },
+    {
+      "title": "TimezoneType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/timezone.html"
+    },
+    {
+      "title": "DateType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/date.html"
+    },
+    {
+      "title": "CurrencyType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/currency.html"
+    },
+    {
+      "title": "LocaleType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/locale.html"
+    },
+    {
+      "title": "DateTimeType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/datetime.html"
+    },
+    {
+      "title": "DateIntervalType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/dateinterval.html"
+    },
+    {
+      "title": "BirthdayType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/birthday.html"
+    },
+    {
+      "title": "TimeType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/time.html"
+    },
+    {
+      "title": "CheckboxType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/checkbox.html"
+    },
+    {
+      "title": "WeekType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/week.html"
+    },
+    {
+      "title": "FileType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/file.html"
+    },
+    {
+      "title": "RadioType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/radio.html"
+    },
+    {
+      "title": "UuidType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/uuid.html"
+    },
+    {
+      "title": "UlidType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/ulid.html"
+    },
+    {
+      "title": "CollectionType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/collection.html"
+    },
+    {
+      "title": "RepeatedType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/repeated.html"
+    },
+    {
+      "title": "SubmitType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/submit.html"
+    },
+    {
+      "title": "ResetType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/reset.html"
+    },
+    {
+      "title": "ButtonType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/button.html"
+    },
+    {
+      "title": "HiddenType Field",
+      "url": "https://symfony.com/doc/7.3/reference/forms/types/hidden.html"
+    },
+    {
+      "title": "Adapters For Interoperability between PSR-6 and PSR-16 Cache",
+      "url": "https://symfony.com/doc/7.3/components/cache/psr6_psr16_adapters.html"
+    },
+    {
+      "title": "Cache Invalidation",
+      "url": "https://symfony.com/doc/7.3/components/cache/cache_invalidation.html"
+    },
+    {
+      "title": "Chain Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/chain_adapter.html"
+    },
+    {
+      "title": "Couchbase Bucket Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/couchbasebucket_adapter.html"
+    },
+    {
+      "title": "PHP Array Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/php_array_cache_adapter.html"
+    },
+    {
+      "title": "PHP Files Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/php_files_adapter.html"
+    },
+    {
+      "title": "Couchbase Collection Cache Adapter",
+      "url": "https://symfony.com/doc/7.3/components/cache/adapters/couchbasecollection_adapter.html"
+    },
+    {
+      "title": "Cache Items",
+      "url": "https://symfony.com/doc/7.3/components/cache/cache_items.html"
+    },
+    {
+      "title": "Changing the Default Command",
+      "url": "https://symfony.com/doc/7.3/components/console/changing_default_command.html"
+    },
+    {
+      "title": "Using Console Commands, Shortcuts and Built-in Commands",
+      "url": "https://symfony.com/doc/7.3/components/console/usage.html"
+    },
+    {
+      "title": "Understanding how Console Arguments and Options Are Handled",
+      "url": "https://symfony.com/doc/7.3/components/console/console_arguments.html"
+    },
+    {
+      "title": "The Console Helpers",
+      "url": "https://symfony.com/doc/7.3/components/console/helpers/index.html"
+    },
+    {
+      "title": "Metadata",
+      "url": "https://symfony.com/doc/7.3/components/validator/metadata.html"
+    },
+    {
+      "title": "Loading Resources",
+      "url": "https://symfony.com/doc/7.3/components/validator/resources.html"
+    },
+    {
+      "title": "The Front Controller",
+      "url": "https://symfony.com/doc/7.3/create_framework/front_controller.html"
+    },
+    {
+      "title": "The Intl Component",
+      "url": "https://symfony.com/doc/7.3/components/intl.html"
+    },
+    {
+      "title": "The Routing Component",
+      "url": "https://symfony.com/doc/7.3/create_framework/routing.html"
+    },
+    {
+      "title": "Templating",
+      "url": "https://symfony.com/doc/7.3/create_framework/templating.html"
+    },
+    {
+      "title": "The Separation of Concerns",
+      "url": "https://symfony.com/doc/7.3/create_framework/separation_of_concerns.html"
+    },
+    {
+      "title": "The HttpKernel Component: the Controller Resolver",
+      "url": "https://symfony.com/doc/7.3/create_framework/http_kernel_controller_resolver.html"
+    },
+    {
+      "title": "The EventDispatcher Component",
+      "url": "https://symfony.com/doc/7.3/create_framework/event_dispatcher.html"
+    },
+    {
+      "title": "The HttpKernel Component: The HttpKernel Class",
+      "url": "https://symfony.com/doc/7.3/create_framework/http_kernel_httpkernel_class.html"
+    },
+    {
+      "title": "The HttpKernel Component: HttpKernelInterface",
+      "url": "https://symfony.com/doc/7.3/create_framework/http_kernel_httpkernelinterface.html"
+    },
+    {
+      "title": "Unit Testing",
+      "url": "https://symfony.com/doc/7.3/create_framework/unit_testing.html"
+    },
+    {
+      "title": "The DependencyInjection Component",
+      "url": "https://symfony.com/doc/7.3/create_framework/dependency_injection.html"
+    },
+    {
+      "title": "Container Building Workflow",
+      "url": "https://symfony.com/doc/7.3/components/dependency_injection/workflow.html"
+    },
+    {
+      "title": "Working with Emojis",
+      "url": "https://symfony.com/doc/7.3/emoji.html"
+    },
+    {
+      "title": "Creating and Manipulating Strings",
+      "url": "https://symfony.com/doc/7.3/string.html"
+    }
+  ]
+}

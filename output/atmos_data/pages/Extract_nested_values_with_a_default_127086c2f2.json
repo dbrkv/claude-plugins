@@ -1,0 +1,140 @@
+{
+  "title": "Extract nested values with a default",
+  "content": "api_key: !store.get ssm /external/config | default \"{}\" | query .api.key\nyaml\nvars:\n  # Retrieve a global configuration object\n  global_config: !store.get redis global-config\n\n# Get a specific field from the configuration\n  api_version: !store.get redis global-config | query .version\n\n# Use templating to construct the key dynamically\n  regional_config: !store.get redis \"config-{{ .vars.region }}\"\nyaml\nvars:\n  # Retrieve a parameter by its full path\n  database_password: !store.get ssm /myapp/prod/db/password\n\n# Get a parameter with a default value\n  feature_flag: !store.get ssm /features/new-feature | default \"disabled\"\nyaml\nvars:\n  # Retrieve a secret by its exact name\n  api_secret: !store.get azure-keyvault external-api-key\n\n# Get a certificate with error handling\n  ssl_cert: !store.get azure-keyvault ssl-certificate | default \"\"\nyaml\nvars:\n  # Retrieve a secret by its resource ID\n  service_account: !store.get gsm projects/my-project/secrets/service-account/versions/latest\n\n# Parse JSON secret and extract a field\n  client_id: !store.get gsm oauth-config | query .client_id\nyaml\n  !store <store_name> <stack> <component> <key> | default <default-value> | query <yq-expression>\nyaml\n  # Get the `key` from the store of a `component` in the current stack\n  !store <store_name> <component> <key>\n\n# Get the `key` from the store of a `component` in the current stack,\n  # and retrieve an individual value from the result using the YQ expression\n  !store <store_name> <component> <key> | query <yq-expression>\n\n# Get the `key` from the store of a `component` in a different stack\n  !store <store_name> <stack> <component> <key>\n\n# Get the `key` from the store of a `component` in a different stack,\n  # and retrieve an individual value from the result using the YQ expression\n  !store <store_name> <stack> <component> <key> | query <yq-expression>\n\n# Get the `key` from the store of a `component` in a different stack, with a default value\n  !store <store_name> <stack> <component> <key> | default <default-value>\nyaml\nsubnet_id1: !store <store_name> <stack> <component> <key> | query .private_subnet_ids[0]\nyaml\nusername: !store <store_name> <stack> <component> <key> | query .config_map.username\nyaml\ncomponents:\n  terraform:\n    my_lambda_component:\n      vars:\n        vpc_config:\n          security_group_id: !store prod/ssm security-group/lambda id\n          security_group_id2: !store prod/ssm {{ .stack }} security-group/lambda2 id\n          security_group_id3: !store prod/ssm {{ .atmos_stack }} security-group/lambda3 id\n        kms_key_arn: !store prod/ssm kms config | query .arn\nyaml title=\"plat-ue2-dev\"\n  components:\n    terraform:\n      tgw:\n        vars:\n          vpc_id: !store prod/ssm plat-ue2-prod vpc vpc_id\nyaml\n  !store <store_name> {{ .stack }} <component> <key>\n  !store <store_name> {{ .atmos_stack }} <component> <key>\nyaml\n  components:\n    terraform:\n      tgw:\n        vars:\n          vpc_id: !store prod/ssm {{ .stack }} vpc vpc_id\nyaml\n  !store <store_name> {{ printf \"%s-%s-%s\" .vars.tenant .vars.environment .vars.stage }} <component> <key>\n\n!store <store_name> {{ printf \"plat-%s-prod\" .vars.environment }} <component> <key>\n\n!store <store_name> {{ printf \"%s-%s-%s\" .settings.context.tenant .settings.context.region .settings.context.account }} <component> <key>\nyaml title=\"plat-ue2-dev\"\n  components:\n    terraform:\n      tgw:\n        vars:\n          vpc_id: !store prod/ssm {{ printf \"net-%s-%s\" .vars.environment .vars.stage }} vpc vpc_id\nyaml",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Examples\n\n#### Redis Store\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n#### AWS SSM Parameter Store\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n#### Azure Key Vault\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n#### Google Secret Manager\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### Considerations\n\n- **Exact Key Matching**: The key you provide must match exactly how it is stored in the backend, including any required\nprefix, path, or normalization specific to that store\n- **External Systems**: This function is ideal for interoperability with values written by external systems that don't\nfollow Atmos naming conventions\n- **Performance**: Direct key access is typically faster than pattern-based retrieval since no key construction is needed\n- **Security**: Like `!store`, using `!store.get` with secrets will expose them to `stdout` in describe commands\n- **Access Control**: Ensure your store credentials have permission to access the keys you're trying to retrieve\n\n---\n\n## !store\n\nimport File from '@site/src/components/File'\nimport Intro from '@site/src/components/Intro'\nimport Terminal from '@site/src/components/Terminal'\n\n<Intro>\nThe `!store` YAML function allows reading the values from a remote [store](/core-concepts/projects/configuration/stores)\n(e.g. SSM Parameter Store, Artifactory, Redis, etc.) for an Atmos component in a stack into Atmos stack manifests.\n</Intro>\n\n## Usage\n\nThe `!store` function can be called with either two, three, or four parameters, and optionally a default value and\na [YQ](https://mikefarah.gitbook.io/yq) query expression:",
+      "language": "unknown"
+    },
+    {
+      "code": "Usage examples:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n  <dt>`store_name`</dt>\n  <dd>The name of the store to read from (as defined in the `atmos.yaml` file)</dd>\n\n  <dt>`stack`</dt>\n  <dd>(optional) Atmos stack name</dd>\n\n  <dt>`component`</dt>\n  <dd>Atmos component name</dd>\n\n  <dt>`key`</dt>\n  <dd>The key to read from the store</dd>\n\n  <dt>`default-value`</dt>\n  <dd>(optional) The default value to return if the key is not found in the store</dd>\n\n  <dt>`yq-expression`</dt>\n  <dd>(optional) [YQ](https://mikefarah.gitbook.io/yq) expression to retrieve individual values from the result</dd>\n</dl>\n\n:::tip\nYou can use [Atmos Stack Manifest Templating](/core-concepts/stacks/templates) in the `!store` YAML function expressions.\nAtmos processes the templates first, and then executes the `!store` function, allowing you to provide the parameters to\nthe function dynamically.\n:::\n\n## Using YQ Expressions to retrieve individual values\n\nTo retrieve individual values from complex types such as maps and lists, or do any kind of filtering or querying,\nyou can utilize [YQ](https://mikefarah.gitbook.io/yq) expressions.\n\nFor example:\n\n- Retrieve the first item from a list",
+      "language": "unknown"
+    },
+    {
+      "code": "- Read a key from a map",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, review the following docs:\n\n- [YQ Guide](https://mikefarah.gitbook.io/yq)\n- [YQ Recipes](https://mikefarah.gitbook.io/yq/recipes)\n\n## Examples\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Specifying Atmos `stack`\n\nIf you call the `!store` function with three parameters, you need to specify the stack as the second argument.\n\nThere are multiple ways you can specify the Atmos stack parameter in the `!terraform.output` function.\n\n### Hardcoded Stack Name\n\nUse it if you want to get a value from the store for a component from a different (well-known and static) stack.\nFor example, you have a `tgw` component in a stack `plat-ue2-dev` that requires the `vpc_id` key from the `vpc` component from the stack `plat-ue2-prod`:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Reference the Current Stack Name\n\nUse the `.stack` (or `.atmos_stack`) template identifier to specify the same stack as the current component is in\n(for which the `!store` function is executed):",
+      "language": "unknown"
+    },
+    {
+      "code": "For example, you have a `tgw` component that requires the `vpc_id` key from the store for the `vpc` component in the same stack:",
+      "language": "unknown"
+    },
+    {
+      "code": ":::note Using the `.stack` or `.atmos_stack` template identifiers to specify the stack is the same as calling the\n`!store` function with two parameters without specifying the current stack, but without using `Go` templates. If you\nneed to get a value from the store from a component in the current stack, using the `!store` function with two\nparameters is preferred because it has a simpler syntax and executes faster.\n:::\n\n### Use a Format Function\n\nUse the `printf` template function to construct stack names using static strings and dynamic identifiers.\nThis is convenient when you want to override some identifiers in the stack name:",
+      "language": "unknown"
+    },
+    {
+      "code": "<dl>\n  <dt><code>&lt;component&gt;</code></dt>\n  <dd>Placeholder for an actual component name (e.g. `vpc`)</dd>\n  <dt><code>&lt;key&gt;</code></dt>\n  <dd>Placeholder for an actual key (e.g. `subnet_ids`)</dd>\n</dl>\n\nFor example, you have a `tgw` component deployed in the stack `plat-ue2-dev`. The `tgw` component requires the\n`vpc_id` key from the store for the `vpc` component from the same environment (`ue2`) and same stage (`dev`), but from a different\ntenant `net` (instead of `plat`):",
+      "language": "unknown"
+    },
+    {
+      "code": ":::tip Important\n    By using the `printf \"%s-%s-%s\"` function, you are constructing stack names using the stack context variables/identifiers.\n\n    For more information on Atmos stack names and how to define them, refer to `stacks.name_pattern` and `stacks.name_template`\n    sections in [`atmos.yaml` CLI config file](/cli/configuration/)\n:::\n\n## Considerations\n\n- Using `!store` with secrets can expose sensitive data to standard output (stdout) in any commands that describe stacks or components.\n- When using `!store` with [`atmos describe affected`](/cli/commands/describe/affected), Atmos requires access to all referenced stores.\n   If you operate with limited permissions (e.g., scoped to `dev`) and reference production stacks, the command will fail.\n- Be mindful of disaster recovery (DR) implications when using it across regions.\n- Consider cold-start scenarios: if the dependent component has not yet been provisioned, the value in the store may not\n  yet be available and the `!store` function call will fail unless you provide a default value with `| default`.\n\n---\n\n## !template\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\n    The `!template` Atmos YAML function is used to [handle the outputs containing maps or\n    lists](/functions/template/atmos.Component#handling-outputs-containing-maps-or-lists)\n    returned from the [`atmos.Component`](/functions/template/atmos.Component) template function.\n</Intro>\n\n## Usage",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Considerations",
+      "id": "considerations"
+    },
+    {
+      "level": "h2",
+      "text": "!store",
+      "id": "!store"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Using YQ Expressions to retrieve individual values",
+      "id": "using-yq-expressions-to-retrieve-individual-values"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Specifying Atmos `stack`",
+      "id": "specifying-atmos-`stack`"
+    },
+    {
+      "level": "h3",
+      "text": "Hardcoded Stack Name",
+      "id": "hardcoded-stack-name"
+    },
+    {
+      "level": "h3",
+      "text": "Reference the Current Stack Name",
+      "id": "reference-the-current-stack-name"
+    },
+    {
+      "level": "h3",
+      "text": "Use a Format Function",
+      "id": "use-a-format-function"
+    },
+    {
+      "level": "h2",
+      "text": "Considerations",
+      "id": "considerations"
+    },
+    {
+      "level": "h2",
+      "text": "!template",
+      "id": "!template"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    }
+  ],
+  "url": "llms-txt#extract-nested-values-with-a-default",
+  "links": []
+}

@@ -1,0 +1,27 @@
+{
+  "title": "Ensure you're using the latest Atmos version",
+  "content": "atmos version --heatmap\nbash\natmos describe stacks --heatmap\natmos terraform plan component -s stack --heatmap\n\nâ ï¸  No TTY available for interactive visualization. Summary displayed above.\nshell",
+  "code_samples": [
+    {
+      "code": "**No Functions Tracked:**\n- Performance tracking is added incrementally\n- Run commands that process stacks/components for more data:",
+      "language": "unknown"
+    },
+    {
+      "code": "**P95 Shows Zero:**\n- P95 requires multiple calls to be meaningful\n- Run commands that execute functions multiple times\n\n**Interactive Mode Not Working:**\n- Requires TTY (terminal)\n- In scripts/CI/CD, static summary is displayed instead:",
+      "language": "unknown"
+    },
+    {
+      "code": "### pprof Issues\n\n**Profile File Creation Errors:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "pprof Issues",
+      "id": "pprof-issues"
+    }
+  ],
+  "url": "llms-txt#ensure-you're-using-the-latest-atmos-version",
+  "links": []
+}

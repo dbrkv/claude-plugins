@@ -1,0 +1,13 @@
+{
+  "title": "List settings for production stacks",
+  "content": "atmos list settings --stack 'prod-*'\nshell",
+  "code_samples": [
+    {
+      "code": "List specific settings using path queries:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#list-settings-for-production-stacks",
+  "links": []
+}

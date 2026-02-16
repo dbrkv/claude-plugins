@@ -1,0 +1,8 @@
+{
+  "title": "Enable pager (multiple ways)",
+  "content": "atmos describe config --pager                # Enable with default pager\natmos describe config --pager=true           # Explicitly enable\natmos describe config --pager=less           # Use specific pager\nATMOS_PAGER=true atmos describe config      # Via environment variable",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-pager-(multiple-ways)",
+  "links": []
+}

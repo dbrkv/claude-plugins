@@ -1,0 +1,13 @@
+{
+  "title": "stacks/orgs/acme/plat/prod/_defaults.yaml (terraform)",
+  "content": "terraform:\n  hooks:\n    store-outputs:\n      name: prod/ssm\nyaml",
+  "code_samples": [
+    {
+      "code": "At the component level, specify that the `id` output of the component should be stored in the store as the `vpc_id` key:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#stacks/orgs/acme/plat/prod/_defaults.yaml-(terraform)",
+  "links": []
+}

@@ -1,0 +1,57 @@
+{
+  "url": "https://symfony.com/doc/7.3/security/expressions.html",
+  "title": "Using Expressions in Security Access Controls",
+  "content": "The best solution for handling complex authorization rules is to use the Voter System.\n\nIn addition to security roles like ROLE_ADMIN, the isGranted() method and #[IsGranted] attribute also accept an Expression object:\n\nIn this example, if the current user has ROLE_ADMIN or if the current user object's isSuperAdmin() method returns true, then access will be granted (note: your User object may not have an isSuperAdmin() method, that method is invented for this example).\n\nThe security expression must use any valid expression language syntax and can use any of these variables created by Symfony:\n\nAdditionally, you have access to a number of functions inside the expression:\n\nis_remember_me() is different than checking IS_AUTHENTICATED_REMEMBERED\n\nThe is_remember_me() and is_fully_authenticated() functions are similar to using IS_AUTHENTICATED_REMEMBERED and IS_AUTHENTICATED_FULLY with the isGranted() function - but they are not the same. The following controller snippet shows the difference:\n\nHere, $access1 and $access2 will be the same value. Unlike the behavior of IS_AUTHENTICATED_REMEMBERED and IS_AUTHENTICATED_FULLY, the is_remember_me() function only returns true if the user is authenticated via a remember-me cookie and is_fully_authenticated() only returns true if the user has actually logged in during this session (i.e. is full-fledged).\n\nIn case of the #[IsGranted] attribute, the subject can also be an Expression object:\n\nIn this example, we fetch the author of the post and use it as the subject. If the subject matches the current user, then access will be granted.\n\nThe subject may also be an array where the key can be used as an alias for the result of an expression:\n\nHere, access will be granted if the author matches the current user and the post's isPublished() method returns true.\n\nYou can also use the current request as the subject:\n\nInside the subject's expression, you have access to two variables:\n\nAdditionally to expressions, the #[IsGranted] attribute also accepts closures that return a boolean value. The subject can also be a closure that returns an array of values that will be injected into the closure:\n\nThe support for closures in the #[IsGranted] attribute was introduced in Symfony 7.3 and requires PHP 8.5.\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Using Expressions in Security Access Controls",
+      "id": "using-expressions-in-security-access-controls"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Controller/MyController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\ExpressionLanguage\\Expression;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsGranted;\n\nclass MyController extends AbstractController\n{\n    #[IsGranted(new Expression('is_granted(\"ROLE_ADMIN\") or is_granted(\"ROLE_MANAGER\")'))]\n    public function show(): Response\n    {\n        // ...\n    }\n\n    #[IsGranted(new Expression(\n        '\"ROLE_ADMIN\" in role_names or (is_authenticated() and user.isSuperAdmin())'\n    ))]\n    public function edit(): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Controller/MyController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\ExpressionLanguage\\Expression;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass MyController extends AbstractController\n{\n    public function show(): Response\n    {\n        $this->denyAccessUnlessGranted(new Expression(\n            'is_granted(\"ROLE_ADMIN\") or is_granted(\"ROLE_MANAGER\")'\n        ));\n\n        // ...\n    }\n\n    public function edit(): Response\n    {\n        $this->denyAccessUnlessGranted(new Expression(\n            '\"ROLE_ADMIN\" in role_names or (is_authenticated() and user.isSuperAdmin())'\n        ));\n\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use Symfony\\Component\\ExpressionLanguage\\Expression;\nuse Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface;\n// ...\n\npublic function index(AuthorizationCheckerInterface $authorizationChecker): Response\n{\n    $access1 = $authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED');\n\n    $access2 = $authorizationChecker->isGranted(new Expression(\n        'is_remember_me() or is_fully_authenticated()'\n    ));\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/MyController.php\nnamespace App\\Controller;\n\nuse App\\Entity\\Post;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\ExpressionLanguage\\Expression;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsGranted;\n\nclass MyController extends AbstractController\n{\n    #[IsGranted(\n        attribute: new Expression('user === subject'),\n        subject: new Expression('args[\"post\"].getAuthor()'),\n    )]\n    public function index(Post $post): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "#[IsGranted(\n    attribute: new Expression('user === subject[\"author\"] and subject[\"post\"].isPublished()'),\n    subject: [\n        'author' => new Expression('args[\"post\"].getAuthor()'),\n        'post',\n    ],\n)]\npublic function index(Post $post): Response\n{\n    // ...\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "#[IsGranted(\n    attribute: '...',\n    subject: new Expression('request'),\n)]\npublic function index(): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/MyController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsGranted;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsGrantedContext;\n\nclass MyController extends AbstractController\n{\n    #[IsGranted(static function (IsGrantedContext $context, mixed $subject) {\n        return $context->user === $subject['post']->getAuthor();\n    }, subject: static function (array $args) {\n        return [\n            'post' => $args['post'],\n        ];\n    })]\n    public function index($post): Response\n    {\n        // ...\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/security/expressions.html",
+    "https://symfony.com/doc/7.3/security/voters.html",
+    "https://symfony.com/doc/7.3/reference/formats/expression_language.html",
+    "https://symfony.com/doc/7.3/security.html",
+    "https://symfony.com/doc/7.3/components/http_foundation.html",
+    "https://symfony.com/doc/7.3/service_container/expression_language.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Expression.html"
+  ]
+}

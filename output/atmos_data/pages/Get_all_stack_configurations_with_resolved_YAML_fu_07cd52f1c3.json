@@ -1,0 +1,34 @@
+{
+  "title": "Get all stack configurations with resolved YAML functions",
+  "content": "atmos describe stacks --identity my-aws-identity --format yaml > stacks.yaml\nbash",
+  "code_samples": [
+    {
+      "code": "## Migration Guide\n\n**No migration required!** This is a backward-compatible enhancement:\n\nâ **Existing workflows continue to work:**\n- Commands without `--identity` use ambient credentials (environment variables, AWS profiles)\n- Default identity configuration is respected\n- CI/CD pipelines are unaffected\n\nâ **Opt-in when needed:**\n- Add `--identity` flag when YAML functions require specific credentials\n- Use interactive selection for convenience during local development\n- Specify explicit identities in automation scripts\n\n## Important Notes\n\n### Default Behavior\n\n**By default, all `atmos describe` commands execute:**\n- â YAML template functions (`!terraform.state`, `!terraform.output`, etc.)\n- â Go templates (Gomplate functions, Atmos functions)\n\n**To disable processing:**\n- Use `--process-functions=false` to skip YAML functions\n- Use `--process-templates=false` to skip Go templates\n\n### Error Handling\n\n**When authentication is not configured:**\n\nIf your `atmos.yaml` does not have an `auth` section or has no identities configured, the behavior depends on whether you use the `--identity` flag:\n\nâ **Without `--identity` flag** - Commands work normally using ambient credentials (environment variables, AWS profiles, instance metadata)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Migration Guide",
+      "id": "migration-guide"
+    },
+    {
+      "level": "h2",
+      "text": "Important Notes",
+      "id": "important-notes"
+    },
+    {
+      "level": "h3",
+      "text": "Default Behavior",
+      "id": "default-behavior"
+    },
+    {
+      "level": "h3",
+      "text": "Error Handling",
+      "id": "error-handling"
+    }
+  ],
+  "url": "llms-txt#get-all-stack-configurations-with-resolved-yaml-functions",
+  "links": []
+}

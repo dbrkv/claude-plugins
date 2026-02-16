@@ -1,0 +1,19 @@
+{
+  "title": "Or SCP-style shorthand",
+  "content": "source: \"git@github.com:cloudposse-terraform-components/aws-vpc.git?ref=v1.0.0\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### With Credentials (Not Recommended)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "With Credentials (Not Recommended)",
+      "id": "with-credentials-(not-recommended)"
+    }
+  ],
+  "url": "llms-txt#or-scp-style-shorthand",
+  "links": []
+}

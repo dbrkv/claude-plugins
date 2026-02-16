@@ -1,0 +1,13 @@
+{
+  "title": "Ensure directory exists",
+  "content": "mkdir -p /path/to/profile/\natmos command --profile-file=/path/to/profile/cpu.prof --profile-type=cpu\nshell",
+  "code_samples": [
+    {
+      "code": "**Invalid Profile Type:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#ensure-directory-exists",
+  "links": []
+}

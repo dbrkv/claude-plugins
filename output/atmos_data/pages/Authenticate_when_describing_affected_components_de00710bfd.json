@@ -1,0 +1,19 @@
+{
+  "title": "Authenticate when describing affected components",
+  "content": "atmos describe affected --identity prod-readonly --include-dependents --format json\nbash",
+  "code_samples": [
+    {
+      "code": "## Disabling YAML Functions\n\nIf you want to see stack configurations **before** YAML functions are processed (without authentication), use the processing flags:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Disabling YAML Functions",
+      "id": "disabling-yaml-functions"
+    }
+  ],
+  "url": "llms-txt#authenticate-when-describing-affected-components",
+  "links": []
+}

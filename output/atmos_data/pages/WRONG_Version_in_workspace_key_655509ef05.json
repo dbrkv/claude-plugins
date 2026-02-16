@@ -1,0 +1,13 @@
+{
+  "title": "WRONG: Version in workspace key",
+  "content": "settings:\n  workspace_key_prefix: \"prod/vpc/v2\"  # State lives at different path per version\nyaml",
+  "code_samples": [
+    {
+      "code": "**Solution**: Keep workspace keys version-agnostic:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#wrong:-version-in-workspace-key",
+  "links": []
+}

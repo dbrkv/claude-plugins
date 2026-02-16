@@ -1,0 +1,228 @@
+{
+  "title": "from the file to the `settings` section in the current stack",
+  "content": "settings: !include https://raw.githubusercontent.com/cloudposse/atmos/main/tests/fixtures/scenarios/stack-templates-2/stacks/deploy/nonprod.yaml .components.terraform.component-1.settings\n\ncomponents:\n  terraform:\n    component-1:\n      vars:\n        # The `config` folder is relative to the `base_path` setting in `atmos.yaml`\n        string_var: !include config/vars.json .string_var\n        boolean_var: !include config/vars.yaml .boolean_var\n        list_var: !include config/vars.tfvars .list_var\n        map_var: !include config/vars.tfvars .map_var\n\ncomponent-2:\n      vars: !include config/vars.tfvars\n\ncomponent-3:\n      vars: !include config/vars.json\n\ncomponent-4:\n      vars: !include config/vars.yaml\nyaml\nvars:\n  # Always injects content from file or URL as string\n  json_string: !include.raw config.json\n  yaml_string: !include.raw settings.yaml\n  hcl_string: !include.raw terraform.tfvars\nyaml\ncomponents:\n  terraform:\n    my-service:\n      vars:\n        # Kubernetes manifest template as string\n        manifest_template: !include.raw k8s-deployment-template.yaml\n\n# JSON config template for interpolation\n        config_template: !include.raw config-template.json\n\n# Terraform HCL template\n        tf_template: !include.raw module-template.tf\nyaml\nmetadata:\n  # Include markdown documentation\n  readme: !include.raw README.md\n  changelog: !include.raw CHANGELOG.md\n\n# Include shell scripts\n  install_script: !include.raw ./scripts/install.sh\n  deploy_script: !include.raw ./scripts/deploy.sh\nyaml\nvars:\n  # Preserve JSON formatting for display or logging\n  example_config: !include.raw example-config.json\n\n# Keep YAML with comments intact\n  annotated_yaml: !include.raw annotated-config.yaml\n\n# Include HCL with original formatting\n  terraform_example: !include.raw example.tf\nyaml\ncomponents:\n  terraform:\n    app:\n      vars:\n        # Pass JSON config as string to Terraform\n        json_config_string: !include.raw app-config.json\n\n# YAML config for base64 encoding\n        yaml_config_string: !include.raw settings.yaml\nyaml\nvars:\n  # GitHub raw content\n  remote_template: !include.raw https://raw.githubusercontent.com/org/repo/main/template.yaml\n\n# S3 bucket files\n  s3_script: !include.raw s3://my-bucket/scripts/deploy.sh\n\n# Google Cloud Storage\n  gcs_config: !include.raw gcs://my-bucket/configs/app.json\n\n# With query parameters (extension detection ignores query strings)\n  versioned_template: !include.raw https://api.example.com/template.yaml?version=2\njson\n{\n  \"database\": {\n    \"host\": \"localhost\",\n    \"port\": 5432\n  }\n}\nyaml\ncomponents:\n  terraform:\n    app:\n      vars:\n        # Parsed as JSON object\n        config_parsed: !include config.json\n        # Result: {database: {host: localhost, port: 5432}}\n\n# Raw string\n        config_string: !include.raw config.json\n        # Result: '{\"database\":{\"host\":\"localhost\",\"port\":5432}}'\nyaml\nvars:\n  # â YQ expressions are not supported with !include.raw\n  # This will fail - !include.raw does not process YQ expressions\n  invalid: !include.raw config.json .database.host\n\n# â Use regular !include for YQ expressions\n  valid: !include config.json .database.host\nyaml\nvars:\n  # All return raw strings regardless of extension\n  json_raw: !include.raw data.json          # Raw string\n  yaml_raw: !include.raw config.yaml        # Raw string\n  hcl_raw: !include.raw terraform.tfvars    # Raw string\n  text_raw: !include.raw readme.txt         # Raw string\n  no_ext_raw: !include.raw LICENSE          # Raw string\nyaml\ncomponents:\n  terraform:\n    component2:\n      settings:\n        s1: !exec echo 's1'\n      env:\n        ENV_VAR_1: !template '{{ (atmos.Component \"component3\" .stack).settings.env.ENV_VAR_1 }}'\n      vars:\n        # Handle the output of type list from the `atmos.Component` template function\n        test_1: !template '{{ toJson (atmos.Component \"component1\" \"plat-ue2-dev\").outputs.test_list }}'\n\n# Handle the output of type map from the `atmos.Component` template function\n        test_2: !template '{{ toJson (atmos.Component \"component1\" .stack).outputs.test_map }}'\n\n# Execute the shell script and assign the result to the `test_3` variable\n        test_3: !exec echo 42\n\n# Execute the shell script to get the `test_label_id` output from the `component1` component in the stack `plat-ue2-dev`\n        test_4: !exec atmos terraform output component1 -s plat-ue2-dev --skip-init -- -json test_label_id\n\n# Execute the shell script to get the `test_map` output from the `component1` component in the current stack\n        test_5: !exec atmos terraform output component1 -s {{ .stack }} --skip-init -- -json test_map\n\n# Execute the shell script to get the `test_list` output from the `component1` component in the current stack\n        test_6: !exec atmos terraform output component1 -s {{ .stack }} --skip-init -- -json test_list\n\n# Get the `test_label_id` output of type string from the `component1` component in the stack `plat-ue2-dev`\n        test_7: !terraform.output component1 plat-ue2-dev test_label_id\n\n# Get the `test_label_id` output of type string from the `component1` component in the current stack\n        test_8: !terraform.output component1 {{ .stack }} test_label_id\n\n# Get the `test_list` output of type list from the `component1` component in the current stack\n        test_9: !terraform.state component1 {{ .stack }} test_list\n\n# Get the `test_map` output of type map from the `component1` component in the current stack\n        test_10: !terraform.state component1 {{ .stack }} test_map\n\n# Retrieve the value of an environment variable\n        api_key: !env API_KEY\n\n# Include a local file\n        config: !include ./dev-config.yaml\n\n# Download a remote JSON file with .json extension and query data using YQ\n        # Note: URLs without extensions are treated as text, so use URLs with appropriate extensions\n        github_data: !include ./github-meta.json .api\nyaml\n  # Get the root directory of the Atmos repository.\n  # If the Git root is not found, it will return a default value if specified; otherwise, it returns an error.\n  `!repo-root <default-value>`\nyaml\nvars:\n  # `base_path` will be set to the root directory of the Atmos repository if present otherwise it will return an error\n  base_path: !repo-root\nyaml\nvars:\n  # `base_path` will be set to the default value `default-value` if the Atmos repository root is not present\n  base_path: !repo-root <default-value>\nyaml\n  !store.get <store_name> <key> | default <default-value> | query <yq-expression>\nyaml\n  # Get an arbitrary key from the store\n  !store.get <store_name> <key>\n\n# Get a key and provide a default value\n  !store.get <store_name> <key> | default <default-value>\n\n# Get a key and extract a value using a YQ expression\n  !store.get <store_name> <key> | query <yq-expression>\n\n# Combine default value and query expression\n  !store.get <store_name> <key> | default \"{}\" | query .field\nyaml",
+  "code_samples": [
+    {
+      "code": "</File>\n\n---\n\n## !include.raw\n\nimport Intro from '@site/src/components/Intro'\nimport File from '@site/src/components/File'\nimport Note from \"@site/src/components/Note\"\n\n<Intro>\n    The `!include.raw` function forces any file to be included as a raw string,\n    bypassing automatic parsing based on file extension.\n</Intro>\n\nWhile the regular [`!include`](./include) function parses files based on their extension (JSON, YAML, HCL),\n`!include.raw` always returns the file content as a plain string. This is useful when you need\nthe actual file content as text rather than parsed data structures.\n\n## Usage",
+      "language": "unknown"
+    },
+    {
+      "code": "## Common Use Cases\n\n### Template Files\n\nInclude template files that need to be processed later:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Documentation and Scripts\n\nInclude documentation or scripts as strings:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Preserving Formatting\n\nWhen you need to preserve the exact formatting of a file:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Configuration as Strings\n\nWhen you need configuration files as strings for further processing:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Remote Files\n\nThe `!include.raw` function works with all remote sources supported by `!include`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Comparison with !include\n\n| Function | File: `config.json` | Content | Result |\n|----------|-------------------|---------|---------|\n| `!include` | `config.json` | `{\"key\": \"value\"}` | Parsed JSON object: `{key: value}` |\n| `!include.raw` | `config.json` | `{\"key\": \"value\"}` | Raw string: `'{\"key\": \"value\"}'` |\n\n### Example\n\nGiven a file `config.json`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Using in a stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "## YQ Expressions Not Supported\n\n<Note>\nThe `!include.raw` function does not support YQ expressions since it always returns raw strings.\nUse the regular `!include` function when you need to query structured data with YQ.\n</Note>",
+      "language": "unknown"
+    },
+    {
+      "code": "## File Extension Handling\n\nUnlike `!include` which uses file extensions to determine parsing behavior,\n`!include.raw` completely ignores file extensions:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Supported Sources\n\nThe `!include.raw` function supports the same sources as `!include`:\n\n### Local Files\n- Absolute paths: `!include.raw /path/to/file.json`\n- Relative paths: `!include.raw ../configs/settings.yaml`\n- Base path relative: `!include.raw stacks/catalog/template.tf`\n\n### Remote Files\n- HTTP/HTTPS: `!include.raw https://example.com/config.json`\n- S3: `!include.raw s3::https://bucket.s3.amazonaws.com/file.yaml`\n- GCS: `!include.raw gcs::gs://bucket/path/file.hcl`\n- Git: `!include.raw git::https://github.com/org/repo.git//file.txt?ref=v1.0.0`\n\n## See Also\n\n- [`!include`](./include) - Standard include function with automatic parsing based on file extension\n- [YAML Functions](/functions/yaml) - Overview of all YAML functions in Atmos\n\n---\n\n## Atmos YAML Functions\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport DocCardList from '@theme/DocCardList'\n\n<PillBox>Recommended</PillBox>\n\n<Intro>\n    **YAML Functions are the recommended way to add dynamic behavior to your Atmos configurations.** They are native YAML features that work with the YAML parser, making them type-safe, predictable, and error-resistant. Unlike template functions which manipulate raw text, YAML functions operate on structured data after parsing.\n</Intro>\n\n## Why YAML Functions Are Safer\n\nYAML functions are based on [YAML Explicit typing](https://yaml.org/spec/1.2.2/)\nand user-defined [Explicit Tags](https://yaml.org/spec/1.2.2/#tags) (local data types).\nExplicit tags are denoted by the exclamation point (__\"!\"__) symbol.\n\n**Key advantages over template functions:**\n- **Cannot break YAML syntax** - Functions execute after YAML parsing, not before\n- **Type-safe** - Work with actual YAML types, not raw strings\n- **No indentation issues** - The YAML structure is already established\n- **Clear error messages** - Errors point to specific YAML nodes, not parsing failures\n- **Predictable behavior** - Always return valid YAML data structures\n\nAtmos detects the tags in the stack manifests and executes the corresponding functions.\n\n:::info\nYAML supports three types of data: core, defined, and user-defined.\n\n- **Core types**: Universally supported, including floats, integers, strings, lists, and maps.\n- **Defined types**: Advanced types like binary data, specified in the YAML standard but not always supported.\n- **User-defined types**: Custom extensions for classes, structures, and functions. Atmos leverages user-defined types to implement its custom functions and extend YAML's capabilities.\n:::\n\n## Use-cases\n\n - The [__`!terraform.output`__](/functions/yaml/terraform.output) YAML function allows you to\n   [access component outputs (remote state) directly within Atmos stack manifests](/core-concepts/share-data/remote-state).\n   Note that this requires initializing each component (`terraform/tofu init`), which initializes all Terraform/OpenTofu\n   modules and downloads all Terraform/OpenTofu providers, which may significantly impact performance. Consider using `!store` or `!terraform.state` functions instead, which don't have this performance penalty.\n\n - The [__`!terraform.state`__](/functions/yaml/terraform.state) YAML function reads outputs **directly from the configured Terraform or OpenTofu backend**, without initializing providers or running Terraform â it's **very fast** and currently supports [S3 and local backends](/core-concepts/components/terraform/backends) for accessing [remote state](/core-concepts/share-data/remote-state).\n\n - The [__`!store`__](/functions/yaml/store) YAML function allows reading the values from a\n   remote [store](/core-concepts/projects/configuration/stores) (e.g. SSM Parameter Store, Artifactory, etc.)\n   into Atmos stack manifests\n\n - The [__`!store.get`__](/functions/yaml/store.get) YAML function allows retrieving arbitrary keys\n   directly from a [store](/core-concepts/projects/configuration/stores)\n   without following the Atmos stack/component/key naming convention.\n   This is useful for accessing values stored by external systems\n   or for retrieving global configuration that doesn't belong to a specific component\n\n - The [__`!include`__](/functions/yaml/include) YAML function allows downloading local or remote files from different sources,\n   and assigning the file contents or individual values to the sections in Atmos stack manifests\n\n - The [__`!template`__](/functions/yaml/template) YAML function is designed to [evaluate and inject outputs containing maps or lists](/functions/template/atmos.Component#handling-outputs-containing-maps-or-lists)\n   into the YAML document, whether generated by the [__`atmos.Component`__](/functions/template/atmos.Component) template function or any Go template.\n\n - The [__`!exec`__](/functions/yaml/exec) YAML function is used to execute shell scripts and assign\n   the results to the sections in Atmos stack manifests\n\n - The [__`!env`__](/functions/yaml/env) YAML function is used to retrieve environment variables\n   and assign them to the sections in Atmos stack manifests\n\n - The [__`!repo-root`__](/functions/yaml/repo-root) YAML function is used to retrieve the\n   root directory of the Atmos repository\n\n:::tip\nYou can combine [Atmos Stack Manifest Templating](/core-concepts/stacks/templates) with Atmos YAML functions within the same stack configuration.\nAtmos processes templates first, followed by YAML functions, enabling you to dynamically provide parameters to the YAML functions.\n:::\n\n## Atmos sections supporting YAML functions\n\nYou can use the YAML functions in all Atmos stack manifest sections:\n\n  - `vars`\n  - `settings`\n  - `env`\n  - `metadata`\n  - `command`\n  - `component`\n  - `providers`\n  - `overrides`\n  - `backend`\n  - `backend_type`\n  - `remote_state_backend`\n  - `remote_state_backend_type`\n\n## Examples\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Native Atmos YAML Functions\n\nAtmos natively supports the following YAML functions:\n\n<DocCardList/>\n\n---\n\n## !repo-root\n\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\n    The `!repo-root` Atmos YAML function is used to retrieve the root directory of the Atmos repository.\n</Intro>\n\n## Usage\n\nThe `!repo-root` function can be called with default value:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "---\n\n## !store.get\n\nimport Intro from '@site/src/components/Intro'\nimport File from '@site/src/components/File'\n\n<Intro>\n    The `!store.get` YAML function allows retrieving arbitrary keys directly from a [store](/core-concepts/projects/configuration/stores)\n    without following the Atmos stack/component/key naming convention. This is useful for accessing values stored by external systems\n    or for retrieving global configuration that doesn't belong to a specific component.\n</Intro>\n\n### Usage\n\nThe `!store.get` function is called with two parameters, and optionally a default value and\na [YQ](https://mikefarah.gitbook.io/yq) query expression:",
+      "language": "unknown"
+    },
+    {
+      "code": "Usage examples:\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### Arguments\n\n<dl>\n    <dt>`store_name`</dt>\n    <dd>The name of the store to read from (as defined in the `atmos.yaml` file)</dd>\n\n    <dt>`key`</dt>\n    <dd>The exact key name or path to retrieve from the store. This is the literal key as it exists in the store, not constructed from stack/component/key patterns</dd>\n\n    <dt>`default-value`</dt>\n    <dd>(optional) The default value to return if the key is not found in the store</dd>\n\n    <dt>`yq-expression`</dt>\n    <dd>(optional) [YQ](https://mikefarah.gitbook.io/yq) expression to retrieve individual values from the result</dd>\n</dl>\n\n:::tip\nYou can use [Atmos Stack Manifest Templating](/core-concepts/stacks/templates) in the `!store.get` YAML function expressions.\nAtmos processes the templates first, and then executes the `!store.get` function, allowing you to provide the key name\ndynamically.\n:::\n\n### Key Differences from [`!store`](/functions/yaml/store)\n\n| Feature           | `!store`                                        | `!store.get`                                    |\n|-------------------|-------------------------------------------------|-------------------------------------------------|\n| **Key Format**    | Constructs key from stack/component/key pattern | Uses exact key as provided                      |\n| **Use Case**      | Retrieve Atmos-managed component outputs        | Retrieve arbitrary values from external systems |\n| **Key Pattern**   | `prefix/stack/component/key`                    | Any format the store supports                   |\n| **Typical Usage** | Cross-component dependencies                    | Global configs, external secrets                |\n\n:::tip\nIf you need to retrieve values that follow the Atmos stack/component/key pattern, use the\n[`!store`](/functions/yaml/store) function instead, as it provides better integration with Atmos component dependencies.\n:::\n\n### Using YQ Expressions\n\nYou can use [YQ](https://mikefarah.gitbook.io/yq) expressions to extract specific values\nfrom complex data structures:\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "!include.raw",
+      "id": "!include.raw"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Common Use Cases",
+      "id": "common-use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "Template Files",
+      "id": "template-files"
+    },
+    {
+      "level": "h3",
+      "text": "Documentation and Scripts",
+      "id": "documentation-and-scripts"
+    },
+    {
+      "level": "h3",
+      "text": "Preserving Formatting",
+      "id": "preserving-formatting"
+    },
+    {
+      "level": "h3",
+      "text": "Configuration as Strings",
+      "id": "configuration-as-strings"
+    },
+    {
+      "level": "h2",
+      "text": "Remote Files",
+      "id": "remote-files"
+    },
+    {
+      "level": "h2",
+      "text": "Comparison with !include",
+      "id": "comparison-with-!include"
+    },
+    {
+      "level": "h3",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "YQ Expressions Not Supported",
+      "id": "yq-expressions-not-supported"
+    },
+    {
+      "level": "h2",
+      "text": "File Extension Handling",
+      "id": "file-extension-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Supported Sources",
+      "id": "supported-sources"
+    },
+    {
+      "level": "h3",
+      "text": "Local Files",
+      "id": "local-files"
+    },
+    {
+      "level": "h3",
+      "text": "Remote Files",
+      "id": "remote-files"
+    },
+    {
+      "level": "h2",
+      "text": "See Also",
+      "id": "see-also"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos YAML Functions",
+      "id": "atmos-yaml-functions"
+    },
+    {
+      "level": "h2",
+      "text": "Why YAML Functions Are Safer",
+      "id": "why-yaml-functions-are-safer"
+    },
+    {
+      "level": "h2",
+      "text": "Use-cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos sections supporting YAML functions",
+      "id": "atmos-sections-supporting-yaml-functions"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Native Atmos YAML Functions",
+      "id": "native-atmos-yaml-functions"
+    },
+    {
+      "level": "h2",
+      "text": "!repo-root",
+      "id": "!repo-root"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "!store.get",
+      "id": "!store.get"
+    },
+    {
+      "level": "h3",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h3",
+      "text": "Key Differences from [`!store`](/functions/yaml/store)",
+      "id": "key-differences-from-[`!store`](/functions/yaml/store)"
+    },
+    {
+      "level": "h3",
+      "text": "Using YQ Expressions",
+      "id": "using-yq-expressions"
+    }
+  ],
+  "url": "llms-txt#from-the-file-to-the-`settings`-section-in-the-current-stack",
+  "links": []
+}

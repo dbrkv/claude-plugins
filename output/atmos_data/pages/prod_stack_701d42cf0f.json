@@ -1,0 +1,210 @@
+{
+  "title": "`prod` stack",
+  "content": "atmos terraform apply vpc-flow-logs-bucket -s prod\natmos terraform apply vpc -s prod\nconsole\nÂ Â  âÂ Â  # Centralized stacks configuration (stack manifests)\nÂ Â  âââ stacks\nÂ Â  âÂ Â  âââ catalog  # component-specific defaults\nÂ Â  âÂ Â  âÂ Â  âââ alb\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ aurora-postgres\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ dns\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ eks\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ efs\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ msk\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ ses\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ sns-topic\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ network-firewall\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ network-firewall-logs-bucket\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ waf\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ vpc\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ vpc-flow-logs-bucket\nÂ Â  âÂ Â  âÂ Â  Â Â Â  âââ defaults.yaml\nÂ Â  âÂ Â  âââ layers  # grouping of components by category/function\nÂ Â  âÂ Â  âÂ Â  âââ load-balancers.yaml\nÂ Â  âÂ Â  âÂ Â  âââ data.yaml\nÂ Â  âÂ Â  âÂ Â  âââ dns.yaml\nÂ Â  âÂ Â  âÂ Â  âââ logs.yaml\nÂ Â  âÂ Â  âÂ Â  âââ notifications.yaml\nÂ Â  âÂ Â  âÂ Â  âââ firewalls.yaml\nÂ Â  âÂ Â  âÂ Â  âââ networking.yaml\nÂ Â  âÂ Â  âÂ Â  âââ eks.yaml\nÂ Â  âÂ Â  âââ mixins\nÂ Â  âÂ Â  âÂ Â  âââ tenant  # tenant-specific defaults\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ plat.yaml\nÂ Â  âÂ Â  âÂ Â  âââ region  # region-specific defaults\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ us-east-2.yaml\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ us-west-2.yaml\nÂ Â  âÂ Â  âÂ Â  âââ stage  # stage-specific defaults\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ dev.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ staging.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ prod.yaml\nÂ Â  âÂ Â  âââ orgs  # Organizations\nÂ Â  âÂ Â Â Â Â Â  âââ acme\nÂ Â  âÂ Â Â Â Â Â  Â Â Â  âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â  âââ plat  # 'plat' represents the \"Platform\" OU (a.k.a tenant)\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ dev\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ staging\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ prod\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â  # Centralized components configuration\nÂ Â  âââ components\nÂ Â  Â Â Â  âââ terraform  # Terraform components (a.k.a Terraform \"root\" modules)\nÂ Â  Â Â Â Â Â Â Â  âââ alb\nÂ Â  Â Â Â Â Â Â Â  âââ aurora-postgres\nÂ Â  Â Â Â Â Â Â Â  âââ dns\nÂ Â  Â Â Â Â Â Â Â  âââ eks\nÂ Â  Â Â Â Â Â Â Â  âââ efs\nÂ Â  Â Â Â Â Â Â Â  âââ msk\nÂ Â  Â Â Â Â Â Â Â  âââ ses\nÂ Â  Â Â Â Â Â Â Â  âââ sns-topic\nÂ Â  Â Â Â Â Â Â Â  âââ network-firewall\nÂ Â  Â Â Â Â Â Â Â  âââ network-firewall-logs-bucket\nÂ Â  Â Â Â Â Â Â Â  âââ waf\nÂ Â  Â Â Â Â Â Â Â  âââ vpc\nÂ Â  Â Â Â Â Â Â Â  âââ vpc-flow-logs-bucket\nyaml title=\"atmos.yaml\"\ncomponents:\n  terraform:\n    base_path: \"components/terraform\"\n\nstacks:\n  base_path: \"stacks\"\n  name_pattern: \"{tenant}-{environment}-{stage}\"\n  included_paths:\n    # Tell Atmos to search for the top-level stack manifests in the `orgs` folder and its sub-folders\n    - \"orgs/**/*\"\n  excluded_paths:\n    # Tell Atmos that the `defaults` folder and all sub-folders don't contain top-level stack manifests\n    - \"defaults/**/*\"\n\nschemas:\n  jsonschema:\n    base_path: \"stacks/schemas/jsonschema\"\n  opa:\n    base_path: \"stacks/schemas/opa\"\n  atmos:\n    manifest: \"stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\"\nyaml title=\"stacks/layers/load-balancers.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/alb/defaults\n  # Import other Load Balancer components\nyaml title=\"stacks/layers/data.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/aurora-postgres/defaults\n  - catalog/msk/defaults\n  - catalog/efs/defaults\n  # Import other Data components\nyaml title=\"stacks/layers/dns.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/dns/defaults\n  # Import other DNS components\nyaml title=\"stacks/layers/logs.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/network-firewall-logs-bucket/defaults\n  - catalog/vpc-flow-logs-bucket/defaults\n  # Import other Logs components\nyaml title=\"stacks/layers/notifications.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/ses/defaults\n  - catalog/sns-topic/defaults\n  # Import other Notification components\nyaml title=\"stacks/layers/firewalls.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/network-firewall/defaults\n  - catalog/waf/defaults\n  # Import other Firewall components\nyaml title=\"stacks/layers/networking.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/vpc/defaults\n  # Import other Networking components\nyaml title=\"stacks/layers/eks.yaml\"\nimport:\n  # Import the related component manifests into this layer manifest\n  - catalog/eks/defaults\nyaml title=\"stacks/orgs/acme/plat/dev/us-east-2.yaml\"\nimport:\n  # The `orgs/acme/plat/dev/_defaults` and `mixins/region/us-east-2` manifests\n  # define the top-level Atmos stack `plat-ue2-dev`\n  - orgs/acme/plat/dev/_defaults\n  - mixins/region/us-east-2\n  # Import the layers (groups of components)\n  - layers/load-balancers\n  - layers/data\n  - layers/dns\n  - layers/logs\n  - layers/notifications\n  - layers/firewalls\n  - layers/networking\n  - layers/eks\nyaml title=\"stacks/orgs/acme/plat/dev/us-west-2.yaml\"\nimport:\n  # The `orgs/acme/plat/dev/_defaults` and `mixins/region/us-west-2` manifests\n  # define the top-level Atmos stack `plat-uw2-dev`\n  - orgs/acme/plat/dev/_defaults\n  - mixins/region/us-west-2\n  # Import the layers (groups of components)\n  - layers/load-balancers\n  - layers/data\n  - layers/dns\n  - layers/logs\n  - layers/notifications\n  - layers/firewalls\n  - layers/networking\n  - layers/eks\nyaml title=\"stacks/orgs/acme/plat/prod/us-east-2.yaml\"\nimport:\n  # The `orgs/acme/plat/prod/_defaults` and `mixins/region/us-east-2` manifests\n  # define the top-level Atmos stack `plat-ue2-prod`\n  - orgs/acme/plat/prod/_defaults\n  - mixins/region/us-east-2\n  # Import the layers (groups of components)\n  - layers/load-balancers\n  - layers/data\n  - layers/dns\n  - layers/logs\n  - layers/notifications\n  - layers/firewalls\n  - layers/networking\n  - layers/eks\nconsole\nÂ Â  âÂ Â  # Centralized stacks configuration (stack manifests)\nÂ Â  âââ stacks\nÂ Â  âÂ Â  âââ catalog  # component-specific defaults\nÂ Â  âÂ Â  âÂ Â  âââ vpc\nÂ Â  âÂ Â  âÂ Â  Â Â Â  âââ defaults.yaml\nÂ Â  âÂ Â  âââ mixins\nÂ Â  âÂ Â  âÂ Â  âââ tenant  # tenant-specific defaults\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ plat.yaml\nÂ Â  âÂ Â  âÂ Â  âââ region  # region-specific defaults\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ us-east-2.yaml\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ us-west-2.yaml\nÂ Â  âÂ Â  âÂ Â  âââ stage  # stage-specific defaults\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ dev.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ staging.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ prod.yaml\nÂ Â  âÂ Â  âââ orgs  # Organizations\nÂ Â  âÂ Â Â Â Â Â  âââ acme\nÂ Â  âÂ Â Â Â Â Â  Â Â Â  âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â  âââ plat  # 'plat' represents the \"Platform\" OU (a.k.a tenant)\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ dev\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ staging\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â âââ prod\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  Â Â Â Â Â Â Â Â Â Â Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â  # Centralized components configuration\nÂ Â  âââ components\nÂ Â  Â Â Â  âââ terraform  # Terraform components (a.k.a Terraform \"root\" modules)\nÂ Â  Â Â Â Â Â Â Â  âââ vpc\nyaml title=\"atmos.yaml\"\ncomponents:\n  terraform:\n    base_path: \"components/terraform\"\n\nstacks:\n  base_path: \"stacks\"\n  name_pattern: \"{tenant}-{environment}-{stage}\"\n  included_paths:\n    # Tell Atmos to search for the top-level stack manifests in the `orgs` folder and its sub-folders\n    - \"orgs/**/*\"\n  excluded_paths:\n    # Tell Atmos that the `defaults` folder and all sub-folders don't contain top-level stack manifests\n    - \"defaults/**/*\"\n\nschemas:\n  jsonschema:\n    base_path: \"stacks/schemas/jsonschema\"\n  opa:\n    base_path: \"stacks/schemas/opa\"\n  atmos:\n    manifest: \"stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\"\nyaml title=\"stacks/catalog/vpc/defaults.yaml\"\ncomponents:\n  terraform:\n    vpc/defaults:\n      metadata:\n        # Abstract components can't be provisioned and serve as base components (blueprints) for real components\n        type: abstract\n      settings:\n        # All validation steps must succeed to allow the component to be provisioned\n        validation:\n          validate-vpc-component-with-jsonschema:\n            schema_type: jsonschema\n            schema_path: \"vpc/validate-vpc-component.json\"\n            description: Validate 'vpc' component variables using JSON Schema\n          check-vpc-component-config-with-opa-policy:\n            schema_type: opa\n            schema_path: \"vpc/validate-vpc-component.rego\"\n            module_paths:\n              - \"catalog/constants\"\n            description: Check 'vpc' component configuration using OPA policy\n      vars:\n        enabled: true\n        name: \"common\"\n        max_subnet_count: 3\n        map_public_ip_on_launch: true\n        assign_generated_ipv6_cidr_block: false\n        nat_gateway_enabled: true\n        nat_instance_enabled: false\n        vpc_flow_logs_enabled: true\n        vpc_flow_logs_traffic_type: \"ALL\"\n        vpc_flow_logs_log_destination_type: \"s3\"\n        nat_eip_aws_shield_protection_enabled: false\n        subnet_type_tag_key: \"acme/subnet/type\"\n        ipv4_primary_cidr_block: 10.0.0.0/18\nyaml title=\"stacks/orgs/acme/plat/prod/us-east-2.yaml\"\nimport:\n  import:\n    - orgs/acme/plat/prod/_defaults\n    - mixins/region/us-east-2\n    # Import the defaults for all VPC components\n    - catalog/vpc/defaults\n\ncomponents:\n  terraform:\n    # Atmos component `vpc/1`\n    vpc/1:\n      metadata:\n        # Point to the Terraform component in `components/terraform/vpc`\n        component: vpc\n        # Inherit the defaults for all VPC components\n        inherits:\n          - vpc/defaults\n      # Define/override variables specific to this `vpc/1` component\n      vars:\n        name: vpc-1\n        ipv4_primary_cidr_block: 10.9.0.0/18\n\n# Atmos component `vpc/2`\n    vpc/2:\n      metadata:\n        # Point to the Terraform component in `components/terraform/vpc`\n        component: vpc\n        # Inherit the defaults for all VPC components\n        inherits:\n          - vpc/defaults\n      # Define/override variables specific to this `vpc/2` component\n      vars:\n        name: vpc-2\n        ipv4_primary_cidr_block: 10.10.0.0/18\n        map_public_ip_on_launch: false\nshell\natmos terraform apply vpc/1 -s plat-ue2-prod\natmos terraform apply vpc/2 -s plat-ue2-prod\nconsole\nacme-plat-ue2-prod-vpc-1\nacme-plat-ue2-prod-vpc-2\nconsole\n{namespace}-{tenant}-{environment}-{stage}-{name}\nconsole\nÂ Â  âÂ Â  # Centralized stacks configuration (stack manifests)\nÂ Â  âââ stacks\nÂ Â  âÂ Â  âââ catalog  # component-specific defaults\nÂ Â  âÂ Â  âÂ Â  âââ vpc-flow-logs-bucket\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ defaults.yaml\nÂ Â  âÂ Â  âÂ Â  âââ vpc\nÂ Â  âÂ Â  âÂ Â  Â Â Â  âââ defaults.yaml\nÂ Â  âÂ Â  âââ mixins\nÂ Â  âÂ Â  âÂ Â  âââ tenant  # tenant-specific defaults\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ core.yaml\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ plat.yaml\nÂ Â  âÂ Â  âÂ Â  âââ region  # region-specific defaults\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ global-region.yaml\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ us-east-2.yaml\nÂ Â  âÂ Â  âÂ Â  âÂ Â  âââ us-west-2.yaml\nÂ Â  âÂ Â  âÂ Â  âââ stage  # stage-specific defaults\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ audit.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ automation.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ identity.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ root.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ dev.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ staging.yaml\nÂ Â  âÂ Â  âÂ Â Â Â Â Â Â âââ prod.yaml\nÂ Â  âÂ Â  âââ orgs  # Organizations\nÂ Â  âÂ Â Â Â Â Â  âââ org1\nÂ Â  âÂ Â Â Â Â Â  âÂ Â  âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â  âââ core  # 'core' represents the \"Core\" OU (a.k.a tenant)\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âââ audit\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âââ automation\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âââ identity\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â âââ root\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â Â Â Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â Â Â Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â âÂ Â Â Â Â Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â  âââ plat  # 'plat' represents the \"Platform\" OU (a.k.a tenant)\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âââ dev\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âââ staging\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âÂ Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â âââ prod\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â Â Â Â Â âââ global-region.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â Â Â Â Â âââ us-east-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âÂ Â Â Â Â Â Â Â Â Â Â âââ us-west-2.yaml\nÂ Â  âÂ Â Â Â Â Â  âââ org2\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â  âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â  âââ core  # 'core' represents the \"Core\" OU (a.k.a tenant)\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â âÂ Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â âÂ Â Â âââ audit\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â âÂ Â Â âââ automation\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â âÂ Â Â âââ identity\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â âÂ Â Â âââ root\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â  âââ plat  # 'plat' represents the \"Platform\" OU (a.k.a tenant)\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â Â Â Â Â âââ _defaults.yaml\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â Â Â Â Â âââ dev\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â Â Â Â Â âââ staging\nÂ Â  âÂ Â Â Â Â Â Â Â Â Â Â Â Â Â Â âââ prod\nÂ Â  âÂ Â \nÂ Â  âÂ Â  # Centralized components configuration\nÂ Â  âââ components\nÂ Â  Â Â Â  âââ terraform  # Terraform components (a.k.a Terraform \"root\" modules)\nÂ Â  Â Â Â Â Â Â Â  âââ vpc\nÂ Â  Â Â Â Â Â Â Â  âââ vpc-flow-logs-bucket\nÂ Â  Â Â Â Â Â Â Â  âââ < other components >\nyaml title=\"atmos.yaml\"\ncomponents:\n  terraform:\n    base_path: \"components/terraform\"\n\nstacks:\n  base_path: \"stacks\"\n  included_paths:\n    # Tell Atmos to search for the top-level stack manifests in the `orgs` folder and its sub-folders\n    - \"orgs/**/*\"\n  excluded_paths:\n    # Tell Atmos that all `_defaults.yaml` files are not top-level stack manifests\n    - \"**/_defaults.yaml\"\n  # If you are using multiple organizations (namespaces), use the following `name_pattern`:\n  name_pattern: \"{namespace}-{tenant}-{environment}-{stage}\"\n  # If you are using a single organization (namespace), use the following `name_pattern`:\n  # name_pattern: \"{tenant}-{environment}-{stage}\"\n\nschemas:\n  jsonschema:\n    base_path: \"stacks/schemas/jsonschema\"\n  opa:\n    base_path: \"stacks/schemas/opa\"\n  atmos:\n    manifest: \"stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\"\nyaml title=\"stacks/catalog/vpc-flow-logs-bucket/defaults.yaml\"\ncomponents:\n  terraform:\n    vpc-flow-logs-bucket:\n      metadata:\n        # Point to the Terraform component\n        component: vpc-flow-logs-bucket\n      vars:\n        enabled: true\n        name: \"vpc-flow-logs\"\n        traffic_type: \"ALL\"\n        force_destroy: true\n        lifecycle_rule_enabled: false\nyaml title=\"stacks/catalog/vpc/defaults.yaml\"\ncomponents:\n  terraform:\n    vpc:\n      metadata:\n        # Point to the Terraform component\n        component: vpc\n      settings:\n        # All validation steps must succeed to allow the component to be provisioned\n        validation:\n          validate-vpc-component-with-jsonschema:\n            schema_type: jsonschema\n            schema_path: \"vpc/validate-vpc-component.json\"\n            description: Validate 'vpc' component variables using JSON Schema\n          check-vpc-component-config-with-opa-policy:\n            schema_type: opa\n            schema_path: \"vpc/validate-vpc-component.rego\"\n            module_paths:\n              - \"catalog/constants\"\n            description: Check 'vpc' component configuration using OPA policy\n      vars:\n        enabled: true\n        name: \"common\"\n        max_subnet_count: 3\n        map_public_ip_on_launch: true\n        assign_generated_ipv6_cidr_block: false\n        nat_gateway_enabled: true\n        nat_instance_enabled: false\n        vpc_flow_logs_enabled: true\n        vpc_flow_logs_traffic_type: \"ALL\"\n        vpc_flow_logs_log_destination_type: \"s3\"\n        nat_eip_aws_shield_protection_enabled: false\n        subnet_type_tag_key: \"acme/subnet/type\"\n        ipv4_primary_cidr_block: 10.9.0.0/18\nyaml title=\"stacks/mixins/tenant/core.yaml\"\nvars:\n  tenant: core",
+  "code_samples": [
+    {
+      "code": "## Limitations\n\nThe **Inline Component Customization** pattern has the following limitations and drawbacks:\n\n- The pattern is useful to customize components per account or region, but if you have more than one Organization, Organizational Unit (OU) or region,\n  then the inline customizations would be repeated in the stack manifests, making the entire stack configuration\n  not [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)\n\n- Should be used only for specific use-cases, e.g. when you use just one region, Organization or Organizational Unit (OU)\n\n:::note\n\nTo address the limitations of the **Inline Component Customization** Design Pattern, consider using the following patterns:\n\n- [Organizational Structure Configuration](/design-patterns/organizational-structure-configuration)\n- [Component Catalog](/design-patterns/component-catalog)\n- [Component Catalog with Mixins](/design-patterns/component-catalog/with-mixins)\n\n:::\n\n## Related Patterns\n\n- [Inline Component Configuration](/design-patterns/inline-component-configuration)\n- [Organizational Structure Configuration](/design-patterns/organizational-structure-configuration)\n- [Component Catalog](/design-patterns/component-catalog)\n- [Component Catalog with Mixins](/design-patterns/component-catalog/with-mixins)\n- [Component Catalog Template](/design-patterns/component-catalog/template)\n- [Component Inheritance](/design-patterns/component-inheritance)\n- [Partial Component Configuration](/design-patterns/partial-component-configuration)\n\n---\n\n## Layered Stack Configuration\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\n\n<PillBox>Atmos Design Pattern</PillBox>\n\n<Intro>\nThe **Layered Stack Configuration** Design Pattern describes the mechanism of grouping Atmos components by category or function,\nadding the groups of components to layers, and importing the layers into top-level Atmos stacks.\n</Intro>\n\nEach layer imports or configures a set of related Atmos components. Each Atmos component belongs to just one layer. Each layer can be managed separately, possibly by different teams.\n\n:::note\n\nThe **Layered Stack Configuration** Design Pattern works around the limitations of\nthe [Partial Stack Configuration](/design-patterns/partial-stack-configuration) pattern. Instead of splitting the top-level Atmos stacks into parts,\nthe **Layered Stack Configuration** pattern adds separate layers to group the related Atmos components by category, and then import the layer\nmanifests into the top-level Atmos stacks.\n\n:::\n\n## Use-cases\n\nUse the **Layered Stack Configuration** pattern when:\n\n- You have many Atmos components, and you need to group the components by category or function\n\n- You want to split the components into layers. Each layer should be managed and modified independent of the other layers, possibly by different\n  people or teams\n\n- You want to keep the configuration easy to manage and [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)\n\n## Benefits\n\nThe **Layered Stack Configuration** pattern provides the following benefits:\n\n- Allows to group Atmos components by category or function\n\n  people or teams. Furthermore, controls like\n  GitHub's [`CODEOWNERS`](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners)\n  can be leveraged so that specific teams or individuals must review changes to these files.\n\n- Allows importing only the required layers into the top-level stacks (only the groups of components that need to be provisioned in the stacks)\n\n- Makes the configurations easier to understand\n\n## Example\n\nIn the following structure, we have various Terraform components (Terraform root modules) in the `components/terraform` folder.\n\nIn the `stacks/catalog` folder, we define the defaults for each component using the [Component Catalog](/design-patterns/component-catalog) Atmos\nDesign Pattern.\n\nIn the `stacks/layers` folder, we define layers (groups of components), and import the related components into the layer manifests:\n\n- `load-balancers.yaml`\n- `data.yaml`\n- `dns.yaml`\n- `logs.yaml`\n- `notifications.yaml`\n- `firewalls.yaml`\n- `networking.yaml`\n- `eks.yaml`",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following minimal configuration to `atmos.yaml` [CLI config file](/cli/configuration) :",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/load-balancers.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/data.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/dns.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/logs.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/notifications.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/firewalls.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/networking.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following configuration to the `stacks/layers/eks.yaml` layer manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Import the required layers into the `stacks/orgs/acme/plat/dev/us-east-2.yaml` top-level stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Import the required layers into the `stacks/orgs/acme/plat/dev/us-west-2.yaml` top-level stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Import the required layers into the `stacks/orgs/acme/plat/prod/us-east-2.yaml` top-level stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Similarly, import the required layers into the other top-level stacks for the other organizations, OUs/tenants, accounts and regions.\nMake sure to import only the layers that define the component that need to be provisioned in the stacks.\n\n## Related Patterns\n\n- [Organizational Structure Configuration](/design-patterns/organizational-structure-configuration)\n- [Partial Stack Configuration](/design-patterns/partial-stack-configuration)\n- [Component Overrides](/design-patterns/component-overrides)\n\n## References\n\n- [Catalogs](/core-concepts/stacks/catalogs)\n- [Mixins](/core-concepts/stacks/inheritance/mixins)\n\n---\n\n## Multiple Component Instances\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\n\n<PillBox>Atmos Design Pattern</PillBox>\n\n<Intro>\nThe **Multiple Component Instances** Design Pattern describes how to provision multiple instances of a single Terraform component in the same environment by configuring multiple Atmos component instances.\n</Intro>\n\nAn Atmos component can have any name that can be different from the Terraform component name. More than one instance of the same Terraform component (with the same or different settings) can be provisioned into the same environment by defining multiple Atmos components that provide configuration for the Terraform component.\n\nFor example, two different Atmos components `vpc/1` and `vpc/2` can provide configuration for the same Terraform component `vpc`.\n\n## Use-cases\n\nUse the **Multiple Component Instances** pattern when:\n\n- You need to provision multiple instances of a Terraform component in the same environment (organization, OU, account, region)\n\n## Benefits\n\nThe **Multiple Component Instances** pattern provides the following benefits:\n\n- Separation of the code (Terraform component) from the configuration (Atmos components)\n\n- The same Terraform code is reused by multiple Atmos component instances with different configurations\n\n- The defaults for the components are defined in just one place making the entire\n  configuration [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself)\n\n## Example\n\nThe following example shows the Atmos stack and component configurations to provision two Atmos components (`vpc/1` and `vpc/2`) that use the\nsame Terraform component `vpc`. The `vpc/1` and `vpc/2` components are provisioned in the same stack. In the `catalog/vpc` folder, we have\nthe `defaults.yaml` manifest that configures the base abstract component `vpc/defaults` to be inherited by the derived VPC components `vpc/1`\nand `vpc/2`.",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following minimal configuration to `atmos.yaml` [CLI config file](/cli/configuration) :",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following default configuration to the `stacks/catalog/vpc/defaults.yaml` manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Configure multiple `vpc` component instances in the `stacks/orgs/acme/plat/prod/us-east-2.yaml` top-level stack:",
+      "language": "unknown"
+    },
+    {
+      "code": "To provision the components in the stack, execute the following commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "The provisioned VPCs will have the following names:",
+      "language": "unknown"
+    },
+    {
+      "code": "The names are generated from the context using the following template:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Related Patterns\n\n- [Component Inheritance](/design-patterns/component-inheritance)\n- [Abstract Component](/design-patterns/abstract-component)\n- [Component Catalog](/design-patterns/component-catalog)\n- [Component Catalog with Mixins](/design-patterns/component-catalog/with-mixins)\n- [Component Catalog Template](/design-patterns/component-catalog/template)\n- [Inline Component Configuration](/design-patterns/inline-component-configuration)\n- [Inline Component Customization](/design-patterns/inline-component-customization)\n\n---\n\n## Organizational Structure Configuration\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\n\n<PillBox>Atmos Design Pattern</PillBox>\n\n<Intro>\nThe **Organizational Structure Configuration** pattern describes core concepts and best practices to structure and organize components\nand stacks to design for organizational complexity and provision multi-account enterprise-grade environments.\n</Intro>\n\nThe pattern is frequently used to model multi-region infrastructures for organizations with multiple organizational units/departments/tenants and multiple accounts.\n\n## Use-cases\n\nUse the **Organizational Structure Configuration** pattern when:\n\n- You have one or more organizations with multiple organizational units/departments/tenants\n\n- Each OU/department/tenant has multiple accounts\n\n- You want to provision the infrastructure into many regions\n\n## Benefits\n\nThe **Organizational Structure Configuration** pattern provides the following benefits:\n\n- The defaults for the components, organizations, tenants/OUs, regions, account/stages are defined in just one place (and then imported) making the\n  entire configuration extremely [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself), reusable, and easy to understand and manage\n\n- New Organizations can be easily added and configured without affecting the configurations for the existing organizations\n\n- New tenants/OUs can be easily added to an organization without affecting the configurations for the existing tenants/OUs\n\n- New stages/accounts can be easily added to a tenant/OU without affecting the configurations for the existing stages/accounts\n\n- New regions can be added to the infrastructure, configured with Atmos, and components provisioned into the regions. New regions can be used for\n  the general infrastructure, or for disaster recovery (DR), or for compliance and audit\n\n- After adding new organizations, tenants, accounts or regions, the entire configuration will still remain DRY, reusable and easy to manage thanks to\n  using the described folder structure, catalogs, mixins, and hierarchical [imports](/core-concepts/stacks/imports)\n\n## The Role of _defaults.yaml Files\n\nIn the organizational structure pattern, `_defaults.yaml` files play a crucial role at each level of the hierarchy. These files:\n\n- **Contain baseline configurations** for their respective level (organization, OU/tenant, account/stage)\n- **Must be explicitly imported** - they are not automatically included (this is by design for explicit control)\n- **Create inheritance chains** by importing parent-level defaults\n- **Are excluded from stack discovery** via the `excluded_paths` configuration\n\n:::info\nThe `_defaults.yaml` naming is a convention, not an Atmos feature. The underscore prefix ensures these files:\n- Sort to the top of directory listings (lexicographic ordering)\n- Are visually distinct from actual stack configurations\n- Are excluded from stack discovery (when configured in `excluded_paths`)\n\nSee the [_defaults.yaml Design Pattern](/design-patterns/defaults-pattern) for a complete explanation of this convention.\n:::\n\n## Example\n\nThe following example shows the Atmos stack and component configurations to provision the `vpc` and `vpc-flow-logs-bucket` components into\na multi-org, multi-tenant, multi-account, multi-region environment. There are two organizations (`org1` and `org2`) with two\nOUs/tenants (`core` and `plat`), multiple accounts in each OU/tenant, and two regions (`us-east-2` and `us-west-2`).",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following minimal configuration to `atmos.yaml` [CLI config file](/cli/configuration) :",
+      "language": "unknown"
+    },
+    {
+      "code": "### Configure Component Catalogs\n\nAdd the following default configuration to the `stacks/catalog/vpc-flow-logs-bucket/defaults.yaml` manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following default configuration to the `stacks/catalog/vpc/defaults.yaml` manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Configure OU/Tenant Manifests\n\nIn `stacks/mixins/tenant/core.yaml`, add the following config:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Limitations",
+      "id": "limitations"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Layered Stack Configuration",
+      "id": "layered-stack-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Use-cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits",
+      "id": "benefits"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "References",
+      "id": "references"
+    },
+    {
+      "level": "h2",
+      "text": "Multiple Component Instances",
+      "id": "multiple-component-instances"
+    },
+    {
+      "level": "h2",
+      "text": "Use-cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits",
+      "id": "benefits"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Organizational Structure Configuration",
+      "id": "organizational-structure-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Use-cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits",
+      "id": "benefits"
+    },
+    {
+      "level": "h2",
+      "text": "The Role of _defaults.yaml Files",
+      "id": "the-role-of-_defaults.yaml-files"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Component Catalogs",
+      "id": "configure-component-catalogs"
+    },
+    {
+      "level": "h3",
+      "text": "Configure OU/Tenant Manifests",
+      "id": "configure-ou/tenant-manifests"
+    }
+  ],
+  "url": "llms-txt#`prod`-stack",
+  "links": []
+}

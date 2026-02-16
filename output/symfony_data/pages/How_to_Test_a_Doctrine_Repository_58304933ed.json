@@ -1,0 +1,41 @@
+{
+  "url": "https://symfony.com/doc/7.3/testing/database.html",
+  "title": "How to Test a Doctrine Repository",
+  "content": "The main Testing guide describes how to use and set-up a database for your automated tests. The contents of this article show ways to test your Doctrine repositories.\n\nUnit testing Doctrine repositories is not recommended. Repositories are meant to be tested against a real database connection. However, in case you still need to do this, look at the following example.\n\nSuppose the class you want to test looks like this:\n\nSince the EntityManagerInterface gets injected into the class through the constructor, you can pass a mock object within a test:\n\nIn this example, you are building the mocks from the inside out, first creating the employee which gets returned by the Repository, which itself gets returned by the EntityManager. This way, no real class is involved in testing.\n\nIn functional tests you'll make queries to the database using the actual Doctrine repositories, instead of mocking them. To do so, get the entity manager via the service container as follows:\n\nCode consumes server resources. Blackfire tells you how\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Test a Doctrine Repository",
+      "id": "how-to-test-a-doctrine-repository"
+    },
+    {
+      "level": "h2",
+      "text": "Mocking a Doctrine Repository in Unit Tests",
+      "id": "mocking-a-doctrine-repository-in-unit-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Functional Testing of a Doctrine Repository",
+      "id": "functional-testing-of-a-doctrine-repository"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Salary/SalaryCalculator.php\nnamespace App\\Salary;\n\nuse App\\Entity\\Employee;\nuse Doctrine\\ORM\\EntityManager;\n\nclass SalaryCalculator\n{\n    public function __construct(\n        private EntityManager $entityManager,\n    ) {\n    }\n\n    public function calculateTotalSalary(int $id): int\n    {\n        $employeeRepository = $this->entityManager\n            ->getRepository(Employee::class);\n        $employee = $employeeRepository->find($id);\n\n        return $employee->getSalary() + $employee->getBonus();\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// tests/Salary/SalaryCalculatorTest.php\nnamespace App\\Tests\\Salary;\n\nuse App\\Entity\\Employee;\nuse App\\Salary\\SalaryCalculator;\nuse Doctrine\\ORM\\EntityManager;\nuse Doctrine\\ORM\\EntityRepository;\nuse PHPUnit\\Framework\\TestCase;\n\nclass SalaryCalculatorTest extends TestCase\n{\n    public function testCalculateTotalSalary(): void\n    {\n        $employee = new Employee();\n        $employee->setSalary(1000);\n        $employee->setBonus(1100);\n\n        // Now, mock the repository so it returns the mock of the employee\n        $employeeRepository = $this->createMock(EntityRepository::class);\n        $employeeRepository->expects($this->any())\n            ->method('find')\n            ->willReturn($employee);\n\n        // Last, mock the EntityManager to return the mock of the repository\n        // (this is not needed if the class being tested injects the\n        // repository it uses instead of the entire entity manager)\n        $entityManager = $this->createMock(EntityManager::class);\n        $entityManager->expects($this->any())\n            ->method('getRepository')\n            ->willReturn($employeeRepository);\n\n        $salaryCalculator = new SalaryCalculator($entityManager);\n        $this->assertEquals(2100, $salaryCalculator->calculateTotalSalary(1));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// tests/Repository/ProductRepositoryTest.php\nnamespace App\\Tests\\Repository;\n\nuse App\\Entity\\Product;\nuse Doctrine\\ORM\\EntityManager;\nuse Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase;\n\nclass ProductRepositoryTest extends KernelTestCase\n{\n    private ?EntityManager $entityManager;\n\n    protected function setUp(): void\n    {\n        $kernel = self::bootKernel();\n\n        $this->entityManager = $kernel->getContainer()\n            ->get('doctrine')\n            ->getManager();\n    }\n\n    public function testSearchByName(): void\n    {\n        $product = $this->entityManager\n            ->getRepository(Product::class)\n            ->findOneBy(['name' => 'Priceless widget'])\n        ;\n\n        $this->assertSame(14.50, $product->getPrice());\n    }\n\n    protected function tearDown(): void\n    {\n        parent::tearDown();\n\n        // doing this is recommended to avoid memory leaks\n        $this->entityManager->close();\n        $this->entityManager = null;\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/testing/database.html",
+    "https://symfony.com/doc/7.3/testing.html"
+  ]
+}

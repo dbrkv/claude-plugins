@@ -1,0 +1,19 @@
+{
+  "title": "Track all component sources in vendor.yaml",
+  "content": "spec:\n  sources:\n    - component: vpc\n      source: \"github.com/cloudposse/terraform-aws-vpc.git///?ref={{.Version}}\"\n      version: \"2.1.0\"\n      # Use comments to document any local modifications\n      # Modified: Added compliance tags, custom security groups\nmarkdown",
+  "code_samples": [
+    {
+      "code": "### 2. Document Divergence\n\nClearly document why and how you've diverged:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "2. Document Divergence",
+      "id": "2.-document-divergence"
+    }
+  ],
+  "url": "llms-txt#track-all-component-sources-in-vendor.yaml",
+  "links": []
+}

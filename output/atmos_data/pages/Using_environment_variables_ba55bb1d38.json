@@ -1,0 +1,19 @@
+{
+  "title": "Using environment variables",
+  "content": "ATMOS_FORCE_TTY=true ATMOS_FORCE_COLOR=true atmos describe stacks | vhs record.tape\nbash",
+  "code_samples": [
+    {
+      "code": "### `--force-color`, `ATMOS_FORCE_COLOR`, and `CLICOLOR_FORCE`\n\nForce TrueColor (24-bit) output even when not a TTY:\n- `ATMOS_FORCE_COLOR` and `CLICOLOR_FORCE` are equivalent and both fully supported\n- `CLICOLOR_FORCE` is a standard environment variable ([CLI Colors](https://bixense.com/clicolors/))\n- Forces TrueColor profile regardless of terminal detection\n- Overrides automatic color degradation\n- Useful when piping to tools that preserve ANSI codes\n\n**Important distinction:**\n- `--color` / `ATMOS_COLOR` - Enables color **only if TTY** (respects terminal capabilities)\n- `--force-color` / `ATMOS_FORCE_COLOR` / `CLICOLOR_FORCE` - Forces TrueColor **even for non-TTY** (for screenshots)\n\n**Example:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "`--force-color`, `ATMOS_FORCE_COLOR`, and `CLICOLOR_FORCE`",
+      "id": "`--force-color`,-`atmos_force_color`,-and-`clicolor_force`"
+    }
+  ],
+  "url": "llms-txt#using-environment-variables",
+  "links": []
+}

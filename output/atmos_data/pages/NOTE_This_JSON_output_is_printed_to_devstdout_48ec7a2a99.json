@@ -1,0 +1,37 @@
+{
+  "title": "NOTE: This JSON output is printed to `/dev/stdout`",
+  "content": "[\n   {\n      \"component\": \"vpc\",\n      \"component_type\": \"terraform\",\n      \"component_path\": \"examples/quick-start-advanced/components/terraform/vpc\",\n      \"stack\": \"plat-uw2-prod\",\n      \"stack_slug\": \"plat-uw2-prod-vpc\",\n      \"affected\": \"stack.vars\"\n   },\n   {\n      \"component\": \"vpc\",\n      \"component_type\": \"terraform\",\n      \"component_path\": \"examples/quick-start-advanced/components/terraform/vpc\",\n      \"stack\": \"plat-ue2-prod\",\n      \"stack_slug\": \"plat-ue2-prod-vpc\",\n      \"affected\": \"stack.vars\"\n   }\n]\nyaml\nprofiler:\n  # Enable or disable the pprof profiling server\n  enabled: false\n  # Host to bind the profiling server to (default: localhost)\n  host: \"localhost\"\n  # Port to run the profiling server on (default: 6060)\n  port: 6060\nconsole\npprof profiler available at: http://localhost:6060/debug/pprof/\nExecuting 'terraform plan' command...\nconsole",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n## Profiler\n\nAtmos includes built-in performance profiling capabilities using Go's pprof profiler. This allows you to analyze CPU usage, memory allocations, goroutines, and other performance metrics when running Atmos commands.\n\nThe profiler is configured in the `profiler` section:\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<dl>\n  <dt>`profiler.enabled`</dt>\n  <dd>\n    Enable or disable the pprof profiling server. When enabled, Atmos will start an HTTP server that serves pprof endpoints for performance analysis. Can also be set using the `--profiler-enabled` command-line flag.\n  </dd>\n\n  <dt>`profiler.host`</dt>\n  <dd>\n    The host address to bind the profiling server to. Defaults to `localhost` for security. Can also be set using the `--profiler-host` command-line flag.\n  </dd>\n\n  <dt>`profiler.port`</dt>\n  <dd>\n    The port number for the profiling server. Defaults to `6060` (the standard pprof port). Can also be set using the `--profiler-port` command-line flag.\n  </dd>\n</dl>\n\n### Using the Profiler\n\nWhen the profiler is enabled, Atmos will start a pprof server and display the URL when any command is run:\n\n<Terminal title=\"atmos terraform plan vpc -s plat-ue2-dev --profiler-enabled\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\nThe profiler provides several endpoints for different types of analysis:\n\n- **CPU Profile**: `http://localhost:6060/debug/pprof/profile` - 30-second CPU profile\n- **Memory Profile**: `http://localhost:6060/debug/pprof/heap` - Memory heap profile\n- **Goroutines**: `http://localhost:6060/debug/pprof/goroutine` - Stack traces of all current goroutines\n- **Web Interface**: `http://localhost:6060/debug/pprof/` - Interactive web interface\n\n### Analyzing Performance Data\n\nYou can use Go's pprof tool to analyze the profiling data:\n\n<Terminal title=\"Analyzing CPU profile\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Profiler",
+      "id": "profiler"
+    },
+    {
+      "level": "h3",
+      "text": "Using the Profiler",
+      "id": "using-the-profiler"
+    },
+    {
+      "level": "h3",
+      "text": "Analyzing Performance Data",
+      "id": "analyzing-performance-data"
+    }
+  ],
+  "url": "llms-txt#note:-this-json-output-is-printed-to-`/dev/stdout`",
+  "links": []
+}

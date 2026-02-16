@@ -1,0 +1,13 @@
+{
+  "title": "stacks/catalog/vpc/_defaults.yaml (global)",
+  "content": "hooks:\n  store-outputs:\n    events:\n      - after-terraform-apply\n    command: store\nyaml",
+  "code_samples": [
+    {
+      "code": "In the production account, use the `prod/ssm` store (configured in atmos.yaml):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#stacks/catalog/vpc/_defaults.yaml-(global)",
+  "links": []
+}

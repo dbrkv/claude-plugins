@@ -1,0 +1,13 @@
+{
+  "title": "Query specific template configurations",
+  "content": "atmos list settings --query '.settings.templates.gomplate'\nshell",
+  "code_samples": [
+    {
+      "code": "Output in different formats:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#query-specific-template-configurations",
+  "links": []
+}

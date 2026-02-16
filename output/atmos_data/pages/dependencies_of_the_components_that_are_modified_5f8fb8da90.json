@@ -1,0 +1,19 @@
+{
+  "title": "dependencies of the components that are modified.",
+  "content": "> atmos terraform apply --affected --stack prod --include-dependents --dry-run\n\nExecuting command=\"atmos terraform apply vpc -s prod\"\nExecuting command=\"atmos terraform apply eks/cluster -s prod\" dependency of component=vpc in stack=prod\nExecuting command=\"atmos terraform apply eks/external-dns -s prod\" dependency of component=eks/cluster in stack=prod\nExecuting command=\"atmos terraform apply eks/istio/base -s prod\" dependency of component=eks/cluster in stack=prod\nExecuting command=\"atmos terraform apply eks/istio/istiod -s prod\" dependency of component=eks/istio/base in stack=prod\nExecuting command=\"atmos terraform apply eks/istio/test-app -s prod\" dependency of component=eks/istio/istiod in stack=prod\nExecuting command=\"atmos terraform apply eks/karpenter -s prod\" dependency of component=eks/cluster in stack=prod\nExecuting command=\"atmos terraform apply eks/karpenter-node-pool -s prod\" dependency of component=eks/karpenter in stack=prod\n```\n</Terminal>\n\nimport ThemeGallery from '@site/src/components/ThemeGallery'",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "Browse Themes",
+      "id": "browse-themes"
+    }
+  ],
+  "url": "llms-txt#dependencies-of-the-components-that-are-modified.",
+  "links": []
+}

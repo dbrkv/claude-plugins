@@ -1,0 +1,8 @@
+{
+  "title": "Helper to get environment from any source",
+  "content": "get_environment := env {\n  env := input.vars.environment\n  env != null\n  env != \"\"\n}\n\nget_environment := env {\n  env := input.tf_cli_vars.environment\n  env != null\n  env != \"\"\n}\n\nget_environment := env {\n  env := input.env_tf_cli_vars.environment\n  env != null\n  env != \"\"\n}\n\nget_environment := env {\n  env := input.process_env.ATMOS_ENVIRONMENT\n  env != null\n  env != \"\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#helper-to-get-environment-from-any-source",
+  "links": []
+}

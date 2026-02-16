@@ -1,0 +1,19 @@
+{
+  "title": "Or use standard GitHub token",
+  "content": "export GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\nyaml",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n### 4. Prefer OCI for Binary Artifacts",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "4. Prefer OCI for Binary Artifacts",
+      "id": "4.-prefer-oci-for-binary-artifacts"
+    }
+  ],
+  "url": "llms-txt#or-use-standard-github-token",
+  "links": []
+}

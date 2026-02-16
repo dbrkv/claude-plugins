@@ -1,0 +1,33 @@
+{
+  "url": "https://symfony.com/doc/7.3/security/force_https.html",
+  "title": "How to Force HTTPS or HTTP for different URLs",
+  "content": "The best policy is to force https on all URLs, which can be done via your web server configuration or access_control.\n\nYou can force areas of your site to use the HTTPS protocol in the security config. This is done through the access_control rules using the requires_channel option. To enforce HTTPS on all URLs, add the requires_channel config to every access control:\n\nTo make life easier while developing, you can also use an environment variable, like requires_channel: '%env(REQUIRED_SCHEME)%'. In your .env file, set REQUIRED_SCHEME to http by default, but override it to https on production.\n\nSee How Does the Security access_control Work? for more details about access_control in general.\n\nAn alternative way to enforce HTTP or HTTPS is to use the scheme option of a route or group of routes.\n\nForcing HTTPS while using a reverse proxy or load balancer requires a proper configuration to avoid infinite redirect loops; see How to Configure Symfony to Work behind a Load Balancer or a Reverse Proxy for more details.\n\nCode consumes server resources. Blackfire tells you how\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Force HTTPS or HTTP for different URLs",
+      "id": "how-to-force-https-or-http-for-different-urls"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    # ...\n\n    access_control:\n        - { path: '^/secure', roles: ROLE_ADMIN, requires_channel: https }\n        - { path: '^/login', roles: PUBLIC_ACCESS, requires_channel: https }\n        # catch all other URLs\n        - { path: '^/', roles: PUBLIC_ACCESS, requires_channel: https }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<srv:container xmlns=\"http://symfony.com/schema/dic/security\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:srv=\"http://symfony.com/schema/dic/services\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/security\n        https://symfony.com/schema/dic/security/security-1.0.xsd\">\n\n    <config>\n        <!-- ... -->\n\n        <rule path=\"^/secure\" role=\"ROLE_ADMIN\" requires-channel=\"https\"/>\n        <rule path=\"^/login\" role=\"PUBLIC_ACCESS\" requires-channel=\"https\"/>\n        <rule path=\"^/\" role=\"PUBLIC_ACCESS\" requires-channel=\"https\"/>\n    </config>\n</srv:container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (SecurityConfig $security): void {\n    // ....\n\n    $security->accessControl()\n        ->path('^/secure')\n        ->roles(['ROLE_ADMIN'])\n        ->requiresChannel('https')\n    ;\n\n    $security->accessControl()\n        ->path('^/login')\n        ->roles(['PUBLIC_ACCESS'])\n        ->requiresChannel('https')\n    ;\n\n    $security->accessControl()\n        ->path('^/')\n        ->roles(['PUBLIC_ACCESS'])\n        ->requiresChannel('https')\n    ;\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/security/force_https.html",
+    "https://symfony.com/doc/7.3/security/access_control.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/deployment/proxies.html"
+  ]
+}

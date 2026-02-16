@@ -1,0 +1,30 @@
+{
+  "url": "https://symfony.com/doc/7.3/create_framework/index.html",
+  "title": "Create your own PHP Framework",
+  "content": "Peruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Create your own PHP Framework",
+      "id": "create-your-own-php-framework"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/create_framework/index.html",
+    "https://symfony.com/doc/7.3/create_framework/introduction.html",
+    "https://symfony.com/doc/7.3/create_framework/http_foundation.html",
+    "https://symfony.com/doc/7.3/create_framework/front_controller.html",
+    "https://symfony.com/doc/7.3/create_framework/routing.html",
+    "https://symfony.com/doc/7.3/create_framework/templating.html",
+    "https://symfony.com/doc/7.3/create_framework/http_kernel_controller_resolver.html",
+    "https://symfony.com/doc/7.3/create_framework/separation_of_concerns.html",
+    "https://symfony.com/doc/7.3/create_framework/unit_testing.html",
+    "https://symfony.com/doc/7.3/create_framework/event_dispatcher.html",
+    "https://symfony.com/doc/7.3/create_framework/http_kernel_httpkernelinterface.html",
+    "https://symfony.com/doc/7.3/create_framework/http_kernel_httpkernel_class.html",
+    "https://symfony.com/doc/7.3/create_framework/dependency_injection.html",
+    "https://symfony.com/doc/7.3/workflow/dumping-workflows.html"
+  ]
+}

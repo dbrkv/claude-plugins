@@ -1,0 +1,13 @@
+{
+  "title": "Open AWS Lambda console",
+  "content": "atmos auth console --destination lambda\nshell",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#open-aws-lambda-console",
+  "links": []
+}

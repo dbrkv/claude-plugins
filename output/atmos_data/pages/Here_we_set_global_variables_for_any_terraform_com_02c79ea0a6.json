@@ -1,0 +1,8 @@
+{
+  "title": "Here we set global variables for any \"terraform\" component.",
+  "content": "terraform:\n  vars: {}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#here-we-set-global-variables-for-any-\"terraform\"-component.",
+  "links": []
+}

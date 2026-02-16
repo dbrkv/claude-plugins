@@ -1,0 +1,24 @@
+{
+  "title": "Repeat: edit code â build â test",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n## Best Practices\n\n### Developer-Specific Configuration\n\nThe `.terraformrc` file contains paths specific to each developer's machine. Don't commit it to version control. Add\nit to your component's `.gitignore`:\n\n<File title=\"components/terraform/myapp/.gitignore\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Developer-Specific Configuration",
+      "id": "developer-specific-configuration"
+    }
+  ],
+  "url": "llms-txt#repeat:-edit-code-â-build-â-test",
+  "links": []
+}

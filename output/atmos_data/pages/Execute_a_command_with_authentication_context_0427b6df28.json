@@ -1,0 +1,8 @@
+{
+  "title": "Execute a command with authentication context",
+  "content": "atmos auth exec -- terraform plan",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#execute-a-command-with-authentication-context",
+  "links": []
+}

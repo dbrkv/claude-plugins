@@ -1,0 +1,22 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/adapters/php_array_cache_adapter.html",
+  "title": "PHP Array Cache Adapter",
+  "content": "This adapter is a high performance cache for static data (e.g. application configuration) that is optimized and preloaded into OPcache memory storage. It is suited for any data that is mostly read-only after warm-up:\n\nThis adapter requires turning on the opcache.enable php.ini setting.\n\nSymfony Code Performance Profiling\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "PHP Array Cache Adapter",
+      "id": "php-array-cache-adapter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter;\nuse Symfony\\Component\\Cache\\Adapter\\PhpArrayAdapter;\n\n// somehow, decide it's time to warm up the cache!\nif ($needsWarmup) {\n    // some static values\n    $values = [\n        'stats.products_count' => 4711,\n        'stats.users_count' => 1356,\n    ];\n\n    $cache = new PhpArrayAdapter(\n        // single file where values are cached\n        __DIR__ . '/somefile.cache',\n        // a backup adapter, if you set values after warm-up\n        new FilesystemAdapter()\n    );\n    $cache->warmUp($values);\n}\n\n// ... then, use the cache!\n$cacheItem = $cache->getItem('stats.users_count');\necho $cacheItem->get();",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/adapters/php_array_cache_adapter.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Generate Graphviz diagram",
+  "content": "brew install graphviz\natmos auth list --format graphviz > auth.dot\ndot -Tpng auth.dot -o auth.png",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generate-graphviz-diagram",
+  "links": []
+}

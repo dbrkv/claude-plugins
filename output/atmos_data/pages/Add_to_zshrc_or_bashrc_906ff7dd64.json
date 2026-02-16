@@ -1,0 +1,13 @@
+{
+  "title": "Add to ~/.zshrc or ~/.bashrc",
+  "content": "eval $(atmos auth env)\nbash",
+  "code_samples": [
+    {
+      "code": "<details>\n<summary>Helper Function for Identity Switching</summary>\n\nFor users who prefer a combined authentication and configuration flow, you can create a helper function:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#add-to-~/.zshrc-or-~/.bashrc",
+  "links": []
+}

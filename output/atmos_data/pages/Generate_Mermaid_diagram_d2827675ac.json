@@ -1,0 +1,8 @@
+{
+  "title": "Generate Mermaid diagram",
+  "content": "atmos auth list --format mermaid",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generate-mermaid-diagram",
+  "links": []
+}

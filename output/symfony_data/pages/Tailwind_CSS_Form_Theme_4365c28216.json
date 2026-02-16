@@ -1,0 +1,45 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/tailwindcss.html",
+  "title": "Tailwind CSS Form Theme",
+  "content": "Symfony provides a minimal form theme for Tailwind CSS. Tailwind is a utility first CSS framework and provides unlimited ways to customize your forms. Tailwind has an official form plugin that provides a basic form reset that standardizes their look on all browsers. This form theme requires this plugin and adds a few basic tailwind classes so out of the box, your forms will look decent. Customization is almost always going to be required so this theme makes that easy.\n\nTo use, first be sure you have installed and integrated Tailwind CSS and the form plugin. Follow their respective documentation to install both packages.\n\nIf you prefer to use the Tailwind theme on a form by form basis, include the form_theme tag in the templates where those forms are used:\n\nCustomizing CSS classes is especially important for this theme.\n\nYou can customize classes of individual fields by setting some class options.\n\nWhen customizing the classes this way the defaults provided by the theme are overridden opposed to merged as is the case with other themes. This enables you to take full control of the classes without worrying about undoing the generic defaults the theme provides.\n\nIf you have a generic Tailwind style for all your forms, you can create a custom form theme using the Tailwind CSS theme as a base.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nSave your teams and projects before they sink",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Tailwind CSS Form Theme",
+      "id": "tailwind-css-form-theme"
+    },
+    {
+      "level": "h2",
+      "text": "Customization",
+      "id": "customization"
+    },
+    {
+      "level": "h3",
+      "text": "Twig Form Functions",
+      "id": "twig-form-functions"
+    },
+    {
+      "level": "h3",
+      "text": "Project Specific Form Layout",
+      "id": "project-specific-form-layout"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "{# ... #}\n{# this tag only applies to the forms defined in this template #}\n{% form_theme form 'tailwind_2_layout.html.twig' %}\n\n{% block body %}\n    <h1>User Sign Up:</h1>\n    {{ form(form) }}\n{% endblock %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ form_row(form.title, {\n    row_class: 'my row classes',\n    label_class: 'my label classes',\n    error_item_class: 'my error item classes',\n    widget_class: 'my widget classes',\n    widget_disabled_class: 'my disabled widget classes',\n    widget_errors_class: 'my widget with error classes',\n}) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% use 'tailwind_2_layout.html.twig' %}\n\n{%- block form_row -%}\n    {%- set row_class = row_class|default('my row classes') -%}\n    {{- parent() -}}\n{%- endblock form_row -%}\n\n{%- block widget_attributes -%}\n    {%- set widget_class = widget_class|default('my widget classes') -%}\n    {%- set widget_disabled_class = widget_disabled_class|default('my disabled widget classes') -%}\n    {%- set widget_errors_class = widget_errors_class|default('my widget with error classes') -%}\n    {{- parent() -}}\n{%- endblock widget_attributes -%}\n\n{%- block form_label -%}\n    {%- set label_class = label_class|default('my label classes') -%}\n    {{- parent() -}}\n{%- endblock form_label -%}\n\n{%- block form_help -%}\n    {%- set help_class = help_class|default('my label classes') -%}\n    {{- parent() -}}\n{%- endblock form_help -%}\n\n{%- block form_errors -%}\n    {%- set error_item_class = error_item_class|default('my error item classes') -%}\n    {{- parent() -}}\n{%- endblock form_errors -%}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/tailwindcss.html"
+  ]
+}

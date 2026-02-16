@@ -1,0 +1,210 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/property_info.html",
+  "title": "The PropertyInfo Component",
+  "content": "The PropertyInfo component allows you to get information about class properties by using different sources of metadata.\n\nWhile the PropertyAccess component allows you to read and write values to/from objects and arrays, the PropertyInfo component works solely with class definitions to provide information about the data type and visibility - including via getter or setter methods - of the properties within that class.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nAdditional dependencies may be required for some of the extractors provided with this component.\n\nTo use this component, create a new PropertyInfoExtractor instance and provide it with a set of information extractors:\n\nThe order of extractor instances within an array matters: the first non-null result will be returned. That is why you must provide each category of extractors as a separate array, even if an extractor provides information for more than one category.\n\nFor example, while the ReflectionExtractor and DoctrineExtractor both provide list and type information it is probably better that:\n\nThe DoctrineExtractor has priority for type information so that entity metadata is used instead of type-hinting to provide more accurate type information:\n\nThe PropertyInfoExtractor class exposes public methods to extract several types of information:\n\nBe sure to pass a class name, not an object to the extractor methods:\n\nExtractors that implement PropertyListExtractorInterface provide the list of properties that are available on a class as an array containing each property name as a string:\n\nExtractors that implement PropertyTypeExtractorInterface provide extensive data type information for a property:\n\nSee The PropertyInfo Component for info about the Type class.\n\nExtractors that implement PropertyDocBlockExtractorInterface can provide the full documentation block for a property as a string:\n\nThe PropertyDocBlockExtractorInterface interface was introduced in Symfony 7.1.\n\nExtractors that implement PropertyDescriptionExtractorInterface provide long and short descriptions from a properties annotations as strings:\n\nExtractors that implement PropertyAccessExtractorInterface provide whether properties are readable or writable as booleans:\n\nThe ReflectionExtractor looks for getter/isser/setter/hasser method in addition to whether or not a property is public to determine if it's accessible. This based on how the PropertyAccess works. It assumes camel case style method names following PSR-1. For example, both myProperty and my_property properties are readable if there's a getMyProperty() method and writable if there's a setMyProperty() method.\n\nExtractors that implement PropertyInitializableExtractorInterface provide whether properties are initializable through the class's constructor as booleans:\n\nisInitializable() returns true if a constructor's parameter of the given class matches the given property name.\n\nThe main PropertyInfoExtractor class implements all interfaces, delegating the extraction of property information to the extractors that have been registered with it.\n\nThis means that any method available on each of the extractors is also available on the main PropertyInfoExtractor class.\n\nCompared to the other extractors, type information extractors provide much more information than can be represented as simple scalar values. Because of this, type extractors return an array of Type objects for each type that the property supports.\n\nFor example, if a property supports both integer and string (via the @return int|string annotation), PropertyInfoExtractor::getTypes() will return an array containing two instances of the Type class.\n\nMost extractors will return only one Type instance. The PhpDocExtractor is currently the only extractor that returns multiple instances in the array.\n\nEach object will provide 6 attributes, available in the 6 methods:\n\nThe Type::getBuiltinType() method returns the built-in PHP data type, which can be one of these string values: array, bool, callable, float, int, iterable, null, object, resource or string.\n\nConstants inside the Type class, in the form Type::BUILTIN_TYPE_*, are provided for convenience.\n\nThe Type::isNullable() method will return a boolean value indicating whether the property parameter can be set to null.\n\nIf the built-in PHP data type is object, the Type::getClassName() method will return the fully-qualified class or interface name accepted.\n\nThe Type::isCollection() method will return a boolean value indicating if the property parameter is a collection - a non-scalar value capable of containing other values. Currently this returns true if:\n\nIf the property is a collection, additional type objects may be returned for both the key and value types of the collection (if the information is available), via the Type::getCollectionKeyTypes() and Type::getCollectionValueTypes() methods.\n\nThe list pseudo type is returned by the PropertyInfo component as an array with integer as the key type.\n\nThe extraction of property information is performed by extractor classes. An extraction class can provide one or more types of property information by implementing the correct interface(s).\n\nThe PropertyInfoExtractor will iterate over the relevant extractor classes in the order they were set, call the appropriate method and return the first result that is not null.\n\nWhile you can create your own extractors, the following are already available to cover most use-cases:\n\nUsing PHP reflection, the ReflectionExtractor provides list, type and access information from setter and accessor methods. It can also give the type of a property (even extracting it from the constructor arguments), and if it is initializable through the constructor. It supports return and scalar types:\n\nWhen using the Symfony framework, this service is automatically registered when the property_info feature is enabled:\n\nThis extractor depends on the phpdocumentor/reflection-docblock library.\n\nUsing phpDocumentor Reflection to parse property and method annotations, the PhpDocExtractor provides type and description information. This extractor is automatically registered with the property_info in the Symfony Framework if the dependent library is present:\n\nThe getDocBlock() method was introduced in Symfony 7.1.\n\nThis extractor depends on the phpstan/phpdoc-parser and phpdocumentor/reflection-docblock libraries.\n\nThis extractor fetches information thanks to the PHPStan parser. It gathers information from annotations of properties and methods, such as @var, @param or @return:\n\nThe getShortDescription() and getLongDescription() methods were introduced in Symfony 7.3.\n\nThis extractor depends on the symfony/serializer library.\n\nUsing groups metadata from the Serializer component, the SerializerExtractor provides list information. This extractor is not registered automatically with the property_info service in the Symfony Framework:\n\nIf serializer_groups is set to null, serializer groups metadata won't be checked but you will get only the properties considered by the Serializer Component (notably the #[Ignore] attribute is taken into account).\n\nThis extractor depends on the symfony/doctrine-bridge and doctrine/orm libraries.\n\nUsing entity mapping data from Doctrine ORM, the DoctrineExtractor provides list and type information. This extractor is not registered automatically with the property_info service in the Symfony Framework:\n\nThe ConstructorExtractor tries to extract properties information by using either the PhpStanExtractor or the ReflectionExtractor on the constructor arguments:\n\nYou can create your own property information extractors by creating a class that implements one or more of the following interfaces: ConstructorArgumentTypeExtractorInterface, PropertyAccessExtractorInterface, PropertyDescriptionExtractorInterface, PropertyListExtractorInterface, PropertyTypeExtractorInterface and PropertyInitializableExtractorInterface.\n\nIf you have enabled the PropertyInfo component with the FrameworkBundle, you can automatically register your extractor class with the property_info service by defining it as a service with one or more of the following tags:\n\nproperty_info.constructor_extractor if it provides type information from the constructor argument.\n\nThe property_info.constructor_extractor tag was introduced in Symfony 7.3.\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The PropertyInfo Component",
+      "id": "the-propertyinfo-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Extractor Ordering",
+      "id": "extractor-ordering"
+    },
+    {
+      "level": "h2",
+      "text": "Extractable Information",
+      "id": "extractable-information"
+    },
+    {
+      "level": "h3",
+      "text": "List Information",
+      "id": "list-information"
+    },
+    {
+      "level": "h3",
+      "text": "Type Information",
+      "id": "type-information"
+    },
+    {
+      "level": "h3",
+      "text": "Documentation Block",
+      "id": "documentation-block"
+    },
+    {
+      "level": "h3",
+      "text": "Description Information",
+      "id": "description-information"
+    },
+    {
+      "level": "h3",
+      "text": "Access Information",
+      "id": "access-information"
+    },
+    {
+      "level": "h2",
+      "text": "Property Initializable Information",
+      "id": "property-initializable-information"
+    },
+    {
+      "level": "h2",
+      "text": "Type Objects",
+      "id": "type-objects"
+    },
+    {
+      "level": "h3",
+      "text": "Type::getBuiltInType()",
+      "id": "type-getbuiltintype"
+    },
+    {
+      "level": "h3",
+      "text": "Type::isNullable()",
+      "id": "type-isnullable"
+    },
+    {
+      "level": "h3",
+      "text": "Type::getClassName()",
+      "id": "type-getclassname"
+    },
+    {
+      "level": "h3",
+      "text": "Type::isCollection()",
+      "id": "type-iscollection"
+    },
+    {
+      "level": "h3",
+      "text": "Type::getCollectionKeyTypes() & Type::getCollectionValueTypes()",
+      "id": "type-getcollectionkeytypes-type-getcollectionvaluetypes"
+    },
+    {
+      "level": "h2",
+      "text": "Extractors",
+      "id": "extractors"
+    },
+    {
+      "level": "h3",
+      "text": "ReflectionExtractor",
+      "id": "reflectionextractor"
+    },
+    {
+      "level": "h3",
+      "text": "PhpDocExtractor",
+      "id": "phpdocextractor"
+    },
+    {
+      "level": "h3",
+      "text": "PhpStanExtractor",
+      "id": "phpstanextractor"
+    },
+    {
+      "level": "h3",
+      "text": "SerializerExtractor",
+      "id": "serializerextractor"
+    },
+    {
+      "level": "h3",
+      "text": "DoctrineExtractor",
+      "id": "doctrineextractor"
+    },
+    {
+      "level": "h3",
+      "text": "ConstructorExtractor",
+      "id": "constructorextractor"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Your Own Extractors",
+      "id": "creating-your-own-extractors"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/property-info",
+      "language": "unknown"
+    },
+    {
+      "code": "use Example\\Namespace\\YourAwesomeCoolClass;\nuse Symfony\\Component\\PropertyInfo\\Extractor\\PhpDocExtractor;\nuse Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor;\nuse Symfony\\Component\\PropertyInfo\\PropertyInfoExtractor;\n\n// a full list of extractors is shown further below\n$phpDocExtractor = new PhpDocExtractor();\n$reflectionExtractor = new ReflectionExtractor();\n\n// list of PropertyListExtractorInterface (any iterable)\n$listExtractors = [$reflectionExtractor];\n\n// list of PropertyTypeExtractorInterface (any iterable)\n$typeExtractors = [$phpDocExtractor, $reflectionExtractor];\n\n// list of PropertyDescriptionExtractorInterface (any iterable)\n$descriptionExtractors = [$phpDocExtractor];\n\n// list of PropertyAccessExtractorInterface (any iterable)\n$accessExtractors = [$reflectionExtractor];\n\n// list of PropertyInitializableExtractorInterface (any iterable)\n$propertyInitializableExtractors = [$reflectionExtractor];\n\n$propertyInfo = new PropertyInfoExtractor(\n    $listExtractors,\n    $typeExtractors,\n    $descriptionExtractors,\n    $accessExtractors,\n    $propertyInitializableExtractors\n);\n\n// see below for more examples\n$class = YourAwesomeCoolClass::class;\n$properties = $propertyInfo->getProperties($class);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Bridge\\Doctrine\\PropertyInfo\\DoctrineExtractor;\nuse Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor;\nuse Symfony\\Component\\PropertyInfo\\PropertyInfoExtractor;\n\n$reflectionExtractor = new ReflectionExtractor();\n$doctrineExtractor = new DoctrineExtractor(/* ... */);\n\n$propertyInfo = new PropertyInfoExtractor(\n    // List extractors\n    [\n        $reflectionExtractor,\n        $doctrineExtractor\n    ],\n    // Type extractors\n    [\n        $doctrineExtractor,\n        $reflectionExtractor\n    ]\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "// bad! It may work, but not with all extractors\n$propertyInfo->getProperties($awesomeObject);\n\n// Good!\n$propertyInfo->getProperties($awesomeObject::class);\n$propertyInfo->getProperties('Example\\Namespace\\YourAwesomeClass');\n$propertyInfo->getProperties(YourAwesomeClass::class);",
+      "language": "unknown"
+    },
+    {
+      "code": "$properties = $propertyInfo->getProperties($class);\n/*\n    Example Result\n    --------------\n    array(3) {\n        [0] => string(8) \"username\"\n        [1] => string(8) \"password\"\n        [2] => string(6) \"active\"\n    }\n*/",
+      "language": "javascript"
+    },
+    {
+      "code": "$types = $propertyInfo->getTypes($class, $property);\n/*\n    Example Result\n    --------------\n    array(1) {\n        [0] =>\n            class Symfony\\Component\\PropertyInfo\\Type (6) {\n            private $builtinType          => string(6) \"string\"\n            private $nullable             => bool(false)\n            private $class                => NULL\n            private $collection           => bool(false)\n            private $collectionKeyType    => NULL\n            private $collectionValueType  => NULL\n        }\n    }\n*/",
+      "language": "javascript"
+    },
+    {
+      "code": "$docBlock = $propertyInfo->getDocBlock($class, $property);\n/*\n    Example Result\n    --------------\n    string(79):\n        This is the subsequent paragraph in the DocComment.\n        It can span multiple lines.\n*/",
+      "language": "unknown"
+    },
+    {
+      "code": "$title = $propertyInfo->getShortDescription($class, $property);\n/*\n    Example Result\n    --------------\n    string(41) \"This is the first line of the DocComment.\"\n*/\n\n$paragraph = $propertyInfo->getLongDescription($class, $property);\n/*\n    Example Result\n    --------------\n    string(79):\n        This is the subsequent paragraph in the DocComment.\n        It can span multiple lines.\n*/",
+      "language": "unknown"
+    },
+    {
+      "code": "$propertyInfo->isReadable($class, $property);\n// Example Result: bool(true)\n\n$propertyInfo->isWritable($class, $property);\n// Example Result: bool(false)",
+      "language": "unknown"
+    },
+    {
+      "code": "$propertyInfo->isInitializable($class, $property);\n// Example Result: bool(true)",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor;\n\n$reflectionExtractor = new ReflectionExtractor();\n\n// List information.\n$reflectionExtractor->getProperties($class);\n\n// Type information.\n$reflectionExtractor->getTypes($class, $property);\n\n// Access information.\n$reflectionExtractor->isReadable($class, $property);\n$reflectionExtractor->isWritable($class, $property);\n\n// Initializable information\n$reflectionExtractor->isInitializable($class, $property);",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    property_info:\n        enabled: true",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\PropertyInfo\\Extractor\\PhpDocExtractor;\n\n$phpDocExtractor = new PhpDocExtractor();\n\n// Type information.\n$phpDocExtractor->getTypes($class, $property);\n// Description information.\n$phpDocExtractor->getShortDescription($class, $property);\n$phpDocExtractor->getLongDescription($class, $property);\n$phpDocExtractor->getDocBlock($class, $property);",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Domain/Foo.php\nclass Foo\n{\n    /**\n     * @param string $bar\n     */\n    public function __construct(\n        private string $bar,\n    ) {\n    }\n}\n\n// Extraction.php\nuse Symfony\\Component\\PropertyInfo\\Extractor\\PhpStanExtractor;\nuse App\\Domain\\Foo;\n\n$phpStanExtractor = new PhpStanExtractor();\n\n// Type information.\n$phpStanExtractor->getTypesFromConstructor(Foo::class, 'bar');\n// Description information.\n$phpStanExtractor->getShortDescription($class, 'bar');\n$phpStanExtractor->getLongDescription($class, 'bar');",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\PropertyInfo\\Extractor\\SerializerExtractor;\nuse Symfony\\Component\\Serializer\\Mapping\\Factory\\ClassMetadataFactory;\nuse Symfony\\Component\\Serializer\\Mapping\\Loader\\AttributeLoader;\n\n$serializerClassMetadataFactory = new ClassMetadataFactory(new AttributeLoader());\n$serializerExtractor = new SerializerExtractor($serializerClassMetadataFactory);\n\n// the `serializer_groups` option must be configured (may be set to null)\n$serializerExtractor->getProperties($class, ['serializer_groups' => ['mygroup']]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Doctrine\\ORM\\EntityManager;\nuse Doctrine\\ORM\\Tools\\Setup;\nuse Symfony\\Bridge\\Doctrine\\PropertyInfo\\DoctrineExtractor;\n\n$config = Setup::createAnnotationMetadataConfiguration([__DIR__], true);\n$entityManager = EntityManager::create([\n    'driver' => 'pdo_sqlite',\n    // ...\n], $config);\n$doctrineExtractor = new DoctrineExtractor($entityManager);\n\n// List information.\n$doctrineExtractor->getProperties($class);\n// Type information.\n$doctrineExtractor->getTypes($class, $property);",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Domain/Foo.php\nclass Foo\n{\n    public function __construct(\n        private string $bar,\n    ) {\n    }\n}\n\n// Extraction.php\nuse App\\Domain\\Foo;\nuse Symfony\\Component\\PropertyInfo\\Extractor\\ConstructorExtractor;\n\n$constructorExtractor = new ConstructorExtractor([new ReflectionExtractor()]);\n$constructorExtractor->getTypes(Foo::class, 'bar')[0]->getBuiltinType(); // returns 'string'",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/property_info.html",
+    "https://symfony.com/doc/7.3/components/property_access.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html"
+  ]
+}

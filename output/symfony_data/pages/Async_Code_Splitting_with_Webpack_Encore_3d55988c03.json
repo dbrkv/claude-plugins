@@ -1,0 +1,26 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/encore/code-splitting.html",
+  "title": "Async Code Splitting with Webpack Encore",
+  "content": "When you require/import a JavaScript or CSS module, Webpack compiles that code into the final JavaScript or CSS file. Usually, that's exactly what you want. But what if you only need to use a piece of code under certain conditions? For example, what if you want to use video.js to play a video, but only once a user has clicked a link:\n\nIn this example, the VideoPlayer module and everything it imports will be packaged into the final, built JavaScript file, even though it may not be very common for someone to actually need it. A better solution is to use dynamic imports: load the code via AJAX when it's needed:\n\nBy using import() like a function, the module will be downloaded async and the .then() callback will be executed when it's finished. The VideoPlayer argument to the callback will be the loaded module. In other words, it works like normal AJAX calls! Behind the scenes, Webpack will package the VideoPlayer module into a separate file (e.g. 0.js) so it can be downloaded. All the details are handled for you.\n\nThe { default: VideoPlayer } part may look strange. When using the async import, your .then() callback is passed an object, where the actual module is on a .default key. There are reasons why this is done, but it does look quirky. The { default: VideoPlayer } code makes sure that the VideoPlayer module we want is read from this .default property.\n\nFor more details and configuration options, see dynamic imports on Webpack's documentation.\n\nMeasure & Improve Symfony Code Performance\n\nShow your Sylius expertise",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Async Code Splitting with Webpack Encore",
+      "id": "async-code-splitting-with-webpack-encore"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// assets/app.js\n\nimport $ from 'jquery';\n// a fictional \"large\" module (e.g. it imports video.js internally)\nimport VideoPlayer from './components/VideoPlayer';\n\n$('.js-open-video').on('click', function() {\n    // use the larger VideoPlayer module\n    const player = new VideoPlayer('some-element');\n});",
+      "language": "python"
+    },
+    {
+      "code": "// assets/app.js\n\nimport $ from 'jquery';\n\n$('.js-open-video').on('click', function() {\n    // you could start a loading animation here\n\n    // use import() as a function - it returns a Promise\n    import('./components/VideoPlayer').then(({ default: VideoPlayer }) => {\n        // you could stop a loading animation here\n\n        // use the larger VideoPlayer module\n        const player = new VideoPlayer('some-element');\n\n    }).catch(error => 'An error occurred while loading the component');\n});",
+      "language": "python"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/encore/code-splitting.html"
+  ]
+}

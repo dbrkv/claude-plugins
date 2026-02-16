@@ -1,0 +1,13 @@
+{
+  "title": "List metadata for production stacks",
+  "content": "atmos list metadata --stack 'prod-*'\nshell",
+  "code_samples": [
+    {
+      "code": "List specific metadata using JMESPath queries:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#list-metadata-for-production-stacks",
+  "links": []
+}

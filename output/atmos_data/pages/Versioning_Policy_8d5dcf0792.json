@@ -1,0 +1,59 @@
+{
+  "title": "Versioning Policy",
+  "content": "## Platform Components\n- Scheme: SemVer (MAJOR.MINOR.PATCH)\n- Location: `components/terraform/{component}/{version}/`\n- Example: `vpc/1.2.3/`\n\n## Application Components\n- Scheme: Maturity Levels\n- Location: `components/terraform/{maturity}/{component}/`\n- Example: `alpha/api-gateway/`\nyaml",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### 3. Match Scheme to Operational Model\nChoose schemes that align with how your team thinks about versions:\n- **Technology teams**: Maturity Levels (alpha, beta, stable)\n- **Operations teams**: Environment Names (dev, staging, prod)\n- **Compliance-driven**: CalVer for temporal tracking\n- **Library management**: SemVer for clear API contracts\n\n### 4. Consider Migration Paths\nPlan for scheme changes as your needs evolve:\n- Start simple (Sequential, Simple folders)\n- Add semantic meaning as needed (SemVer, Maturity Levels)\n- Maintain backward compatibility during transitions\n\n## Summary\n\nVersioning schemes provide naming conventions for component versions. Choose based on whether you need:\n\n- **Fixed points** (SemVer, CalVer, Sequential) â Use with Strict Version Pinning\n- **Moving targets** (Maturity Levels, Environment Names) â Use with Release Tracks/Channels\n\nThe right scheme depends on your operational model, team culture, and which [version management pattern](/design-patterns/version-management) you're implementing. Start with simpler schemes and add complexity only when the benefits justify the overhead.\n\n:::tip\nDifferent components can use different schemes based on their needs. Platform components might use SemVer while application components use maturity levels.\n:::\n\n## Related Patterns\n\n- [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning) - Works with number-based schemes\n- [Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels) - Works with label-based schemes\n- [Git Flow: Branches as Channels](/design-patterns/version-management/git-flow-branches-as-channels) - Idiomatic with environment names\n- [Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning) - Works with simple naming\n\n---\n\n## Atmos Functions\n\nimport DocCardList from '@theme/DocCardList'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nAtmos provides two types of functions for dynamic configuration: **YAML Functions** (recommended) and **Template Functions**. Understanding the difference is crucial for writing reliable, maintainable configurations.\n</Intro>\n\n## Critical Differences\n\n### YAML Functions (Recommended) â\n\nYAML functions are **native YAML features** that work with the YAML parser. They are processed **after** the YAML is parsed into a structured document.\n\n**Advantages:**\n- **Type-safe**: Work with actual YAML data types (strings, numbers, booleans, objects, arrays)\n- **Error-resistant**: Cannot break YAML syntax since they operate on parsed data\n- **Predictable**: Results are always valid YAML structures\n- **Debuggable**: Errors point to specific YAML nodes\n- **Native**: Part of the YAML specification via custom tags\n\n**Example:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Platform Components",
+      "id": "platform-components"
+    },
+    {
+      "level": "h2",
+      "text": "Application Components",
+      "id": "application-components"
+    },
+    {
+      "level": "h3",
+      "text": "3. Match Scheme to Operational Model",
+      "id": "3.-match-scheme-to-operational-model"
+    },
+    {
+      "level": "h3",
+      "text": "4. Consider Migration Paths",
+      "id": "4.-consider-migration-paths"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos Functions",
+      "id": "atmos-functions"
+    },
+    {
+      "level": "h2",
+      "text": "Critical Differences",
+      "id": "critical-differences"
+    },
+    {
+      "level": "h3",
+      "text": "YAML Functions (Recommended) â",
+      "id": "yaml-functions-(recommended)-â"
+    }
+  ],
+  "url": "llms-txt#versioning-policy",
+  "links": []
+}

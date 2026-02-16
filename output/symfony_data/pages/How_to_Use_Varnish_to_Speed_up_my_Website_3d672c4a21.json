@@ -1,0 +1,82 @@
+{
+  "url": "https://symfony.com/doc/7.3/http_cache/varnish.html",
+  "title": "How to Use Varnish to Speed up my Website",
+  "content": "Because Symfony's cache uses the standard HTTP cache headers, the HTTP Cache can be replaced with any other reverse proxy. Varnish is a powerful, open-source, HTTP accelerator capable of serving cached content fast and including support for Edge Side Includes.\n\nVarnish automatically forwards the IP as X-Forwarded-For and leaves the X-Forwarded-Proto header in the request. If you do not configure Varnish as trusted proxy, Symfony will see all requests as coming through insecure HTTP connections from the Varnish host instead of the real client.\n\nRemember to call the Request::setTrustedProxies() method in your front controller so that Varnish is seen as a trusted proxy and the X-Forwarded-* headers are used.\n\nTo ensure that the Symfony Router generates URLs correctly with Varnish, an X-Forwarded-Port header must be present for Symfony to use the correct port number.\n\nThis port number corresponds to the port your setup is using to receive external connections (80 is the default value for HTTP connections). If the application also accepts HTTPS connections, there could be another proxy (as Varnish does not do HTTPS itself) on the default HTTPS port 443 that handles the SSL termination and forwards the requests as HTTP requests to Varnish with an X-Forwarded-Proto header. In this case, you need to add the following configuration snippet:\n\nForcing HTTPS while using a reverse proxy or load balancer requires a proper configuration to avoid infinite redirect loops; see How to Configure Symfony to Work behind a Load Balancer or a Reverse Proxy for more details.\n\nBy default, most caching proxies do not cache anything when a request is sent with cookies or a basic authentication header. This is because the content of the page is supposed to depend on the cookie value or authentication header.\n\nIf you know for sure that the backend never uses sessions or basic authentication, have Varnish remove the corresponding header from requests to prevent clients from bypassing the cache. In practice, you will need sessions at least for some parts of the site, e.g. when using forms with stateful CSRF Protection. In this situation, make sure to only start a session when actually needed and clear the session when it is no longer needed. Alternatively, you can look into caching pages that contain CSRF protected forms.\n\nCookies created in JavaScript and used only on the frontend, such as those from Google Analytics, are still sent to the server. These cookies are not relevant for backend processing and should not influence the caching logic. To ensure this, configure your Varnish cache to clean the cookies header by retaining only essential cookies (e.g., session cookies) and removing all others. This allows pages to be cached when there is no active session.\n\nIf you are using PHP with its default configuration, the session cookie is typically named PHPSESSID. Additionally, if your application depends on other critical cookies, such as a REMEMBERME cookie for remember me functionality or a trusted device cookie for two-factor authentication, these cookies should also be preserved.\n\nIf content is not different for every user, but depends on the roles of a user, a solution is to separate the cache per group. This pattern is implemented and explained by the FOSHttpCacheBundle under the name User Context.\n\nVarnish uses the cache headers sent by your application to determine how to cache content. However, versions prior to Varnish 4 did not respect Cache-Control: no-cache, no-store and private. To ensure consistent behavior, use the following configuration if you are still using Varnish 3:\n\nYou can see the default behavior of Varnish in the form of a VCL file: default.vcl for Varnish 3, builtin.vcl for Varnish 4.\n\nAs explained in the Edge Side Includes article, Symfony detects whether it talks to a reverse proxy that understands ESI or not. When you use the Symfony reverse proxy, you don't need to do anything. But to make Varnish instead of Symfony resolve the ESI tags, you need some configuration in Varnish. Symfony uses the Surrogate-Capability header from the Edge Architecture described by Akamai.\n\nVarnish only supports the src attribute for ESI tags (onerror and alt attributes are ignored).\n\nFirst, configure Varnish so that it advertises its ESI support by adding a Surrogate-Capability header to requests forwarded to the backend application:\n\nThe abc part of the header isn't important unless you have multiple \"surrogates\" that need to advertise their capabilities. See Surrogate-Capability Header for details.\n\nThen, optimize Varnish so that it only parses the response contents when there is at least one ESI tag by checking the Surrogate-Control header that Symfony adds automatically:\n\nIf you followed the advice about ensuring a consistent caching behavior, those VCL functions already exist. Append the code to the end of the function, they won't interfere with each other.\n\nIf you want to cache content that changes frequently and still serve the most recent version to users, you need to invalidate that content. While cache invalidation allows you to purge content from your proxy before it has expired, it adds complexity to your caching setup.\n\nThe open source FOSHttpCacheBundle takes the pain out of cache invalidation by helping you to organize your caching and invalidation setup.\n\nThe documentation of the FOSHttpCacheBundle explains how to configure Varnish and other reverse proxies for cache invalidation.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nOnline Symfony certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Use Varnish to Speed up my Website",
+      "id": "how-to-use-varnish-to-speed-up-my-website"
+    },
+    {
+      "level": "h2",
+      "text": "Make Symfony Trust the Reverse Proxy",
+      "id": "make-symfony-trust-the-reverse-proxy"
+    },
+    {
+      "level": "h2",
+      "text": "Routing and X-FORWARDED Headers",
+      "id": "routing-and-x-forwarded-headers"
+    },
+    {
+      "level": "h2",
+      "text": "Cookies and Caching",
+      "id": "cookies-and-caching"
+    },
+    {
+      "level": "h2",
+      "text": "Ensure Consistent Caching Behavior",
+      "id": "ensure-consistent-caching-behavior"
+    },
+    {
+      "level": "h2",
+      "text": "Enable Edge Side Includes (ESI)",
+      "id": "enable-edge-side-includes-esi"
+    },
+    {
+      "level": "h2",
+      "text": "Cache Invalidation",
+      "id": "cache-invalidation"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "sub vcl_recv {\n    if (req.http.X-Forwarded-Proto == \"https\" ) {\n        set req.http.X-Forwarded-Port = \"443\";\n    } else {\n        set req.http.X-Forwarded-Port = \"80\";\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "sub vcl_recv {\n    // Remove all cookies except for essential ones.\n    if (req.http.Cookie) {\n        set req.http.Cookie = \";\" + req.http.Cookie;\n        set req.http.Cookie = regsuball(req.http.Cookie, \"; +\", \";\");\n        set req.http.Cookie = regsuball(req.http.Cookie, \";(PHPSESSID|REMEMBERME)=\", \"; \\1=\");\n        set req.http.Cookie = regsuball(req.http.Cookie, \";[^ ][^;]*\", \"\");\n        set req.http.Cookie = regsuball(req.http.Cookie, \"^[; ]+|[; ]+$\", \"\");\n\n        if (req.http.Cookie == \"\") {\n            // If there are no more cookies, remove the header to get the page cached.\n            unset req.http.Cookie;\n        }\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "sub vcl_recv {\n    // Remove all cookies except for essential ones.\n    if (req.http.Cookie) {\n        set req.http.Cookie = \";\" + req.http.Cookie;\n        set req.http.Cookie = regsuball(req.http.Cookie, \"; +\", \";\");\n        set req.http.Cookie = regsuball(req.http.Cookie, \";(PHPSESSID|REMEMBERME)=\", \"; \\1=\");\n        set req.http.Cookie = regsuball(req.http.Cookie, \";[^ ][^;]*\", \"\");\n        set req.http.Cookie = regsuball(req.http.Cookie, \"^[; ]+|[; ]+$\", \"\");\n\n        if (req.http.Cookie == \"\") {\n            // If there are no more cookies, remove the header to get page cached.\n            remove req.http.Cookie;\n        }\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "sub vcl_fetch {\n    // By default, Varnish3 ignores Cache-Control: no-cache and private\n    // https://www.varnish-cache.org/docs/3.0/tutorial/increasing_your_hitrate.html#cache-control\n    if (beresp.http.Cache-Control ~ \"private\" ||\n        beresp.http.Cache-Control ~ \"no-cache\" ||\n        beresp.http.Cache-Control ~ \"no-store\"\n    ) {\n        return (hit_for_pass);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "sub vcl_recv {\n    // Add a Surrogate-Capability header to announce ESI support.\n    set req.http.Surrogate-Capability = \"abc=ESI/1.0\";\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "sub vcl_backend_response {\n    // Check for ESI acknowledgement and remove Surrogate-Control header\n    if (beresp.http.Surrogate-Control ~ \"ESI/1.0\") {\n        unset beresp.http.Surrogate-Control;\n        set beresp.do_esi = true;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "sub vcl_fetch {\n    // Check for ESI acknowledgement and remove Surrogate-Control header\n    if (beresp.http.Surrogate-Control ~ \"ESI/1.0\") {\n        unset beresp.http.Surrogate-Control;\n        set beresp.do_esi = true;\n    }\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/http_cache/varnish.html",
+    "https://symfony.com/doc/7.3/http_cache.html",
+    "https://symfony.com/doc/7.3/http_cache/esi.html",
+    "https://symfony.com/doc/7.3/deployment/proxies.html",
+    "https://symfony.com/doc/7.3/security/csrf.html",
+    "https://symfony.com/doc/7.3/session.html",
+    "https://symfony.com/doc/7.3/security/remember_me.html"
+  ]
+}

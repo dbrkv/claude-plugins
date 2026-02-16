@@ -1,0 +1,42 @@
+{
+  "title": "Helper to calculate total instances from all sources",
+  "content": "get_total_instances := total {\n  instance_counts := [\n    object.get(input.vars, \"instance_count\", null),\n    object.get(input.tf_cli_vars, \"instance_count\", null),\n    object.get(input.env_tf_cli_vars, \"instance_count\", null)\n  ]\n  valid_counts := [n | n := instance_counts[_]; is_number(n)]\n  total := sum(valid_counts)\n}\nshell\natmos terraform apply <component> -s <stack> -- -var name=api\n\natmos terraform apply <component> -s <stack> -- -var name=api -var 'tags={\"Team\":\"api\", \"Group\":\"web\"}'\nconsole\nATMOS_LOGS_LEVEL=Trace /\natmos terraform apply my-component -s plat-ue2-dev -- -var name=api -var 'tags={\"Team\":\"api\", \"Group\":\"web\"}'\n\nVariables for the component 'my-component' in the stack 'plat-ue2-dev':\nenvironment: ue2\nnamespace: cp\nregion: us-east-2\nstage: dev\ntenant: plat\n\nWriting the variables to file:\ncomponents/terraform/my-component/plat-ue2-dev-my-component.terraform.tfvars.json\n\nCLI variables (will override the variables defined in the stack manifests):\nname: api\ntags:\n    Team: api\n    Group: web\nyaml",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Best Practices for Context-Aware Policies\n\n1. **Environment Consistency**: Always validate that environment settings are consistent across all input sources\n2. **Security First**: Use `process_env` to enforce security requirements like required credentials and approval workflows\n3. **Type Safety**: Leverage Rego's type checking functions (`is_number`, `is_object`, etc.) when working with parsed JSON from CLI variables\n4. **Graceful Handling**: Check for null/undefined values before processing to avoid policy evaluation errors\n5. **Clear Messages**: Provide specific error messages that indicate which context source triggered the violation\n6. **Separation of Concerns**: Create focused policies for different aspects (security, compliance, cost control) rather than monolithic rules\n\n---\n\n## Terraform Input Variables Validation\n\nimport Terminal from '@site/src/components/Terminal'\nimport File from '@site/src/components/File'\nimport EmbedFile from '@site/src/components/EmbedFile'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse [Open Policy Agent](https://www.openpolicyagent.org/docs/latest/) (OPA) policies to validate Terraform input variables.\n</Intro>\n\n## Introduction\n\nWhen executing `atmos terraform <sub-command>` commands, you can provide\n[Terraform input variables](https://developer.hashicorp.com/terraform/language/values/variables) on the command line\nusing the `-var` flag. These variables will override the variables configured in Atmos stack manifests.\n\nFor example:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n:::tip\nUse double-dash `--` to signify the end of the options for Atmos and the start\nof the additional native arguments and flags for the Terraform commands.\n\nRefer to [Terraform CLI commands usage](/cli/commands/terraform/usage) for more details.\n\n:::\n\n:::info\nTerraform processes variables in the following order of precedence (from highest to lowest):\n\n- Explicit `-var` flags: these variables have the highest priority and will override any other variable values, including those specified in `--var-file`.\n\n- Variables in `--var-file`: values in a variable file override default values set in the Terraform configuration.\n  Atmos generates varfiles from stack configurations and provides it to Terraform using the `--var-file` flag.\n\n- Environment variables: variables set as environment variables using the `TF_VAR_` prefix.\n\n- Default values in the Terraform configuration files: these have the lowest priority.\n:::\n\nWhen log level `Trace` is used, Atmos prints the Terraform variables specified on the command line in the \"CLI variables\" output.\nFor example:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\nAtmos exposes the Terraform variables passed on the command line in the `tf_cli_vars` section, and also provides access to\nthe variables from the [`TF_CLI_ARGS`](https://developer.hashicorp.com/terraform/cli/config/environment-variables#tf_cli_args-and-tf_cli_args_name)\nenvironment variable in the `env_tf_cli_vars` section. Both can be used in OPA policies for validation.\n\n## Terraform Variables Validation using OPA Policies\n\nIn `atmos.yaml`, configure the `schemas.opa` section:\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Best Practices for Context-Aware Policies",
+      "id": "best-practices-for-context-aware-policies"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform Input Variables Validation",
+      "id": "terraform-input-variables-validation"
+    },
+    {
+      "level": "h2",
+      "text": "Introduction",
+      "id": "introduction"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform Variables Validation using OPA Policies",
+      "id": "terraform-variables-validation-using-opa-policies"
+    }
+  ],
+  "url": "llms-txt#helper-to-calculate-total-instances-from-all-sources",
+  "links": []
+}

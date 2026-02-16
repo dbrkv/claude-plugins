@@ -1,0 +1,132 @@
+{
+  "title": "Bypass confirmation with --force",
+  "content": "atmos auth logout dev-admin --keychain --force\nshell\n    # Interactive confirmation\n    atmos auth logout dev-admin --keychain\n\n# Non-interactive (CI/CD)\n    atmos auth logout dev-admin --keychain --force\n    shell\n$ atmos auth logout dev-admin\n\nLogging out from identity: dev-admin\n\nBuilding authentication chain...\n  â Chain: aws-sso â dev-admin\n\nRemoving credentials...\n  â Keyring: aws-sso\n  â Keyring: dev-admin (not found - already logged out)\n  â Files: ~/.config/atmos/aws/aws-sso/ (XDG-compliant)\n\nLogged out with warnings (2/3 successful)\n\nErrors encountered:\n  â¢ dev-admin: credential not found in keyring\n\n2025-10-17T10:15:30Z DEBUG Starting logout identity=dev-admin\n2025-10-17T10:15:30Z DEBUG Authentication chain built chain=[aws-sso dev-org-admin dev-admin]\n2025-10-17T10:15:30Z DEBUG Removing keyring entry alias=aws-sso\n2025-10-17T10:15:30Z DEBUG Removing keyring entry alias=dev-org-admin\n2025-10-17T10:15:30Z DEBUG Removing keyring entry alias=dev-admin\n2025-10-17T10:15:30Z INFO Logout completed identity=dev-admin removed=3\n\nError: identity \"myidentity\" not found in configuration\n\nAvailable identities:\n  â¢ dev-admin\n  â¢ prod-admin\n  â¢ dev-readonly\n\nRun 'atmos auth logout' without arguments for interactive selection.\n\nIdentity 'dev-admin' is already logged out.\nNo credentials found in keyring or file storage.\n\nError: failed to delete credentials from keyring: access denied\n\nâ Files: ~/.config/atmos/aws/aws-sso/ (permission denied)\nshell",
+  "code_samples": [
+    {
+      "code": "**What happens:**\n- Deletes credentials from system keychain (IAM keys, service account creds)\n- Clears session data (AWS SSO tokens, temporary credentials)\n- Removes AWS config files\n- Requires re-authentication (`atmos auth login`) to use this identity again\n\n**When to use `--keychain`:**\n- Permanently removing an identity you no longer need\n- Security incident response (credential rotation)\n- Switching to different IAM user or service account\n- Complete credential cleanup before machine decommission\n\n**When NOT to use `--keychain`:**\n- Normal end-of-day logout (preserve keychain for next day)\n- Switching between identities temporarily\n- Troubleshooting authentication issues\n\n## Quick Reference\n\nUnderstanding what gets removed:\n\n| Command | Keychain Credentials | Session Data | AWS Config Files | Use When |\n|---------|---------------------|--------------|------------------|----------|\n| `atmos auth logout <identity>` | **Preserved** | **Cleared** | **Identity profile removed** | End of work session |\n| `atmos auth logout <identity> --keychain` | **Deleted** | **Cleared** | **Identity profile removed** | Permanently remove identity |\n| `atmos auth logout --provider <name>` | **Preserved** | **Cleared** | **Entire provider directory** | Switch providers |\n| `atmos auth logout --provider <name> --keychain` | **Deleted** | **Cleared** | **Entire provider directory** | Permanently remove provider |\n| `atmos auth logout --all` | **Preserved** | **Cleared** | **All profiles removed** | Clean session data |\n| `atmos auth logout --all --keychain` | **Deleted** | **Cleared** | **All profiles removed** | Complete cleanup |\n\n:::tip Safe by Default\nWithout `--keychain`, logout preserves your stored credentials (IAM user keys, service account creds) for instant re-authentication. It only clears session data (AWS SSO tokens, temporary credentials).\n:::\n\n:::danger Permanent Deletion\nUsing `--keychain` permanently deletes credentials from your system keychain. You'll need to re-enter IAM user access keys or re-authenticate service accounts when logging in again.\n:::\n\n:::tip Re-authentication\nAll logout commands preserve your `atmos.yaml` configuration. Run `atmos auth login` to re-authenticate with any configured identity.\n:::\n\n## Arguments\n\n<dl>\n  <dt>`identity`</dt>\n  <dd>Name of the identity to logout from. Must match an identity defined in `atmos.yaml`. If omitted, enters interactive mode. Can also be specified via the `--identity` flag.</dd>\n</dl>\n\n## Flags\n\n<dl>\n  <dt>`--identity` (alias `-i`)</dt>\n  <dd>\n    Specify the identity to logout from. Alternative to using the positional argument. This flag has three modes:\n\n    - **With value** (`--identity admin`): Logout from the specified identity\n    - **Without value** (`--identity`): Show interactive selector to choose identity (same as omitting both flag and argument)\n    - **Omitted**: Enter interactive mode if no positional argument is provided\n\n    **Environment variables:** `ATMOS_IDENTITY` or `IDENTITY` (checked in that order)\n  </dd>\n\n  <dt>`--all`</dt>\n  <dd>Logout from all identities and providers. Clears session data for all identities. Combine with `--keychain` to also remove stored credentials.</dd>\n\n  <dt>`--provider`</dt>\n  <dd>Logout from a specific provider instead of an identity. Clears session data for all identities using this provider. Combine with `--keychain` to also remove stored credentials.</dd>\n\n  <dt>`--keychain`</dt>\n  <dd>\n    **Also delete credentials from system keychain** (destructive operation). By default, logout preserves keychain credentials (IAM user access keys, service account credentials) to enable instant re-authentication.\n\n    **When specified:**\n    - Requires interactive confirmation (shows what will be deleted)\n    - Use `--force` to bypass confirmation in CI/CD environments\n    - Permanently removes: IAM user access keys, service account credentials, provider credentials\n    - Session data is also cleared (always happens during logout)\n\n    **Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n  <dt>`--force`</dt>\n  <dd>\n    Skip interactive confirmation prompts. Required when using `--keychain` in non-interactive environments (CI/CD pipelines, scripts).\n\n    **Safety note:** Only use with `--keychain` when you're certain you want to delete credentials. This bypasses the confirmation dialog that warns about permanent credential deletion.\n  </dd>\n\n  <dt>`--dry-run`</dt>\n  <dd>Preview what would be removed without actually deleting anything. Shows which session data and (if `--keychain` is used) which keychain entries would be deleted. Useful for understanding the scope of logout.</dd>\n</dl>\n\n## How It Works\n\n### Default Behavior (Safe by Default)\n\nBy default, `atmos auth logout` clears **session data only**:\n\n**Example:** For `atmos auth logout dev-admin` (without `--keychain`):\n\n1. Clears session data:\n   - Removes `dev-admin` profile from `~/.config/atmos/aws/aws-sso/credentials`\n   - Removes `dev-admin` profile from `~/.config/atmos/aws/aws-sso/config`\n   - Clears AWS SSO tokens from `~/.aws/sso/cache/`\n\n2. Preserves keychain credentials:\n   - Keyring entry for `dev-admin` is **preserved**\n   - Keyring entries for authentication chain (`aws-sso`, `dev-org-admin`) are **preserved**\n   - Other identity credentials remain intact\n\n**Next login** (`atmos auth login dev-admin`):\n- Uses preserved keychain credentials instantly\n- No need to re-enter IAM user access keys\n- No need to re-authenticate service accounts\n- Faster authentication (skips interactive prompts)\n\n### Destructive Logout with --keychain\n\nAdding `--keychain` permanently deletes credentials from system keychain:\n\n**Example:** For `atmos auth logout dev-admin --keychain`:\n\n1. Requires interactive confirmation (bypass with `--force` in CI/CD)\n2. Deletes keychain credentials:\n   - Removes keyring entry for `dev-admin`\n   - IAM user access keys are permanently deleted\n   - Service account credentials are permanently deleted\n3. Clears session data (same as default logout)\n\n**Next login** (`atmos auth login dev-admin`):\n- Requires re-entering IAM user access keys\n- Requires re-authenticating service accounts\n- Full authentication flow (no shortcuts)\n\n### Provider Logout\n\nWhen you log out of a provider using `--provider`, Atmos performs **complete cleanup for that provider**:\n\n**Example:** For `atmos auth logout --provider aws-sso` (without `--keychain`):\n\n1. Logs out each identity using the provider (clears session data for all)\n2. Keychain credentials are **preserved** (unless `--keychain` is specified)\n3. Deletes entire provider directory: `~/.config/atmos/aws/aws-sso/`\n\n**With `--keychain`:** `atmos auth logout --provider aws-sso --keychain`\n1. Deletes provider keyring entry\n2. Deletes all identity keyring entries using this provider\n3. Deletes entire provider directory\n\nThis is the nuclear option when you want to completely remove all traces of a provider.\n\n### Credential Storage Locations\n\nAtmos stores credentials in two locations:\n\n#### 1. System Keyring\n\nCredentials are securely stored in your operating system's keyring:\n\n- **macOS**: Keychain Access\n- **Linux**: Secret Service API (GNOME Keyring, KWallet)\n- **Windows**: Windows Credential Manager\n\n**Keyring entries** use the identity or provider name as the key with user `atmos-auth`.\n\n#### 2. Provider-Specific Files\n\nSome providers (like AWS) also write credential files for compatibility with other tools:\n\n- **AWS credentials**: `<base_path>/<provider>/credentials`\n- **AWS config**: `<base_path>/<provider>/config`\n\nThe default base path follows XDG Base Directory Specification (`~/.config/atmos/aws/` on both Linux and macOS), but this can be customized (see [Custom File Paths](#custom-file-paths)).\n\n**Identity logout** selectively removes only that identity's profile from the config files using file locking to prevent conflicts. **Provider logout** (`--provider` flag) deletes the entire provider directory.\n\n### Error Handling\n\nThe logout command uses **best-effort cleanup**: it continues even if individual steps fail and reports all errors at the end.\n\n**Example with missing credentials:**",
+      "language": "unknown"
+    },
+    {
+      "code": "The command succeeds (exit code 0) as long as at least one credential was removed.\n\n## Security Considerations\n\n### Browser Sessions Remain Active\n\n:::danger Web Sessions Not Affected\n**Important**: The `atmos auth logout` command only removes **locally cached credentials from your filesystem and keychain**.\n\n**Your browser session with the identity provider (AWS SSO, Okta, etc.) remains active and logged in.** Anyone with access to your browser can still access authenticated resources through your active web session.\n:::\n\nTo completely end your session and fully logout:\n\n1. Run `atmos auth logout` to remove local credentials\n2. Visit your identity provider's website (e.g., `https://mycompany.awsapps.com/start`)\n3. **Explicitly sign out** from the browser session\n4. Close all browser windows\n\n**Why this matters**: If you only run `atmos auth logout` without signing out of your browser, someone using your computer could potentially access your authenticated session through the browser.\n\n### What Gets Removed\n\n**Default logout** (without `--keychain`):\n\n- â AWS credential files (XDG-compliant: `~/.config/atmos/aws/<provider>/credentials`)\n- â AWS config files (XDG-compliant: `~/.config/atmos/aws/<provider>/config`)\n- â AWS SSO tokens (`~/.aws/sso/cache/`)\n- â Empty provider directories\n\n**With `--keychain` flag:**\n\n- â Everything above, PLUS:\n- â Credentials stored in system keychain (IAM user keys, service account creds)\n- â Provider credentials from system keychain\n\n**Logout does NOT remove:**\n\n- â Browser session cookies\n- â Identity provider sessions\n- â Credentials stored outside Atmos (e.g., `~/.aws/credentials`)\n- â Configuration files (e.g., `atmos.yaml`)\n\n### Audit Trail\n\nAll logout operations are logged for security auditing:",
+      "language": "unknown"
+    },
+    {
+      "code": "Enable debug logging with `ATMOS_LOGS_LEVEL=Debug` to see detailed audit information.\n\n## Troubleshooting\n\n### Identity Not Found",
+      "language": "unknown"
+    },
+    {
+      "code": "**Solution**: Check your `atmos.yaml` configuration and ensure the identity name is spelled correctly.\n\n### Already Logged Out",
+      "language": "unknown"
+    },
+    {
+      "code": "This is informational, not an error. The identity has no cached credentials to remove.\n\n### Permission Denied",
+      "language": "unknown"
+    },
+    {
+      "code": "**Solution**: The system keyring requires authentication. On macOS, you may need to grant Atmos permission in **System Preferences â Security & Privacy â Privacy â Accessibility**.\n\n### Files Not Removed",
+      "language": "unknown"
+    },
+    {
+      "code": "**Solution**: Ensure you have write permissions to the Atmos config directory. Check file ownership and permissions:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Quick Reference",
+      "id": "quick-reference"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "Default Behavior (Safe by Default)",
+      "id": "default-behavior-(safe-by-default)"
+    },
+    {
+      "level": "h3",
+      "text": "Destructive Logout with --keychain",
+      "id": "destructive-logout-with---keychain"
+    },
+    {
+      "level": "h3",
+      "text": "Provider Logout",
+      "id": "provider-logout"
+    },
+    {
+      "level": "h3",
+      "text": "Credential Storage Locations",
+      "id": "credential-storage-locations"
+    },
+    {
+      "level": "h3",
+      "text": "Error Handling",
+      "id": "error-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Security Considerations",
+      "id": "security-considerations"
+    },
+    {
+      "level": "h3",
+      "text": "Browser Sessions Remain Active",
+      "id": "browser-sessions-remain-active"
+    },
+    {
+      "level": "h3",
+      "text": "What Gets Removed",
+      "id": "what-gets-removed"
+    },
+    {
+      "level": "h3",
+      "text": "Audit Trail",
+      "id": "audit-trail"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Identity Not Found",
+      "id": "identity-not-found"
+    },
+    {
+      "level": "h3",
+      "text": "Already Logged Out",
+      "id": "already-logged-out"
+    },
+    {
+      "level": "h3",
+      "text": "Permission Denied",
+      "id": "permission-denied"
+    },
+    {
+      "level": "h3",
+      "text": "Files Not Removed",
+      "id": "files-not-removed"
+    }
+  ],
+  "url": "llms-txt#bypass-confirmation-with---force",
+  "links": []
+}

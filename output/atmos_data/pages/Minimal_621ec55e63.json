@@ -1,0 +1,8 @@
+{
+  "title": "Minimal",
+  "content": "shell:\n  prompt: \"[{{.Component}}] $ \"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#minimal",
+  "links": []
+}

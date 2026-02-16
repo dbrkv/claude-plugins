@@ -1,0 +1,109 @@
+{
+  "title": "All Terraform components in this layer will get the 'Layer' and 'Team' tags",
+  "content": "terraform:\n  overrides:\n    vars:\n      tags:\n        Layer: eks\n        Team: EKS cluster managers\nyaml title=\"stacks/orgs/acme/plat/dev/us-east-2.yaml\"\nimport:\n  # The `orgs/acme/plat/dev/_defaults` and `mixins/region/us-east-2` manifests\n  # define the top-level Atmos stack `plat-ue2-dev`\n  - orgs/acme/plat/dev/_defaults\n  - mixins/region/us-east-2\n  # Import the layers (groups of components)\n  - layers/load-balancers\n  - layers/data\n  - layers/dns\n  - layers/logs\n  - layers/notifications\n  - layers/firewalls\n  - layers/networking\n  - layers/eks\nyaml title=\"stacks/orgs/acme/plat/dev/us-west-2.yaml\"\nimport:\n  # The `orgs/acme/plat/dev/_defaults` and `mixins/region/us-west-2` manifests\n  # define the top-level Atmos stack `plat-uw2-dev`\n  - orgs/acme/plat/dev/_defaults\n  - mixins/region/us-west-2\n  # Import the layers (groups of components)\n  - layers/load-balancers\n  - layers/data\n  - layers/dns\n  - layers/logs\n  - layers/notifications\n  - layers/firewalls\n  - layers/networking\n  - layers/eks\nyaml title=\"stacks/orgs/acme/plat/prod/us-east-2.yaml\"\nimport:\n  # The `orgs/acme/plat/prod/_defaults` and `mixins/region/us-east-2` manifests\n  # define the top-level Atmos stack `plat-ue2-prod`\n  - orgs/acme/plat/prod/_defaults\n  - mixins/region/us-east-2\n  # Import the layers (groups of components)\n  - layers/load-balancers\n  - layers/data\n  - layers/dns\n  - layers/logs\n  - layers/notifications\n  - layers/firewalls\n  - layers/networking\n  - layers/eks\nyaml\nstacks:\n  excluded_paths:\n    - \"**/_defaults.yaml\"\nconsole\nstacks/\nâââ orgs/\nâ   âââ acme/\nâ       âââ _defaults.yaml          # Organization defaults (NOT auto-imported)\nâ       âââ core/\nâ       â   âââ _defaults.yaml      # OU defaults - must import org defaults\nâ       â   âââ prod/\nâ       â       âââ _defaults.yaml  # Stage defaults - must import OU defaults\nâ       â       âââ us-east-2.yaml  # Stack - must import stage defaults\nyaml title=\"stacks/orgs/acme/_defaults.yaml\"",
+  "code_samples": [
+    {
+      "code": "Import the required layers into the `stacks/orgs/acme/plat/dev/us-east-2.yaml` top-level stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Import the required layers into the `stacks/orgs/acme/plat/dev/us-west-2.yaml` top-level stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Import the required layers into the `stacks/orgs/acme/plat/prod/us-east-2.yaml` top-level stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "Similarly, import the required layers into the other top-level stacks for the other organizations, OUs/tenants, accounts and regions.\nMake sure to import only the layers that define the component that need to be provisioned in the stacks.\n\nAfter the Atmos components are provisioned in the top-level stacks, all Terraform components will get the `Layer` and `Team` tags from the\ncorresponding layers.\n\n## Related Patterns\n\n- [Organizational Structure Configuration](/design-patterns/organizational-structure-configuration)\n- [Partial Stack Configuration](/design-patterns/partial-stack-configuration)\n- [Layered Stack Configuration](/design-patterns/layered-stack-configuration)\n- [Component Catalog](/design-patterns/component-catalog)\n- [Component Catalog with Mixins](/design-patterns/component-catalog/with-mixins)\n\n## References\n\n- [Catalogs](/core-concepts/stacks/catalogs)\n- [Mixins](/core-concepts/stacks/inheritance/mixins)\n\n---\n\n## The _defaults.yaml Design Pattern\n\nimport Intro from '@site/src/components/Intro'\nimport PillBox from '@site/src/components/PillBox'\n\n<PillBox>Atmos Design Pattern</PillBox>\n\n<Intro>\nThe `_defaults.yaml` pattern is a **naming convention** (not an Atmos feature) for organizing hierarchical configuration defaults. Atmos has no special knowledge of these filesâthey are treated like any other YAML file that can be imported.\n</Intro>\n\n## What\n\nThe `_defaults.yaml` pattern is a naming convention used throughout Atmos configurations to organize default settings at different levels of your infrastructure hierarchy. This is purely a convention adopted by teams for better organizationâAtmos itself has no built-in knowledge or special handling of files named `_defaults.yaml`.\n\n## Why We Use This Convention\n\n### 1. Lexicographic Sorting\nThe underscore prefix (`_`) ensures these files appear at the top of directory listings, making them immediately visible when browsing the filesystem. This saves time when navigating complex stack structures.\n\n### 2. Visual Distinction\nThe naming pattern immediately signals to developers: \"this file contains defaults, not a stack definition.\" This clear visual cue helps prevent confusion between actual stack configurations and their default settings.\n\n### 3. Automatic Exclusion from Stack Discovery\nBy convention, we configure Atmos to exclude `**/_defaults.yaml` from stack discovery in `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "This prevents these files from being mistakenly processed as stacks when Atmos discovers stack configurations.\n\n### 4. Explicit Import Control\nSince they're excluded from discovery, these files must be explicitly imported, giving developers precise control over inheritance chains. This explicitness helps prevent unexpected configuration inheritance and makes the configuration flow easier to trace.\n\n## How It Works\n\n### Important: Not Automatic!\n\n:::warning\nUnlike some configuration systems, Atmos does **NOT** automatically import `_defaults.yaml` files. Each must be explicitly imported where needed. This is intentionalâit provides explicit control over configuration inheritance.\n:::\n\n### Import Path Resolution\n\nAtmos supports two types of import paths:\n\n**Base-Relative Paths** (most common):\n- Resolved relative to `stacks.base_path` configured in `atmos.yaml`\n- Examples: `orgs/acme/_defaults`, `catalog/vpc/defaults`\n\n**File-Relative Paths**:\n- Start with `./` or `../`\n- Resolved relative to the importing file's directory\n- Examples: `./_defaults`, `../_defaults`\n\n### Typical Usage Pattern",
+      "language": "unknown"
+    },
+    {
+      "code": "## The Convention in Practice\n\n### Step 1: Create defaults at each level",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "References",
+      "id": "references"
+    },
+    {
+      "level": "h2",
+      "text": "The _defaults.yaml Design Pattern",
+      "id": "the-_defaults.yaml-design-pattern"
+    },
+    {
+      "level": "h2",
+      "text": "What",
+      "id": "what"
+    },
+    {
+      "level": "h2",
+      "text": "Why We Use This Convention",
+      "id": "why-we-use-this-convention"
+    },
+    {
+      "level": "h3",
+      "text": "1. Lexicographic Sorting",
+      "id": "1.-lexicographic-sorting"
+    },
+    {
+      "level": "h3",
+      "text": "2. Visual Distinction",
+      "id": "2.-visual-distinction"
+    },
+    {
+      "level": "h3",
+      "text": "3. Automatic Exclusion from Stack Discovery",
+      "id": "3.-automatic-exclusion-from-stack-discovery"
+    },
+    {
+      "level": "h3",
+      "text": "4. Explicit Import Control",
+      "id": "4.-explicit-import-control"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "Important: Not Automatic!",
+      "id": "important:-not-automatic!"
+    },
+    {
+      "level": "h3",
+      "text": "Import Path Resolution",
+      "id": "import-path-resolution"
+    },
+    {
+      "level": "h3",
+      "text": "Typical Usage Pattern",
+      "id": "typical-usage-pattern"
+    },
+    {
+      "level": "h2",
+      "text": "The Convention in Practice",
+      "id": "the-convention-in-practice"
+    },
+    {
+      "level": "h3",
+      "text": "Step 1: Create defaults at each level",
+      "id": "step-1:-create-defaults-at-each-level"
+    }
+  ],
+  "url": "llms-txt#all-terraform-components-in-this-layer-will-get-the-'layer'-and-'team'-tags",
+  "links": []
+}

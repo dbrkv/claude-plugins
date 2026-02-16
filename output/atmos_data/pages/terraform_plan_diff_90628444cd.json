@@ -1,0 +1,57 @@
+{
+  "title": "terraform plan-diff",
+  "content": "The `atmos terraform plan-diff` command compares two Terraform plans and shows the differences between them.\n\nIt takes an original plan file (`--orig`) and optionally a new plan file (`--new`). If the new plan file is not provided, it will generate one by running `terraform plan` with the current configuration.\n\nThe command shows differences in variables, resources, and outputs between the two plans.\n\n:::info\n[Data sources](https://opentofu.org/docs/language/data-sources/) are automatically skipped during comparison and will not appear in the diff.\n:::\n\n<dl>\n  <dt>`component` (required)</dt>\n  <dd>The name of the component to run the command against.</dd>\n</dl>\n\n<dl>\n  <dt>`-s` / `--stack` (required)</dt>\n  <dd>The stack name to use.</dd>\n\n<dt>`--orig` (required)</dt>\n  <dd>Path to the original Terraform plan file.</dd>\n\n<dt>`--new` (optional)</dt>\n  <dd>Path to the new Terraform plan file.</dd>\n\n<dt>`--skip-init` (optional)</dt>\n  <dd>Skip running `terraform init` before executing the command.</dd>\n</dl>\n\nYou can also pass any additional flags and arguments that are supported by the `terraform plan` command when generating a new plan.\n\n### Compare an existing plan with a new plan generated with current configuration\n\n### Compare two existing plan files\n\n### Example with data resources\n\nWhen your Terraform configuration includes data sources, they will be automatically filtered out of the diff:",
+  "code_samples": [
+    {
+      "code": "atmos terraform plan-diff <component> -s <stack> --orig=<original-plan-file> [--new=<new-plan-file>] [options]",
+      "language": "shell"
+    },
+    {
+      "code": "atmos terraform plan-diff myapp -s dev --orig=orig.plan",
+      "language": "shell"
+    },
+    {
+      "code": "atmos terraform plan-diff myapp -s dev --orig=orig.plan --new=new.plan",
+      "language": "shell"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Compare an existing plan with a new plan generated with current configuration",
+      "id": "compare-an-existing-plan-with-a-new-plan-generated-with-current-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Compare two existing plan files",
+      "id": "compare-two-existing-plan-files"
+    },
+    {
+      "level": "h3",
+      "text": "Example with data resources",
+      "id": "example-with-data-resources"
+    }
+  ],
+  "url": "llms-txt#terraform-plan-diff",
+  "links": []
+}

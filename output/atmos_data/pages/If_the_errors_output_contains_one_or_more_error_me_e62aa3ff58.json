@@ -1,0 +1,53 @@
+{
+  "title": "If the 'errors' output contains one or more error messages, Atmos considers the policy failed.",
+  "content": "errors[\"for the 'my-component' component, the variable 'name' must be provided on the command line using the '-var' flag\"] {\n    not input.tf_cli_vars.name\n}\nconsole\natmos terraform apply my-component -s plat-ue2-dev\n\nValidating the component 'my-component' using OPA file 'my-component/validate-my-component.rego'\n\nfor the 'my-component' component, the variable 'name' must be provided on the command line using the '-var' flag\nshell\natmos terraform apply my-component -s plat-ue2-dev -- -var name=api\nrego\npackage atmos\n\nerrors[\"for the 'my-component' component, the variable 'name' cannot be overridden on the command line using the '-var' flag\"] {\n    input.tf_cli_vars.name\n}\nconsole\natmos terraform apply my-component -s plat-ue2-dev -- -var name=api\n\nValidating the component 'my-component' using OPA file 'my-component/validate-my-component.rego'\n\nfor the 'my-component' component, the variable 'name' cannot be overridden on the command line using the '-var' flag\nshell\natmos terraform apply my-component -s plat-ue2-dev\nrego\npackage atmos\n\nerrors[\"for the 'my-component' component, 'environment' must be set in the 'TF_CLI_ARGS' environment variable\"] {\n    not input.env_tf_cli_vars.environment\n}\nconsole",
+  "code_samples": [
+    {
+      "code": "</File>\n\nWhen executing the following command (and not passing the `name` variable on the command line), Atmos will validate\nthe component using the OPA policy, which will fail and prevent the component from being provisioned:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\nOn the other hand, when passing the `name` variable on the command line using the `-var name=api` flag, the command will succeed:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n### Restrict a Terraform variable from being provided on the command line\n\nIf you need to prevent a Terraform variable from being passed (and overridden) on the command line,\nadd the following OPA policy in the file `stacks/schemas/opa/my-component/validate-my-component.rego`\n\n<File title=\"stacks/schemas/opa/my-component/validate-my-component.rego\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nWhen executing the following command, Atmos will validate the component using the OPA policy, which will fail and prevent\nthe component from being provisioned:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\nThis command will pass the validation and succeed:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n## Environment Variables Validation using OPA Policies\n\nIn addition to `tf_cli_vars` (which contains variables passed via `-var` flags on the command line),\nAtmos also provides access to the variables through the `env_tf_cli_vars` section passed via the `TF_CLI_ARGS` environment variable.\n\n### Require a variable to be set via the `TF_CLI_ARGS` environment variable\n\nIf you need to enforce that a specific Terraform variable must be set, add the following OPA policy:\n\n<File title=\"stacks/schemas/opa/my-component/validate-my-component.rego\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nThis policy will fail if the `'environment'` variable is not set in the 'TF_CLI_ARGS' environment variable.\n\n<Terminal>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Restrict a Terraform variable from being provided on the command line",
+      "id": "restrict-a-terraform-variable-from-being-provided-on-the-command-line"
+    },
+    {
+      "level": "h2",
+      "text": "Environment Variables Validation using OPA Policies",
+      "id": "environment-variables-validation-using-opa-policies"
+    },
+    {
+      "level": "h3",
+      "text": "Require a variable to be set via the `TF_CLI_ARGS` environment variable",
+      "id": "require-a-variable-to-be-set-via-the-`tf_cli_args`-environment-variable"
+    }
+  ],
+  "url": "llms-txt#if-the-'errors'-output-contains-one-or-more-error-messages,-atmos-considers-the-policy-failed.",
+  "links": []
+}

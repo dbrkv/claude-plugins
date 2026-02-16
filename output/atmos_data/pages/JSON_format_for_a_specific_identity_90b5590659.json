@@ -1,0 +1,8 @@
+{
+  "title": "JSON format for a specific identity",
+  "content": "atmos auth env --identity prod-admin --format json",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#json-format-for-a-specific-identity",
+  "links": []
+}

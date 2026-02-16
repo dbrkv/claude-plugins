@@ -1,0 +1,8 @@
+{
+  "title": "Combine for comprehensive analysis",
+  "content": "atmos terraform plan vpc -s prod \\\n  --heatmap \\\n  --profile-file=cpu.prof \\\n  --profile-type=cpu",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#combine-for-comprehensive-analysis",
+  "links": []
+}

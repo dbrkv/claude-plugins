@@ -1,0 +1,19 @@
+{
+  "title": "Force push (requires permissions)",
+  "content": "git push --force-with-lease origin channels/prod\nbash",
+  "code_samples": [
+    {
+      "code": "### Option 3: Fast-Forward to Previous State",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Option 3: Fast-Forward to Previous State",
+      "id": "option-3:-fast-forward-to-previous-state"
+    }
+  ],
+  "url": "llms-txt#force-push-(requires-permissions)",
+  "links": []
+}

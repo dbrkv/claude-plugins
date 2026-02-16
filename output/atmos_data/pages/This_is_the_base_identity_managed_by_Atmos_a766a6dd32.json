@@ -1,0 +1,39 @@
+{
+  "title": "This is the base identity managed by Atmos",
+  "content": "[profile dev-admin]\nsource_profile = acme-identity\nrole_arn = arn:aws:iam::111111111111:role/DevAdmin\nregion = us-east-1\n\n[profile prod-readonly]\nsource_profile = acme-identity\nrole_arn = arn:aws:iam::222222222222:role/ProdReadOnly\nregion = us-east-1\nyaml",
+  "code_samples": [
+    {
+      "code": "## Workflow\n\nOnce configured, the typical workflow is:\n\n1. **Start Geodesic** (on your laptop): Run `make run`\n2. **Authenticate** (on your laptop): Atmos runs `atmos auth login` on your host machine, opens your browser for SSO\n3. **Credentials mounted**: Once authenticated, Geodesic starts with credentials mounted from `~/.config/atmos/` (all platforms)\n4. **Work in Shell** (inside Geodesic): Use AWS CLI, Terraform, and other tools normally\n5. **Assume Roles** (inside Geodesic): Use `assume-role dev-admin` to switch to other roles\n\n### Important Notes\n\n- **Authentication is host-based**: You cannot run `atmos auth login` inside the Geodesic container - it requires browser access on your laptop\n- **Credentials are mounted**: The Atmos config directory from your laptop is mounted into Geodesic following XDG conventions\n- **Keychain not available in container**: macOS Keychain integration works only on the host, not inside Geodesic\n- **Session duration**: Authentication persists for the duration configured in IAM Identity Center (typically 1-12 hours)\n\n## Troubleshooting\n\n### Issue: \"Credentials not found\" error\n\n**Cause**: Atmos hasn't authenticated yet, or credentials have expired.\n\n**Solution**: Exit Geodesic and run `atmos auth login` on your host machine to re-authenticate. Remember, authentication must happen on your laptop, not inside the container.\n\n### Issue: `assume-role` not finding source profile\n\n**Cause**: The `source_profile` in `aws-config-teams` doesn't match the identity name in `atmos.yaml`.\n\n**Solution**: Ensure the profile names match exactly:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Workflow",
+      "id": "workflow"
+    },
+    {
+      "level": "h3",
+      "text": "Important Notes",
+      "id": "important-notes"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Issue: \"Credentials not found\" error",
+      "id": "issue:-\"credentials-not-found\"-error"
+    },
+    {
+      "level": "h3",
+      "text": "Issue: `assume-role` not finding source profile",
+      "id": "issue:-`assume-role`-not-finding-source-profile"
+    }
+  ],
+  "url": "llms-txt#this-is-the-base-identity-managed-by-atmos",
+  "links": []
+}

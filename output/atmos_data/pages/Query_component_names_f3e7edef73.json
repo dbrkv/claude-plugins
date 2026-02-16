@@ -1,0 +1,8 @@
+{
+  "title": "Query component names",
+  "content": "atmos list metadata --query '.metadata.component'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#query-component-names",
+  "links": []
+}

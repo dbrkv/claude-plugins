@@ -1,0 +1,8 @@
+{
+  "title": "Week 2: Staging environments",
+  "content": "staging:\n  vpc:\n    metadata:\n      component: vpc/v2",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#week-2:-staging-environments",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Production environment (read-only)",
+  "content": "atmos describe component app -s prod-use1 --identity prod-readonly\nbash",
+  "code_samples": [
+    {
+      "code": "### 2. CI/CD Pipelines\n\nAuthenticate in CI/CD before describing affected components:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "2. CI/CD Pipelines",
+      "id": "2.-ci/cd-pipelines"
+    }
+  ],
+  "url": "llms-txt#production-environment-(read-only)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Disable pager (explicit)",
+  "content": "atmos describe config --pager=false          # Explicitly disable\natmos describe config --pager=off            # Alternative syntax\nATMOS_PAGER=false atmos describe config     # Via environment variable",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#disable-pager-(explicit)",
+  "links": []
+}

@@ -1,0 +1,23 @@
+{
+  "title": "yaml-language-server: $schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json",
+  "content": "import:\n  - catalog/aws/bastion/defaults\n\ncomponents:\n  packer:\n    aws/bastion:\n      vars:\n        # Define the variables specific to the `prod` account\n        instance_type: \"t4g.medium\"\n        volume_size: 16\n        assume_role_arn: \"arn:aws:iam::PROD_ACCOUNT_ID:role/ROLE_NAME\"\n        ami_tags:\n          Stage: prod\nshell\n> atmos packer version",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Execute Atmos Packer commands\n\n<Terminal title=\"atmos packer version\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n<Terminal title=\"atmos packer validate aws/bastion -s nonprod\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Execute Atmos Packer commands",
+      "id": "execute-atmos-packer-commands"
+    }
+  ],
+  "url": "llms-txt#yaml-language-server:-$schema=https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json",
+  "links": []
+}

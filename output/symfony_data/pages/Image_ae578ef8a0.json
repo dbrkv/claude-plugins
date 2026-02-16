@@ -1,0 +1,208 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Image.html",
+  "title": "Image",
+  "content": "The Image constraint works exactly like the File constraint, except that its mimeTypes and mimeTypesMessage options are automatically setup to work for image files specifically.\n\nAdditionally it has options so you can validate against the width and height of the image.\n\nSee the File constraint for the bulk of the documentation on this constraint.\n\nThis constraint is most commonly used on a property that will be rendered in a form as a FileType field. For example, suppose you're creating an author form where you can upload a \"headshot\" image for the author. In your form, the headshot property would be a file type. The Author class might look as follows:\n\nTo guarantee that the headshot File object is a valid image and that it is between a certain size, add the following:\n\nThe headshot property is validated to guarantee that it is a real image and that it is between a certain width and height.\n\nYou may also want to guarantee the headshot image to be square. In this case you can disable portrait and landscape orientations as shown in the following code:\n\nYou can mix all the constraint options to create powerful validation rules.\n\nThis constraint shares all of its options with the File constraint. It does, however, modify two of the default option values and add several other options.\n\ntype: Boolean default: true\n\nIf this option is false, the image cannot be landscape oriented.\n\nThe allowLandscape option support for SVG files was introduced in Symfony 7.3.\n\ntype: string default: The image is landscape oriented ({{ width }}x{{ height }}px). Landscape oriented images are not allowed\n\nThe error message if the image is landscape oriented and you set allowLandscape to false.\n\nYou can use the following parameters in this message:\n\ntype: Boolean default: true\n\nIf this option is false, the image cannot be portrait oriented.\n\nThe allowPortrait option support for SVG files was introduced in Symfony 7.3.\n\ntype: string default: The image is portrait oriented ({{ width }}x{{ height }}px). Portrait oriented images are not allowed\n\nThe error message if the image is portrait oriented and you set allowPortrait to false.\n\nYou can use the following parameters in this message:\n\ntype: Boolean default: true\n\nIf this option is false, the image cannot be a square. If you want to force a square image, then leave this option as its default true value and set allowLandscape and allowPortrait both to false.\n\nThe allowSquare option support for SVG files was introduced in Symfony 7.3.\n\ntype: string default: The image is square ({{ width }}x{{ height }}px). Square images are not allowed\n\nThe error message if the image is square and you set allowSquare to false.\n\nYou can use the following parameters in this message:\n\ntype: string default: The image file is corrupted.\n\nThe error message when the detectCorrupted option is enabled and the image is corrupted.\n\nThis message has no parameters.\n\ntype: boolean default: false\n\nIf this option is true, the image contents are validated to ensure that the image is not corrupted. This validation is done with PHP's imagecreatefromstring function, which requires the PHP GD extension to be enabled.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\nIf set, the height of the image file must be less than or equal to this value in pixels.\n\ntype: string default: The image height is too big ({{ height }}px). Allowed maximum height is {{ max_height }}px.\n\nThe error message if the height of the image exceeds maxHeight.\n\nYou can use the following parameters in this message:\n\ntype: integer | float\n\nIf set, the amount of pixels of the image file must be less than or equal to this value.\n\ntype: string default: The image has too many pixels ({{ pixels }} pixels). Maximum amount expected is {{ max_pixels }} pixels.\n\nThe error message if the amount of pixels of the image exceeds maxPixels.\n\nYou can use the following parameters in this message:\n\ntype: integer | float\n\nIf set, the aspect ratio (width / height) of the image file must be less than or equal to this value.\n\nThe maxRatio option support for SVG files was introduced in Symfony 7.3.\n\ntype: string default: The image ratio is too big ({{ ratio }}). Allowed maximum ratio is {{ max_ratio }}\n\nThe error message if the aspect ratio of the image exceeds maxRatio.\n\nYou can use the following parameters in this message:\n\nIf set, the width of the image file must be less than or equal to this value in pixels.\n\ntype: string default: The image width is too big ({{ width }}px). Allowed maximum width is {{ max_width }}px.\n\nThe error message if the width of the image exceeds maxWidth.\n\nYou can use the following parameters in this message:\n\ntype: array or string default: image/*\n\nYou can find a list of existing image mime types on the IANA website.\n\ntype: string default: This file is not a valid image.\n\nIf all the values of the mimeTypes option are a subset of image/*, the error message will be instead: The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.\n\nYou can use the following parameters in this message:\n\nIf set, the height of the image file must be greater than or equal to this value in pixels.\n\ntype: string default: The image height is too small ({{ height }}px). Minimum height expected is {{ min_height }}px.\n\nThe error message if the height of the image is less than minHeight.\n\nYou can use the following parameters in this message:\n\ntype: integer | float\n\nIf set, the amount of pixels of the image file must be greater than or equal to this value.\n\ntype: string default: The image has too few pixels ({{ pixels }} pixels). Minimum amount expected is {{ min_pixels }} pixels.\n\nThe error message if the amount of pixels of the image is less than minPixels.\n\nYou can use the following parameters in this message:\n\ntype: integer | float\n\nIf set, the aspect ratio (width / height) of the image file must be greater than or equal to this value.\n\nThe minRatio option support for SVG files was introduced in Symfony 7.3.\n\ntype: string default: The image ratio is too small ({{ ratio }}). Minimum ratio expected is {{ min_ratio }}\n\nThe error message if the aspect ratio of the image is less than minRatio.\n\nYou can use the following parameters in this message:\n\nIf set, the width of the image file must be greater than or equal to this value in pixels.\n\ntype: string default: The image width is too small ({{ width }}px). Minimum width expected is {{ min_width }}px.\n\nThe error message if the width of the image is less than minWidth.\n\nYou can use the following parameters in this message:\n\ntype: string default: The size of the image could not be detected.\n\nIf the system is unable to determine the size of the image, this error will be displayed. This will only occur when at least one of the size constraint options has been set.\n\nThis message has no parameters.\n\nBecome certified from home\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Image",
+      "id": "image"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "allowLandscape",
+      "id": "allowlandscape"
+    },
+    {
+      "level": "h3",
+      "text": "allowLandscapeMessage",
+      "id": "allowlandscapemessage"
+    },
+    {
+      "level": "h3",
+      "text": "allowPortrait",
+      "id": "allowportrait"
+    },
+    {
+      "level": "h3",
+      "text": "allowPortraitMessage",
+      "id": "allowportraitmessage"
+    },
+    {
+      "level": "h3",
+      "text": "allowSquare",
+      "id": "allowsquare"
+    },
+    {
+      "level": "h3",
+      "text": "allowSquareMessage",
+      "id": "allowsquaremessage"
+    },
+    {
+      "level": "h3",
+      "text": "corruptedMessage",
+      "id": "corruptedmessage"
+    },
+    {
+      "level": "h3",
+      "text": "detectCorrupted",
+      "id": "detectcorrupted"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "maxHeight",
+      "id": "maxheight"
+    },
+    {
+      "level": "h3",
+      "text": "maxHeightMessage",
+      "id": "maxheightmessage"
+    },
+    {
+      "level": "h3",
+      "text": "maxPixels",
+      "id": "maxpixels"
+    },
+    {
+      "level": "h3",
+      "text": "maxPixelsMessage",
+      "id": "maxpixelsmessage"
+    },
+    {
+      "level": "h3",
+      "text": "maxRatio",
+      "id": "maxratio"
+    },
+    {
+      "level": "h3",
+      "text": "maxRatioMessage",
+      "id": "maxratiomessage"
+    },
+    {
+      "level": "h3",
+      "text": "maxWidth",
+      "id": "maxwidth"
+    },
+    {
+      "level": "h3",
+      "text": "maxWidthMessage",
+      "id": "maxwidthmessage"
+    },
+    {
+      "level": "h3",
+      "text": "mimeTypes",
+      "id": "mimetypes"
+    },
+    {
+      "level": "h3",
+      "text": "mimeTypesMessage",
+      "id": "mimetypesmessage"
+    },
+    {
+      "level": "h3",
+      "text": "minHeight",
+      "id": "minheight"
+    },
+    {
+      "level": "h3",
+      "text": "minHeightMessage",
+      "id": "minheightmessage"
+    },
+    {
+      "level": "h3",
+      "text": "minPixels",
+      "id": "minpixels"
+    },
+    {
+      "level": "h3",
+      "text": "minPixelsMessage",
+      "id": "minpixelsmessage"
+    },
+    {
+      "level": "h3",
+      "text": "minRatio",
+      "id": "minratio"
+    },
+    {
+      "level": "h3",
+      "text": "minRatioMessage",
+      "id": "minratiomessage"
+    },
+    {
+      "level": "h3",
+      "text": "minWidth",
+      "id": "minwidth"
+    },
+    {
+      "level": "h3",
+      "text": "minWidthMessage",
+      "id": "minwidthmessage"
+    },
+    {
+      "level": "h3",
+      "text": "sizeNotDetectedMessage",
+      "id": "sizenotdetectedmessage"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\HttpFoundation\\File\\File;\n\nclass Author\n{\n    protected File $headshot;\n\n    public function setHeadshot(?File $file = null): void\n    {\n        $this->headshot = $file;\n    }\n\n    public function getHeadshot(): File\n    {\n        return $this->headshot;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\HttpFoundation\\File\\File;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    #[Assert\\Image(\n        minWidth: 200,\n        maxWidth: 400,\n        minHeight: 200,\n        maxHeight: 400,\n    )]\n    protected File $headshot;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        headshot:\n            - Image:\n                minWidth: 200\n                maxWidth: 400\n                minHeight: 200\n                maxHeight: 400",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <property name=\"headshot\">\n            <constraint name=\"Image\">\n                <option name=\"minWidth\">200</option>\n                <option name=\"maxWidth\">400</option>\n                <option name=\"minHeight\">200</option>\n                <option name=\"maxHeight\">400</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('headshot', new Assert\\Image(\n            minWidth: 200,\n            maxWidth: 400,\n            minHeight: 200,\n            maxHeight: 400,\n        ));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\HttpFoundation\\File\\File;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    #[Assert\\Image(\n        allowLandscape: false,\n        allowPortrait: false,\n    )]\n    protected File $headshot;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        headshot:\n            - Image:\n                allowLandscape: false\n                allowPortrait: false",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<class name=\"App\\Entity\\Author\">\n    <property name=\"headshot\">\n        <constraint name=\"Image\">\n            <option name=\"allowLandscape\">false</option>\n            <option name=\"allowPortrait\">false</option>\n        </constraint>\n    </property>\n</class>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('headshot', new Assert\\Image(\n            allowLandscape: false,\n            allowPortrait: false,\n        ));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Image.html",
+    "https://symfony.com/doc/7.3/reference/constraints/File.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/file.html",
+    "https://symfony.com/doc/7.3/validation/groups.html"
+  ]
+}

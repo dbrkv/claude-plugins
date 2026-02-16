@@ -1,0 +1,8 @@
+{
+  "title": "Development environment",
+  "content": "atmos describe component app -s dev-use1 --identity dev-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#development-environment",
+  "links": []
+}

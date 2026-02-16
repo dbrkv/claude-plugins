@@ -1,0 +1,28 @@
+{
+  "url": "https://symfony.com/doc/7.3/setup/upgrade_patch.html",
+  "title": "Upgrading a Patch Version (e.g. 6.0.0 to 6.0.1)",
+  "content": "When a new patch version is released (only the last number changed), it is a release that only contains bug fixes. This means that upgrading to a new patch version should not cause any problems.\n\nTo upgrade to a new \"patch\" release, read the Upgrading a Minor Version article. Thanks to Symfony's backwards compatibility promise, it's always safe to upgrade to the latest \"minor\" version.\n\nIt is recommended to update to a new patch version as soon as possible, as important bugs and security vulnerabilities may be fixed in these new releases.\n\nYou may also want to upgrade the rest of your libraries. If you've done a good job with your version constraints in composer.json, you can do this safely by running:\n\nBeware, if you have some unspecific version constraints in your composer.json (e.g. dev-master), this could upgrade some non-Symfony libraries to new versions that contain backwards-compatibility breaking changes.\n\nShow your Symfony expertise\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Upgrading a Patch Version (e.g. 6.0.0 to 6.0.1)",
+      "id": "upgrading-a-patch-version-e-g-6-0-0-to-6-0-1"
+    },
+    {
+      "level": "h2",
+      "text": "Upgrading other Packages",
+      "id": "upgrading-other-packages"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer update",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/setup/upgrade_patch.html",
+    "https://symfony.com/doc/7.3/setup/upgrade_minor.html"
+  ]
+}

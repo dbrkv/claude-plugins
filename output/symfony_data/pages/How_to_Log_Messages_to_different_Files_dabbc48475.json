@@ -1,0 +1,82 @@
+{
+  "url": "https://symfony.com/doc/7.3/logging/channels_handlers.html",
+  "title": "How to Log Messages to different Files",
+  "content": "The Symfony Framework organizes log messages into channels. By default, there are several channels, including doctrine, event, security, request and more. The channel is printed in the log message and can also be used to direct different channels to different places/files.\n\nBy default, Symfony logs every message into a single file (regardless of the channel).\n\nEach channel corresponds to a different logger service (monolog.logger.XXX) Use the php bin/console debug:container monolog command to see a full list of services and learn how to autowire monolog channels.\n\nNow, suppose you want to log the security channel to a different file. To do this, create a new handler and configure it to log only messages from the security channel. The following example does that only in the prod configuration environment:\n\nThe channels configuration only works for top-level handlers. Handlers that are nested inside a group, buffer, filter, fingers crossed or other such handler will ignore this configuration and will process every message passed to them.\n\nYou can specify the configuration in different ways:\n\nYou can change the channel Monolog logs to one service at a time. This is done either via the configuration below or by tagging your service with monolog.logger and specifying which channel the service should log to. With the tag, the logger that is injected into that service is preconfigured to use the channel you've specified.\n\nYou can also configure additional channels without the need to tag your services:\n\nSymfony automatically registers one service per channel (in this example, the channel foo creates a service called monolog.logger.foo). In order to inject this service into others, you must update the service configuration to choose the specific service to inject.\n\nStarting from MonologBundle 3.5 you can autowire different Monolog channels by type-hinting your service arguments with the following syntax: Psr\\Log\\LoggerInterface $<camelCased channel name> + Logger. The <channel> must have been predefined in your Monolog configuration.\n\nFor example to inject the service related to the foo_bar logger channel, change your constructor like this:\n\nStarting from Monolog 3.5 you can also configure the logger channel by using the #[WithMonologChannel] attribute directly on your service class:\n\nThis way you can avoid declaring your service manually to use a specific channel.\n\nThe #[WithMonologChannel] attribute was introduced in Monolog 3.5.0.\n\nShow your Sylius expertise\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Log Messages to different Files",
+      "id": "how-to-log-messages-to-different-files"
+    },
+    {
+      "level": "h2",
+      "text": "Switching a Channel to a different Handler",
+      "id": "switching-a-channel-to-a-different-handler"
+    },
+    {
+      "level": "h2",
+      "text": "Creating your own Channel",
+      "id": "creating-your-own-channel"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Additional Channels without Tagged Services",
+      "id": "configure-additional-channels-without-tagged-services"
+    },
+    {
+      "level": "h3",
+      "text": "How to Autowire Logger Channels",
+      "id": "how-to-autowire-logger-channels"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Logger Channels with Attributes",
+      "id": "configure-logger-channels-with-attributes"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/monolog.yaml\nwhen@prod:\n    monolog:\n        handlers:\n            security:\n                # log all messages (since debug is the lowest level)\n                level:    debug\n                type:     stream\n                path:     '%kernel.logs_dir%/security.log'\n                channels: [security]\n\n            # an example of *not* logging security channel messages for this handler\n            main:\n                # ...\n                # channels: ['!security']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/prod/monolog.xml-->\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:monolog=\"http://symfony.com/schema/dic/monolog\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/monolog\n        https://symfony.com/schema/dic/monolog/monolog-1.0.xsd\">\n\n    <when env=\"prod\">\n        <monolog:config>\n            <monolog:handler name=\"security\" type=\"stream\" path=\"%kernel.logs_dir%/security.log\">\n                <monolog:channels>\n                    <monolog:channel>security</monolog:channel>\n                </monolog:channels>\n            </monolog:handler>\n        </monolog:config>\n    </when>\n\n        <monolog:handler name=\"main\" type=\"stream\" path=\"%kernel.logs_dir%/main.log\">\n            <!-- ... -->\n            <monolog:channels>\n                <monolog:channel>!security</monolog:channel>\n            </monolog:channels>\n        </monolog:handler>\n    </monolog:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/prod/monolog.php\nuse Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator;\nuse Symfony\\Config\\MonologConfig;\n\nreturn static function (MonologConfig $monolog, ContainerConfigurator $container) {\n    if ('prod' === $container->env()) {\n        $monolog->handler('security')\n            ->type('stream')\n            ->path(param('kernel.logs_dir') . \\DIRECTORY_SEPARATOR . 'security.log')\n            ->channels()->elements(['security']);\n\n        $monolog->handler('main')\n             // ...\n\n            ->channels()->elements(['!security']);\n    }\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "channels: ~    # Include all the channels\n\nchannels: foo  # Include only channel 'foo'\nchannels: '!foo' # Include all channels, except 'foo'\n\nchannels: [foo, bar]   # Include only channels 'foo' and 'bar'\nchannels: ['!foo', '!bar'] # Include all channels, except 'foo' and 'bar'",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/monolog.yaml\nmonolog:\n    channels: ['foo', 'bar', 'foo_bar']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/monolog.xml -->\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:monolog=\"http://symfony.com/schema/dic/monolog\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/monolog\n        https://symfony.com/schema/dic/monolog/monolog-1.0.xsd\">\n\n    <monolog:config>\n        <monolog:channel>foo</monolog:channel>\n        <monolog:channel>bar</monolog:channel>\n        <monolog:channel>foo_bar</monolog:channel>\n    </monolog:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/monolog.php\nuse Symfony\\Config\\MonologConfig;\n\nreturn static function (MonologConfig $monolog): void {\n    $monolog->channels(['foo', 'bar', 'foo_bar']);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "public function __construct(\n-     LoggerInterface $logger,\n+     LoggerInterface $fooBarLogger,\n    ) {\n    }",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Service/MyFixtureService.php\nnamespace App\\Service;\n\nuse Monolog\\Attribute\\WithMonologChannel;\nuse Psr\\Log\\LoggerInterface;\nuse Symfony\\Bridge\\Monolog\\Logger;\n\n#[WithMonologChannel('fixtures')]\nclass MyFixtureService\n{\n    public function __construct(LoggerInterface $logger)\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/logging/channels_handlers.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/reference/dic_tags.html",
+    "https://symfony.com/doc/7.3/service_container.html"
+  ]
+}

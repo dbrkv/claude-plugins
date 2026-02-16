@@ -1,0 +1,8 @@
+{
+  "title": "Access nested maps with special characters in multiple levels",
+  "content": "endpoint: !terraform.output services '.endpoints[\"my-service\"][\"production\"].url'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#access-nested-maps-with-special-characters-in-multiple-levels",
+  "links": []
+}

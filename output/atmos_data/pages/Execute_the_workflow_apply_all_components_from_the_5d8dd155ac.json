@@ -1,0 +1,72 @@
+{
+  "title": "Execute the workflow `apply-all-components` from the workflow manifest `weather.yaml`",
+  "content": "atmos workflow apply-all -f weather\nconsole\nExecuting the workflow 'plan-all' from 'stacks/workflows/weather.yaml'\n\nExecuting workflow step: terraform plan station -s dev\nExecuting workflow step: terraform plan station -s staging\nExecuting workflow step: terraform plan station -s prod\nyaml\napiVersion: atmos/v1\nkind: AtmosVendorConfig\nmetadata:\n  name: my-vendor-config\n  description: Example Atmos vendoring manifest\nspec:\n  sources:\n    - component: \"ipinfo\"\n      source: \"github.com/cloudposse/atmos.git//examples/demo-library/ipinfo?ref={{.Version}}\"\n      version: \"main\"\n      targets:\n        - \"components/terraform/{{.Component}}\"\n      included_paths:\n        - \"**/*.tf\"\n        # If the component's folder has the `modules` sub-folder, it needs to be explicitly defined\n        - \"**/modules/**\"\nyaml\napiVersion: atmos/v1\nkind: AtmosVendorConfig\nmetadata:\n  name: my-vendor-config\n  description: Example Atmos vendoring manifest\nspec:\n  imports: vendor/**.yaml\nshell\n  Processing vendor config file 'vendor.yaml'\n\nPulling sources for the component 'ipinfo'\n  from 'github.com/cloudposse/atmos.git//examples/demo-library/ipinfo?ref=main'\n  into 'components/terraform/ipinfo'\n  console\n  Â Â  â\n  Â Â  âââ stacks/\n  Â Â  â\n  Â Â  âââ components/\n  Â Â  Â Â Â  âââ terraform/   # Terraform root modules\n  Â Â  Â Â Â Â Â Â Â  âââ ipinfo/  # Vendored component\n  Â Â  Â Â Â Â Â Â Â   Â Â  âââ main.tf\n  Â Â  Â Â Â Â Â Â Â   Â Â  âââ outputs.tf\n  Â Â  Â Â Â Â Â Â Â   Â Â  âââ providers.tf\n  Â Â  Â Â Â Â Â Â Â   Â Â  âââ variables.tf\n  Â Â  Â Â Â Â Â Â Â   Â Â  âââ versions.tf\n  yaml\n  terraform:\n    components:\n      ipinfo:\n        metadata:\n          component: ipinfo\n        vars: {}\n  shell\natmos terraform apply station -s dev\n\natmos terraform apply station -s staging\n\natmos terraform apply station -s prod\nshell",
+  "code_samples": [
+    {
+      "code": "The `atmos workflow` CLI command supports the `--dry-run` flag. If passed, the command will just print information about\nthe executed workflow steps without executing them. For example:\n\n<Terminal title=\"atmos workflow plan-all -f weather --dry-run\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n</Step>\n\n:::tip\nRefer to [atmos workflow](/cli/commands/workflow) for more information on the `atmos workflow` CLI command\n:::\n\n<ActionCard title=\"Want to go deeper on this topic?\">\n    Workflows can do a lot more than we're showing here. Workflows support templates, and can call other workflows.\n    <PrimaryCTA to=\"/core-concepts/workflows\">Learn More</PrimaryCTA>\n</ActionCard>\n\n---\n\n## Extra Credit!\n\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport DocCardList from '@theme/DocCardList'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nNow we want to provide you with some bonus material because we didnât want to overwhelm you when you were just getting started.\nThese are common ways we use Atmos daily in the infrastructures we manage.\n</Intro>\n\n<KeyPoints>\n- How to deploy additional instances of your components.\n- How to automate repetitive operations using workflows.\n- How to extend the Atmos CLI by adding your own custom commands, making it easy for developers to rely on a single command.\n- How to vendor all your external dependencies, which can include other components, stack configurations, and really just anything!\n</KeyPoints>\n\n## What's Included\n\n<DocCardList/>\n\n---\n\n## Vendor Dependencies\n\nimport Terminal from '@site/src/components/Terminal'\nimport File from '@site/src/components/File'\nimport Intro from '@site/src/components/Intro'\nimport Note from '@site/src/components/Note'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\nimport Step from '@site/src/components/Step'\nimport StepNumber from '@site/src/components/StepNumber'\n\n<Intro>\nIn the previous steps, we wrote our own component from scratch. In practice, you'll often want to reuse components that are already available in the open-source community, or within your organization. To do that, you'll leverage vendoring.\n</Intro>\n\nVendoring is driven by the `atmos vendor pull` command. It allows you to pull in components from remote sources, like Git repositories, and place them in your project's filesystem. This way, you can reuse components across multiple projects. The vendoring process is defined in the `vendor.yaml` file, which specifies the components to pull in, where to place them, and how to filter them.\n\n<Note>\nFor more information about Atmos Vendoring and the `atmos vendor pull` CLI command, refer to:\n- [Atmos Vendoring](/core-concepts/vendor)\n- [atmos vendor pull](/cli/commands/vendor/pull)\n</Note>\n\nLet's kick the tires on this, by vendoring some more components from the [`demo-library`](https://github.com/cloudposse/atmos/tree/main/examples/demo-library).\n\n<Step>\n## <StepNumber/> Create Vendor Manifest\n\nCreate a `vendor.yaml` Atmos vendor config file in the root of the repo with the following content:\n\n<File title=\"vendor.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nLet's unpack what's going on here. The `sources` section defines a list of components to pull in. Each component has the following attributes:\n<dl>\n  <dt>`component`</dt>\n  <dd>The name of the component to pull in.</dd>\n\n  <dt>`source`</dt>\n  <dd>The source of the component. It can be a Git repository URL with an optional reference to a specific version. The `{{.Version}}` token is a placeholder for the version of the component. In this example, we're pulling in the `ipinfo` component from the `atmos` repository from the `examples/demo-library` folder.</dd>\n\n  <dt>`version`</dt>\n  <dd>The version (git ref) of the component to pull in. In this example, we're pulling in the `main` branch, but in practice you will usually pin to a tag or major release.</dd>\n\n  <dt>`targets`</dt>\n  <dd>The target directories where the component will be placed. In this example, we're placing the `ipinfo` component in the `components/terraform/ipinfo` directory, because we reference the `{{ .Component }}`</dd>\n\n  <dt>`included_paths`</dt>\n  <dd>\n  A list of file paths to include in the vendored component. In this example, we're including all `.tf` files and any files in the `modules` sub-folder.\n    <Note>\n  The `glob` library that Atmos uses to download remote artifacts does not treat the double-star `**` as including sub-folders.\n  If the component's folder has sub-folders, and you need to vendor them, they have to be explicitly defined as in the following example.\n  </Note>\n  </dd>\n\n  <dt>`excluded_paths`</dt>\n  <dd>A list of file paths to exclude from the vendored component.</dd>\n\n</dl>\n\nIf you have a lot of dependencies, it can be helpful to break them down into smaller, more manageable pieces. You can do this by importing other vendoring configurations. Just define the `imports` section in the `vendor.yaml` file.\n\n<File title=\"vendor.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nIn this example, could add additional vendoring configurations in the `vendor/` directory, and they will be imported into the main vendoring configuration.\n\n</Step>\n\n<Step>\n  ## <StepNumber/> Pull the Components\n  Execute the command `atmos vendor pull` from the root of the repo\n\n  <Terminal command=\"atmos vendor pull\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n  After the command completes, the filesystem layout should look like this (in addition to any other files you already had):",
+      "language": "unknown"
+    },
+    {
+      "code": "</Step>\n\n<Step>\n  ## <StepNumber/> Configure Component in Stack\n\n  Now that the component is vendored, you can use it in your stack configurations. For example, you can include the `ipinfo` component in your stack configuration like this:\n\n  <File title=\"stacks/catalog/ipinfo.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n</Step>\n\n<ActionCard title=\"Want to go deeper on this topic?\">\n    Vendoring is a critical concept to master, if you want to reuse components across multiple projects.\n    <PrimaryCTA to=\"/core-concepts/vendor\">Learn More</PrimaryCTA>\n</ActionCard>\n\n---\n\n## Deploy Everything\n\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Intro from '@site/src/components/Intro'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\nimport SecondaryCTA from '@site/src/components/SecondaryCTA'\n\n<Intro>\nAfter you've written your components and configured your stacks, now we're ready to deploy them!\n</Intro>\n\n<KeyPoints>\n- How Atmos identifies components using context variables and naming patterns\n- How to preview your configurations and changes before applying them\n- How to deploy your components, one at a time\n</KeyPoints>\n\n## Provision Atmos Components into all Stacks\n\nProvision the `station` Atmos component into the stacks:",
+      "language": "unknown"
+    },
+    {
+      "code": "Alternatively, you can execute the configured [Atmos workflow](/quick-start/advanced/create-workflows) to provision all the components in all the stacks:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Extra Credit!",
+      "id": "extra-credit!"
+    },
+    {
+      "level": "h2",
+      "text": "What's Included",
+      "id": "what's-included"
+    },
+    {
+      "level": "h2",
+      "text": "Vendor Dependencies",
+      "id": "vendor-dependencies"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Create Vendor Manifest",
+      "id": "<stepnumber/>-create-vendor-manifest"
+    },
+    {
+      "level": "h2",
+      "text": "Deploy Everything",
+      "id": "deploy-everything"
+    },
+    {
+      "level": "h2",
+      "text": "Provision Atmos Components into all Stacks",
+      "id": "provision-atmos-components-into-all-stacks"
+    }
+  ],
+  "url": "llms-txt#execute-the-workflow-`apply-all-components`-from-the-workflow-manifest-`weather.yaml`",
+  "links": []
+}

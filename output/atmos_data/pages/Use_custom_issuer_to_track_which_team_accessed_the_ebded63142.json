@@ -1,0 +1,163 @@
+{
+  "title": "Use custom issuer to track which team accessed the console",
+  "content": "atmos auth console --issuer platform-team --duration 4h\nshell\n$ atmos auth console --destination s3\n**Console URL generated**\nProvider: aws-sso\nIdentity: prod-admin\nAccount: 123456789012\nSession Duration: 1h\n\nConsole URL:\nhttps://signin.aws.amazon.com/federation?Action=login&Issuer=atmos&Destination=https%3A%2F%2Fconsole.aws.amazon.com%2Fs3&SigninToken=VeryLongTokenString...\n\nOpening console in browser...\nshell\n$ atmos auth console --print-only\nhttps://signin.aws.amazon.com/federation?Action=login&Issuer=atmos&Destination=https%3A%2F%2Fconsole.aws.amazon.com&SigninToken=VeryLongTokenString...\ngo\nAuthenticate â SetupFiles â SetAuthContext â SetEnvironmentVariables\n                                    â\n                AuthContext {\n                    AWS: { profile, region, creds... }\n                    GitHub: { token, org... }\n                    // Future: Azure, GCP, etc.\n                }\n                                    â\n                Used by: Terraform state ops, SDK calls, spawned processes\nyaml\ncomponents:\n  terraform:\n    vpc:\n      backend_type: azurerm\n      backend:\n        azurerm:\n          storage_account_name: \"mystorageaccount\"\n          container_name: \"tfstate\"\n          key: \"vpc.terraform.tfstate\"\nyaml\ncomponents:\n  terraform:\n    eks-cluster:\n      vars:\n        # Get vpc_id output from vpc component in current stack\n        vpc_id: !terraform.state vpc vpc_id\n\n# Get private subnet IDs\n        subnet_ids: !terraform.state vpc private_subnet_ids\n\n# Get first subnet using YQ expression\n        subnet_id: !terraform.state vpc .private_subnet_ids[0]\nyaml\ncomponents:\n  terraform:\n    tgw:\n      vars:\n        # Get VPC ID from production stack\n        vpc_id: !terraform.state vpc plat-ue2-prod vpc_id\n\n# Use template for dynamic stack names\n        vpc_id: !terraform.state vpc {{ printf \"net-%s-%s\" .vars.environment .vars.stage }} vpc_id\nbash\n$ time atmos terraform plan eks-cluster -s plat-ue2-dev",
+  "code_samples": [
+    {
+      "code": "## Current Provider Support\n\n| Provider | Status | Notes |\n|----------|--------|-------|\n| AWS (IAM Identity Center) | â Available Now | Full support with federation endpoint |\n| AWS (SAML) | â Available Now | Full support with federation endpoint |\n| Azure | ð§ Coming Soon | Planned for future release |\n| GCP | ð§ Coming Soon | Planned for future release |\n\n## Security Best Practices\n\n1. **Never Share Console URLs**: Signin tokens provide authenticated access and should be treated as sensitive credentials\n2. **Use Appropriate Durations**: Choose session durations based on your actual needs (shorter is more secure)\n3. **Enable Logging**: Use custom issuer names to track console access in your audit logs\n4. **Require MFA**: Ensure your identity provider enforces MFA for console access\n\n## Examples\n\n### Opening AWS S3 Console",
+      "language": "unknown"
+    },
+    {
+      "code": "### Printing URL for Scripting",
+      "language": "unknown"
+    },
+    {
+      "code": "## Get Involved\n\nTry it out and let us know what you think:\n\n- Update to the latest Atmos version and run `atmos auth console`\n- Share feedback on what works well and what could be improved\n- Tell us which cloud providers you'd like to see supported next\n- Contribute Azure or GCP support at [github.com/cloudposse/atmos](https://github.com/cloudposse/atmos)\n\n## Related Documentation\n\n- [atmos auth console command reference](/cli/commands/auth/console)\n- [AWS Console Federation](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html)\n\n---\n\nThis feature is available in Atmos v2.x and later. Update your installation to start using `atmos auth console` today!\n\n---\n\n## Auth Context: Centralizing Authentication State in Atmos\n\nWe've implemented a centralized authentication context system to enable **concurrent multi-provider identities** - allowing Atmos to manage AWS, GitHub, and other cloud provider credentials simultaneously in a single operation.\n\n<!--truncate-->\n\n## What Changed\n\nWe introduced `AuthContext` as the **single source of truth** for runtime authentication credentials across multiple cloud providers. This context flows through the entire authentication pipeline and enables concurrent identity management (e.g., AWS and GitHub at the same time) plus proper credential handling in operations like Terraform state access.\n\n**Key changes:**\n- Added `schema.AuthContext` with provider-specific fields (AWS, GitHub, future: Azure/GCP)\n- Refactored `PostAuthenticate` interface to use `PostAuthenticateParams` struct (reducing parameters from 6 to 2)\n- Updated Terraform backend operations to accept and use `authContext` parameter\n- Created `SetAuthContext()` function to populate context after authentication\n- Derived environment variables from auth context rather than duplicating credential logic\n- **Migrated AWS credential storage to XDG Base Directory Specification** for consistency with other Atmos data.\n\n## Why This Matters\n\n**The core problem:** Atmos needs to support **multiple cloud providers simultaneously** in a single component deployment. For example, a component might need AWS credentials for infrastructure AND GitHub credentials for repository management - both active at the same time.\n\n**Before:** Credential information was scattered and provider-specific:\n- Identity-specific files written by each authenticator\n- Environment variables set independently (only one provider at a time)\n- Backend operations couldn't access proper credentials for S3 state\n- No way to track multiple active provider credentials concurrently\n- Multi-identity chains overwrote each other's credentials\n\n**After:** Unified context supports concurrent providers:",
+      "language": "unknown"
+    },
+    {
+      "code": "## XDG Base Directory Compliance\n\nAtmos-managed AWS credentials now follow the **XDG Base Directory Specification**, providing a consistent location pattern across all Atmos data:\n\n**New default locations:**\n- **Linux**: `~/.config/atmos/aws/<provider>/credentials`\n- **macOS**: `~/.config/atmos/aws/<provider>/credentials`\n- **Windows**: `%APPDATA%\\atmos\\aws\\<provider>\\credentials`\n\n**Why this matters:**\n- **Consistency**: All Atmos data (cache, keyring, AWS credentials) now follows XDG conventions\n- **Overridable**: Respect `$XDG_CONFIG_HOME` and `$ATMOS_XDG_CONFIG_HOME` environment variables\n- **Clean namespace**: Atmos-managed credentials stay under the `atmos/` namespace, not mixed with user's personal AWS credentials\n- **Platform-aware**: Automatically uses platform-appropriate paths (Linux/macOS/Windows)\n\n**Migration:** Users with custom `files.base_path` in their provider configuration are unaffected. For users relying on defaults, credentials will be created in the new XDG location on next login.\n\n## For Atmos Contributors\n\nThis is an **internal architecture improvement** with minimal user-facing impact. The changes enable:\n\n1. **Concurrent multi-provider support** - Components can use AWS + GitHub + other providers simultaneously without credentials conflicting\n2. **Terraform state operations with proper auth** - `terraform.output()` and state queries now work correctly in multi-identity scenarios\n3. **Cleaner interface design** - PostAuthenticateParams struct is more maintainable than 6 individual parameters\n4. **Extensibility** - Adding new providers (Azure, GCP) just means adding fields to AuthContext\n5. **Better testability** - Auth context can be mocked/injected for testing\n6. **XDG compliance** - AWS credential storage follows same patterns as cache and keyring\n\n**Related PRs:**\n- #1695 - Auth context implementation\n- See `docs/prd/auth-context-multi-identity.md` for complete technical design\n\n## Get Involved\n\nThis refactoring sets the foundation for future authentication improvements. If you're working on auth-related features, ensure you:\n- Pass `authContext` through your call chains\n- Use `SetAuthContext()` to populate credentials\n- Derive from auth context rather than duplicating credential logic\n\nQuestions? Discussion in #1695 or reach out to the core team.\n\n---\n\n## Azure Blob Storage Support for !terraform.state Function\n\nAtmos now supports Azure Blob Storage backends in the `!terraform.state` YAML function. Read Terraform outputs directly from Azure-backed state files without initializing Terraformâbringing the same blazing-fast performance to Azure that S3 users already enjoy.\n\n<!--truncate-->\n\n## What's New\n\nThe `!terraform.state` YAML function now supports **Azure Blob Storage (azurerm)** backends, joining existing support for S3 and local backends. This means you can retrieve Terraform outputs from Azure-backed state files at lightning speedâwithout the overhead of Terraform initialization.\n\n### Why This Matters\n\nBefore this feature, if you were using Azure Blob Storage as your Terraform backend, you had two options for reading remote state:\n\n1. **`!terraform.output`** - Slow but reliable. Requires full Terraform initialization, provider downloads, and varfile generation.\n2. **`!store`** - Fast but requires extra setup. You had to manually configure external secret stores.\n\nNow you can use **`!terraform.state`** with Azure backendsâgetting **10-100x faster performance** compared to `!terraform.output` by reading directly from blob storage.\n\n## How It Works\n\n### Backend Configuration\n\nConfigure your Terraform component with an `azurerm` backend:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Reading State\n\nUse the `!terraform.state` function to read outputs:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Cross-Stack References\n\nReference components from different stacks:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Authentication\n\nThe Azure Blob Storage integration uses **Azure DefaultAzureCredential**, which supports multiple authentication methods automatically:\n\n1. **Environment variables** - `AZURE_TENANT_ID`, `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`\n2. **Managed Identity** - When running in Azure (AKS, VMs, Functions)\n3. **Azure CLI credentials** - `az login`\n4. **Visual Studio Code credentials** - Authenticated VS Code sessions\n\nNo additional configuration neededâjust authenticate using your preferred method.\n\n## Workspace Handling\n\nAzure Blob Storage uses a specific naming convention for workspaces:\n\n- **Default workspace**: Uses the key as-is (e.g., `terraform.tfstate`)\n- **Non-default workspaces**: Appends workspace as suffix (e.g., `terraform.tfstateenv:dev`)\n\nAtmos handles this automaticallyâyou don't need to worry about the naming convention.\n\n### Example\n\nIf you have:\n\n- Key: `apimanagement.terraform.tfstate`\n- Workspace: `dev-wus3-apimanagement-be`\n\nAtmos will look for: `apimanagement.terraform.tfstateenv:dev-wus3-apimanagement-be`\n\n## Performance Benefits\n\n### Before: Using `!terraform.output`",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Current Provider Support",
+      "id": "current-provider-support"
+    },
+    {
+      "level": "h2",
+      "text": "Security Best Practices",
+      "id": "security-best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Opening AWS S3 Console",
+      "id": "opening-aws-s3-console"
+    },
+    {
+      "level": "h3",
+      "text": "Printing URL for Scripting",
+      "id": "printing-url-for-scripting"
+    },
+    {
+      "level": "h2",
+      "text": "Get Involved",
+      "id": "get-involved"
+    },
+    {
+      "level": "h2",
+      "text": "Related Documentation",
+      "id": "related-documentation"
+    },
+    {
+      "level": "h2",
+      "text": "Auth Context: Centralizing Authentication State in Atmos",
+      "id": "auth-context:-centralizing-authentication-state-in-atmos"
+    },
+    {
+      "level": "h2",
+      "text": "What Changed",
+      "id": "what-changed"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h2",
+      "text": "XDG Base Directory Compliance",
+      "id": "xdg-base-directory-compliance"
+    },
+    {
+      "level": "h2",
+      "text": "For Atmos Contributors",
+      "id": "for-atmos-contributors"
+    },
+    {
+      "level": "h2",
+      "text": "Get Involved",
+      "id": "get-involved"
+    },
+    {
+      "level": "h2",
+      "text": "Azure Blob Storage Support for !terraform.state Function",
+      "id": "azure-blob-storage-support-for-!terraform.state-function"
+    },
+    {
+      "level": "h2",
+      "text": "What's New",
+      "id": "what's-new"
+    },
+    {
+      "level": "h3",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "Backend Configuration",
+      "id": "backend-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Reading State",
+      "id": "reading-state"
+    },
+    {
+      "level": "h3",
+      "text": "Cross-Stack References",
+      "id": "cross-stack-references"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication",
+      "id": "authentication"
+    },
+    {
+      "level": "h2",
+      "text": "Workspace Handling",
+      "id": "workspace-handling"
+    },
+    {
+      "level": "h3",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Performance Benefits",
+      "id": "performance-benefits"
+    },
+    {
+      "level": "h3",
+      "text": "Before: Using `!terraform.output`",
+      "id": "before:-using-`!terraform.output`"
+    }
+  ],
+  "url": "llms-txt#use-custom-issuer-to-track-which-team-accessed-the-console",
+  "links": []
+}

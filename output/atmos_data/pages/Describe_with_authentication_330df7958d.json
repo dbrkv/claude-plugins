@@ -1,0 +1,19 @@
+{
+  "title": "Describe with authentication",
+  "content": "atmos describe component app -s prod --identity my-aws-identity\nbash",
+  "code_samples": [
+    {
+      "code": "### 4. Stack Introspection\n\nDescribe entire stacks with authentication for complete configuration:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "4. Stack Introspection",
+      "id": "4.-stack-introspection"
+    }
+  ],
+  "url": "llms-txt#describe-with-authentication",
+  "links": []
+}

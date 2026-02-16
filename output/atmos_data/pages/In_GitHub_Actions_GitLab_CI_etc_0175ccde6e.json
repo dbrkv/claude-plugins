@@ -1,0 +1,19 @@
+{
+  "title": "In GitHub Actions, GitLab CI, etc.",
+  "content": "atmos describe affected \\\n  --identity \"$ATMOS_IDENTITY\" \\\n  --ref \"$BASE_BRANCH\" \\\n  --format json > affected.json\nbash",
+  "code_samples": [
+    {
+      "code": "### 3. Debugging State Access\n\nWhen YAML functions access remote state, authenticate to avoid timeouts:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "3. Debugging State Access",
+      "id": "3.-debugging-state-access"
+    }
+  ],
+  "url": "llms-txt#in-github-actions,-gitlab-ci,-etc.",
+  "links": []
+}

@@ -1,0 +1,105 @@
+{
+  "url": "https://symfony.com/doc/7.3/serializer/encoders.html",
+  "title": "Serializer Encoders",
+  "content": "The Serializer component provides several built-in encoders:\n\nYou can also create your own encoder to use another structure. Read more at Creating a Custom Encoder below.\n\nAll these encoders are enabled by default when using the Serializer component in a Symfony application.\n\nThe JsonEncoder encodes to and decodes from JSON strings, based on the PHP json_encode and json_decode functions.\n\nIt can be useful to modify how these functions operate in certain instances by providing options such as JSON_PRESERVE_ZERO_FRACTION. You can use the serialization context to pass in these options using the key json_encode_options or json_decode_options respectively:\n\nAll context options available for the JSON encoder are:\n\nThe CsvEncoder encodes to and decodes from CSV. Several context options are available to customize the behavior of the encoder:\n\ncsv_escape_char (default: empty string)\n\nThe csv_escape_char option was deprecated in Symfony 7.2.\n\nSets the escape character (at most one character).\n\nThis encoder transforms PHP values into XML and vice versa.\n\nFor example, take an object that is normalized as following:\n\nThe XmlEncoder will encode this object like:\n\nThe special # key can be used to define the data of a node:\n\nFurthermore, keys beginning with @ will be considered attributes, and the key #comment can be used for encoding XML comments:\n\nYou can pass the context key as_collection in order to have the results always as a collection.\n\nYou may need to add some attributes on the root node:\n\nXML comments are ignored by default when decoding contents, but this behavior can be changed with the optional context key XmlEncoder::DECODER_IGNORED_NODE_TYPES.\n\nData with #comment keys are encoded to XML comments by default. This can be changed by adding the \\XML_COMMENT_NODE option to the XmlEncoder::ENCODER_IGNORED_NODE_TYPES key of the $defaultContext of the XmlEncoder constructor or directly to the $context argument of the encode() method:\n\nThese are the options available on the serializer context:\n\nThe cdata_wrapping_pattern option was introduced in Symfony 7.1.\n\nThe ignore_empty_attributes option was introduced in Symfony 7.3.\n\nExample with a custom context:\n\nThis encoder requires the Yaml Component and transforms from and to Yaml.\n\nLike other encoder, several context options are available:\n\nImagine you want to serialize and deserialize NEON. For that you'll have to create your own encoder:\n\nIf you need access to $context in your supportsDecoding or supportsEncoding method, make sure to implement Symfony\\Component\\Serializer\\Encoder\\ContextAwareDecoderInterface or Symfony\\Component\\Serializer\\Encoder\\ContextAwareEncoderInterface accordingly.\n\nIf you use the Symfony Framework, then you probably want to register this encoder as a service in your app. If you're using the default services.yaml configuration, that's done automatically!\n\nIf you're not using autoconfigure, make sure to register your class as a service and tag it with serializer.encoder:\n\nNow you'll be able to serialize and deserialize NEON!\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nOnline Sylius certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Serializer Encoders",
+      "id": "serializer-encoders"
+    },
+    {
+      "level": "h2",
+      "text": "The JsonEncoder",
+      "id": "the-jsonencoder"
+    },
+    {
+      "level": "h2",
+      "text": "The CsvEncoder",
+      "id": "the-csvencoder"
+    },
+    {
+      "level": "h2",
+      "text": "The XmlEncoder",
+      "id": "the-xmlencoder"
+    },
+    {
+      "level": "h3",
+      "text": "The XmlEncoder Context Options",
+      "id": "the-xmlencoder-context-options"
+    },
+    {
+      "level": "h2",
+      "text": "The YamlEncoder",
+      "id": "the-yamlencoder"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a Custom Encoder",
+      "id": "creating-a-custom-encoder"
+    },
+    {
+      "level": "h3",
+      "text": "Registering it in Your App",
+      "id": "registering-it-in-your-app"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$this->serializer->serialize($data, 'json', [\n    'json_encode_options' => \\JSON_PRESERVE_ZERO_FRACTION,\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$normalizedArray = ['foo' => [1, 2], 'bar' => true];",
+      "language": "javascript"
+    },
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<response>\n    <foo>1</foo>\n    <foo>2</foo>\n    <bar>1</bar>\n</response>",
+      "language": "unknown"
+    },
+    {
+      "code": "['foo' => ['@bar' => 'value', '#' => 'baz']];\n\n/* is encoded as follows:\n   <?xml version=\"1.0\"?>\n   <response>\n       <foo bar=\"value\">\n          baz\n       </foo>\n   </response>\n */",
+      "language": "javascript"
+    },
+    {
+      "code": "$encoder = new XmlEncoder();\n$xml = $encoder->encode([\n    'foo' => ['@bar' => 'value'],\n    'qux' => ['#comment' => 'A comment'],\n], 'xml');\n/* will return:\n   <?xml version=\"1.0\"?>\n   <response>\n       <foo bar=\"value\"/>\n       <qux><!-- A comment --!><qux>\n   </response>\n */",
+      "language": "javascript"
+    },
+    {
+      "code": "$encoder = new XmlEncoder();\n$encoder->encode([\n    '@attribute1' => 'foo',\n    '@attribute2' => 'bar',\n    '#' => ['foo' => ['@bar' => 'value', '#' => 'baz']]\n], 'xml');\n\n// will return:\n// <?xml version=\"1.0\"?>\n// <response attribute1=\"foo\" attribute2=\"bar\">\n// <foo bar=\"value\">baz</foo>\n// </response>",
+      "language": "javascript"
+    },
+    {
+      "code": "$xmlEncoder->encode($array, 'xml', [XmlEncoder::ENCODER_IGNORED_NODE_TYPES => [\\XML_COMMENT_NODE]]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Serializer\\Encoder\\XmlEncoder;\n\n$data = [\n    'id' => 'IDHNQIItNyQ',\n    'date' => '2019-10-24',\n];\n\n$xmlEncoder->encode($data, 'xml', ['xml_format_output' => true]);\n// outputs:\n// <?xml version=\"1.0\"?>\n// <response>\n//   <id>IDHNQIItNyQ</id>\n//   <date>2019-10-24</date>\n// </response>\n\n$xmlEncoder->encode($data, 'xml', [\n    'xml_format_output' => true,\n    'xml_root_node_name' => 'track',\n    'encoder_ignored_node_types' => [\n        \\XML_PI_NODE, // removes XML declaration (the leading xml tag)\n    ],\n]);\n// outputs:\n// <track>\n//   <id>IDHNQIItNyQ</id>\n//   <date>2019-10-24</date>\n// </track>",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Serializer/NeonEncoder.php\nnamespace App\\Serializer;\n\nuse Nette\\Neon\\Neon;\nuse Symfony\\Component\\Serializer\\Encoder\\DecoderInterface;\nuse Symfony\\Component\\Serializer\\Encoder\\EncoderInterface;\n\nclass NeonEncoder implements EncoderInterface, DecoderInterface\n{\n    public function encode($data, string $format, array $context = [])\n    {\n        return Neon::encode($data);\n    }\n\n    public function supportsEncoding(string $format)\n    {\n        return 'neon' === $format;\n    }\n\n    public function decode(string $data, string $format, array $context = [])\n    {\n        return Neon::decode($data);\n    }\n\n    public function supportsDecoding(string $format)\n    {\n        return 'neon' === $format;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Serializer\\NeonEncoder:\n        tags: ['serializer.encoder']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"App\\Serializer\\NeonEncoder\">\n            <tag name=\"serializer.encoder\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Serializer\\NeonEncoder;\n\nreturn function(ContainerConfigurator $container) {\n    // ...\n\n    $services->set(NeonEncoder::class)\n        ->tag('serializer.encoder')\n    ;\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/serializer/encoders.html",
+    "https://symfony.com/doc/7.3/components/yaml.html",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/reference/dic_tags.html"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "title": "EC2 Console (using alias)",
+  "content": "atmos auth console --destination ec2",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ec2-console-(using-alias)",
+  "links": []
+}

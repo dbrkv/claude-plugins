@@ -1,0 +1,13 @@
+{
+  "title": "Skip first 10, show next 10",
+  "content": "$ atmos version list --limit 10 --offset 10\nbash",
+  "code_samples": [
+    {
+      "code": "Filter by date:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#skip-first-10,-show-next-10",
+  "links": []
+}

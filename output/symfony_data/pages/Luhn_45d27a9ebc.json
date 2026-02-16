@@ -1,0 +1,63 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Luhn.html",
+  "title": "Luhn",
+  "content": "This constraint is used to ensure that a credit card number passes the Luhn algorithm. It is useful as a first step to validating a credit card: before communicating with a payment gateway.\n\nTo use the Luhn validator, apply it to a property on an object that will contain a credit card number.\n\nAs with most of the other constraints, null and empty strings are considered valid values. This is to allow them to be optional values. If the value is mandatory, a common solution is to combine this constraint with NotBlank.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: Invalid card number.\n\nThe default message supplied when the value does not pass the Luhn check.\n\nYou can use the following parameters in this message:\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nGet your Sylius expertise recognized\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Luhn",
+      "id": "luhn"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "message",
+      "id": "message"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Transaction.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Transaction\n{\n    #[Assert\\Luhn(message: 'Please check your credit card number.')]\n    protected string $cardNumber;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Transaction:\n    properties:\n        cardNumber:\n            - Luhn:\n                message: Please check your credit card number.",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Transaction\">\n        <property name=\"cardNumber\">\n            <constraint name=\"Luhn\">\n                <option name=\"message\">Please check your credit card number.</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Transaction.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Transaction\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('cardNumber', new Assert\\Luhn(\n            message: 'Please check your credit card number',\n        ));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Luhn.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotBlank.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

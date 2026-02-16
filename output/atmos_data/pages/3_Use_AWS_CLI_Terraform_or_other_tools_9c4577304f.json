@@ -1,0 +1,24 @@
+{
+  "title": "3. Use AWS CLI, Terraform, or other tools",
+  "content": "aws s3 ls\nterraform plan vpc -s prod\nshell",
+  "code_samples": [
+    {
+      "code": "**The commands fail gracefully:** If you run AWS CLI or Terraform commands before logging in, they will fail with standard credential errors, prompting you to run `atmos auth login`.\n\nThis separation allows you to add `eval $(atmos auth env)` to your shell profile without triggering login prompts every time you open a terminal.\n\n## When to Use This Command\n\n**Use `atmos auth env` when:**\n- Adding authentication to your shell profile (`.zshrc`, `.bashrc`) for automatic configuration\n- Integrating with CI/CD pipelines that need environment variables\n- Writing scripts that source credentials\n- You need credentials in a specific format (bash, json, dotenv)\n- Working primarily in a single identity and want persistent configuration\n\n**Use `atmos auth shell` instead when:**\n- You need session isolation for security (credentials scoped to subshell)\n- Working with production or sensitive environments requiring strict boundaries\n- Running multiple concurrent sessions with different identities in separate terminals\n- You want credentials to automatically clean up when you exit the shell\n- You need clear separation between different cloud contexts\n\nSee the [`atmos auth shell`](/cli/commands/auth/shell) documentation for more details on session isolation.\n\n## Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "When to Use This Command",
+      "id": "when-to-use-this-command"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#3.-use-aws-cli,-terraform,-or-other-tools",
+  "links": []
+}

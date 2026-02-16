@@ -1,0 +1,57 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Cascade.html",
+  "title": "Cascade",
+  "content": "The Cascade constraint is used to validate a whole class, including all the objects that might be stored in its properties. Thanks to this constraint, you don't need to add the Valid constraint on every child object that you want to validate in your class.\n\nIn the following example, the Cascade constraint will tell the validator to validate all properties of the class, including constraints that are set in the child classes BookMetadata and Author:\n\nThe groups option is not available for this constraint.\n\ntype: array | string default: null\n\nThis option can be used to exclude one or more properties from the cascade validation.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nSymfony Code Performance Profiling\n\nGet your Sylius expertise recognized",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Cascade",
+      "id": "cascade"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "exclude",
+      "id": "exclude"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Model/BookCollection.php\nnamespace App\\Model;\n\nuse App\\Model\\Author;\nuse App\\Model\\BookMetadata;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\n#[Assert\\Cascade]\nclass BookCollection\n{\n    #[Assert\\NotBlank]\n    protected string $name = '';\n\n    public BookMetadata $metadata;\n\n    public Author $author;\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\BookCollection:\n    constraints:\n        - Cascade: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\BookCollection\">\n        <constraint name=\"Cascade\"/>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/BookCollection.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass BookCollection\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addConstraint(new Assert\\Cascade());\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Cascade.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Valid.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "title": "CORRECT - Stable workspace key across versions",
+  "content": "settings:\n  workspace_key_prefix: \"prod/vpc\"     # Version-agnostic key\nyaml",
+  "code_samples": [
+    {
+      "code": "When the workspace key includes version information, switching versions requires complex state migrations. Keep it stable!\n:::\n\n## Migration Strategies\n\n### Gradual Migration\n\nRoll out new versions progressively through environments:\n\n<File title=\"migration-plan.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Migration Strategies",
+      "id": "migration-strategies"
+    },
+    {
+      "level": "h3",
+      "text": "Gradual Migration",
+      "id": "gradual-migration"
+    }
+  ],
+  "url": "llms-txt#correct---stable-workspace-key-across-versions",
+  "links": []
+}

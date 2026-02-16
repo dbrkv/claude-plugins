@@ -1,0 +1,54 @@
+{
+  "title": "Use environment variables instead",
+  "content": "export ATMOS_SENTRY_DSN=\"https://your-public-key@sentry.io/project-id\"\nyaml\nerrors:\n  sentry:\n    enabled: true\n    dsn: !env ATMOS_SENTRY_DSN\n    environment: \"production\"\nyaml\nerrors:\n  sentry:\n    enabled: true\n    dsn: !env SENTRY_DSN\n    environment: \"ci\"\n    tags:\n      pipeline: !env CI_PIPELINE_ID\n      branch: !env CI_COMMIT_BRANCH\n      team: \"platform\"\nyaml\nerrors:\n  sentry:\n    enabled: true\n    dsn: !env SENTRY_DSN\n    environment: !env ENVIRONMENT\n    tags:\n      team: !env TEAM_NAME        # \"platform\", \"security\", \"data\"\n      service: \"atmos\"\n      region: !env AWS_REGION\nbash\nexport TEAM_NAME=\"platform\"\natmos terraform apply vpc -s prod/us-east-1\nyaml\nerrors:\n  format:\n    # More detail in development\n    verbose: !env DEVELOPMENT false\n\nsentry:\n    # Only enable in production/staging\n    enabled: !env SENTRY_ENABLED false\n    dsn: !env SENTRY_DSN\n    environment: !env ENVIRONMENT development\n\n# Sample aggressively in dev, fully in prod\n    sample_rate: !env SENTRY_SAMPLE_RATE 0.1\nbash",
+  "code_samples": [
+    {
+      "code": "<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Use Cases\n\n### Monitoring CI/CD Pipelines\n\nTrack infrastructure deployment failures across all your CI pipelines:\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nThis allows you to:\n- Filter errors by pipeline, branch, or team in Sentry\n- Track error rates over time\n- Set up alerts for critical failures\n- Identify patterns (e.g., \"VPC component fails in prod but not staging\")\n\n### Multi-Team Organizations\n\nDifferent teams can share the same Sentry project with custom tags:\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nThen set team-specific environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Development vs. Production\n\nReduce noise in development while maintaining full monitoring in production:\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "Monitoring CI/CD Pipelines",
+      "id": "monitoring-ci/cd-pipelines"
+    },
+    {
+      "level": "h3",
+      "text": "Multi-Team Organizations",
+      "id": "multi-team-organizations"
+    },
+    {
+      "level": "h3",
+      "text": "Development vs. Production",
+      "id": "development-vs.-production"
+    }
+  ],
+  "url": "llms-txt#use-environment-variables-instead",
+  "links": []
+}

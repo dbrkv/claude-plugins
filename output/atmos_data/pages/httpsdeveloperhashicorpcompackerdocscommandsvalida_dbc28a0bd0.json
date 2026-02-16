@@ -1,0 +1,13 @@
+{
+  "title": "https://developer.hashicorp.com/packer/docs/commands/validate",
+  "content": "> atmos packer validate aws/bastion -s nonprod\n\nThe configuration is valid.\nshell",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n<Terminal title=\"atmos packer inspect aws/bastion -s nonprod\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#https://developer.hashicorp.com/packer/docs/commands/validate",
+  "links": []
+}

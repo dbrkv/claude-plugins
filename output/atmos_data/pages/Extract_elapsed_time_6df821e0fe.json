@@ -1,0 +1,8 @@
+{
+  "title": "Extract elapsed time",
+  "content": "elapsed=$(grep \"Elapsed:\" perf-output.txt | awk '{print $2}')",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#extract-elapsed-time",
+  "links": []
+}

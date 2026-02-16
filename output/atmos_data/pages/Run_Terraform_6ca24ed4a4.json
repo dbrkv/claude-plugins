@@ -1,0 +1,23 @@
+{
+  "title": "Run Terraform",
+  "content": "atmos terraform apply my-component -s prod\nyaml\nauth:\n  providers:\n    azure-main:\n      kind: azure/device-code\n      tenant_id: \"YOUR_TENANT_ID\"\n      subscription_id: \"DEV_SUBSCRIPTION_ID\"\n\nidentities:\n    azure-dev:\n      kind: azure/subscription\n      via:\n        provider: azure-main\n      principal:\n        subscription_id: \"DEV_SUBSCRIPTION_ID\"\n        location: \"eastus\"\n\nazure-staging:\n      kind: azure/subscription\n      via:\n        provider: azure-main\n      principal:\n        subscription_id: \"STAGING_SUBSCRIPTION_ID\"\n        location: \"westus\"\n\nazure-prod:\n      kind: azure/subscription\n      via:\n        provider: azure-main\n      principal:\n        subscription_id: \"PROD_SUBSCRIPTION_ID\"\n        location: \"eastus2\"\nbash",
+  "code_samples": [
+    {
+      "code": "**Common use cases:**\n- **Scheduled Jobs**: Cron jobs or Azure DevOps scheduled pipelines\n- **CI/CD Pipelines**: Jenkins, GitLab CI, CircleCI (when OIDC not available)\n- **Automation Scripts**: Python/Go scripts for infrastructure management\n- **Multi-tenant SaaS**: Isolated credentials per customer environment\n\n**Security best practices:**\n- Store `client_secret` in secure secret management (Azure Key Vault, HashiCorp Vault)\n- Use least-privilege RBAC roles (avoid Owner, prefer specific roles like Network Contributor)\n- Rotate credentials regularly (90-day rotation recommended)\n- Use certificate-based authentication for production (more secure than secrets)\n- Prefer OIDC over service principals when available (passwordless)\n\n## Multi-Subscription Workflows\n\nWork with multiple Azure subscriptions seamlessly:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Switch between subscriptions effortlessly:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Multi-Subscription Workflows",
+      "id": "multi-subscription-workflows"
+    }
+  ],
+  "url": "llms-txt#run-terraform",
+  "links": []
+}

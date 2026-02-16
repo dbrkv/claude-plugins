@@ -1,0 +1,8 @@
+{
+  "title": "Clean a specific component in a stack",
+  "content": "atmos terraform clean vpc --stack dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#clean-a-specific-component-in-a-stack",
+  "links": []
+}

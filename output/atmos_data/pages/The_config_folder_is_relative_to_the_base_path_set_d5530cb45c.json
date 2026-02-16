@@ -1,0 +1,8 @@
+{
+  "title": "The `config` folder is relative to the `base_path` setting in `atmos.yaml`",
+  "content": "import: !include config/import.yaml",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#the-`config`-folder-is-relative-to-the-`base_path`-setting-in-`atmos.yaml`",
+  "links": []
+}

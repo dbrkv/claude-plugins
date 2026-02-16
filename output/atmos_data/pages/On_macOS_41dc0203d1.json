@@ -1,0 +1,69 @@
+{
+  "title": "On macOS:",
+  "content": "ls -la ~/Library/Application\\ Support/atmos/\nyaml\nauth:\n  providers:\n    aws-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://mycompany.awsapps.com/start\n\nidentities:\n    dev-admin:\n      kind: aws/permission-set\n      via:\n        provider: aws-sso\n      principal:\n        name: AdminAccess\n        account:\n          name: \"dev-account\"\n\nprod-admin:\n      kind: aws/permission-set\n      via:\n        provider: aws-sso\n      principal:\n        name: AdminAccess\n        account:\n          name: \"prod-account\"\nyaml\nauth:\n  providers:\n    aws-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://mycompany.awsapps.com/start\n      spec:\n        files:\n          base_path: ~/.custom/aws/credentials  # Custom path\nyaml\nspec:\n  files:\n    base_path: ~/custom/path  # Expands to /Users/username/custom/path\nshell\natmos auth validate\nshell\natmos auth logout dev-admin\natmos auth login prod-admin\nshell",
+  "code_samples": [
+    {
+      "code": "## Related Commands\n\n- [`atmos auth login`](/cli/commands/auth/login) - Authenticate with an identity\n- [`atmos auth whoami`](/cli/commands/auth/whoami) - Show current authentication status\n- [`atmos auth validate`](/cli/commands/auth/validate) - Validate authentication configuration\n- [`atmos auth env`](/cli/commands/auth/env) - Export authentication environment variables\n\n## Configuration\n\nLogout works with identities and providers defined in your `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Running `atmos auth logout dev-admin` removes credentials for `dev-admin` and its authentication chain.\n\n## Advanced Configuration\n\n### Custom File Paths\n\nAWS providers support configurable file storage locations via `spec.files.base_path`. This is useful for:\n\n- **Custom directories**: Store credentials in non-standard locations\n- **Container environments**: Use volume mounts at custom paths\n- **Multi-user systems**: Isolate credentials per user or project\n\n#### Configuration\n\nIn your `atmos.yaml`, add `spec.files.base_path` to your AWS provider:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Precedence\n\nThe file path is resolved using this precedence order:\n\n1. **Provider configuration** (`spec.files.base_path` in `atmos.yaml`)\n2. **Default** (XDG-compliant: `~/.config/atmos/aws/` on both Linux and macOS)\n\n#### Path Expansion\n\nPaths support tilde (`~`) expansion for user home directories:",
+      "language": "unknown"
+    },
+    {
+      "code": "#### Validation\n\nThe path is validated during `atmos auth validate`:\n\n- Must not be empty or whitespace-only\n- Must not contain null bytes, carriage returns, or newlines\n- Tilde expansion must succeed",
+      "language": "unknown"
+    },
+    {
+      "code": "## Best Practices\n\n### 1. Logout When Switching Contexts\n\nWhen switching between different identities or environments, logout first to ensure clean state:",
+      "language": "unknown"
+    },
+    {
+      "code": "### 2. Logout at End of Work Session\n\nRemove credentials when ending your work session for security:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related Commands",
+      "id": "related-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Configuration",
+      "id": "advanced-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Custom File Paths",
+      "id": "custom-file-paths"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "1. Logout When Switching Contexts",
+      "id": "1.-logout-when-switching-contexts"
+    },
+    {
+      "level": "h3",
+      "text": "2. Logout at End of Work Session",
+      "id": "2.-logout-at-end-of-work-session"
+    }
+  ],
+  "url": "llms-txt#on-macos:",
+  "links": []
+}

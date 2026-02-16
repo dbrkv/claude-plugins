@@ -1,0 +1,56 @@
+{
+  "title": "'atmos vendor pull -c infra/vpc' or 'atmos vendor pull --component infra/vpc'",
+  "content": "apiVersion: atmos/v1\nkind: ComponentVendorConfig\nmetadata:\n  name: stable/aws/vpc\n  description: Config for vendoring of the 'stable/aws/vpc' component\nspec:\n  source:\n    # Source 'uri' supports the following protocols: OCI (https://opencontainers.org), Git, Mercurial, HTTP, HTTPS, Amazon S3, Google GCP,\n    # and all URL and archive formats as described in https://github.com/hashicorp/go-getter\n    # In 'uri', Golang templates are supported  https://pkg.go.dev/text/template\n    # If 'version' is provided, '{{.Version}}' will be replaced with the 'version' value before pulling the files from 'uri'\n    # Download the component from the AWS public ECR registry (https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html)\n    uri: \"oci://public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:{{.Version}}\"\n    version: \"latest\"\n    # Only include the files that match the 'included_paths' patterns\n    # If 'included_paths' is not specified, all files will be matched except those that match the patterns from 'excluded_paths'\n    # 'included_paths' support POSIX-style Globs for file names/paths (double-star `**` is supported)\n    # https://en.wikipedia.org/wiki/Glob_(programming)\n    # https://github.com/bmatcuk/doublestar#patterns\n    included_paths:\n      - \"**/*.*\"\nyaml\n    source: \"github.com/cloudposse-terraform-components/aws-vpc.git//modules/public-subnets?ref=1.398.0\"\n    yaml\n    source: \"github.com/cloudposse-terraform-components/aws-s3-bucket.git//.?ref=v5.7.0\"\n    yaml\n    source: \"github.com/cloudposse-terraform-components/aws-vpc.git?ref=v1.0\"\n    yaml",
+  "code_samples": [
+    {
+      "code": "---\n\n## Vendor URL Syntax\n\nimport File from '@site/src/components/File'\nimport Terminal from '@site/src/components/Terminal'\nimport Intro from '@site/src/components/Intro'\nimport Tabs from '@theme/Tabs'\nimport TabItem from '@theme/TabItem'\n\n<Intro>\nAtmos vendor sources support a wide variety of URL schemes and path formats for pulling external components, stacks, and configurations. Understanding the URL syntax helps you effectively vendor dependencies from any source.\n</Intro>\n\n## URL Schemes\n\nAtmos vendoring is built on [HashiCorp's go-getter library](https://github.com/hashicorp/go-getter), with additional support for OCI registries and smart defaults for Git hosting platforms.\n\n### Supported Schemes\n\n| Scheme | Description | Example |\n|--------|-------------|---------|\n| ` `(no scheme) | Implicit HTTPS for Git hosts | `github.com/owner/repo.git?ref=v1.0` |\n| `https://` | HTTPS protocol | `https://github.com/owner/repo.git//path?ref=v1.0` |\n| `git::` | Explicit Git protocol | `git::https://github.com/owner/repo.git?ref=v1.0` |\n| `oci://` | OCI registries (Atmos extension) | `oci://ghcr.io/owner/image:tag` |\n| `file://` | Local filesystem | `file:///absolute/path/to/components` |\n| `ssh://` | SSH protocol | `ssh://git@github.com/owner/repo.git` |\n| SCP-style | SSH shorthand | `git@github.com:owner/repo.git` |\n\n:::tip\nMost of the time, you can use the **simplest form** without an explicit scheme. Atmos will automatically detect the right protocol.\n:::\n\n## Subdirectory Syntax\n\nOne of the most powerful features is the **subdirectory delimiter** that lets you vendor only a specific directory from a repository.\n\n### The Double-Slash Delimiter\n\nThe double-slash (`//`) is a special delimiter (not a path separator) that separates:\n1. **Left side**: The source to download (repository URL, archive, etc.)\n2. **Right side**: The subdirectory within that source to extract\n\n<Tabs>\n  <TabItem value=\"subdir\" label=\"With Subdirectory\" default>",
+      "language": "unknown"
+    },
+    {
+      "code": "**Result:** Clones the repository and extracts only the `modules/public-subnets` subdirectory.\n  </TabItem>\n\n  <TabItem value=\"root\" label=\"Root Directory\">",
+      "language": "unknown"
+    },
+    {
+      "code": "**Result:** Clones the repository and uses the root directory (`.` means current directory).\n  </TabItem>\n\n  <TabItem value=\"no-delimiter\" label=\"Without Delimiter\">",
+      "language": "unknown"
+    },
+    {
+      "code": "**Result:** For Git URLs without a subdirectory, Atmos automatically adds `//.` for you (root of repository).\n  </TabItem>\n</Tabs>\n\n### Common Patterns\n\n| Pattern | What It Means | When To Use |\n|---------|---------------|-------------|\n| `repo.git//path/to/dir` | Extract `path/to/dir` subdirectory | When you only need a specific directory |\n| `repo.git//.` | Extract root directory | When you need the entire repository |\n| `repo.git` | No subdirectory specified | Atmos adds `//.` automatically for Git URLs |\n\n:::caution Deprecated: Triple-Slash Pattern\nThe triple-slash pattern (`///`) was used in older Atmos versions to indicate the root directory:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Vendor URL Syntax",
+      "id": "vendor-url-syntax"
+    },
+    {
+      "level": "h2",
+      "text": "URL Schemes",
+      "id": "url-schemes"
+    },
+    {
+      "level": "h3",
+      "text": "Supported Schemes",
+      "id": "supported-schemes"
+    },
+    {
+      "level": "h2",
+      "text": "Subdirectory Syntax",
+      "id": "subdirectory-syntax"
+    },
+    {
+      "level": "h3",
+      "text": "The Double-Slash Delimiter",
+      "id": "the-double-slash-delimiter"
+    },
+    {
+      "level": "h3",
+      "text": "Common Patterns",
+      "id": "common-patterns"
+    }
+  ],
+  "url": "llms-txt#'atmos-vendor-pull--c-infra/vpc'-or-'atmos-vendor-pull---component-infra/vpc'",
+  "links": []
+}

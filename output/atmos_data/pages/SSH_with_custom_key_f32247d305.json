@@ -1,0 +1,19 @@
+{
+  "title": "SSH with custom key",
+  "content": "source: \"git@github.com:owner/private-repo.git?ref=main&sshkey=~/.ssh/custom_key\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### Embedded Credentials",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Embedded Credentials",
+      "id": "embedded-credentials"
+    }
+  ],
+  "url": "llms-txt#ssh-with-custom-key",
+  "links": []
+}

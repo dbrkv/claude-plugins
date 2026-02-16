@@ -1,0 +1,8 @@
+{
+  "title": "Old syntax (still works but deprecated)",
+  "content": "source: \"github.com/owner/repo.git///?ref=v1.0\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#old-syntax-(still-works-but-deprecated)",
+  "links": []
+}

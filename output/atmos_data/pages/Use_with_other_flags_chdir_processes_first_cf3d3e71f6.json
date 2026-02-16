@@ -1,0 +1,8 @@
+{
+  "title": "Use with other flags - chdir processes first",
+  "content": "atmos -C /infra --base-path=./config describe component vpc -s dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-with-other-flags---chdir-processes-first",
+  "links": []
+}

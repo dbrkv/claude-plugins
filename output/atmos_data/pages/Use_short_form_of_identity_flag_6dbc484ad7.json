@@ -1,0 +1,8 @@
+{
+  "title": "Use short form of identity flag",
+  "content": "atmos auth console -i prod-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-short-form-of-identity-flag",
+  "links": []
+}

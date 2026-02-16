@@ -1,0 +1,56 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/index.html",
+  "title": "Reference Documents",
+  "content": "Ever wondered what configuration options you have available to you in config/packages/*.yaml files? In this section, all the available configuration is broken down by the key (e.g. framework) that defines each possible section of your Symfony configuration.\n\nOnline exam, become Sylius certified today\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Reference Documents",
+      "id": "reference-documents"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration Options",
+      "id": "configuration-options"
+    },
+    {
+      "level": "h2",
+      "text": "Forms and Validation",
+      "id": "forms-and-validation"
+    },
+    {
+      "level": "h2",
+      "text": "Format Specifications",
+      "id": "format-specifications"
+    },
+    {
+      "level": "h2",
+      "text": "Others",
+      "id": "others"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/index.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/reference/configuration/doctrine.html",
+    "https://symfony.com/doc/7.3/reference/configuration/security.html",
+    "https://symfony.com/doc/7.3/reference/configuration/twig.html",
+    "https://symfony.com/doc/7.3/reference/configuration/monolog.html",
+    "https://symfony.com/doc/7.3/reference/configuration/web_profiler.html",
+    "https://symfony.com/doc/7.3/reference/configuration/debug.html",
+    "https://symfony.com/doc/7.3/reference/forms/types.html",
+    "https://symfony.com/doc/7.3/reference/constraints.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html",
+    "https://symfony.com/doc/7.3/reference/formats/yaml.html",
+    "https://symfony.com/doc/7.3/reference/formats/xliff.html",
+    "https://symfony.com/doc/7.3/reference/formats/message_format.html",
+    "https://symfony.com/doc/7.3/reference/formats/expression_language.html",
+    "https://symfony.com/doc/7.3/reference/configuration/kernel.html",
+    "https://symfony.com/doc/7.3/reference/twig_reference.html",
+    "https://symfony.com/doc/7.3/reference/dic_tags.html",
+    "https://symfony.com/doc/7.3/reference/attributes.html",
+    "https://symfony.com/doc/7.3/reference/events.html"
+  ]
+}

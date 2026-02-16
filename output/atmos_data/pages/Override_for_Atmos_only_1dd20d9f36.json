@@ -1,0 +1,8 @@
+{
+  "title": "Override for Atmos only",
+  "content": "export ATMOS_XDG_CONFIG_HOME=/custom/path",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#override-for-atmos-only",
+  "links": []
+}

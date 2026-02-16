@@ -1,0 +1,8 @@
+{
+  "title": "Global settings",
+  "content": "settings:\n  templates:\n    settings:\n      # Environment variables passed to data sources when evaluating templates\n      # https://docs.gomplate.ca/functions/aws/#configuring-aws\n      # https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html\n      env:\n        # AWS profile with permissions to access the S3 bucket\n        AWS_PROFILE: \"<AWS profile>\"\n      gomplate:\n        # Timeout in seconds to execute the data sources\n        timeout: 5\n        # https://docs.gomplate.ca/datasources\n        datasources:\n          # `s3` datasource\n          # https://docs.gomplate.ca/datasources/#using-s3-datasources\n          s3-tags:\n            # The `url` uses a `Go` template with the delimiters `${ }`,\n            # which is processed as first step in the template processing pipeline\n            url: \"s3://mybucket/{{ .vars.stage }}/tags.json\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#global-settings",
+  "links": []
+}

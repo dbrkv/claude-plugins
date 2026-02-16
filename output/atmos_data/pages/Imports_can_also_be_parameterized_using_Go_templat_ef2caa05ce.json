@@ -1,0 +1,76 @@
+{
+  "title": "Imports can also be parameterized using `Go` templates",
+  "content": "components:\n  terraform:\n    \"eks-{{ .flavor }}/cluster\":\n      metadata:\n        component: \"test/test-component\"\n      vars:\n        enabled: \"{{ .enabled }}\"\n        name: \"eks-{{ .flavor }}\"\n        service_1_name: \"{{ .service_1_name }}\"\n        service_2_name: \"{{ .service_2_name }}\"\n        tags:\n          flavor: \"{{ .flavor }}\"\nyaml title=\"stacks/orgs/cp/tenant1/test1/us-west-2.yaml\"\nimport:\n  - path: \"mixins/region/us-west-2\"\n  - path: \"orgs/cp/tenant1/test1/_defaults\"\n\n# This import with the provided context will dynamically generate\n  # a new Atmos component `eks-blue/cluster` in the current stack\n  - path: \"catalog/terraform/eks_cluster.yaml.tmpl\"\n    context:\n      flavor: \"blue\"\n      enabled: true\n      service_1_name: \"blue-service-1\"\n      service_2_name: \"blue-service-2\"\n\n# This import with the provided context will dynamically generate\n  # a new Atmos component `eks-green/cluster` in the current stack\n  - path: \"catalog/terraform/eks_cluster.yaml.tmpl\"\n    context:\n      flavor: \"green\"\n      enabled: false\n      service_1_name: \"green-service-1\"\n      service_2_name: \"green-service-2\"\nshell\natmos describe component eks-blue/cluster -s tenant1-uw2-test-1\natmos describe component eks-green/cluster -s tenant1-uw2-test-1\n\natmos terraform apply eks-blue/cluster -s tenant1-uw2-test-1\natmos terraform apply eks-green/cluster -s tenant1-uw2-test-1\nyaml title=\"atmos describe component eks-blue/cluster -s tenant1-uw2-test-1\"\nvars:\n  enabled: true\n  environment: uw2\n  name: eks-blue\n  namespace: cp\n  region: us-west-2\n  service_1_name: blue-service-1\n  service_2_name: blue-service-2\n  stage: test-1\n  tags:\n    flavor: blue\n  tenant: tenant1\nyaml title=\"atmos describe component eks-green/cluster -s tenant1-uw2-test-1\"\nvars:\n  enabled: true\n  environment: uw2\n  name: eks-green\n  namespace: cp\n  region: us-west-2\n  service_1_name: green-service-1\n  service_2_name: green-service-2\n  stage: test-1\n  tags:\n    flavor: green\n  tenant: tenant1\nyaml title=\"stacks/catalog/terraform/eks_cluster_hierarchical.yaml.tmpl\"\nimport:\n  # Use `region.yaml.tmpl` `Go` template and provide `context` for it.\n  # This can also be done by using `Go` templates in the import path itself.\n  # - path: \"mixins/region/{{ .region }}\"\n  - path: \"mixins/region/region.yaml.tmpl\"\n    # `Go` templates in `context`\n    context:\n      region: \"{{ .region }}\"\n      environment: \"{{ .environment }}\"\n\n# `Go` templates in the import path\n  - path: \"orgs/cp/{{ .tenant }}/{{ .stage }}/_defaults\"\n\ncomponents:\n  terraform:\n    # Parameterize Atmos component name\n    \"eks-{{ .flavor }}/cluster\":\n      metadata:\n        component: \"test/test-component\"\n      vars:\n        # Parameterize variables\n        enabled: \"{{ .enabled }}\"\n        name: \"eks-{{ .flavor }}\"\n        service_1_name: \"{{ .service_1_name }}\"\n        service_2_name: \"{{ .service_2_name }}\"\n        tags:\n          flavor: \"{{ .flavor }}\"\nyaml title=\"stacks/orgs/cp/tenant1/test1/us-west-1.yaml\"\nimport:\n\n# This import with the provided hierarchical context will dynamically generate\n  # a new Atmos component `eks-blue/cluster` in the `tenant1-uw1-test1` stack\n  - path: \"catalog/terraform/eks_cluster_hierarchical.yaml.tmpl\"\n    context:\n      # Context variables for the EKS component\n      flavor: \"blue\"\n      enabled: true\n      service_1_name: \"blue-service-1\"\n      service_2_name: \"blue-service-2\"\n      # Context variables for the hierarchical imports\n      # `catalog/terraform/eks_cluster_hierarchical.yaml.tmpl` imports other parameterized configurations\n      tenant: \"tenant1\"\n      region: \"us-west-1\"\n      environment: \"uw1\"\n      stage: \"test1\"\n\n# This import with the provided hierarchical context will dynamically generate\n  # a new Atmos component `eks-green/cluster` in the `tenant1-uw1-test1` stack\n  - path: \"catalog/terraform/eks_cluster_hierarchical.yaml.tmpl\"\n    context:\n      # Context variables for the EKS component\n      flavor: \"green\"\n      enabled: false\n      service_1_name: \"green-service-1\"\n      service_2_name: \"green-service-2\"\n      # Context variables for the hierarchical imports\n      # `catalog/terraform/eks_cluster_hierarchical.yaml.tmpl` imports other parameterized configurations\n      tenant: \"tenant1\"\n      region: \"us-west-1\"\n      environment: \"uw1\"\n      stage: \"test1\"\nshell\natmos terraform apply eks-blue/cluster -s tenant1-uw1-test-1\natmos terraform apply eks-green/cluster -s tenant1-uw1-test-1\nyaml title=\"atmos describe component eks-blue/cluster -s tenant1-uw1-test-1\"\nvars:\n  enabled: true\n  environment: uw1\n  name: eks-blue\n  namespace: cp\n  region: us-west-1\n  service_1_name: blue-service-1\n  service_2_name: blue-service-2\n  stage: test-1\n  tags:\n    flavor: blue\n  tenant: tenant1\nyaml\ncomponents:\n  terraform:\n    eks/iam-role/{{ .app_name }}/{{ .service_environment }}:\n      metadata:\n        component: eks/iam-role\n      settings:\n        spacelift:\n          workspace_enabled: true\n      vars:\n        enabled: {{ .enabled }}\n        tags:\n          Service: {{ .app_name }}\n        service_account_name: {{ .app_name }}\n        service_account_namespace: {{ .service_account_namespace }}\n        {{ if hasKey . \"iam_managed_policy_arns\" }}\n        iam_managed_policy_arns:\n          {{ range $i, $iam_managed_policy_arn := .iam_managed_policy_arns }}\n          - '{{ $iam_managed_policy_arn }}'\n          {{ end }}\n        {{- end }}\n        {{ if hasKey . \"iam_source_policy_documents\" }}\n        iam_source_policy_documents:\n          {{ range $i, $iam_source_policy_document := .iam_source_policy_documents }}\n          - '{{ $iam_source_policy_document }}'\n          {{ end }}\n        {{- end }}\n```\n\nThe `iam_managed_policy_arns` and `iam_source_policy_documents` variables will be included in the component configuration only if the\nprovided `context` object has the `iam_managed_policy_arns` and `iam_source_policy_documents` fields.\n\nUsing imports with context (and hierarchical imports with context) with parameterized config files will help you make the configurations\nextremely DRY. It's very useful in many cases, for example, when creating stacks and components\nfor [EKS blue-green deployment](https://aws.amazon.com/blogs/containers/kubernetes-cluster-upgrade-the-blue-green-deployment-strategy/).\n\n- [Configure CLI](/quick-start/advanced/configure-cli)\n- [Create Atmos Stacks](/quick-start/advanced/create-atmos-stacks)\n\n## Inherit Configurations in Atmos Stacks\n\nimport File from '@site/src/components/File'\nimport Terminal from '@site/src/components/Terminal'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nInheritance provides a template-free way to customize Stack configurations. When combined with [imports](/core-concepts/stacks/imports), it provides the ability to combine multiple configurations through ordered deep-merging of configurations. Inheritance is how you manage configuration variations, without resorting to [templating](/core-concepts/stacks/templates).\n</Intro>\n\nAtmos supports the following concepts and principles of **Component-Oriented Programming (COP)**:\n\n- [Single Inheritance](/core-concepts/stacks/inheritance#single-inheritance) - when an Atmos component inherits the configuration properties from\n  another Atmos component\n\n- [Multiple Inheritance](/core-concepts/stacks/inheritance#multiple-inheritance) - when an Atmos component inherits the configuration from more than one Atmos\n  component\n\nThese concepts and principles are implemented and used in Atmos by combining two features: [`import`](/core-concepts/stacks/imports)\nand [`metadata`](/core-concepts/stacks/define-components) component's configuration section.\n\n:::info\nThe mechanics of mixins and inheritance apply only to the [Stack](/core-concepts/stacks) configurations. Atmos knows nothing about the underlying\ncomponents (e.g. terraform), and does not magically implement inheritance for HCL. However, by designing highly reusable components that do one thing\nwell, we're able to achieve many of the same benefits.\n:::\n\nComponent Inheritance is implemented and used in Atmos by combining two features: [`import`](/core-concepts/stacks/imports)\nand `metadata` component's configuration section.\n\n<dl>\n<dt>Base Component</dt>\n<dd>is an Atmos component from which other Atmos components inherit all the configuration properties</dd>\n<dt>Derived Component</dt>\n<dd>is an Atmos component that derives the configuration properties from other Atmos components</dd>\n</dl>",
+  "code_samples": [
+    {
+      "code": ":::note\n\nSince `Go` processes files ending in `.yaml.tmpl` text files with templates, we can parameterize the Atmos component name `eks-{{ .flavor }}/cluster` and any values in any sections (`vars`, `settings`, `env`, `backend`, etc.), and even the `import` section in the imported file (if the file imports other configurations).\n\n:::\n\nThen we can import the template into a top-level stack multiple times providing different context variables to each import:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now we can execute the following Atmos commands to describe and provision the dynamically generated EKS components into the stack:",
+      "language": "unknown"
+    },
+    {
+      "code": "All the parameterized variables get their values from the `context`:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## Hierarchical Imports with Context\n\nAtmos supports hierarchical imports with context.\nThis will allow you to parameterize the entire chain of stack configurations and dynamically generate components in stacks.\n\nFor example, let's create the configuration `stacks/catalog/terraform/eks_cluster_hierarchical.yaml.tmpl` with the following content:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then we can import the template into a top-level stack multiple times providing different context variables to each import and to the imports for\nthe entire inheritance chain (which `catalog/terraform/eks_cluster_hierarchical.yaml.tmpl` imports itself):",
+      "language": "unknown"
+    },
+    {
+      "code": "In the case of hierarchical imports, Atmos performs the following steps:\n\n- Processes all the imports in the `import` section in the current configuration in the order they are specified providing the `context` to all\n  imported files\n\n- For each imported file, Atmos deep-merges the parent `context` with the current context. Note that the current `context` (in the current file) takes\n  precedence over the parent `context` and will override items with the same keys. Atmos does this hierarchically for all imports in all files,\n  effectively processing a graph of imports and deep-merging the contexts on all levels\n\nFor example, in the `stacks/orgs/cp/tenant1/test1/us-west-1.yaml` configuration above, we first import\nthe `catalog/terraform/eks_cluster_hierarchical.yaml.tmpl` and provide it with the `context` which includes the context variables for the EKS component\nitself, as well as the context variables for all the hierarchical imports. Then, when processing\nthe `stacks/catalog/terraform/eks_cluster_hierarchical.yaml.tmpl` configuration, Atmos deep-merges the parent `context` (from\n`stacks/orgs/cp/tenant1/test1/us-west-1.yaml`) with the current `context` and processes the `Go` templates.\n\nWe are now able to dynamically generate the components `eks-blue/cluster` and `eks-green/cluster` in the stack `tenant1-uw1-test1` and can\nexecute the following Atmos commands to provision the components into the stack:",
+      "language": "unknown"
+    },
+    {
+      "code": "All the parameterized variables get their values from the hierarchical `context` settings:",
+      "language": "unknown"
+    },
+    {
+      "code": ":::warning Handle with Care\n\nLeveraging Go templating for Atmos stack generation grants significant power but demands equal responsibility. It can easily defy the principle of creating stack configurations that are straightforward and intuitive to read.\n\nWhile templating fosters DRYer code, it comes at the expense of searchable components and introduces elements like conditionals, loops, and dynamic variables that impede understandability. It's a tool not for regular use, but for instances where code duplication becomes excessively cumbersome.\n\nBefore resorting to advanced Go templates in Atmos, rigorously evaluate the trade-off between the value added and the complexity introduced.\n\n:::\n\n## Advanced Examples of Templates in Atmos Configurations\n\nAtmos supports all the functionality of [Go templates](https://pkg.go.dev/text/template), including [functions](https://pkg.go.dev/text/template#hdr-Functions) and [Sprig functions](http://masterminds.github.io/sprig/).\nThe Sprig library provides over 70 template functions for `Go's` template language.\n\nThe following example shows how to dynamically include a variable in the Atmos component configuration by using the `hasKey` Sprig function.\nThe hasKey function returns `true` if the given dictionary contains the given key.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Hierarchical Imports with Context",
+      "id": "hierarchical-imports-with-context"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Examples of Templates in Atmos Configurations",
+      "id": "advanced-examples-of-templates-in-atmos-configurations"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Related",
+      "id": "related"
+    },
+    {
+      "level": "h2",
+      "text": "Inherit Configurations in Atmos Stacks",
+      "id": "inherit-configurations-in-atmos-stacks"
+    },
+    {
+      "level": "h3",
+      "text": "Definitions",
+      "id": "definitions"
+    }
+  ],
+  "url": "llms-txt#imports-can-also-be-parameterized-using-`go`-templates",
+  "links": []
+}

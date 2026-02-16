@@ -1,0 +1,58 @@
+{
+  "title": "Combine options",
+  "content": "atmos auth shell --identity staging-readonly --shell /bin/bash -- -c \"terraform plan\"\nshell\natmos auth user configure\nshell",
+  "code_samples": [
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--identity` (alias `-i`)</dt>\n  <dd>\n    Specify the identity to use for authentication. This flag has three modes:\n\n    - **With value** (`--identity admin`): Use the specified identity\n    - **Without value** (`--identity`): Force interactive selector, even if a default identity is configured\n    - **Omitted**: Use the default identity configured in `atmos.yaml`, or prompt if no default is set\n\n    **Environment variables:** `ATMOS_IDENTITY` or `IDENTITY` (checked in that order)\n  </dd>\n\n  <dt>`--shell`</dt>\n  <dd>Specify the shell program to use. Defaults to `$SHELL`, then `bash`, then `sh`. On Windows, defaults to `cmd.exe`.</dd>\n</dl>\n\n## Arguments\n\n<dl>\n  <dt>shell-args...</dt>\n  <dd>Optional shell arguments to pass after `--`. If not provided, launches a login shell by default (`-l`).</dd>\n</dl>\n\n## Environment Variables\n\nThe shell session will have the following environment variables set:\n\n- **`ATMOS_IDENTITY`** - The name of the authenticated identity\n- **`ATMOS_SHLVL`** - Shell nesting level (increments for nested Atmos shells)\n- **AWS configuration paths** (for AWS identities):\n  - `AWS_SHARED_CREDENTIALS_FILE` - Path to Atmos-managed credentials file\n  - `AWS_CONFIG_FILE` - Path to Atmos-managed config file\n  - `AWS_PROFILE` - Profile name corresponding to your identity\n\n:::info Secure Credential Handling\nAtmos never exposes sensitive credentials directly in environment variables. Instead, it writes credentials to managed configuration files following XDG Base Directory Specification (e.g., `~/.config/atmos/aws/` on both Linux and macOS) and sets environment variables pointing to these files. This approach follows AWS SDK best practices and works seamlessly with any tool that uses the AWS SDK, including Terraform, AWS CLI, kubectl with AWS authentication, and more.\n:::\n\n## Notes\n\n- Type `exit` or press `Ctrl+D` to leave the authenticated shell\n- The shell can be nested; `ATMOS_SHLVL` tracks the nesting depth\n- Use `--` to separate Atmos flags from shell-specific arguments\n- Environment variables from authentication take precedence over existing values\n\n---\n\n## atmos auth user configure\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Note from '@site/src/components/Note'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command whenever an identity is backed by a **user** credential source and you need to configure those credentials interactively. The values are stored securely in your OS keychain and can be referenced by other `atmos auth` commands (`login`, `env`, `exec`).\n</Intro>\n\n<Note>Currently, only **AWS IAM users** (`kind: aws/user`) are supported. You'll be prompted for the AWS Access Key ID, Secret Access Key, and an optional MFA device ARN, which will be stored securely in your system keychain.</Note>\n\n<Screengrab title=\"atmos auth user configure --help\" slug=\"atmos-auth-user-configure--help\" />\n\n## Usage",
+      "language": "unknown"
+    },
+    {
+      "code": "## Description\n\nThis command provides an interactive way to configure AWS IAM user credentials and store them securely in your system keychain.\n\n**What it prompts for:**\n\n- **AWS Access Key ID** (required) - Your IAM user's access key identifier\n- **AWS Secret Access Key** (required, masked input) - Your IAM user's secret key\n- **AWS User MFA ARN** (optional) - Your MFA device ARN for enhanced security\n- **Session Duration** (optional, default: 12h) - How long session tokens remain valid\n\n**Storage:**\n\n- Credentials are stored in your OS keychain (macOS Keychain, GNOME Keyring, Windows Credential Manager)\n- The storage key matches your `aws/user` identity name from `atmos.yaml`\n- Only identities with `kind: aws/user` are selectable\n\n## Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Environment Variables",
+      "id": "environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Notes",
+      "id": "notes"
+    },
+    {
+      "level": "h2",
+      "text": "atmos auth user configure",
+      "id": "atmos-auth-user-configure"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Description",
+      "id": "description"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#combine-options",
+  "links": []
+}

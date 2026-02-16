@@ -1,0 +1,52 @@
+{
+  "title": "Test with verbose logging",
+  "content": "TF_LOG=DEBUG atmos terraform plan myapp -s dev\n\nmy-project/\nâââ providers/\nâ   âââ terraform-provider-acme/\nâ       âââ main.go\nâ       âââ provider.go\nâ       âââ bin/\nâ           âââ terraform-provider-acme  # Built binary\nâââ infrastructure/\n    âââ components/\n    â   âââ terraform/\n    â       âââ web-app/\n    â           âââ .terraformrc\n    â           âââ .terraformrc.example\n    â           âââ .gitignore\n    â           âââ main.tf\n    â           âââ providers.tf\n    â           âââ versions.tf\n    âââ stacks/\n        âââ catalog/\n            âââ web-app/\n                âââ defaults.yaml\nhcl\nprovider_installation {\n  dev_overrides {\n    \"registry.terraform.io/acme/cloud\" = \"/Users/developer/work/providers/terraform-provider-acme/bin\"\n  }\n  direct {}\n}\n\n.terraformrc\nyaml\nterraform:\n  settings:\n    # Toggle this to switch between dev and prod modes\n    provider_dev_mode: true\n\n# Development API endpoint\n    acme_api_endpoint: \"https://dev.api.acme.com\"\n    acme_api_debug: true\nyaml\ncomponents:\n  terraform:\n    web-app:\n      # Configure provider behavior\n      providers:\n        acme:\n          endpoint: \"{{ .settings.acme_api_endpoint }}\"\n          debug: \"{{ .settings.acme_api_debug }}\"\n          api_token: \"{{ .settings.acme_api_token }}\"\n\n# Point to CLI config in the component directory\n      env:\n        TF_CLI_CONFIG_FILE: \".terraformrc\"\n\nvars:\n        app_name: \"web-app\"\n        region: \"us-east-1\"\nyaml\nenv:\n  TF_CLI_CONFIG_FILE: >-\n    {{ if .settings.provider_dev_mode }}.terraformrc{{ end }}\nmakefile\n.PHONY: build install test\n\nbuild:\n\t@echo \"Building provider binary...\"\n\t@go build -o terraform-provider-acme\n\t@echo \"Build complete: terraform-provider-acme\"\n\ninstall: build\n\t@echo \"Creating bin directory...\"\n\t@mkdir -p bin\n\t@echo \"Installing provider binary to bin/...\"\n\t@mv terraform-provider-acme bin/\n\t@chmod +x bin/terraform-provider-acme\n\t@echo \"Installation complete: bin/terraform-provider-acme\"\n\ntest: install\n\t@echo \"Running Atmos terraform plan...\"\n\t@cd ../infrastructure && \\\n\tatmos terraform plan web-app -s dev\nhcl",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n### Version Conflicts\n\nIf you see version-related errors, verify:\n\n1. The provider address in `dev_overrides` exactly matches the `source` in your `required_providers` block\n2. The provider binary name matches the provider name (last segment of the address)\n\n## Real-World Example\n\nHere's a complete working example for developing a custom cloud provider:\n\n**Project Structure:**",
+      "language": "unknown"
+    },
+    {
+      "code": "<File title=\"components/terraform/web-app/.terraformrc\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"components/terraform/web-app/.gitignore\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/orgs/acme/_defaults.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/catalog/web-app/defaults.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n:::tip Toggle Development Mode\n\nYou can use Atmos settings and templating to conditionally enable dev overrides:",
+      "language": "unknown"
+    },
+    {
+      "code": "Set `provider_dev_mode: true` in your global defaults when doing provider development, and `false` (or omit) when using published versions.\n\n:::\n\n<File title=\"providers/terraform-provider-acme/Makefile\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"components/terraform/web-app/.terraformrc.example\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Version Conflicts",
+      "id": "version-conflicts"
+    },
+    {
+      "level": "h2",
+      "text": "Real-World Example",
+      "id": "real-world-example"
+    }
+  ],
+  "url": "llms-txt#test-with-verbose-logging",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Use these wisely. Too many global vars will pollute the variable namespace.",
+  "content": "vars:\n  # Variables can be anything you want. They can be scalars, lists, and maps. Whatever is supported by YAML.\n  stage: dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-these-wisely.-too-many-global-vars-will-pollute-the-variable-namespace.",
+  "links": []
+}

@@ -1,0 +1,57 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/data_mappers.html",
+  "title": "When and How to Use Data Mappers",
+  "content": "When a form is compound, the initial data needs to be passed to children so each can display their own input value. On submission, children values need to be written back into the form.\n\nData mappers are responsible for reading and writing data from and into parent forms.\n\nThe main built-in data mapper uses the PropertyAccess component and will fit most cases. However, you can create your own implementation that could, for example, pass submitted data to immutable objects via their constructor.\n\nIt is important to know the difference between data transformers and mappers.\n\nSuppose that you want to save a set of colors to the database. For this, you're using an immutable color object:\n\nThe form type should be allowed to edit a color. But because you've decided to make the Color object immutable, a new color object has to be created each time one of the values is changed.\n\nIf you're using a mutable object with constructor arguments, instead of using a data mapper, you should configure the empty_data option with a closure as described in How to Configure empty Data for a Form Class.\n\nThe red, green and blue form fields have to be mapped to the constructor arguments and the Color instance has to be mapped to red, green and blue form fields. Recognize a familiar pattern? It's time for a data mapper. The easiest way to create one is by implementing DataMapperInterface in your form type:\n\nThe data passed to the mapper is not yet validated. This means that your objects should allow being created in an invalid state in order to produce user-friendly errors in the form.\n\nAfter creating the data mapper, you need to configure the form to use it. This is achieved using the setDataMapper() method:\n\nCool! When using the ColorType form, the custom data mapper methods will create a new Color object now.\n\nConveniently, you can also map data from and into a form field by using the getter and setter options. For example, suppose you have a form with some fields and only one of them needs to be mapped in some special way or you only need to change how it's written into the underlying object. In that case, register a PHP callable that is able to write or read to/from that specific object:\n\nIf available, these options have priority over the property path accessor and the default data mapper will still use the PropertyAccess component for the other form fields.\n\nWhen a form has the inherit_data option set to true, it does not use the data mapper and lets its parent map inner values.\n\nGet your Sylius expertise recognized\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "When and How to Use Data Mappers",
+      "id": "when-and-how-to-use-data-mappers"
+    },
+    {
+      "level": "h2",
+      "text": "The Difference between Data Transformers and Mappers",
+      "id": "the-difference-between-data-transformers-and-mappers"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a Data Mapper",
+      "id": "creating-a-data-mapper"
+    },
+    {
+      "level": "h2",
+      "text": "Using the Mapper",
+      "id": "using-the-mapper"
+    },
+    {
+      "level": "h2",
+      "text": "Mapping Form Fields Using Callbacks",
+      "id": "mapping-form-fields-using-callbacks"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Painting/Color.php\nnamespace App\\Painting;\n\nfinal class Color\n{\n    public function __construct(\n        private int $red,\n        private int $green,\n        private int $blue,\n    ) {\n    }\n\n    public function getRed(): int\n    {\n        return $this->red;\n    }\n\n    public function getGreen(): int\n    {\n        return $this->green;\n    }\n\n    public function getBlue(): int\n    {\n        return $this->blue;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/ColorType.php\nnamespace App\\Form;\n\nuse App\\Painting\\Color;\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\DataMapperInterface;\nuse Symfony\\Component\\Form\\Exception\\UnexpectedTypeException;\nuse Symfony\\Component\\Form\\FormInterface;\n\nfinal class ColorType extends AbstractType implements DataMapperInterface\n{\n    // ...\n\n    /**\n     * @param Color|null $viewData\n     */\n    public function mapDataToForms($viewData, \\Traversable $forms): void\n    {\n        // there is no data yet, so nothing to prepopulate\n        if (null === $viewData) {\n            return;\n        }\n\n        // invalid data type\n        if (!$viewData instanceof Color) {\n            throw new UnexpectedTypeException($viewData, Color::class);\n        }\n\n        /** @var FormInterface[] $forms */\n        $forms = iterator_to_array($forms);\n\n        // initialize form field values\n        $forms['red']->setData($viewData->getRed());\n        $forms['green']->setData($viewData->getGreen());\n        $forms['blue']->setData($viewData->getBlue());\n    }\n\n    public function mapFormsToData(\\Traversable $forms, &$viewData): void\n    {\n        /** @var FormInterface[] $forms */\n        $forms = iterator_to_array($forms);\n\n        // as data is passed by reference, overriding it will change it in\n        // the form object as well\n        // beware of type inconsistency, see caution below\n        $viewData = new Color(\n            $forms['red']->getData(),\n            $forms['green']->getData(),\n            $forms['blue']->getData()\n        );\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/Type/ColorType.php\nnamespace App\\Form\\Type;\n\n// ...\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\IntegerType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nfinal class ColorType extends AbstractType implements DataMapperInterface\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder\n            ->add('red', IntegerType::class, [\n                // enforce the strictness of the type to ensure the constructor\n                // of the Color class doesn't break\n                'empty_data' => '0',\n            ])\n            ->add('green', IntegerType::class, [\n                'empty_data' => '0',\n            ])\n            ->add('blue', IntegerType::class, [\n                'empty_data' => '0',\n            ])\n            // configure the data mapper for this FormType\n            ->setDataMapper($this)\n        ;\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // when creating a new color, the initial data should be null\n        $resolver->setDefault('empty_data', null);\n    }\n\n    // ...\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "public function buildForm(FormBuilderInterface $builder, array $options): void\n{\n    // ...\n\n    $builder->add('state', ChoiceType::class, [\n        'choices' => [\n            'active' => true,\n            'paused' => false,\n        ],\n        'getter' => function (Task $task, FormInterface $form): bool {\n            return !$task->isCancelled() && !$task->isPaused();\n        },\n        'setter' => function (Task &$task, bool $state, FormInterface $form): void {\n            if ($state) {\n                $task->activate();\n            } else {\n                $task->pause();\n            }\n        },\n    ]);\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/data_mappers.html",
+    "https://symfony.com/doc/7.3/components/property_access.html",
+    "https://symfony.com/doc/7.3/form/data_transformers.html",
+    "https://symfony.com/doc/7.3/form/use_empty_data.html"
+  ]
+}

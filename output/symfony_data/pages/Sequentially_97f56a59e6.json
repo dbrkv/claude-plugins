@@ -1,0 +1,63 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Sequentially.html",
+  "title": "Sequentially",
+  "content": "This constraint allows you to apply a set of rules that should be validated step-by-step, allowing to interrupt the validation once the first violation is raised.\n\nAs an alternative in situations Sequentially cannot solve, you may consider using GroupSequence which allows more control.\n\nSuppose that you have a Place object with an $address property which must match the following requirements:\n\nIn such situations, you may encounter three issues:\n\nYou can validate each of these constraints sequentially to solve these issues:\n\nThis required option is the array of validation constraints that you want to apply sequentially.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nCode consumes server resources. Blackfire tells you how\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Sequentially",
+      "id": "sequentially"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "constraints",
+      "id": "constraints"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Localization/Place.php\nnamespace App\\Localization;\n\nuse App\\Validator\\Constraints as AcmeAssert;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Place\n{\n    private const string ADDRESS_REGEX = '...';\n\n    #[Assert\\Sequentially([\n        new Assert\\NotNull,\n        new Assert\\Type('string'),\n        new Assert\\Length(min: 10),\n        new Assert\\Regex(Place::ADDRESS_REGEX),\n        new AcmeAssert\\Geolocalizable,\n    ])]\n    public string $address;\n\n    // ...\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Localization\\Place:\n    properties:\n        address:\n            - Sequentially:\n                - NotNull: ~\n                - Type: string\n                - Length: { min: 10 }\n                - Regex: !php/const App\\Localization\\Place::ADDRESS_REGEX\n                - App\\Validator\\Constraints\\Geolocalizable: ~",
+      "language": "javascript"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Localization\\Place\">\n        <property name=\"address\">\n            <constraint name=\"Sequentially\">\n                    <constraint name=\"NotNull\"/>\n                    <constraint name=\"Type\">string</constraint>\n                    <constraint name=\"Length\">\n                        <option name=\"min\">10</option>\n                    </constraint>\n                    <constraint name=\"Regex\">\n                        <option name=\"pattern\">/address-regex/</option>\n                    </constraint>\n                    <constraint name=\"App\\Validator\\Constraints\\Geolocalizable\"/>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Localization/Place.php\nnamespace App\\Localization;\n\nuse App\\Validator\\Constraints as AcmeAssert;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Place\n{\n    private const string ADDRESS_REGEX = '...';\n\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('address', new Assert\\Sequentially([\n            new Assert\\NotNull(),\n            new Assert\\Type('string'),\n            new Assert\\Length(min: 10),\n            new Assert\\Regex(self::ADDRESS_REGEX),\n            new AcmeAssert\\Geolocalizable(),\n        ]));\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Sequentially.html",
+    "https://symfony.com/doc/7.3/validation/sequence_provider.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

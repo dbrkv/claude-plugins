@@ -1,0 +1,13 @@
+{
+  "title": "List variables for production stacks",
+  "content": "atmos list vars vpc --stack 'prod-*'\nshell",
+  "code_samples": [
+    {
+      "code": "Output in different formats:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#list-variables-for-production-stacks",
+  "links": []
+}

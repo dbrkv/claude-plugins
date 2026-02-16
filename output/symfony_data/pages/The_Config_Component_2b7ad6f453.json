@@ -1,0 +1,40 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/config.html",
+  "title": "The Config Component",
+  "content": "The Config component provides utilities to define and manage the configuration options of PHP applications. It allows you to:\n\nYou don't have to use this component to configure Symfony applications. Instead, read the docs about how to configure Symfony applications.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The Config Component",
+      "id": "the-config-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Learn More",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/config",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/config.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/components/config/caching.html",
+    "https://symfony.com/doc/7.3/components/config/definition.html",
+    "https://symfony.com/doc/7.3/components/config/resources.html",
+    "https://symfony.com/doc/7.3/bundles/configuration.html",
+    "https://symfony.com/doc/7.3/bundles/extension.html",
+    "https://symfony.com/doc/7.3/bundles/prepend_extension.html"
+  ]
+}

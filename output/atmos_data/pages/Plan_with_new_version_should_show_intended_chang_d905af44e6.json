@@ -1,0 +1,8 @@
+{
+  "title": "Plan with new version - should show intended changes",
+  "content": "atmos terraform plan vpc --stack prod-us-east-1",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#plan-with-new-version---should-show-intended-changes",
+  "links": []
+}

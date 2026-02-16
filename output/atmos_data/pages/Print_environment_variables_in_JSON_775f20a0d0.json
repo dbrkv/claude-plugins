@@ -1,0 +1,8 @@
+{
+  "title": "Print environment variables in JSON",
+  "content": "atmos auth env --format json",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#print-environment-variables-in-json",
+  "links": []
+}

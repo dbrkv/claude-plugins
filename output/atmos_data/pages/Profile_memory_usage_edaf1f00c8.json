@@ -1,0 +1,8 @@
+{
+  "title": "Profile memory usage",
+  "content": "atmos terraform plan large-component -s prod --profile-file=memory.prof --profile-type=heap",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#profile-memory-usage",
+  "links": []
+}

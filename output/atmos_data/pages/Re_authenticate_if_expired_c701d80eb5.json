@@ -1,0 +1,19 @@
+{
+  "title": "Re-authenticate if expired",
+  "content": "atmos auth login\nbash",
+  "code_samples": [
+    {
+      "code": "### Missing Token Scopes\n\nIf you see errors about missing permissions, ensure all 3 token scopes are configured:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Missing Token Scopes",
+      "id": "missing-token-scopes"
+    }
+  ],
+  "url": "llms-txt#re-authenticate-if-expired",
+  "links": []
+}

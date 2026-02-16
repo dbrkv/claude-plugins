@@ -1,0 +1,8 @@
+{
+  "title": "List specific variable",
+  "content": "atmos list vars vpc --query .vars.tags",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-specific-variable",
+  "links": []
+}

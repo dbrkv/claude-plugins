@@ -1,0 +1,22 @@
+{
+  "url": "https://symfony.com/doc/7.3/console/calling_commands.html",
+  "title": "How to Call Other Commands",
+  "content": "If a command depends on another one being run before it you can call that in the console command itself. This can be useful if you want to create a \"meta\" command that runs a bunch of other commands (for instance, all commands that need to be run when the project's code has changed on the production servers: clearing the cache, generating Doctrine proxies, dumping web assets, ...).\n\nUse the doRun(). Then, create a new ArrayInput with the arguments and options you want to pass to the command. The command name must be the first argument.\n\nEventually, calling the doRun() method actually runs the command and returns the returned code from the command (return value from command __invoke() method):\n\nIf you want to suppress the output of the executed command, pass a NullOutput as the second argument to $application->doRun().\n\nUsing doRun() instead of run() prevents autoexiting and allows to return the exit code instead.\n\nAlso, using $application->doRun() instead of $application->find('demo:greet')->run() will allow proper events to be dispatched for that inner command as well.\n\nNote that all the commands will run in the same process and some of Symfony's built-in commands may not work well this way. For instance, the cache:clear and cache:warmup commands change some class definitions, so running something after them is likely to break.\n\nMost of the time, calling a command from code that is not executed on the command line is not a good idea. The main reason is that the command's output is optimized for the console and not to be passed to other commands.\n\nShow your Symfony expertise\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Call Other Commands",
+      "id": "how-to-call-other-commands"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// ...\nuse Symfony\\Component\\Console\\Application;\nuse Symfony\\Component\\Console\\Attribute\\AsCommand;\nuse Symfony\\Component\\Console\\Input\\ArrayInput;\nuse Symfony\\Component\\Console\\Output\\OutputInterface;\n\n#[AsCommand(name: 'app:create-user')]\nclass CreateUserCommand\n{\n    public function __invoke(OutputInterface $output, Application $application): int\n    {\n        $greetInput = new ArrayInput([\n            // the command name is passed as first argument\n            'command' => 'demo:greet',\n            'name'    => 'Fabien',\n            '--yell'  => true,\n        ]);\n\n        // disable interactive behavior for the greet command\n        $greetInput->setInteractive(false);\n\n        $returnCode = $application->doRun($greetInput, $output);\n\n        // ...\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/console/calling_commands.html"
+  ]
+}

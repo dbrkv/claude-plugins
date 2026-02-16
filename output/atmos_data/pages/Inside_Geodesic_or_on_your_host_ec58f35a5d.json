@@ -1,0 +1,46 @@
+{
+  "title": "Inside Geodesic or on your host",
+  "content": "atmos auth login\nyaml\nauth:\n  identities:\n    acme-identity:\n      kind: aws/permission-set\n      # ...\nini\n[profile some-role]\nsource_profile = acme-identity\nrole_arn = arn:aws:iam::123456789012:role/SomeRole\nyaml\nauth:\n  providers:\n    acme-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://acme.awsapps.com/start/\n\nidentities:\n    acme-identity:\n      default: true\n      kind: aws/permission-set\n      via:\n        provider: acme-sso\n      principal:\n        name: \"IdentityDevopsTeamAccess\"\n        account:\n          name: \"core-identity\"\ndockerfile\nFROM cloudposse/geodesic:latest",
+  "code_samples": [
+    {
+      "code": "This will create credentials at `~/.config/atmos/aws/<provider>/` which Geodesic automatically mounts.\n\n**Note**: We do not recommend setting `ATMOS_XDG_CONFIG_HOME=\"$HOME/.aws\"` as this affects **all** Atmos XDG paths (config, cache, data), not just AWS credentials. If you need to customize only the AWS credentials location, use the provider's `base_path` configuration in `atmos.yaml` instead.\n:::\n\n### 4. Update Source Profile Configuration\n\nFor `assume-role` and other Geodesic utilities to work correctly, update your `source_profile` in the `{Repo Root}/etc/aws-config/aws-config-teams` file to match the identity name from your `atmos.yaml` auth configuration.\n\n**Example:**\n\nIf your `atmos.yaml` defines:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then your `aws-config-teams` should reference:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Complete Example\n\nHere's a complete example showing how all the pieces fit together:\n\n### atmos.yaml",
+      "language": "unknown"
+    },
+    {
+      "code": "### Dockerfile (Geodesic)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "4. Update Source Profile Configuration",
+      "id": "4.-update-source-profile-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Complete Example",
+      "id": "complete-example"
+    },
+    {
+      "level": "h3",
+      "text": "atmos.yaml",
+      "id": "atmos.yaml"
+    },
+    {
+      "level": "h3",
+      "text": "Dockerfile (Geodesic)",
+      "id": "dockerfile-(geodesic)"
+    }
+  ],
+  "url": "llms-txt#inside-geodesic-or-on-your-host",
+  "links": []
+}

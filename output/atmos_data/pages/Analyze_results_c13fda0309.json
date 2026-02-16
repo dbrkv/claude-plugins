@@ -1,0 +1,13 @@
+{
+  "title": "Analyze results",
+  "content": "go tool pprof -http=:8080 slow-plan.prof\ngo tool pprof -http=:8080 memory.prof\ngo tool trace trace.out\nshell",
+  "code_samples": [
+    {
+      "code": "**Memory Analysis:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#analyze-results",
+  "links": []
+}

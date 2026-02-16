@@ -1,0 +1,19 @@
+{
+  "title": "This will pass validation",
+  "content": "TF_CLI_ARGS=\"-var environment=production\" atmos terraform apply my-component -s plat-ue2-dev\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n### Validate environment variable values\n\nYou can also validate the actual values of variables passed via `TF_CLI_ARGS`. For example, to ensure that the `environment` variable is set to one of the allowed values:\n\n<File title=\"stacks/schemas/opa/my-component/validate-my-component.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Validate environment variable values",
+      "id": "validate-environment-variable-values"
+    }
+  ],
+  "url": "llms-txt#this-will-pass-validation",
+  "links": []
+}

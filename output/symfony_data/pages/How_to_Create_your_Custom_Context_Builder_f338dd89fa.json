@@ -1,0 +1,41 @@
+{
+  "url": "https://symfony.com/doc/7.3/serializer/custom_context_builders.html",
+  "title": "How to Create your Custom Context Builder",
+  "content": "That serialization process of the Serializer Component can be configured by the serialization context, which can be built thanks to context builders.\n\nEach built-in normalizer/encoder has its related context builder. However, you may want to create a custom context builder for your custom normalizers.\n\nLet's imagine that you want to handle date denormalization differently if they are coming from a legacy system, by converting dates to null if the serialized value is 0000-00-00. To do that you'll first have to create your normalizer:\n\nNow you can cast zero-ish dates to null during denormalization:\n\nNow, to avoid having to remember about this specific zero_date_to_null context key, you can create a dedicated context builder:\n\nAnd finally, use it to build the serialization context:\n\nOnline exam, become Symfony certified today\n\nSave your teams and projects before they sink",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Create your Custom Context Builder",
+      "id": "how-to-create-your-custom-context-builder"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a new Context Builder",
+      "id": "creating-a-new-context-builder"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Serializer/ZeroDateTimeDenormalizer.php\nnamespace App\\Serializer;\n\nuse Symfony\\Component\\Serializer\\Normalizer\\DenormalizerAwareInterface;\nuse Symfony\\Component\\Serializer\\Normalizer\\DenormalizerAwareTrait;\nuse Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface;\n\nfinal class ZeroDateTimeDenormalizer implements DenormalizerInterface, DenormalizerAwareInterface\n{\n    use DenormalizerAwareTrait;\n\n    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed\n    {\n        if ('0000-00-00' === $data) {\n            return null;\n        }\n\n        unset($context['zero_datetime_to_null']);\n\n        return $this->denormalizer->denormalize($data, $type, $format, $context);\n    }\n\n    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool\n    {\n        return true === ($context['zero_datetime_to_null'] ?? false)\n            && is_a($type, \\DateTimeInterface::class, true);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$legacyData = '{\"updatedAt\": \"0000-00-00\"}';\n$serializer->deserialize($legacyData, MyModel::class, 'json', ['zero_datetime_to_null' => true]);",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Serializer/LegacyContextBuilder\nnamespace App\\Serializer;\n\nuse Symfony\\Component\\Serializer\\Context\\ContextBuilderInterface;\nuse Symfony\\Component\\Serializer\\Context\\ContextBuilderTrait;\n\nfinal class LegacyContextBuilder implements ContextBuilderInterface\n{\n    use ContextBuilderTrait;\n\n    public function withLegacyDates(bool $legacy): static\n    {\n        return $this->with('zero_datetime_to_null', $legacy);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$legacyData = '{\"updatedAt\": \"0000-00-00\"}';\n\n$context = (new LegacyContextBuilder())\n    ->withLegacyDates(true)\n    ->toArray();\n\n$serializer->deserialize($legacyData, MyModel::class, 'json', $context);",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/serializer/custom_context_builders.html",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/serializer/custom_normalizer.html"
+  ]
+}

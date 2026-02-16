@@ -1,0 +1,24 @@
+{
+  "title": "Use different port",
+  "content": "atmos command --profiler-enabled --profiler-port=7070\nbash",
+  "code_samples": [
+    {
+      "code": "## Examples\n\n### Development Workflow",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Development Workflow",
+      "id": "development-workflow"
+    }
+  ],
+  "url": "llms-txt#use-different-port",
+  "links": []
+}

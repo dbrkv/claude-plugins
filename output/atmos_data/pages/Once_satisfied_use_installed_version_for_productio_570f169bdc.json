@@ -1,0 +1,19 @@
+{
+  "title": "Once satisfied, use installed version for production",
+  "content": "atmos -C ~/infra terraform apply vpc -s prod\nbash\n#!/bin/bash",
+  "code_samples": [
+    {
+      "code": "### Automated Scripts",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Automated Scripts",
+      "id": "automated-scripts"
+    }
+  ],
+  "url": "llms-txt#once-satisfied,-use-installed-version-for-production",
+  "links": []
+}

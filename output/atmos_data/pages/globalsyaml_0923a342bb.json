@@ -1,0 +1,8 @@
+{
+  "title": "globals.yaml",
+  "content": "env:\n  REGION: \"us-east-1\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#globals.yaml",
+  "links": []
+}

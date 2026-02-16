@@ -1,0 +1,76 @@
+{
+  "title": "Run any Atmos command with the --heatmap flag",
+  "content": "atmos describe stacks --heatmap\n\nð¥ Performance Heatmap - Bar Chart\n\nutils.processCustomTags           ââââââââââââââââââââââââââââââââââââââââ avg: 0.37ms | calls: 447586\nexec.ProcessYAMLConfigFile        ââââââââââââââââââââââââââââââââ avg: 686Âµs | calls: 199\nutils.UnmarshalYAMLFromFile       âââââââââââââââââ avg: 82Âµs | calls: 53429\n\nParallelism: ~0.9x | Elapsed: 279.002ms | CPU Time: 255.378ms\nCount: # calls (incl. recursion) | CPU Time: sum of self-time (excludes children)\nAvg: avg self-time | Max: max self-time | P95: 95th percentile self-time\n\n=== Atmos Performance Summary ===\n    Elapsed: 54.16ms | CPU Time: 37.21ms | Parallelism: ~0.7x\n    Functions: 42 | Total Calls: 5980\n\nFunction                                            Count    CPU Time        Avg        Max        P95\n    exec.ProcessYAMLConfigFileWithContext                  52     7.488ms      144Âµs      760Âµs      662Âµs\n    exec.Execute                                            1     6.233ms    6.233ms    6.233ms    6.233ms\n    exec.ValidateStacks                                     1     5.499ms    5.499ms    5.499ms    5.499ms\n    merge.MergeWithOptions                                746     4.561ms        6Âµs      654Âµs       21Âµs\n    utils.processCustomTags                              1024      4.27ms        4Âµs      146Âµs       15Âµs\n    utils.GetHighlightedYAML                                1      3.86ms     3.86ms     3.86ms     3.86ms\n    merge.MergeWithContext                                356     3.123ms        8Âµs      655Âµs       29Âµs\n    utils.ConvertToYAML                                   177       2.5ms       14Âµs      309Âµs       56Âµs\n    exec.ProcessStackConfig                                12     1.926ms      160Âµs      367Âµs      186Âµs\n    utils.GetGlobMatches                                   48     1.859ms       38Âµs      418Âµs      226Âµs\n    shell\natmos describe stacks --heatmap --heatmap-mode=bar\nshell\natmos describe stacks --heatmap --heatmap-mode=sparkline\nshell\natmos describe stacks --heatmap --heatmap-mode=table\n\n=== Atmos Performance Summary ===\nElapsed: 234.56ms | CPU Time: 185.32ms | Parallelism: ~0.8x\nFunctions: 12 | Total Calls: 156\n\nFunction                Count    CPU Time  Avg       Max       P95\nnetwork.FetchRemote     100      1.2s      12ms      850ms     15ms\nbash",
+  "code_samples": [
+    {
+      "code": "This launches an interactive TUI (Terminal User Interface) where you can switch between visualization modes by pressing 1-3.\n\n### Real-World Example\n\nHere's actual output from `atmos describe stacks --heatmap`:\n\n**Interactive Mode** (when running in a terminal with TTY):\n\n![Performance Heatmap - Bar Chart](/img/cli/perf/atmos-describe-stacks-heatmap-bar-chart.png)\n\nThe interactive TUI shows the top 25 functions with color-coded bars representing total CPU time. Each function displays its **average execution time per call** alongside the **total number of calls**, making it easy to identify both slow functions and high-frequency functions at a glance.\n\n**Example Interactive Display:**",
+      "language": "unknown"
+    },
+    {
+      "code": "- **Bar length**: Proportional to total CPU time (shows overall impact on performance)\n- **avg**: Average self-time per call (shows typical function performance)\n- **calls**: Number of times the function was invoked\n\n**Interactive TUI Legend:**\n\nThe TUI displays a comprehensive legend at the top showing performance summary and metric descriptions:",
+      "language": "unknown"
+    },
+    {
+      "code": "- **Line 1**: Live performance metrics for this execution (Parallelism, Elapsed time, Total CPU time)\n- **Line 2**: Explanation of Count and CPU Time columns\n- **Line 3**: Explanation of statistical timing columns (Avg, Max, P95)\n\n**Non-Interactive Mode** (CI/CD, scripts, or redirected output):\n\n<Terminal title=\"Performance heatmap output\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n### Visualization Modes\n\nThe heatmap supports three visualization modes. In interactive mode, press 1-3 to switch:\n\n#### 1. Bar Chart (Default)\n\nHorizontal bars with color gradient showing relative total CPU time:",
+      "language": "unknown"
+    },
+    {
+      "code": "- **Bar length**: Proportional to total CPU time (overall performance impact)\n- **Display format**: Shows `avg: Xms | calls: N` for each function\n- **Color gradient**: Red (highest impact) â Green (lowest impact)\n- **Best for**: Quick identification of both slow functions and high-impact functions\n- **Example**: `utils.processCustomTags  ââââââââ avg: 0.37ms | calls: 447586`\n\n#### 2. Sparkline Mode\n\nCompact sparkline charts showing relative average execution times:",
+      "language": "unknown"
+    },
+    {
+      "code": "- **Sparkline height**: Proportional to average self-time per call\n- **Display format**: Shows `avg: Xms | calls: N` for each function\n- **Compact view**: See more functions in less vertical space\n- **Best for**: Quick pattern recognition and comparing many functions at once\n- **Example**: `utils.processCustomTags  ââââââââââ avg: 0.37ms | calls: 447586`\n\n#### 3. Table Mode\n\nDetailed tabular view with all metric columns (top 50 rows):",
+      "language": "unknown"
+    },
+    {
+      "code": "- All metric columns (Count/CPU Time/Avg/Max/P95)\n- Shows top 50 functions by CPU time\n- Best for detailed analysis\n\n### Understanding Metrics\n\n**Performance Summary:**",
+      "language": "unknown"
+    },
+    {
+      "code": "- **Elapsed**: Total wall-clock execution time for the command\n- **CPU Time**: Sum of all self-times (actual CPU work done, excludes time spent in child functions)\n- **Parallelism**: CPU Time Ã· Elapsed time ratio (greater than 1.0 = parallel execution, less than 1.0 = single-threaded)\n- **Functions**: Number of unique functions tracked\n- **Total Calls**: Total number of function calls tracked\n\n**Function Metrics:**\n\n<dl>\n    <dt>`Function`</dt>\n    <dd>Name of the tracked function</dd>\n\n    <dt>`Count`</dt>\n    <dd>Number of times the function was called (includes all recursive calls)</dd>\n\n    <dt>`CPU Time`</dt>\n    <dd>Sum of self-time across all calls - total CPU work done by the function itself, excluding time spent in child function calls. This avoids double-counting in nested/recursive calls and accurately represents the total CPU time spent executing the function's own code.</dd>\n\n    <dt>`Avg`</dt>\n    <dd>Average self-time per call - actual work done in the function, excluding time spent in child function calls (SelfTime Ã· Count). This metric accurately represents the function's own execution time and is the best indicator for optimization opportunities.</dd>\n\n    <dt>`Max`</dt>\n    <dd>Maximum self-time for a single function call among ALL executions (excludes time spent in children). Critical for identifying performance outliers and worst-case scenarios. If a function is called 100 times with most calls taking ~10ms but one call took 500ms, Max will show 500ms - revealing intermittent issues like excessive work, algorithmic edge cases, or system resource contention affecting that specific call.</dd>\n\n    <dt>`P95`</dt>\n    <dd>95th percentile of self-time latency - represents the self-time below which 95% of function calls complete. A consistent indicator of the function's own work performance, excluding time spent in child functions.</dd>\n</dl>\n\n:::tip Understanding CPU Time and Self-Time Metrics\n\n**All timing columns use Self-Time**: CPU Time, Avg, Max, and P95 all exclude time spent in child function calls, showing only the actual work done in the function itself. This avoids double-counting in nested/recursive calls.\n\n**CPU Time**: Sum of self-time across all calls - represents total CPU work done by the function\n**Avg**: Average self-time per call (CPU Time Ã· Count)\n**Max**: Maximum self-time for any single call\n**P95**: 95th percentile of self-time across all calls\n\n**Example**: If `ProcessConfig` is called 10 times and each call does 20ms of its own work (excluding 80ms spent in child functions):\n- **CPU Time**: 200ms (10 calls Ã 20ms per call)\n- **Avg**: 20ms (200ms Ã· 10 calls)\n- **Wall-Clock Time**: Would be ~1000ms (10 Ã 100ms including children) - but this would double-count child execution time\n\n**Why CPU Time vs Wall-Clock?** When functions call each other, summing wall-clock times counts the same work multiple times. CPU Time (sum of self-times) accurately represents total work without double-counting, making it possible to meaningfully compare the sum of all CPU Times to the command's elapsed time.\n\n**Parallelism Factor**: The ratio of CPU Time to Elapsed time shows execution characteristics:\n- **~0.8x**: Single-threaded with some overhead\n- **~1.0x**: Perfect single-threaded execution\n- **Greater than 1.0x**: Parallel execution across multiple cores (e.g., 4.0x = ~4 cores utilized)\n:::\n\n:::warning Detecting Performance Outliers with Max\n\n**Max is your outlier detector!** It shows the slowest single execution among all calls to a function (excluding time spent in children).\n\n**Example - Spotting Intermittent Issues:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Analysis:**\n- **Count**: 100 calls total\n- **CPU Time**: 1.2s total (sum of all self-times)\n- **Avg**: 12ms average (typical performance)\n- **Max**: 850ms (one call's own work took 71x longer!)\n- **P95**: 15ms (95% of calls complete within 15ms)\n\n**Diagnosis**: The large gap between Max (850ms) and P95 (15ms) reveals an intermittent performance issue affecting ~5% of calls. Since Max tracks self-time (excluding children), this indicates the function's own work was slow. Likely causes:\n- **Network timeout** on one request (if function makes network calls)\n- **Disk I/O spike** during that specific call\n- **CPU contention** or system resource starvation\n- **GC pause** occurred during execution\n- **Algorithmic edge case** (e.g., processing unusually large input)\n\n**Action**: Investigate why that specific call was 71x slower than average. Use `--profile-file` with pprof for deeper analysis.\n:::\n\n### Interactive Controls\n\n**Keyboard Shortcuts:**\n- **â/â**: Move selection up/down (also **k/j**)\n- **1**: Switch to Bar Chart mode\n- **2**: Switch to Sparkline mode\n- **3**: Switch to Table mode\n- **q/esc**: Quit and return to terminal\n\n### CLI Flags\n\n<dl>\n    <dt>`--heatmap`</dt>\n    <dd>Show performance heatmap visualization after command execution (includes P95 latency) (default: `false`)</dd>\n\n    <dt>`--heatmap-mode`</dt>\n    <dd>Heatmap visualization mode: `bar`, `sparkline`, `table` (press 1-3 to switch in TUI) (default: `bar`)</dd>\n</dl>\n\n### Common Use Cases\n\n**Identifying Performance Bottlenecks:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Real-World Example",
+      "id": "real-world-example"
+    },
+    {
+      "level": "h3",
+      "text": "Visualization Modes",
+      "id": "visualization-modes"
+    },
+    {
+      "level": "h3",
+      "text": "Understanding Metrics",
+      "id": "understanding-metrics"
+    },
+    {
+      "level": "h3",
+      "text": "Interactive Controls",
+      "id": "interactive-controls"
+    },
+    {
+      "level": "h3",
+      "text": "CLI Flags",
+      "id": "cli-flags"
+    },
+    {
+      "level": "h3",
+      "text": "Common Use Cases",
+      "id": "common-use-cases"
+    }
+  ],
+  "url": "llms-txt#run-any-atmos-command-with-the---heatmap-flag",
+  "links": []
+}

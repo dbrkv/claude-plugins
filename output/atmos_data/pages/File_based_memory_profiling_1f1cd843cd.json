@@ -1,0 +1,8 @@
+{
+  "title": "File-based memory profiling",
+  "content": "atmos describe stacks --profile-file=heap.prof --profile-type=heap\natmos describe stacks --profile-file=allocs.prof --profile-type=allocs",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#file-based-memory-profiling",
+  "links": []
+}

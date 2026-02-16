@@ -1,0 +1,23 @@
+{
+  "title": "In another terminal",
+  "content": "go tool pprof http://localhost:6060/debug/pprof/heap\ngo tool pprof http://localhost:6060/debug/pprof/allocs\nshell\natmos terraform apply vpc -s prod \\\n  --profiler-enabled \\\n  --profiler-host=0.0.0.0 \\\n  --profiler-port=8060\nbash",
+  "code_samples": [
+    {
+      "code": "**Custom Server Configuration:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Choosing the Right Tool\n\n| Feature            | Performance Heatmap            | pprof Profiling                       |\n|--------------------|--------------------------------|---------------------------------------|\n| **Overhead**       | Minimal (microsecond tracking) | Higher (full runtime instrumentation) |\n| **Granularity**    | Function-level metrics         | Line-level profiling                  |\n| **Setup**          | CLI flag only (`--heatmap`)    | Requires flags or config              |\n| **Output**         | Real-time visualization        | File or HTTP endpoint                 |\n| **Use Case**       | Quick performance checks       | Deep performance analysis             |\n| **Visualization**  | Built-in interactive UI        | Requires `go tool pprof`              |\n| **Data Retention** | In-memory (command lifetime)   | Persistent files                      |\n| **Profile Types**  | Function timing only           | CPU, memory, goroutines, blocking, etc. |\n\n**Use Performance Heatmap when:**\n- Validating performance during development\n- Identifying which functions are called most\n- Comparing execution times between commands\n- Need quick insights without external tools\n- Monitoring lightweight operations\n\n**Use pprof Profiling when:**\n- Deep diving into performance bottlenecks\n- Analyzing CPU and memory usage patterns\n- Investigating memory leaks\n- Profiling goroutines and lock contention\n- Need flame graphs and detailed visualizations\n- Historical comparison across runs\n\n**Use Both Together:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Choosing the Right Tool",
+      "id": "choosing-the-right-tool"
+    }
+  ],
+  "url": "llms-txt#in-another-terminal",
+  "links": []
+}

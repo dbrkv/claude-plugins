@@ -1,0 +1,13 @@
+{
+  "title": "Other defaults for the `plat` tenant/OU",
+  "content": "yaml\nimport:\n  # Import the `ue2` manifest with `vpc` configuration for `us-east-2` region\n  - catalog/vpc/ue2\n  # All accounts (stages) in `us-east-2` region will have the `vpc-flow-logs-bucket` component\n  - catalog/vpc-flow-logs-bucket/defaults\n\nvars:\n  region: us-east-2\n  environment: ue2",
+  "code_samples": [
+    {
+      "code": "</File>\n\nIn `stacks/mixins/region/us-east-2.yaml`, add the following config:\n\n<File title=\"stacks/mixins/region/us-east-2.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#other-defaults-for-the-`plat`-tenant/ou",
+  "links": []
+}

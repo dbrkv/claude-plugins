@@ -1,0 +1,409 @@
+{
+  "url": "https://symfony.com/doc/7.3/testing.html",
+  "title": "Testing",
+  "content": "Whenever you write a new line of code, you also potentially add new bugs. To build better and more reliable applications, you should test your code using both functional and unit tests.\n\nSymfony integrates with an independent library called PHPUnit to give you a rich testing framework. This article covers the PHPUnit basics you'll need to write Symfony tests. To learn everything about PHPUnit and its features, read the official PHPUnit documentation.\n\nThere are many types of automated tests and precise definitions often differ from project to project. In Symfony, the following definitions are used. If you have learned something different, that is not necessarily wrong, merely different from what the Symfony documentation is using.\n\nBefore creating your first test, install symfony/test-pack, which installs some other packages needed for testing (such as phpunit/phpunit):\n\nAfter the library is installed, try running PHPUnit:\n\nThis command automatically runs your application tests. Each test is a PHP class ending with \"Test\" (e.g. BlogControllerTest) that lives in the tests/ directory of your application.\n\nPHPUnit is configured by the phpunit.dist.xml file in the root of your application (in PHPUnit versions older than 10, the file is named phpunit.xml.dist). The default configuration provided by Symfony Flex will be enough in most cases. Read the PHPUnit documentation to discover all possible configuration options (e.g. to enable code coverage or to split your test into multiple \"test suites\").\n\nSymfony Flex automatically creates phpunit.dist.xml and tests/bootstrap.php. If these files are missing, you can try running the recipe again using composer recipes:install phpunit/phpunit --force -v.\n\nA unit test ensures that individual units of source code (e.g. a single class or some specific method in some class) meet their design and behave as intended. Writing unit tests in a Symfony application is no different from writing standard PHPUnit unit tests. You can learn about it in the PHPUnit documentation: Writing Tests for PHPUnit.\n\nBy convention, the tests/ directory should replicate the directory of your application for unit tests. So, if you're testing a class in the src/Form/ directory, put the test in the tests/Form/ directory. Autoloading is automatically enabled via the vendor/autoload.php file (as configured by default in the phpunit.dist.xml file).\n\nYou can run tests using the bin/phpunit command:\n\nIn large test suites, it can make sense to create subdirectories for each type of test (tests/Unit/, tests/Integration/, tests/Application/, etc.).\n\nAn integration test will test a larger part of your application compared to a unit test (e.g. a combination of services). Integration tests might want to use the Symfony Kernel to fetch a service from the dependency injection container.\n\nSymfony provides a KernelTestCase class to help you create and boot the kernel in your tests using bootKernel():\n\nThe KernelTestCase also makes sure your kernel is rebooted for each test. This assures that each test is run independently from each other.\n\nTo run your application tests, the KernelTestCase class needs to find the application kernel to initialize. The kernel class is usually defined in the KERNEL_CLASS environment variable (included in the default .env.test file provided by Symfony Flex):\n\nIf your use case is more complex, you can also override the getKernelClass() or createKernel() methods of your functional test, which takes precedence over the KERNEL_CLASS env var.\n\nThe tests create a kernel that runs in the test environment. This allows to have special settings for your tests inside config/packages/test/.\n\nIf you have Symfony Flex installed, some packages already installed some useful test configuration. For example, by default, the Twig bundle is configured to be especially strict to catch errors before deploying your code to production:\n\nYou can also use a different environment entirely, or override the default debug mode (true) by passing each as options to the bootKernel() method:\n\nIt is recommended to run your test with debug set to false on your CI server, as it significantly improves test performance. This disables clearing the cache. If your tests don't run in a clean environment each time, you have to manually clear it using for instance this code in tests/bootstrap.php:\n\nIf you need to customize some environment variables for your tests (e.g. the DATABASE_URL used by Doctrine), you can do that by overriding anything you need in your .env.test file:\n\nIn the test environment, these env files are read (if vars are duplicated in them, files lower in the list override previous items):\n\nThe .env.local file is not used in the test environment, to make each test set-up as consistent as possible.\n\nIn your integration tests, you often need to fetch the service from the service container to call a specific method. After booting the kernel, the container is returned by static::getContainer():\n\nThe container from static::getContainer() is actually a special test container. It gives you access to both the public services and the non-removed private services.\n\nIf you need to test private services that have been removed (those who are not used by any other services), you need to declare those private services as public in the config/services_test.yaml file.\n\nSometimes it can be useful to mock a dependency of a tested service. From the example in the previous section, let's assume the NewsletterGenerator has a dependency to a private alias NewsRepositoryInterface pointing to a private NewsRepository service and you'd like to use a mocked NewsRepositoryInterface instead of the concrete one:\n\nNo further configuration is required, as the test service container is a special one that allows you to interact with private services and aliases.\n\nTests that interact with the database should use their own separate database to not mess with the databases used in the other configuration environments.\n\nTo do that, edit or create the .env.test.local file at the root directory of your project and define the new value for the DATABASE_URL env var:\n\nThis assumes that each developer/machine uses a different database for the tests. If the test set-up is the same on each machine, use the .env.test file instead and commit it to the shared repository. Learn more about using multiple .env files in Symfony applications.\n\nAfter that, you can create the test database and all tables using:\n\nYou can run these commands to create the database during the test bootstrap process.\n\nA common practice is to append the _test suffix to the original database names in tests. If the database name in production is called project_acme the name of the testing database could be project_acme_test.\n\nTests should be independent from each other to avoid side effects. For example, if some test modifies the database (by adding or removing an entity) it could change the results of other tests.\n\nThe DAMADoctrineTestBundle uses Doctrine transactions to let each test interact with an unmodified database. Install it using:\n\nNow, enable it as a PHPUnit extension:\n\nThat's it! This bundle uses a clever trick: it begins a database transaction before every test and rolls it back automatically after the test finishes to undo all changes. Read more in the documentation of the DAMADoctrineTestBundle.\n\nInstead of using the real data from the production database, it's common to use fake or test data in the test database. This is usually called \"fixtures data\" and Doctrine provides a library to create and load them. Install it with:\n\nThen, use the make:fixtures command of the SymfonyMakerBundle to generate an empty fixture class:\n\nThen you modify and use this class to load new entities in the database. For instance, to load Product objects into Doctrine, use:\n\nEmpty the database and reload all the fixture classes with:\n\nFor more information, read the DoctrineFixturesBundle documentation.\n\nApplication tests check the integration of all the different layers of the application (from the routing to the views). They are no different from unit tests or integration tests as far as PHPUnit is concerned, but they have a very specific workflow:\n\nThe tools used in this section can be installed via the symfony/test-pack, use composer require symfony/test-pack if you haven't done so already.\n\nApplication tests are PHP files that typically live in the tests/Controller/ directory of your application. They often extend WebTestCase. This class adds special logic on top of the KernelTestCase. You can read more about that in the above section on integration tests.\n\nIf you want to test the pages handled by your PostController class, start by creating a new PostControllerTest using the make:test command of the SymfonyMakerBundle:\n\nThis creates the following test class:\n\nIn the above example, the test validates that the HTTP response was successful and the request body contains a <h1> tag with \"Hello world\".\n\nThe request() method also returns a crawler, which you can use to create more complex assertions in your tests (e.g. to count the number of page elements that match a given CSS selector):\n\nYou can learn more about the crawler in The DOM Crawler.\n\nThe test client simulates an HTTP client like a browser and makes requests into your Symfony application:\n\nThe request() method takes the HTTP method and a URL as arguments and returns a Crawler instance.\n\nHardcoding the request URLs is a best practice for application tests. If the test generates URLs using the Symfony router, it won't detect any change made to the application URLs which may impact the end users.\n\nThe full signature of the request() method is:\n\nThis allows you to create all types of requests you can think of:\n\nThe test client is available as the test.client service in the container in the test environment (or wherever the framework.test option is enabled). This means you can override the service entirely if you need to.\n\nAfter making a request, subsequent requests will make the client reboot the kernel. This recreates the container from scratch to ensures that requests are isolated and use new service objects each time. This behavior can have some unexpected consequences: for example, the security token will be cleared, Doctrine entities will be detached, etc.\n\nFirst, you can call the client's disableReboot() method to reset the kernel instead of rebooting it. In practice, Symfony will call the reset() method of every service tagged with kernel.reset. However, this will also clear the security token, detach Doctrine entities, etc.\n\nIn order to solve this issue, create a compiler pass to remove the kernel.reset tag from some services in your test environment:\n\nThe Client supports many operations that can be done in a real browser:\n\nThe back() and forward() methods skip the redirects that may have occurred when requesting a URL, as normal browsers do.\n\nWhen a request returns a redirect response, the client does not follow it automatically. You can examine the response and force a redirection afterwards with the followRedirect() method:\n\nIf you want the client to automatically follow all redirects, you can force them by calling the followRedirects() method before performing the request:\n\nIf you pass false to the followRedirects() method, the redirects will no longer be followed:\n\nWhen you want to add application tests for protected pages, you have to first \"login\" as a user. Reproducing the actual steps - such as submitting a login form - makes a test very slow. For this reason, Symfony provides a loginUser() method to simulate logging in your functional tests.\n\nInstead of logging in with real users, it's recommended to create a user only for tests. You can do that with Doctrine data fixtures to load the testing users only in the test database.\n\nAfter loading users in your database, use your user repository to fetch this user and use $client->loginUser() to simulate a login request:\n\nYou can pass any UserInterface instance to loginUser(). This method creates a special TestBrowserToken object and stores in the session of the test client. If you need to define custom attributes in this token, you can use the tokenAttributes argument of the loginUser() method.\n\nYou can also use an in-memory user in your tests by instantiating InMemoryUser directly:\n\nBefore doing this, you must define the in-memory user in your test environment configuration to ensure it exists and can be authenticated:\n\nTo set a specific firewall (main is set by default):\n\nBy design, the loginUser() method doesn't work when using stateless firewalls. Instead, add the appropriate token/header in each request() call.\n\nThe client provides an xmlHttpRequest() method, which has the same arguments as the request() method and is a shortcut to make AJAX requests:\n\nIf your application behaves according to some HTTP headers, pass them as the second argument of createClient():\n\nYou can also override HTTP headers on a per request basis:\n\nThe name of your custom headers must follow the syntax defined in the section 4.1.18 of RFC 3875: replace - by _, transform it into uppercase and prefix the result with HTTP_. For example, if your header name is X-Session-Token, pass HTTP_X_SESSION_TOKEN.\n\nDebugging exceptions in application tests may be difficult because by default they are caught and you need to look at the logs to see which exception was thrown. Disabling catching of exceptions in the test client allows the exception to be reported by PHPUnit:\n\nIf you use the client to test your application, you might want to access the client's internal objects:\n\nYou can also get the objects related to the latest request:\n\nOn each request, you can enable the Symfony profiler to collect data about the internal handling of that request. For example, the profiler could be used to verify that a given page runs less than a certain number of database queries when loading.\n\nTo get the profiler for the last request, do the following:\n\nFor specific details on using the profiler inside a test, see the How to Use the Profiler in a Functional Test article.\n\nLike a real browser, the Client and Crawler objects can be used to interact with the page you're served:\n\nUse the clickLink() method to click on the first link that contains the given text (or the first clickable image with that alt attribute):\n\nIf you need access to the Link object that provides helpful methods specific to links (such as getMethod() and getUri()), use the Crawler::selectLink() method instead:\n\nUse the submitForm() method to submit the form that contains the given button:\n\nThe first argument of submitForm() is the text content, id or name of any <button> or <input type=\"submit\"> included in the form. The second optional argument is used to override the default form field values.\n\nNotice that you select form buttons and not forms, as a form can have several buttons. If you use the traversing API, keep in mind that you must look for a button.\n\nIf you need access to the Form object that provides helpful methods specific to forms (such as getUri(), getValues() and getFiles()) use the Crawler::selectButton() method instead:\n\nBased on the form type, you can use different methods to fill in the input:\n\nInstead of hardcoding the form name as part of the field names (e.g. my_form[...] in previous examples), you can use the getName() method to get the form name.\n\nIf you purposefully want to select \"invalid\" select/radio values, see The DomCrawler Component.\n\nYou can get the values that will be submitted by calling the getValues() method on the Form object. The uploaded files are available in a separate array returned by getFiles(). The getPhpValues() and getPhpFiles() methods also return the submitted values, but in the PHP format (it converts the keys with square brackets notation - e.g. my_form[subject] - to PHP arrays).\n\nThe submit() and submitForm() methods define optional arguments to add custom server parameters and HTTP headers when submitting the form:\n\nNow that the tests have visited a page and interacted with it (e.g. filled in a form), it is time to verify that the expected output is shown.\n\nAs all tests are based on PHPUnit, you can use any PHPUnit Assertion in your tests. Combined with test Client and the Crawler, this allows you to check anything you want.\n\nHowever, Symfony provides useful shortcut methods for the most common cases:\n\nThe $verbose parameters were introduced in Symfony 7.1.\n\nAsserts the given Constraint in the Client. Useful for using your custom asserts in the same way as built-in asserts (i.e. without passing the Client as argument):\n\nFor all the following assertions, $client->enableProfiler() must be called before the code that will trigger HTTP request(s).\n\nIf you need to test the application as a whole, including the JavaScript code, you can use a real browser instead of the test client. This is called an end-to-end test and it's a great way to test the application.\n\nThis can be achieved thanks to the Panther component. You can learn more about it in the dedicated page.\n\nTake the exam at home\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Testing",
+      "id": "testing"
+    },
+    {
+      "level": "h2",
+      "text": "Types of Tests",
+      "id": "types-of-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Unit Tests",
+      "id": "unit-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Integration Tests",
+      "id": "integration-tests"
+    },
+    {
+      "level": "h3",
+      "text": "Set-up your Test Environment",
+      "id": "set-up-your-test-environment"
+    },
+    {
+      "level": "h3",
+      "text": "Customizing Environment Variables",
+      "id": "customizing-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Retrieving Services in the Test",
+      "id": "retrieving-services-in-the-test"
+    },
+    {
+      "level": "h2",
+      "text": "Mocking Dependencies",
+      "id": "mocking-dependencies"
+    },
+    {
+      "level": "h3",
+      "text": "Configuring a Database for Tests",
+      "id": "configuring-a-database-for-tests"
+    },
+    {
+      "level": "h4",
+      "text": "Resetting the Database Automatically Before each Test",
+      "id": "resetting-the-database-automatically-before-each-test"
+    },
+    {
+      "level": "h4",
+      "text": "Load Test Data Fixtures",
+      "id": "load-test-data-fixtures"
+    },
+    {
+      "level": "h2",
+      "text": "Application Tests",
+      "id": "application-tests"
+    },
+    {
+      "level": "h3",
+      "text": "Write Your First Application Test",
+      "id": "write-your-first-application-test"
+    },
+    {
+      "level": "h3",
+      "text": "Making Requests",
+      "id": "making-requests"
+    },
+    {
+      "level": "h4",
+      "text": "Multiple Requests in One Test",
+      "id": "multiple-requests-in-one-test"
+    },
+    {
+      "level": "h4",
+      "text": "Browsing the Site",
+      "id": "browsing-the-site"
+    },
+    {
+      "level": "h4",
+      "text": "Redirecting",
+      "id": "redirecting"
+    },
+    {
+      "level": "h4",
+      "text": "Logging in Users (Authentication)",
+      "id": "logging-in-users-authentication"
+    },
+    {
+      "level": "h4",
+      "text": "Making AJAX Requests",
+      "id": "making-ajax-requests"
+    },
+    {
+      "level": "h4",
+      "text": "Sending Custom HTTP Headers",
+      "id": "sending-custom-http-headers"
+    },
+    {
+      "level": "h4",
+      "text": "Reporting Exceptions",
+      "id": "reporting-exceptions"
+    },
+    {
+      "level": "h4",
+      "text": "Accessing Internal Objects",
+      "id": "accessing-internal-objects"
+    },
+    {
+      "level": "h4",
+      "text": "Accessing the Profiler Data",
+      "id": "accessing-the-profiler-data"
+    },
+    {
+      "level": "h3",
+      "text": "Interacting with the Response",
+      "id": "interacting-with-the-response"
+    },
+    {
+      "level": "h4",
+      "text": "Clicking on Links",
+      "id": "clicking-on-links"
+    },
+    {
+      "level": "h4",
+      "text": "Submitting Forms",
+      "id": "submitting-forms"
+    },
+    {
+      "level": "h3",
+      "text": "Testing the Response (Assertions)",
+      "id": "testing-the-response-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "Response Assertions",
+      "id": "response-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "Request Assertions",
+      "id": "request-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "Browser Assertions",
+      "id": "browser-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "Crawler Assertions",
+      "id": "crawler-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "Mailer Assertions",
+      "id": "mailer-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "Notifier Assertions",
+      "id": "notifier-assertions"
+    },
+    {
+      "level": "h4",
+      "text": "HttpClient Assertions",
+      "id": "httpclient-assertions"
+    },
+    {
+      "level": "h3",
+      "text": "End to End Tests (E2E)",
+      "id": "end-to-end-tests-e2e"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require --dev symfony/test-pack",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "# run all tests of the application\n$ php bin/phpunit\n\n# run all tests in the Form/ directory\n$ php bin/phpunit tests/Form\n\n# run tests for the UserType class\n$ php bin/phpunit tests/Form/UserTypeTest.php",
+      "language": "unknown"
+    },
+    {
+      "code": "// tests/Service/NewsletterGeneratorTest.php\nnamespace App\\Tests\\Service;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase;\n\nclass NewsletterGeneratorTest extends KernelTestCase\n{\n    public function testSomething(): void\n    {\n        self::bootKernel();\n\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# .env.test\nKERNEL_CLASS=App\\Kernel",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/test/twig.yaml\ntwig:\n    strict_variables: true",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/test/twig.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig\n        https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <framework:config strict-variables=\"true\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/test/twig.php\nuse Symfony\\Config\\TwigConfig;\n\nreturn static function (TwigConfig $twig): void {\n    $twig->strictVariables(true);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "self::bootKernel([\n    'environment' => 'my_test_env',\n    'debug'       => false,\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\n\n// ensure a fresh cache when debug mode is disabled\n(new \\Symfony\\Component\\Filesystem\\Filesystem())->remove(__DIR__.'/../var/cache/test');",
+      "language": "unknown"
+    },
+    {
+      "code": "# .env.test\n\n# ...\nDATABASE_URL=\"mysql://db_user:db_password@127.0.0.1:3306/db_name_test?serverVersion=8.0.37\"",
+      "language": "unknown"
+    },
+    {
+      "code": "// tests/Service/NewsletterGeneratorTest.php\nnamespace App\\Tests\\Service;\n\nuse App\\Service\\NewsletterGenerator;\nuse Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase;\n\nclass NewsletterGeneratorTest extends KernelTestCase\n{\n    public function testSomething(): void\n    {\n        // (1) boot the Symfony kernel\n        self::bootKernel();\n\n        // (2) use static::getContainer() to access the service container\n        $container = static::getContainer();\n\n        // (3) run some service & test the result\n        $newsletterGenerator = $container->get(NewsletterGenerator::class);\n        $newsletter = $newsletterGenerator->generateMonthlyNews(/* ... */);\n\n        $this->assertEquals('...', $newsletter->getContent());\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// ...\nuse App\\Contracts\\Repository\\NewsRepositoryInterface;\n\nclass NewsletterGeneratorTest extends KernelTestCase\n{\n    public function testSomething(): void\n    {\n        // ... same bootstrap as the section above\n\n        $newsRepository = $this->createMock(NewsRepositoryInterface::class);\n        $newsRepository->expects(self::once())\n            ->method('findNewsFromLastMonth')\n            ->willReturn([\n                new News('some news'),\n                new News('some other news'),\n            ])\n        ;\n\n        $container->set(NewsRepositoryInterface::class, $newsRepository);\n\n        // will be injected the mocked repository\n        $newsletterGenerator = $container->get(NewsletterGenerator::class);\n\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# .env.test.local\nDATABASE_URL=\"mysql://USERNAME:PASSWORD@127.0.0.1:3306/DB_NAME?serverVersion=8.0.37\"",
+      "language": "unknown"
+    },
+    {
+      "code": "# create the test database\n$ php bin/console --env=test doctrine:database:create\n\n# create the tables/columns in the test database\n$ php bin/console --env=test doctrine:schema:create",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require --dev dama/doctrine-test-bundle",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- phpunit.dist.xml -->\n<phpunit>\n    <!-- ... -->\n\n    <extensions>\n        <!-- use this with PHPUnit 10 or newer -->\n        <bootstrap class=\"DAMA\\DoctrineTestBundle\\PHPUnit\\PHPUnitExtension\"/>\n        <!-- use this with legacy PHPUnit versions older than 10 -->\n        <extension class=\"DAMA\\DoctrineTestBundle\\PHPUnit\\PHPUnitExtension\"/>\n    </extensions>\n</phpunit>",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require --dev doctrine/doctrine-fixtures-bundle",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console make:fixtures\n\nThe class name of the fixtures to create (e.g. AppFixtures):\n> ProductFixture",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/DataFixtures/ProductFixture.php\nnamespace App\\DataFixtures;\n\nuse App\\Entity\\Product;\nuse Doctrine\\Bundle\\FixturesBundle\\Fixture;\nuse Doctrine\\Persistence\\ObjectManager;\n\nclass ProductFixture extends Fixture\n{\n    public function load(ObjectManager $manager): void\n    {\n        $product = new Product();\n        $product->setName('Priceless widget');\n        $product->setPrice(14.50);\n        $product->setDescription('Ok, I guess it *does* have a price');\n        $manager->persist($product);\n\n        // add more products\n\n        $manager->flush();\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$ php bin/console --env=test doctrine:fixtures:load",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console make:test\n\n Which test type would you like?:\n > WebTestCase\n\n The name of the test class (e.g. BlogPostTest):\n > Controller\\PostControllerTest",
+      "language": "unknown"
+    },
+    {
+      "code": "// tests/Controller/PostControllerTest.php\nnamespace App\\Tests\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase;\n\nclass PostControllerTest extends WebTestCase\n{\n    public function testSomething(): void\n    {\n        // This calls KernelTestCase::bootKernel(), and creates a\n        // \"client\" that is acting as the browser\n        $client = static::createClient();\n\n        // Request a specific page\n        $crawler = $client->request('GET', '/');\n\n        // Validate a successful response and some content\n        $this->assertResponseIsSuccessful();\n        $this->assertSelectorTextContains('h1', 'Hello World');\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$crawler = $client->request('GET', '/post/hello-world');\n$this->assertCount(4, $crawler->filter('.comment'));",
+      "language": "unknown"
+    },
+    {
+      "code": "$crawler = $client->request('GET', '/post/hello-world');",
+      "language": "unknown"
+    },
+    {
+      "code": "public function request(\n    string $method,\n    string $uri,\n    array $parameters = [],\n    array $files = [],\n    array $server = [],\n    ?string $content = null,\n    bool $changeHistory = true\n): Crawler",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Kernel.php\nnamespace App;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Kernel\\MicroKernelTrait;\nuse Symfony\\Component\\DependencyInjection\\Compiler\\CompilerPassInterface;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\HttpKernel\\Kernel as BaseKernel;\n\nclass Kernel extends BaseKernel implements CompilerPassInterface\n{\n    use MicroKernelTrait;\n\n    // ...\n\n    public function process(ContainerBuilder $container): void\n    {\n        if ('test' === $this->environment) {\n            // prevents the security token to be cleared\n            $container->getDefinition('security.token_storage')->clearTag('kernel.reset');\n\n            // prevents Doctrine entities to be detached\n            $container->getDefinition('doctrine')->clearTag('kernel.reset');\n\n            // ...\n        }\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$client->back();\n$client->forward();\n$client->reload();\n\n// clears all cookies and the history\n$client->restart();",
+      "language": "unknown"
+    },
+    {
+      "code": "$crawler = $client->followRedirect();",
+      "language": "unknown"
+    },
+    {
+      "code": "$client->followRedirects();",
+      "language": "unknown"
+    },
+    {
+      "code": "$client->followRedirects(false);",
+      "language": "unknown"
+    },
+    {
+      "code": "// tests/Controller/ProfileControllerTest.php\nnamespace App\\Tests\\Controller;\n\nuse App\\Repository\\UserRepository;\nuse Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase;\n\nclass ProfileControllerTest extends WebTestCase\n{\n    // ...\n\n    public function testVisitingWhileLoggedIn(): void\n    {\n        $client = static::createClient();\n        $userRepository = static::getContainer()->get(UserRepository::class);\n\n        // retrieve the test user\n        $testUser = $userRepository->findOneByEmail('john.doe@example.com');\n\n        // simulate $testUser being logged in\n        $client->loginUser($testUser);\n\n        // test e.g. the profile page\n        $client->request('GET', '/profile');\n        $this->assertResponseIsSuccessful();\n        $this->assertSelectorTextContains('h1', 'Hello John!');\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// tests/Controller/ProfileControllerTest.php\nuse Symfony\\Component\\Security\\Core\\User\\InMemoryUser;\n\n$client = static::createClient();\n$testUser = new InMemoryUser('admin', 'password', ['ROLE_ADMIN']);\n$client->loginUser($testUser);",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/security.yaml\nwhen@test:\n    security:\n        providers:\n            users_in_memory:\n                memory:\n                    users:\n                        admin: { password: password, roles: ROLE_ADMIN }",
+      "language": "unknown"
+    },
+    {
+      "code": "$client->loginUser($testUser, 'my_firewall');",
+      "language": "unknown"
+    },
+    {
+      "code": "// the required HTTP_X_REQUESTED_WITH header is added automatically\n$client->xmlHttpRequest('POST', '/submit', ['name' => 'Fabien']);",
+      "language": "javascript"
+    },
+    {
+      "code": "$client = static::createClient([], [\n    'HTTP_HOST'       => 'en.example.com',\n    'HTTP_USER_AGENT' => 'MySuperBrowser/1.0',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$client->request('GET', '/', [], [], [\n    'HTTP_HOST'       => 'en.example.com',\n    'HTTP_USER_AGENT' => 'MySuperBrowser/1.0',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$client->catchExceptions(false);",
+      "language": "unknown"
+    },
+    {
+      "code": "$history = $client->getHistory();\n$cookieJar = $client->getCookieJar();",
+      "language": "unknown"
+    },
+    {
+      "code": "// the HttpKernel request instance\n$request = $client->getRequest();\n\n// the BrowserKit request instance\n$request = $client->getInternalRequest();\n\n// the HttpKernel response instance\n$response = $client->getResponse();\n\n// the BrowserKit response instance\n$response = $client->getInternalResponse();\n\n// the Crawler instance\n$crawler = $client->getCrawler();",
+      "language": "unknown"
+    },
+    {
+      "code": "// enables the profiler for the very next request\n$client->enableProfiler();\n\n$crawler = $client->request('GET', '/profiler');\n\n// gets the profile\n$profile = $client->getProfile();",
+      "language": "unknown"
+    },
+    {
+      "code": "$client = static::createClient();\n$client->request('GET', '/post/hello-world');\n\n$client->clickLink('Click here');",
+      "language": "unknown"
+    },
+    {
+      "code": "$client = static::createClient();\n$crawler = $client->request('GET', '/post/hello-world');\n\n$link = $crawler->selectLink('Click here')->link();\n// ...\n\n// use click() if you want to click the selected link\n$client->click($link);",
+      "language": "unknown"
+    },
+    {
+      "code": "$client = static::createClient();\n$client->request('GET', '/post/hello-world');\n\n$crawler = $client->submitForm('Add comment', [\n    'comment_form[content]' => '...',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$client = static::createClient();\n$crawler = $client->request('GET', '/post/hello-world');\n\n// select the button\n$buttonCrawlerNode = $crawler->selectButton('submit');\n\n// retrieve the Form object for the form belonging to this button\n$form = $buttonCrawlerNode->form();\n\n// set values on a form object\n$form['my_form[name]'] = 'Fabien';\n$form['my_form[subject]'] = 'Symfony rocks!';\n\n// submit the Form object\n$client->submit($form);\n\n// optionally, you can combine the last 2 steps by passing an array of\n// field values while submitting the form:\n$client->submit($form, [\n    'my_form[name]'    => 'Fabien',\n    'my_form[subject]' => 'Symfony rocks!',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "// selects an option or a radio\n$form['my_form[country]']->select('France');\n\n// ticks a checkbox\n$form['my_form[like_symfony]']->tick();\n\n// uploads a file\n$form['my_form[photo]']->upload('/path/to/lucas.jpg');\n\n// In the case of a multiple file upload\n$form['my_form[field][0]']->upload('/path/to/lucas.jpg');\n$form['my_form[field][1]']->upload('/path/to/lisa.jpg');",
+      "language": "unknown"
+    },
+    {
+      "code": "$client->submit($form, [], ['HTTP_ACCEPT_LANGUAGE' => 'es']);\n$client->submitForm($button, [], 'POST', ['HTTP_ACCEPT_LANGUAGE' => 'es']);",
+      "language": "javascript"
+    },
+    {
+      "code": "// add this method in some custom class imported in your tests\nprotected static function assertMyOwnCustomAssert(): void\n{\n    self::assertThatForClient(new SomeCustomConstraint());\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/testing.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/testing/bootstrap.html",
+    "https://symfony.com/doc/7.3/testing/dom_crawler.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/service_container/compiler_passes.html",
+    "https://symfony.com/doc/7.3/security/user_providers.html",
+    "https://symfony.com/doc/7.3/testing/profiling.html",
+    "https://symfony.com/doc/7.3/components/dom_crawler.html",
+    "https://symfony.com/doc/7.3/components/http_foundation.html",
+    "https://symfony.com/doc/7.3/testing/end_to_end.html",
+    "https://symfony.com/doc/7.3/testing/database.html",
+    "https://symfony.com/doc/7.3/testing/insulating_clients.html",
+    "https://symfony.com/doc/7.3/components/css_selector.html"
+  ]
+}

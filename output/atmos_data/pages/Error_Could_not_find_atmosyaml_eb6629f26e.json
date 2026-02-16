@@ -1,0 +1,74 @@
+{
+  "title": "Error: Could not find atmos.yaml",
+  "content": "cd ../../..\natmos terraform plan vpc -s prod  # Now it works\nbash\ncd components/terraform/vpc\natmos terraform plan vpc -s prod  # Just works\nbash\ncd experiments/\necho \"base_path: .\" > atmos.yaml\natmos terraform plan  # Uses ./atmos.yaml, not repository root\nbash\nexport ATMOS_GIT_ROOT_BASEPATH=false\natmos terraform plan  # Uses current directory as base path\n\nError: invalid workflow manifest\n\nError: Vendoring is not configured",
+  "code_samples": [
+    {
+      "code": "**Now:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## How It Works\n\nWhen you run Atmos from a subdirectory:\n\n1. Atmos detects you're in a Git repository\n2. It finds the repository root (where `.git` lives)\n3. It uses that as the base path for all operations\n4. Your `atmos.yaml` at the repository root is found automatically\n\nJust like Git, Atmos walks up the directory tree to find the repository root.\n\n## Local Configuration Always Wins\n\nIf you have an `atmos.yaml` in your current directory, Atmos uses that instead. This ensures local overrides work as expected:",
+      "language": "unknown"
+    },
+    {
+      "code": "Atmos respects these local configuration indicators:\n- `atmos.yaml` - Main config file\n- `.atmos.yaml` - Hidden config file\n- `.atmos/` - Config directory\n- `.atmos.d/` - Default imports directory\n- `atmos.d/` - Alternate imports directory\n\nIf any of these exist in your current directory, they take precedence over git root discovery.\n\n## Disabling the Feature\n\nFor testing or if you prefer the old behavior, set an environment variable:",
+      "language": "unknown"
+    },
+    {
+      "code": "This is automatically set for Atmos's internal test suite to prevent test pollution.\n\n## Why This Matters\n\nThis small change eliminates a common frustration: having to remember where you are in your repository structure. Now you can:\n\n- Navigate to component directories to review code\n- Run Atmos commands without changing directories\n- Write simpler automation scripts\n- Work more naturally within your repository\n\nJust like Git changed your mental model from \"I must be at the root\" to \"I can work anywhere,\" Atmos now does the same for infrastructure orchestration.\n\n---\n\n## Better Error Messages: Helpful Hints, Rich Context, and Enterprise Error Tracking\n\nWe've completely rebuilt Atmos error handling from the ground up to provide **helpful hints**, **rich context**, and **enterprise-grade error tracking**. When something goes wrong, you now get actionable guidance instead of cryptic messages, and enterprises can track and analyze errors across their entire infrastructure stack.\n\n<!--truncate-->\n\n## The Problem: Errors That Don't Help\n\nTraditional CLI error messages tell you *what* went wrong, but not *how* to fix it:",
+      "language": "unknown"
+    },
+    {
+      "code": "What's invalid? What should it look like? Where do I find documentation? You're left to guess, search documentation, or dig through source code.\n\nFor platform teams managing hundreds of components across multiple environments, this friction adds up:\n\n- **Time wasted debugging** - Engineers spend hours tracking down configuration issues\n- **Context switching** - Jumping between error messages, documentation, and source code\n- **Repeated mistakes** - Without clear guidance, teams make the same errors repeatedly\n- **No visibility** - No way to track error patterns across teams or identify systemic issues\n\n## What We Built\n\n### 1. Helpful Hints That Guide You\n\nErrors now include **actionable hints** that tell you exactly how to fix the problem:\n\n**Before:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**After:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Local Configuration Always Wins",
+      "id": "local-configuration-always-wins"
+    },
+    {
+      "level": "h2",
+      "text": "Disabling the Feature",
+      "id": "disabling-the-feature"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h2",
+      "text": "Better Error Messages: Helpful Hints, Rich Context, and Enterprise Error Tracking",
+      "id": "better-error-messages:-helpful-hints,-rich-context,-and-enterprise-error-tracking"
+    },
+    {
+      "level": "h2",
+      "text": "The Problem: Errors That Don't Help",
+      "id": "the-problem:-errors-that-don't-help"
+    },
+    {
+      "level": "h2",
+      "text": "What We Built",
+      "id": "what-we-built"
+    },
+    {
+      "level": "h3",
+      "text": "1. Helpful Hints That Guide You",
+      "id": "1.-helpful-hints-that-guide-you"
+    }
+  ],
+  "url": "llms-txt#error:-could-not-find-atmos.yaml",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Block operations if running in production without proper approval",
+  "content": "errors[message] {\n  input.process_env.ENVIRONMENT == \"production\"\n  not input.process_env.DEPLOYMENT_APPROVED\n  message = \"Production deployments require DEPLOYMENT_APPROVED environment variable\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#block-operations-if-running-in-production-without-proper-approval",
+  "links": []
+}

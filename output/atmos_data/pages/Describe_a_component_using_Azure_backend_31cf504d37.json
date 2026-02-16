@@ -1,0 +1,8 @@
+{
+  "title": "Describe a component using Azure backend",
+  "content": "atmos describe component vpc -s plat-ue2-dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#describe-a-component-using-azure-backend",
+  "links": []
+}

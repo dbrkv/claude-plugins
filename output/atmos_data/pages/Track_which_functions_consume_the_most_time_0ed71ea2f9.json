@@ -1,0 +1,8 @@
+{
+  "title": "Track which functions consume the most time",
+  "content": "atmos terraform plan large-component -s prod --heatmap",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#track-which-functions-consume-the-most-time",
+  "links": []
+}

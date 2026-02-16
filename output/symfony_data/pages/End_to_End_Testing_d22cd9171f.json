@@ -1,0 +1,307 @@
+{
+  "url": "https://symfony.com/doc/7.3/testing/end_to_end.html",
+  "title": "End-to-End Testing",
+  "content": "End-to-end tests simulate how real users interact with your application through a browser. They focus on verifying your user interface and the outcomes of user actions (like confirming that clicking a button sends an email).\n\nUnlike application tests, these tests run in a real browser that can work in headless mode (without a graphical interface) for CI environments or with a graphical interface for debugging.\n\nSymfony provides a component called Panther to run end-to-end tests. Panther lets you run tests in a real browser and offers unique features not available in other test types:\n\nBefore creating and running your first end-to-end tests, run the following command to install the needed dependencies:\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nPanther uses the WebDriver protocol to control the browser used to crawl websites. On all systems, you can use dbrekelmans/browser-driver-installer to install ChromeDriver and geckodriver locally:\n\nPanther will detect and automatically use drivers stored in the drivers/ directory of your project when installing them manually. You can download ChromeDriver for Chromium or Chrome and GeckoDriver for Firefox and put them anywhere in your PATH or in the drivers/ directory of your project.\n\nAlternatively, you can use the package manager of your operating system to install them:\n\nIf you intend to use Panther to test your application, it is strongly recommended to register the Panther PHPUnit extension. While not strictly mandatory, this extension dramatically improves the testing experience by boosting the performance and allowing to use the interactive debugging mode.\n\nWhen using the extension in conjunction with the PANTHER_ERROR_SCREENSHOT_DIR environment variable, tests using the Panther client that fail or error (after the client is created) will automatically get a screenshot taken to help debugging.\n\nTo register the Panther extension, add the following lines to phpunit.dist.xml (in legacy PHPUnit versions older than 10, the file is named phpunit.xml.dist):\n\nWithout the extension, the web server used by Panther to serve the application under test is started on demand and stopped when tearDownAfterClass() is called. On the other hand, when the extension is registered, the web server will be stopped only after the very last test.\n\nHere is an example of a snippet that uses Panther to test an application:\n\nAccording to the specification, WebDriver implementations return only the displayed text by default. When you filter on a head tag (like title), the method text() returns an empty string. Use the html() method to get the complete contents of the tag, including the tag itself.\n\nThe PantherTestCase class allows you to write end-to-end tests. It automatically starts your app using the built-in PHP web server and lets you crawl it using Panther. To provide all the testing tools you're used to, it extends PHPUnit's TestCase.\n\nIf you are testing a Symfony application, PantherTestCase automatically extends the WebTestCase class. It means you can create functional tests, which can directly execute the kernel of your application and access all your existing services. In this case, you can use all crawler test assertions provided by Symfony with Panther.\n\nHere is an example of a PantherTestCase:\n\nPanther client comes with methods that wait until some asynchronous process finishes:\n\nFinally, you can also make assertions on things that will happen in the future:\n\nYou can then run this test using PHPUnit, like you would for any other test:\n\nWhen writing end-to-end tests, you should keep in mind that they are slower than other tests. If you need to check that the WebDriver connection is still active during long-running tests, you can use the Client::ping() method which returns a boolean depending on the connection status.\n\nIf you want to change the host and/or the port used by the built-in web server, pass the hostname and port to the $options parameter of the createPantherClient() method:\n\nPanther also gives access to other BrowserKit-based implementations of Client and Crawler. Unlike Panther's native client, these alternative clients don't support JavaScript, CSS and screenshot capturing, but are way faster. Two alternative clients are available:\n\nBecause all clients implement the same API, you can switch from one to another just by calling the appropriate factory method, resulting in a good trade-off for every single test case: if JavaScript is needed or not, if an authentication against an external SSO has to be done, etc.\n\nHere is how to retrieve instances of these clients:\n\nWhen initializing a custom client, the integrated web server is not started automatically. Use PantherTestCase::startWebServer() or the WebServerManager class if you want to start it manually.\n\nPanther provides a convenient way to test applications with real-time capabilities that use Mercure, WebSocket and similar technologies.\n\nThe PantherTestCase::createAdditionalPantherClient() method can create additional, isolated browsers that can interact with other ones. For instance, this can be useful to test a chat application having several users connected simultaneously:\n\nIf needed, you can use Panther to access the content of the console:\n\nIf needed, you can configure the arguments to pass to the chromedriver binary:\n\nTo use a proxy server, you have to set the PANTHER_CHROME_ARGUMENTS:\n\nIf you want to use Selenium Grid with the built-in web server, you need to configure the Panther client as follows:\n\nTo force Chrome to accept invalid and self-signed certificates, you can set the following environment variable: PANTHER_CHROME_ARGUMENTS='--ignore-certificate-errors'.\n\nThis option is insecure, use it only for testing in development environments, never in production (e.g. for web crawlers).\n\nFor Firefox, instantiate the client like this, you can do this at client creation:\n\nSometimes, it's convenient to reuse an existing web server configuration instead of starting the built-in PHP one. To do so, set the external_base_uri option when creating your client:\n\nWhen using an external web server, Panther will not start the built-in PHP web server.\n\nIt happens that your PHP/Symfony application might serve several different domain names. As Panther saves the client in memory between tests to improve performance, you will have to run your tests in separate processes if you write several tests using Panther for different domain names.\n\nTo do so, you can use the native @runInSeparateProcess PHPUnit annotation. Here is an example using the external_base_uri option to determine the domain name used by the client when using separate processes:\n\nIf you want to use Panther with other testing tools like LiipFunctionalTestBundle or if you just need to use a different base class, you can use the Symfony\\Component\\Panther\\PantherTestCaseTrait to enhance your existing test-infrastructure with some Panther mechanisms:\n\nThe following environment variables can be set to change some Panther's behavior:\n\nThe support for the PANTHER_NO_REDUCED_MOTION env var was added in Panther 2.2.0.\n\nIt's possible to control the size of the browser window. This also controls the size of the screenshots.\n\nThis is how you would do it with Chrome:\n\nYou can achieve the same thing by setting the PANTHER_CHROME_ARGUMENTS env var to --window-size=1500,4000.\n\nOn Firefox, here is how you would do it:\n\nPanther can make a pause in your test suites after a failure. Thanks to this break time, you can investigate the encountered problem through the web browser. To enable this mode, you need the --debug PHPUnit option without the headless mode:\n\nTo use the interactive mode, the PHPUnit extension has to be registered.\n\nHere is a minimal Docker image that can run Panther with both Chrome and Firefox:\n\nYou can then build and run your image:\n\nPanther works out of the box with GitHub Actions. Here is a minimal .github/workflows/panther.yaml file to run Panther tests:\n\nPanther will work out of the box with Travis CI if you add the Chrome addon. Here is a minimal .travis.yaml file to run Panther tests:\n\nHere is a minimal .gitlab-ci.yaml file to run Panther tests with Gitlab CI:\n\nPanther will work out of the box with AppVeyor as long as Google Chrome is installed. Here is a minimal appveyor.yaml file to run Panther tests:\n\nThe following features are not currently supported:\n\nAlso, there is a known issue if you are using Bootstrap 5. It implements a scrolling effect which tends to mislead Panther. To fix this, we advise you to deactivate this effect by setting the Bootstrap 5 $enable-smooth-scroll variable to false in your style file:\n\nSometimes, your assets might not load during tests. This happens because Panther uses the PHP built-in server to serve your app. If asset files (or any requested URI that's not a .php file) aren't in your public directory, the built-in server will return a 404 error. This often happens when letting the AssetMapper component handle your application assets in the dev environment.\n\nOne solution when using AssetMapper is to compile assets before running your tests. This will also speed up your tests, as Symfony won't need to handle the assets, allowing the PHP built-in server to serve them directly.\n\nAnother option is to create a file called tests/router.php and add the following to it:\n\nThen declare it as a router for Panther server in phpunit.dist.xml using the PANTHER_WEB_SERVER_ROUTER environment variable:\n\nSee the Functional Testing tutorial on SymfonyCasts.\n\nSince Panther implements the API of popular libraries, you can find even more documentation:\n\nTake the exam at home\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "End-to-End Testing",
+      "id": "end-to-end-testing"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h3",
+      "text": "Installing Web Drivers",
+      "id": "installing-web-drivers"
+    },
+    {
+      "level": "h3",
+      "text": "Registering The PHPUnit Extension",
+      "id": "registering-the-phpunit-extension"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Creating a TestCase",
+      "id": "creating-a-testcase"
+    },
+    {
+      "level": "h2",
+      "text": "Advanced Usage",
+      "id": "advanced-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Changing The Hostname and the Port Of The Web Server",
+      "id": "changing-the-hostname-and-the-port-of-the-web-server"
+    },
+    {
+      "level": "h3",
+      "text": "Using Browser-Kit Clients",
+      "id": "using-browser-kit-clients"
+    },
+    {
+      "level": "h3",
+      "text": "Testing Real-Time Applications",
+      "id": "testing-real-time-applications"
+    },
+    {
+      "level": "h3",
+      "text": "Accessing Browser Console Logs",
+      "id": "accessing-browser-console-logs"
+    },
+    {
+      "level": "h3",
+      "text": "Passing Arguments to ChromeDriver",
+      "id": "passing-arguments-to-chromedriver"
+    },
+    {
+      "level": "h3",
+      "text": "Using a Proxy",
+      "id": "using-a-proxy"
+    },
+    {
+      "level": "h3",
+      "text": "Using Selenium With the Built-In Web Server",
+      "id": "using-selenium-with-the-built-in-web-server"
+    },
+    {
+      "level": "h3",
+      "text": "Accepting Self-Signed SSL Certificates",
+      "id": "accepting-self-signed-ssl-certificates"
+    },
+    {
+      "level": "h3",
+      "text": "Using An External Web Server",
+      "id": "using-an-external-web-server"
+    },
+    {
+      "level": "h3",
+      "text": "Having a Multi-domain Application",
+      "id": "having-a-multi-domain-application"
+    },
+    {
+      "level": "h2",
+      "text": "Usage With Other Testing Tools",
+      "id": "usage-with-other-testing-tools"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring Panther Through Environment Variables",
+      "id": "configuring-panther-through-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Chrome Specific Environment Variables",
+      "id": "chrome-specific-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Firefox Specific Environment Variables",
+      "id": "firefox-specific-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Changing the Size of the Browser Window",
+      "id": "changing-the-size-of-the-browser-window"
+    },
+    {
+      "level": "h2",
+      "text": "Interactive Mode",
+      "id": "interactive-mode"
+    },
+    {
+      "level": "h2",
+      "text": "Docker Integration",
+      "id": "docker-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Integrating Panther In Your CI",
+      "id": "integrating-panther-in-your-ci"
+    },
+    {
+      "level": "h3",
+      "text": "Github Actions",
+      "id": "github-actions"
+    },
+    {
+      "level": "h3",
+      "text": "Travis CI",
+      "id": "travis-ci"
+    },
+    {
+      "level": "h3",
+      "text": "Gitlab CI",
+      "id": "gitlab-ci"
+    },
+    {
+      "level": "h3",
+      "text": "AppVeyor",
+      "id": "appveyor"
+    },
+    {
+      "level": "h2",
+      "text": "Known Limitations and Troubleshooting",
+      "id": "known-limitations-and-troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Assets not Loading when Using the PHP Built-In Server",
+      "id": "assets-not-loading-when-using-the-php-built-in-server"
+    },
+    {
+      "level": "h2",
+      "text": "Additional Documentation",
+      "id": "additional-documentation"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require --dev symfony/panther",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require --dev dbrekelmans/bdi\n\n$ vendor/bin/bdi detect drivers",
+      "language": "unknown"
+    },
+    {
+      "code": "# Ubuntu\n$ apt-get install chromium-chromedriver firefox-geckodriver\n\n# MacOS, using Homebrew\n$ brew install chromedriver geckodriver\n\n# Windows, using Chocolatey\n$ choco install chromedriver selenium-gecko-driver",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- phpunit.dist.xml -->\n<extensions>\n    <!-- use this with PHPUnit 10 or newer -->\n    <bootstrap class=\"Symfony\\Component\\Panther\\ServerExtension\"/>\n    <!-- use this with legacy PHPUnit versions older than 10 -->\n    <extension class=\"Symfony\\Component\\Panther\\ServerExtension\"/>\n</extensions>",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Panther\\Client;\n\n$client = Client::createChromeClient();\n// alternatively, create a Firefox client\n$client = Client::createFirefoxClient();\n\n$client->request('GET', 'https://api-platform.com');\n$client->clickLink('Getting started');\n\n// wait for an element to be present in the DOM, even if hidden\n$crawler = $client->waitFor('#bootstrapping-the-core-library');\n// you can also wait for an element to be visible\n$crawler = $client->waitForVisibility('#bootstrapping-the-core-library');\n\n// get the text of an element thanks to the query selector syntax\necho $crawler->filter('div:has(> #bootstrapping-the-core-library)')->text();\n// take a screenshot of the current page\n$client->takeScreenshot('screen.png');",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass HomepageTest extends PantherTestCase\n{\n    public function testMyApp(): void\n    {\n        // your app is automatically started using the built-in web server\n        $client = static::createPantherClient();\n        $client->request('GET', '/home');\n\n        // use any PHPUnit assertion, including the ones provided by Symfony...\n        $this->assertPageTitleContains('My Title');\n        $this->assertSelectorTextContains('#main', 'My body');\n\n        // ... or the one provided by Panther\n        $this->assertSelectorIsEnabled('.search');\n        $this->assertSelectorIsDisabled('[type=\"submit\"]');\n        $this->assertSelectorIsVisible('.errors');\n        $this->assertSelectorIsNotVisible('.loading');\n        $this->assertSelectorAttributeContains('.price', 'data-old-price', '42');\n        $this->assertSelectorAttributeNotContains('.price', 'data-old-price', '36');\n\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass HomepageTest extends PantherTestCase\n{\n    public function testMyApp(): void\n    {\n        // ...\n\n        // wait for element to be attached to the DOM\n        $client->waitFor('.popin');\n\n        // wait for element to be removed from the DOM\n        $client->waitForStaleness('.popin');\n\n        // wait for element of the DOM to become visible\n        $client->waitForVisibility('.loader');\n\n        // wait for element of the DOM to become hidden\n        $client->waitForInvisibility('.loader');\n\n        // wait for text to be inserted in the element content\n        $client->waitForElementToContain('.total', '25 €');\n\n        // wait for text to be removed from the element content\n        $client->waitForElementToNotContain('.promotion', '5%');\n\n        // wait for the button to become enabled\n        $client->waitForEnabled('[type=\"submit\"]');\n\n        // wait for  the button to become disabled\n        $client->waitForDisabled('[type=\"submit\"]');\n\n        // wait for the attribute to contain content\n        $client->waitForAttributeToContain('.price', 'data-old-price', '25 €');\n\n        // wait for the attribute to not contain content\n        $client->waitForAttributeToNotContain('.price', 'data-old-price', '25 €');\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass HomepageTest extends PantherTestCase\n{\n    public function testMyApp(): void\n    {\n        // ...\n\n        // element will be attached to the DOM\n        $this->assertSelectorWillExist('.popin');\n\n        // element will be removed from the DOM\n        $this->assertSelectorWillNotExist('.popin');\n\n        // element will be visible\n        $this->assertSelectorWillBeVisible('.loader');\n\n        // element will not be visible\n        $this->assertSelectorWillNotBeVisible('.loader');\n\n        // text will be inserted in the element content\n        $this->assertSelectorWillContain('.total', '€25');\n\n        // text will be removed from the element content\n        $this->assertSelectorWillNotContain('.promotion', '5%');\n\n        // button will be enabled\n        $this->assertSelectorWillBeEnabled('[type=\"submit\"]');\n\n        // button will be disabled\n        $this->assertSelectorWillBeDisabled('[type=\"submit\"]');\n\n        // attribute will contain content\n        $this->assertSelectorAttributeWillContain('.price', 'data-old-price', '€25');\n\n        // attribute will not contain content\n        $this->assertSelectorAttributeWillNotContain('.price', 'data-old-price', '€25');\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$ ./vendor/bin/phpunit tests/HomepageTest.php",
+      "language": "unknown"
+    },
+    {
+      "code": "$client = self::createPantherClient([\n    'hostname' => 'example.com', // defaults to 127.0.0.1\n    'port' => 8080, // defaults to 9080\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "namespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\Client;\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass AppTest extends PantherTestCase\n{\n    public function testMyApp(): void\n    {\n        // retrieve an existing client\n        $symfonyClient = static::createClient();\n        $httpBrowserClient = static::createHttpBrowserClient();\n        $pantherClient = static::createPantherClient();\n        $firefoxClient = static::createPantherClient(['browser' => static::FIREFOX]);\n\n        // create a custom client\n        $customChromeClient = Client::createChromeClient(null, null, [], 'https://example.com');\n        $customFirefoxClient = Client::createFirefoxClient(null, null, [], 'https://example.com');\n        $customSeleniumClient = Client::createSeleniumClient('http://127.0.0.1:4444/wd/hub', null, 'https://example.com');\n\n        // if you are testing a Symfony app, you also have access to the kernel\n        $kernel = static::createKernel();\n\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Panther\\PantherTestCase;\n\nclass ChatTest extends PantherTestCase\n{\n    public function testChat(): void\n    {\n        $client1 = self::createPantherClient();\n        $client1->request('GET', '/chat');\n\n        // connect a 2nd user using an isolated browser\n        $client2 = self::createAdditionalPantherClient();\n        $client2->request('GET', '/chat');\n        $client2->submitForm('Post message', ['message' => 'Hi folks !']);\n\n        // wait for the message to be received by the first client\n        $client1->waitFor('.message');\n\n        // Symfony Assertions are *always* executed in the primary browser\n        $this->assertSelectorTextContains('.message', 'Hi folks !');\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Panther\\PantherTestCase;\n\nclass ConsoleTest extends PantherTestCase\n{\n    public function testConsole(): void\n    {\n        $client = self::createPantherClient(\n            [],\n            [],\n            [\n                'capabilities' => [\n                    'goog:loggingPrefs' => [\n                        'browser' => 'ALL', // calls to console.* methods\n                        'performance' => 'ALL', // performance data\n                    ],\n                ],\n            ]\n        );\n\n        $client->request('GET', '/');\n\n        $consoleLogs = $client->getWebDriver()->manage()->getLog('browser');\n        $performanceLogs = $client->getWebDriver()->manage()->getLog('performance'); // performance logs\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Panther\\PantherTestCase;\n\nclass MyTest extends PantherTestCase\n{\n    public function testLogging(): void\n    {\n        $client = self::createPantherClient(\n            [],\n            [],\n            [\n                'chromedriver_arguments' => [\n                    '--log-path=myfile.log',\n                    '--log-level=DEBUG'\n                ],\n            ]\n        );\n\n        $client->request('GET', '/');\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# .env.test\nPANTHER_CHROME_ARGUMENTS='--proxy-server=socks://127.0.0.1:9050'",
+      "language": "unknown"
+    },
+    {
+      "code": "$client = Client::createPantherClient(\n    options: [\n        'browser' => PantherTestCase::SELENIUM,\n    ],\n    managerOptions: [\n        'host' => 'http://selenium-hub:4444', // the host of the Selenium Server (Grid)\n        'capabilities' => DesiredCapabilities::firefox(), // the capabilities of the browser\n    ],\n);",
+      "language": "javascript"
+    },
+    {
+      "code": "$client = Client::createFirefoxClient(null, null, ['capabilities' => ['acceptInsecureCerts' => true]]);",
+      "language": "javascript"
+    },
+    {
+      "code": "namespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass E2eTest extends PantherTestCase\n{\n    public function testMyApp(): void\n    {\n        $pantherClient = static::createPantherClient(['external_base_uri' => 'https://localhost']);\n\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// tests/FirstDomainTest.php\nnamespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass FirstDomainTest extends PantherTestCase\n{\n    /**\n     * @runInSeparateProcess\n     */\n    public function testMyApp(): void\n    {\n        $pantherClient = static::createPantherClient([\n            'external_base_uri' => 'http://mydomain.localhost:8000',\n        ]);\n\n        // ...\n    }\n}\n\n// tests/SecondDomainTest.php\nnamespace App\\Tests;\n\nuse Symfony\\Component\\Panther\\PantherTestCase;\n\nclass SecondDomainTest extends PantherTestCase\n{\n    /**\n     * @runInSeparateProcess\n     */\n    public function testMyApp(): void\n    {\n        $pantherClient = static::createPantherClient([\n            'external_base_uri' => 'http://anotherdomain.localhost:8000',\n        ]);\n\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "namespace App\\Tests\\Controller;\n\nuse Liip\\FunctionalTestBundle\\Test\\WebTestCase;\nuse Symfony\\Component\\Panther\\PantherTestCaseTrait;\n\nclass DefaultControllerTest extends WebTestCase\n{\n    use PantherTestCaseTrait;\n\n    public function testWithFixtures(): void\n    {\n        $this->loadFixtures([]); // load your fixtures\n        $client = self::createPantherClient(); // create your panther client\n\n        $client->request('GET', '/');\n\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$client = Client::createChromeClient(null, ['--window-size=1500,4000']);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Facebook\\WebDriver\\WebDriverDimension;\n\n$client = Client::createFirefoxClient();\n$size = new WebDriverDimension(1500, 4000);\n$client->manage()->window()->setSize($size);",
+      "language": "unknown"
+    },
+    {
+      "code": "$ PANTHER_NO_HEADLESS=1 bin/phpunit --debug\n\nTest 'App\\AdminTest::testLogin' started\nError: something is wrong.\n\nPress enter to continue...",
+      "language": "unknown"
+    },
+    {
+      "code": "FROM php:alpine\n\n# Chromium and ChromeDriver\nENV PANTHER_NO_SANDBOX 1\n# Not mandatory, but recommended\nENV PANTHER_CHROME_ARGUMENTS='--disable-dev-shm-usage'\nRUN apk add --no-cache chromium chromium-chromedriver\n\n# Firefox and GeckoDriver (optional)\nARG GECKODRIVER_VERSION=0.28.0\nRUN apk add --no-cache firefox libzip-dev; \\\n    docker-php-ext-install zip\nRUN wget -q https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz; \\\n    tar -zxf geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz -C /usr/bin; \\\n    rm geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz",
+      "language": "unknown"
+    },
+    {
+      "code": "$ docker build . -t myproject\n$ docker run -it -v \"$PWD\":/srv/myproject -w /srv/myproject myproject bin/phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "name: Run Panther tests\n\non: [ push, pull_request ]\n\njobs:\n  tests:\n\n    runs-on: ubuntu-latest\n\n    steps:\n      - uses: actions/checkout@v4\n      - uses: \"ramsey/composer-install@v2\"\n\n      - name: Install dependencies\n        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist\n\n      - name: Run test suite\n        run: bin/phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "language: php\naddons:\n  # If you don't use Chrome or Firefox, remove the corresponding line\n  chrome: stable\n  firefox: latest\n\nphp:\n  - 8.0\n\nscript:\n  - bin/phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "image: ubuntu\n\nbefore_script:\n  - apt-get update\n  - apt-get install software-properties-common -y\n  - ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime\n  - apt-get install curl wget php php-cli php8.1 php8.1-common php8.1-curl php8.1-intl php8.1-xml php8.1-opcache php8.1-mbstring php8.1-zip libfontconfig1 fontconfig libxrender-dev libfreetype6 libxrender1 zlib1g-dev xvfb chromium-chromedriver firefox-geckodriver -y -qq\n  - export PANTHER_NO_SANDBOX=1\n  - export PANTHER_WEB_SERVER_PORT=9080\n  - php -r \"copy('https://getcomposer.org/installer', 'composer-setup.php');\"\n  - php composer-setup.php --install-dir=/usr/local/bin --filename=composer\n  - php -r \"unlink('composer-setup.php');\"\n  - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist\n\ntest:\n  script:\n    - bin/phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "build: false\nplatform: x86\nclone_folder: c:\\projects\\myproject\n\ncache:\n  - '%LOCALAPPDATA%\\Composer\\files'\n\ninstall:\n  - ps: Set-Service wuauserv -StartupType Manual\n  - cinst -y php composer googlechrome chromedriver firfox selenium-gecko-driver\n  - refreshenv\n  - cd c:\\tools\\php80\n  - copy php.ini-production php.ini /Y\n  - echo date.timezone=\"UTC\" >> php.ini\n  - echo extension_dir=ext >> php.ini\n  - echo extension=php_openssl.dll >> php.ini\n  - echo extension=php_mbstring.dll >> php.ini\n  - echo extension=php_curl.dll >> php.ini\n  - echo memory_limit=3G >> php.ini\n  - cd %APPVEYOR_BUILD_FOLDER%\n  - composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist\n\ntest_script:\n  - cd %APPVEYOR_BUILD_FOLDER%\n  - php bin\\phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "$enable-smooth-scroll: false;",
+      "language": "unknown"
+    },
+    {
+      "code": "// tests/router.php\nif (is_file($_SERVER['DOCUMENT_ROOT'].\\DIRECTORY_SEPARATOR.$_SERVER['SCRIPT_NAME'])) {\n    return false;\n}\n\n$script = 'index.php';\n\n$_SERVER = array_merge($_SERVER, $_ENV);\n$_SERVER['SCRIPT_FILENAME'] = $_SERVER['DOCUMENT_ROOT'].\\DIRECTORY_SEPARATOR.$script;\n\n$_SERVER['SCRIPT_NAME'] = \\DIRECTORY_SEPARATOR.$script;\n$_SERVER['PHP_SELF'] = \\DIRECTORY_SEPARATOR.$script;\n\nrequire $script;",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- phpunit.dist.xml -->\n<phpunit>\n    <!-- ... -->\n    <php>\n        <!-- ... -->\n        <server name=\"PANTHER_WEB_SERVER_ROUTER\" value=\"../tests/router.php\"/>\n    </php>\n</phpunit>",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/testing/end_to_end.html",
+    "https://symfony.com/doc/7.3/testing.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/http_client.html",
+    "https://symfony.com/doc/7.3/frontend/asset_mapper.html",
+    "https://symfony.com/doc/7.3/components/browser_kit.html",
+    "https://symfony.com/doc/7.3/components/dom_crawler.html"
+  ]
+}

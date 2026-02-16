@@ -1,0 +1,23 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/adapters/doctrine_dbal_adapter.html",
+  "title": "Doctrine DBAL Cache Adapter",
+  "content": "The Doctrine DBAL adapters store the cache items in a table of an SQL database.\n\nThis adapter implements PruneableInterface, allowing for manual pruning of expired cache entries by calling the prune() method.\n\nThe DoctrineDbalAdapter requires a Doctrine DBAL Connection, or Doctrine DBAL URL as its first parameter. You can pass a namespace, default cache lifetime, and options array as the other optional arguments:\n\nDBAL Connection are lazy-loaded by default; some additional options may be necessary to detect the database engine and version without opening the connection.\n\nThe adapter uses SQL syntax that is optimized for database server that it is connected to. The following database servers are known to be compatible:\n\nNewer releases of Doctrine DBAL might increase these minimal versions. Check the manual page on Doctrine DBAL Platforms if your database server is compatible with the installed Doctrine DBAL version.\n\nCode consumes server resources. Blackfire tells you how\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Doctrine DBAL Cache Adapter",
+      "id": "doctrine-dbal-cache-adapter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\DoctrineDbalAdapter;\n\n$cache = new DoctrineDbalAdapter(\n\n    // a Doctrine DBAL connection or DBAL URL\n    $databaseConnectionOrURL,\n\n    // the string prefixed to the keys of the items stored in this cache\n    $namespace = '',\n\n    // the default lifetime (in seconds) for cache items that do not define their\n    // own lifetime, with a value 0 causing items to be stored indefinitely (i.e.\n    // until the database table is truncated or its rows are otherwise deleted)\n    $defaultLifetime = 0,\n\n    // an array of options for configuring the database table and connection\n    $options = []\n);",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/adapters/doctrine_dbal_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/cache_pools.html"
+  ]
+}

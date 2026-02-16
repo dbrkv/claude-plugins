@@ -1,0 +1,8 @@
+{
+  "title": "S3 Console (using alias)",
+  "content": "atmos auth console --destination s3",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#s3-console-(using-alias)",
+  "links": []
+}

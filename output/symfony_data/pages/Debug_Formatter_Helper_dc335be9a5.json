@@ -1,0 +1,81 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/console/helpers/debug_formatter.html",
+  "title": "Debug Formatter Helper",
+  "content": "The DebugFormatterHelper provides functions to output debug information when running an external program, for instance a process or HTTP request. For example, if you used it to output the results of running figlet symfony, it might output something like this:\n\nThe debug formatter helper can be instantiated directly as shown:\n\nIt accepts strings and returns a formatted string, which you then output to the console (or even log the information or do anything else).\n\nAll methods of this helper have an identifier as the first argument. This is a unique value for each program. This way, the helper can debug information for multiple programs at the same time. When using the Process component, you probably want to use spl_object_hash.\n\nThis information is often too verbose to be shown by default. You can use verbosity levels to only show it when in debugging mode (-vvv).\n\nAs soon as you start a program, you can use start() to display information that the program is started:\n\nYou can tweak the prefix using the third argument:\n\nSome programs give output while they are running. This information can be shown using progress():\n\nIn case of success, this will output:\n\nAnd this in case of failure:\n\nThe third argument is a boolean which tells the function if the output is error output or not. When true, the output is considered error output.\n\nThe fourth and fifth argument allow you to override the prefix for the normal output and error output respectively.\n\nWhen a program is stopped, you can use stop() to notify this to the users:\n\nIn case of failure, this will be in red and in case of success it will be green.\n\nAs said before, you can also use the helper to display more programs at the same time. Information about different programs will be shown in different colors, to make it clear which output belongs to which command.\n\nMeasure & Improve Symfony Code Performance\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Debug Formatter Helper",
+      "id": "debug-formatter-helper"
+    },
+    {
+      "level": "h2",
+      "text": "Using the Debug Formatter",
+      "id": "using-the-debug-formatter"
+    },
+    {
+      "level": "h2",
+      "text": "Starting a Program",
+      "id": "starting-a-program"
+    },
+    {
+      "level": "h2",
+      "text": "Output Progress Information",
+      "id": "output-progress-information"
+    },
+    {
+      "level": "h2",
+      "text": "Stopping a Program",
+      "id": "stopping-a-program"
+    },
+    {
+      "level": "h2",
+      "text": "Using multiple Programs",
+      "id": "using-multiple-programs"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$debugFormatter = new DebugFormatterHelper();",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$process = new Process(...);\n\n$output->writeln($debugFormatter->start(\n    spl_object_hash($process),\n    'Some process description'\n));\n\n$process->run();",
+      "language": "unknown"
+    },
+    {
+      "code": "RUN Some process description",
+      "language": "unknown"
+    },
+    {
+      "code": "$output->writeln($debugFormatter->start(\n    spl_object_hash($process),\n    'Some process description',\n    'STARTED'\n));\n// will output:\n//  STARTED Some process description",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n// ...\n$process = new Process(...);\n\n$process->run(function (string $type, string $buffer) use ($output, $debugFormatter, $process): void {\n    $output->writeln(\n        $debugFormatter->progress(\n            spl_object_hash($process),\n            $buffer,\n            Process::ERR === $type\n        )\n    );\n});\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "OUT The output of the process",
+      "language": "unknown"
+    },
+    {
+      "code": "ERR The output of the process",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$output->writeln(\n    $debugFormatter->stop(\n        spl_object_hash($process),\n        'Some command description',\n        $process->isSuccessful()\n    )\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "RES Some command description",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/console/helpers/debug_formatter.html",
+    "https://symfony.com/doc/7.3/components/process.html",
+    "https://symfony.com/doc/7.3/console/verbosity.html"
+  ]
+}

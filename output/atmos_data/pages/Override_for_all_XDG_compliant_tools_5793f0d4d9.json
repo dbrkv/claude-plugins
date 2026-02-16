@@ -1,0 +1,37 @@
+{
+  "title": "Override for all XDG-compliant tools",
+  "content": "export XDG_CONFIG_HOME=/custom/path\nyaml\nauth:\n  providers:\n    my-sso:\n      kind: aws/iam-identity-center\n      # ... other config ...\n      spec:\n        files:\n          base_path: /custom/path/aws\nbash\natmos auth validate --verbose\nbash",
+  "code_samples": [
+    {
+      "code": "Or configure per-provider in `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Environment Variables\n\n- Your files remain untouched\n- Your existing `~/.aws/credentials` and `~/.aws/config` are never modified\n- Atmos uses separate files to avoid conflicts\n- Standard AWS environment variables are set to point to Atmos-managed files\n\n## Troubleshooting\n\n### Common Issues\n\n**Configuration Validation Errors**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Authentication Failures**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Environment Variables",
+      "id": "environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Common Issues",
+      "id": "common-issues"
+    }
+  ],
+  "url": "llms-txt#override-for-all-xdg-compliant-tools",
+  "links": []
+}

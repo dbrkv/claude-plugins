@@ -1,0 +1,83 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Bic.html",
+  "title": "Bic",
+  "content": "This constraint is used to ensure that a value has the proper format of a Business Identifier Code (BIC). BIC is an internationally agreed means to uniquely identify both financial and non-financial institutions. You may also check that the BIC's country code is the same as a given IBAN's one.\n\nTo use the Bic validator, apply it to a property on an object that will contain a Business Identifier Code (BIC).\n\nAs with most of the other constraints, null and empty strings are considered valid values. This is to allow them to be optional values. If the value is mandatory, a common solution is to combine this constraint with NotBlank.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: null\n\nAn IBAN value to validate that its country code is the same as the BIC's one.\n\ntype: string default: This Business Identifier Code (BIC) is not associated with IBAN {{ iban }}.\n\nThe default message supplied when the value does not pass the combined BIC/IBAN check.\n\ntype: string default: null\n\nIt defines the object property whose value stores the IBAN used to check the BIC with.\n\nFor example, if you want to compare the $bic property of some object with regard to the $iban property of the same object, use ibanPropertyPath=\"iban\" in the comparison constraint of $bic.\n\ntype: string default: This is not a valid Business Identifier Code (BIC).\n\nThe default message supplied when the value does not pass the BIC check.\n\nYou can use the following parameters in this message:\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\ntype: string default: Bic::VALIDATION_MODE_STRICT\n\nThis option defines how the BIC is validated. The possible values are available as constants in the Bic class:\n\nThe mode option was introduced in Symfony 7.2.\n\nOnline Sylius certification, take it now!\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Bic",
+      "id": "bic"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Available Options",
+      "id": "available-options"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "iban",
+      "id": "iban"
+    },
+    {
+      "level": "h3",
+      "text": "ibanMessage",
+      "id": "ibanmessage"
+    },
+    {
+      "level": "h3",
+      "text": "ibanPropertyPath",
+      "id": "ibanpropertypath"
+    },
+    {
+      "level": "h3",
+      "text": "message",
+      "id": "message"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    },
+    {
+      "level": "h3",
+      "text": "mode",
+      "id": "mode"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Transaction.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Transaction\n{\n    #[Assert\\Bic]\n    protected string $businessIdentifierCode;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Transaction:\n    properties:\n        businessIdentifierCode:\n            - Bic: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Transaction\">\n        <property name=\"businessIdentifierCode\">\n            <constraint name=\"Bic\"/>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Transaction.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Transaction\n{\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('businessIdentifierCode', new Assert\\Bic());\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Bic.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotBlank.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

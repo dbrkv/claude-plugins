@@ -1,0 +1,259 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/options_resolver.html",
+  "title": "The OptionsResolver Component",
+  "content": "The OptionsResolver component is an improved replacement for the array_replace PHP function. It allows you to create an options system with required options, defaults, validation (type, value), normalization and more.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nImagine you have a Mailer class which has four options: host, username, password and port:\n\nWhen accessing the $options, you need to add some boilerplate code to check which options are set:\n\nAlso, the default values of the options are buried in the business logic of your code. Use array_replace to fix that:\n\nNow all four options are guaranteed to be set, but you could still make an error like the following when using the Mailer class:\n\nNo error will be shown. In the best case, the bug will appear during testing, but the developer will spend time looking for the problem. In the worst case, the bug might not appear until it's deployed to the live system.\n\nFortunately, the OptionsResolver class helps you to fix this problem:\n\nLike before, all options will be guaranteed to be set. Additionally, an UndefinedOptionsException is thrown if an unknown option is passed:\n\nThe rest of your code can access the values of the options without boilerplate code:\n\nIt's a good practice to split the option configuration into a separate method:\n\nFirst, your code becomes easier to read, especially if the constructor does more than processing options. Second, sub-classes may now override the configureOptions() method to adjust the configuration of the options:\n\nIf an option must be set by the caller, pass that option to setRequired(). For example, to make the host option required, you can do:\n\nIf you omit a required option, a MissingOptionsException will be thrown:\n\nThe setRequired() method accepts a single name or an array of option names if you have more than one required option:\n\nUse isRequired() to find out if an option is required. You can use getRequiredOptions() to retrieve the names of all required options:\n\nIf you want to check whether a required option is still missing from the default options, you can use isMissing(). The difference between this and isRequired() is that this method will return false if a required option has already been set:\n\nThe getMissingOptions() method lets you access the names of all missing options.\n\nYou can run additional checks on the options to make sure they were passed correctly. To validate the types of the options, call setAllowedTypes():\n\nDefining type unions with the | syntax was introduced in Symfony 7.3.\n\nYou can pass any type for which an is_<type>() function is defined in PHP. You may also pass fully qualified class or interface names (which is checked using instanceof). Additionally, you can validate all items in an array recursively by suffixing the type with [].\n\nIf you pass an invalid option now, an InvalidOptionsException is thrown:\n\nIn sub-classes, you can use addAllowedTypes() to add additional allowed types without erasing the ones already set.\n\nSome options can only take one of a fixed list of predefined values. For example, suppose the Mailer class has a transport option which can be one of sendmail, mail and smtp. Use the method setAllowedValues() to verify that the passed option contains one of these values:\n\nIf you pass an invalid transport, an InvalidOptionsException is thrown:\n\nFor options with more complicated validation schemes, pass a closure which returns true for acceptable values and false for invalid values:\n\nYou can even use the Validator component to validate the input by using the createIsValidCallable() method:\n\nIn sub-classes, you can use addAllowedValues() to add additional allowed values without erasing the ones already set.\n\nSometimes, option values need to be normalized before you can use them. For instance, assume that the host should always start with http://. To do that, you can write normalizers. Normalizers are executed after validating an option. You can configure a normalizer by calling setNormalizer():\n\nThe normalizer receives the actual $value and returns the normalized form. You see that the closure also takes an $options parameter. This is useful if you need to use other options during normalization:\n\nTo normalize a new allowed value in subclasses that are being normalized in parent classes, use addNormalizer() method. This way, the $value argument will receive the previously normalized value, otherwise you can prepend the new normalizer by passing true as third argument.\n\nSuppose you want to set the default value of the port option based on the encryption chosen by the user of the Mailer class. More precisely, you want to set the port to 465 if SSL is used and to 25 otherwise.\n\nYou can implement this feature by passing a closure as the default value of the port option. The closure receives the options as arguments. Based on these options, you can return the desired default value:\n\nThe argument of the callable must be type hinted as Options. Otherwise, the callable itself is considered as the default value of the option.\n\nThe closure is only executed if the port option isn't set by the user or overwritten in a subclass.\n\nA previously set default value can be accessed by adding a second argument to the closure:\n\nAs seen in the example, this feature is mostly useful if you want to reuse the default values set in parent classes in sub-classes.\n\nIn some cases, it is useful to define an option without setting a default value. This is useful if you need to know whether or not the user actually set an option or not. For example, if you set the default value for an option, it's not possible to know whether the user passed this value or if it comes from the default:\n\nYou can use setDefined() to define an option without setting a default value. Then the option will only be included in the resolved options if it was actually passed to resolve():\n\nYou can also pass an array of option names if you want to define multiple options in one go:\n\nThe methods isDefined() and getDefinedOptions() let you find out which options are defined:\n\nSuppose you have an option named spool which has two sub-options type and path. Instead of defining it as a simple array of values, you can pass a closure as the default value of the spool option with a OptionsResolver argument. Based on this instance, you can define the options under spool and its desired default value:\n\nDefining nested options via setDefault() is deprecated since Symfony 7.3. Use the setOptions() method instead, which also allows defining default values for prototyped options.\n\nThe setOptions() method was introduced in Symfony 7.3.\n\nNested options also support required options, validation (type, value) and normalization of their values. If the default value of a nested option depends on another option defined in the parent level, add a second Options argument to the closure to access to them:\n\nThe arguments of the closure must be type hinted as OptionsResolver and Options respectively. Otherwise, the closure itself is considered as the default value of the option.\n\nIn same way, parent options can access to the nested options as normal arrays:\n\nThe fact that an option is defined as nested means that you must pass an array of values to resolve it at runtime.\n\nThere are situations where you will have to resolve and validate a set of options that may repeat many times within another option. Let's imagine a connections option that will accept an array of database connections with host, database, user and password each.\n\nThe best way to implement this is to define the connections option as prototype:\n\nAccording to the prototype definition in the example above, it is possible to have multiple connection arrays like the following:\n\nThe array keys (default, test, etc.) of this prototype option are validation-free and can be any arbitrary value that helps differentiate the connections.\n\nA prototype option can only be defined inside a nested option and during its resolution it will expect an array of arrays.\n\nOnce an option is outdated or you decided not to maintain it anymore, you can deprecate it using the setDeprecated() method:\n\nThe deprecation message will be triggered only if the option is being used somewhere, either its value is provided by the user or the option is evaluated within closures of lazy options and normalizers.\n\nWhen using an option deprecated by you in your own library, you can pass false as the second argument of the offsetGet() method to not trigger the deprecation warning.\n\nAll deprecation messages are displayed in the profiler logs in the \"Deprecations\" tab.\n\nInstead of passing the message, you may also pass a closure which returns a string (the deprecation message) or an empty string to ignore the deprecation. This closure is useful to only deprecate some of the allowed types or values of the option:\n\nDeprecation based on the value is triggered only when the option is provided by the user.\n\nThis closure receives as argument the value of the option after validating it and before normalizing it when the option is being resolved.\n\nBy default, all options are resolved and validated, resulting in a UndefinedOptionsException if an unknown option is passed. You can ignore not defined options by using the ignoreUndefined() method:\n\nIn many cases you may need to define multiple configurations for each option. For example, suppose the InvoiceMailer class has an host option that is required and a transport option which can be one of sendmail, mail and smtp. You can improve the readability of the code avoiding to duplicate option name for each configuration using the define() method:\n\nWith the current implementation, the configureOptions() method will be called for every single instance of the Mailer class. Depending on the amount of option configuration and the number of created instances, this may add noticeable overhead to your application. If that overhead becomes a problem, you can change your code to do the configuration only once per class:\n\nNow the OptionsResolver instance will be created once per class and reused from that on. Be aware that this may lead to memory leaks in long-running applications, if the default options contain references to objects or object graphs. If that's the case for you, implement a method clearOptionsConfig() and call it periodically:\n\nThat's it! You now have all the tools and knowledge needed to process options in your code.\n\nUse the OptionsResolverIntrospector to inspect the options definitions inside an OptionsResolver instance:\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nOnline Symfony certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The OptionsResolver Component",
+      "id": "the-optionsresolver-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Required Options",
+      "id": "required-options"
+    },
+    {
+      "level": "h3",
+      "text": "Type Validation",
+      "id": "type-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Value Validation",
+      "id": "value-validation"
+    },
+    {
+      "level": "h3",
+      "text": "Option Normalization",
+      "id": "option-normalization"
+    },
+    {
+      "level": "h3",
+      "text": "Default Values that Depend on another Option",
+      "id": "default-values-that-depend-on-another-option"
+    },
+    {
+      "level": "h3",
+      "text": "Options without Default Values",
+      "id": "options-without-default-values"
+    },
+    {
+      "level": "h3",
+      "text": "Nested Options",
+      "id": "nested-options"
+    },
+    {
+      "level": "h3",
+      "text": "Prototype Options",
+      "id": "prototype-options"
+    },
+    {
+      "level": "h3",
+      "text": "Deprecating the Option",
+      "id": "deprecating-the-option"
+    },
+    {
+      "level": "h3",
+      "text": "Ignore not defined Options",
+      "id": "ignore-not-defined-options"
+    },
+    {
+      "level": "h3",
+      "text": "Chaining Option Configurations",
+      "id": "chaining-option-configurations"
+    },
+    {
+      "level": "h3",
+      "text": "Performance Tweaks",
+      "id": "performance-tweaks"
+    },
+    {
+      "level": "h3",
+      "text": "Getting More Insights",
+      "id": "getting-more-insights"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/options-resolver",
+      "language": "unknown"
+    },
+    {
+      "code": "class Mailer\n{\n    protected array $options;\n\n    public function __construct(array $options = [])\n    {\n        $this->options = $options;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "class Mailer\n{\n    // ...\n    public function sendMail($from, $to): void\n    {\n        $mail = ...;\n\n        $mail->setHost($this->options['host'] ?? 'smtp.example.org');\n        $mail->setUsername($this->options['username'] ?? 'user');\n        $mail->setPassword($this->options['password'] ?? 'pa$$word');\n        $mail->setPort($this->options['port'] ?? 25);\n\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "class Mailer\n{\n    // ...\n\n    public function __construct(array $options = [])\n    {\n        $this->options = array_replace([\n            'host'     => 'smtp.example.org',\n            'username' => 'user',\n            'password' => 'pa$$word',\n            'port'     => 25,\n        ], $options);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$mailer = new Mailer([\n    'usernme' => 'johndoe',  // 'username' is wrongly spelled as 'usernme'\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass Mailer\n{\n    // ...\n\n    public function __construct(array $options = [])\n    {\n        $resolver = new OptionsResolver();\n        $resolver->setDefaults([\n            'host'     => 'smtp.example.org',\n            'username' => 'user',\n            'password' => 'pa$$word',\n            'port'     => 25,\n        ]);\n\n        $this->options = $resolver->resolve($options);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$mailer = new Mailer([\n    'usernme' => 'johndoe',\n]);\n\n// UndefinedOptionsException: The option \"usernme\" does not exist.\n// Defined options are: \"host\", \"password\", \"port\", \"username\"",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function sendMail($from, $to): void\n    {\n        $mail = ...;\n        $mail->setHost($this->options['host']);\n        $mail->setUsername($this->options['username']);\n        $mail->setPassword($this->options['password']);\n        $mail->setPort($this->options['port']);\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function __construct(array $options = [])\n    {\n        $resolver = new OptionsResolver();\n        $this->configureOptions($resolver);\n\n        $this->options = $resolver->resolve($options);\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'host'       => 'smtp.example.org',\n            'username'   => 'user',\n            'password'   => 'pa$$word',\n            'port'       => 25,\n            'encryption' => null,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass GoogleMailer extends Mailer\n{\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        parent::configureOptions($resolver);\n\n        $resolver->setDefaults([\n            'host' => 'smtp.google.com',\n            'encryption' => 'ssl',\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setRequired('host');\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$mailer = new Mailer();\n\n// MissingOptionsException: The required option \"host\" is missing.",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setRequired(['host', 'username', 'password']);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass GoogleMailer extends Mailer\n{\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        parent::configureOptions($resolver);\n\n        if ($resolver->isRequired('host')) {\n            // ...\n        }\n\n        $requiredOptions = $resolver->getRequiredOptions();\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setRequired('host');\n    }\n}\n\n// ...\nclass GoogleMailer extends Mailer\n{\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        parent::configureOptions($resolver);\n\n        $resolver->isRequired('host');\n        // => true\n\n        $resolver->isMissing('host');\n        // => true\n\n        $resolver->setDefault('host', 'smtp.google.com');\n\n        $resolver->isRequired('host');\n        // => true\n\n        $resolver->isMissing('host');\n        // => false\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n\n        // specify one allowed type\n        $resolver->setAllowedTypes('host', 'string');\n\n        // specify multiple allowed types\n        $resolver->setAllowedTypes('port', ['null', 'int']);\n        // if you prefer, you can also use the following equivalent syntax\n        $resolver->setAllowedTypes('port', 'int|null');\n\n        // check all items in an array recursively for a type\n        $resolver->setAllowedTypes('dates', 'DateTime[]');\n        $resolver->setAllowedTypes('ports', 'int[]');\n        // the following syntax means \"an array of integers or an array of strings\"\n        $resolver->setAllowedTypes('endpoints', '(int|string)[]');\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$mailer = new Mailer([\n    'host' => 25,\n]);\n\n// InvalidOptionsException: The option \"host\" with value \"25\" is\n// expected to be of type \"string\", but is of type \"int\"",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setDefault('transport', 'sendmail');\n        $resolver->setAllowedValues('transport', ['sendmail', 'mail', 'smtp']);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$mailer = new Mailer([\n    'transport' => 'send-mail',\n]);\n\n// InvalidOptionsException: The option \"transport\" with value \"send-mail\"\n// is invalid. Accepted values are: \"sendmail\", \"mail\", \"smtp\"",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\n$resolver->setAllowedValues('transport', function (string $value): bool {\n    // return true or false\n});",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\OptionsResolver;\nuse Symfony\\Component\\Validator\\Constraints\\Length;\nuse Symfony\\Component\\Validator\\Validation;\n\n// ...\n$resolver->setAllowedValues('transport', Validation::createIsValidCallable(\n    new Length(min: 10)\n));",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\Options;\n\n// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n\n        $resolver->setNormalizer('host', function (Options $options, string $value): string {\n            if (!str_starts_with($value, 'http://')) {\n                $value = 'http://'.$value;\n            }\n\n            return $value;\n        });\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setNormalizer('host', function (Options $options, string $value): string {\n            if (!str_starts_with($value, 'http://') && !str_starts_with($value, 'https://')) {\n                if ('ssl' === $options['encryption']) {\n                    $value = 'https://'.$value;\n                } else {\n                    $value = 'http://'.$value;\n                }\n            }\n\n            return $value;\n        });\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\Options;\n\n// ...\nclass Mailer\n{\n    // ...\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setDefault('encryption', null);\n\n        $resolver->setDefault('port', function (Options $options): int {\n            if ('ssl' === $options['encryption']) {\n                return 465;\n            }\n\n            return 25;\n        });\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setDefaults([\n            'encryption' => null,\n            'host' => 'example.org',\n        ]);\n    }\n}\n\nclass GoogleMailer extends Mailer\n{\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        parent::configureOptions($resolver);\n\n        $resolver->setDefault('host', function (Options $options, string $previousValue): string {\n            if ('ssl' === $options['encryption']) {\n                return 'secure.example.org';\n            }\n\n            // Take default value configured in the base class\n            return $previousValue;\n        });\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setDefault('port', 25);\n    }\n\n    // ...\n    public function sendMail(string $from, string $to): void\n    {\n        // Is this the default value or did the caller of the class really\n        // set the port to 25?\n        if (25 === $this->options['port']) {\n            // ...\n        }\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setDefined('port');\n    }\n\n    // ...\n    public function sendMail(string $from, string $to): void\n    {\n        if (array_key_exists('port', $this->options)) {\n            echo 'Set!';\n        } else {\n            echo 'Not Set!';\n        }\n    }\n}\n\n$mailer = new Mailer();\n$mailer->sendMail($from, $to);\n// => Not Set!\n\n$mailer = new Mailer([\n    'port' => 25,\n]);\n$mailer->sendMail($from, $to);\n// => Set!",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    // ...\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->setDefined(['port', 'encryption']);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass GoogleMailer extends Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        parent::configureOptions($resolver);\n\n        if ($resolver->isDefined('host')) {\n            // One of the following was called:\n\n            // $resolver->setDefault('host', ...);\n            // $resolver->setRequired('host');\n            // $resolver->setDefined('host');\n        }\n\n        $definedOptions = $resolver->getDefinedOptions();\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "class Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setOptions('spool', function (OptionsResolver $spoolResolver): void {\n            $spoolResolver->setDefaults([\n                'type' => 'file',\n                'path' => '/path/to/spool',\n            ]);\n            $spoolResolver->setAllowedValues('type', ['file', 'memory']);\n            $spoolResolver->setAllowedTypes('path', 'string');\n        });\n    }\n\n    public function sendMail(string $from, string $to): void\n    {\n        if ('memory' === $this->options['spool']['type']) {\n            // ...\n        }\n    }\n}\n\n$mailer = new Mailer([\n    'spool' => [\n        'type' => 'memory',\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "class Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefault('sandbox', false);\n        $resolver->setOptions('spool', function (OptionsResolver $spoolResolver, Options $parent): void {\n            $spoolResolver->setDefaults([\n                'type' => $parent['sandbox'] ? 'memory' : 'file',\n                // ...\n            ]);\n        });\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "class Mailer\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setOptions('spool', function (OptionsResolver $spoolResolver): void {\n            $spoolResolver->setDefaults([\n                'type' => 'file',\n                // ...\n            ]);\n        });\n        $resolver->setOptions('profiling', function (Options $options): void {\n            return 'file' === $options['spool']['type'];\n        });\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$resolver->setOptions('connections', function (OptionsResolver $connResolver): void {\n    $connResolver\n        ->setPrototype(true)\n        ->setRequired(['host', 'database'])\n        ->setDefaults(['user' => 'root', 'password' => null]);\n});",
+      "language": "javascript"
+    },
+    {
+      "code": "$resolver->resolve([\n    'connections' => [\n        'default' => [\n            'host' => '127.0.0.1',\n            'database' => 'symfony',\n        ],\n        'test' => [\n            'host' => '127.0.0.1',\n            'database' => 'symfony_test',\n            'user' => 'test',\n            'password' => 'test',\n        ],\n        // ...\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$resolver\n    ->setDefined(['hostname', 'host'])\n\n    // this outputs the following generic deprecation message:\n    // Since acme/package 1.2: The option \"hostname\" is deprecated.\n    ->setDeprecated('hostname', 'acme/package', '1.2')\n\n    // you can also pass a custom deprecation message (%name% placeholder is available)\n    // %name% placeholder will be replaced by the deprecated option.\n    // This outputs the following deprecation message:\n    // Since acme/package 1.2: The option \"hostname\" is deprecated, use \"host\" instead.\n    ->setDeprecated(\n        'hostname',\n        'acme/package',\n        '1.2',\n        'The option \"%name%\" is deprecated, use \"host\" instead.'\n    )\n;",
+      "language": "unknown"
+    },
+    {
+      "code": "$resolver\n    ->setDefault('encryption', null)\n    ->setDefault('port', null)\n    ->setAllowedTypes('port', ['null', 'int'])\n    ->setDeprecated('port', 'acme/package', '1.2', function (Options $options, ?int $value): string {\n        if (null === $value) {\n            return 'Passing \"null\" to option \"port\" is deprecated, pass an integer instead.';\n        }\n\n        // deprecation may also depend on another option\n        if ('ssl' === $options['encryption'] && 456 !== $value) {\n            return 'Passing a different port than \"456\" when the \"encryption\" option is set to \"ssl\" is deprecated.';\n        }\n\n        return '';\n    })\n;",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$resolver\n    ->setDefined(['hostname'])\n    ->setIgnoreUndefined(true)\n;\n\n// option \"version\" will be ignored\n$resolver->resolve([\n    'hostname' => 'acme/package',\n    'version'  => '1.2.3'\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nclass InvoiceMailer\n{\n    // ...\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n        $resolver->define('host')\n            ->required()\n            ->default('smtp.example.org')\n            ->allowedTypes('string')\n            ->info('The IP address or hostname');\n\n        $resolver->define('transport')\n            ->required()\n            ->default('transport')\n            ->allowedValues('sendmail', 'mail', 'smtp');\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    private static array $resolversByClass = [];\n\n    protected array $options;\n\n    public function __construct(array $options = [])\n    {\n        // What type of Mailer is this, a Mailer, a GoogleMailer, ... ?\n        $class = $this::class;\n\n        // Was configureOptions() executed before for this class?\n        if (!isset(self::$resolversByClass[$class])) {\n            self::$resolversByClass[$class] = new OptionsResolver();\n            $this->configureOptions(self::$resolversByClass[$class]);\n        }\n\n        $this->options = self::$resolversByClass[$class]->resolve($options);\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nclass Mailer\n{\n    private static array $resolversByClass = [];\n\n    public static function clearOptionsConfig(): void\n    {\n        self::$resolversByClass = [];\n    }\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\Debug\\OptionsResolverIntrospector;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\n$resolver = new OptionsResolver();\n$resolver->setDefaults([\n    'host' => 'smtp.example.org',\n    'port' => 25,\n]);\n\n$introspector = new OptionsResolverIntrospector($resolver);\n$introspector->getDefault('host'); // Retrieves \"smtp.example.org\"",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/options_resolver.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/validation.html"
+  ]
+}

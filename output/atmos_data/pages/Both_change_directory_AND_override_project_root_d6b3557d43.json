@@ -1,0 +1,24 @@
+{
+  "title": "Both: change directory AND override project root",
+  "content": "atmos -C /infra --base-path=./custom terraform plan vpc -s prod\nbash",
+  "code_samples": [
+    {
+      "code": "## Real-World Examples\n\n### Multi-Repo Infrastructure Management",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Real-World Examples",
+      "id": "real-world-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Multi-Repo Infrastructure Management",
+      "id": "multi-repo-infrastructure-management"
+    }
+  ],
+  "url": "llms-txt#both:-change-directory-and-override-project-root",
+  "links": []
+}

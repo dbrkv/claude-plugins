@@ -1,0 +1,8 @@
+{
+  "title": "Capture and analyze CPU profile",
+  "content": "go tool pprof http://localhost:6060/debug/pprof/profile",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#capture-and-analyze-cpu-profile",
+  "links": []
+}

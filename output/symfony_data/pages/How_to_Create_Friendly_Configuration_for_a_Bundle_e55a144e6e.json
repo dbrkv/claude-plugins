@@ -1,0 +1,148 @@
+{
+  "url": "https://symfony.com/doc/7.3/bundles/configuration.html",
+  "title": "How to Create Friendly Configuration for a Bundle",
+  "content": "If you open your main application configuration directory (usually config/packages/), you'll see a number of different files, such as framework.yaml, twig.yaml and doctrine.yaml. Each of these configures a specific bundle, allowing you to define options at a high level and then let the bundle make all the low-level, complex changes based on your settings.\n\nFor example, the following configuration tells the FrameworkBundle to enable the form integration, which involves the definition of quite a few services as well as integration of other related components:\n\nThere are two different ways of creating friendly configuration for a bundle:\n\nIn bundles extending the AbstractBundle class, you can add all the logic related to processing the configuration in that class:\n\nThe configure() and loadExtension() methods are called only at compile time.\n\nThe AbstractBundle::configure() method also allows to import the configuration definition from one or more files:\n\nThis is the traditional way of creating friendly configuration for bundles. For new bundles it's recommended to use the main bundle class, but the traditional way of creating an extension class still works.\n\nImagine you are creating a new bundle - AcmeSocialBundle - which provides integration with X/Twitter. To make your bundle configurable to the user, you can add some configuration that looks like this:\n\nThe basic idea is that instead of having the user override individual parameters, you let the user configure just a few, specifically created, options. As the bundle developer, you then parse through that configuration and load correct services and parameters inside an \"Extension\" class.\n\nThe root key of your bundle configuration (acme_social in the previous example) is automatically determined from your bundle name (it's the snake case of the bundle name without the Bundle suffix).\n\nRead more about the extension in How to Load Service Configuration inside a Bundle.\n\nIf a bundle provides an Extension class, then you should not generally override any service container parameters from that bundle. The idea is that if an extension class is present, every setting that should be configurable should be present in the configuration made available by that class. In other words, the extension class defines all the public configuration settings for which backward compatibility will be maintained.\n\nFor parameter handling within a dependency injection container see Using Parameters within a Dependency Injection Class.\n\nFirst things first, you have to create an extension class as explained in How to Load Service Configuration inside a Bundle.\n\nWhenever a user includes the acme_social key (which is the DI alias) in a configuration file, the configuration under it is added to an array of configurations and passed to the load() method of your extension (Symfony automatically converts XML and YAML to an array).\n\nFor the configuration example in the previous section, the array passed to your load() method will look like this:\n\nNotice that this is an array of arrays, not just a single flat array of the configuration values. This is intentional, as it allows Symfony to parse several configuration resources. For example, if acme_social appears in another configuration file - say config/packages/dev/acme_social.yaml - with different values beneath it, the incoming array might look like this:\n\nThe order of the two arrays depends on which one is set first.\n\nBut don't worry! Symfony's Config component will help you merge these values, provide defaults and give the user validation errors on bad configuration. Here's how it works. Create a Configuration class in the DependencyInjection directory and build a tree that defines the structure of your bundle's configuration.\n\nThe Configuration class to handle the sample configuration looks like:\n\nThe Configuration class can be much more complicated than shown here, supporting \"prototype\" nodes, advanced validation, XML-specific normalization and advanced merging. You can read more about this in the Config component documentation. You can also see it in action by checking out some core Configuration classes, such as the one from the FrameworkBundle Configuration or the TwigBundle Configuration.\n\nThis class can now be used in your load() method to merge configurations and force validation (e.g. if an additional option was passed, an exception will be thrown):\n\nThe processConfiguration() method uses the configuration tree you've defined in the Configuration class to validate, normalize and merge all the configuration arrays together.\n\nNow, you can use the $config variable to modify a service provided by your bundle. For example, imagine your bundle has the following example config:\n\nIn your extension, you can load this and dynamically set its arguments:\n\nInstead of calling processConfiguration() in your extension each time you provide some configuration options, you might want to use the ConfigurableExtension to do this automatically for you:\n\nThis class uses the getConfiguration() method to get the Configuration instance.\n\nProcessing the Configuration yourself\n\nUsing the Config component is fully optional. The load() method gets an array of configuration values. You can instead parse these arrays yourself (e.g. by overriding configurations and using isset to check for the existence of a value). Be aware that it'll be very hard to support XML:\n\nIf you have multiple bundles that depend on each other, it may be useful to allow one Extension class to modify the configuration passed to another bundle's Extension class. This can be achieved using a prepend extension. For more details, see How to Simplify Configuration of Multiple Bundles.\n\nThe config:dump-reference command dumps the default configuration of a bundle in the console using the Yaml format.\n\nAs long as your bundle's configuration is located in the standard location (<YourBundle>/src/DependencyInjection/Configuration) and does not have a constructor, it will work automatically. If you have something different, your Extension class must override the Extension::getConfiguration() method and return an instance of your Configuration.\n\nSymfony allows people to provide the configuration in three different formats: Yaml, XML and PHP. Both Yaml and PHP use the same syntax and are supported by default when using the Config component. Supporting XML requires you to do some more things. But when sharing your bundle with others, it is recommended that you follow these steps.\n\nThe Config component provides some methods by default to allow it to correctly process XML configuration. See \"Defining and Processing Configuration Values\" of the component documentation. However, you can do some optional things as well, this will improve the experience of using XML configuration:\n\nIn XML, the XML namespace is used to determine which elements belong to the configuration of a specific bundle. The namespace is returned from the Extension::getNamespace() method. By convention, the namespace is a URL (it doesn't have to be a valid URL nor does it need to exist). By default, the namespace for a bundle is http://example.org/schema/dic/DI_ALIAS, where DI_ALIAS is the DI alias of the extension. You might want to change this to a more professional URL:\n\nXML has a very useful feature called XML schema. This allows you to describe all possible elements and attributes and their values in an XML Schema Definition (an XSD file). This XSD file is used by IDEs for auto completion and it is used by the Config component to validate the elements.\n\nIn order to use the schema, the XML configuration file must provide an xsi:schemaLocation attribute pointing to the XSD file for a certain XML namespace. This location always starts with the XML namespace. This XML namespace is then replaced with the XSD validation base path returned from Extension::getXsdValidationBasePath() method. This namespace is then followed by the rest of the path from the base path to the file itself.\n\nBy convention, the XSD file lives in config/schema/ directory, but you can place it anywhere you like. You should return this path as the base path:\n\nAssuming the XSD file is called hello-1.0.xsd, the schema location will be https://acme_company.com/schema/dic/hello/hello-1.0.xsd:\n\nCode consumes server resources. Blackfire tells you how\n\nOnline Sylius certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Create Friendly Configuration for a Bundle",
+      "id": "how-to-create-friendly-configuration-for-a-bundle"
+    },
+    {
+      "level": "h2",
+      "text": "Using the AbstractBundle Class",
+      "id": "using-the-abstractbundle-class"
+    },
+    {
+      "level": "h2",
+      "text": "Using the Bundle Extension",
+      "id": "using-the-bundle-extension"
+    },
+    {
+      "level": "h3",
+      "text": "Processing the $configs Array",
+      "id": "processing-the-configs-array"
+    },
+    {
+      "level": "h2",
+      "text": "Modifying the Configuration of Another Bundle",
+      "id": "modifying-the-configuration-of-another-bundle"
+    },
+    {
+      "level": "h2",
+      "text": "Dump the Configuration",
+      "id": "dump-the-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Supporting XML",
+      "id": "supporting-xml"
+    },
+    {
+      "level": "h3",
+      "text": "Make your Config Tree ready for XML",
+      "id": "make-your-config-tree-ready-for-xml"
+    },
+    {
+      "level": "h3",
+      "text": "Choosing an XML Namespace",
+      "id": "choosing-an-xml-namespace"
+    },
+    {
+      "level": "h3",
+      "text": "Providing an XML Schema",
+      "id": "providing-an-xml-schema"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    form: true",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\"\n>\n    <framework:config>\n        <framework:form/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->form()->enabled(true);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/AcmeSocialBundle.php\nnamespace Acme\\SocialBundle;\n\nuse Symfony\\Component\\Config\\Definition\\Configurator\\DefinitionConfigurator;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator;\nuse Symfony\\Component\\HttpKernel\\Bundle\\AbstractBundle;\n\nclass AcmeSocialBundle extends AbstractBundle\n{\n    public function configure(DefinitionConfigurator $definition): void\n    {\n        $definition->rootNode()\n            ->children()\n                ->arrayNode('twitter')\n                    ->children()\n                        ->integerNode('client_id')->end()\n                        ->scalarNode('client_secret')->end()\n                    ->end()\n                ->end() // twitter\n            ->end()\n        ;\n    }\n\n    public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void\n    {\n        // the \"$config\" variable is already merged and processed so you can\n        // use it directly to configure the service container (when defining an\n        // extension class, you also have to do this merging and processing)\n        $container->services()\n            ->get('acme_social.twitter_client')\n            ->arg(0, $config['twitter']['client_id'])\n            ->arg(1, $config['twitter']['client_secret'])\n        ;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/AcmeSocialBundle.php\nnamespace Acme\\SocialBundle;\n\n// ...\nclass AcmeSocialBundle extends AbstractBundle\n{\n    public function configure(DefinitionConfigurator $definition): void\n    {\n        $definition->import('../config/definition.php');\n        // you can also use glob patterns\n        //$definition->import('../config/definition/*.php');\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// config/definition.php\nuse Symfony\\Component\\Config\\Definition\\Configurator\\DefinitionConfigurator;\n\nreturn static function (DefinitionConfigurator $definition): void {\n    $definition->rootNode()\n        ->children()\n            ->scalarNode('foo')->defaultValue('bar')->end()\n        ->end()\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/acme_social.yaml\nacme_social:\n    twitter:\n        client_id: 123\n        client_secret: your_secret",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/acme_social.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:acme-social=\"http://example.org/schema/dic/acme_social\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <acme-social:config>\n        <acme-social:twitter client-id=\"123\"\n            client-secret=\"your_secret\"\n        />\n    </acme-social:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/acme_social.php\nuse Symfony\\Config\\AcmeSocialConfig;\n\nreturn static function (AcmeSocialConfig $acmeSocial): void {\n    $acmeSocial->twitter()\n        ->clientId(123)\n        ->clientSecret('your_secret');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "[\n    [\n        'twitter' => [\n            'client_id' => 123,\n            'client_secret' => 'your_secret',\n        ],\n    ],\n]",
+      "language": "javascript"
+    },
+    {
+      "code": "[\n    // values from config/packages/acme_social.yaml\n    [\n        'twitter' => [\n            'client_id' => 123,\n            'client_secret' => 'your_secret',\n        ],\n    ],\n    // values from config/packages/dev/acme_social.yaml\n    [\n        'twitter' => [\n            'client_id' => 456,\n        ],\n    ],\n]",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/DependencyInjection/Configuration.php\nnamespace Acme\\SocialBundle\\DependencyInjection;\n\nuse Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder;\nuse Symfony\\Component\\Config\\Definition\\ConfigurationInterface;\n\nclass Configuration implements ConfigurationInterface\n{\n    public function getConfigTreeBuilder(): TreeBuilder\n    {\n        $treeBuilder = new TreeBuilder('acme_social');\n\n        $treeBuilder->getRootNode()\n            ->children()\n                ->arrayNode('twitter')\n                    ->children()\n                        ->integerNode('client_id')->end()\n                        ->scalarNode('client_secret')->end()\n                    ->end()\n                ->end() // twitter\n            ->end()\n        ;\n\n        return $treeBuilder;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/DependencyInjection/AcmeSocialExtension.php\npublic function load(array $configs, ContainerBuilder $container): void\n{\n    $configuration = new Configuration();\n\n    $config = $this->processConfiguration($configuration, $configs);\n\n    // you now have these 2 config keys\n    // $config['twitter']['client_id'] and $config['twitter']['client_secret']\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- src/config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <services>\n        <service id=\"acme_social.twitter_client\" class=\"Acme\\SocialBundle\\TwitterClient\">\n            <argument></argument> <!-- will be filled in with client_id dynamically -->\n            <argument></argument> <!-- will be filled in with client_secret dynamically -->\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/DependencyInjection/AcmeSocialExtension.php\nnamespace Acme\\SocialBundle\\DependencyInjection;\n\nuse Symfony\\Component\\Config\\FileLocator;\nuse Symfony\\Component\\DependencyInjection\\Loader\\XmlFileLoader;\n\npublic function load(array $configs, ContainerBuilder $container): void\n{\n    $loader = new XmlFileLoader($container, new FileLocator(dirname(__DIR__).'/Resources/config'));\n    $loader->load('services.xml');\n\n    $configuration = new Configuration();\n    $config = $this->processConfiguration($configuration, $configs);\n\n    $definition = $container->getDefinition('acme_social.twitter_client');\n    $definition->replaceArgument(0, $config['twitter']['client_id']);\n    $definition->replaceArgument(1, $config['twitter']['client_secret']);\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/DependencyInjection/HelloExtension.php\nnamespace Acme\\HelloBundle\\DependencyInjection;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\HttpKernel\\DependencyInjection\\ConfigurableExtension;\n\nclass AcmeHelloExtension extends ConfigurableExtension\n{\n    // note that this method is called loadInternal and not load\n    protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "public function load(array $configs, ContainerBuilder $container): void\n{\n    $config = [];\n    // let resources override the previous set value\n    foreach ($configs as $subConfig) {\n        $config = array_merge($config, $subConfig);\n    }\n\n    // ... now use the flat $config array\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/DependencyInjection/AcmeHelloExtension.php\nnamespace Acme\\HelloBundle\\DependencyInjection;\n\n// ...\nclass AcmeHelloExtension extends Extension\n{\n    // ...\n\n    public function getNamespace(): string\n    {\n        return 'http://acme_company.com/schema/dic/hello';\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/DependencyInjection/AcmeHelloExtension.php\nnamespace Acme\\HelloBundle\\DependencyInjection;\n\n// ...\nclass AcmeHelloExtension extends Extension\n{\n    // ...\n\n    public function getXsdValidationBasePath(): string\n    {\n        return __DIR__.'/../config/schema';\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "<!-- config/packages/acme_hello.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:acme-hello=\"http://acme_company.com/schema/dic/hello\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://acme_company.com/schema/dic/hello\n        https://acme_company.com/schema/dic/hello/hello-1.0.xsd\"\n>\n    <acme-hello:config>\n        <!-- ... -->\n    </acme-hello:config>\n\n    <!-- ... -->\n</container>",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/bundles/configuration.html",
+    "https://symfony.com/doc/7.3/bundles.html",
+    "https://symfony.com/doc/7.3/bundles/extension.html",
+    "https://symfony.com/doc/7.3/configuration/using_parameters_in_dic.html",
+    "https://symfony.com/doc/7.3/components/config/definition.html",
+    "https://symfony.com/doc/7.3/bundles/prepend_extension.html"
+  ]
+}

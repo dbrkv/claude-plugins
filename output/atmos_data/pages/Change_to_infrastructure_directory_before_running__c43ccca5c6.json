@@ -1,0 +1,8 @@
+{
+  "title": "Change to infrastructure directory before running command",
+  "content": "atmos --chdir=/path/to/infrastructure describe stacks",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#change-to-infrastructure-directory-before-running-command",
+  "links": []
+}

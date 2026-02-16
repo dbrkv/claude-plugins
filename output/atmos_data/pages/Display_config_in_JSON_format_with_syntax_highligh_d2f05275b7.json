@@ -1,0 +1,13 @@
+{
+  "title": "Display config in JSON format with syntax highlighting",
+  "content": "atmos describe config\nbash",
+  "code_samples": [
+    {
+      "code": "<Note>\nWhen the output is piped to another command, syntax highlighting is automatically disabled to ensure compatibility:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#display-config-in-json-format-with-syntax-highlighting",
+  "links": []
+}

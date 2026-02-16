@@ -1,0 +1,19 @@
+{
+  "title": "Custom issuer name (appears in AWS console URL)",
+  "content": "atmos auth console --issuer my-organization\nshell",
+  "code_samples": [
+    {
+      "code": "### Scripting and Automation",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Scripting and Automation",
+      "id": "scripting-and-automation"
+    }
+  ],
+  "url": "llms-txt#custom-issuer-name-(appears-in-aws-console-url)",
+  "links": []
+}

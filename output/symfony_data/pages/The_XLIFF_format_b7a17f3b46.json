@@ -1,0 +1,28 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/formats/xliff.html",
+  "title": "The XLIFF format",
+  "content": "Most professional translation tools support XLIFF. These files use the XML format and are supported by Symfony by default. Besides supporting all Symfony translation features, the XLIFF format also has some specific features.\n\nSometimes translators need additional context to better decide how to translate some content. This context can be provided with notes, which are a collection of comments used to store end user readable information. The only format that supports loading and dumping notes is XLIFF version 2.\n\nIf the XLIFF 2.0 document contains <notes> nodes, they are automatically loaded/dumped inside a Symfony application:\n\nThe support of attributes in the <segment> element was introduced in Symfony 7.2.\n\nGet your Symfony expertise recognized\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The XLIFF format",
+      "id": "the-xliff-format"
+    },
+    {
+      "level": "h2",
+      "text": "Adding Notes to Translation Contents",
+      "id": "adding-notes-to-translation-contents"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff xmlns=\"urn:oasis:names:tc:xliff:document:2.1\" version=\"2.1\"\n    srcLang=\"fr-FR\" trgLang=\"en-US\">\n    <file id=\"messages.en_US\">\n        <unit id=\"LCa0a2j\" name=\"original-content\">\n            <notes>\n                <note category=\"state\">new</note>\n                <note category=\"approved\">true</note>\n                <note category=\"section\" priority=\"1\">user login</note>\n            </notes>\n            <segment state=\"translated\" subState=\"Some custom value\">\n                <source>original-content</source>\n                <target>translated-content</target>\n            </segment>\n        </unit>\n    </file>\n</xliff>",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/formats/xliff.html",
+    "https://symfony.com/doc/7.3/translation.html"
+  ]
+}

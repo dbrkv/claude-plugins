@@ -1,0 +1,28 @@
+{
+  "title": "dev.yaml",
+  "content": "components:\n  terraform:\n    my-service:\n      env:\n        # Reference env variables defined in globals\n        DB_HOST: !env DATABASE_HOST\n        DB_PORT: !env DATABASE_PORT\n      vars:\n        # Can also use in vars section\n        connection_string: !env DATABASE_HOST\nyaml\nvars:\n  # `api_key` will be set to `null` if the OS environment variable `API_KEY` is not present\n  api_key: !env API_KEY\n  # `app_name` will be set to the default value `my-app` if the OS environment variable `APP_NAME` is not present\n  app_name: !env APP_NAME my-app\n\nsettings:\n  # `provisioned_by_user` will be set to `null` if the OS environment variable `ATMOS_USER` is not present\n  provisioned_by_user: !env ATMOS_USER\nyaml",
+  "code_samples": [
+    {
+      "code": "### Using OS Environment Variables",
+      "language": "unknown"
+    },
+    {
+      "code": "### Mixed Usage (Stack Manifests + OS Environment)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Using OS Environment Variables",
+      "id": "using-os-environment-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Mixed Usage (Stack Manifests + OS Environment)",
+      "id": "mixed-usage-(stack-manifests-+-os-environment)"
+    }
+  ],
+  "url": "llms-txt#dev.yaml",
+  "links": []
+}

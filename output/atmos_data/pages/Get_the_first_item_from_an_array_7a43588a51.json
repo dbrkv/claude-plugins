@@ -1,0 +1,8 @@
+{
+  "title": "Get the first item from an array",
+  "content": "primary_zone: !store.get azure-keyvault availability-zones | query .[0]",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-the-first-item-from-an-array",
+  "links": []
+}

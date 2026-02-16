@@ -1,0 +1,8 @@
+{
+  "title": "Bash: With username and hostname",
+  "content": "shell:\n  prompt: '\\u@\\h [{{.Stack}}] {{.Component}} $ '",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#bash:-with-username-and-hostname",
+  "links": []
+}

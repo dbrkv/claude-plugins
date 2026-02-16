@@ -1,0 +1,19 @@
+{
+  "title": "Custom XDG data directory",
+  "content": "export ATMOS_XDG_DATA_HOME=/custom/data\natmos auth login --identity prod-admin\nyaml",
+  "code_samples": [
+    {
+      "code": "### Memory Keyring\n\nIn-memory storage with no persistence (credentials lost on exit):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Memory Keyring",
+      "id": "memory-keyring"
+    }
+  ],
+  "url": "llms-txt#custom-xdg-data-directory",
+  "links": []
+}

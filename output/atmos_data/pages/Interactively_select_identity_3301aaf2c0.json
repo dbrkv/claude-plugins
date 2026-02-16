@@ -1,0 +1,8 @@
+{
+  "title": "Interactively select identity",
+  "content": "atmos auth console --identity",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#interactively-select-identity",
+  "links": []
+}

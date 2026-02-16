@@ -1,0 +1,28 @@
+{
+  "url": "https://symfony.com/doc/7.3/validation/raw_values.html",
+  "title": "How to Validate Raw Values (Scalar Values and Arrays)",
+  "content": "Usually you will be validating entire objects. But sometimes, you want to validate a simple value - like to verify that a string is a valid email address. From inside a controller, it looks like this:\n\nBy calling validate() on the validator, you can pass in a raw value and the constraint object that you want to validate that value against. A full list of the available constraints - as well as the full class name for each constraint - is available in the constraints reference section.\n\nValidation of arrays is possible using the Collection constraint:\n\nThe validate() method returns a ConstraintViolationList object, which acts like an array of errors. Each error in the collection is a ConstraintViolation object, which holds the error message on its getMessage() method.\n\nWhen using groups with the Collection constraint, be sure to use the Optional constraint when appropriate as explained in its reference documentation.\n\nMeasure & Improve Symfony Code Performance\n\nPut the code quality back at the heart of your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Validate Raw Values (Scalar Values and Arrays)",
+      "id": "how-to-validate-raw-values-scalar-values-and-arrays"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// ...\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Validator\\ValidatorInterface;\n\n// ...\npublic function addEmail(string $email, ValidatorInterface $validator): void\n{\n    $emailConstraint = new Assert\\Email();\n    // all constraint \"options\" can be set this way\n    $emailConstraint->message = 'Invalid email address';\n\n    // use the validator to validate the value\n    $errors = $validator->validate(\n        $email,\n        $emailConstraint\n    );\n\n    if (!$errors->count()) {\n        // ... this IS a valid email address, do something\n    } else {\n        // this is *not* a valid email address\n        $errorMessage = $errors[0]->getMessage();\n\n        // ... do something with the error\n    }\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Validation;\n\n$validator = Validation::createValidator();\n\n$input = [\n    'name' => [\n        'first_name' => 'Fabien',\n        'last_name' => 'Potencier',\n    ],\n    'email' => 'test@email.tld',\n    'simple' => 'hello',\n    'eye_color' => 3,\n    'file' => null,\n    'password' => 'test',\n    'tags' => [\n        [\n            'slug' => 'symfony_doc',\n            'label' => 'symfony doc',\n        ],\n    ],\n];\n\n$groups = new Assert\\GroupSequence(['Default', 'custom']);\n\n$constraint = new Assert\\Collection([\n    // the keys correspond to the keys in the input array\n    'name' => new Assert\\Collection([\n        'first_name' => new Assert\\Length(['min' => 101]),\n        'last_name' => new Assert\\Length(['min' => 1]),\n    ]),\n    'email' => new Assert\\Email(),\n    'simple' => new Assert\\Length(['min' => 102]),\n    'eye_color' => new Assert\\Choice([3, 4]),\n    'file' => new Assert\\File(),\n    'password' => new Assert\\Length(['min' => 60]),\n    'tags' => new Assert\\Optional([\n        new Assert\\Type('array'),\n        new Assert\\Count(['min' => 1]),\n        new Assert\\All([\n            new Assert\\Collection([\n                'slug' => [\n                    new Assert\\NotBlank(),\n                    new Assert\\Type(['type' => 'string']),\n                ],\n                'label' => [\n                    new Assert\\NotBlank(),\n                ],\n            ]),\n            new CustomUniqueTagValidator(['groups' => 'custom']),\n        ]),\n    ]),\n]);\n\n$violations = $validator->validate($input, $constraint, $groups);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/validation/raw_values.html",
+    "https://symfony.com/doc/7.3/reference/constraints.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Collection.html"
+  ]
+}

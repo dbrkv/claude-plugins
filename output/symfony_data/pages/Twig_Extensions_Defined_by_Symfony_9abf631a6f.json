@@ -1,0 +1,612 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/twig_reference.html",
+  "title": "Twig Extensions Defined by Symfony",
+  "content": "Twig is the template engine used in Symfony applications. There are tens of default filters and functions defined by Twig, but Symfony also defines some filters, functions and tags to integrate the various Symfony components with Twig templates. This article explains them all.\n\nIf these extensions provided by Symfony are not enough, you can create a custom Twig extension to define even more filters and functions.\n\nMakes a request to the given internal URI or controller and returns the result. The render strategy can be specified in the strategy key of the options. It's commonly used to embed controllers in templates.\n\nIt's similar to the render function and defines the same arguments. However, it generates an ESI tag when ESI support is enabled or falls back to the behavior of render otherwise.\n\nThe render_esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render_*() functions.\n\nGenerates the URI of a fragment.\n\nReturns an instance of ControllerReference to be used with functions like render() and render_esi().\n\nReturns the public path of the given asset path (which can be a CSS file, a JavaScript file, an image path, etc.). This function takes into account where the application is installed (e.g. in case the project is accessed in a host subdirectory) and the optional asset package base path.\n\nSymfony provides various cache busting implementations via the assets.version, assets.version_strategy, and assets.json_manifest_path configuration options.\n\nRead more about linking to web assets from templates.\n\nReturns the current version of the package, more information in Creating and Using Templates.\n\nRenders a CSRF token. Use this function if you want CSRF protection in a regular HTML form not managed by the Symfony Form component.\n\nReturns true if the current user has the given role.\n\nOptionally, an object can be passed to be used by the voter. More information can be found in Security.\n\nThe is_granted_for_user() function was introduced in Symfony 7.3.\n\nReturns true if the user is authorized for the specified attribute.\n\nOptionally, an object can be passed to be used by the voter. More information can be found in Security.\n\nGenerates a relative logout URL for the given firewall. If no key is provided, the URL is generated for the current firewall the user is logged into.\n\nEqual to the logout_path function, but it'll generate an absolute URL instead of a relative one.\n\nReturns the relative URL (without the scheme and host) for the given route. If relative is enabled, it'll create a path relative to the current path.\n\nRead more about Symfony routing and about creating links in Twig templates.\n\nReturns the absolute URL (with scheme and host) for the given route. If schemeRelative is enabled, it'll create a scheme-relative URL.\n\nRead more about Symfony routing and about creating links in Twig templates.\n\nReturns the absolute URL (with scheme and host) from the passed relative path. Combine it with the asset() function to generate absolute URLs for web assets. Read more about Linking to CSS, JavaScript and Image Assets.\n\nReturns the relative path from the passed absolute URL. For example, assume you're on the following page in your app: http://example.com/products/hover-board.\n\nCreates an Expression related to the ExpressionLanguage component.\n\nGenerates a URL that you can visit to impersonate a user, identified by the identifier argument.\n\nIt's similar to the impersonation_path function, but it generates absolute URLs instead of relative URLs.\n\nGenerates a URL that you can visit to exit user impersonation. After exiting impersonation, the user is redirected to the current URI. If you prefer to redirect to a different URI, define its value in the exitTo argument.\n\nIf no user is being impersonated, the function returns an empty string.\n\nIt's similar to the impersonation_exit_path function, but it generates absolute URLs instead of relative URLs.\n\nCreates a Translatable object that can be passed to the trans filter.\n\nUsing the filter will be rendered as:\n\nOutputs the importmap & a few other items when using the Asset component.\n\nThe following functions related to Symfony Forms are also available. They are explained in the article about customizing form rendering:\n\nTransforms the given string into a human readable string (by replacing underscores with spaces, capitalizing the string, etc.) It's useful e.g. when displaying the names of PHP properties/variables to end users:\n\nTranslates the text into the current language. More information in Translation Filters.\n\nUsing the filter will be rendered as:\n\nSanitizes the text using the HTML Sanitizer component. More information in HTML Sanitizer.\n\nTransforms the input into YAML syntax.\n\nThe inline argument is the level where the generated output switches to inline YAML:\n\nThe dumpObjects argument enables the dumping of PHP objects:\n\nSee The Yaml Component for more information.\n\nDoes the same as yaml_encode(), but includes the type in the output.\n\nThe inline argument is the level where the generated output switches to inline YAML:\n\nThe dumpObjects argument enables the dumping of PHP objects:\n\nGenerates an <abbr> element with the short name of a PHP class (the FQCN will be shown in a tooltip when a user hovers over the element).\n\nThe above example will be rendered as:\n\nGenerates an <abbr> element using the FQCN::method() syntax. If method is Closure, Closure will be used instead and if method doesn't have a class name, it's shown as a function (method()).\n\nThe above example will be rendered as:\n\nGenerates a string with the arguments and their types (within <em> elements).\n\nEqual to the format_args filter, but without using HTML tags.\n\nGenerates an excerpt of a code file around the given line number. The srcContext argument defines the total number of lines to display around the given line number (use -1 to display the whole file).\n\nConsider the following as the content of file.txt:\n\nGenerates the file path inside an <a> element. If the path is inside the kernel root directory, the kernel root directory path is replaced by kernel.project_dir (showing the full path in a tooltip on hover).\n\nIf you set the framework.ide option, the generated links will change to open the file in that IDE/editor. For example, when using PhpStorm, the <a href=\"/path/to/file.txt&amp;line=3\" link will become <a href=\"phpstorm://open?file=/path/to/file.txt&amp;line=3\".\n\nUses format_file to improve the output of default PHP errors.\n\nGenerates a link to the provided file and line number using a preconfigured scheme.\n\nIt transforms the given absolute file path into a new file path relative to project's root directory:\n\nIf the given file path is out of the project directory, a null value will be returned.\n\nAccepts any data that can be serialized by the Serializer component and returns a serialized string in the specified format.\n\nThe emojify filter was introduced in Symfony 7.1.\n\nThe emoji set used to generate the textual representation (slack, github, gitlab, etc.)\n\nIt transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋):\n\nSets the resources to override the form theme for the given form view instance. You can use _self as resources to set it to the current resource. More information in How to Customize Form Rendering.\n\nRenders the translation of the content. More information in Translations.\n\nThis will set the default domain in the current template.\n\nThis measures the time and memory used to execute some code in the template and displays it in the Symfony profiler. See how to profile Symfony applications.\n\nThe following tests related to Symfony Forms are available. They are explained in the article about customizing form rendering:\n\nThe app variable is injected automatically by Symfony in all templates and provides access to lots of useful application information. Read more about the Twig global app variable.\n\nSymfony Code Performance Profiling\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Twig Extensions Defined by Symfony",
+      "id": "twig-extensions-defined-by-symfony"
+    },
+    {
+      "level": "h2",
+      "text": "Functions",
+      "id": "functions"
+    },
+    {
+      "level": "h3",
+      "text": "render",
+      "id": "render"
+    },
+    {
+      "level": "h3",
+      "text": "render_esi",
+      "id": "render-esi"
+    },
+    {
+      "level": "h3",
+      "text": "fragment_uri",
+      "id": "fragment-uri"
+    },
+    {
+      "level": "h3",
+      "text": "controller",
+      "id": "controller"
+    },
+    {
+      "level": "h3",
+      "text": "asset",
+      "id": "asset"
+    },
+    {
+      "level": "h3",
+      "text": "asset_version",
+      "id": "asset-version"
+    },
+    {
+      "level": "h3",
+      "text": "csrf_token",
+      "id": "csrf-token"
+    },
+    {
+      "level": "h3",
+      "text": "is_granted",
+      "id": "is-granted"
+    },
+    {
+      "level": "h3",
+      "text": "is_granted_for_user",
+      "id": "is-granted-for-user"
+    },
+    {
+      "level": "h3",
+      "text": "logout_path",
+      "id": "logout-path"
+    },
+    {
+      "level": "h3",
+      "text": "logout_url",
+      "id": "logout-url"
+    },
+    {
+      "level": "h3",
+      "text": "path",
+      "id": "path"
+    },
+    {
+      "level": "h3",
+      "text": "url",
+      "id": "url"
+    },
+    {
+      "level": "h3",
+      "text": "absolute_url",
+      "id": "absolute-url"
+    },
+    {
+      "level": "h3",
+      "text": "relative_path",
+      "id": "relative-path"
+    },
+    {
+      "level": "h3",
+      "text": "expression",
+      "id": "expression"
+    },
+    {
+      "level": "h3",
+      "text": "impersonation_path",
+      "id": "impersonation-path"
+    },
+    {
+      "level": "h3",
+      "text": "impersonation_url",
+      "id": "impersonation-url"
+    },
+    {
+      "level": "h3",
+      "text": "impersonation_exit_path",
+      "id": "impersonation-exit-path"
+    },
+    {
+      "level": "h3",
+      "text": "impersonation_exit_url",
+      "id": "impersonation-exit-url"
+    },
+    {
+      "level": "h3",
+      "text": "t",
+      "id": "t"
+    },
+    {
+      "level": "h3",
+      "text": "importmap",
+      "id": "importmap"
+    },
+    {
+      "level": "h3",
+      "text": "Form Related Functions",
+      "id": "form-related-functions"
+    },
+    {
+      "level": "h2",
+      "text": "Filters",
+      "id": "filters"
+    },
+    {
+      "level": "h3",
+      "text": "humanize",
+      "id": "humanize"
+    },
+    {
+      "level": "h3",
+      "text": "trans",
+      "id": "trans"
+    },
+    {
+      "level": "h3",
+      "text": "sanitize_html",
+      "id": "sanitize-html"
+    },
+    {
+      "level": "h3",
+      "text": "yaml_encode",
+      "id": "yaml-encode"
+    },
+    {
+      "level": "h3",
+      "text": "yaml_dump",
+      "id": "yaml-dump"
+    },
+    {
+      "level": "h3",
+      "text": "abbr_class",
+      "id": "abbr-class"
+    },
+    {
+      "level": "h3",
+      "text": "abbr_method",
+      "id": "abbr-method"
+    },
+    {
+      "level": "h3",
+      "text": "format_args",
+      "id": "format-args"
+    },
+    {
+      "level": "h3",
+      "text": "format_args_as_text",
+      "id": "format-args-as-text"
+    },
+    {
+      "level": "h3",
+      "text": "file_excerpt",
+      "id": "file-excerpt"
+    },
+    {
+      "level": "h3",
+      "text": "format_file",
+      "id": "format-file"
+    },
+    {
+      "level": "h3",
+      "text": "format_file_from_text",
+      "id": "format-file-from-text"
+    },
+    {
+      "level": "h3",
+      "text": "file_link",
+      "id": "file-link"
+    },
+    {
+      "level": "h3",
+      "text": "file_relative",
+      "id": "file-relative"
+    },
+    {
+      "level": "h3",
+      "text": "serialize",
+      "id": "serialize"
+    },
+    {
+      "level": "h3",
+      "text": "emojify",
+      "id": "emojify"
+    },
+    {
+      "level": "h2",
+      "text": "Tags",
+      "id": "tags"
+    },
+    {
+      "level": "h3",
+      "text": "form_theme",
+      "id": "form-theme"
+    },
+    {
+      "level": "h3",
+      "text": "trans",
+      "id": "trans-1"
+    },
+    {
+      "level": "h3",
+      "text": "trans_default_domain",
+      "id": "trans-default-domain"
+    },
+    {
+      "level": "h3",
+      "text": "stopwatch",
+      "id": "stopwatch"
+    },
+    {
+      "level": "h2",
+      "text": "Tests",
+      "id": "tests"
+    },
+    {
+      "level": "h2",
+      "text": "Global Variables",
+      "id": "global-variables"
+    },
+    {
+      "level": "h3",
+      "text": "app",
+      "id": "app"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "{{ render(uri, options = []) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ render_esi(uri, options = []) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ controller(controller, attributes = [], query = []) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ render(controller('App\\\\Controller\\\\BlogController:latest', {max: 3})) }}\n{# output: the content returned by the controller method; e.g. a rendered Twig template #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ asset(path, packageName = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    assets:\n        packages:\n            foo_package:\n                base_path: /avatars",
+      "language": "unknown"
+    },
+    {
+      "code": "{# the image lives at \"public/avatars/avatar.png\" #}\n{{ asset(path = 'avatar.png', packageName = 'foo_package') }}\n{# output: /avatars/avatar.png #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ asset_version(path, packageName = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ csrf_token(intention) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ csrf_token('my_form') }}\n{# output: a random alphanumeric string like:\n   a.YOosAd0fhT7BEuUCFbROzrvgkW8kpEmBDQ_DKRMUi2o.Va8ZQKt5_2qoa7dLW-02_PLYwDBx9nnWOluUHUFCwC5Zo0VuuVfQCqtngg #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ is_granted(role, object = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ is_granted_for_user(user, attribute, subject = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ logout_path(key = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    # ...\n\n    firewalls:\n        main:\n            # ...\n            logout:\n                path: '/logout'\n        othername:\n            # ...\n            logout:\n                path: '/other/logout'",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ logout_path(key = 'main') }}\n{# output: /logout #}\n\n{{ logout_path(key = 'othername') }}\n{# output: /other/logout #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ logout_url(key = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    # ...\n\n    firewalls:\n        main:\n            # ...\n            logout:\n                path: '/logout'\n        othername:\n            # ...\n            logout:\n                path: '/other/logout'",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ logout_url(key = 'main') }}\n{# output: http://example.org/logout #}\n\n{{ logout_url(key = 'othername') }}\n{# output: http://example.org/other/logout #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ path(route_name, route_parameters = [], relative = false) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #}\n\n{{ path(name = 'app_blog', parameters = {page: 3}, relative = false) }}\n{# output: /blog/3 #}\n\n{{ path(name = 'app_blog', parameters = {page: 3}, relative = true) }}\n{# output: blog/3 #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ url(route_name, route_parameters = [], schemeRelative = false) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #}\n\n{{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = false) }}\n{# output: http://example.org/blog/3 #}\n\n{{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = true) }}\n{# output: //example.org/blog/3 #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ absolute_url(path) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ relative_path(path) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ relative_path('http://example.com/human.txt') }}\n{# ../human.txt #}\n\n{{ relative_path('http://example.com/products/products_icon.png') }}\n{# products_icon.png #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ expression(1 + 2) }}\n{# output: 3 #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ impersonation_path(identifier) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ impersonation_url(identifier) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ impersonation_exit_path(exitTo = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ impersonation_exit_url(exitTo = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ t(message, parameters = [], domain = 'messages')|trans }}",
+      "language": "unknown"
+    },
+    {
+      "code": "# translations/blog.en.yaml\nmessage: Hello %name%",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- translations/blog.en.xlf -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\">\n        <body>\n            <trans-unit id=\"message\">\n                <source>message</source>\n                <target>Hello %name%</target>\n            </trans-unit>\n        </body>\n    </file>\n</xliff>",
+      "language": "unknown"
+    },
+    {
+      "code": "// translations/blog.en.php\nreturn [\n    'message' => \"Hello %name%\",\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "{{ t(message = 'message', parameters = {'%name%': 'John'}, domain = 'blog')|trans }}\n{# output: Hello John #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ text|humanize }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ 'dateOfBirth'|humanize }}    {# renders: Date of birth #}\n{{ 'DateOfBirth'|humanize }}    {# renders: Date of birth #}\n{{ 'date-of-birth'|humanize }}  {# renders: Date-of-birth #}\n{{ 'date_of_birth'|humanize }}  {# renders: Date of birth #}\n{{ 'date of birth'|humanize }}  {# renders: Date of birth #}\n{{ 'Date Of Birth'|humanize }}  {# renders: Date of birth #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ message|trans(arguments = [], domain = null, locale = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "# translations/messages.en.yaml\nmessage: Hello %name%",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- translations/messages.en.xlf -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\">\n        <body>\n            <trans-unit id=\"message\">\n                <source>message</source>\n                <target>Hello %name%</target>\n            </trans-unit>\n        </body>\n    </file>\n</xliff>",
+      "language": "unknown"
+    },
+    {
+      "code": "// translations/messages.en.php\nreturn [\n    'message' => \"Hello %name%\",\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "{{ 'message'|trans(arguments = {'%name%': 'John'}, domain = 'messages', locale = 'en') }}\n{# output: Hello John #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ body|sanitize_html(sanitizer = \"default\") }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ input|yaml_encode(inline = 0, dumpObjects = false) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% set array = {\n    'a': {\n        'c': 'e'\n    },\n    'b': {\n        'd': 'f'\n    }\n} %}\n\n{{ array|yaml_encode(inline = 0) }}\n{# output:\n   { a: { c: e }, b: { d: f } } #}\n\n{{ array|yaml_encode(inline = 1) }}\n{# output:\n   a: { c: e }\n   b: { d: f } #}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$object = new \\stdClass();\n$object->foo = 'bar';\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ object|yaml_encode(dumpObjects = false) }}\n{# output: null #}\n\n{{ object|yaml_encode(dumpObjects = true) }}\n{# output: !php/object 'O:8:\"stdClass\":1:{s:5:\"foo\";s:7:\"bar\";}' #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ value|yaml_dump(inline = 0, dumpObjects = false) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% set array = {\n    'a': {\n        'c': 'e'\n    },\n    'b': {\n        'd': 'f'\n    }\n} %}\n\n{{ array|yaml_dump(inline = 0) }}\n{# output:\n   %array% { a: { c: e }, b: { d: f } } #}\n\n{{ array|yaml_dump(inline = 1) }}\n{# output:\n   %array% a: { c: e }\n   b: { d: f } #}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$object = new \\stdClass();\n$object->foo = 'bar';\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ object|yaml_dump(dumpObjects = false) }}\n{# output: %object% null #}\n\n{{ object|yaml_dump(dumpObjects = true) }}\n{# output: %object% !php/object 'O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"bar\";}' #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ class|abbr_class }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ 'App\\\\Entity\\\\Product'|abbr_class }}",
+      "language": "unknown"
+    },
+    {
+      "code": "<abbr title=\"App\\Entity\\Product\">Product</abbr>",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ method|abbr_method }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ 'App\\\\Controller\\\\ProductController::list'|abbr_method }}",
+      "language": "unknown"
+    },
+    {
+      "code": "<abbr title=\"App\\Controller\\ProductController\">ProductController</abbr>::list()",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ args|format_args }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ args|format_args_as_text }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ file|file_excerpt(line, srcContext = 3) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ '/path/to/file.txt'|file_excerpt(line = 4, srcContext = 1) }}\n{# output: #}\n<ol start=\"3\">\n    <li><a class=\"anchor\" id=\"line3\"></a><code>c</code></li>\n    <li class=\"selected\"><a class=\"anchor\" id=\"line4\"></a><code>d</code></li>\n    <li><a class=\"anchor\" id=\"line5\"></a><code>e</code></li>\n</ol>\n\n{{ '/path/to/file.txt'|file_excerpt(line = 1, srcContext = 0) }}\n{# output: #}\n<ol start=\"1\">\n    <li class=\"selected\"><a class=\"anchor\" id=\"line1\"></a><code>a</code></li>\n</ol>",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ file|format_file(line, text = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ '/path/to/file.txt'|format_file(line = 1, text = \"my_text\") }}\n{# output: #}\n<a href=\"/path/to/file.txt#L1\"\n    title=\"Click to open this file\" class=\"file_link\">my_text at line 1\n</a>\n\n{{ \"/path/to/file.txt\"|format_file(line = 3) }}\n{# output: #}\n<a href=\"/path/to/file.txt&amp;line=3\"\n    title=\"Click to open this file\" class=\"file_link\">/path/to/file.txt at line 3\n</a>",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ text|format_file_from_text }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ file|file_link(line) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ 'path/to/file/file.txt'|file_link(line = 3) }}\n{# output: file://path/to/file/file.txt#L3 #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ file|file_relative }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ '/var/www/blog/templates/admin/index.html.twig'|file_relative }}\n{# if project root dir is '/var/www/blog/', it returns 'templates/admin/index.html.twig' #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ object|serialize(format = 'json', context = []) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "$object = new \\stdClass();\n$object->foo = 'bar';\n$object->content = [];\n$object->createdAt = new \\DateTime('2024-11-30');",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ object|serialize(format = 'json', context = {\n    'datetime_format': 'D, Y-m-d',\n    'empty_array_as_object': true,\n}) }}\n{# output: {\"foo\":\"bar\",\"content\":{},\"createdAt\":\"Sat, 2024-11-30\"} #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ text|emojify(catalog = null) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ ':+1:'|emojify }}                 {# renders: 👍 #}\n{{ ':+1:'|emojify('github') }}       {# renders: 👍 #}\n{{ ':thumbsup:'|emojify('gitlab') }} {# renders: 👍 #}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% form_theme form resources %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% trans with vars from domain into locale %}{% endtrans %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% trans_default_domain domain %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% stopwatch 'event_name' %}...{% endstopwatch %}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "Search Symfony Docs Version: 8.1 8.0 7.4 (dev) 7.3 (current) 6.4 7.2 7.1 7.0 6.3 6.2 6.1 6.0 5.x 4.x 3.x 2.x Table of Contents Functions render render_esi fragment_uri controller asset asset_version csrf_token is_granted is_granted_for_user logout_path logout_url path url absolute_url relative_path expression impersonation_path impersonation_url impersonation_exit_path impersonation_exit_url t importmap Form Related Functions Filters humanize trans sanitize_html yaml_encode yaml_dump abbr_class abbr_method format_args format_args_as_text file_excerpt format_file format_file_from_text file_link file_relative serialize emojify Tags form_theme trans trans_default_domain stopwatch Tests Global Variables app Twig Extensions Defined by Symfony Edit this page Twig is the template engine used in Symfony applications. There are tens of default filters and functions defined by Twig, but Symfony also defines some filters, functions and tags to integrate the various Symfony components with Twig templates. This article explains them all. Tip If these extensions provided by Symfony are not enough, you can create a custom Twig extension to define even more filters and functions. Functions render 1 {{ render(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] Makes a request to the given internal URI or controller and returns the result. The render strategy can be specified in the strategy key of the options. It's commonly used to embed controllers in templates. render_esi 1 {{ render_esi(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] It's similar to the render function and defines the same arguments. However, it generates an ESI tag when ESI support is enabled or falls back to the behavior of render otherwise. Tip The render_esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render_*() functions. fragment_uri 1 {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }} controller type: ControllerReference absolute (optional) type: boolean default: false strict (optional) type: boolean default: true sign (optional) type: boolean default: true Generates the URI of a fragment. controller 1 {{ controller(controller, attributes = [], query = []) }} controller type: string attributes (optional) type: array default: [] query (optional) type: array default: [] Returns an instance of ControllerReference to be used with functions like render() and render_esi(). 1 2 {{ render(controller('App\\\\Controller\\\\BlogController:latest', {max: 3})) }} {# output: the content returned by the controller method; e.g. a rendered Twig template #} asset 1 {{ asset(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null 1 2 3 4 5 6 7 # config/packages/framework.yaml framework: # ... assets: packages: foo_package: base_path: /avatars 1 2 3 {# the image lives at \"public/avatars/avatar.png\" #} {{ asset(path = 'avatar.png', packageName = 'foo_package') }} {# output: /avatars/avatar.png #} Returns the public path of the given asset path (which can be a CSS file, a JavaScript file, an image path, etc.). This function takes into account where the application is installed (e.g. in case the project is accessed in a host subdirectory) and the optional asset package base path. Symfony provides various cache busting implementations via the assets.version, assets.version_strategy, and assets.json_manifest_path configuration options. See also Read more about linking to web assets from templates. asset_version 1 {{ asset_version(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null Returns the current version of the package, more information in Creating and Using Templates. csrf_token 1 {{ csrf_token(intention) }} intention type: string - an arbitrary string used to identify the token. Renders a CSRF token. Use this function if you want CSRF protection in a regular HTML form not managed by the Symfony Form component. 1 2 3 {{ csrf_token('my_form') }} {# output: a random alphanumeric string like: a.YOosAd0fhT7BEuUCFbROzrvgkW8kpEmBDQ_DKRMUi2o.Va8ZQKt5_2qoa7dLW-02_PLYwDBx9nnWOluUHUFCwC5Zo0VuuVfQCqtngg #} is_granted 1 {{ is_granted(role, object = null) }} role type: string object (optional) type: object Returns true if the current user has the given role. Optionally, an object can be passed to be used by the voter. More information can be found in Security. is_granted_for_user 7.3 The is_granted_for_user() function was introduced in Symfony 7.3. 1 {{ is_granted_for_user(user, attribute, subject = null) }} user type: object attribute type: string subject (optional) type: object Returns true if the user is authorized for the specified attribute. Optionally, an object can be passed to be used by the voter. More information can be found in Security. logout_path 1 {{ logout_path(key = null) }} key (optional) type: string Generates a relative logout URL for the given firewall. If no key is provided, the URL is generated for the current firewall the user is logged into. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_path(key = 'main') }} {# output: /logout #} {{ logout_path(key = 'othername') }} {# output: /other/logout #} logout_url 1 {{ logout_url(key = null) }} key (optional) type: string Equal to the logout_path function, but it'll generate an absolute URL instead of a relative one. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_url(key = 'main') }} {# output: http://example.org/logout #} {{ logout_url(key = 'othername') }} {# output: http://example.org/other/logout #} path 1 {{ path(route_name, route_parameters = [], relative = false) }} name type: string parameters (optional) type: array default: [] relative (optional) type: boolean default: false Returns the relative URL (without the scheme and host) for the given route. If relative is enabled, it'll create a path relative to the current path. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = false) }} {# output: /blog/3 #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = true) }} {# output: blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. url 1 {{ url(route_name, route_parameters = [], schemeRelative = false) }} name type: string parameters (optional) type: array default: [] schemeRelative (optional) type: boolean default: false Returns the absolute URL (with scheme and host) for the given route. If schemeRelative is enabled, it'll create a scheme-relative URL. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = false) }} {# output: http://example.org/blog/3 #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = true) }} {# output: //example.org/blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. absolute_url 1 {{ absolute_url(path) }} path type: string Returns the absolute URL (with scheme and host) from the passed relative path. Combine it with the asset() function to generate absolute URLs for web assets. Read more about Linking to CSS, JavaScript and Image Assets. relative_path 1 {{ relative_path(path) }} path type: string Returns the relative path from the passed absolute URL. For example, assume you're on the following page in your app: http://example.com/products/hover-board. 1 2 3 4 5 {{ relative_path('http://example.com/human.txt') }} {# ../human.txt #} {{ relative_path('http://example.com/products/products_icon.png') }} {# products_icon.png #} expression Creates an Expression related to the ExpressionLanguage component. 1 2 {{ expression(1 + 2) }} {# output: 3 #} impersonation_path 1 {{ impersonation_path(identifier) }} identifier type: string Generates a URL that you can visit to impersonate a user, identified by the identifier argument. impersonation_url 1 {{ impersonation_url(identifier) }} identifier type: string It's similar to the impersonation_path function, but it generates absolute URLs instead of relative URLs. impersonation_exit_path 1 {{ impersonation_exit_path(exitTo = null) }} exitTo (optional) type: string Generates a URL that you can visit to exit user impersonation. After exiting impersonation, the user is redirected to the current URI. If you prefer to redirect to a different URI, define its value in the exitTo argument. If no user is being impersonated, the function returns an empty string. impersonation_exit_url 1 {{ impersonation_exit_url(exitTo = null) }} exitTo (optional) type: string It's similar to the impersonation_exit_path function, but it generates absolute URLs instead of relative URLs. t 1 {{ t(message, parameters = [], domain = 'messages')|trans }} message type: string parameters (optional) type: array default: [] domain (optional) type: string default: messages Creates a Translatable object that can be passed to the trans filter. YAML XML PHP 1 2 # translations/blog.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/blog.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/blog.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ t(message = 'message', parameters = {'%name%': 'John'}, domain = 'blog')|trans }} {# output: Hello John #} importmap Outputs the importmap & a few other items when using the Asset component. Form Related Functions The following functions related to Symfony Forms are also available. They are explained in the article about customizing form rendering: form() form_start() form_end() form_widget() form_errors() form_label() form_help() form_row() form_rest() field_name() field_id() field_value() field_label() field_help() field_errors() field_choices() Filters humanize 1 {{ text|humanize }} text type: string Transforms the given string into a human readable string (by replacing underscores with spaces, capitalizing the string, etc.) It's useful e.g. when displaying the names of PHP properties/variables to end users: 1 2 3 4 5 6 {{ 'dateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'DateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'date-of-birth'|humanize }} {# renders: Date-of-birth #} {{ 'date_of_birth'|humanize }} {# renders: Date of birth #} {{ 'date of birth'|humanize }} {# renders: Date of birth #} {{ 'Date Of Birth'|humanize }} {# renders: Date of birth #} trans 1 {{ message|trans(arguments = [], domain = null, locale = null) }} message type: string | Translatable arguments (optional) type: array default: [] domain (optional) type: string default: null locale (optional) type: string default: null Translates the text into the current language. More information in Translation Filters. YAML XML PHP 1 2 # translations/messages.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/messages.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/messages.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ 'message'|trans(arguments = {'%name%': 'John'}, domain = 'messages', locale = 'en') }} {# output: Hello John #} sanitize_html 1 {{ body|sanitize_html(sanitizer = \"default\") }} body type: string sanitizer (optional) type: string default: \"default\" Sanitizes the text using the HTML Sanitizer component. More information in HTML Sanitizer. yaml_encode 1 {{ input|yaml_encode(inline = 0, dumpObjects = false) }} input type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Transforms the input into YAML syntax. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_encode(inline = 0) }} {# output: { a: { c: e }, b: { d: f } } #} {{ array|yaml_encode(inline = 1) }} {# output: a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_encode(dumpObjects = false) }} {# output: null #} {{ object|yaml_encode(dumpObjects = true) }} {# output: !php/object 'O:8:\"stdClass\":1:{s:5:\"foo\";s:7:\"bar\";}' #} See The Yaml Component for more information. yaml_dump 1 {{ value|yaml_dump(inline = 0, dumpObjects = false) }} value type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Does the same as yaml_encode(), but includes the type in the output. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_dump(inline = 0) }} {# output: %array% { a: { c: e }, b: { d: f } } #} {{ array|yaml_dump(inline = 1) }} {# output: %array% a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_dump(dumpObjects = false) }} {# output: %object% null #} {{ object|yaml_dump(dumpObjects = true) }} {# output: %object% !php/object 'O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"bar\";}' #} abbr_class 1 {{ class|abbr_class }} class type: string Generates an <abbr> element with the short name of a PHP class (the FQCN will be shown in a tooltip when a user hovers over the element). 1 {{ 'App\\\\Entity\\\\Product'|abbr_class }} The above example will be rendered as: 1 <abbr title=\"App\\Entity\\Product\">Product</abbr> abbr_method 1 {{ method|abbr_method }} method type: string Generates an <abbr> element using the FQCN::method() syntax. If method is Closure, Closure will be used instead and if method doesn't have a class name, it's shown as a function (method()). 1 {{ 'App\\\\Controller\\\\ProductController::list'|abbr_method }} The above example will be rendered as: 1 <abbr title=\"App\\Controller\\ProductController\">ProductController</abbr>::list() format_args 1 {{ args|format_args }} args type: array Generates a string with the arguments and their types (within <em> elements). format_args_as_text 1 {{ args|format_args_as_text }} args type: array Equal to the format_args filter, but without using HTML tags. file_excerpt 1 {{ file|file_excerpt(line, srcContext = 3) }} file type: string line type: integer srcContext (optional) type: integer Generates an excerpt of a code file around the given line number. The srcContext argument defines the total number of lines to display around the given line number (use -1 to display the whole file). Consider the following as the content of file.txt: 1 2 3 4 5 a b c d e 1 2 3 4 5 6 7 8 9 10 11 12 13 {{ '/path/to/file.txt'|file_excerpt(line = 4, srcContext = 1) }} {# output: #} <ol start=\"3\"> <li><a class=\"anchor\" id=\"line3\"></a><code>c</code></li> <li class=\"selected\"><a class=\"anchor\" id=\"line4\"></a><code>d</code></li> <li><a class=\"anchor\" id=\"line5\"></a><code>e</code></li> </ol> {{ '/path/to/file.txt'|file_excerpt(line = 1, srcContext = 0) }} {# output: #} <ol start=\"1\"> <li class=\"selected\"><a class=\"anchor\" id=\"line1\"></a><code>a</code></li> </ol> format_file 1 {{ file|format_file(line, text = null) }} file type: string line type: integer text (optional) type: string default: null Generates the file path inside an <a> element. If the path is inside the kernel root directory, the kernel root directory path is replaced by kernel.project_dir (showing the full path in a tooltip on hover). 1 2 3 4 5 6 7 8 9 10 11 {{ '/path/to/file.txt'|format_file(line = 1, text = \"my_text\") }} {# output: #} <a href=\"/path/to/file.txt#L1\" title=\"Click to open this file\" class=\"file_link\">my_text at line 1 </a> {{ \"/path/to/file.txt\"|format_file(line = 3) }} {# output: #} <a href=\"/path/to/file.txt&amp;line=3\" title=\"Click to open this file\" class=\"file_link\">/path/to/file.txt at line 3 </a> Tip If you set the framework.ide option, the generated links will change to open the file in that IDE/editor. For example, when using PhpStorm, the <a href=\"/path/to/file.txt&amp;line=3\" link will become <a href=\"phpstorm://open?file=/path/to/file.txt&amp;line=3\". format_file_from_text 1 {{ text|format_file_from_text }} text type: string Uses format_file to improve the output of default PHP errors. file_link 1 {{ file|file_link(line) }} file type: string line type: integer Generates a link to the provided file and line number using a preconfigured scheme. 1 2 {{ 'path/to/file/file.txt'|file_link(line = 3) }} {# output: file://path/to/file/file.txt#L3 #} file_relative 1 {{ file|file_relative }} file type: string It transforms the given absolute file path into a new file path relative to project's root directory: 1 2 {{ '/var/www/blog/templates/admin/index.html.twig'|file_relative }} {# if project root dir is '/var/www/blog/', it returns 'templates/admin/index.html.twig' #} If the given file path is out of the project directory, a null value will be returned. serialize 1 {{ object|serialize(format = 'json', context = []) }} object type: mixed format (optional) type: string context (optional) type: array Accepts any data that can be serialized by the Serializer component and returns a serialized string in the specified format. For example: 1 2 3 4 $object = new \\stdClass(); $object->foo = 'bar'; $object->content = []; $object->createdAt = new \\DateTime('2024-11-30'); 1 2 3 4 5 {{ object|serialize(format = 'json', context = { 'datetime_format': 'D, Y-m-d', 'empty_array_as_object': true, }) }} {# output: {\"foo\":\"bar\",\"content\":{},\"createdAt\":\"Sat, 2024-11-30\"} #} emojify 7.1 The emojify filter was introduced in Symfony 7.1. 1 {{ text|emojify(catalog = null) }} text type: string catalog (optional) type: string | null The emoji set used to generate the textual representation (slack, github, gitlab, etc.) It transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋): 1 2 3 {{ ':+1:'|emojify }} {# renders: 👍 #} {{ ':+1:'|emojify('github') }} {# renders: 👍 #} {{ ':thumbsup:'|emojify('gitlab') }} {# renders: 👍 #} Tags form_theme 1 {% form_theme form resources %} form type: FormView resources type: array | string Sets the resources to override the form theme for the given form view instance. You can use _self as resources to set it to the current resource. More information in How to Customize Form Rendering. trans 1 {% trans with vars from domain into locale %}{% endtrans %} vars (optional) type: array default: [] domain (optional) type: string default: string locale (optional) type: string default: string Renders the translation of the content. More information in Translations. trans_default_domain 1 {% trans_default_domain domain %} domain type: string This will set the default domain in the current template. stopwatch 1 {% stopwatch 'event_name' %}...{% endstopwatch %} This measures the time and memory used to execute some code in the template and displays it in the Symfony profiler. See how to profile Symfony applications. Tests The following tests related to Symfony Forms are available. They are explained in the article about customizing form rendering: selectedchoice() rootform() Global Variables app The app variable is injected automatically by Symfony in all templates and provides access to lots of useful application information. Read more about the Twig global app variable. This work, including the code samples, is licensed under a Creative Commons BY-SA 3.0 license. TOC Search Version Symfony 7.3 backers Symfony Code Performance Profiling Be safe against critical risks to your projects and businesses",
+      "code": "1"
+    },
+    {
+      "description": "Search Symfony Docs Version: 8.1 8.0 7.4 (dev) 7.3 (current) 6.4 7.2 7.1 7.0 6.3 6.2 6.1 6.0 5.x 4.x 3.x 2.x Table of Contents Functions render render_esi fragment_uri controller asset asset_version csrf_token is_granted is_granted_for_user logout_path logout_url path url absolute_url relative_path expression impersonation_path impersonation_url impersonation_exit_path impersonation_exit_url t importmap Form Related Functions Filters humanize trans sanitize_html yaml_encode yaml_dump abbr_class abbr_method format_args format_args_as_text file_excerpt format_file format_file_from_text file_link file_relative serialize emojify Tags form_theme trans trans_default_domain stopwatch Tests Global Variables app Twig Extensions Defined by Symfony Edit this page Twig is the template engine used in Symfony applications. There are tens of default filters and functions defined by Twig, but Symfony also defines some filters, functions and tags to integrate the various Symfony components with Twig templates. This article explains them all. Tip If these extensions provided by Symfony are not enough, you can create a custom Twig extension to define even more filters and functions. Functions render 1 {{ render(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] Makes a request to the given internal URI or controller and returns the result. The render strategy can be specified in the strategy key of the options. It's commonly used to embed controllers in templates. render_esi 1 {{ render_esi(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] It's similar to the render function and defines the same arguments. However, it generates an ESI tag when ESI support is enabled or falls back to the behavior of render otherwise. Tip The render_esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render_*() functions. fragment_uri 1 {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }} controller type: ControllerReference absolute (optional) type: boolean default: false strict (optional) type: boolean default: true sign (optional) type: boolean default: true Generates the URI of a fragment. controller 1 {{ controller(controller, attributes = [], query = []) }} controller type: string attributes (optional) type: array default: [] query (optional) type: array default: [] Returns an instance of ControllerReference to be used with functions like render() and render_esi(). 1 2 {{ render(controller('App\\\\Controller\\\\BlogController:latest', {max: 3})) }} {# output: the content returned by the controller method; e.g. a rendered Twig template #} asset 1 {{ asset(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null 1 2 3 4 5 6 7 # config/packages/framework.yaml framework: # ... assets: packages: foo_package: base_path: /avatars 1 2 3 {# the image lives at \"public/avatars/avatar.png\" #} {{ asset(path = 'avatar.png', packageName = 'foo_package') }} {# output: /avatars/avatar.png #} Returns the public path of the given asset path (which can be a CSS file, a JavaScript file, an image path, etc.). This function takes into account where the application is installed (e.g. in case the project is accessed in a host subdirectory) and the optional asset package base path. Symfony provides various cache busting implementations via the assets.version, assets.version_strategy, and assets.json_manifest_path configuration options. See also Read more about linking to web assets from templates. asset_version 1 {{ asset_version(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null Returns the current version of the package, more information in Creating and Using Templates. csrf_token 1 {{ csrf_token(intention) }} intention type: string - an arbitrary string used to identify the token. Renders a CSRF token. Use this function if you want CSRF protection in a regular HTML form not managed by the Symfony Form component. 1 2 3 {{ csrf_token('my_form') }} {# output: a random alphanumeric string like: a.YOosAd0fhT7BEuUCFbROzrvgkW8kpEmBDQ_DKRMUi2o.Va8ZQKt5_2qoa7dLW-02_PLYwDBx9nnWOluUHUFCwC5Zo0VuuVfQCqtngg #} is_granted 1 {{ is_granted(role, object = null) }} role type: string object (optional) type: object Returns true if the current user has the given role. Optionally, an object can be passed to be used by the voter. More information can be found in Security. is_granted_for_user 7.3 The is_granted_for_user() function was introduced in Symfony 7.3. 1 {{ is_granted_for_user(user, attribute, subject = null) }} user type: object attribute type: string subject (optional) type: object Returns true if the user is authorized for the specified attribute. Optionally, an object can be passed to be used by the voter. More information can be found in Security. logout_path 1 {{ logout_path(key = null) }} key (optional) type: string Generates a relative logout URL for the given firewall. If no key is provided, the URL is generated for the current firewall the user is logged into. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_path(key = 'main') }} {# output: /logout #} {{ logout_path(key = 'othername') }} {# output: /other/logout #} logout_url 1 {{ logout_url(key = null) }} key (optional) type: string Equal to the logout_path function, but it'll generate an absolute URL instead of a relative one. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_url(key = 'main') }} {# output: http://example.org/logout #} {{ logout_url(key = 'othername') }} {# output: http://example.org/other/logout #} path 1 {{ path(route_name, route_parameters = [], relative = false) }} name type: string parameters (optional) type: array default: [] relative (optional) type: boolean default: false Returns the relative URL (without the scheme and host) for the given route. If relative is enabled, it'll create a path relative to the current path. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = false) }} {# output: /blog/3 #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = true) }} {# output: blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. url 1 {{ url(route_name, route_parameters = [], schemeRelative = false) }} name type: string parameters (optional) type: array default: [] schemeRelative (optional) type: boolean default: false Returns the absolute URL (with scheme and host) for the given route. If schemeRelative is enabled, it'll create a scheme-relative URL. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = false) }} {# output: http://example.org/blog/3 #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = true) }} {# output: //example.org/blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. absolute_url 1 {{ absolute_url(path) }} path type: string Returns the absolute URL (with scheme and host) from the passed relative path. Combine it with the asset() function to generate absolute URLs for web assets. Read more about Linking to CSS, JavaScript and Image Assets. relative_path 1 {{ relative_path(path) }} path type: string Returns the relative path from the passed absolute URL. For example, assume you're on the following page in your app: http://example.com/products/hover-board. 1 2 3 4 5 {{ relative_path('http://example.com/human.txt') }} {# ../human.txt #} {{ relative_path('http://example.com/products/products_icon.png') }} {# products_icon.png #} expression Creates an Expression related to the ExpressionLanguage component. 1 2 {{ expression(1 + 2) }} {# output: 3 #} impersonation_path 1 {{ impersonation_path(identifier) }} identifier type: string Generates a URL that you can visit to impersonate a user, identified by the identifier argument. impersonation_url 1 {{ impersonation_url(identifier) }} identifier type: string It's similar to the impersonation_path function, but it generates absolute URLs instead of relative URLs. impersonation_exit_path 1 {{ impersonation_exit_path(exitTo = null) }} exitTo (optional) type: string Generates a URL that you can visit to exit user impersonation. After exiting impersonation, the user is redirected to the current URI. If you prefer to redirect to a different URI, define its value in the exitTo argument. If no user is being impersonated, the function returns an empty string. impersonation_exit_url 1 {{ impersonation_exit_url(exitTo = null) }} exitTo (optional) type: string It's similar to the impersonation_exit_path function, but it generates absolute URLs instead of relative URLs. t 1 {{ t(message, parameters = [], domain = 'messages')|trans }} message type: string parameters (optional) type: array default: [] domain (optional) type: string default: messages Creates a Translatable object that can be passed to the trans filter. YAML XML PHP 1 2 # translations/blog.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/blog.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/blog.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ t(message = 'message', parameters = {'%name%': 'John'}, domain = 'blog')|trans }} {# output: Hello John #} importmap Outputs the importmap & a few other items when using the Asset component. Form Related Functions The following functions related to Symfony Forms are also available. They are explained in the article about customizing form rendering: form() form_start() form_end() form_widget() form_errors() form_label() form_help() form_row() form_rest() field_name() field_id() field_value() field_label() field_help() field_errors() field_choices() Filters humanize 1 {{ text|humanize }} text type: string Transforms the given string into a human readable string (by replacing underscores with spaces, capitalizing the string, etc.) It's useful e.g. when displaying the names of PHP properties/variables to end users: 1 2 3 4 5 6 {{ 'dateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'DateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'date-of-birth'|humanize }} {# renders: Date-of-birth #} {{ 'date_of_birth'|humanize }} {# renders: Date of birth #} {{ 'date of birth'|humanize }} {# renders: Date of birth #} {{ 'Date Of Birth'|humanize }} {# renders: Date of birth #} trans 1 {{ message|trans(arguments = [], domain = null, locale = null) }} message type: string | Translatable arguments (optional) type: array default: [] domain (optional) type: string default: null locale (optional) type: string default: null Translates the text into the current language. More information in Translation Filters. YAML XML PHP 1 2 # translations/messages.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/messages.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/messages.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ 'message'|trans(arguments = {'%name%': 'John'}, domain = 'messages', locale = 'en') }} {# output: Hello John #} sanitize_html 1 {{ body|sanitize_html(sanitizer = \"default\") }} body type: string sanitizer (optional) type: string default: \"default\" Sanitizes the text using the HTML Sanitizer component. More information in HTML Sanitizer. yaml_encode 1 {{ input|yaml_encode(inline = 0, dumpObjects = false) }} input type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Transforms the input into YAML syntax. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_encode(inline = 0) }} {# output: { a: { c: e }, b: { d: f } } #} {{ array|yaml_encode(inline = 1) }} {# output: a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_encode(dumpObjects = false) }} {# output: null #} {{ object|yaml_encode(dumpObjects = true) }} {# output: !php/object 'O:8:\"stdClass\":1:{s:5:\"foo\";s:7:\"bar\";}' #} See The Yaml Component for more information. yaml_dump 1 {{ value|yaml_dump(inline = 0, dumpObjects = false) }} value type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Does the same as yaml_encode(), but includes the type in the output. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_dump(inline = 0) }} {# output: %array% { a: { c: e }, b: { d: f } } #} {{ array|yaml_dump(inline = 1) }} {# output: %array% a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_dump(dumpObjects = false) }} {# output: %object% null #} {{ object|yaml_dump(dumpObjects = true) }} {# output: %object% !php/object 'O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"bar\";}' #} abbr_class 1 {{ class|abbr_class }} class type: string Generates an <abbr> element with the short name of a PHP class (the FQCN will be shown in a tooltip when a user hovers over the element). 1 {{ 'App\\\\Entity\\\\Product'|abbr_class }} The above example will be rendered as: 1 <abbr title=\"App\\Entity\\Product\">Product</abbr> abbr_method 1 {{ method|abbr_method }} method type: string Generates an <abbr> element using the FQCN::method() syntax. If method is Closure, Closure will be used instead and if method doesn't have a class name, it's shown as a function (method()). 1 {{ 'App\\\\Controller\\\\ProductController::list'|abbr_method }} The above example will be rendered as: 1 <abbr title=\"App\\Controller\\ProductController\">ProductController</abbr>::list() format_args 1 {{ args|format_args }} args type: array Generates a string with the arguments and their types (within <em> elements). format_args_as_text 1 {{ args|format_args_as_text }} args type: array Equal to the format_args filter, but without using HTML tags. file_excerpt 1 {{ file|file_excerpt(line, srcContext = 3) }} file type: string line type: integer srcContext (optional) type: integer Generates an excerpt of a code file around the given line number. The srcContext argument defines the total number of lines to display around the given line number (use -1 to display the whole file). Consider the following as the content of file.txt: 1 2 3 4 5 a b c d e 1 2 3 4 5 6 7 8 9 10 11 12 13 {{ '/path/to/file.txt'|file_excerpt(line = 4, srcContext = 1) }} {# output: #} <ol start=\"3\"> <li><a class=\"anchor\" id=\"line3\"></a><code>c</code></li> <li class=\"selected\"><a class=\"anchor\" id=\"line4\"></a><code>d</code></li> <li><a class=\"anchor\" id=\"line5\"></a><code>e</code></li> </ol> {{ '/path/to/file.txt'|file_excerpt(line = 1, srcContext = 0) }} {# output: #} <ol start=\"1\"> <li class=\"selected\"><a class=\"anchor\" id=\"line1\"></a><code>a</code></li> </ol> format_file 1 {{ file|format_file(line, text = null) }} file type: string line type: integer text (optional) type: string default: null Generates the file path inside an <a> element. If the path is inside the kernel root directory, the kernel root directory path is replaced by kernel.project_dir (showing the full path in a tooltip on hover). 1 2 3 4 5 6 7 8 9 10 11 {{ '/path/to/file.txt'|format_file(line = 1, text = \"my_text\") }} {# output: #} <a href=\"/path/to/file.txt#L1\" title=\"Click to open this file\" class=\"file_link\">my_text at line 1 </a> {{ \"/path/to/file.txt\"|format_file(line = 3) }} {# output: #} <a href=\"/path/to/file.txt&amp;line=3\" title=\"Click to open this file\" class=\"file_link\">/path/to/file.txt at line 3 </a> Tip If you set the framework.ide option, the generated links will change to open the file in that IDE/editor. For example, when using PhpStorm, the <a href=\"/path/to/file.txt&amp;line=3\" link will become <a href=\"phpstorm://open?file=/path/to/file.txt&amp;line=3\". format_file_from_text 1 {{ text|format_file_from_text }} text type: string Uses format_file to improve the output of default PHP errors. file_link 1 {{ file|file_link(line) }} file type: string line type: integer Generates a link to the provided file and line number using a preconfigured scheme. 1 2 {{ 'path/to/file/file.txt'|file_link(line = 3) }} {# output: file://path/to/file/file.txt#L3 #} file_relative 1 {{ file|file_relative }} file type: string It transforms the given absolute file path into a new file path relative to project's root directory: 1 2 {{ '/var/www/blog/templates/admin/index.html.twig'|file_relative }} {# if project root dir is '/var/www/blog/', it returns 'templates/admin/index.html.twig' #} If the given file path is out of the project directory, a null value will be returned. serialize 1 {{ object|serialize(format = 'json', context = []) }} object type: mixed format (optional) type: string context (optional) type: array Accepts any data that can be serialized by the Serializer component and returns a serialized string in the specified format. For example: 1 2 3 4 $object = new \\stdClass(); $object->foo = 'bar'; $object->content = []; $object->createdAt = new \\DateTime('2024-11-30'); 1 2 3 4 5 {{ object|serialize(format = 'json', context = { 'datetime_format': 'D, Y-m-d', 'empty_array_as_object': true, }) }} {# output: {\"foo\":\"bar\",\"content\":{},\"createdAt\":\"Sat, 2024-11-30\"} #} emojify 7.1 The emojify filter was introduced in Symfony 7.1. 1 {{ text|emojify(catalog = null) }} text type: string catalog (optional) type: string | null The emoji set used to generate the textual representation (slack, github, gitlab, etc.) It transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋): 1 2 3 {{ ':+1:'|emojify }} {# renders: 👍 #} {{ ':+1:'|emojify('github') }} {# renders: 👍 #} {{ ':thumbsup:'|emojify('gitlab') }} {# renders: 👍 #} Tags form_theme 1 {% form_theme form resources %} form type: FormView resources type: array | string Sets the resources to override the form theme for the given form view instance. You can use _self as resources to set it to the current resource. More information in How to Customize Form Rendering. trans 1 {% trans with vars from domain into locale %}{% endtrans %} vars (optional) type: array default: [] domain (optional) type: string default: string locale (optional) type: string default: string Renders the translation of the content. More information in Translations. trans_default_domain 1 {% trans_default_domain domain %} domain type: string This will set the default domain in the current template. stopwatch 1 {% stopwatch 'event_name' %}...{% endstopwatch %} This measures the time and memory used to execute some code in the template and displays it in the Symfony profiler. See how to profile Symfony applications. Tests The following tests related to Symfony Forms are available. They are explained in the article about customizing form rendering: selectedchoice() rootform() Global Variables app The app variable is injected automatically by Symfony in all templates and provides access to lots of useful application information. Read more about the Twig global app variable. This work, including the code samples, is licensed under a Creative Commons BY-SA 3.0 license. TOC Search Version Symfony 7.3 backers Symfony Code Performance Profiling Be safe against critical risks to your projects and businesses",
+      "code": "1"
+    },
+    {
+      "description": "Twig is the template engine used in Symfony applications. There are tens of default filters and functions defined by Twig, but Symfony also defines some filters, functions and tags to integrate the various Symfony components with Twig templates. This article explains them all. Tip If these extensions provided by Symfony are not enough, you can create a custom Twig extension to define even more filters and functions. Functions render 1 {{ render(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] Makes a request to the given internal URI or controller and returns the result. The render strategy can be specified in the strategy key of the options. It's commonly used to embed controllers in templates. render_esi 1 {{ render_esi(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] It's similar to the render function and defines the same arguments. However, it generates an ESI tag when ESI support is enabled or falls back to the behavior of render otherwise. Tip The render_esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render_*() functions. fragment_uri 1 {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }} controller type: ControllerReference absolute (optional) type: boolean default: false strict (optional) type: boolean default: true sign (optional) type: boolean default: true Generates the URI of a fragment. controller 1 {{ controller(controller, attributes = [], query = []) }} controller type: string attributes (optional) type: array default: [] query (optional) type: array default: [] Returns an instance of ControllerReference to be used with functions like render() and render_esi(). 1 2 {{ render(controller('App\\\\Controller\\\\BlogController:latest', {max: 3})) }} {# output: the content returned by the controller method; e.g. a rendered Twig template #} asset 1 {{ asset(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null 1 2 3 4 5 6 7 # config/packages/framework.yaml framework: # ... assets: packages: foo_package: base_path: /avatars 1 2 3 {# the image lives at \"public/avatars/avatar.png\" #} {{ asset(path = 'avatar.png', packageName = 'foo_package') }} {# output: /avatars/avatar.png #} Returns the public path of the given asset path (which can be a CSS file, a JavaScript file, an image path, etc.). This function takes into account where the application is installed (e.g. in case the project is accessed in a host subdirectory) and the optional asset package base path. Symfony provides various cache busting implementations via the assets.version, assets.version_strategy, and assets.json_manifest_path configuration options. See also Read more about linking to web assets from templates. asset_version 1 {{ asset_version(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null Returns the current version of the package, more information in Creating and Using Templates. csrf_token 1 {{ csrf_token(intention) }} intention type: string - an arbitrary string used to identify the token. Renders a CSRF token. Use this function if you want CSRF protection in a regular HTML form not managed by the Symfony Form component. 1 2 3 {{ csrf_token('my_form') }} {# output: a random alphanumeric string like: a.YOosAd0fhT7BEuUCFbROzrvgkW8kpEmBDQ_DKRMUi2o.Va8ZQKt5_2qoa7dLW-02_PLYwDBx9nnWOluUHUFCwC5Zo0VuuVfQCqtngg #} is_granted 1 {{ is_granted(role, object = null) }} role type: string object (optional) type: object Returns true if the current user has the given role. Optionally, an object can be passed to be used by the voter. More information can be found in Security. is_granted_for_user 7.3 The is_granted_for_user() function was introduced in Symfony 7.3. 1 {{ is_granted_for_user(user, attribute, subject = null) }} user type: object attribute type: string subject (optional) type: object Returns true if the user is authorized for the specified attribute. Optionally, an object can be passed to be used by the voter. More information can be found in Security. logout_path 1 {{ logout_path(key = null) }} key (optional) type: string Generates a relative logout URL for the given firewall. If no key is provided, the URL is generated for the current firewall the user is logged into. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_path(key = 'main') }} {# output: /logout #} {{ logout_path(key = 'othername') }} {# output: /other/logout #} logout_url 1 {{ logout_url(key = null) }} key (optional) type: string Equal to the logout_path function, but it'll generate an absolute URL instead of a relative one. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_url(key = 'main') }} {# output: http://example.org/logout #} {{ logout_url(key = 'othername') }} {# output: http://example.org/other/logout #} path 1 {{ path(route_name, route_parameters = [], relative = false) }} name type: string parameters (optional) type: array default: [] relative (optional) type: boolean default: false Returns the relative URL (without the scheme and host) for the given route. If relative is enabled, it'll create a path relative to the current path. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = false) }} {# output: /blog/3 #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = true) }} {# output: blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. url 1 {{ url(route_name, route_parameters = [], schemeRelative = false) }} name type: string parameters (optional) type: array default: [] schemeRelative (optional) type: boolean default: false Returns the absolute URL (with scheme and host) for the given route. If schemeRelative is enabled, it'll create a scheme-relative URL. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = false) }} {# output: http://example.org/blog/3 #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = true) }} {# output: //example.org/blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. absolute_url 1 {{ absolute_url(path) }} path type: string Returns the absolute URL (with scheme and host) from the passed relative path. Combine it with the asset() function to generate absolute URLs for web assets. Read more about Linking to CSS, JavaScript and Image Assets. relative_path 1 {{ relative_path(path) }} path type: string Returns the relative path from the passed absolute URL. For example, assume you're on the following page in your app: http://example.com/products/hover-board. 1 2 3 4 5 {{ relative_path('http://example.com/human.txt') }} {# ../human.txt #} {{ relative_path('http://example.com/products/products_icon.png') }} {# products_icon.png #} expression Creates an Expression related to the ExpressionLanguage component. 1 2 {{ expression(1 + 2) }} {# output: 3 #} impersonation_path 1 {{ impersonation_path(identifier) }} identifier type: string Generates a URL that you can visit to impersonate a user, identified by the identifier argument. impersonation_url 1 {{ impersonation_url(identifier) }} identifier type: string It's similar to the impersonation_path function, but it generates absolute URLs instead of relative URLs. impersonation_exit_path 1 {{ impersonation_exit_path(exitTo = null) }} exitTo (optional) type: string Generates a URL that you can visit to exit user impersonation. After exiting impersonation, the user is redirected to the current URI. If you prefer to redirect to a different URI, define its value in the exitTo argument. If no user is being impersonated, the function returns an empty string. impersonation_exit_url 1 {{ impersonation_exit_url(exitTo = null) }} exitTo (optional) type: string It's similar to the impersonation_exit_path function, but it generates absolute URLs instead of relative URLs. t 1 {{ t(message, parameters = [], domain = 'messages')|trans }} message type: string parameters (optional) type: array default: [] domain (optional) type: string default: messages Creates a Translatable object that can be passed to the trans filter. YAML XML PHP 1 2 # translations/blog.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/blog.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/blog.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ t(message = 'message', parameters = {'%name%': 'John'}, domain = 'blog')|trans }} {# output: Hello John #} importmap Outputs the importmap & a few other items when using the Asset component. Form Related Functions The following functions related to Symfony Forms are also available. They are explained in the article about customizing form rendering: form() form_start() form_end() form_widget() form_errors() form_label() form_help() form_row() form_rest() field_name() field_id() field_value() field_label() field_help() field_errors() field_choices() Filters humanize 1 {{ text|humanize }} text type: string Transforms the given string into a human readable string (by replacing underscores with spaces, capitalizing the string, etc.) It's useful e.g. when displaying the names of PHP properties/variables to end users: 1 2 3 4 5 6 {{ 'dateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'DateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'date-of-birth'|humanize }} {# renders: Date-of-birth #} {{ 'date_of_birth'|humanize }} {# renders: Date of birth #} {{ 'date of birth'|humanize }} {# renders: Date of birth #} {{ 'Date Of Birth'|humanize }} {# renders: Date of birth #} trans 1 {{ message|trans(arguments = [], domain = null, locale = null) }} message type: string | Translatable arguments (optional) type: array default: [] domain (optional) type: string default: null locale (optional) type: string default: null Translates the text into the current language. More information in Translation Filters. YAML XML PHP 1 2 # translations/messages.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/messages.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/messages.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ 'message'|trans(arguments = {'%name%': 'John'}, domain = 'messages', locale = 'en') }} {# output: Hello John #} sanitize_html 1 {{ body|sanitize_html(sanitizer = \"default\") }} body type: string sanitizer (optional) type: string default: \"default\" Sanitizes the text using the HTML Sanitizer component. More information in HTML Sanitizer. yaml_encode 1 {{ input|yaml_encode(inline = 0, dumpObjects = false) }} input type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Transforms the input into YAML syntax. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_encode(inline = 0) }} {# output: { a: { c: e }, b: { d: f } } #} {{ array|yaml_encode(inline = 1) }} {# output: a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_encode(dumpObjects = false) }} {# output: null #} {{ object|yaml_encode(dumpObjects = true) }} {# output: !php/object 'O:8:\"stdClass\":1:{s:5:\"foo\";s:7:\"bar\";}' #} See The Yaml Component for more information. yaml_dump 1 {{ value|yaml_dump(inline = 0, dumpObjects = false) }} value type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Does the same as yaml_encode(), but includes the type in the output. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_dump(inline = 0) }} {# output: %array% { a: { c: e }, b: { d: f } } #} {{ array|yaml_dump(inline = 1) }} {# output: %array% a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_dump(dumpObjects = false) }} {# output: %object% null #} {{ object|yaml_dump(dumpObjects = true) }} {# output: %object% !php/object 'O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"bar\";}' #} abbr_class 1 {{ class|abbr_class }} class type: string Generates an <abbr> element with the short name of a PHP class (the FQCN will be shown in a tooltip when a user hovers over the element). 1 {{ 'App\\\\Entity\\\\Product'|abbr_class }} The above example will be rendered as: 1 <abbr title=\"App\\Entity\\Product\">Product</abbr> abbr_method 1 {{ method|abbr_method }} method type: string Generates an <abbr> element using the FQCN::method() syntax. If method is Closure, Closure will be used instead and if method doesn't have a class name, it's shown as a function (method()). 1 {{ 'App\\\\Controller\\\\ProductController::list'|abbr_method }} The above example will be rendered as: 1 <abbr title=\"App\\Controller\\ProductController\">ProductController</abbr>::list() format_args 1 {{ args|format_args }} args type: array Generates a string with the arguments and their types (within <em> elements). format_args_as_text 1 {{ args|format_args_as_text }} args type: array Equal to the format_args filter, but without using HTML tags. file_excerpt 1 {{ file|file_excerpt(line, srcContext = 3) }} file type: string line type: integer srcContext (optional) type: integer Generates an excerpt of a code file around the given line number. The srcContext argument defines the total number of lines to display around the given line number (use -1 to display the whole file). Consider the following as the content of file.txt: 1 2 3 4 5 a b c d e 1 2 3 4 5 6 7 8 9 10 11 12 13 {{ '/path/to/file.txt'|file_excerpt(line = 4, srcContext = 1) }} {# output: #} <ol start=\"3\"> <li><a class=\"anchor\" id=\"line3\"></a><code>c</code></li> <li class=\"selected\"><a class=\"anchor\" id=\"line4\"></a><code>d</code></li> <li><a class=\"anchor\" id=\"line5\"></a><code>e</code></li> </ol> {{ '/path/to/file.txt'|file_excerpt(line = 1, srcContext = 0) }} {# output: #} <ol start=\"1\"> <li class=\"selected\"><a class=\"anchor\" id=\"line1\"></a><code>a</code></li> </ol> format_file 1 {{ file|format_file(line, text = null) }} file type: string line type: integer text (optional) type: string default: null Generates the file path inside an <a> element. If the path is inside the kernel root directory, the kernel root directory path is replaced by kernel.project_dir (showing the full path in a tooltip on hover). 1 2 3 4 5 6 7 8 9 10 11 {{ '/path/to/file.txt'|format_file(line = 1, text = \"my_text\") }} {# output: #} <a href=\"/path/to/file.txt#L1\" title=\"Click to open this file\" class=\"file_link\">my_text at line 1 </a> {{ \"/path/to/file.txt\"|format_file(line = 3) }} {# output: #} <a href=\"/path/to/file.txt&amp;line=3\" title=\"Click to open this file\" class=\"file_link\">/path/to/file.txt at line 3 </a> Tip If you set the framework.ide option, the generated links will change to open the file in that IDE/editor. For example, when using PhpStorm, the <a href=\"/path/to/file.txt&amp;line=3\" link will become <a href=\"phpstorm://open?file=/path/to/file.txt&amp;line=3\". format_file_from_text 1 {{ text|format_file_from_text }} text type: string Uses format_file to improve the output of default PHP errors. file_link 1 {{ file|file_link(line) }} file type: string line type: integer Generates a link to the provided file and line number using a preconfigured scheme. 1 2 {{ 'path/to/file/file.txt'|file_link(line = 3) }} {# output: file://path/to/file/file.txt#L3 #} file_relative 1 {{ file|file_relative }} file type: string It transforms the given absolute file path into a new file path relative to project's root directory: 1 2 {{ '/var/www/blog/templates/admin/index.html.twig'|file_relative }} {# if project root dir is '/var/www/blog/', it returns 'templates/admin/index.html.twig' #} If the given file path is out of the project directory, a null value will be returned. serialize 1 {{ object|serialize(format = 'json', context = []) }} object type: mixed format (optional) type: string context (optional) type: array Accepts any data that can be serialized by the Serializer component and returns a serialized string in the specified format. For example: 1 2 3 4 $object = new \\stdClass(); $object->foo = 'bar'; $object->content = []; $object->createdAt = new \\DateTime('2024-11-30'); 1 2 3 4 5 {{ object|serialize(format = 'json', context = { 'datetime_format': 'D, Y-m-d', 'empty_array_as_object': true, }) }} {# output: {\"foo\":\"bar\",\"content\":{},\"createdAt\":\"Sat, 2024-11-30\"} #} emojify 7.1 The emojify filter was introduced in Symfony 7.1. 1 {{ text|emojify(catalog = null) }} text type: string catalog (optional) type: string | null The emoji set used to generate the textual representation (slack, github, gitlab, etc.) It transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋): 1 2 3 {{ ':+1:'|emojify }} {# renders: 👍 #} {{ ':+1:'|emojify('github') }} {# renders: 👍 #} {{ ':thumbsup:'|emojify('gitlab') }} {# renders: 👍 #} Tags form_theme 1 {% form_theme form resources %} form type: FormView resources type: array | string Sets the resources to override the form theme for the given form view instance. You can use _self as resources to set it to the current resource. More information in How to Customize Form Rendering. trans 1 {% trans with vars from domain into locale %}{% endtrans %} vars (optional) type: array default: [] domain (optional) type: string default: string locale (optional) type: string default: string Renders the translation of the content. More information in Translations. trans_default_domain 1 {% trans_default_domain domain %} domain type: string This will set the default domain in the current template. stopwatch 1 {% stopwatch 'event_name' %}...{% endstopwatch %} This measures the time and memory used to execute some code in the template and displays it in the Symfony profiler. See how to profile Symfony applications. Tests The following tests related to Symfony Forms are available. They are explained in the article about customizing form rendering: selectedchoice() rootform() Global Variables app The app variable is injected automatically by Symfony in all templates and provides access to lots of useful application information. Read more about the Twig global app variable.",
+      "code": "1"
+    },
+    {
+      "description": "Twig is the template engine used in Symfony applications. There are tens of default filters and functions defined by Twig, but Symfony also defines some filters, functions and tags to integrate the various Symfony components with Twig templates. This article explains them all. Tip If these extensions provided by Symfony are not enough, you can create a custom Twig extension to define even more filters and functions. Functions render 1 {{ render(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] Makes a request to the given internal URI or controller and returns the result. The render strategy can be specified in the strategy key of the options. It's commonly used to embed controllers in templates. render_esi 1 {{ render_esi(uri, options = []) }} uri type: string | ControllerReference options (optional) type: array default: [] It's similar to the render function and defines the same arguments. However, it generates an ESI tag when ESI support is enabled or falls back to the behavior of render otherwise. Tip The render_esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render_*() functions. fragment_uri 1 {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }} controller type: ControllerReference absolute (optional) type: boolean default: false strict (optional) type: boolean default: true sign (optional) type: boolean default: true Generates the URI of a fragment. controller 1 {{ controller(controller, attributes = [], query = []) }} controller type: string attributes (optional) type: array default: [] query (optional) type: array default: [] Returns an instance of ControllerReference to be used with functions like render() and render_esi(). 1 2 {{ render(controller('App\\\\Controller\\\\BlogController:latest', {max: 3})) }} {# output: the content returned by the controller method; e.g. a rendered Twig template #} asset 1 {{ asset(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null 1 2 3 4 5 6 7 # config/packages/framework.yaml framework: # ... assets: packages: foo_package: base_path: /avatars 1 2 3 {# the image lives at \"public/avatars/avatar.png\" #} {{ asset(path = 'avatar.png', packageName = 'foo_package') }} {# output: /avatars/avatar.png #} Returns the public path of the given asset path (which can be a CSS file, a JavaScript file, an image path, etc.). This function takes into account where the application is installed (e.g. in case the project is accessed in a host subdirectory) and the optional asset package base path. Symfony provides various cache busting implementations via the assets.version, assets.version_strategy, and assets.json_manifest_path configuration options. See also Read more about linking to web assets from templates. asset_version 1 {{ asset_version(path, packageName = null) }} path type: string packageName (optional) type: string | null default: null Returns the current version of the package, more information in Creating and Using Templates. csrf_token 1 {{ csrf_token(intention) }} intention type: string - an arbitrary string used to identify the token. Renders a CSRF token. Use this function if you want CSRF protection in a regular HTML form not managed by the Symfony Form component. 1 2 3 {{ csrf_token('my_form') }} {# output: a random alphanumeric string like: a.YOosAd0fhT7BEuUCFbROzrvgkW8kpEmBDQ_DKRMUi2o.Va8ZQKt5_2qoa7dLW-02_PLYwDBx9nnWOluUHUFCwC5Zo0VuuVfQCqtngg #} is_granted 1 {{ is_granted(role, object = null) }} role type: string object (optional) type: object Returns true if the current user has the given role. Optionally, an object can be passed to be used by the voter. More information can be found in Security. is_granted_for_user 7.3 The is_granted_for_user() function was introduced in Symfony 7.3. 1 {{ is_granted_for_user(user, attribute, subject = null) }} user type: object attribute type: string subject (optional) type: object Returns true if the user is authorized for the specified attribute. Optionally, an object can be passed to be used by the voter. More information can be found in Security. logout_path 1 {{ logout_path(key = null) }} key (optional) type: string Generates a relative logout URL for the given firewall. If no key is provided, the URL is generated for the current firewall the user is logged into. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_path(key = 'main') }} {# output: /logout #} {{ logout_path(key = 'othername') }} {# output: /other/logout #} logout_url 1 {{ logout_url(key = null) }} key (optional) type: string Equal to the logout_path function, but it'll generate an absolute URL instead of a relative one. 1 2 3 4 5 6 7 8 9 10 11 12 13 # config/packages/security.yaml security: # ... firewalls: main: # ... logout: path: '/logout' othername: # ... logout: path: '/other/logout' 1 2 3 4 5 {{ logout_url(key = 'main') }} {# output: http://example.org/logout #} {{ logout_url(key = 'othername') }} {# output: http://example.org/other/logout #} path 1 {{ path(route_name, route_parameters = [], relative = false) }} name type: string parameters (optional) type: array default: [] relative (optional) type: boolean default: false Returns the relative URL (without the scheme and host) for the given route. If relative is enabled, it'll create a path relative to the current path. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = false) }} {# output: /blog/3 #} {{ path(name = 'app_blog', parameters = {page: 3}, relative = true) }} {# output: blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. url 1 {{ url(route_name, route_parameters = [], schemeRelative = false) }} name type: string parameters (optional) type: array default: [] schemeRelative (optional) type: boolean default: false Returns the absolute URL (with scheme and host) for the given route. If schemeRelative is enabled, it'll create a scheme-relative URL. 1 2 3 4 5 6 7 {# consider that the app defines an 'app_blog' route with the path '/blog/{page}' #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = false) }} {# output: http://example.org/blog/3 #} {{ url(name = 'app_blog', parameters = {page: 3}, schemeRelative = true) }} {# output: //example.org/blog/3 #} See also Read more about Symfony routing and about creating links in Twig templates. absolute_url 1 {{ absolute_url(path) }} path type: string Returns the absolute URL (with scheme and host) from the passed relative path. Combine it with the asset() function to generate absolute URLs for web assets. Read more about Linking to CSS, JavaScript and Image Assets. relative_path 1 {{ relative_path(path) }} path type: string Returns the relative path from the passed absolute URL. For example, assume you're on the following page in your app: http://example.com/products/hover-board. 1 2 3 4 5 {{ relative_path('http://example.com/human.txt') }} {# ../human.txt #} {{ relative_path('http://example.com/products/products_icon.png') }} {# products_icon.png #} expression Creates an Expression related to the ExpressionLanguage component. 1 2 {{ expression(1 + 2) }} {# output: 3 #} impersonation_path 1 {{ impersonation_path(identifier) }} identifier type: string Generates a URL that you can visit to impersonate a user, identified by the identifier argument. impersonation_url 1 {{ impersonation_url(identifier) }} identifier type: string It's similar to the impersonation_path function, but it generates absolute URLs instead of relative URLs. impersonation_exit_path 1 {{ impersonation_exit_path(exitTo = null) }} exitTo (optional) type: string Generates a URL that you can visit to exit user impersonation. After exiting impersonation, the user is redirected to the current URI. If you prefer to redirect to a different URI, define its value in the exitTo argument. If no user is being impersonated, the function returns an empty string. impersonation_exit_url 1 {{ impersonation_exit_url(exitTo = null) }} exitTo (optional) type: string It's similar to the impersonation_exit_path function, but it generates absolute URLs instead of relative URLs. t 1 {{ t(message, parameters = [], domain = 'messages')|trans }} message type: string parameters (optional) type: array default: [] domain (optional) type: string default: messages Creates a Translatable object that can be passed to the trans filter. YAML XML PHP 1 2 # translations/blog.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/blog.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/blog.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ t(message = 'message', parameters = {'%name%': 'John'}, domain = 'blog')|trans }} {# output: Hello John #} importmap Outputs the importmap & a few other items when using the Asset component. Form Related Functions The following functions related to Symfony Forms are also available. They are explained in the article about customizing form rendering: form() form_start() form_end() form_widget() form_errors() form_label() form_help() form_row() form_rest() field_name() field_id() field_value() field_label() field_help() field_errors() field_choices() Filters humanize 1 {{ text|humanize }} text type: string Transforms the given string into a human readable string (by replacing underscores with spaces, capitalizing the string, etc.) It's useful e.g. when displaying the names of PHP properties/variables to end users: 1 2 3 4 5 6 {{ 'dateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'DateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'date-of-birth'|humanize }} {# renders: Date-of-birth #} {{ 'date_of_birth'|humanize }} {# renders: Date of birth #} {{ 'date of birth'|humanize }} {# renders: Date of birth #} {{ 'Date Of Birth'|humanize }} {# renders: Date of birth #} trans 1 {{ message|trans(arguments = [], domain = null, locale = null) }} message type: string | Translatable arguments (optional) type: array default: [] domain (optional) type: string default: null locale (optional) type: string default: null Translates the text into the current language. More information in Translation Filters. YAML XML PHP 1 2 # translations/messages.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/messages.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/messages.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ 'message'|trans(arguments = {'%name%': 'John'}, domain = 'messages', locale = 'en') }} {# output: Hello John #} sanitize_html 1 {{ body|sanitize_html(sanitizer = \"default\") }} body type: string sanitizer (optional) type: string default: \"default\" Sanitizes the text using the HTML Sanitizer component. More information in HTML Sanitizer. yaml_encode 1 {{ input|yaml_encode(inline = 0, dumpObjects = false) }} input type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Transforms the input into YAML syntax. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_encode(inline = 0) }} {# output: { a: { c: e }, b: { d: f } } #} {{ array|yaml_encode(inline = 1) }} {# output: a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_encode(dumpObjects = false) }} {# output: null #} {{ object|yaml_encode(dumpObjects = true) }} {# output: !php/object 'O:8:\"stdClass\":1:{s:5:\"foo\";s:7:\"bar\";}' #} See The Yaml Component for more information. yaml_dump 1 {{ value|yaml_dump(inline = 0, dumpObjects = false) }} value type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Does the same as yaml_encode(), but includes the type in the output. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_dump(inline = 0) }} {# output: %array% { a: { c: e }, b: { d: f } } #} {{ array|yaml_dump(inline = 1) }} {# output: %array% a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_dump(dumpObjects = false) }} {# output: %object% null #} {{ object|yaml_dump(dumpObjects = true) }} {# output: %object% !php/object 'O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"bar\";}' #} abbr_class 1 {{ class|abbr_class }} class type: string Generates an <abbr> element with the short name of a PHP class (the FQCN will be shown in a tooltip when a user hovers over the element). 1 {{ 'App\\\\Entity\\\\Product'|abbr_class }} The above example will be rendered as: 1 <abbr title=\"App\\Entity\\Product\">Product</abbr> abbr_method 1 {{ method|abbr_method }} method type: string Generates an <abbr> element using the FQCN::method() syntax. If method is Closure, Closure will be used instead and if method doesn't have a class name, it's shown as a function (method()). 1 {{ 'App\\\\Controller\\\\ProductController::list'|abbr_method }} The above example will be rendered as: 1 <abbr title=\"App\\Controller\\ProductController\">ProductController</abbr>::list() format_args 1 {{ args|format_args }} args type: array Generates a string with the arguments and their types (within <em> elements). format_args_as_text 1 {{ args|format_args_as_text }} args type: array Equal to the format_args filter, but without using HTML tags. file_excerpt 1 {{ file|file_excerpt(line, srcContext = 3) }} file type: string line type: integer srcContext (optional) type: integer Generates an excerpt of a code file around the given line number. The srcContext argument defines the total number of lines to display around the given line number (use -1 to display the whole file). Consider the following as the content of file.txt: 1 2 3 4 5 a b c d e 1 2 3 4 5 6 7 8 9 10 11 12 13 {{ '/path/to/file.txt'|file_excerpt(line = 4, srcContext = 1) }} {# output: #} <ol start=\"3\"> <li><a class=\"anchor\" id=\"line3\"></a><code>c</code></li> <li class=\"selected\"><a class=\"anchor\" id=\"line4\"></a><code>d</code></li> <li><a class=\"anchor\" id=\"line5\"></a><code>e</code></li> </ol> {{ '/path/to/file.txt'|file_excerpt(line = 1, srcContext = 0) }} {# output: #} <ol start=\"1\"> <li class=\"selected\"><a class=\"anchor\" id=\"line1\"></a><code>a</code></li> </ol> format_file 1 {{ file|format_file(line, text = null) }} file type: string line type: integer text (optional) type: string default: null Generates the file path inside an <a> element. If the path is inside the kernel root directory, the kernel root directory path is replaced by kernel.project_dir (showing the full path in a tooltip on hover). 1 2 3 4 5 6 7 8 9 10 11 {{ '/path/to/file.txt'|format_file(line = 1, text = \"my_text\") }} {# output: #} <a href=\"/path/to/file.txt#L1\" title=\"Click to open this file\" class=\"file_link\">my_text at line 1 </a> {{ \"/path/to/file.txt\"|format_file(line = 3) }} {# output: #} <a href=\"/path/to/file.txt&amp;line=3\" title=\"Click to open this file\" class=\"file_link\">/path/to/file.txt at line 3 </a> Tip If you set the framework.ide option, the generated links will change to open the file in that IDE/editor. For example, when using PhpStorm, the <a href=\"/path/to/file.txt&amp;line=3\" link will become <a href=\"phpstorm://open?file=/path/to/file.txt&amp;line=3\". format_file_from_text 1 {{ text|format_file_from_text }} text type: string Uses format_file to improve the output of default PHP errors. file_link 1 {{ file|file_link(line) }} file type: string line type: integer Generates a link to the provided file and line number using a preconfigured scheme. 1 2 {{ 'path/to/file/file.txt'|file_link(line = 3) }} {# output: file://path/to/file/file.txt#L3 #} file_relative 1 {{ file|file_relative }} file type: string It transforms the given absolute file path into a new file path relative to project's root directory: 1 2 {{ '/var/www/blog/templates/admin/index.html.twig'|file_relative }} {# if project root dir is '/var/www/blog/', it returns 'templates/admin/index.html.twig' #} If the given file path is out of the project directory, a null value will be returned. serialize 1 {{ object|serialize(format = 'json', context = []) }} object type: mixed format (optional) type: string context (optional) type: array Accepts any data that can be serialized by the Serializer component and returns a serialized string in the specified format. For example: 1 2 3 4 $object = new \\stdClass(); $object->foo = 'bar'; $object->content = []; $object->createdAt = new \\DateTime('2024-11-30'); 1 2 3 4 5 {{ object|serialize(format = 'json', context = { 'datetime_format': 'D, Y-m-d', 'empty_array_as_object': true, }) }} {# output: {\"foo\":\"bar\",\"content\":{},\"createdAt\":\"Sat, 2024-11-30\"} #} emojify 7.1 The emojify filter was introduced in Symfony 7.1. 1 {{ text|emojify(catalog = null) }} text type: string catalog (optional) type: string | null The emoji set used to generate the textual representation (slack, github, gitlab, etc.) It transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋): 1 2 3 {{ ':+1:'|emojify }} {# renders: 👍 #} {{ ':+1:'|emojify('github') }} {# renders: 👍 #} {{ ':thumbsup:'|emojify('gitlab') }} {# renders: 👍 #} Tags form_theme 1 {% form_theme form resources %} form type: FormView resources type: array | string Sets the resources to override the form theme for the given form view instance. You can use _self as resources to set it to the current resource. More information in How to Customize Form Rendering. trans 1 {% trans with vars from domain into locale %}{% endtrans %} vars (optional) type: array default: [] domain (optional) type: string default: string locale (optional) type: string default: string Renders the translation of the content. More information in Translations. trans_default_domain 1 {% trans_default_domain domain %} domain type: string This will set the default domain in the current template. stopwatch 1 {% stopwatch 'event_name' %}...{% endstopwatch %} This measures the time and memory used to execute some code in the template and displays it in the Symfony profiler. See how to profile Symfony applications. Tests The following tests related to Symfony Forms are available. They are explained in the article about customizing form rendering: selectedchoice() rootform() Global Variables app The app variable is injected automatically by Symfony in all templates and provides access to lots of useful application information. Read more about the Twig global app variable.",
+      "code": "1"
+    },
+    {
+      "description": "Filters humanize 1 {{ text|humanize }} text type: string Transforms the given string into a human readable string (by replacing underscores with spaces, capitalizing the string, etc.) It's useful e.g. when displaying the names of PHP properties/variables to end users: 1 2 3 4 5 6 {{ 'dateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'DateOfBirth'|humanize }} {# renders: Date of birth #} {{ 'date-of-birth'|humanize }} {# renders: Date-of-birth #} {{ 'date_of_birth'|humanize }} {# renders: Date of birth #} {{ 'date of birth'|humanize }} {# renders: Date of birth #} {{ 'Date Of Birth'|humanize }} {# renders: Date of birth #} trans 1 {{ message|trans(arguments = [], domain = null, locale = null) }} message type: string | Translatable arguments (optional) type: array default: [] domain (optional) type: string default: null locale (optional) type: string default: null Translates the text into the current language. More information in Translation Filters. YAML XML PHP 1 2 # translations/messages.en.yaml message: Hello %name% 1 2 3 4 5 6 7 8 9 10 11 12 <!-- translations/messages.en.xlf --> <?xml version=\"1.0\" encoding=\"UTF-8\" ?> <xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\"> <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\"> <body> <trans-unit id=\"message\"> <source>message</source> <target>Hello %name%</target> </trans-unit> </body> </file> </xliff> 1 2 3 4 // translations/messages.en.php return [ 'message' => \"Hello %name%\", ]; Using the filter will be rendered as: 1 2 {{ 'message'|trans(arguments = {'%name%': 'John'}, domain = 'messages', locale = 'en') }} {# output: Hello John #} sanitize_html 1 {{ body|sanitize_html(sanitizer = \"default\") }} body type: string sanitizer (optional) type: string default: \"default\" Sanitizes the text using the HTML Sanitizer component. More information in HTML Sanitizer. yaml_encode 1 {{ input|yaml_encode(inline = 0, dumpObjects = false) }} input type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Transforms the input into YAML syntax. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_encode(inline = 0) }} {# output: { a: { c: e }, b: { d: f } } #} {{ array|yaml_encode(inline = 1) }} {# output: a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_encode(dumpObjects = false) }} {# output: null #} {{ object|yaml_encode(dumpObjects = true) }} {# output: !php/object 'O:8:\"stdClass\":1:{s:5:\"foo\";s:7:\"bar\";}' #} See The Yaml Component for more information. yaml_dump 1 {{ value|yaml_dump(inline = 0, dumpObjects = false) }} value type: mixed inline (optional) type: integer default: 0 dumpObjects (optional) type: boolean default: false Does the same as yaml_encode(), but includes the type in the output. The inline argument is the level where the generated output switches to inline YAML: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 {% set array = { 'a': { 'c': 'e' }, 'b': { 'd': 'f' } } %} {{ array|yaml_dump(inline = 0) }} {# output: %array% { a: { c: e }, b: { d: f } } #} {{ array|yaml_dump(inline = 1) }} {# output: %array% a: { c: e } b: { d: f } #} The dumpObjects argument enables the dumping of PHP objects: 1 2 3 4 // ... $object = new \\stdClass(); $object->foo = 'bar'; // ... 1 2 3 4 5 {{ object|yaml_dump(dumpObjects = false) }} {# output: %object% null #} {{ object|yaml_dump(dumpObjects = true) }} {# output: %object% !php/object 'O:8:\"stdClass\":1:{s:3:\"foo\";s:3:\"bar\";}' #} abbr_class 1 {{ class|abbr_class }} class type: string Generates an <abbr> element with the short name of a PHP class (the FQCN will be shown in a tooltip when a user hovers over the element). 1 {{ 'App\\\\Entity\\\\Product'|abbr_class }} The above example will be rendered as: 1 <abbr title=\"App\\Entity\\Product\">Product</abbr> abbr_method 1 {{ method|abbr_method }} method type: string Generates an <abbr> element using the FQCN::method() syntax. If method is Closure, Closure will be used instead and if method doesn't have a class name, it's shown as a function (method()). 1 {{ 'App\\\\Controller\\\\ProductController::list'|abbr_method }} The above example will be rendered as: 1 <abbr title=\"App\\Controller\\ProductController\">ProductController</abbr>::list() format_args 1 {{ args|format_args }} args type: array Generates a string with the arguments and their types (within <em> elements). format_args_as_text 1 {{ args|format_args_as_text }} args type: array Equal to the format_args filter, but without using HTML tags. file_excerpt 1 {{ file|file_excerpt(line, srcContext = 3) }} file type: string line type: integer srcContext (optional) type: integer Generates an excerpt of a code file around the given line number. The srcContext argument defines the total number of lines to display around the given line number (use -1 to display the whole file). Consider the following as the content of file.txt: 1 2 3 4 5 a b c d e 1 2 3 4 5 6 7 8 9 10 11 12 13 {{ '/path/to/file.txt'|file_excerpt(line = 4, srcContext = 1) }} {# output: #} <ol start=\"3\"> <li><a class=\"anchor\" id=\"line3\"></a><code>c</code></li> <li class=\"selected\"><a class=\"anchor\" id=\"line4\"></a><code>d</code></li> <li><a class=\"anchor\" id=\"line5\"></a><code>e</code></li> </ol> {{ '/path/to/file.txt'|file_excerpt(line = 1, srcContext = 0) }} {# output: #} <ol start=\"1\"> <li class=\"selected\"><a class=\"anchor\" id=\"line1\"></a><code>a</code></li> </ol> format_file 1 {{ file|format_file(line, text = null) }} file type: string line type: integer text (optional) type: string default: null Generates the file path inside an <a> element. If the path is inside the kernel root directory, the kernel root directory path is replaced by kernel.project_dir (showing the full path in a tooltip on hover). 1 2 3 4 5 6 7 8 9 10 11 {{ '/path/to/file.txt'|format_file(line = 1, text = \"my_text\") }} {# output: #} <a href=\"/path/to/file.txt#L1\" title=\"Click to open this file\" class=\"file_link\">my_text at line 1 </a> {{ \"/path/to/file.txt\"|format_file(line = 3) }} {# output: #} <a href=\"/path/to/file.txt&amp;line=3\" title=\"Click to open this file\" class=\"file_link\">/path/to/file.txt at line 3 </a> Tip If you set the framework.ide option, the generated links will change to open the file in that IDE/editor. For example, when using PhpStorm, the <a href=\"/path/to/file.txt&amp;line=3\" link will become <a href=\"phpstorm://open?file=/path/to/file.txt&amp;line=3\". format_file_from_text 1 {{ text|format_file_from_text }} text type: string Uses format_file to improve the output of default PHP errors. file_link 1 {{ file|file_link(line) }} file type: string line type: integer Generates a link to the provided file and line number using a preconfigured scheme. 1 2 {{ 'path/to/file/file.txt'|file_link(line = 3) }} {# output: file://path/to/file/file.txt#L3 #} file_relative 1 {{ file|file_relative }} file type: string It transforms the given absolute file path into a new file path relative to project's root directory: 1 2 {{ '/var/www/blog/templates/admin/index.html.twig'|file_relative }} {# if project root dir is '/var/www/blog/', it returns 'templates/admin/index.html.twig' #} If the given file path is out of the project directory, a null value will be returned. serialize 1 {{ object|serialize(format = 'json', context = []) }} object type: mixed format (optional) type: string context (optional) type: array Accepts any data that can be serialized by the Serializer component and returns a serialized string in the specified format. For example: 1 2 3 4 $object = new \\stdClass(); $object->foo = 'bar'; $object->content = []; $object->createdAt = new \\DateTime('2024-11-30'); 1 2 3 4 5 {{ object|serialize(format = 'json', context = { 'datetime_format': 'D, Y-m-d', 'empty_array_as_object': true, }) }} {# output: {\"foo\":\"bar\",\"content\":{},\"createdAt\":\"Sat, 2024-11-30\"} #} emojify 7.1 The emojify filter was introduced in Symfony 7.1. 1 {{ text|emojify(catalog = null) }} text type: string catalog (optional) type: string | null The emoji set used to generate the textual representation (slack, github, gitlab, etc.) It transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋): 1 2 3 {{ ':+1:'|emojify }} {# renders: 👍 #} {{ ':+1:'|emojify('github') }} {# renders: 👍 #} {{ ':thumbsup:'|emojify('gitlab') }} {# renders: 👍 #}",
+      "code": "1"
+    }
+  ],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/twig_reference.html",
+    "https://symfony.com/doc/7.3/templates.html",
+    "https://symfony.com/doc/7.3/http_cache/esi.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/security/csrf.html",
+    "https://symfony.com/doc/7.3/security.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/components/expression_language.html",
+    "https://symfony.com/doc/7.3/security/impersonating_user.html",
+    "https://symfony.com/doc/7.3/frontend/asset_mapper.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html",
+    "https://symfony.com/doc/7.3/translation.html",
+    "https://symfony.com/doc/7.3/html_sanitizer.html",
+    "https://symfony.com/doc/7.3/components/yaml.html",
+    "https://symfony.com/doc/7.3/reference/yaml_encode",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/performance.html"
+  ]
+}

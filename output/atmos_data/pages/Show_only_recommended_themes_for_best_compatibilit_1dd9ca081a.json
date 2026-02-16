@@ -1,0 +1,67 @@
+{
+  "title": "Show only recommended themes for best compatibility",
+  "content": "atmos theme list --recommended\nyaml\n   settings:\n     terminal:\n       theme: <theme-name>\n   shell\natmos theme show <theme-name>\nshell",
+  "code_samples": [
+    {
+      "code": "## Arguments\n\nThis command does not require any arguments.\n\n## Flags\n\n<dl>\n  <dt>`--recommended`</dt>\n  <dd>Show only recommended themes that have been tested for optimal readability and compatibility with Atmos</dd>\n</dl>\n\n## Output\n\nThe command displays a table with the following information:\n\n- **Name** - The theme name to use with `ATMOS_THEME` environment variable or `settings.terminal.theme` in `atmos.yaml`\n- **Type** - Whether the theme is optimized for Dark or Light terminals\n- **Rec** - Shows \"â\" for recommended themes when listing all themes\n- **Source** - Attribution or link to the theme's original source\n\n## Setting a Theme\n\nTo use a theme from the list:\n\n1. **Environment variable**: Set `ATMOS_THEME=<theme-name>` before running Atmos commands\n2. **Configuration file**: Add to your `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Alias\n\nThe `atmos list themes` command is an alias for `atmos theme list` and behaves identically, except it shows only recommended themes by default and uses the `--all` flag to show all themes.\n\n## Related Commands\n\n- [`atmos theme show`](/cli/commands/theme/show) - Display detailed preview of a specific theme\n- [`atmos list themes`](/cli/commands/list/themes) - Alias command with different default behavior\n\n---\n\n## atmos theme show\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Terminal from '@site/src/components/Terminal'\n\n:::note Purpose\nUse this command to preview a specific theme's color palette and see how it will affect various UI elements in Atmos, including tables, status messages, and command output.\n:::\n\n<Screengrab title=\"atmos theme show --help\" slug=\"atmos-theme-show--help\" />\n\n## Usage",
+      "language": "unknown"
+    },
+    {
+      "code": "## Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "Setting a Theme",
+      "id": "setting-a-theme"
+    },
+    {
+      "level": "h2",
+      "text": "Alias",
+      "id": "alias"
+    },
+    {
+      "level": "h2",
+      "text": "Related Commands",
+      "id": "related-commands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos theme show",
+      "id": "atmos-theme-show"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#show-only-recommended-themes-for-best-compatibility",
+  "links": []
+}

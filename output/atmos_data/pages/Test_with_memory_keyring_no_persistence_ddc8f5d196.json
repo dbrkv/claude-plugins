@@ -1,0 +1,8 @@
+{
+  "title": "Test with memory keyring (no persistence)",
+  "content": "ATMOS_KEYRING_TYPE=memory atmos auth login --identity test",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-with-memory-keyring-(no-persistence)",
+  "links": []
+}

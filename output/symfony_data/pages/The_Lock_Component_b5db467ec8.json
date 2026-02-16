@@ -1,0 +1,309 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/lock.html",
+  "title": "The Lock Component",
+  "content": "The Lock Component creates and manages locks, a mechanism to provide exclusive access to a shared resource.\n\nIf you're using the Symfony Framework, read the Symfony Framework Lock documentation.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nLocks are used to guarantee exclusive access to some shared resource. In Symfony applications, you can use locks for example to ensure that a command is not executed more than once at the same time (on the same or different servers).\n\nLocks are created using a LockFactory class, which in turn requires another class to manage the storage of locks:\n\nThe lock is created by calling the createLock() method. Its first argument is an arbitrary string that represents the locked resource. Then, a call to the acquire() method will try to acquire the lock:\n\nIf the lock can not be acquired, the method returns false. The acquire() method can be safely called repeatedly, even if the lock is already acquired.\n\nUnlike other implementations, the Lock Component distinguishes lock instances even when they are created for the same resource. It means that for a given scope and resource one lock instance can be acquired multiple times. If a lock has to be used by several services, they should share the same Lock instance returned by the LockFactory::createLock method.\n\nIf you don't release the lock explicitly, it will be released automatically upon instance destruction. In some cases, it can be useful to lock a resource across several requests. To disable the automatic release behavior, set the third argument of the createLock() method to false.\n\nThe Key contains the state of the Lock and can be serialized. This allows the user to begin a long job in a process by acquiring the lock, and continue the job in another process using the same lock.\n\nFirst, you may create a serializable class containing the resource and the key of the lock:\n\nThen, you can use this class to dispatch all that's needed for another process to handle the rest of the job:\n\nDon't forget to set the autoRelease argument to false in the Lock instantiation to avoid releasing the lock when the destructor is called.\n\nNot all stores are compatible with serialization and cross-process locking: for example, the kernel will automatically release semaphores acquired by the SemaphoreStore store. If you use an incompatible store (see lock stores for supported stores), an exception will be thrown when the application tries to serialize the key.\n\nBy default, when a lock cannot be acquired, the acquire method returns false immediately. To wait (indefinitely) until the lock can be created, pass true as the argument of the acquire() method. This is called a blocking lock because the execution of your application stops until the lock is acquired:\n\nWhen the store does not support blocking locks by implementing the BlockingStoreInterface interface (see lock stores for supported stores), the Lock class will retry to acquire the lock in a non-blocking way until the lock is acquired.\n\nLocks created remotely are difficult to manage because there is no way for the remote Store to know if the locker process is still alive. Due to bugs, fatal errors or segmentation faults, it cannot be guaranteed that the release() method will be called, which would cause the resource to be locked infinitely.\n\nThe best solution in those cases is to create expiring locks, which are released automatically after some amount of time has passed (called TTL for Time To Live). This time, in seconds, is configured as the second argument of the createLock() method. If needed, these locks can also be released early with the release() method.\n\nThe trickiest part when working with expiring locks is choosing the right TTL. If it's too short, other processes could acquire the lock before finishing the job; if it's too long and the process crashes before calling the release() method, the resource will stay locked until the timeout:\n\nTo avoid leaving the lock in a locked state, it's recommended to wrap the job in a try/catch/finally block to always try to release the expiring lock.\n\nIn case of long-running tasks, it's better to start with a not too long TTL and then use the refresh() method to reset the TTL to its original value:\n\nAnother useful technique for long-running tasks is to pass a custom TTL as an argument of the refresh() method to change the default lock TTL:\n\nThis component also provides two useful methods related to expiring locks: getRemainingLifetime() (which returns null or a float as seconds) and isExpired() (which returns a boolean).\n\nLocks are automatically released when their Lock objects are destroyed. This is an implementation detail that is important when sharing Locks between processes. In the example below, pcntl_fork() creates two processes and the Lock will be released automatically as soon as one process finishes:\n\nIn order for the above example to work, the PCNTL extension must be installed.\n\nTo disable this behavior, set the autoRelease argument of LockFactory::createLock() to false. That will make the lock acquired for 3600 seconds or until Lock::release() is called:\n\nA shared or readers-writer lock is a synchronization primitive that allows concurrent access for read-only operations, while write operations require exclusive access. This means that multiple threads can read the data in parallel but an exclusive lock is needed for writing or modifying data. They are used for example for data structures that cannot be updated atomically and are invalid until the update is complete.\n\nUse the acquireRead() method to acquire a read-only lock, and acquire() method to acquire a write lock:\n\nSimilar to the acquire() method, pass true as the argument of acquireRead() to acquire the lock in a blocking mode:\n\nThe priority policy of Symfony's shared locks depends on the underlying store (e.g. Redis store prioritizes readers vs writers).\n\nWhen a read-only lock is acquired with the acquireRead() method, it's possible to promote the lock, and change it to a write lock, by calling the acquire() method:\n\nIn the same way, it's possible to demote a write lock, and change it to a read-only lock by calling the acquireRead() method.\n\nWhen the provided store does not implement the SharedLockStoreInterface interface (see lock stores for supported stores), the Lock class will fallback to a write lock by calling the acquire() method.\n\nLocks that are acquired for the first time are owned by the Lock instance that acquired it. If you need to check whether the current Lock instance is (still) the owner of a lock, you can use the isAcquired() method:\n\nBecause some lock stores have expiring locks, it is possible for an instance to lose the lock it acquired automatically:\n\nA common pitfall might be to use the isAcquired() method to check if a lock has already been acquired by any process. As you can see in this example you have to use acquire() for this. The isAcquired() method is used to check if the lock has been acquired by the current process only.\n\nTechnically, the true owners of the lock are the ones that share the same instance of Key, not Lock. But from a user perspective, Key is internal and you will likely only be working with the Lock instance so it's easier to think of the Lock instance as being the one that is the owner of the lock.\n\nLocks are created and managed in Stores, which are classes that implement PersistingStoreInterface and, optionally, BlockingStoreInterface.\n\nThe component includes the following built-in store types:\n\nSymfony includes two other special stores that are mostly useful for testing:\n\nThe NullStore was introduced in Symfony 7.2.\n\nThe FlockStore uses the file system on the local computer to create the locks. It does not support expiration, but the lock is automatically released when the lock object goes out of scope and is freed by the garbage collector (for example when the PHP process ends):\n\nBeware that some file systems (such as some types of NFS) do not support locking. In those cases, it's better to use a directory on a local disk drive or a remote store.\n\nThe MemcachedStore saves locks on a Memcached server, it requires a Memcached connection implementing the \\Memcached class. This store does not support blocking, and expects a TTL to avoid stalled locks:\n\nMemcached does not support TTL lower than 1 second.\n\nThe MongoDbStore saves locks on a MongoDB server >=2.2, it requires a \\MongoDB\\Collection or \\MongoDB\\Client from mongodb/mongodb or a MongoDB Connection String. This store does not support blocking and expects a TTL to avoid stalled locks:\n\nThe MongoDbStore takes the following $options (depending on the first parameter type):\n\nWhen the first parameter is a:\n\nMongoDB Connection String:\n\nThe collection querystring parameter is not part of the MongoDB Connection String definition. It is used to allow constructing a MongoDbStore using a Data Source Name (DSN) without $options.\n\nThe PdoStore saves locks in an SQL database. It requires a PDO connection or a Data Source Name (DSN). This store does not support blocking, and expects a TTL to avoid stalled locks:\n\nThis store does not support TTL lower than 1 second.\n\nThe table where values are stored is created automatically on the first call to the save() method. You can also create this table explicitly by calling the createTable() method in your code.\n\nThe DoctrineDbalStore saves locks in an SQL database. It is identical to PdoStore but requires a Doctrine DBAL Connection, or a Doctrine DBAL URL. This store does not support blocking, and expects a TTL to avoid stalled locks:\n\nThis store does not support TTL lower than 1 second.\n\nThe table where values are stored will be automatically generated when your run the command:\n\nIf you prefer to create the table yourself and it has not already been created, you can create this table explicitly by calling the createTable() method. You can also add this table to your schema by calling configureSchema() method in your code\n\nIf the table has not been created upstream, it will be created automatically on the first call to the save() method.\n\nThe PostgreSqlStore uses Advisory Locks provided by PostgreSQL. It requires a PDO connection or a Data Source Name (DSN). It supports native blocking, as well as sharing locks:\n\nIn opposite to the PdoStore, the PostgreSqlStore does not need a table to store locks and it does not expire.\n\nThe DoctrineDbalPostgreSqlStore uses Advisory Locks provided by PostgreSQL. It is identical to PostgreSqlStore but requires a Doctrine DBAL Connection or a Doctrine DBAL URL. It supports native blocking, as well as sharing locks:\n\nIn opposite to the DoctrineDbalStore, the DoctrineDbalPostgreSqlStore does not need a table to store locks and does not expire.\n\nThe RedisStore saves locks on a Redis server, it requires a Redis connection implementing the \\Redis, \\RedisArray, \\RedisCluster, \\Relay\\Relay, \\Relay\\Cluster or \\Predis classes. This store does not support blocking, and expects a TTL to avoid stalled locks:\n\nSupport for Relay\\Cluster was introduced in Symfony 7.3.\n\nThe SemaphoreStore uses the PHP semaphore functions to create the locks:\n\nThe CombinedStore is designed for High Availability applications because it manages several stores in sync (for example, several Redis servers). When a lock is acquired, it forwards the call to all the managed stores, and it collects their responses. If a simple majority of stores have acquired the lock, then the lock is considered acquired:\n\nInstead of the simple majority strategy (ConsensusStrategy) an UnanimousStrategy can be used to require the lock to be acquired in all the stores:\n\nIn order to get high availability when using the ConsensusStrategy, the minimum cluster size must be three servers. This allows the cluster to keep working when a single server fails (because this strategy requires that the lock is acquired for more than half of the servers).\n\nThe ZookeeperStore saves locks on a ZooKeeper server. It requires a ZooKeeper connection implementing the \\Zookeeper class. This store does not support blocking and expiration but the lock is automatically released when the PHP process is terminated:\n\nZookeeper does not require a TTL as the nodes used for locking are ephemeral and die when the PHP process is terminated.\n\nThe component guarantees that the same resource can't be locked twice as long as the component is used in the following way.\n\nRemote stores (MemcachedStore, MongoDbStore, PdoStore, PostgreSqlStore, RedisStore and ZookeeperStore) use a unique token to recognize the true owner of the lock. This token is stored in the Key object and is used internally by the Lock.\n\nEvery concurrent process must store the Lock on the same server. Otherwise two different machines may allow two different processes to acquire the same Lock.\n\nTo guarantee that the same server will always be safe, do not use Memcached behind a LoadBalancer, a cluster or round-robin DNS. Even if the main server is down, the calls must not be forwarded to a backup or failover server.\n\nExpiring stores (MemcachedStore, MongoDbStore, PdoStore and RedisStore) guarantee that the lock is acquired only for the defined duration of time. If the task takes longer to be accomplished, then the lock can be released by the store and acquired by someone else.\n\nThe Lock provides several methods to check its health. The isExpired() method checks whether or not its lifetime is over and the getRemainingLifetime() method returns its time to live in seconds.\n\nUsing the above methods, a robust code would be:\n\nChoose wisely the lifetime of the Lock and check whether its remaining time to live is enough to perform the task.\n\nStoring a Lock usually takes a few milliseconds, but network conditions may increase that time a lot (up to a few seconds). Take that into account when choosing the right TTL.\n\nBy design, locks are stored on servers with a defined lifetime. If the date or time of the machine changes, a lock could be released sooner than expected.\n\nTo guarantee that date won't change, the NTP service should be disabled and the date should be updated when the service is stopped.\n\nBy using the file system, this Store is reliable as long as concurrent processes use the same physical directory to store locks.\n\nProcesses must run on the same machine, virtual machine or container. Be careful when updating a Kubernetes or Swarm service because, for a short period of time, there can be two containers running in parallel.\n\nThe absolute path to the directory must remain the same. Be careful of symlinks that could change at anytime: Capistrano and blue/green deployment often use that trick. Be careful when the path to that directory changes between two deployments.\n\nSome file systems (such as some types of NFS) do not support locking.\n\nAll concurrent processes must use the same physical file system by running on the same machine and using the same absolute path to the lock directory.\n\nUsing a FlockStore in an HTTP context is incompatible with multiple front servers, unless to ensure that the same resource will always be locked on the same machine or to use a well configured shared file system.\n\nFiles on the file system can be removed during a maintenance operation. For instance, to clean up the /tmp directory or after a reboot of the machine when a directory uses tmpfs. It's not an issue if the lock is released when the process ended, but it is in case of Lock reused between requests.\n\nDo not store locks on a volatile file system if they have to be reused in several requests.\n\nThe way Memcached works is to store items in memory. That means that by using the MemcachedStore the locks are not persisted and may disappear by mistake at any time.\n\nIf the Memcached service or the machine hosting it restarts, every lock would be lost without notifying the running processes.\n\nTo avoid that someone else acquires a lock after a restart, it's recommended to delay service start and wait at least as long as the longest lock TTL.\n\nBy default Memcached uses a LRU mechanism to remove old entries when the service needs space to add new items.\n\nThe number of items stored in Memcached must be under control. If it's not possible, LRU should be disabled and Lock should be stored in a dedicated Memcached service away from Cache.\n\nWhen the Memcached service is shared and used for multiple usage, Locks could be removed by mistake. For instance some implementation of the PSR-6 clear() method uses the Memcached's flush() method which purges and removes everything.\n\nThe method flush() must not be called, or locks should be stored in a dedicated Memcached service away from Cache.\n\nThe locked resource name is indexed in the _id field of the lock collection. Beware that an indexed field's value in MongoDB can be a maximum of 1024 bytes in length including the structural overhead.\n\nA TTL index must be used to automatically clean up expired locks. Such an index can be created manually:\n\nAlternatively, the method MongoDbStore::createTtlIndex(int $expireAfterSeconds = 0) can be called once to create the TTL index during database setup. Read more about Expire Data from Collections by Setting TTL in MongoDB.\n\nMongoDbStore will attempt to automatically create a TTL index. It's recommended to set constructor option gcProbability to 0.0 to disable this behavior if you have manually dealt with TTL index creation.\n\nThis store relies on all PHP application and database nodes to have synchronized clocks for lock expiry to occur at the correct time. To ensure locks don't expire prematurely; the lock TTL should be set with enough extra time in expireAfterSeconds to account for any clock drift between nodes.\n\nwriteConcern and readConcern are not specified by MongoDbStore meaning the collection's settings will take effect. readPreference is primary for all queries. Read more about Replica Set Read and Write Semantics in MongoDB.\n\nThe PdoStore relies on the ACID properties of the SQL engine.\n\nIn a cluster configured with multiple primaries, ensure writes are synchronously propagated to every node, or always use the same node.\n\nSome SQL engines like MySQL allow to disable the unique constraint check. Ensure that this is not the case SET unique_checks=1;.\n\nIn order to purge old locks, this store uses a current datetime to define an expiration date reference. This mechanism relies on all server nodes to have synchronized clocks.\n\nTo ensure locks don't expire prematurely; the TTLs should be set with enough extra time to account for any clock drift between nodes.\n\nThe PostgreSqlStore relies on the Advisory Locks properties of the PostgreSQL database. That means that by using PostgreSqlStore the locks will be automatically released at the end of the session in case the client cannot unlock for any reason.\n\nIf the PostgreSQL service or the machine hosting it restarts, every lock would be lost without notifying the running processes.\n\nIf the TCP connection is lost, the PostgreSQL may release locks without notifying the application.\n\nThe way Redis works is to store items in memory. That means that by using the RedisStore the locks are not persisted and may disappear by mistake at any time.\n\nIf the Redis service or the machine hosting it restarts, every locks would be lost without notifying the running processes.\n\nTo avoid that someone else acquires a lock after a restart, it's recommended to delay service start and wait at least as long as the longest lock TTL.\n\nRedis can be configured to persist items on disk, but this option would slow down writes on the service. This could go against other uses of the server.\n\nWhen the Redis service is shared and used for multiple usages, locks could be removed by mistake.\n\nThe command FLUSHDB must not be called, or locks should be stored in a dedicated Redis service away from Cache.\n\nCombined stores allow the storage of locks across several backends. It's a common mistake to think that the lock mechanism will be more reliable. This is wrong. The CombinedStore will be, at best, as reliable as the least reliable of all managed stores. As soon as one managed store returns erroneous information, the CombinedStore won't be reliable.\n\nAll concurrent processes must use the same configuration, with the same amount of managed stored and the same endpoint.\n\nInstead of using a cluster of Redis or Memcached servers, it's better to use a CombinedStore with a single server per managed store.\n\nSemaphores are handled by the Kernel level. In order to be reliable, processes must run on the same machine, virtual machine or container. Be careful when updating a Kubernetes or Swarm service because for a short period of time, there can be two running containers in parallel.\n\nAll concurrent processes must use the same machine. Before starting a concurrent process on a new machine, check that other processes are stopped on the old one.\n\nWhen running on systemd with non-system user and option RemoveIPC=yes (default value), locks are deleted by systemd when that user logs out. Check that process is run with a system user (UID <= SYS_UID_MAX) with SYS_UID_MAX defined in /etc/login.defs, or set the option RemoveIPC=off in /etc/systemd/logind.conf.\n\nThe way ZookeeperStore works is by maintaining locks as ephemeral nodes on the server. That means that by using ZookeeperStore the locks will be automatically released at the end of the session in case the client cannot unlock for any reason.\n\nIf the ZooKeeper service or the machine hosting it restarts, every lock would be lost without notifying the running processes.\n\nTo use ZooKeeper's high-availability feature, you can setup a cluster of multiple servers so that in case one of the server goes down, the majority will still be up and serving the requests. All the available servers in the cluster will see the same state.\n\nAs this store does not support multi-level node locks, since the clean up of intermediate nodes becomes an overhead, all locks are maintained at the root level.\n\nChanging the configuration of stores should be done very carefully. For instance, during the deployment of a new version. Processes with new configuration must not be started while old processes with old configuration are still running.\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The Lock Component",
+      "id": "the-lock-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Serializing Locks",
+      "id": "serializing-locks"
+    },
+    {
+      "level": "h2",
+      "text": "Blocking Locks",
+      "id": "blocking-locks"
+    },
+    {
+      "level": "h2",
+      "text": "Expiring Locks",
+      "id": "expiring-locks"
+    },
+    {
+      "level": "h3",
+      "text": "Automatically Releasing The Lock",
+      "id": "automatically-releasing-the-lock"
+    },
+    {
+      "level": "h2",
+      "text": "Shared Locks",
+      "id": "shared-locks"
+    },
+    {
+      "level": "h2",
+      "text": "The Owner of The Lock",
+      "id": "the-owner-of-the-lock"
+    },
+    {
+      "level": "h2",
+      "text": "Available Stores",
+      "id": "available-stores"
+    },
+    {
+      "level": "h3",
+      "text": "FlockStore",
+      "id": "flockstore"
+    },
+    {
+      "level": "h3",
+      "text": "MemcachedStore",
+      "id": "memcachedstore"
+    },
+    {
+      "level": "h3",
+      "text": "MongoDbStore",
+      "id": "mongodbstore"
+    },
+    {
+      "level": "h3",
+      "text": "PdoStore",
+      "id": "pdostore"
+    },
+    {
+      "level": "h3",
+      "text": "DoctrineDbalStore",
+      "id": "doctrinedbalstore"
+    },
+    {
+      "level": "h3",
+      "text": "PostgreSqlStore",
+      "id": "postgresqlstore"
+    },
+    {
+      "level": "h3",
+      "text": "DoctrineDbalPostgreSqlStore",
+      "id": "doctrinedbalpostgresqlstore"
+    },
+    {
+      "level": "h3",
+      "text": "RedisStore",
+      "id": "redisstore"
+    },
+    {
+      "level": "h3",
+      "text": "SemaphoreStore",
+      "id": "semaphorestore"
+    },
+    {
+      "level": "h3",
+      "text": "CombinedStore",
+      "id": "combinedstore"
+    },
+    {
+      "level": "h3",
+      "text": "ZookeeperStore",
+      "id": "zookeeperstore"
+    },
+    {
+      "level": "h2",
+      "text": "Reliability",
+      "id": "reliability"
+    },
+    {
+      "level": "h3",
+      "text": "Remote Stores",
+      "id": "remote-stores"
+    },
+    {
+      "level": "h3",
+      "text": "Expiring Stores",
+      "id": "expiring-stores"
+    },
+    {
+      "level": "h3",
+      "text": "FlockStore",
+      "id": "flockstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "MemcachedStore",
+      "id": "memcachedstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "MongoDbStore",
+      "id": "mongodbstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "PdoStore",
+      "id": "pdostore-1"
+    },
+    {
+      "level": "h3",
+      "text": "PostgreSqlStore",
+      "id": "postgresqlstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "RedisStore",
+      "id": "redisstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "CombinedStore",
+      "id": "combinedstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "SemaphoreStore",
+      "id": "semaphorestore-1"
+    },
+    {
+      "level": "h3",
+      "text": "ZookeeperStore",
+      "id": "zookeeperstore-1"
+    },
+    {
+      "level": "h3",
+      "text": "Overall",
+      "id": "overall"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/lock",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\LockFactory;\nuse Symfony\\Component\\Lock\\Store\\SemaphoreStore;\n\n$store = new SemaphoreStore();\n$factory = new LockFactory($store);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$lock = $factory->createLock('pdf-creation');\n\nif ($lock->acquire()) {\n    // The resource \"pdf-creation\" is locked.\n    // You can compute and generate the invoice safely here.\n\n    $lock->release();\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Lock/RefreshTaxonomy.php\nnamespace App\\Lock;\n\nuse Symfony\\Component\\Lock\\Key;\n\nclass RefreshTaxonomy\n{\n    public function __construct(\n        private object $article,\n        private Key $key,\n    ) {\n    }\n\n    public function getArticle(): object\n    {\n        return $this->article;\n    }\n\n    public function getKey(): Key\n    {\n        return $this->key;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Lock\\RefreshTaxonomy;\nuse Symfony\\Component\\Lock\\Key;\n\n$key = new Key('article.'.$article->getId());\n$lock = $factory->createLockFromKey(\n    $key,\n    300,  // ttl\n    false // autoRelease\n);\n$lock->acquire(true);\n\n$this->bus->dispatch(new RefreshTaxonomy($article, $key));",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\LockFactory;\nuse Symfony\\Component\\Lock\\Store\\FlockStore;\n\n$store = new FlockStore('/var/stores');\n$factory = new LockFactory($store);\n\n$lock = $factory->createLock('pdf-creation');\n$lock->acquire(true);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n// create an expiring lock that lasts 30 seconds (default is 300.0)\n$lock = $factory->createLock('pdf-creation', ttl: 30);\n\nif (!$lock->acquire()) {\n    return;\n}\ntry {\n    // perform a job during less than 30 seconds\n} finally {\n    $lock->release();\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$lock = $factory->createLock('pdf-creation', ttl: 30);\n\nif (!$lock->acquire()) {\n    return;\n}\ntry {\n    while (!$finished) {\n        // perform a small part of the job.\n\n        // renew the lock for 30 more seconds.\n        $lock->refresh();\n    }\n} finally {\n    $lock->release();\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$lock = $factory->createLock('pdf-creation', ttl: 30);\n// ...\n// refresh the lock for 30 seconds\n$lock->refresh();\n// ...\n// refresh the lock for 600 seconds (next refresh() call will be 30 seconds again)\n$lock->refresh(600);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$lock = $factory->createLock('pdf-creation');\nif (!$lock->acquire()) {\n    return;\n}\n\n$pid = pcntl_fork();\nif (-1 === $pid) {\n    // Could not fork\n    exit(1);\n} elseif ($pid) {\n    // Parent process\n    sleep(30);\n} else {\n    // Child process\n    echo 'The lock will be released now.';\n    exit(0);\n}\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "$lock = $factory->createLock(\n    'pdf-creation',\n    3600, // ttl\n    false // autoRelease\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "$lock = $factory->createLock('user-'.$user->id);\nif (!$lock->acquireRead()) {\n    return;\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$lock = $factory->createLock('user-'.$user->id);\n$lock->acquireRead(true);",
+      "language": "unknown"
+    },
+    {
+      "code": "$lock = $factory->createLock('user-'.$userId);\n$lock->acquireRead(true);\n\nif (!$this->shouldUpdate($userId)) {\n    return;\n}\n\n$lock->acquire(true); // Promote the lock to a write lock\n$this->update($userId);",
+      "language": "unknown"
+    },
+    {
+      "code": "if ($lock->isAcquired()) {\n    // We (still) own the lock\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// If we cannot acquire ourselves, it means some other process is already working on it\nif (!$lock->acquire()) {\n    return;\n}\n\n$this->beginTransaction();\n\n// Perform a very long process that might exceed TTL of the lock\n\nif ($lock->isAcquired()) {\n    // Still all good, no other instance has acquired the lock in the meantime, we're safe\n    $this->commit();\n} else {\n    // Bummer! Our lock has apparently exceeded TTL and another process has started in\n    // the meantime so it's not safe for us to commit.\n    $this->rollback();\n    throw new \\Exception('Process failed');\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\FlockStore;\n\n// the argument is the path of the directory where the locks are created\n// if none is given, sys_get_temp_dir() is used internally.\n$store = new FlockStore('/var/stores');",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\MemcachedStore;\n\n$memcached = new \\Memcached();\n$memcached->addServer('localhost', 11211);\n\n$store = new MemcachedStore($memcached);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\MongoDbStore;\n\n$mongo = 'mongodb://localhost/database?collection=lock';\n$options = [\n    'gcProbability' => 0.001,\n    'database' => 'myapp',\n    'collection' => 'lock',\n    'uriOptions' => [],\n    'driverOptions' => [],\n];\n$store = new MongoDbStore($mongo, $options);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\PdoStore;\n\n// a PDO instance or DSN for lazy connecting through PDO\n$databaseConnectionOrDSN = 'mysql:host=127.0.0.1;dbname=app';\n$store = new PdoStore($databaseConnectionOrDSN, ['db_username' => 'myuser', 'db_password' => 'mypassword']);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\DoctrineDbalStore;\n\n// a Doctrine DBAL connection or DSN\n$connectionOrURL = 'mysql://myuser:mypassword@127.0.0.1/app';\n$store = new DoctrineDbalStore($connectionOrURL);",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console make:migration",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\PostgreSqlStore;\n\n// a PDO instance or DSN for lazy connecting through PDO\n$databaseConnectionOrDSN = 'pgsql:host=localhost;port=5634;dbname=app';\n$store = new PostgreSqlStore($databaseConnectionOrDSN, ['db_username' => 'myuser', 'db_password' => 'mypassword']);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\DoctrineDbalPostgreSqlStore;\n\n// a Doctrine Connection or DSN\n$databaseConnectionOrDSN = 'postgresql+advisory://myuser:mypassword@127.0.0.1:5634/lock';\n$store = new DoctrineDbalPostgreSqlStore($databaseConnectionOrDSN);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\RedisStore;\n\n$redis = new \\Redis();\n$redis->connect('localhost');\n\n$store = new RedisStore($redis);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\SemaphoreStore;\n\n$store = new SemaphoreStore();",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\CombinedStore;\nuse Symfony\\Component\\Lock\\Store\\RedisStore;\nuse Symfony\\Component\\Lock\\Strategy\\ConsensusStrategy;\n\n$stores = [];\nforeach (['server1', 'server2', 'server3'] as $server) {\n    $redis = new \\Redis();\n    $redis->connect($server);\n\n    $stores[] = new RedisStore($redis);\n}\n\n$store = new CombinedStore($stores, new ConsensusStrategy());",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\CombinedStore;\nuse Symfony\\Component\\Lock\\Strategy\\UnanimousStrategy;\n\n$store = new CombinedStore($stores, new UnanimousStrategy());",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Lock\\Store\\ZookeeperStore;\n\n$zookeeper = new \\Zookeeper('localhost:2181');\n// use the following to define a high-availability cluster:\n// $zookeeper = new \\Zookeeper('localhost1:2181,localhost2:2181,localhost3:2181');\n\n$store = new ZookeeperStore($zookeeper);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$lock = $factory->createLock('pdf-creation', 30);\n\nif (!$lock->acquire()) {\n    return;\n}\nwhile (!$finished) {\n    if ($lock->getRemainingLifetime() <= 5) {\n        if ($lock->isExpired()) {\n            // lock was lost, perform a rollback or send a notification\n            throw new \\RuntimeException('Lock lost during the overall process');\n        }\n\n        $lock->refresh();\n    }\n\n    // Perform the task whose duration MUST be less than 5 seconds\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "db.lock.createIndex(\n    { \"expires_at\": 1 },\n    { \"expireAfterSeconds\": 0 }\n)",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/lock.html",
+    "https://symfony.com/doc/7.3/lock.html",
+    "https://symfony.com/doc/7.3/components/using_components.html"
+  ]
+}

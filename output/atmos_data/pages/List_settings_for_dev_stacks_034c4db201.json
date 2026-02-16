@@ -1,0 +1,8 @@
+{
+  "title": "List settings for dev stacks",
+  "content": "atmos list settings --stack '*-dev-*'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-settings-for-dev-stacks",
+  "links": []
+}

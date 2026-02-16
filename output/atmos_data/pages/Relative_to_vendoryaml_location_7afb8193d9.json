@@ -1,0 +1,19 @@
+{
+  "title": "Relative to vendor.yaml location",
+  "content": "source: \"../../../components/terraform/mixins\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### Absolute Paths",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Absolute Paths",
+      "id": "absolute-paths"
+    }
+  ],
+  "url": "llms-txt#relative-to-vendor.yaml-location",
+  "links": []
+}

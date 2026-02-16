@@ -1,0 +1,8 @@
+{
+  "title": "Override shell program",
+  "content": "atmos auth shell --shell /bin/zsh",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#override-shell-program",
+  "links": []
+}

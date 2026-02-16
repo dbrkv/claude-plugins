@@ -1,0 +1,8 @@
+{
+  "title": "Interactively select identity to inspect",
+  "content": "atmos auth whoami --identity",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#interactively-select-identity-to-inspect",
+  "links": []
+}

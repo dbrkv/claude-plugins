@@ -1,0 +1,53 @@
+{
+  "url": "https://symfony.com/doc/7.3/validation/severity.html",
+  "title": "How to Handle Different Error Levels",
+  "content": "Sometimes, you may want to display constraint validation error messages differently based on some rules. For example, you have a registration form for new users where they enter some personal information and choose their authentication credentials. They would have to choose a username and a secure password, but providing bank account information would be optional. Nonetheless, you want to make sure that these optional fields, if entered, are still valid, but display their errors differently.\n\nThe process to achieve this behavior consists of two steps:\n\nUse the payload option to configure the error level for each constraint:\n\nWhen validation of the User object fails, you can retrieve the constraint that caused a particular failure using the getConstraint() method. Each constraint exposes the attached payload as a public property:\n\nFor example, you can leverage this to customize the form_errors block so that the severity is added as an additional HTML class:\n\nFor more information on customizing form rendering, see How to Customize Form Rendering.\n\nSymfony Code Performance Profiling\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Handle Different Error Levels",
+      "id": "how-to-handle-different-error-levels"
+    },
+    {
+      "level": "h2",
+      "text": "1. Assigning the Error Level",
+      "id": "1-assigning-the-error-level"
+    },
+    {
+      "level": "h2",
+      "text": "2. Customize the Error Message Template",
+      "id": "2-customize-the-error-message-template"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/User.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass User\n{\n    #[Assert\\NotBlank(payload: ['severity' => 'error'])]\n    protected string $username;\n\n    #[Assert\\NotBlank(payload: ['severity' => 'error'])]\n    protected string $password;\n\n    #[Assert\\Iban(payload: ['severity' => 'warning'])]\n    protected string $bankAccountNumber;\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\User:\n    properties:\n        username:\n            - NotBlank:\n                payload:\n                    severity: error\n        password:\n            - NotBlank:\n                payload:\n                    severity: error\n        bankAccountNumber:\n            - Iban:\n                payload:\n                    severity: warning",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\User\">\n        <property name=\"username\">\n            <constraint name=\"NotBlank\">\n                <option name=\"payload\">\n                    <value key=\"severity\">error</value>\n                </option>\n            </constraint>\n        </property>\n        <property name=\"password\">\n            <constraint name=\"NotBlank\">\n                <option name=\"payload\">\n                    <value key=\"severity\">error</value>\n                </option>\n            </constraint>\n        </property>\n        <property name=\"bankAccountNumber\">\n            <constraint name=\"Iban\">\n                <option name=\"payload\">\n                    <value key=\"severity\">warning</value>\n                </option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/User.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass User\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('username', new Assert\\NotBlank(\n            payload: ['severity' => 'error'],\n        ));\n        $metadata->addPropertyConstraint('password', new Assert\\NotBlank(\n            payload: ['severity' => 'error'],\n        ));\n        $metadata->addPropertyConstraint('bankAccountNumber', new Assert\\Iban(\n            payload: ['severity' => 'warning'],\n        ));\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// a constraint validation failure, instance of\n// Symfony\\Component\\Validator\\ConstraintViolation\n$constraintViolation = ...;\n$constraint = $constraintViolation->getConstraint();\n$severity = $constraint->payload['severity'] ?? null;",
+      "language": "unknown"
+    },
+    {
+      "code": "{%- block form_errors -%}\n    {%- if errors|length > 0 -%}\n    <ul>\n        {%- for error in errors -%}\n            <li class=\"{{ error.cause.constraint.payload.severity ?? '' }}\">{{ error.message }}</li>\n        {%- endfor -%}\n    </ul>\n    {%- endif -%}\n{%- endblock form_errors -%}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/validation/severity.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html"
+  ]
+}

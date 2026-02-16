@@ -1,0 +1,8 @@
+{
+  "title": "Web interface (requires Graphviz: brew install graphviz)",
+  "content": "go tool pprof -http=:8080 cpu.prof\ngo tool pprof -http=:8080 heap.prof",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#web-interface-(requires-graphviz:-brew-install-graphviz)",
+  "links": []
+}

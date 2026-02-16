@@ -1,0 +1,75 @@
+{
+  "title": "Same path on both platforms!",
+  "content": "text\n~/.config/\nâââ atmos/          # Atmos (now!)\nâââ gh/             # GitHub CLI\nâââ git/            # Git\nâââ packer/         # HashiCorp Packer\nâââ stripe/         # Stripe CLI\nâââ op/             # 1Password CLI\ngo\nfunc init() {\n    if runtime.GOOS == \"darwin\" {\n        xdg.ConfigHome = filepath.Join(homeDir, \".config\")\n        xdg.DataHome = filepath.Join(homeDir, \".local\", \"share\")\n        xdg.CacheHome = filepath.Join(homeDir, \".cache\")\n    }\n}\nbash\n   ls -la ~/Library/Application\\ Support/atmos\n   ls -la ~/.config/atmos\n   text\nError: failed to initialize atmos config\nstack base path must be provided in 'stacks.base_path' config or ATMOS_STACKS_BASE_PATH' ENV variable\nyaml",
+  "code_samples": [
+    {
+      "code": "### Ecosystem Alignment\n\nYour `~/.config` directory now contains configuration for all your CLI tools:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Technical Implementation\n\nWe override the `adrg/xdg` library's macOS defaults using an `init()` function:",
+      "language": "unknown"
+    },
+    {
+      "code": "This ensures **all code** in Atmos (even code that directly imports `github.com/adrg/xdg`) gets CLI tool conventions on macOS.\n\n## Documentation Updates\n\n- [Configuring Geodesic with Atmos Auth](/cli/commands/auth/tutorials/configuring-geodesic) - Simplified configuration (no setup needed!)\n- [Auth Usage Guide](/cli/commands/auth/usage) - Updated with correct macOS paths.\n\n## Migration Support\n\nIf you encounter issues:\n\n1. Check your current credentials location:",
+      "language": "unknown"
+    },
+    {
+      "code": "2. Open an issue on [GitHub](https://github.com/cloudposse/atmos/issues) if you need help\n\n## References\n\n- [XDG Base Directory Specification](https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html)\n- [Stack Overflow discussion on XDG equivalents on macOS](https://stackoverflow.com/questions/3373948/equivalents-of-xdg-config-home-and-xdg-data-home-on-mac-os-x)\n- [Geodesic](https://github.com/cloudposse/geodesic)\n\n---\n\nThis change aligns Atmos with CLI tool best practices and ensures seamless integration with containerized development environments. macOS users now enjoy the same consistent experience as Linux users!\n\n---\n\n## Auth and Utility Commands No Longer Require Stack Configurations\n\nAtmos auth, documentation, and workflow management commands now work independently of stack configurations, making it easier to use Atmos in CI/CD pipelines and alongside \"native\" Terraform workflows.\n\n<!--truncate-->\n\n## What Changed\n\nSix Atmos commands that don't operate on stacks have been updated to no longer require stack configurations:\n\n**Auth Commands:**\n- `atmos auth env` - Export cloud credentials as environment variables\n- `atmos auth exec` - Execute commands with authenticated credentials\n- `atmos auth shell` - Launch an authenticated shell session\n\n**Utility Commands:**\n- `atmos list workflows` - List available workflows\n- `atmos list vendor` - List vendor configurations\n- `atmos docs <component>` - Display component documentation\n\n## Why This Matters\n\nPreviously, these commands would fail with an error if you didn't have `stacks.base_path` and `stacks.included_paths` configured in your `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "This created an unnecessary barrier for teams who wanted to:\n\n- Use Atmos auth for credential management without adopting full stack-based configuration\n- Run authentication commands in CI/CD pipelines\n- Browse component documentation without setting up stacks\n- Manage workflows independently of stack operations\n\nWith these changes, Atmos now works with \"native\" Terraform, regardless of whether you use Atmos to manage stack configuration or not (but let's face it, [Nobody Runs Native Terraform](https://cloudposse.com/blog/nobody-runs-native-terraform/)).\n\nYou can now use Atmos features incrementally:\n\n### Just Authentication\nUse Atmos for cloud credential management without any stack configuration:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Ecosystem Alignment",
+      "id": "ecosystem-alignment"
+    },
+    {
+      "level": "h2",
+      "text": "Technical Implementation",
+      "id": "technical-implementation"
+    },
+    {
+      "level": "h2",
+      "text": "Documentation Updates",
+      "id": "documentation-updates"
+    },
+    {
+      "level": "h2",
+      "text": "Migration Support",
+      "id": "migration-support"
+    },
+    {
+      "level": "h2",
+      "text": "References",
+      "id": "references"
+    },
+    {
+      "level": "h2",
+      "text": "Auth and Utility Commands No Longer Require Stack Configurations",
+      "id": "auth-and-utility-commands-no-longer-require-stack-configurations"
+    },
+    {
+      "level": "h2",
+      "text": "What Changed",
+      "id": "what-changed"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h3",
+      "text": "Just Authentication",
+      "id": "just-authentication"
+    }
+  ],
+  "url": "llms-txt#same-path-on-both-platforms!",
+  "links": []
+}

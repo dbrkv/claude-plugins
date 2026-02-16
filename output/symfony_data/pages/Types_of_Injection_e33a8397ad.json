@@ -1,0 +1,102 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/injection_types.html",
+  "title": "Types of Injection",
+  "content": "Making a class's dependencies explicit and requiring that they are injected into it is a good way to make a class more reusable, testable, and decoupled from the rest of the code.\n\nThere are several ways that the dependencies can be injected. Each injection point has advantages and disadvantages to consider, as well as different ways of working with them when using the service container.\n\nThe most common way to inject dependencies is via a class's constructor. To do this you need to add an argument to the constructor signature to accept the dependency:\n\nYou can specify what service you would like to inject into this in the service container configuration:\n\nType hinting the injected object means that you can be sure that a suitable dependency has been injected. By type-hinting, you'll get a clear error immediately if an unsuitable dependency is injected. By type hinting using an interface rather than a class you can make the choice of dependency more flexible. And assuming you only use methods defined in the interface, you can gain that flexibility and still safely use the object.\n\nThere are several advantages to using constructor injection:\n\nThese advantages do mean that constructor injection is not suitable for working with optional dependencies. It is also more difficult to use in combination with class hierarchies: if a class uses constructor injection then extending it and overriding the constructor becomes problematic.\n\nAnother possible injection is to use a method which returns a separate instance by cloning the original service, this approach allows you to make a service immutable:\n\nIn order to use this type of injection, don't forget to configure it:\n\nIf you decide to use autowiring, this type of injection requires that you add a @return static docblock or the static return type in order for the container to be capable of registering the method.\n\nThis approach is useful if you need to configure your service according to your needs, so, here's the advantages of immutable-setters:\n\nThe disadvantages are:\n\nAnother possible injection point into a class is by adding a setter method that accepts the dependency:\n\nThis time the advantages are:\n\nThe disadvantages of setter injection are:\n\nAnother possibility is setting public fields of the class directly:\n\nThere are mainly only disadvantages to using property injection. It is similar to setter injection but with this additional important problem:\n\nBut, it is useful to know that this can be done with the service container, especially if you are working with code that is out of your control, such as in a third party library, which uses public properties for its dependencies.\n\nOnline Symfony certification, take it now!\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Types of Injection",
+      "id": "types-of-injection"
+    },
+    {
+      "level": "h2",
+      "text": "Constructor Injection",
+      "id": "constructor-injection"
+    },
+    {
+      "level": "h2",
+      "text": "Immutable-setter Injection",
+      "id": "immutable-setter-injection"
+    },
+    {
+      "level": "h2",
+      "text": "Setter Injection",
+      "id": "setter-injection"
+    },
+    {
+      "level": "h2",
+      "text": "Property Injection",
+      "id": "property-injection"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Mail/NewsletterManager.php\nnamespace App\\Mail;\n\n// ...\nclass NewsletterManager\n{\n    public function __construct(\n        private MailerInterface $mailer,\n    ) {\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Mail\\NewsletterManager:\n        arguments: ['@mailer']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"App\\Mail\\NewsletterManager\">\n            <argument type=\"service\" id=\"mailer\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Mail\\NewsletterManager;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(NewsletterManager::class)\n        ->args(service('mailer'));\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Mail/NewsletterManager.php\nnamespace App\\Mail;\n\n// ...\nuse Symfony\\Component\\Mailer\\MailerInterface;\nuse Symfony\\Contracts\\Service\\Attribute\\Required;\n\nclass NewsletterManager\n{\n    private MailerInterface $mailer;\n\n    /**\n     * @return static\n     */\n    #[Required]\n    public function withMailer(MailerInterface $mailer): self\n    {\n        $new = clone $this;\n        $new->mailer = $mailer;\n\n        return $new;\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n     # ...\n\n     app.newsletter_manager:\n         class: App\\Mail\\NewsletterManager\n         calls:\n             - withMailer: !returns_clone ['@mailer']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"https://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"app.newsletter_manager\" class=\"App\\Mail\\NewsletterManager\">\n            <call method=\"withMailer\" returns-clone=\"true\">\n                <argument type=\"service\" id=\"mailer\"/>\n            </call>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nuse App\\Mail\\NewsletterManager;\nuse Symfony\\Component\\DependencyInjection\\Reference;\n\n// ...\n$container->register('app.newsletter_manager', NewsletterManager::class)\n    ->addMethodCall('withMailer', [new Reference('mailer')], true);",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Mail/NewsletterManager.php\nnamespace App\\Mail;\n\nuse Symfony\\Contracts\\Service\\Attribute\\Required;\n\n// ...\nclass NewsletterManager\n{\n    private MailerInterface $mailer;\n\n    #[Required]\n    public function setMailer(MailerInterface $mailer): void\n    {\n        $this->mailer = $mailer;\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    app.newsletter_manager:\n        class: App\\Mail\\NewsletterManager\n        calls:\n            - setMailer: ['@mailer']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"app.newsletter_manager\" class=\"App\\Mail\\NewsletterManager\">\n            <call method=\"setMailer\">\n                <argument type=\"service\" id=\"mailer\"/>\n            </call>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Mail\\NewsletterManager;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(NewsletterManager::class)\n        ->call('setMailer', [service('mailer')]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// ...\nclass NewsletterManager\n{\n    public MailerInterface $mailer;\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    app.newsletter_manager:\n        class: App\\Mail\\NewsletterManager\n        properties:\n            mailer: '@mailer'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"app.newsletter_manager\" class=\"App\\Mail\\NewsletterManager\">\n            <property name=\"mailer\" type=\"service\" id=\"mailer\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Mail\\NewsletterManager;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set('app.newsletter_manager', NewsletterManager::class)\n        ->property('mailer', service('mailer'));\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/injection_types.html"
+  ]
+}

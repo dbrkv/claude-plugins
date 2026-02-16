@@ -1,0 +1,8 @@
+{
+  "title": "Memory heap profiling",
+  "content": "atmos terraform plan vpc -s plat-ue2-dev --profile-file=heap.prof --profile-type=heap",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#memory-heap-profiling",
+  "links": []
+}

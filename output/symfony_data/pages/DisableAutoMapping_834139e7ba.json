@@ -1,0 +1,52 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/DisableAutoMapping.html",
+  "title": "DisableAutoMapping",
+  "content": "This constraint allows to disable Doctrine's auto mapping on a class or a property. Automapping allows to determine validation rules based on Doctrine's attributes. You may use this constraint when automapping is globally enabled, but you still want to disable this feature for a class or a property specifically.\n\nIn the following example, the DisableAutoMapping constraint will tell the validator to not gather constraints from Doctrine's metadata:\n\nThe groups option is not available for this constraint.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nMeasure & Improve Symfony Code Performance\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "DisableAutoMapping",
+      "id": "disableautomapping"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Model/BookCollection.php\nnamespace App\\Model;\n\nuse App\\Model\\Author;\nuse App\\Model\\BookMetadata;\nuse Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\n#[Assert\\DisableAutoMapping]\nclass BookCollection\n{\n    #[ORM\\Column(nullable: false)]\n    protected string $name = '';\n\n    #[ORM\\ManyToOne(targetEntity: Author::class)]\n    public Author $author;\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\BookCollection:\n    constraints:\n        - DisableAutoMapping: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\BookCollection\">\n        <constraint name=\"DisableAutoMapping\"/>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/BookCollection.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass BookCollection\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addConstraint(new Assert\\DisableAutoMapping());\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/DisableAutoMapping.html",
+    "https://symfony.com/doc/7.3/reference/configuration/doctrine.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

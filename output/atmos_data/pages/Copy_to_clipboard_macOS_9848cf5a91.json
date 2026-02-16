@@ -1,0 +1,8 @@
+{
+  "title": "Copy to clipboard (macOS)",
+  "content": "atmos auth console --print-only | pbcopy",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#copy-to-clipboard-(macos)",
+  "links": []
+}

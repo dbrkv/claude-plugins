@@ -1,0 +1,324 @@
+{
+  "url": "https://symfony.com/doc/7.3/controller.html",
+  "title": "Controller",
+  "content": "A controller is a PHP function you create that reads information from the Request object and creates and returns a Response object. The response could be an HTML page, JSON, XML, a file download, a redirect, a 404 error or anything else. The controller runs whatever arbitrary logic your application needs to render the content of a page.\n\nIf you haven't already created your first working page, check out Create your First Page in Symfony and then come back!\n\nWhile a controller can be any PHP callable (function, method on an object, or a Closure), a controller is usually a method inside a controller class:\n\nThe controller is the number() method, which lives inside the controller class LuckyController.\n\nThis controller is quite simple:\n\nIn order to view the result of this controller, you need to map a URL to it via a route. This was done above with the #[Route('/lucky/number/{max}')] route attribute.\n\nTo see your page, go to this URL in your browser: http://localhost:8000/lucky/number/100\n\nFor more information on routing, see Routing.\n\nTo aid development, Symfony comes with an optional base controller class called AbstractController. It can be extended to gain access to helper methods.\n\nAdd the use statement atop your controller class and then modify LuckyController to extend it:\n\nThat's it! You now have access to methods like $this->render() and many others that you'll learn about next.\n\nThe generateUrl() method is just a helper method that generates the URL for a given route:\n\nIf you want to redirect the user to another page, use the redirectToRoute() and redirect() methods:\n\nThe redirect() method does not check its destination in any way. If you redirect to a URL provided by end-users, your application may be open to the unvalidated redirects security vulnerability.\n\nIf you're serving HTML, you'll want to render a template. The render() method renders a template and puts that content into a Response object for you:\n\nTemplating and Twig are explained more in the Creating and Using Templates article.\n\nSymfony comes packed with a lot of useful classes and functionalities, called services. These are used for rendering templates, sending emails, querying the database and any other \"work\" you can think of.\n\nIf you need a service in a controller, type-hint an argument with its class (or interface) name and Symfony will inject it automatically. This requires your controller to be registered as a service:\n\nWhat other services can you type-hint? To see them, use the debug:autowiring console command:\n\nIf you need control over the exact value of an argument, or require a parameter, you can use the #[Autowire] attribute:\n\nYou can read more about this attribute in Defining Services Dependencies Automatically (Autowiring).\n\nLike with all services, you can also use regular constructor injection in your controllers.\n\nFor more information about services, see the Service Container article.\n\nTo save time, you can install Symfony Maker and tell Symfony to generate a new controller class:\n\nIf you want to generate an entire CRUD from a Doctrine entity, use:\n\nWhen things are not found, you should return a 404 response. To do this, throw a special type of exception:\n\nThe createNotFoundException() method is just a shortcut to create a special NotFoundHttpException object, which ultimately triggers a 404 HTTP response inside Symfony.\n\nIf you throw an exception that extends or is an instance of HttpException, Symfony will use the appropriate HTTP status code. Otherwise, the response will have a 500 HTTP status code:\n\nIn every case, an error page is shown to the end user and a full debug error page is shown to the developer (i.e. when you're in \"Debug\" mode - see Configuring Symfony).\n\nTo customize the error page that's shown to the user, see the How to Customize Error Pages article.\n\nWhat if you need to read query parameters, grab a request header or get access to an uploaded file? That information is stored in Symfony's Request object. To access it in your controller, add it as an argument and type-hint it with the Request class:\n\nKeep reading for more information about using the Request object.\n\nIt is possible to automatically map request's payload and/or query parameters to your controller's action arguments with attributes.\n\nLet's say a user sends you a request with the following query string: https://example.com/dashboard?firstName=John&lastName=Smith&age=27. Thanks to the MapQueryParameter attribute, arguments of your controller's action can be automatically fulfilled:\n\nThe MapQueryParameter attribute supports the following argument types:\n\nSupport for AbstractUid objects was introduced in Symfony 7.3.\n\n#[MapQueryParameter] can take an optional argument called filter. You can use the Validate Filters constants defined in PHP:\n\nAnother possibility is to map the entire query string into an object that will hold available query parameters. Let's say you declare the following DTO with its optional validation constraints:\n\nYou can then use the MapQueryString attribute in your controller:\n\nYou can customize the validation groups used during the mapping and also the HTTP status to return if the validation fails:\n\nThe default status code returned if the validation fails is 404.\n\nIf you want to map your object to a nested array in your query using a specific key, set the key option in the #[MapQueryString] attribute:\n\nThe key option of #[MapQueryString] was introduced in Symfony 7.3.\n\nIf you need a valid DTO even when the request query string is empty, set a default value for your controller arguments:\n\nWhen creating an API and dealing with other HTTP methods than GET (like POST or PUT), user's data are not stored in the query string but directly in the request payload, like this:\n\nIn this case, it is also possible to directly map this payload to your DTO by using the MapRequestPayload attribute:\n\nThis attribute allows you to customize the serialization context as well as the class responsible of doing the mapping between the request and your DTO:\n\nYou can also customize the validation groups used, the status code to return if the validation fails as well as supported payload formats:\n\nThe default status code returned if the validation fails is 422.\n\nIf you build a JSON API, make sure to declare your route as using the JSON format. This will make the error handling output a JSON response in case of validation errors, rather than an HTML page:\n\nMake sure to install phpstan/phpdoc-parser and phpdocumentor/type-resolver if you want to map a nested array of specific DTOs:\n\nInstead of returning an array of DTO objects, you can tell Symfony to transform each DTO object into an array and return something like this:\n\nTo do so, map the parameter as an array and configure the type of each element using the type option of the attribute:\n\nThe type option of #[MapRequestPayload] was introduced in Symfony 7.1.\n\nSymfony provides an attribute called #[MapUploadedFile] to map one or more UploadedFile objects to controller arguments:\n\nIn this example, the associated argument resolver fetches the UploadedFile based on the argument name ($picture). If no file is submitted, an HttpException is thrown. You can change this by making the controller argument nullable:\n\nThe #[MapUploadedFile] attribute also allows to pass a list of constraints to apply to the uploaded file:\n\nThe validation constraints are checked before injecting the UploadedFile into the controller argument. If there's a constraint violation, an HttpException is thrown and the controller's action is not executed.\n\nIf you need to upload a collection of files, map them to an array or a variadic argument. The given constraint will be applied to all files and if any of them fails, an HttpException is thrown:\n\nUse the name option to rename the uploaded file to a custom value:\n\nIn addition, you can change the status code of the HTTP exception thrown when there are constraint violations:\n\nThe #[MapUploadedFile] attribute was introduced in Symfony 7.1.\n\nYou can store special messages, called \"flash\" messages, on the user's session. By design, flash messages are meant to be used exactly once: they vanish from the session automatically as soon as you retrieve them. This feature makes \"flash\" messages particularly great for storing user notifications.\n\nFor example, imagine you're processing a form submission:\n\nReading for more information about using Sessions.\n\nAs mentioned earlier, Symfony will pass the Request object to any controller argument that is type-hinted with the Request class:\n\nThe Request class has several public properties and methods that return any information you need about the request.\n\nLike the Request, the Response object has a public headers property. This object is of the type ResponseHeaderBag and provides methods for getting and setting response headers. The header names are normalized. As a result, the name Content-Type is equivalent to the name content-type or content_type.\n\nIn Symfony, a controller is required to return a Response object:\n\nTo facilitate this, different response objects are included to address different response types. Some of these are mentioned below. To learn more about the Request and Response (and different Response classes), see the HttpFoundation component documentation.\n\nTechnically, a controller can return a value other than a Response. However, your application is responsible for transforming that value into a Response object. This is handled using events (specifically the kernel.view event), an advanced feature you'll learn about later.\n\nTo get the value of any configuration parameter from a controller, use the getParameter() helper method:\n\nTo return JSON from a controller, use the json() helper method. This returns a JsonResponse object that encodes the data automatically:\n\nIf the serializer service is enabled in your application, it will be used to serialize the data to JSON. Otherwise, the json_encode function is used.\n\nYou can use the file() helper to serve a file from inside a controller:\n\nThe file() helper provides some arguments to configure its behavior:\n\nEarly hints tell the browser to start downloading some assets even before the application sends the response content. This improves perceived performance because the browser can prefetch resources that will be needed once the full response is finally sent. These resources are commonly Javascript or CSS files, but they can be any type of resource.\n\nIn order to work, the SAPI you're using must support this feature, like FrankenPHP.\n\nYou can send early hints from your controller action thanks to the sendEarlyHints() method:\n\nTechnically, Early Hints are an informational HTTP response with the status code 103. The sendEarlyHints() method creates a Response object with that status code and sends its headers immediately.\n\nThis way, browsers can start downloading the assets immediately; like the style.css and script.js files in the above example. The sendEarlyHints() method also returns the Response object, which you must use to create the full response sent from the controller action.\n\nIn Symfony, a controller is usually a class method which is used to accept requests, and return a Response object. When mapped with a URL, a controller becomes accessible and its response can be viewed.\n\nTo facilitate the development of controllers, Symfony provides an AbstractController. It can be used to extend the controller class allowing access to some frequently used utilities such as render() and redirectToRoute(). The AbstractController also provides the createNotFoundException() utility which is used to return a page not found response.\n\nIn other articles, you'll learn how to use specific services from inside your controller that will help you persist and fetch objects from a database, process form submissions, handle caching and more.\n\nNext, learn all about rendering templates with Twig.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Controller",
+      "id": "controller"
+    },
+    {
+      "level": "h2",
+      "text": "A Basic Controller",
+      "id": "a-basic-controller"
+    },
+    {
+      "level": "h3",
+      "text": "Mapping a URL to a Controller",
+      "id": "mapping-a-url-to-a-controller"
+    },
+    {
+      "level": "h2",
+      "text": "The Base Controller Class & Services",
+      "id": "the-base-controller-class-services"
+    },
+    {
+      "level": "h3",
+      "text": "Generating URLs",
+      "id": "generating-urls"
+    },
+    {
+      "level": "h3",
+      "text": "Redirecting",
+      "id": "redirecting"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering Templates",
+      "id": "rendering-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Fetching Services",
+      "id": "fetching-services"
+    },
+    {
+      "level": "h2",
+      "text": "Generating Controllers",
+      "id": "generating-controllers"
+    },
+    {
+      "level": "h2",
+      "text": "Managing Errors and 404 Pages",
+      "id": "managing-errors-and-404-pages"
+    },
+    {
+      "level": "h2",
+      "text": "The Request object as a Controller Argument",
+      "id": "the-request-object-as-a-controller-argument"
+    },
+    {
+      "level": "h2",
+      "text": "Automatic Mapping Of The Request",
+      "id": "automatic-mapping-of-the-request"
+    },
+    {
+      "level": "h3",
+      "text": "Mapping Query Parameters Individually",
+      "id": "mapping-query-parameters-individually"
+    },
+    {
+      "level": "h3",
+      "text": "Mapping The Whole Query String",
+      "id": "mapping-the-whole-query-string"
+    },
+    {
+      "level": "h3",
+      "text": "Mapping Request Payload",
+      "id": "mapping-request-payload"
+    },
+    {
+      "level": "h3",
+      "text": "Mapping Uploaded Files",
+      "id": "mapping-uploaded-files"
+    },
+    {
+      "level": "h2",
+      "text": "Managing the Session",
+      "id": "managing-the-session"
+    },
+    {
+      "level": "h2",
+      "text": "The Request and Response Object",
+      "id": "the-request-and-response-object"
+    },
+    {
+      "level": "h3",
+      "text": "Accessing Configuration Values",
+      "id": "accessing-configuration-values"
+    },
+    {
+      "level": "h3",
+      "text": "Returning JSON Response",
+      "id": "returning-json-response"
+    },
+    {
+      "level": "h3",
+      "text": "Streaming File Responses",
+      "id": "streaming-file-responses"
+    },
+    {
+      "level": "h3",
+      "text": "Sending Early Hints",
+      "id": "sending-early-hints"
+    },
+    {
+      "level": "h2",
+      "text": "Final Thoughts",
+      "id": "final-thoughts"
+    },
+    {
+      "level": "h2",
+      "text": "Keep Going!",
+      "id": "keep-going"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more about Controllers",
+      "id": "learn-more-about-controllers"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Controller/LuckyController.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\nclass LuckyController\n{\n    #[Route('/lucky/number/{max}', name: 'app_lucky_number')]\n    public function number(int $max): Response\n    {\n        $number = random_int(0, $max);\n\n        return new Response(\n            '<html><body>Lucky number: '.$number.'</body></html>'\n        );\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Controller/LuckyController.php\n  namespace App\\Controller;\n\n+ use Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\n\n- class LuckyController\n+ class LuckyController extends AbstractController\n  {\n      // ...\n  }",
+      "language": "csharp"
+    },
+    {
+      "code": "$url = $this->generateUrl('app_lucky_number', ['max' => 10]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\RedirectResponse;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\n// ...\npublic function index(): RedirectResponse\n{\n    // redirects to the \"homepage\" route\n    return $this->redirectToRoute('homepage');\n\n    // redirectToRoute is a shortcut for:\n    // return new RedirectResponse($this->generateUrl('homepage'));\n\n    // does a permanent HTTP 301 redirect\n    return $this->redirectToRoute('homepage', [], 301);\n    // if you prefer, you can use PHP constants instead of hardcoded numbers\n    return $this->redirectToRoute('homepage', [], Response::HTTP_MOVED_PERMANENTLY);\n\n    // redirect to a route with parameters\n    return $this->redirectToRoute('app_lucky_number', ['max' => 10]);\n\n    // redirects to a route and maintains the original query string parameters\n    return $this->redirectToRoute('blog_show', $request->query->all());\n\n    // redirects to the current route (e.g. for Post/Redirect/Get pattern):\n    return $this->redirectToRoute($request->attributes->get('_route'));\n\n    // redirects externally\n    return $this->redirect('http://symfony.com/doc');\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// renders templates/lucky/number.html.twig\nreturn $this->render('lucky/number.html.twig', ['number' => $number]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Psr\\Log\\LoggerInterface;\nuse Symfony\\Component\\HttpFoundation\\Response;\n// ...\n\n#[Route('/lucky/number/{max}')]\npublic function number(int $max, LoggerInterface $logger): Response\n{\n    $logger->info('We are logging!');\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:autowiring",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Psr\\Log\\LoggerInterface;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autowire;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass LuckyController extends AbstractController\n{\n    public function number(\n        int $max,\n\n        // inject a specific logger service\n        #[Autowire(service: 'monolog.logger.request')]\n        LoggerInterface $logger,\n\n        // or inject parameter values\n        #[Autowire('%kernel.project_dir%')]\n        string $projectDir\n    ): Response\n    {\n        $logger->info('We are logging!');\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console make:controller BrandNewController\n\ncreated: src/Controller/BrandNewController.php\ncreated: templates/brandnew/index.html.twig",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console make:crud Product\n\ncreated: src/Controller/ProductController.php\ncreated: src/Form/ProductType.php\ncreated: templates/product/_delete_form.html.twig\ncreated: templates/product/_form.html.twig\ncreated: templates/product/edit.html.twig\ncreated: templates/product/index.html.twig\ncreated: templates/product/new.html.twig\ncreated: templates/product/show.html.twig",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Exception\\NotFoundHttpException;\n\n// ...\npublic function index(): Response\n{\n    // retrieve the object from database\n    $product = ...;\n    if (!$product) {\n        throw $this->createNotFoundException('The product does not exist');\n\n        // the above is just a shortcut for:\n        // throw new NotFoundHttpException('The product does not exist');\n    }\n\n    return $this->render(/* ... */);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// this exception ultimately generates a 500 status error\nthrow new \\Exception('Something went wrong!');",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n// ...\n\npublic function index(Request $request): Response\n{\n    $page = $request->query->get('page', 1);\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapQueryParameter;\n\n// ...\n\npublic function dashboard(\n    #[MapQueryParameter] string $firstName,\n    #[MapQueryParameter] string $lastName,\n    #[MapQueryParameter] int $age,\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapQueryParameter;\n\n// ...\n\npublic function dashboard(\n    #[MapQueryParameter(filter: \\FILTER_VALIDATE_REGEXP, options: ['regexp' => '/^\\w+$/'])] string $firstName,\n    #[MapQueryParameter] string $lastName,\n    #[MapQueryParameter(filter: \\FILTER_VALIDATE_INT)] int $age,\n): Response\n{\n    // ...\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "namespace App\\Model;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass UserDto\n{\n    public function __construct(\n        #[Assert\\NotBlank]\n        public string $firstName,\n\n        #[Assert\\NotBlank]\n        public string $lastName,\n\n        #[Assert\\GreaterThan(18)]\n        public int $age,\n    ) {\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Model\\UserDto;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapQueryString;\n\n// ...\n\npublic function dashboard(\n    #[MapQueryString] UserDto $userDto\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\n\n// ...\n\npublic function dashboard(\n    #[MapQueryString(\n        validationGroups: ['strict', 'edit'],\n        validationFailedStatusCode: Response::HTTP_UNPROCESSABLE_ENTITY\n    )] UserDto $userDto\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use App\\Model\\SearchDto;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapQueryString;\n\n// ...\n\npublic function dashboard(\n    #[MapQueryString(key: 'search')] SearchDto $searchDto\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use App\\Model\\UserDto;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapQueryString;\n\n// ...\n\npublic function dashboard(\n    #[MapQueryString] UserDto $userDto = new UserDto()\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n    \"firstName\": \"John\",\n    \"lastName\": \"Smith\",\n    \"age\": 28\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use App\\Model\\UserDto;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapRequestPayload;\n\n// ...\n\npublic function dashboard(\n    #[MapRequestPayload] UserDto $userDto\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "public function dashboard(\n    #[MapRequestPayload(\n        serializationContext: ['...'],\n        resolver: App\\Resolver\\UserDtoResolver\n    )]\n    UserDto $userDto\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\n\n// ...\n\npublic function dashboard(\n    #[MapRequestPayload(\n        acceptFormat: 'json',\n        validationGroups: ['strict', 'read'],\n        validationFailedStatusCode: Response::HTTP_NOT_FOUND\n    )] UserDto $userDto\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "#[Route('/dashboard', name: 'dashboard', format: 'json')]",
+      "language": "unknown"
+    },
+    {
+      "code": "public function dashboard(\n    #[MapRequestPayload] EmployeesDto $employeesDto\n): Response\n{\n    // ...\n}\n\nfinal class EmployeesDto\n{\n    /**\n     * @param UserDto[] $users\n     */\n    public function __construct(\n        public readonly array $users = []\n    ) {}\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "[\n    {\n        \"firstName\": \"John\",\n        \"lastName\": \"Smith\",\n        \"age\": 28\n    },\n    {\n        \"firstName\": \"Jane\",\n        \"lastName\": \"Doe\",\n        \"age\": 30\n    }\n]",
+      "language": "unknown"
+    },
+    {
+      "code": "public function dashboard(\n    #[MapRequestPayload(type: UserDto::class)] array $users\n): Response\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\File\\UploadedFile;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapUploadedFile;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\nclass UserController extends AbstractController\n{\n    #[Route('/user/picture', methods: ['PUT'])]\n    public function changePicture(\n        #[MapUploadedFile] UploadedFile $picture,\n    ): Response {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "#[MapUploadedFile]\n?UploadedFile $document",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\File\\UploadedFile;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\MapUploadedFile;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass UserController extends AbstractController\n{\n    #[Route('/user/picture', methods: ['PUT'])]\n    public function changePicture(\n        #[MapUploadedFile([\n            new Assert\\File(mimeTypes: ['image/png', 'image/jpeg']),\n            new Assert\\Image(maxWidth: 3840, maxHeight: 2160),\n        ])]\n        UploadedFile $picture,\n    ): Response {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "#[MapUploadedFile(new Assert\\File(mimeTypes: ['application/pdf']))]\narray $documents\n\n#[MapUploadedFile(new Assert\\File(mimeTypes: ['application/pdf']))]\nUploadedFile ...$documents",
+      "language": "unknown"
+    },
+    {
+      "code": "#[MapUploadedFile(name: 'something-else')]\nUploadedFile $document",
+      "language": "unknown"
+    },
+    {
+      "code": "#[MapUploadedFile(\n    constraints: new Assert\\File(maxSize: '2M'),\n    validationFailedStatusCode: Response::HTTP_REQUEST_ENTITY_TOO_LARGE\n)]\nUploadedFile $document",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n// ...\n\npublic function update(Request $request): Response\n{\n    // ...\n\n    if ($form->isSubmitted() && $form->isValid()) {\n        // do some sort of processing\n\n        $this->addFlash(\n            'notice',\n            'Your changes were saved!'\n        );\n        // $this->addFlash() is equivalent to $request->getSession()->getFlashBag()->add()\n\n        return $this->redirectToRoute(/* ... */);\n    }\n\n    return $this->render(/* ... */);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\npublic function index(Request $request): Response\n{\n    $request->isXmlHttpRequest(); // is it an Ajax request?\n\n    $request->getPreferredLanguage(['en', 'fr']);\n\n    // retrieves GET and POST variables respectively\n    $request->query->get('page');\n    $request->getPayload()->get('page');\n\n    // retrieves SERVER variables\n    $request->server->get('HTTP_HOST');\n\n    // retrieves an instance of UploadedFile identified by foo\n    $request->files->get('foo');\n\n    // retrieves a COOKIE value\n    $request->cookies->get('PHPSESSID');\n\n    // retrieves an HTTP request header, with normalized, lowercase keys\n    $request->headers->get('host');\n    $request->headers->get('content-type');\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\n\n// creates a simple Response with a 200 status code (the default)\n$response = new Response('Hello '.$name, Response::HTTP_OK);\n\n// creates a CSS-response with a 200 status code\n$response = new Response('<style> ... </style>');\n$response->headers->set('Content-Type', 'text/css');",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\npublic function index(): Response\n{\n    $contentsDir = $this->getParameter('kernel.project_dir').'/contents';\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\JsonResponse;\n// ...\n\npublic function index(): JsonResponse\n{\n    // returns '{\"username\":\"jane.doe\"}' and sets the proper Content-Type header\n    return $this->json(['username' => 'jane.doe']);\n\n    // the shortcut defines three optional arguments\n    // return $this->json($data, $status = 200, $headers = [], $context = []);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\BinaryFileResponse;\n// ...\n\npublic function download(): BinaryFileResponse\n{\n    // send the file contents and force the browser to download it\n    return $this->file('/path/to/some_file.pdf');\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\File\\File;\nuse Symfony\\Component\\HttpFoundation\\ResponseHeaderBag;\n// ...\n\npublic function download(): BinaryFileResponse\n{\n    // load the file from the filesystem\n    $file = new File('/path/to/some_file.pdf');\n\n    return $this->file($file);\n\n    // rename the downloaded file\n    return $this->file($file, 'custom_name.pdf');\n\n    // display the file contents in the browser instead of downloading it\n    return $this->file('invoice_3241.pdf', 'my_invoice.pdf', ResponseHeaderBag::DISPOSITION_INLINE);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\nuse Symfony\\Component\\WebLink\\Link;\n\nclass HomepageController extends AbstractController\n{\n    #[Route(\"/\", name: \"homepage\")]\n    public function index(): Response\n    {\n        $response = $this->sendEarlyHints([\n            new Link(rel: 'preconnect', href: 'https://fonts.google.com'),\n            (new Link(href: '/style.css'))->withAttribute('as', 'style'),\n            (new Link(href: '/script.js'))->withAttribute('as', 'script'),\n        ]);\n\n        // prepare the contents of the response...\n\n        return $this->render('homepage/index.html.twig', response: $response);\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/controller.html",
+    "https://symfony.com/doc/7.3/page_creation.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/templates.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/controller/service.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html",
+    "https://symfony.com/doc/7.3/doctrine.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/controller/error_pages.html",
+    "https://symfony.com/doc/7.3/controller/value_resolver.html",
+    "https://symfony.com/doc/7.3/forms.html",
+    "https://symfony.com/doc/7.3/session.html",
+    "https://symfony.com/doc/7.3/components/http_foundation.html",
+    "https://symfony.com/doc/7.3/event_dispatcher.html",
+    "https://symfony.com/doc/7.3/components/http_kernel.html",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/controller/forwarding.html",
+    "https://symfony.com/doc/7.3/controller/upload_file.html"
+  ]
+}

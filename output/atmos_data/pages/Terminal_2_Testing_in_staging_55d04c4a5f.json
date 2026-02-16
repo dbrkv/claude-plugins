@@ -1,0 +1,8 @@
+{
+  "title": "Terminal 2: Testing in staging",
+  "content": "atmos auth shell --identity staging-admin\nterraform apply -target=module.test_feature",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#terminal-2:-testing-in-staging",
+  "links": []
+}

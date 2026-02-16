@@ -1,0 +1,8 @@
+{
+  "title": "(if component dependencies are configured)",
+  "content": "atmos terraform <command> --affected --stack prod",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#(if-component-dependencies-are-configured)",
+  "links": []
+}

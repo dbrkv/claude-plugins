@@ -1,0 +1,19 @@
+{
+  "title": "BETTER - Use proper quoting or YAML functions",
+  "content": "description: \"{{ .vars.description }}\"  # Quote the entire expression\nyaml",
+  "code_samples": [
+    {
+      "code": "### 3. Type Confusion",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "3. Type Confusion",
+      "id": "3.-type-confusion"
+    }
+  ],
+  "url": "llms-txt#better---use-proper-quoting-or-yaml-functions",
+  "links": []
+}

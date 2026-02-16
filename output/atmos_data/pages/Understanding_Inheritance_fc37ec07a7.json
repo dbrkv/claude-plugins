@@ -1,0 +1,28 @@
+{
+  "title": "Understanding Inheritance",
+  "content": "The concept of inheritance in Atmos is implemented through deep merging. Deep merging involves taking two maps or objects and combining them in a specific order, where the values in the latter map override those in the former. This approach allows us to achieve a template-free way of defining configurations in a logical, predictable, and consistent manner.\n\n## Single Inheritance\n\n<PillBox>Easy</PillBox>\n\nSingle Inheritance is used when an Atmos component inherits from another base Atmos component.\n\nIn the diagram below, `ComponentA` is the base component. `ComponentB` and `ComponentC` are derived components, they inherit all the\nconfigurations (`vars`, `settings`, `env` and other sections) from `ComponentA`, and can override the default values from `ComponentA`.\n\n### Single Inheritance Example\n\nLet's say we want to provision two VPCs with different settings into the same AWS account.\n\nIn the `stacks/catalog/vpc.yaml` file, add the following config for the VPC component:\n\n<File title=\"stacks/catalog/vpc.yaml\">\n\nIn the configuration above, the following **Component-Oriented Programming** concepts are implemented:\n\n- **Abstract Components**: `atmos` component `vpc-defaults` is marked as abstract in `metadata.type`. This makes the component non-deployable, and it\n  can be used only as a base for other components that inherit from it\n- **Dynamic Polymorphism**: All the variables in the `vars` section become the default values for the derived components. This provides the ability to\n  override and use the base component properties in the derived components to provision the same Terraform configuration many times but with different\n  settings\n\n<details>\n<summary>Deep Dive</summary>\n\nComponent Inheritance is one of the principles of [Component-Oriented Programming (COP)](https://en.wikipedia.org/wiki/Component-based_software_engineering)\nsupported by Atmos.\n\nThe concept is borrowed from [Object-Oriented Programming](https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming))\nto logically organize complex configurations in a way that makes conceptual sense. The side effect of this are extremely DRY and reusable\nconfigurations.\n\n[Component-Oriented Configuration](https://en.wikipedia.org/wiki/Component-based_software_engineering) is a reuse-based approach to defining,\nimplementing and composing loosely-coupled independent components into systems.\n\n<dl>\n  <dt>Dynamic Polymorphism</dt>\n  <dd>Ability to use and override base component(s) properties</dd>\n\n<dt>Encapsulation</dt>\n  <dd>Enclose a set of related configuration properties into reusable loosely-coupled modules. Encapsulation is implemented by Atmos Components which are opinionated building blocks of Infrastructure-as-Code (IAC) that solve one specific problem or use-case</dd>\n\n<dt>Abstraction</dt>\n  <dd>\n    \n      Principle of Abstraction: In a given stack, \"hide\" all but the relevant information about a component configuration in order to reduce complexity and increase efficiency\n      Abstract Components: If a component is marked as <code>abstract</code>, it can be used only as a base for other components and can't be provisioned using <code>atmos</code>\n    \n  </dd>\n</dl>\n</details>\n\nIn the `stacks/ue2-dev.yaml` stack config file, add the following config for the derived VPC components in the `ue2-dev` stack:\n\n<File title=\"stacks/ue2-dev.yaml\">\n```yaml",
+  "code_samples": [
+    {
+      "code": "classDiagram\n      direction TB\n      ComponentA --> ComponentB\n      ComponentA --> ComponentC\n      ComponentA : vars\n      ComponentA : settings\n      ComponentA : env\n      ComponentA : backend\n      class ComponentB {\n          vars\n          settings\n          env\n          backend\n          metadata:\n          &nbsp;&nbsp;inherits:\n          &nbsp;&nbsp;&nbsp;&nbsp;- ComponentA&nbsp;&nbsp;\n      }\n      class ComponentC {\n          vars\n          settings\n          env\n          backend\n          metadata:\n          &nbsp;&nbsp;inherits:\n          &nbsp;&nbsp;&nbsp;&nbsp;- ComponentA&nbsp;&nbsp;\n      }",
+      "language": "mermaid"
+    },
+    {
+      "code": "components:\n  terraform:\n    vpc-defaults:\n      metadata:\n        # Setting `metadata.type: abstract` makes the component `abstract`,\n        # explicitly prohibiting the component from being deployed.\n        # `atmos terraform apply` will fail with an error.\n        # If `metadata.type` attribute is not specified, it defaults to `real`.\n        # `real` components can be provisioned by `atmos` and CI/CD like Spacelift and Atlantis.\n        type: abstract\n      # Default variables, which will be inherited and can be overridden in the derived components\n      vars:\n        public_subnets_enabled: false\n        nat_gateway_enabled: false\n        nat_instance_enabled: false\n        max_subnet_count: 3\n        vpc_flow_logs_enabled: true",
+      "language": "yaml"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Single Inheritance",
+      "id": "single-inheritance"
+    },
+    {
+      "level": "h3",
+      "text": "Single Inheritance Example",
+      "id": "single-inheritance-example"
+    }
+  ],
+  "url": "llms-txt#understanding-inheritance",
+  "links": []
+}

@@ -1,0 +1,242 @@
+{
+  "title": "Point to the remote JSON Schema",
+  "content": "atmos validate stacks --schemas-atmos-manifest https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\nyaml title=\"atmos.yaml\"\n  # Validation schemas (for validating atmos stacks and components)\n  schemas:\n    # JSON Schema to validate Atmos manifests\n    atmos:\n      # Can also be set using 'ATMOS_SCHEMAS_ATMOS_MANIFEST' ENV var, or '--schemas-atmos-manifest' command-line arguments\n      # Supports both absolute and relative paths (relative to the `base_path` setting in `atmos.yaml`)\n      manifest: \"stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\"\n      # Also supports URLs\n      # manifest: \"https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\"\n  shell\n  ATMOS_SCHEMAS_ATMOS_MANIFEST=stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json atmos validate stacks\n  atmos validate stacks --schemas-atmos-manifest stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\n  atmos validate stacks --schemas-atmos-manifest https://atmos.tools/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json\n  console\nno matches found for the import 'globals/tenant1-globals-does-not-exist' in the\nfile 'catalog/invalid-yaml-and-schema/invalid-import-1.yaml'\n\ninvalid import in the file 'catalog/invalid-yaml-and-schema/invalid-import-2.yaml'\nThe file imports itself in 'catalog/invalid-yaml-and-schema/invalid-import-2'\n\ninvalid stack manifest 'catalog/invalid-yaml-and-schema/invalid-yaml-1.yaml'\nyaml: line 15: found unknown directive name\n\ninvalid stack manifest 'catalog/invalid-yaml-and-schema/invalid-yaml-3.yaml'\nyaml: line 13: did not find expected key\n\ninvalid stack manifest 'catalog/invalid-yaml-and-schema/invalid-yaml-5.yaml'\nyaml: mapping values are not allowed in this context\n\ninvalid stack manifest 'catalog/invalid-yaml-and-schema/invalid-yaml-6.yaml'\nyaml: line 2: block sequence entries are not allowed in this context\n\ninvalid stack manifest 'catalog/invalid-yaml-and-schema/invalid-yaml-7.yaml'\nyaml: line 4: could not find expected ':'\n\nAtmos manifest JSON Schema validation error in the\nfile 'catalog/invalid-yaml-and-schema/invalid-import-5.yaml':\n{\n  \"valid\": false,\n  \"errors\": [\n    {\n      \"keywordLocation\": \"\",\n      \"absoluteKeywordLocation\": \"tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#\",\n      \"instanceLocation\": \"\",\n      \"error\": \"doesn't validate with tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#\"\n    },\n    {\n      \"keywordLocation\": \"/properties/import/$ref\",\n      \"absoluteKeywordLocation\": \"tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#/properties/import/$ref\",\n      \"instanceLocation\": \"/import\",\n      \"error\": \"doesn't validate with '/definitions/import'\"\n    },\n    {\n      \"keywordLocation\": \"/properties/import/$ref/type\",\n      \"absoluteKeywordLocation\": \"tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#/definitions/import/type\",\n      \"instanceLocation\": \"/import\",\n      \"error\": \"expected array, but got object\"\n    }\n  ]\n}\n\nAtmos manifest JSON Schema validation error in the\nfile 'catalog/invalid-yaml-and-schema/invalid-schema-8.yaml':\n{\n  \"valid\": false,\n  \"errors\": [\n    {\n      \"keywordLocation\": \"\",\n      \"absoluteKeywordLocation\": \"tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#\",\n      \"instanceLocation\": \"\",\n      \"error\": \"doesn't validate with tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#\"\n    },\n    {\n      \"keywordLocation\": \"/properties/env/$ref\",\n      \"absoluteKeywordLocation\": \"tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#/properties/env/$ref\",\n      \"instanceLocation\": \"/env\",\n      \"error\": \"doesn't validate with '/definitions/env'\"\n    },\n    {\n      \"keywordLocation\": \"/properties/env/$ref/type\",\n      \"absoluteKeywordLocation\": \"tests/fixtures/scenarios/complete/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json#/definitions/env/type\",\n      \"instanceLocation\": \"/env\",\n      \"error\": \"expected object, but got array\"\n    }\n  ]\n}\nshell\natmos vendor pull\natmos vendor pull --everything\natmos vendor pull --component <component> [options]\natmos vendor pull -c <component> [options]\natmos vendor pull --tags <tag1>,<tag2> [options]\nyaml\n  apiVersion: atmos/v1\n  kind: ComponentVendorConfig\n  metadata:\n    name: vpc-vendor-config\n    description: Config for vendoring of 'vpc' component\n  spec:\n    source:\n      # Download the component from the AWS public ECR registry (https://docs.aws.amazon.com/AmazonECR/latest/public/public-registries.html)\n      uri: \"oci://public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:{{.Version}}\"\n      version: \"latest\"\n  shell\ngit::git@github.com:cloudposse/terraform-null-label.git?ref={{.Version}}\nshell\ngit::ssh://git@github.com/cloudposse/terraform-null-label.git?depth=1&ref={{.Version}}\nshell\ngit::ssh://git@github.com/cloudposse/terraform-null-label.git?ref={{ .Version }}\nshell\n  github.com:cloudposse/terraform-null-label.git?ref={{ .Version }}\n  shell\n  github.com/cloudposse/terraform-null-label.git?ref={{ .Version }}\n  \ngithub.com/cloudposse/terraform-null-label.git?ref={{ .Version }}\n\ngit::https://github.com/cloudposse/terraform-null-label.git?depth=1&ref={{ .Version }}\nshell\natmos vendor pull\natmos vendor pull --everything\natmos vendor pull --component vpc\natmos vendor pull -c vpc-flow-logs-bucket\natmos vendor pull -c echo-server --type helmfile\natmos vendor pull --tags dev,test\natmos vendor pull --tags networking --dry-run\nshell\natmos version list\nshell\natmos version list\nshell\natmos version list --limit 20\nshell\natmos version list --offset 10\nshell\natmos version list --include-prereleases\nshell\natmos version list --since 2025-01-01\nshell\natmos version list --format json\nshell\natmos version list --format yaml\nshell\natmos version list --limit 5 --include-prereleases --format json\nshell",
+  "code_samples": [
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--schemas-atmos-manifest` (optional)</dt>\n  <dd>Path to JSON Schema to validate Atmos stack manifests.Can be a URL, an absolute path,or a path relative to the `base_path` setting in `atmos.yaml`.</dd>\n</dl>\n\n## Validate Atmos Manifests using JSON Schema\n\nAtmos uses the [Atmos Manifest JSON Schema](pathname:///schemas/atmos/atmos-manifest/1.0/atmos-manifest.json) to validate Atmos manifests, and has a default (embedded) JSON Schema.\n\nIf you don't configure the path to a JSON Schema in `atmos.yaml` and don't provide it on the command line using the `--schemas-atmos-manifest` flag,\nthe default (embedded) JSON Schema will be used when executing the command `atmos validate stacks`.\n\nTo override the default behavior, configure JSON Schema in `atmos.yaml`:\n\n- Add the [Atmos Manifest JSON Schema](pathname:///schemas/atmos/atmos-manifest/1.0/atmos-manifest.json) to your repository, for example\n  in  [`stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json`](https://github.com/cloudposse/atmos/blob/main/examples/quick-start-advanced/stacks/schemas/atmos/atmos-manifest/1.0/atmos-manifest.json)\n\n- Configure the following section in the `atmos.yaml` [CLI config file](/cli/configuration)",
+      "language": "unknown"
+    },
+    {
+      "code": "- Instead of configuring the `schemas.atmos.manifest` section in `atmos.yaml`, you can provide the path to\n  the [Atmos Manifest JSON Schema](pathname:///schemas/atmos/atmos-manifest/1.0/atmos-manifest.json) file by using the ENV variable `ATMOS_SCHEMAS_ATMOS_MANIFEST`\n  or the `--schemas-atmos-manifest` command line flag:",
+      "language": "unknown"
+    },
+    {
+      "code": "In case of any validation errors (invalid YAML syntax, Atmos manifest JSON Schema errors, invalid imports, etc.), you'll get an output from the\ncommand similar to the following:\n\n<Terminal title=\"atmos validate stacks\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n---\n\n## atmos vendor\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport DocCardList from '@theme/DocCardList';\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse these subcommands to vendor Atmos components and stacks.\n</Intro>\n\n<Screengrab title=\"atmos vendor --help\" slug=\"atmos-vendor--help\" />\n\n## Subcommands\n<DocCardList />\n\n---\n\n## atmos vendor pull\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nThis command implements [Atmos Vendoring](/core-concepts/vendor/). Use this command to download sources from local and remote\nrepositories for Terraform and Helmfile components and stacks.\n</Intro>\n\n<Screengrab title=\"atmos vendor pull --help\" slug=\"atmos-vendor-pull--help\" />\n\nWith Atmos vendoring, you can copy components and other artifacts from the following sources:\n\n- Copy all files from an [OCI Registry](https://opencontainers.org) into a local folder\n- Copy all files from Git, Mercurial, Amazon S3, Google GCP into a local folder\n- Copy all files from an HTTP/HTTPS endpoint into a local folder\n- Copy a single file from an HTTP/HTTPS endpoint to a local file\n- Copy a local file into a local folder (keeping the same file name)\n- Copy a local file to a local file with a different file name\n- Copy a local folder (all files) into a local folder\n\n## Usage\n\nExecute the `vendor pull` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Description\n\nAtmos supports two different ways of vendoring components, stacks and other artifacts:\n\n- Using `component.yaml` vendoring manifest\n- Using `vendor.yaml` vendoring manifest\n\nThe `component.yaml` vendoring manifest can be used to vendor components from remote repositories.\nA `component.yaml` file placed into a component's directory is used to describe the vendoring config for one component only.\nUsing `component.yaml` is not recommended, and it's maintained for backwards compatibility.\n\nThe `vendor.yaml` vendoring manifest provides more functionality than using `component.yaml` files.\nIt's used to describe vendoring config for all components, stacks and other artifacts for the entire infrastructure.\nThe file is placed into the directory from which the `atmos vendor pull` command is executed. It's the recommended way to describe vendoring\nconfigurations.\n\n## Vendoring using `vendor.yaml` manifest\n\n- The `vendor.yaml` vendoring manifest supports Kubernetes-style YAML config to describe vendoring configuration for components, stacks,\n  and other artifacts.\n\n- The `source` attribute supports all protocols (local files, Git, Mercurial, HTTP, HTTPS, Amazon S3, Google GCP), and all URL and\n  archive formats as described in [go-getter](https://github.com/hashicorp/go-getter), and also the `oci://` scheme to download artifacts from\n  [OCI registries](https://opencontainers.org). See [Vendor URL Syntax](/core-concepts/vendor/url-syntax) for complete documentation on supported URL formats and authentication.\n\n- The `targets` in the `sources` support absolute paths and relative paths (relative to the `vendor.yaml` file). Note: if the `targets` paths\n  are set as relative, and if the `vendor.yaml` file is detected by Atmos using the `base_path` setting in `atmos.yaml`, the `targets` paths\n  will be considered relative to the `base_path`. Multiple targets can be specified.\n\n- `included_paths` and `excluded_paths` support [POSIX-style greedy Globs](https://en.wikipedia.org/wiki/Glob_(programming)) for filenames/paths\n  (double-star/globstar `**` is supported as well).\n\n- The `tags` in each source specifies a list of tags to apply to the component. This allows you to only vendor the components that have the\n  specified tags by executing a command `atmos vendor pull --tags <tag1>,<tag2>`\n\n:::tip\nRefer to [`Atmos Vendoring`](/core-concepts/vendor) for more details\n:::\n\n## Vendoring using `component.yaml` manifest\n\n- The `component.yaml` vendoring manifest supports Kubernetes-style YAML config to describe component vendoring configuration.\n  The file is placed into the component's folder.\n\n- The URIs (`uri`) in `component.yaml` support all protocols (local files, Git, Mercurial, HTTP, HTTPS, Amazon S3, Google GCP), and all URL and\n  archive formats as described in [go-getter](https://github.com/hashicorp/go-getter), and also the `oci://` scheme to download artifacts from\n  [OCI registries](https://opencontainers.org).\n\n- `included_paths` and `excluded_paths` in `component.yaml` support [POSIX-style greedy Globs](https://en.wikipedia.org/wiki/Glob_(programming)) for\n  file names/paths (double-star/globstar `**` is supported as well).\n\n:::tip\nRefer to [`Atmos Component Vendoring`](/core-concepts/vendor/component-manifest) for more details\n:::\n\n## Vendoring from OCI Registries\n\nThe following config can be used to download the `vpc` component from an AWS public ECR registry:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Vendoring from SSH\n\nAtmos supports SSH for accessing non-public Git repositories, which is convenient for local development. Atmos will use any installed SSH keys automatically.\n\n:::tip\nIn automated systems like GitHub Actions, we recommend sticking with the `https://` scheme for vendoring. Atmos will automatically inject the `GITHUB_TOKEN`.\n:::\n\nThere are two primary ways to specify an SSH source.\n\n### SCP-style Sources\n\nAtmos supports traditional SCP-style sources, which use a colon to separate the host from the repository, like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "Atmos rewrites this URL to the following format:",
+      "language": "unknown"
+    },
+    {
+      "code": "If no username is supplied and the host is `github.com`, Atmos automatically injects the default username `git`.\n\n### Explicit SSH Sources\n\nWhen the `ssh://` scheme is explicitly specified, the URL is used as provided, and no rewriting occurs.\n\nFor example:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Important Notes\n\n- The following URL is **invalid** because `go-getter` misinterprets `github.com:` as a URL scheme (like `http:` or `git:`), causing a parsing error:",
+      "language": "unknown"
+    },
+    {
+      "code": "- When a URL has no scheme, Atmos defaults to **HTTPS** and injects credentials if available.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Git over HTTPS Vendoring\n\nAtmos supports vendoring components using **Git over HTTPS**.\n\nFor example:",
+      "language": "unknown"
+    },
+    {
+      "code": "is automatically resolved as:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Authentication & Token Usage for HTTPS\n\nAtmos prioritizes authentication credentials based on predefined environment variables. The priority order for each provider is:\n\n### GitHub\n<dl>\n <dt>`ATMOS_GITHUB_TOKEN`</dt>\n <dd>Bearer token for GitHub API requests, enabling authentication for private repositories and higher rate limits.</dd>\n\n <dt>`GITHUB_TOKEN`</dt>\n <dd>Used as a fallback if `ATMOS_GITHUB_TOKEN` is not set.</dd>\n</dl>\n\n**Default Username for HTTPS:** `x-access-token`\n\n### Bitbucket\n<dl>\n <dt>`ATMOS_BITBUCKET_TOKEN`</dt>\n <dd>Bitbucket app password for API requests; used to avoid rate limits. When both `ATMOS_BITBUCKET_TOKEN` and `BITBUCKET_TOKEN` are defined, the former prevails.</dd>\n\n <dt>`BITBUCKET_TOKEN`</dt>\n <dd>Used as a fallback when `ATMOS_BITBUCKET_TOKEN` is not set.</dd>\n\n <dt>`ATMOS_BITBUCKET_USERNAME`</dt>\n <dd>Bitbucket username for authentication. Takes precedence over `BITBUCKET_USERNAME`.</dd>\n\n <dt>`BITBUCKET_USERNAME`</dt>\n <dd>Used as a fallback when `ATMOS_BITBUCKET_USERNAME` is not set. Bitbucket requires a valid username and does not accept dummy values like `x-access-token`.</dd>\n</dl>\n\n### GitLab\n<dl>\n <dt>`ATMOS_GITLAB_TOKEN`</dt>\n <dd>Personal Access Token (PAT) for GitLab authentication. Takes precedence over `GITLAB_TOKEN`.</dd>\n\n <dt>`GITLAB_TOKEN`</dt>\n <dd>Used as a fallback if `ATMOS_GITLAB_TOKEN` is not set.</dd>\n</dl>\n\n**Default Username for HTTPS:** `\"oauth2\"`\n\n## How HTTPS URLs Are Resolved\n\nWhen resolving Git sources, Atmos follows these rules:\n\n1. If a **full HTTPS URL** is provided (`git::https://github.com/...`), it is used as-is. No token data is injected, even if environment variables are set.\n2. If a **repository name** is provided without a scheme (`github.com/org/repo.git`), it defaults to `https://`, and if a token is set, it is injected into the URL.\n3. If a **username and repository name** are provided in SCP format (`git@github.com:org/repo.git`), it is rewritten as an SSH URL.\n\n:::note\nFor more details on configuration, refer to [Atmos Configuration](/cli/configuration).\n\n:::\n\n:::tip\nRun `atmos vendor pull --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": ":::note\n\nWhen executing the `atmos vendor pull` command, Atmos performs the following steps to decide which vendoring manifest to use:\n\n- If `vendor.yaml` manifest is found (in the directory from which the command is executed), Atmos will parse the file and execute the command\n  against it. If the flag `--component` is not specified, Atmos will vendor all the artifacts defined in the `vendor.yaml` manifest.\n  If the flag `--component` is passed in, Atmos will vendor only that component\n\n- If `vendor.yaml` is not found, Atmos will look for the `component.yaml` manifest in the component's folder. If `component.yaml` is not found,\n  an error will be thrown. The flag `--component` is required in this case\n\n:::\n\n## Flags\n\n<dl>\n  <dt>`--component` / `-c` (optional)</dt>\n  <dd>Atmos component to pull.</dd>\n\n  <dt>`--everything` (optional)</dt>\n  <dd>Vendor all components.</dd>\n\n  <dt>`--tags` (optional)</dt>\n  <dd>Only vendor the components that have the specified tags.`tags` is a comma-separated values (CSV) string.</dd>\n\n  <dt>`--type` / `-t` (optional)</dt>\n  <dd>Component type: `terraform` or `helmfile` (`terraform` is default).</dd>\n\n  <dt>`--dry-run` (optional)</dt>\n  <dd>Dry run.</dd>\n</dl>\n\n---\n\n## atmos version list\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nList recent Atmos releases with pagination and filtering options.\n</Intro>\n\n<Screengrab title=\"atmos version list --help\" slug=\"atmos-version-list--help\" />\n\n## Usage\n\nExecute the `version list` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command displays recent Atmos releases in a clean, formatted table with support for pagination, date filtering, and multiple output formats.\n\n:::tip\nRun `atmos version list --help` to see all the available options\n:::\n\n## Examples\n\nList the last 10 releases (default):",
+      "language": "unknown"
+    },
+    {
+      "code": "List the last 20 releases:",
+      "language": "unknown"
+    },
+    {
+      "code": "List releases starting from offset 10:",
+      "language": "unknown"
+    },
+    {
+      "code": "Include pre-release versions:",
+      "language": "unknown"
+    },
+    {
+      "code": "List releases since a specific date (ISO 8601 format):",
+      "language": "unknown"
+    },
+    {
+      "code": "Output as JSON:",
+      "language": "unknown"
+    },
+    {
+      "code": "Output as YAML:",
+      "language": "unknown"
+    },
+    {
+      "code": "Combine multiple options:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--limit`</dt>\n  <dd>Maximum number of releases to display (1-100). Default: `10`</dd>\n\n  <dt>`--offset`</dt>\n  <dd>Number of releases to skip for pagination. Default: `0`</dd>\n\n  <dt>`--since`</dt>\n  <dd>Only show releases published after this date. Format: ISO 8601 (`YYYY-MM-DD`)</dd>\n\n  <dt>`--include-prereleases`</dt>\n  <dd>Include pre-release versions (beta, alpha, rc). Default: `false`</dd>\n\n  <dt>`--format`</dt>\n  <dd>Output format: `table`, `json`, or `yaml`. Default: `table`</dd>\n</dl>\n\n## Features\n\n- **Clean table view** - Borderless table with header separator\n- **Markdown-rendered titles** - Release titles displayed with proper formatting and colors\n- **Date filtering** - Filter releases with `--since` for specific time ranges\n- **Pagination support** - Browse through extensive release history with `--limit` and `--offset`\n- **Current version indicator** - Green bullet (â) marks your installed version\n- **Spinner feedback** - Visual feedback during GitHub API calls (when TTY is available)\n- **Terminal width detection** - Automatically adapts to your terminal size\n\n## GitHub API Rate Limits\n\nThe command uses the GitHub API which has rate limits:\n\n- **Without authentication**: 60 requests/hour\n- **With authentication**: 5,000 requests/hour\n\nTo increase your rate limit, set a GitHub token:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Validate Atmos Manifests using JSON Schema",
+      "id": "validate-atmos-manifests-using-json-schema"
+    },
+    {
+      "level": "h2",
+      "text": "atmos vendor",
+      "id": "atmos-vendor"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos vendor pull",
+      "id": "atmos-vendor-pull"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Description",
+      "id": "description"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring using `vendor.yaml` manifest",
+      "id": "vendoring-using-`vendor.yaml`-manifest"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring using `component.yaml` manifest",
+      "id": "vendoring-using-`component.yaml`-manifest"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring from OCI Registries",
+      "id": "vendoring-from-oci-registries"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring from SSH",
+      "id": "vendoring-from-ssh"
+    },
+    {
+      "level": "h3",
+      "text": "SCP-style Sources",
+      "id": "scp-style-sources"
+    },
+    {
+      "level": "h3",
+      "text": "Explicit SSH Sources",
+      "id": "explicit-ssh-sources"
+    },
+    {
+      "level": "h3",
+      "text": "Important Notes",
+      "id": "important-notes"
+    },
+    {
+      "level": "h2",
+      "text": "Git over HTTPS Vendoring",
+      "id": "git-over-https-vendoring"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication & Token Usage for HTTPS",
+      "id": "authentication-&-token-usage-for-https"
+    },
+    {
+      "level": "h3",
+      "text": "GitHub",
+      "id": "github"
+    },
+    {
+      "level": "h3",
+      "text": "Bitbucket",
+      "id": "bitbucket"
+    },
+    {
+      "level": "h3",
+      "text": "GitLab",
+      "id": "gitlab"
+    },
+    {
+      "level": "h2",
+      "text": "How HTTPS URLs Are Resolved",
+      "id": "how-https-urls-are-resolved"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos version list",
+      "id": "atmos-version-list"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h2",
+      "text": "GitHub API Rate Limits",
+      "id": "github-api-rate-limits"
+    }
+  ],
+  "url": "llms-txt#point-to-the-remote-json-schema",
+  "links": []
+}

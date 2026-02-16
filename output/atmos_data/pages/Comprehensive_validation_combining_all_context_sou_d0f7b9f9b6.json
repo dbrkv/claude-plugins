@@ -1,0 +1,8 @@
+{
+  "title": "Comprehensive validation combining all context sources",
+  "content": "errors[message] {\n  # Check if this is a production apply operation\n  \"apply\" in input.cli_args\n  (input.process_env.ENVIRONMENT == \"production\" or\n   input.vars.environment == \"production\" or\n   input.tf_cli_vars.environment == \"production\" or\n   input.env_tf_cli_vars.environment == \"production\")\n\n# Ensure proper approval workflow\n  not production_approved\n  message = \"Production deployments require proper approval workflow\"\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#comprehensive-validation-combining-all-context-sources",
+  "links": []
+}

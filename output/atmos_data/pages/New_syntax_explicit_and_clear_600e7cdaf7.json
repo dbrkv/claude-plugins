@@ -1,0 +1,55 @@
+{
+  "title": "New syntax (explicit and clear)",
+  "content": "source: \"github.com/owner/repo.git//.?ref=v1.0\"\nyaml\n    source: \"github.com/cloudposse-terraform-components/aws-vpc.git?ref=v1.398.0\"\n    yaml\n    source: \"github.com/cloudposse/atmos.git//examples?ref=main\"\n    yaml\n    source: \"github.com/cloudposse-terraform-components/aws-vpc.git?ref=a1b2c3d4\"\n    yaml\n    source: \"github.com/cloudposse-terraform-components/aws-vpc.git?ref=main&depth=10\"\n    yaml",
+  "code_samples": [
+    {
+      "code": "Atmos automatically normalizes the triple-slash pattern for backward compatibility, but we recommend using `//.` for clarity.\n:::\n\n## Query Parameters\n\nQuery parameters are appended to the URL and control how the source is downloaded.\n\n### Common Parameters\n\n| Parameter | Description | Example |\n|-----------|-------------|---------|\n| `ref=<value>` | Git reference (branch, tag, commit) | `?ref=main` or `?ref=v1.0.0` |\n| `depth=<n>` | Git clone depth (shallow clone) | `?depth=1` |\n| `sshkey=<path>` | Path to SSH private key | `?sshkey=~/.ssh/id_rsa` |\n\n:::tip Automatic Shallow Clones\nAtmos automatically adds `depth=1` to Git clones for faster downloads. You can override this by explicitly setting `depth`.\n:::\n\n### Examples\n\n<Tabs>\n  <TabItem value=\"tag\" label=\"Git Tag\" default>",
+      "language": "unknown"
+    },
+    {
+      "code": "</TabItem>\n\n  <TabItem value=\"branch\" label=\"Git Branch\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</TabItem>\n\n  <TabItem value=\"commit\" label=\"Git Commit SHA\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</TabItem>\n\n  <TabItem value=\"depth\" label=\"Custom Clone Depth\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</TabItem>\n</Tabs>\n\n## URL Patterns by Platform\n\n<Tabs>\n  <TabItem value=\"github\" label=\"GitHub\" default>\n\n### Implicit HTTPS (recommended)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Query Parameters",
+      "id": "query-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Common Parameters",
+      "id": "common-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "URL Patterns by Platform",
+      "id": "url-patterns-by-platform"
+    },
+    {
+      "level": "h3",
+      "text": "Implicit HTTPS (recommended)",
+      "id": "implicit-https-(recommended)"
+    }
+  ],
+  "url": "llms-txt#new-syntax-(explicit-and-clear)",
+  "links": []
+}

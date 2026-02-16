@@ -1,0 +1,56 @@
+{
+  "url": "https://symfony.com/doc/7.3/create_framework/unit_testing.html",
+  "title": "Unit Testing",
+  "content": "You might have noticed some subtle but nonetheless important bugs in the framework we built in the previous chapter. When creating a framework, you must be sure that it behaves as advertised. If not, all the applications based on it will exhibit the same bugs. The good news is that whenever you fix a bug, you are fixing a bunch of applications too.\n\nToday's mission is to write unit tests for the framework we have created by using PHPUnit. At first, install PHPUnit as a development dependency:\n\nThen, create a PHPUnit configuration file in example.com/phpunit.dist.xml:\n\nThis configuration defines sensible defaults for most PHPUnit settings; more interesting, the autoloader is used to bootstrap the tests, and tests will be stored under the example.com/tests/ directory.\n\nNow, let's write a test for \"not found\" resources. To avoid the creation of all dependencies when writing tests and to really just unit-test what we want, we are going to use test doubles. Test doubles are easier to create when we rely on interfaces instead of concrete classes. Fortunately, Symfony provides such interfaces for core objects like the URL matcher and the controller resolver. Modify the framework to make use of them:\n\nWe are now ready to write our first test:\n\nThis test simulates a request that does not match any route. As such, the match() method returns a ResourceNotFoundException exception and we are testing that our framework converts this exception to a 404 response.\n\nExecute this test by running phpunit in the example.com directory:\n\nIf you don't understand what the hell is going on in the code, read the PHPUnit documentation on test doubles.\n\nAfter the test ran, you should see a green bar. If not, you have a bug either in the test or in the framework code!\n\nAdding a unit test for any exception thrown in a controller:\n\nLast, but not the least, let's write a test for when we actually have a proper Response:\n\nIn this test, we simulate a route that matches and returns a simple controller. We check that the response status is 200 and that its content is the one we have set in the controller.\n\nTo check that we have covered all possible use cases, run the PHPUnit test coverage feature (you need to enable XDebug first):\n\nOpen example.com/cov/Simplex/Framework.php.html in a browser and check that all the lines for the Framework class are green (it means that they have been visited when the tests were executed).\n\nAlternatively you can output the result directly to the console:\n\nThanks to the clean object-oriented code that we have written so far, we have been able to write unit-tests to cover all possible use cases of our framework; test doubles ensured that we were actually testing our code and not Symfony code.\n\nNow that we are confident (again) about the code we have written, we can safely think about the next batch of features we want to add to our framework.\n\nGet your Sylius expertise recognized\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Unit Testing",
+      "id": "unit-testing"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require --dev phpunit/phpunit:^11.0",
+      "language": "unknown"
+    },
+    {
+      "code": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<phpunit\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:noNamespaceSchemaLocation=\"https://schema.phpunit.de/11.0/phpunit.xsd\"\n    backupGlobals=\"false\"\n    colors=\"true\"\n    bootstrap=\"vendor/autoload.php\"\n>\n    <source>\n        <include>\n            <directory suffix=\".php\">./src</directory>\n        </include>\n    </source>\n\n    <testsuites>\n        <testsuite name=\"Test Suite\">\n            <directory>./tests</directory>\n        </testsuite>\n    </testsuites>\n</phpunit>",
+      "language": "unknown"
+    },
+    {
+      "code": "// example.com/src/Simplex/Framework.php\nnamespace Simplex;\n\n// ...\n\nuse Calendar\\Controller\\LeapYearController;\nuse Symfony\\Component\\HttpKernel\\Controller\\ArgumentResolverInterface;\nuse Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface;\nuse Symfony\\Component\\Routing\\Matcher\\UrlMatcherInterface;\n\nclass Framework\n{\n    public function __construct(\n        private UrlMatcherInterface $matcher,\n        private ControllerResolverInterface $resolver,\n        private ArgumentResolverInterface $argumentResolver,\n    ) {\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// example.com/tests/Simplex/Tests/FrameworkTest.php\nnamespace Simplex\\Tests;\n\nuse PHPUnit\\Framework\\TestCase;\nuse Simplex\\Framework;\nuse Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpKernel\\Controller\\ArgumentResolverInterface;\nuse Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface;\nuse Symfony\\Component\\Routing;\nuse Symfony\\Component\\Routing\\Exception\\ResourceNotFoundException;\n\nclass FrameworkTest extends TestCase\n{\n    public function testNotFoundHandling(): void\n    {\n        $framework = $this->getFrameworkForException(new ResourceNotFoundException());\n\n        $response = $framework->handle(new Request());\n\n        $this->assertEquals(404, $response->getStatusCode());\n    }\n\n    private function getFrameworkForException($exception): Framework\n    {\n        $matcher = $this->createMock(Routing\\Matcher\\UrlMatcherInterface::class);\n\n        $matcher\n            ->expects($this->once())\n            ->method('match')\n            ->willThrowException($exception)\n        ;\n        $matcher\n            ->expects($this->once())\n            ->method('getContext')\n            ->willReturn($this->createMock(Routing\\RequestContext::class))\n        ;\n        $controllerResolver = $this->createMock(ControllerResolverInterface::class);\n        $argumentResolver = $this->createMock(ArgumentResolverInterface::class);\n\n        return new Framework($matcher, $controllerResolver, $argumentResolver);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$ ./vendor/bin/phpunit",
+      "language": "unknown"
+    },
+    {
+      "code": "public function testErrorHandling(): void\n{\n    $framework = $this->getFrameworkForException(new \\RuntimeException());\n\n    $response = $framework->handle(new Request());\n\n    $this->assertEquals(500, $response->getStatusCode());\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Controller\\ArgumentResolver;\nuse Symfony\\Component\\HttpKernel\\Controller\\ControllerResolver;\n// ...\n\npublic function testControllerResponse(): void\n{\n    $matcher = $this->createMock(Routing\\Matcher\\UrlMatcherInterface::class);\n\n    $matcher\n        ->expects($this->once())\n        ->method('match')\n        ->willReturn([\n            '_route' => 'is_leap_year/{year}',\n            'year' => '2000',\n            '_controller' => [new LeapYearController(), 'index'],\n        ])\n    ;\n    $matcher\n        ->expects($this->once())\n        ->method('getContext')\n        ->willReturn($this->createMock(Routing\\RequestContext::class))\n    ;\n    $controllerResolver = new ControllerResolver();\n    $argumentResolver = new ArgumentResolver();\n\n    $framework = new Framework($matcher, $controllerResolver, $argumentResolver);\n\n    $response = $framework->handle(new Request());\n\n    $this->assertEquals(200, $response->getStatusCode());\n    $this->assertStringContainsString('Yep, this is a leap year!', $response->getContent());\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$ ./vendor/bin/phpunit --coverage-html=cov/",
+      "language": "unknown"
+    },
+    {
+      "code": "$ ./vendor/bin/phpunit --coverage-text",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/create_framework/unit_testing.html",
+    "https://symfony.com/doc/7.3/create_framework/separation_of_concerns.html",
+    "https://symfony.com/doc/7.3/create_framework/event_dispatcher.html"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "title": "stacks/prod.yaml",
+  "content": "components:\n  terraform:\n    vpc:\n      vars: {...}\nbash",
+  "code_samples": [
+    {
+      "code": "Tab completion will now show:\n- `atmos terraform plan vpc --stack <TAB>` â `dev` and `prod`\n- `atmos terraform plan myapp --stack <TAB>` â `dev` only\n\nThis works across all Terraform commands: `plan`, `apply`, `deploy`, `destroy`, and more.\n\n### Scale Matters\n\nIn organizations with large infrastructures, this becomes invaluable:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Scale Matters",
+      "id": "scale-matters"
+    }
+  ],
+  "url": "llms-txt#stacks/prod.yaml",
+  "links": []
+}

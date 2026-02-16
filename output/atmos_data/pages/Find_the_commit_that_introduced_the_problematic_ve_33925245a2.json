@@ -1,0 +1,8 @@
+{
+  "title": "Find the commit that introduced the problematic version",
+  "content": "git log --oneline stacks/prod/us-east-1.yaml",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#find-the-commit-that-introduced-the-problematic-version",
+  "links": []
+}

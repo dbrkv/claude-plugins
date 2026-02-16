@@ -1,0 +1,8 @@
+{
+  "title": "Ensure sensitive variables are not passed via CLI",
+  "content": "errors[message] {\n  sensitive_vars := [\"password\", \"secret\", \"api_key\", \"token\"]\n  cli_var := sensitive_vars[_]\n  input.tf_cli_vars[cli_var]\n  message = sprintf(\"Sensitive variable '%s' should not be passed via command line\", [cli_var])\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ensure-sensitive-variables-are-not-passed-via-cli",
+  "links": []
+}

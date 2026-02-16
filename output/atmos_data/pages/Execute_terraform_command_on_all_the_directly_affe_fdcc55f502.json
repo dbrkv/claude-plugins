@@ -1,0 +1,8 @@
+{
+  "title": "Execute `terraform <command>` on all the directly affected components in the `prod` stack in dependency order",
+  "content": "",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#execute-`terraform-<command>`-on-all-the-directly-affected-components-in-the-`prod`-stack-in-dependency-order",
+  "links": []
+}

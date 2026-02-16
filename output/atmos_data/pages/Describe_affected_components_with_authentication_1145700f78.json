@@ -1,0 +1,8 @@
+{
+  "title": "Describe affected components with authentication",
+  "content": "atmos describe affected --ref main --identity prod-readonly",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#describe-affected-components-with-authentication",
+  "links": []
+}

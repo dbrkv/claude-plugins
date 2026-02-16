@@ -1,0 +1,8 @@
+{
+  "title": "Process the output of type list from the `atmos.Component` template function in the provided stack",
+  "content": "var1: !template '{{ toJson (atmos.Component \"<component>\" \"<stack>\").outputs.test_list }}'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#process-the-output-of-type-list-from-the-`atmos.component`-template-function-in-the-provided-stack",
+  "links": []
+}

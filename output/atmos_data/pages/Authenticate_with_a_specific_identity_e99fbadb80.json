@@ -1,0 +1,8 @@
+{
+  "title": "Authenticate with a specific identity",
+  "content": "atmos auth login --identity admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#authenticate-with-a-specific-identity",
+  "links": []
+}

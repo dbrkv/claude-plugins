@@ -1,0 +1,8 @@
+{
+  "title": "Use with Terraform",
+  "content": "atmos terraform plan my-component -s my-stack",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-with-terraform",
+  "links": []
+}

@@ -1,0 +1,68 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/DateTime.html",
+  "title": "DateTime",
+  "content": "Validates that a value is a valid \"datetime\", meaning a string (or an object that can be cast into a string) that follows a specific format.\n\nAs with most of the other constraints, null and empty strings are considered valid values. This is to allow them to be optional values. If the value is mandatory, a common solution is to combine this constraint with NotBlank.\n\ntype: string default: Y-m-d H:i:s\n\nThis option allows you to validate a custom date format. See createFromFormat() for formatting options.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: This value is not a valid datetime.\n\nThis message is shown if the underlying data is not a valid datetime.\n\nYou can use the following parameters in this message:\n\nThe {{ format }} parameter was introduced in Symfony 7.3.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nShow your Symfony expertise\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "DateTime",
+      "id": "datetime"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "format",
+      "id": "format"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "message",
+      "id": "message"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    /**\n     * @var string A \"Y-m-d H:i:s\" formatted value\n     */\n    #[Assert\\DateTime]\n    protected string $createdAt;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        createdAt:\n            - DateTime: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <property name=\"createdAt\">\n            <constraint name=\"DateTime\"/>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n   /**\n    * @var string A \"Y-m-d H:i:s\" formatted value\n    */\n    protected string $createdAt;\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('createdAt', new Assert\\DateTime());\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/DateTime.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotBlank.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

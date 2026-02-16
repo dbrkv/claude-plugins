@@ -1,0 +1,8 @@
+{
+  "title": "Execute `terraform <command>` on components `component-1` and `component-2` in the stack `prod`",
+  "content": "atmos terraform <command> --stack prod --components component-1,component-2",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#execute-`terraform-<command>`-on-components-`component-1`-and-`component-2`-in-the-stack-`prod`",
+  "links": []
+}

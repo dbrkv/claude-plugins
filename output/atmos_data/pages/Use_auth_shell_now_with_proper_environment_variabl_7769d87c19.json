@@ -1,0 +1,60 @@
+{
+  "title": "Use auth shell (now with proper environment variables!)",
+  "content": "atmos auth shell my-identity\nhcl\nprovider_installation {\n  dev_overrides {\n    \"registry.terraform.io/myorg/myprovider\" = \"/absolute/path/to/provider/bin\"\n  }\n  direct {}\n}\nyaml\ncomponents:\n  terraform:\n    myapp:\n      providers:\n        myprovider:\n          endpoint: \"https://api.example.com\"\n          api_token: \"{{ .settings.api_token }}\"\n\nenv:\n        TF_CLI_CONFIG_FILE: \".terraformrc\"\nhcl\nprovider_installation {\n  dev_overrides {\n    \"registry.terraform.io/myorg/myprovider\" = \"/absolute/path/to/provider/bin\"\n  }\n  direct {}\n}\nyaml\ncomponents:\n  terraform:\n    myapp:\n      env:\n        TF_CLI_CONFIG_FILE: \".terraformrc\"\nbash",
+  "code_samples": [
+    {
+      "code": "We're excited to see how you use these features to simplify your multi-account and multi-cloud automation!\n\n---\n\n## Testing Custom Terraform Providers with Atmos Components\n\nIf you develop Terraform providers, you can now test them locally with Atmos-managed components using Terraform's development overrides feature. This enables rapid iteration without publishing development versions to a registry.\n\n<!--truncate-->\n\n## Overview\n\nWhen developing Terraform providers, you need to test them with real infrastructure code. Terraform's development overrides let you point to locally-built provider binaries instead of downloading from a registry. This works with Atmos components.\n\n## How It Works\n\nDevelopment overrides use two separate mechanisms that work together:\n\n### 1. Provider Binary Location (Terraform CLI Config)\n\nCreate a `.terraformrc` file in your component directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "This tells Terraform where to find your locally-built provider binary instead of downloading it from a registry.\n\n### 2. Provider Configuration (Atmos Stack Manifests)\n\nConfigure provider behavior using the `providers` section in your stack manifests as usual:",
+      "language": "unknown"
+    },
+    {
+      "code": "Atmos continues to generate `providers_override.tf.json` for provider configuration, while Terraform uses your local binary via `dev_overrides`.\n\n## Setup\n\n**1. Create `.terraformrc` in your component directory**\n\nPlace the file in your component folder (e.g., `components/terraform/myapp/.terraformrc`):",
+      "language": "unknown"
+    },
+    {
+      "code": "Atmos executes Terraform from the component directory, so the file must be there.\n\n**2. Configure the environment variable**\n\nIn your stack manifest:",
+      "language": "unknown"
+    },
+    {
+      "code": "**3. Build and test your provider**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Testing Custom Terraform Providers with Atmos Components",
+      "id": "testing-custom-terraform-providers-with-atmos-components"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "1. Provider Binary Location (Terraform CLI Config)",
+      "id": "1.-provider-binary-location-(terraform-cli-config)"
+    },
+    {
+      "level": "h3",
+      "text": "2. Provider Configuration (Atmos Stack Manifests)",
+      "id": "2.-provider-configuration-(atmos-stack-manifests)"
+    },
+    {
+      "level": "h2",
+      "text": "Setup",
+      "id": "setup"
+    }
+  ],
+  "url": "llms-txt#use-auth-shell-(now-with-proper-environment-variables!)",
+  "links": []
+}

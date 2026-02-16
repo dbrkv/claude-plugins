@@ -1,0 +1,19 @@
+{
+  "title": "All of these work and display \"Dev-Admin\"",
+  "content": "atmos auth login dev-admin\natmos auth login DEV-ADMIN\natmos auth whoami Dev-Admin\nbash",
+  "code_samples": [
+    {
+      "code": "This makes the CLI more forgiving while maintaining visual consistency with your configuration.\n\n## Selective Identity Logout\n\nYou can now log out of specific identities without affecting others that share the same provider:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Selective Identity Logout",
+      "id": "selective-identity-logout"
+    }
+  ],
+  "url": "llms-txt#all-of-these-work-and-display-\"dev-admin\"",
+  "links": []
+}

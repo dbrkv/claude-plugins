@@ -1,0 +1,160 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/console/helpers/progressbar.html",
+  "title": "Progress Bar",
+  "content": "When executing longer-running commands, it may be helpful to show progress information, which updates as your command runs:\n\nAs an alternative, consider using the SymfonyStyle to display a progress bar.\n\nTo display progress details, use the ProgressBar, pass it a total number of units, and advance the progress as the command executes:\n\nYou can also regress the progress bar (i.e. step backwards) by calling $progress->advance() with a negative value. For example, if you call $progress->advance(-2) then it will regress the progress bar 2 steps.\n\nBy default, the progress bar helper uses the error output (stderr) as its default output. This behavior can be changed by passing an instance of StreamOutput to the ProgressBar constructor.\n\nInstead of advancing the bar by a number of steps (with the advance() method), you can also set the current progress by calling the setProgress() method.\n\nIf you are resuming long-standing tasks, it's useful to start drawing the progress bar at a certain point. Use the second optional argument of start() to set that starting point:\n\nIf your platform doesn't support ANSI codes, updates to the progress bar are added as new lines. To prevent the output from being flooded, use the minSecondsBetweenRedraws() method to limit the number of redraws and the setRedrawFrequency() method to redraw every N iterations. By default, redraw frequency is 100ms or 10% of your max.\n\nIf you don't know the exact number of steps in advance, set it to a reasonable value and then call the setMaxSteps() method to update it as needed:\n\nAnother solution is to omit the steps argument when creating the ProgressBar instance:\n\nThe progress will then be displayed as a throbber:\n\nAn alternative to this is to use a Progress Indicator instead of a progress bar.\n\nWhenever your task is finished, don't forget to call finish() to ensure that the progress bar display is refreshed with a 100% completion.\n\nIf you want to output something while the progress bar is running, call clear() first. After you're done, call display() to show the progress bar again.\n\nIf the progress information is stored in an iterable variable (such as an array or a PHP generator) you can use the iterate() method, which starts, advances and finishes the progress bar automatically:\n\nThe previous code will output:\n\nBy default, the information rendered on a progress bar depends on the current level of verbosity of the OutputInterface instance:\n\nIf you call a command with the quiet flag (-q), the progress bar won't be displayed.\n\nInstead of relying on the verbosity mode of the current command, you can also force a format via setFormat():\n\nThe built-in formats are the following:\n\nIf you don't set the number of steps for your progress bar, use the _nomax variants:\n\nInstead of using the built-in formats, you can also set your own:\n\nThis sets the format to only display the progress bar itself:\n\nA progress bar format is a string that contains specific placeholders (a name enclosed with the % character); the placeholders are replaced based on the current progress of the bar. Here is a list of the built-in placeholders:\n\nThe time fields elapsed, remaining and estimated are displayed with a precision of 2. That means 172799 seconds are displayed as 1 day, 23 hrs instead of 1 day, 23 hrs, 59 mins, 59 secs.\n\nFor instance, here is how you could set the format to be the same as the debug one:\n\nNotice the :6s part added to some placeholders? That's how you can tweak the appearance of the bar (formatting and alignment). The part after the colon (:) is used to set the sprintf format of the string.\n\nInstead of setting the format for a given instance of a progress bar, you can also define global formats:\n\nThis code defines a new minimal format that you can then use for your progress bars:\n\nIt is almost always better to redefine built-in formats instead of creating new ones as that allows the display to automatically vary based on the verbosity flag of the command.\n\nWhen defining a new style that contains placeholders that are only available when the maximum number of steps is known, you should create a _nomax variant:\n\nWhen displaying the progress bar, the format will automatically be set to minimal_nomax if the bar does not have a maximum number of steps like in the example above.\n\nA format can contain any valid ANSI codes and can also use the Symfony-specific way to set colors:\n\nA format can span more than one line; that's very useful when you want to display more contextual information alongside the progress bar (see the example at the beginning of this article).\n\nAmong the placeholders, bar is a bit special as all the characters used to display it can be customized:\n\nFor performance reasons, Symfony redraws the screen once every 100ms. If this is too fast or too slow for your application, use the methods minSecondsBetweenRedraws() and maxSecondsBetweenRedraws():\n\nIf you want to display some information that depends on the progress bar display that are not available in the list of built-in placeholders, you can create your own. Let's see how you can create a remaining_steps placeholder that displays the number of remaining steps:\n\nIt is also possible to set a placeholder formatter per ProgressBar instance with the setPlaceholderFormatter method:\n\nProgress bars define a placeholder called message to display arbitrary messages. However, none of the built-in formats include that placeholder, so before displaying these messages, you must define your own custom format:\n\nNow, use the setMessage() method to set the value of the %message% placeholder before displaying the progress bar:\n\nMessages can be combined with custom placeholders too. In this example, the progress bar uses the %message% and %filename% placeholders:\n\nThe setMessage() method accepts a second optional argument to set the value of the custom placeholders:\n\nWhen using Console output sections it's possible to display multiple progress bars at the same time and change their progress independently:\n\nAfter a couple of iterations, the output in the terminal will look like this:\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Progress Bar",
+      "id": "progress-bar"
+    },
+    {
+      "level": "h2",
+      "text": "Customizing the Progress Bar",
+      "id": "customizing-the-progress-bar"
+    },
+    {
+      "level": "h3",
+      "text": "Built-in Formats",
+      "id": "built-in-formats"
+    },
+    {
+      "level": "h3",
+      "text": "Custom Formats",
+      "id": "custom-formats"
+    },
+    {
+      "level": "h3",
+      "text": "Bar Settings",
+      "id": "bar-settings"
+    },
+    {
+      "level": "h3",
+      "text": "Custom Placeholders",
+      "id": "custom-placeholders"
+    },
+    {
+      "level": "h3",
+      "text": "Custom Messages",
+      "id": "custom-messages"
+    },
+    {
+      "level": "h2",
+      "text": "Displaying Multiple Progress Bars",
+      "id": "displaying-multiple-progress-bars"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Console\\Helper\\ProgressBar;\n\n// creates a new progress bar (50 units)\n$progressBar = new ProgressBar($output, 50);\n\n// starts and displays the progress bar\n$progressBar->start();\n\n$i = 0;\nwhile ($i++ < 50) {\n    // ... do some work\n\n    // advances the progress bar 1 unit\n    $progressBar->advance();\n\n    // you can also advance the progress bar by more than 1 unit\n    // $progressBar->advance(3);\n}\n\n// ensures that the progress bar is at 100%\n$progressBar->finish();",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Console\\Helper\\ProgressBar;\n\n// creates a new progress bar (100 units)\n$progressBar = new ProgressBar($output, 100);\n\n// displays the progress bar starting at 25 completed units\n$progressBar->start(null, 25);",
+      "language": "unknown"
+    },
+    {
+      "code": "// start with a 50 units progressbar\n$progressBar = new ProgressBar($output, 50);\n\n// a complex task has just been created: increase the progressbar to 200 units\n$progressBar->setMaxSteps(200);",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressBar = new ProgressBar($output);",
+      "language": "unknown"
+    },
+    {
+      "code": "# no max steps (displays it like a throbber)\n    0 [>---------------------------]\n    5 [----->----------------------]\n    5 [============================]\n\n# max steps defined\n 0/3 [>---------------------------]   0%\n 1/3 [=========>------------------]  33%\n 3/3 [============================] 100%",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Console\\Helper\\ProgressBar;\n\n$progressBar = new ProgressBar($output);\n\n// $iterable can be array\n$iterable = [1, 2];\nforeach ($progressBar->iterate($iterable) as $value) {\n    // ... do some work\n}\n\n// or a generator\nfunction iterable() { yield 1; yield 2; ... };\nforeach ($progressBar->iterate(iterable()) as $value) {\n    // ... do some work\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "0/2 [>---------------------------]   0%\n1/2 [==============>-------------]  50%\n2/2 [============================] 100%",
+      "language": "javascript"
+    },
+    {
+      "code": "# OutputInterface::VERBOSITY_NORMAL (CLI with no verbosity flag)\n 0/3 [>---------------------------]   0%\n 1/3 [=========>------------------]  33%\n 3/3 [============================] 100%\n\n# OutputInterface::VERBOSITY_VERBOSE (-v)\n 0/3 [>---------------------------]   0%  1 sec\n 1/3 [=========>------------------]  33%  1 sec\n 3/3 [============================] 100%  1 sec\n\n# OutputInterface::VERBOSITY_VERY_VERBOSE (-vv)\n 0/3 [>---------------------------]   0%  1 sec/1 sec\n 1/3 [=========>------------------]  33%  1 sec/1 sec\n 3/3 [============================] 100%  1 sec/1 sec\n\n# OutputInterface::VERBOSITY_DEBUG (-vvv)\n 0/3 [>---------------------------]   0%  1 sec/1 sec  1.0 MB\n 1/3 [=========>------------------]  33%  1 sec/1 sec  1.0 MB\n 3/3 [============================] 100%  1 sec/1 sec  1.0 MB",
+      "language": "javascript"
+    },
+    {
+      "code": "$progressBar->setFormat('verbose');",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressBar->setFormat('%bar%');",
+      "language": "unknown"
+    },
+    {
+      "code": ">---------------------------\n=========>------------------\n============================",
+      "language": "javascript"
+    },
+    {
+      "code": "$progressBar->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:16s%/%estimated:-16s% %memory:6s%');",
+      "language": "unknown"
+    },
+    {
+      "code": "ProgressBar::setFormatDefinition('minimal', 'Progress: %percent%%');\n\n$progressBar = new ProgressBar($output, 3);\n$progressBar->setFormat('minimal');",
+      "language": "unknown"
+    },
+    {
+      "code": "Progress: 0%\nProgress: 33%\nProgress: 100%",
+      "language": "unknown"
+    },
+    {
+      "code": "ProgressBar::setFormatDefinition('minimal', '%percent%% %remaining%');\nProgressBar::setFormatDefinition('minimal_nomax', '%percent%%');\n\n$progressBar = new ProgressBar($output);\n$progressBar->setFormat('minimal');",
+      "language": "unknown"
+    },
+    {
+      "code": "ProgressBar::setFormatDefinition(\n    'minimal',\n    '<info>%percent%</info>\\033[32m%\\033[0m <fg=white;bg=blue>%remaining%</>'\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "// the finished part of the bar\n$progressBar->setBarCharacter('<comment>=</comment>');\n\n// the unfinished part of the bar\n$progressBar->setEmptyBarCharacter(' ');\n\n// the progress character\n$progressBar->setProgressCharacter('|');\n\n// the bar width\n$progressBar->setBarWidth(50);",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressBar = new ProgressBar($output, 50000);\n$progressBar->start();\n\n// this redraws the screen every 100 iterations, but sets additional limits:\n// don't redraw slower than 200ms (0.2) or faster than 100ms (0.1)\n$progressBar->setRedrawFrequency(100);\n$progressBar->maxSecondsBetweenRedraws(0.2);\n$progressBar->minSecondsBetweenRedraws(0.1);\n\n$i = 0;\nwhile ($i++ < 50000) {\n    // ... do some work\n\n    $progressBar->advance();\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// This definition is globally registered for all ProgressBar instances\nProgressBar::setPlaceholderFormatterDefinition(\n    'remaining_steps',\n    function (ProgressBar $progressBar, OutputInterface $output): int {\n        return $progressBar->getMaxSteps() - $progressBar->getProgress();\n    }\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "$progressBar = new ProgressBar($output, 3, 0);\n$progressBar->setFormat('%countdown% [%bar%]');\n$progressBar->setPlaceholderFormatter('countdown', function (ProgressBar $progressBar) {\n    return $progressBar->getMaxSteps() - $progressBar->getProgress();\n});",
+      "language": "unknown"
+    },
+    {
+      "code": "ProgressBar::setFormatDefinition('custom', ' %current%/%max% -- %message%');\n\n$progressBar = new ProgressBar($output, 100);\n$progressBar->setFormat('custom');",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$progressBar->setMessage('Start');\n$progressBar->start();\n// 0/100 -- Start\n\n$progressBar->setMessage('Task is in progress...');\n$progressBar->advance();\n// 1/100 -- Task is in progress...",
+      "language": "unknown"
+    },
+    {
+      "code": "ProgressBar::setFormatDefinition('custom', ' %current%/%max% -- %message% (%filename%)');\n\n$progressBar = new ProgressBar($output, 100);\n$progressBar->setFormat('custom');",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n// $files = ['client-001/invoices.xml', '...'];\nforeach ($files as $filename) {\n    $progressBar->setMessage('Importing invoices...');\n    $progressBar->setMessage($filename, 'filename');\n    $progressBar->advance();\n    // 2/100 -- Importing invoices... (client-001/invoices.xml)\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$section1 = $output->section();\n$section2 = $output->section();\n\n$progress1 = new ProgressBar($section1);\n$progress2 = new ProgressBar($section2);\n\n$progress1->start(100);\n$progress2->start(100);\n\n$i = 0;\nwhile (++$i < 100) {\n    $progress1->advance();\n\n    if ($i % 2 === 0) {\n        $progress2->advance(4);\n    }\n\n    usleep(50000);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "34/100 [=========>------------------]  34%\n68/100 [===================>--------]  68%",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/console/helpers/progressbar.html",
+    "https://symfony.com/doc/7.3/console/style.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/progressindicator.html",
+    "https://symfony.com/doc/7.3/console.html"
+  ]
+}

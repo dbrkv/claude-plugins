@@ -1,0 +1,17 @@
+{
+  "title": "Interactive mode with confirmation",
+  "content": "atmos auth logout dev-admin --keychain\n\nDelete keychain credentials for dev-admin?\n\nThis will permanently remove:\n  â¢ IAM user access keys\n  â¢ Service account credentials\n  â¢ Provider credentials\n\nSession data will also be cleared.\n\n? Yes, delete credentials / No, keep credentials\nshell",
+  "code_samples": [
+    {
+      "code": "**Interactive confirmation prompt:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**For CI/CD (non-interactive):**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#interactive-mode-with-confirmation",
+  "links": []
+}

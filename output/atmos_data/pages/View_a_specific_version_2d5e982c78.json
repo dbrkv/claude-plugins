@@ -1,0 +1,8 @@
+{
+  "title": "View a specific version",
+  "content": "$ atmos version show v1.95.0",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#view-a-specific-version",
+  "links": []
+}

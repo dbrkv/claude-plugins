@@ -1,0 +1,19 @@
+{
+  "title": "Pull component updates",
+  "content": "atmos vendor pull\nbash",
+  "code_samples": [
+    {
+      "code": "### Just Documentation\nBrowse component README files without any stack configuration:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Just Documentation",
+      "id": "just-documentation"
+    }
+  ],
+  "url": "llms-txt#pull-component-updates",
+  "links": []
+}

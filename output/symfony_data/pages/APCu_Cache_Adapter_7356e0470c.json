@@ -1,0 +1,22 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/adapters/apcu_adapter.html",
+  "title": "APCu Cache Adapter",
+  "content": "This adapter is a high-performance, shared memory cache. It can significantly increase an application's performance, as its cache contents are stored in shared memory, a component appreciably faster than many others, such as the filesystem.\n\nRequirement: The APCu extension must be installed and active to use this adapter.\n\nThe ApcuAdapter can optionally be provided a namespace, default cache lifetime, and cache items version string as constructor arguments:\n\nUse of this adapter is discouraged in write/delete heavy workloads, as these operations cause memory fragmentation that results in significantly degraded performance.\n\nThis adapter's CRUD operations are specific to the PHP SAPI it is running under. This means cache operations (such as additions, deletions, etc) using the CLI will not be available under the FPM or CGI SAPIs.\n\nCode consumes server resources. Blackfire tells you how\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "APCu Cache Adapter",
+      "id": "apcu-cache-adapter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\ApcuAdapter;\n\n$cache = new ApcuAdapter(\n\n    // a string prefixed to the keys of the items stored in this cache\n    $namespace = '',\n\n    // the default lifetime (in seconds) for cache items that do not define their\n    // own lifetime, with a value 0 causing items to be stored indefinitely (i.e.\n    // until the APCu memory is cleared)\n    $defaultLifetime = 0,\n\n    // when set, all keys prefixed by $namespace can be invalidated by changing\n    // this $version string\n    $version = null\n);",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/adapters/apcu_adapter.html"
+  ]
+}

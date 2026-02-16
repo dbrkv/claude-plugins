@@ -1,0 +1,43 @@
+{
+  "url": "https://symfony.com/doc/7.3/setup/docker.html",
+  "title": "Using Docker with Symfony",
+  "content": "Can you use Docker with Symfony? Of course! And several tools exist to help, depending on your needs.\n\nIf you'd like a complete Docker environment (i.e. where PHP, web server, database, etc. are all in Docker), check out https://github.com/dunglas/symfony-docker.\n\nAlternatively, you can install PHP on your local machine and use the symfony binary Docker integration. In both cases, you can take advantage of automatic Docker configuration from Symfony Flex.\n\nThe Flex recipe for some packages also include Docker configuration. For example, when you run composer require doctrine (to get symfony/orm-pack), your compose.yaml file will automatically be updated to include a database service.\n\nThe first time you install a recipe containing Docker config, Flex will ask you if you want to include it. Or, you can set your preference in composer.json, by setting the extra.symfony.docker config to true or false.\n\nSome recipes also include additions to your Dockerfile. To get those changes, you need to already have a Dockerfile at the root of your app with the following code somewhere inside:\n\nThe recipe will find this section and add the changes inside. If you're using https://github.com/dunglas/symfony-docker, you'll already have this.\n\nAfter installing the package, rebuild your containers by running:\n\nIf you're using the symfony binary web server (e.g. symfony server:start), then it can automatically detect your Docker services and expose them as environment variables. See Symfony CLI.\n\nmacOS users need to explicitly allow the default Docker socket to be used for the Docker integration to work as explained in the Docker documentation.\n\nOnline exam, become Symfony certified today\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Using Docker with Symfony",
+      "id": "using-docker-with-symfony"
+    },
+    {
+      "level": "h2",
+      "text": "Complete Docker Environment",
+      "id": "complete-docker-environment"
+    },
+    {
+      "level": "h2",
+      "text": "Flex Recipes & Docker Configuration",
+      "id": "flex-recipes-docker-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Symfony Binary Web Server and Docker Support",
+      "id": "symfony-binary-web-server-and-docker-support"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "###> recipes ###\n###< recipes ###",
+      "language": "unknown"
+    },
+    {
+      "code": "$ docker-compose up --build",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/setup/docker.html",
+    "https://symfony.com/doc/7.3/setup/symfony_cli.html",
+    "https://symfony.com/doc/7.3/setup.html"
+  ]
+}

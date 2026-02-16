@@ -1,0 +1,42 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/use_empty_data.html",
+  "title": "How to Configure empty Data for a Form Class",
+  "content": "The empty_data option allows you to specify an empty data set for your form class. This empty data set would be used if you submit your form, but haven't called setData() on your form or passed in data when you created your form. For example, in a controller:\n\nBy default, empty_data is set to null. Or, if you have specified a data_class option for your form class, it will default to a new instance of that class. That instance will be created by calling the constructor with no arguments.\n\nIf you want to override this default behavior, there are two ways to do this:\n\nIf you didn't set the data_class option, you can pass the initial data as string or pass an array of strings (where the key matches the field name) when the form type is compound.\n\nOne reason you might use this option is if you want to use a constructor that takes arguments. Remember, the default data_class option calls that constructor with no arguments:\n\nYou can instantiate your class however you want. In this example, you pass some dependency into the BlogType then use that to instantiate the Blog class. The point is, you can set empty_data to the exact \"new\" object that you want to use.\n\nIn order to pass arguments to the BlogType constructor, you'll need to register the form as a service and tag it with form.type. If you're using the default services.yaml configuration, this is already done for you.\n\nUsing a closure is the preferred method, since it will only create the object if it is needed.\n\nThe closure must accept a FormInterface instance as the first argument:\n\nMeasure & Improve Symfony Code Performance\n\nBecome certified from home",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Configure empty Data for a Form Class",
+      "id": "how-to-configure-empty-data-for-a-form-class"
+    },
+    {
+      "level": "h2",
+      "text": "Option 1: Instantiate a new Class",
+      "id": "option-1-instantiate-a-new-class"
+    },
+    {
+      "level": "h2",
+      "text": "Option 2: Provide a Closure",
+      "id": "option-2-provide-a-closure"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "public function index(): Response\n{\n    $blog = ...;\n\n    // $blog is passed in as the data, so the empty_data\n    // option is not needed\n    $form = $this->createForm(BlogType::class, $blog);\n\n    // no data is passed in, so empty_data is\n    // used to get the \"starting data\"\n    $form = $this->createForm(BlogType::class);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Form/Type/BlogType.php\nnamespace App\\Form\\Type;\n\n// ...\nuse App\\Entity\\Blog;\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass BlogType extends AbstractType\n{\n    public function __construct(\n        private object $someDependency,\n    ) {\n    }\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'empty_data' => new Blog($this->someDependency),\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\FormInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n// ...\n\npublic function configureOptions(OptionsResolver $resolver): void\n{\n    $resolver->setDefaults([\n        'empty_data' => function (FormInterface $form): Blog {\n            return new Blog($form->get('title')->getData());\n        },\n    ]);\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/use_empty_data.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html"
+  ]
+}

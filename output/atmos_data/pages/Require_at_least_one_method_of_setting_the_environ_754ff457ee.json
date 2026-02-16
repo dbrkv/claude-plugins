@@ -1,0 +1,19 @@
+{
+  "title": "Require at least one method of setting the environment",
+  "content": "errors[\"for the 'my-component' component, 'environment' must be specified via either TF_CLI_ARGS or -var flag\"] {\n    not input.env_tf_cli_vars.environment\n    not input.tf_cli_vars.environment\n}\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Complex validation with type checking\n\nVariables passed via `TF_CLI_ARGS` are automatically parsed and converted to their appropriate types when possible, so you can validate their format and values:\n\n<File title=\"stacks/schemas/opa/my-component/validate-my-component.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Complex validation with type checking",
+      "id": "complex-validation-with-type-checking"
+    }
+  ],
+  "url": "llms-txt#require-at-least-one-method-of-setting-the-environment",
+  "links": []
+}

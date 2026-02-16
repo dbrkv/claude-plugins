@@ -1,0 +1,8 @@
+{
+  "title": "Export as JSON for programmatic access",
+  "content": "atmos auth list --format json",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#export-as-json-for-programmatic-access",
+  "links": []
+}

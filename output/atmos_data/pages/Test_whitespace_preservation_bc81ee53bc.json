@@ -1,0 +1,8 @@
+{
+  "title": "Test whitespace preservation",
+  "content": "atmos mycmd -- echo \"hello  world\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-whitespace-preservation",
+  "links": []
+}

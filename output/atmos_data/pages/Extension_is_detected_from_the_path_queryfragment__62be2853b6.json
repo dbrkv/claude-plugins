@@ -1,0 +1,136 @@
+{
+  "title": "Extension is detected from the path (query/fragment ignored)",
+  "content": "config: !include https://example.com/data.json?v=1#field\nyaml\n    vars: !include /Users/me/Documents/vars.yaml\n    yaml\n    vars: !include ../config/vars.yaml\n    yaml\n    vars: !include stacks/catalog/vpc/vars.yaml\n    yaml\n  vars: !include https://raw.githubusercontent.com/org/repo/main/path/to/vars.yaml\n  yaml\n  vars: !include s3::https://my-bucket.s3.amazonaws.com/path/to/vars.yaml\n  yaml\n  vars: !include gcs::gs://my-bucket/path/to/vars.yaml\n  yaml\n   vars: !include scp://user@remote-server:/path/to/vars.yaml\n   settings: !include sftp://user@remote-server:/path/to/settings.yaml\n   yaml\n  vars: !include oci://ghcr.io/my-org/my-image:path/to/vars.yaml\n  yaml\ncomponents:\n  terraform:\n    app:\n      vars: !include config/dev.tfvars\nyaml\ncomponents:\n  terraform:\n    app:\n      vars: !include config/staging.tfvars\nyaml\ncomponents:\n  terraform:\n    app:\n      vars: !include config/prod.tfvars\nyaml\n  # Download the file and inject the content directly into the current location in the YAML\n  !include <file-path>\n\n# Download the file, filter the content using the YQ expression,\n  # and inject the result directly into the current location in the YAML\n  !include <file-path> <yq-expression>\nyaml\nsubnet_id1: !include <file-path> .private_subnet_ids[0]\nyaml\nusername: !include <file-path> .config_map.username\nyaml\n  vars:\n    values: !include '\"~/My Documents/dev/values.yaml\"'\n    config: !include '\"~/My Documents/dev/config.json\" \"<yq-expression-with-spaces>\"'\nyaml\n  vars:\n    values: !include './values.yaml \"<yq-expression-with-spaces>\"'\n    description: !include '\"component description.md\"'\nyaml\nvars:\n  access_key: !include ./config.yaml '.security.users[\"github-dependabot\"].access.key.id'\nyaml\ncomponents:\n  terraform:\n    my-component:\n      vars:\n        # Include a local file with the path relative to the current Atmos manifest\n        values: !include ./values.yaml\n        # Include a local file with the path relative to the current Atmos manifest and query the `vars.ipv4_primary_cidr_block` value from the file using YQ\n        ipv4_primary_cidr_block: !include ./vpc_config.yaml .vars.ipv4_primary_cidr_block\n        # Include a local file relative to the `base_path` setting in `atmos.yaml`\n        vpc_defaults: !include stacks/catalog/vpc/defaults.yaml\n        # Include a local file in HCL format\n        hcl_values: !include ./values.hcl\n        # Include a local varfile in HCL format\n        tfvars_values: !include ../components/terraform/vpc/vpc.tfvars\n        # Include a local Markdown file\n        description: !include ./description.md\n        # Include a local text file\n        text: !include a.txt\n        # Include a local text file with spaces in the file name\n        text2: !include '\"my config.txt\"'\n        # Include a local text file on Windows with spaces in the file name, and get the `config.tests` value from the file\n        tests: !include '\"~/My Documents/dev/tests.yaml\" .config.tests'\n        # Download and include a remote YAML file using HTTPS protocol, and query the `vars` section from the file\n        region_values: !include https://raw.githubusercontent.com/cloudposse/atmos/refs/heads/main/examples/quick-start-advanced/stacks/mixins/region/us-east-2.yaml .vars\n        # Download and include a remote JSON file from a URL with .json extension\n        # Note: For URLs without extensions, save locally first or use a URL with .json extension\n        github_config: !include ./github-meta.json .api\nyaml",
+  "code_samples": [
+    {
+      "code": "## Supported Sources\n\n### Local Sources\n\nThe `!include` function supports the following local file sources:\n  - Absolute paths",
+      "language": "unknown"
+    },
+    {
+      "code": "- Paths relative to the current Atmos manifest (where the `!include` function is executed)",
+      "language": "unknown"
+    },
+    {
+      "code": "- Paths relative to the [`base_path`](/cli/configuration/#base-path) defined in `atmos.yaml` CLI config file",
+      "language": "unknown"
+    },
+    {
+      "code": "### Remote Sources\n\nTo download remote files, Atmos uses [`go-getter`](https://github.com/hashicorp/go-getter)\n(used by [Terraform](https://www.terraform.io/) for downloading modules) and supports the following protocols to download a single file:\n\n- **http/https** - the file must be publicly accessible (not inside a private repository)",
+      "language": "unknown"
+    },
+    {
+      "code": "- **s3** (Amazon S3) - requires the correct AWS permissions and credentials configured",
+      "language": "unknown"
+    },
+    {
+      "code": "- **gcs** (Google Cloud Storage) - requires valid Google Cloud credentials",
+      "language": "unknown"
+    },
+    {
+      "code": "- **scp/sftp** (SSH-based File Transfer) - requires SSH access to the remote server",
+      "language": "unknown"
+    },
+    {
+      "code": "- **oci** (Open Container Initiative)",
+      "language": "unknown"
+    },
+    {
+      "code": "- The file must be exposed as part of the OCI image and exist as a layer in the image (not hidden inside layers)\n  - The registry must support OCI artifact downloads (e.g., AWS ECR, Docker Hub, GHCR, GCR)\n\n## Key Benefits of `!include`\n\nThe `!include` directive enables modular, reusable configuration patterns across all Atmos YAML files.\nThis has several important implications:\n\n- **Modularization & Reuse**\n  `!include` supports a [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) approach by allowing shared configuration fragments to be stored in local or remote\n   files and reused across multiple stacks or components. You can use it in place of YAML anchors, which don't work across files.\n\n- **Preprocessing for Inheritance**\n  Includes are resolved *before* Atmos processes stacks and components, enabling powerful [inheritance](/core-concepts/stacks/inheritance/) and deep-merging\n  behaviors using fully expanded configuration data.\n\n- **Adopting Existing Terraform/OpenTofu Root Modules as Atmos Components**\n  If you're already managing your root modules using `.tfvars` files â for example, separate files for `dev`, `staging`,\n  and `prod` â you can reference them directly in Atmos using `!include`. This makes it easy to adopt Atmos without\n  having to translate all variables into Atmos stacks.\n\n### Example: Referencing Different TFVAR Files Per Environment\n\nFor example, instead of rewriting existing `.tfvars` varfiles into inline YAML, Atmos lets you bring them in as-is into your [Stacks](/core-concepts/stacks/).\nYou can continue managing your root modules as you always have, while gaining Atmos features like stack inheritance,\nenvironment promotion, and deep-merging.\n\nLet's say you already have environment-specific `.tfvars` files like:\n\n- `config/dev.tfvars`\n- `config/staging.tfvars`\n- `config/prod.tfvars`\n\nYou can keep using these files in Atmos by referencing them in your stack configurations:\n\n<File title=\"stacks/org/dev/app.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/org/staging/app.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/org/prod/app.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nThis pattern allows you to plug Atmos into your existing Terraform/OpenTofu root modules with minimal changes â no need to\nduplicate or reformat your varfiles. You also unlock additional capabilities like [listing all your stacks](/cli/commands/list/stacks)\nand [components](/cli/commands/list/components), leveraging layered configurations, [stack inheritance with imports](/core-concepts/stacks/imports),\nand consistent promotion of settings across environments.\n\n## Usage\n\nThe `!include` function can be called with either one or two parameters:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n    <dt>`file-path`</dt>\n    <dd>\n        Path to a local or remote file\n    </dd>\n\n    <dt>`yq-expression`</dt>\n    <dd>(Optional) [YQ](https://mikefarah.gitbook.io/yq) expression to retrieve individual values from the file</dd>\n</dl>\n\n## Using YQ Expressions to retrieve individual values from files\n\nTo retrieve individual values from complex types such as maps and lists, or do any kind of filtering or querying,\nyou can utilize [YQ](https://mikefarah.gitbook.io/yq) expressions.\n\nFor example:\n\n- Retrieve the first item from a list",
+      "language": "unknown"
+    },
+    {
+      "code": "- Read a key from a map",
+      "language": "unknown"
+    },
+    {
+      "code": "For more details, review the following docs:\n\n- [YQ Guide](https://mikefarah.gitbook.io/yq)\n- [YQ Recipes](https://mikefarah.gitbook.io/yq/recipes)\n\n## Handling File Paths and YQ Expressions with Spaces and Quotes\n\nIf you have spaces in the file names or YQ expressions, enclose the file paths and YQ expressions in double quotes\nand use single quotes around the whole expression.\n\nFor example, on Windows:",
+      "language": "unknown"
+    },
+    {
+      "code": "On macOS and Linux:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Using YQ Expressions with Bracket Notation**\n\nWhen a YQ expression needs double quotes inside bracket notation (for example, `[\"github-dependabot\"]`), wrap the expression argument in single quotes while leaving the `!include` tag itself unquoted. This keeps the parser from splitting the expression into multiple arguments. The detailed guidance lives in the [!terraform.output documentation](/functions/yaml/terraform.output#handling-yq-expressions-with-bracket-notation-and-quotes), which applies here as well.",
+      "language": "unknown"
+    },
+    {
+      "code": "For paths that already require double quotes, put each argument in double quotes and wrap the entire arguments string in single quotesâ`!include '\"path with spaces.yaml\" \".data[\\\"key\\\"]\"'`âand see the linked documentation for more escaping techniques.\n\n:::tip\n`!include`, `!terraform.output`, and the other YAML functions share the same parser, so you only need to learn the quoting rules once.\n:::\n\n## Examples\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stack.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Supported Sources",
+      "id": "supported-sources"
+    },
+    {
+      "level": "h3",
+      "text": "Local Sources",
+      "id": "local-sources"
+    },
+    {
+      "level": "h3",
+      "text": "Remote Sources",
+      "id": "remote-sources"
+    },
+    {
+      "level": "h2",
+      "text": "Key Benefits of `!include`",
+      "id": "key-benefits-of-`!include`"
+    },
+    {
+      "level": "h3",
+      "text": "Example: Referencing Different TFVAR Files Per Environment",
+      "id": "example:-referencing-different-tfvar-files-per-environment"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Using YQ Expressions to retrieve individual values from files",
+      "id": "using-yq-expressions-to-retrieve-individual-values-from-files"
+    },
+    {
+      "level": "h2",
+      "text": "Handling File Paths and YQ Expressions with Spaces and Quotes",
+      "id": "handling-file-paths-and-yq-expressions-with-spaces-and-quotes"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#extension-is-detected-from-the-path-(query/fragment-ignored)",
+  "links": []
+}

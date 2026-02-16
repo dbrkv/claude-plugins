@@ -1,0 +1,115 @@
+{
+  "url": "https://symfony.com/doc/7.3/security/user_providers.html",
+  "title": "User Providers",
+  "content": "User providers (re)load users from a storage (e.g. a database) based on a \"user identifier\" (e.g. the user's email address or username). See Security for more detailed information when a user provider is used.\n\nSymfony provides several user providers:\n\nThis is the most common user provider. Users are stored in a database and the user provider uses Doctrine to retrieve them.\n\nThe entity provider can only query from one specific field, specified by the property config key. If you want a bit more control over this - e.g. you want to find a user by email or username, you can do that by implementing UserLoaderInterface in your Doctrine repository (e.g. UserRepository):\n\nTo finish this, remove the property key from the user provider in security.yaml:\n\nNow, whenever Symfony uses the user provider, the loadUserByIdentifier() method on your UserRepository will be called.\n\nIt's not recommended to use this provider in real applications because of its limitations and how difficult it is to manage users. It may be useful in application prototypes and for limited applications that don't store users in databases.\n\nThis user provider stores all user information in a configuration file, including their passwords. Make sure the passwords are hashed properly. See Password Hashing and Verification for more information.\n\nAfter setting up hashing, you can configure all the user information in security.yaml:\n\nWhen using a memory provider, and not the auto algorithm, you have to choose an encoding without salt (i.e. bcrypt).\n\nThis user provider combines two or more of the other providers to create a new user provider. The order in which providers are configured is important because Symfony will look for users starting from the first provider and will keep looking for in the other providers until the user is found:\n\nMost applications don't need to create a custom provider. If you store users in a database, a LDAP server or a configuration file, Symfony supports that. However, if you're loading users from a custom location (e.g. via an API or legacy database connection), you'll need to create a custom user provider.\n\nFirst, make sure you've followed the Security Guide to create your User class.\n\nIf you used the make:user command to create your User class (and you answered the questions indicating that you need a custom user provider), that command will generate a nice skeleton to get you started:\n\nMost of the work is already done! Read the comments in the code and update the TODO sections to finish the user provider. When you're done, tell Symfony about the user provider by adding it in security.yaml:\n\nLastly, update the config/packages/security.yaml file to set the provider key to your_custom_user_provider in all the firewalls which will use this custom user provider.\n\nMeasure & Improve Symfony Code Performance\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "User Providers",
+      "id": "user-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Entity User Provider",
+      "id": "entity-user-provider"
+    },
+    {
+      "level": "h3",
+      "text": "Using a Custom Query to Load the User",
+      "id": "using-a-custom-query-to-load-the-user"
+    },
+    {
+      "level": "h2",
+      "text": "Memory User Provider",
+      "id": "memory-user-provider"
+    },
+    {
+      "level": "h2",
+      "text": "Chain User Provider",
+      "id": "chain-user-provider"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a Custom User Provider",
+      "id": "creating-a-custom-user-provider"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    providers:\n        users:\n            entity:\n                # the class of the entity that represents users\n                class: 'App\\Entity\\User'\n                # the property to query by - e.g. email, username, etc\n                property: 'email'\n\n                # optional: if you're using multiple Doctrine entity\n                # managers, this option defines which one to use\n                #manager_name: 'customer'\n\n    # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<srv:container xmlns=\"http://symfony.com/schema/dic/security\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:srv=\"http://symfony.com/schema/dic/services\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <config>\n        <provider name=\"users\">\n            <!-- class:    the class of the entity that represents users\n                 property: the property to query by - e.g. email, username, etc-->\n            <entity class=\"App\\Entity\\User\" property=\"email\"/>\n\n            <!-- optional, if you're using multiple Doctrine entity\n                 managers, \"manager-name\" defines which one to use -->\n            <!-- <entity class=\"App\\Entity\\User\" property=\"email\"\n                         manager-name=\"customer\"/> -->\n        </provider>\n\n        <!-- ... -->\n    </config>\n</srv:container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse App\\Entity\\User;\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (SecurityConfig $security): void {\n    // ...\n\n    $security->provider('app_user_provider')\n        ->entity()\n            ->class(User::class)\n            ->property('email')\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Repository/UserRepository.php\nnamespace App\\Repository;\n\nuse App\\Entity\\User;\nuse Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository;\nuse Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface;\n\nclass UserRepository extends ServiceEntityRepository implements UserLoaderInterface\n{\n    // ...\n\n    public function loadUserByIdentifier(string $usernameOrEmail): ?User\n    {\n        $entityManager = $this->getEntityManager();\n\n        return $entityManager->createQuery(\n                'SELECT u\n                FROM App\\Entity\\User u\n                WHERE u.username = :query\n                OR u.email = :query'\n            )\n            ->setParameter('query', $usernameOrEmail)\n            ->getOneOrNullResult();\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    providers:\n        users:\n            entity:\n                class: App\\Entity\\User\n\n    # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<srv:container xmlns=\"http://symfony.com/schema/dic/security\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:srv=\"http://symfony.com/schema/dic/services\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/security\n        https://symfony.com/schema/dic/security/security-1.0.xsd\">\n\n    <config>\n        <provider name=\"users\">\n            <entity class=\"App\\Entity\\User\"/>\n        </provider>\n\n        <!-- ... -->\n    </config>\n</srv:container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse App\\Entity\\User;\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (SecurityConfig $security): void {\n    // ...\n\n    $security->provider('app_user_provider')\n        ->entity()\n            ->class(User::class)\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    providers:\n        backend_users:\n            memory:\n                users:\n                    john_admin: { password: '$2y$13$jxGxc ... IuqDju', roles: ['ROLE_ADMIN'] }\n                    jane_admin: { password: '$2y$13$PFi1I ... rGwXCZ', roles: ['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'] }\n\n    # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<srv:container xmlns=\"http://symfony.com/schema/dic/security\"\n               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n               xmlns:srv=\"http://symfony.com/schema/dic/services\"\n               xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/security\n        https://symfony.com/schema/dic/security/security-1.0.xsd\">\n\n    <config>\n        <!-- ... -->\n\n        <provider name=\"app_user_provider2\">\n            <memory>\n                <user identifier=\"john_admin\" password=\"$2y$13$jxGxc ... IuqDju\" roles=\"ROLE_ADMIN\"/>\n                <user identifier=\"jane_admin\" password=\"$2y$13$PFi1I ... rGwXCZ\" roles=\"ROLE_ADMIN, ROLE_SUPER_ADMIN\"/>\n            </memory>\n        </provider>\n    </config>\n</srv:container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse App\\Entity\\User;\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (SecurityConfig $security): void {\n    // ...\n\n    $memoryProvider = $security->provider('app_user_provider')->memory();\n    $memoryProvider\n        ->user('john_admin')\n            ->password('$2y$13$jxGxc ... IuqDju')\n            ->roles(['ROLE_ADMIN'])\n    ;\n\n    $memoryProvider\n        ->user('jane_admin')\n        ->password('$2y$13$PFi1I ... rGwXCZ')\n        ->roles(['ROLE_ADMIN', 'ROLE_SUPER_ADMIN'])\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    # ...\n    providers:\n        backend_users:\n            ldap:\n                # ...\n\n        legacy_users:\n            entity:\n                # ...\n\n        users:\n            entity:\n                # ...\n\n        all_users:\n            chain:\n                providers: ['legacy_users', 'users', 'backend_users']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<srv:container xmlns=\"http://symfony.com/schema/dic/security\"\n               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n               xmlns:srv=\"http://symfony.com/schema/dic/services\"\n               xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/security\n        https://symfony.com/schema/dic/security/security-1.0.xsd\">\n\n    <config>\n        <!-- ... -->\n\n        <provider name=\"backend_users\">\n            <ldap service=\"...\" base-dn=\"...\"/>\n        </provider>\n\n        <provider name=\"legacy_users\">\n            <entity>\n                <!-- ... -->\n            </entity>\n        </provider>\n\n        <provider name=\"users\">\n            <entity>\n                <!-- ... -->\n            </entity>\n        </provider>\n\n        <provider name=\"all_users\">\n            <chain>\n                <provider>backend_users</provider>\n                <provider>legacy_users</provider>\n                <provider>users</provider>\n            </chain>\n        </provider>\n    </config>\n</srv:container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse App\\Entity\\User;\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (SecurityConfig $security): void {\n    // ...\n\n    $security->provider('backend_users')\n        ->ldap()\n        // ...\n    ;\n\n    $security->provider('legacy_users')\n        ->entity()\n        // ...\n    ;\n\n    $security->provider('users')\n        ->entity()\n        // ...\n    ;\n\n    $security->provider('all_users')->chain()\n        ->providers(['backend_users', 'legacy_users', 'users'])\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Security/UserProvider.php\nnamespace App\\Security;\n\nuse Symfony\\Component\\Security\\Core\\Exception\\UnsupportedUserException;\nuse Symfony\\Component\\Security\\Core\\Exception\\UserNotFoundException;\nuse Symfony\\Component\\Security\\Core\\User\\PasswordAuthenticatedUserInterface;\nuse Symfony\\Component\\Security\\Core\\User\\PasswordUpgraderInterface;\nuse Symfony\\Component\\Security\\Core\\User\\UserInterface;\nuse Symfony\\Component\\Security\\Core\\User\\UserProviderInterface;\n\nclass UserProvider implements UserProviderInterface, PasswordUpgraderInterface\n{\n    /**\n     * Symfony calls this method if you use features like switch_user\n     * or remember_me. If you're not using these features, you do not\n     * need to implement this method.\n     *\n     * @throws UserNotFoundException if the user is not found\n     */\n    public function loadUserByIdentifier(string $identifier): UserInterface\n    {\n        // Load a User object from your data source or throw UserNotFoundException.\n        // The $identifier argument is whatever value is being returned by the\n        // getUserIdentifier() method in your User class.\n        throw new \\Exception('TODO: fill in loadUserByIdentifier() inside '.__FILE__);\n    }\n\n    /**\n     * Refreshes the user after being reloaded from the session.\n     *\n     * When a user is logged in, at the beginning of each request, the\n     * User object is loaded from the session and then this method is\n     * called. Your job is to make sure the user's data is still fresh by,\n     * for example, re-querying for fresh User data.\n     *\n     * If your firewall is \"stateless: true\" (for a pure API), this\n     * method is not called.\n     */\n    public function refreshUser(UserInterface $user): UserInterface\n    {\n        if (!$user instanceof User) {\n            throw new UnsupportedUserException(sprintf('Invalid user class \"%s\".', $user::class));\n        }\n\n        // Return a User object after making sure its data is \"fresh\".\n        // Or throw a UserNotFoundException if the user no longer exists.\n        throw new \\Exception('TODO: fill in refreshUser() inside '.__FILE__);\n    }\n\n    /**\n     * Tells Symfony to use this provider for this User class.\n     */\n    public function supportsClass(string $class): bool\n    {\n        return User::class === $class || is_subclass_of($class, User::class);\n    }\n\n    /**\n     * Upgrades the hashed password of a user, typically for using a better hash algorithm.\n     */\n    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void\n    {\n        // TODO: when hashed passwords are in use, this method should:\n        // 1. persist the new password in the user storage\n        // 2. update the $user object with $user->setPassword($newHashedPassword);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/security.yaml\nsecurity:\n    providers:\n        # the name of your user provider can be anything\n        your_custom_user_provider:\n            id: App\\Security\\UserProvider",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<srv:container xmlns=\"http://symfony.com/schema/dic/security\"\n               xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n               xmlns:srv=\"http://symfony.com/schema/dic/services\"\n               xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/security\n        https://symfony.com/schema/dic/security/security-1.0.xsd\">\n\n    <config>\n        <!-- ... -->\n\n        <provider name=\"your_custom_user_provider\" id=\"App\\Security\\UserProvider\">\n            <!-- ... -->\n        </provider>\n    </config>\n</srv:container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse App\\Security\\UserProvider;\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (SecurityConfig $security): void {\n    // ...\n\n     $customProvider = $security->provider('your_custom_user_provider')\n        ->id(UserProvider::class)\n        // ...\n    ;\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/security/user_providers.html",
+    "https://symfony.com/doc/7.3/security.html",
+    "https://symfony.com/doc/7.3/doctrine.html",
+    "https://symfony.com/doc/7.3/security/ldap.html",
+    "https://symfony.com/doc/7.3/security/passwords.html"
+  ]
+}

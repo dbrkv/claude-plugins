@@ -1,0 +1,23 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/disabling_validation.html",
+  "title": "How to Disable the Validation of Submitted Data",
+  "content": "Sometimes it is useful to suppress the validation of a form altogether. For these cases you can set the validation_groups option to false:\n\nNote that when you do that, the form will still run basic integrity checks, for example whether an uploaded file was too large or whether non-existing fields were submitted.\n\nThe submission of extra form fields can be controlled with the allow_extra_fields config option and the maximum upload file size should be handled via your PHP and web server configuration.\n\nSymfony Code Performance Profiling\n\nBecome certified from home",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Disable the Validation of Submitted Data",
+      "id": "how-to-disable-the-validation-of-submitted-data"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\npublic function configureOptions(OptionsResolver $resolver): void\n{\n    $resolver->setDefaults([\n        'validation_groups' => false,\n    ]);\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/disabling_validation.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/form.html"
+  ]
+}

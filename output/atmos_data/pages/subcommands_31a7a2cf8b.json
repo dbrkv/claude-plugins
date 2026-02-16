@@ -1,0 +1,32 @@
+{
+  "title": "subcommands",
+  "content": "commands:\n  - name: hello\n    description: This command says hello to the provided name\n    flags:\n      - name: name\n        shorthand: n\n        description: Name to greet\n        required: true\n    steps:\n      - \"echo Hello {{ .Flags.name }}!\"\nshell\natmos hello --name world\nshell\natmos hello -n world\nyaml",
+  "code_samples": [
+    {
+      "code": "We can run this example like this, using the long flag:",
+      "language": "unknown"
+    },
+    {
+      "code": "Or, using the shorthand, we can just write:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Advanced Examples\n\n### Define a New Terraform Command",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Advanced Examples",
+      "id": "advanced-examples"
+    },
+    {
+      "level": "h3",
+      "text": "Define a New Terraform Command",
+      "id": "define-a-new-terraform-command"
+    }
+  ],
+  "url": "llms-txt#subcommands",
+  "links": []
+}

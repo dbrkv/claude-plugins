@@ -1,0 +1,179 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/service_decoration.html",
+  "title": "How to Decorate Services",
+  "content": "When overriding an existing definition, the original service is lost:\n\nMost of the time, that's exactly what you want to do. But sometimes, you might want to decorate the old one instead (i.e. apply the Decorator pattern). In this case, the old service should be kept around to be able to reference it in the new one. This configuration replaces App\\Mailer with a new one, but keeps a reference of the old one as .inner:\n\nThe decorates option tells the container that the App\\DecoratingMailer service replaces the App\\Mailer service. If you're using the default services.yaml configuration, the decorated service is automatically injected when the constructor of the decorating service has one argument type-hinted with the decorated service class.\n\nIf you are not using autowiring or the decorating service has more than one constructor argument type-hinted with the decorated service class, you must inject the decorated service explicitly (the ID of the decorated service is automatically changed to '.inner'):\n\nWhen decorating a service, the original service (e.g. App\\Mailer) is available inside the decorating service (e.g. App\\DecoratingMailer) using an ID constructed as \"Decorating service ID\" + the .inner suffix (e.g. in the previous example, the ID is 'App\\DecoratingMailer.inner'). You can control the inner service name via the decoration_inner_name option:\n\nThe visibility of the decorated App\\Mailer service (which is an alias for the new service) will still be the same as the original App\\Mailer visibility.\n\nAll custom service tags from the decorated service are removed in the new service. Only certain built-in service tags defined by Symfony are retained: container.service_locator, container.service_subscriber, kernel.event_subscriber, kernel.event_listener, kernel.locale_aware, and kernel.reset.\n\nWhen applying multiple decorators to a service, you can control their order with the decoration_priority option. Its value is an integer that defaults to 0 and higher priorities mean that decorators will be applied earlier.\n\nThe generated code will be the following:\n\nAn alternative to using decoration priorities is to create a stack of ordered services, each one decorating the next:\n\nThe result will be the same as in the previous section:\n\nLike aliases, a stack can only use public and deprecated attributes.\n\nEach frame of the stack can be either an inlined service, a reference or a child definition. The latter allows embedding stack definitions into each others, here's an advanced example of composition:\n\nTo change existing stacks (i.e. from a compiler pass), you can access each frame by its generated id with the following structure: .stack_id.frame_key. From the example above, .decorated_foo_stack.1 would be a reference to the inlined Baz service and .decorated_foo_stack.0 to the embedded stack. To get more explicit ids, you can give a name to each frame:\n\nThe Baz frame id will now be .decorated_foo_stack.second.\n\nWhen you decorate a service that doesn't exist, the decoration_on_invalid option allows you to choose the behavior to adopt.\n\nThree different behaviors are available:\n\nWhen using null, you may have to update the decorator constructor in order to make decorated dependency nullable:\n\nSometimes, you may want to add a compiler pass that creates service definitions on the fly. If you want to decorate such a service, be sure that your compiler pass is registered with PassConfig::TYPE_BEFORE_OPTIMIZATION type so that the decoration pass will be able to find the created services.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Decorate Services",
+      "id": "how-to-decorate-services"
+    },
+    {
+      "level": "h2",
+      "text": "Decoration Priority",
+      "id": "decoration-priority"
+    },
+    {
+      "level": "h2",
+      "text": "Stacking Decorators",
+      "id": "stacking-decorators"
+    },
+    {
+      "level": "h2",
+      "text": "Control the Behavior When the Decorated Service Does Not Exist",
+      "id": "control-the-behavior-when-the-decorated-service-does-not-exist"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Mailer: ~\n\n    # this replaces the old App\\Mailer definition with the new one, the\n    # old definition is lost\n    App\\Mailer:\n        class: App\\NewMailer",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsd=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsd:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Mailer\"/>\n\n        <!-- this replaces the old App\\Mailer definition with the new\n             one, the old definition is lost -->\n        <service id=\"App\\Mailer\" class=\"App\\NewMailer\"/>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Mailer;\nuse App\\NewMailer;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Mailer::class);\n\n    // this replaces the old App\\Mailer definition with the new one, the\n    // old definition is lost\n    $services->set(Mailer::class, NewMailer::class);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/DecoratingMailer.php\nnamespace App;\n\n// ...\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsDecorator;\n\n#[AsDecorator(decorates: Mailer::class)]\nclass DecoratingMailer\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Mailer: ~\n\n    App\\DecoratingMailer:\n        # overrides the App\\Mailer service\n        # but that service is still available as \".inner\"\n        decorates: App\\Mailer",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsd=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsd:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Mailer\"/>\n\n        <!-- overrides the App\\Mailer service\n             but that service is still available as \".inner\" -->\n        <service id=\"App\\DecoratingMailer\"\n            decorates=\"App\\Mailer\"\n        />\n\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\DecoratingMailer;\nuse App\\Mailer;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Mailer::class);\n\n    $services->set(DecoratingMailer::class)\n        // overrides the App\\Mailer service\n        // but that service is still available as \".inner\"\n        ->decorate(Mailer::class);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/DecoratingMailer.php\nnamespace App;\n\n// ...\nuse App\\Mailer;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsDecorator;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AutowireDecorated;\n\n#[AsDecorator(decorates: Mailer::class)]\nclass DecoratingMailer\n{\n    public function __construct(\n        // unlike other configuration formats, that name the decorated service argument\n        // as `$inner` by default, when using attributes you can choose any variable name\n        #[AutowireDecorated] private Mailer $mailer,\n    ) {\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Mailer: ~\n\n    App\\DecoratingMailer:\n        decorates: App\\Mailer\n        # pass the old service as an argument\n        arguments: ['@.inner']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsd=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsd:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Mailer\"/>\n\n        <service id=\"App\\DecoratingMailer\"\n            decorates=\"App\\Mailer\"\n        >\n            <!-- pass the old service as an argument -->\n            <argument type=\"service\" id=\".inner\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\DecoratingMailer;\nuse App\\Mailer;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Mailer::class);\n\n    $services->set(DecoratingMailer::class)\n        ->decorate(Mailer::class)\n        // pass the old service as an argument\n        ->args([service('.inner')]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// when using the #[AutowireDecorated] attribute, you can name the argument\n// that holds the decorated service however you like, without needing to\n// configure that name explicitly\n#[AutowireDecorated] private Mailer $originalMailer,",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\DecoratingMailer:\n        # ...\n        decoration_inner_name: 'original_mailer'\n        arguments: ['@original_mailer']\n\n        # if you decorate a lot of services, consider adding the full\n        # original service ID as part of the new ID\n        decoration_inner_name: 'App\\Mailer.original'\n        arguments: ['@App\\Mailer.original']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsd=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsd:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service\n            id=\"App\\DecoratingMailer\"\n            decorates=\"App\\Mailer\"\n            decoration-inner-name=\"original_mailer\"\n            public=\"false\"\n        >\n            <argument type=\"service\" id=\"original_mailer\"/>\n        </service>\n\n        <!-- if you decorate a lot of services, consider adding the full\n             original service ID as part of the new ID -->\n        <service\n            id=\"App\\DecoratingMailer\"\n            decorates=\"App\\Mailer\"\n            decoration-inner-name=\"App\\Mailer.original\"\n            public=\"false\"\n        >\n            <argument type=\"service\" id=\"App\\Mailer.original\"/>\n        </service>\n\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\DecoratingMailer;\nuse App\\Mailer;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Mailer::class);\n\n    $services->set(DecoratingMailer::class)\n        ->decorate(Mailer::class, 'original_mailer')\n        ->args([service('original_mailer')]);\n\n    // if you decorate a lot of services, consider adding the full\n    // original service ID as part of the new ID\n    $services->set(DecoratingMailer::class)\n        ->decorate(Mailer::class, DecoratingMailer::class.'.original')\n        ->args([service(DecoratingMailer::class.'.original')]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsDecorator;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AutowireDecorated;\n\n#[AsDecorator(decorates: Foo::class, priority: 5)]\nclass Bar\n{\n    public function __construct(\n        #[AutowireDecorated]\n        private $inner,\n    ) {\n    }\n    // ...\n}\n\n#[AsDecorator(decorates: Foo::class, priority: 1)]\nclass Baz\n{\n    public function __construct(\n        #[AutowireDecorated]\n        private $inner,\n    ) {\n    }\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    Foo: ~\n\n    Bar:\n        decorates: Foo\n        decoration_priority: 5\n        arguments: ['@.inner']\n\n    Baz:\n        decorates: Foo\n        decoration_priority: 1\n        arguments: ['@.inner']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"Foo\"/>\n\n        <service id=\"Bar\" decorates=\"Foo\" decoration-priority=\"5\">\n            <argument type=\"service\" id=\".inner\"/>\n        </service>\n\n        <service id=\"Baz\" decorates=\"Foo\" decoration-priority=\"1\">\n            <argument type=\"service\" id=\".inner\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(\\Foo::class);\n\n    $services->set(\\Bar::class)\n        ->decorate(\\Foo::class, null, 5)\n        ->args([service('.inner')]);\n\n    $services->set(\\Baz::class)\n        ->decorate(\\Foo::class, null, 1)\n        ->args([service('.inner')]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "$this->services[Foo::class] = new Baz(new Bar(new Foo()));",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    decorated_foo_stack:\n        stack:\n            - class: Baz\n              arguments: ['@.inner']\n            - class: Bar\n              arguments: ['@.inner']\n            - class: Foo\n\n    # using the short syntax:\n    decorated_foo_stack:\n        stack:\n            - Baz: ['@.inner']\n            - Bar: ['@.inner']\n            - Foo: ~\n\n    # can be simplified when autowiring is enabled:\n    decorated_foo_stack:\n        stack:\n            - Baz: ~\n            - Bar: ~\n            - Foo: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <services>\n        <stack id=\"decorated_foo_stack\">\n            <service class=\"Baz\">\n                <argument type=\"service\" id=\".inner\"/>\n            </service>\n            <service class=\"Bar\">\n                <argument type=\"service\" id=\".inner\"/>\n            </service>\n            <service class=\"Foo\"/>\n        </stack>\n\n        <!-- can be simplified when autowiring is enabled: -->\n        <stack id=\"decorated_foo_stack\">\n            <service class=\"Baz\"/>\n            <service class=\"Bar\"/>\n            <service class=\"Foo\"/>\n        </stack>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nreturn function(ContainerConfigurator $container): void {\n    $container->services()\n        ->stack('decorated_foo_stack', [\n            inline_service(\\Baz::class)->args([service('.inner')]),\n            inline_service(\\Bar::class)->args([service('.inner')]),\n            inline_service(\\Foo::class),\n        ])\n\n        // can be simplified when autowiring is enabled:\n        ->stack('decorated_foo_stack', [\n            inline_service(\\Baz::class),\n            inline_service(\\Bar::class),\n            inline_service(\\Foo::class),\n        ])\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "$this->services['decorated_foo_stack'] = new Baz(new Bar(new Foo()));",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    some_decorator:\n        class: App\\Decorator\n\n    embedded_stack:\n        stack:\n            - alias: some_decorator\n            - App\\Decorated: ~\n\n    decorated_foo_stack:\n        stack:\n            - parent: embedded_stack\n            - Baz: ~\n            - Bar: ~\n            - Foo: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <services>\n        <service id=\"some_decorator\" class=\"App\\Decorator\"/>\n\n        <stack id=\"embedded_stack\">\n            <service alias=\"some_decorator\"/>\n            <service class=\"App\\Decorated\"/>\n        </stack>\n\n        <stack id=\"decorated_foo_stack\">\n            <service parent=\"embedded_stack\"/>\n            <service class=\"Baz\"/>\n            <service class=\"Bar\"/>\n            <service class=\"Foo\"/>\n        </stack>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Decorated;\nuse App\\Decorator;\n\nreturn function(ContainerConfigurator $container): void {\n    $container->services()\n        ->set('some_decorator', Decorator::class)\n\n        ->stack('embedded_stack', [\n            service('some_decorator'),\n            inline_service(Decorated::class),\n        ])\n\n        ->stack('decorated_foo_stack', [\n            inline_service()->parent('embedded_stack'),\n            inline_service(\\Baz::class),\n            inline_service(\\Bar::class),\n            inline_service(\\Foo::class),\n        ])\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "$this->services['decorated_foo_stack'] = new App\\Decorator(new App\\Decorated(new Baz(new Bar(new Foo()))));",
+      "language": "unknown"
+    },
+    {
+      "code": "# ...\ndecorated_foo_stack:\n    stack:\n        first:\n            parent: embedded_stack\n        second:\n            Baz: ~\n        # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- ... -->\n<stack id=\"decorated_foo_stack\">\n    <service id=\"first\" parent=\"embedded_stack\"/>\n    <service id=\"second\" class=\"Baz\"/>\n    <!-- ... -->\n</stack>",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n->stack('decorated_foo_stack', [\n    'first' => inline_service()->parent('embedded_stack'),\n    'second' => inline_service(\\Baz::class),\n    // ...\n])",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsDecorator;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AutowireDecorated;\nuse Symfony\\Component\\DependencyInjection\\ContainerInterface;\n\n#[AsDecorator(decorates: Mailer::class, onInvalid: ContainerInterface::IGNORE_ON_INVALID_REFERENCE)]\nclass Bar\n{\n    public function __construct(\n        #[AutowireDecorated] private $inner,\n    ) {\n    }\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nFoo: ~\n\nBar:\n    decorates: Foo\n    decoration_on_invalid: ignore\n    arguments: ['@.inner']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"Foo\"/>\n\n        <service id=\"Bar\" decorates=\"Foo\" decoration-on-invalid=\"ignore\">\n            <argument type=\"service\" id=\".inner\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerInterface;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(Foo::class);\n\n    $services->set(Bar::class)\n        ->decorate(Foo::class, null, 0, ContainerInterface::IGNORE_ON_INVALID_REFERENCE)\n        ->args([service('.inner')])\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Service/DecoratorService.php\nnamespace App\\Service;\n\nuse Acme\\OptionalBundle\\Service\\OptionalService;\n\nclass DecoratorService\n{\n    public function __construct(\n        private ?OptionalService $decorated,\n    ) {\n    }\n\n    public function tellInterestingStuff(): string\n    {\n        if (!$this->decorated) {\n            return 'Just one interesting thing';\n        }\n\n        return $this->decorated->tellInterestingStuff().' + one more interesting thing';\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/service_decoration.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html"
+  ]
+}

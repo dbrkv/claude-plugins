@@ -1,0 +1,8 @@
+{
+  "title": "Use single quotes to wrap expressions containing double quotes",
+  "content": "config_path: !env 'CONFIG_PATH \"/etc/app/config.json\"'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-single-quotes-to-wrap-expressions-containing-double-quotes",
+  "links": []
+}

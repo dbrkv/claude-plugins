@@ -1,0 +1,19 @@
+{
+  "title": "Download and extract archives",
+  "content": "source: \"https://example.com/components.tar.gz\"\nsource: \"https://example.com/components.zip\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### Single Files",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Single Files",
+      "id": "single-files"
+    }
+  ],
+  "url": "llms-txt#download-and-extract-archives",
+  "links": []
+}

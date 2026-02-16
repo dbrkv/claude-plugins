@@ -1,0 +1,77 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/validation_groups.html",
+  "title": "Configuring Validation Groups in Forms",
+  "content": "If the object handled in your form uses validation groups, you need to specify which validation group(s) the form should apply.\n\nTo define them when creating forms in classes, use the configureOptions() method:\n\nWhen creating forms in controllers, pass it as a form option:\n\nIn both cases, only the registration group will be used to validate the object. To apply the registration group and all constraints not in any other group, add the special Default group:\n\nYou can use any name for your validation groups. Symfony recommends using \"lower snake case\" (e.g. foo_bar), while automatically generated groups use \"UpperCamelCase\" (e.g. Default, SomeClassName).\n\nWhen your form has multiple submit buttons, you can change the validation group based on the clicked button. For example, in a multi-step form like the following, you might want to skip validation when returning to a previous step:\n\nTo do so, configure the validation groups of the previousStep button to false, which is a special value that skips validation:\n\nNow the form will skip your validation constraints when that button is clicked. It will still validate basic integrity constraints, such as checking whether an uploaded file was too large or whether you tried to submit text in a number field.\n\nTo determine validation groups dynamically based on submitted data, use a callback. This is called after the form is submitted, but before validation is invoked. The callback receives the form object as its first argument:\n\nAdding Default to the list of validation groups is common but not mandatory. See the main article about validation groups to learn more about validation groups and the default constraints.\n\nYou can also pass a static class method callback:\n\nIf validation group logic requires services or can't fit in a closure, use a dedicated validation group resolver service. The class of this service must be invokable and receives the form object as its first argument:\n\nThen use the service in your form type:\n\nFor more information about how validation groups work, see How to Apply only a Subset of all Your Validation Constraints (Validation Groups).\n\nShow your Symfony expertise\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Configuring Validation Groups in Forms",
+      "id": "configuring-validation-groups-in-forms"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing Validation Groups Based on the Clicked Button",
+      "id": "choosing-validation-groups-based-on-the-clicked-button"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing Validation Groups Based on Submitted Data",
+      "id": "choosing-validation-groups-based-on-submitted-data"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing Validation Groups via a Service",
+      "id": "choosing-validation-groups-via-a-service"
+    },
+    {
+      "level": "h2",
+      "text": "Learn More",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\npublic function configureOptions(OptionsResolver $resolver): void\n{\n    $resolver->setDefaults([\n        // ...\n        'validation_groups' => ['registration'],\n    ]);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$form = $this->createFormBuilder($user, [\n    'validation_groups' => ['registration'],\n])->add(/* ... */);",
+      "language": "javascript"
+    },
+    {
+      "code": "[\n    // ...\n    'validation_groups' => ['Default', 'registration'],\n]",
+      "language": "javascript"
+    },
+    {
+      "code": "$form = $this->createFormBuilder($task)\n    // ...\n    ->add('nextStep', SubmitType::class)\n    ->add('previousStep', SubmitType::class)\n    ->getForm();",
+      "language": "unknown"
+    },
+    {
+      "code": "$form = $this->createFormBuilder($task)\n    // ...\n    ->add('previousStep', SubmitType::class, [\n        'validation_groups' => false,\n    ])\n    ->getForm();",
+      "language": "javascript"
+    },
+    {
+      "code": "use App\\Entity\\Client;\nuse Symfony\\Component\\Form\\FormInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\npublic function configureOptions(OptionsResolver $resolver): void\n{\n    $resolver->setDefaults([\n        'validation_groups' => function (FormInterface $form): array {\n            $data = $form->getData();\n\n            if (Client::TYPE_PERSON === $data->getType()) {\n                return ['Default', 'person'];\n            }\n\n            return ['Default', 'company'];\n        },\n    ]);\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "'validation_groups' => [Client::class, 'determineValidationGroups']",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Validation/ValidationGroupResolver.php\nnamespace App\\Validation;\n\nuse Symfony\\Component\\Form\\FormInterface;\n\nclass ValidationGroupResolver\n{\n    public function __construct(\n        private object $service1,\n        private object $service2,\n    ) {\n    }\n\n    public function __invoke(FormInterface $form): array\n    {\n        $groups = [];\n\n        // ... determine which groups to return\n\n        return $groups;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Form;\n\nuse App\\Validation\\ValidationGroupResolver;\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass MyClassType extends AbstractType\n{\n    public function __construct(\n        private ValidationGroupResolver $groupResolver,\n    ) {\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'validation_groups' => $this->groupResolver,\n        ]);\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/validation_groups.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/forms.html",
+    "https://symfony.com/doc/7.3/form/multiple_buttons.html"
+  ]
+}

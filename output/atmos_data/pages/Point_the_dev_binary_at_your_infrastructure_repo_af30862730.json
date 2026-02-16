@@ -1,0 +1,8 @@
+{
+  "title": "Point the dev binary at your infrastructure repo",
+  "content": "./build/atmos -C ~/projects/my-infrastructure describe stacks",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#point-the-dev-binary-at-your-infrastructure-repo",
+  "links": []
+}

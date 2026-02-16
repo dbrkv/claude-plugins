@@ -1,0 +1,19 @@
+{
+  "title": "Use in scripts",
+  "content": "CONSOLE_URL=$(atmos auth console --print-only --identity prod-oncall)\necho \"Emergency console access: $CONSOLE_URL\"\nshell",
+  "code_samples": [
+    {
+      "code": "### Custom Session Duration",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Custom Session Duration",
+      "id": "custom-session-duration"
+    }
+  ],
+  "url": "llms-txt#use-in-scripts",
+  "links": []
+}

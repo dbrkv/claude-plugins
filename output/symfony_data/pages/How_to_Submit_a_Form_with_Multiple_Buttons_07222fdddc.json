@@ -1,0 +1,30 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/multiple_buttons.html",
+  "title": "How to Submit a Form with Multiple Buttons",
+  "content": "When your form contains more than one submit button, you will want to check which of the buttons was clicked to adapt the program flow in your controller. To do this, add a second button with the caption \"Save and Add\" to your form:\n\nIn your controller, use the button's isClicked() method for querying if the \"Save and Add\" button was clicked:\n\nOr you can get the button's name by using the getClickedButton() method of the form:\n\nBecome certified from home\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Submit a Form with Multiple Buttons",
+      "id": "how-to-submit-a-form-with-multiple-buttons"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$form = $this->createFormBuilder($task)\n    ->add('task', TextType::class)\n    ->add('dueDate', DateType::class)\n    ->add('save', SubmitType::class, ['label' => 'Create Task'])\n    ->add('saveAndAdd', SubmitType::class, ['label' => 'Save and Add'])\n    ->getForm();",
+      "language": "javascript"
+    },
+    {
+      "code": "if ($form->isSubmitted() && $form->isValid()) {\n    // ... perform some action, such as saving the task to the database\n\n    $nextAction = $form->get('saveAndAdd')->isClicked()\n        ? 'task_new'\n        : 'task_success';\n\n    return $this->redirectToRoute($nextAction);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "if ($form->getClickedButton() && 'saveAndAdd' === $form->getClickedButton()->getName()) {\n    // ...\n}\n\n// when using nested forms, two or more buttons can have the same name;\n// in those cases, compare the button objects instead of the button names\nif ($form->getClickedButton() === $form->get('saveAndAdd')){\n    // ...\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/multiple_buttons.html"
+  ]
+}

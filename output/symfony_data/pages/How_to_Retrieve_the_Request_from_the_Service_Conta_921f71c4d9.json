@@ -1,0 +1,24 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/request.html",
+  "title": "How to Retrieve the Request from the Service Container",
+  "content": "Whenever you need to access the current request in a service, you can either add it as an argument to the methods that need the request or inject the request_stack service and access the Request by calling the getCurrentRequest() method:\n\nNow, inject the request_stack, which behaves like any normal service. If you're using the default services.yaml configuration, this will happen automatically via autowiring.\n\nIn a controller you can get the Request object by having it passed in as an argument to your action method. See Controller for details.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Retrieve the Request from the Service Container",
+      "id": "how-to-retrieve-the-request-from-the-service-container"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Newsletter/NewsletterManager.php\nnamespace App\\Newsletter;\n\nuse Symfony\\Component\\HttpFoundation\\RequestStack;\n\nclass NewsletterManager\n{\n    public function __construct(\n        protected RequestStack $requestStack,\n    ) {\n    }\n\n    public function anyMethod(): void\n    {\n        $request = $this->requestStack->getCurrentRequest();\n        // ... do something with the request\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/request.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/controller.html"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/server-data.html",
+  "title": "Passing Information from Twig to JavaScript",
+  "content": "In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example:\n\nFetch this in JavaScript:\n\nIf you prefer to access data attributes via JavaScript's dataset property, the attribute names are converted from dash-style to camelCase. For example, data-number-of-reviews becomes dataset.numberOfReviews:\n\nThere is no size limit for the value of the data-* attributes, so you can store any content. In Twig, use the html_attr escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following:\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Passing Information from Twig to JavaScript",
+      "id": "passing-information-from-twig-to-javascript"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<div class=\"js-user-rating\"\n    data-is-authenticated=\"{{ app.user ? 'true' : 'false' }}\"\n    data-user=\"{{ app.user|serialize(format = 'json')|e('html') }}\"\n>\n    <!-- ... -->\n</div>",
+      "language": "unknown"
+    },
+    {
+      "code": "document.addEventListener('DOMContentLoaded', function() {\n    const userRating = document.querySelector('.js-user-rating');\n    const isAuthenticated = userRating.getAttribute('data-is-authenticated');\n    const user = JSON.parse(userRating.getAttribute('data-user'));\n});",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nconst isAuthenticated = userRating.dataset.isAuthenticated;\nconst user = JSON.parse(userRating.dataset.user);",
+      "language": "javascript"
+    },
+    {
+      "code": "<div data-user-profile=\"{{ app.user ? app.user.profileData|json_encode|e('html_attr') }}\">\n    <!-- ... -->\n</div>",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [
+    {
+      "description": "Search Symfony Docs Version: 8.1 8.0 7.4 (dev) 7.3 (current) 6.4 7.2 7.1 7.0 6.3 6.2 6.1 6.0 5.x 4.x 3.x 2.x Passing Information from Twig to JavaScript Edit this page In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example: 1 2 3 4 5 6 <div class=\"js-user-rating\" data-is-authenticated=\"{{ app.user ? 'true' : 'false' }}\" data-user=\"{{ app.user|serialize(format = 'json')|e('html') }}\" > <!-- ... --> </div> Fetch this in JavaScript: 1 2 3 4 5 document.addEventListener('DOMContentLoaded', function() { const userRating = document.querySelector('.js-user-rating'); const isAuthenticated = userRating.getAttribute('data-is-authenticated'); const user = JSON.parse(userRating.getAttribute('data-user')); }); Note If you prefer to access data attributes via JavaScript's dataset property, the attribute names are converted from dash-style to camelCase. For example, data-number-of-reviews becomes dataset.numberOfReviews: 1 2 3 // ... const isAuthenticated = userRating.dataset.isAuthenticated; const user = JSON.parse(userRating.dataset.user); There is no size limit for the value of the data-* attributes, so you can store any content. In Twig, use the html_attr escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following: 1 2 3 <div data-user-profile=\"{{ app.user ? app.user.profileData|json_encode|e('html_attr') }}\"> <!-- ... --> </div> This work, including the code samples, is licensed under a Creative Commons BY-SA 3.0 license. TOC Search Version Symfony 7.3 backers Check Code Performance in Dev, Test, Staging & Production Peruse our complete Symfony & PHP solutions catalog for your web development needs.",
+      "code": "data-*"
+    },
+    {
+      "description": "Search Symfony Docs Version: 8.1 8.0 7.4 (dev) 7.3 (current) 6.4 7.2 7.1 7.0 6.3 6.2 6.1 6.0 5.x 4.x 3.x 2.x Passing Information from Twig to JavaScript Edit this page In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example: 1 2 3 4 5 6 <div class=\"js-user-rating\" data-is-authenticated=\"{{ app.user ? 'true' : 'false' }}\" data-user=\"{{ app.user|serialize(format = 'json')|e('html') }}\" > <!-- ... --> </div> Fetch this in JavaScript: 1 2 3 4 5 document.addEventListener('DOMContentLoaded', function() { const userRating = document.querySelector('.js-user-rating'); const isAuthenticated = userRating.getAttribute('data-is-authenticated'); const user = JSON.parse(userRating.getAttribute('data-user')); }); Note If you prefer to access data attributes via JavaScript's dataset property, the attribute names are converted from dash-style to camelCase. For example, data-number-of-reviews becomes dataset.numberOfReviews: 1 2 3 // ... const isAuthenticated = userRating.dataset.isAuthenticated; const user = JSON.parse(userRating.dataset.user); There is no size limit for the value of the data-* attributes, so you can store any content. In Twig, use the html_attr escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following: 1 2 3 <div data-user-profile=\"{{ app.user ? app.user.profileData|json_encode|e('html_attr') }}\"> <!-- ... --> </div> This work, including the code samples, is licensed under a Creative Commons BY-SA 3.0 license. TOC Search Version Symfony 7.3 backers Check Code Performance in Dev, Test, Staging & Production Peruse our complete Symfony & PHP solutions catalog for your web development needs.",
+      "code": "data-*"
+    },
+    {
+      "description": "In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example: 1 2 3 4 5 6 <div class=\"js-user-rating\" data-is-authenticated=\"{{ app.user ? 'true' : 'false' }}\" data-user=\"{{ app.user|serialize(format = 'json')|e('html') }}\" > <!-- ... --> </div> Fetch this in JavaScript: 1 2 3 4 5 document.addEventListener('DOMContentLoaded', function() { const userRating = document.querySelector('.js-user-rating'); const isAuthenticated = userRating.getAttribute('data-is-authenticated'); const user = JSON.parse(userRating.getAttribute('data-user')); }); Note If you prefer to access data attributes via JavaScript's dataset property, the attribute names are converted from dash-style to camelCase. For example, data-number-of-reviews becomes dataset.numberOfReviews: 1 2 3 // ... const isAuthenticated = userRating.dataset.isAuthenticated; const user = JSON.parse(userRating.dataset.user); There is no size limit for the value of the data-* attributes, so you can store any content. In Twig, use the html_attr escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following: 1 2 3 <div data-user-profile=\"{{ app.user ? app.user.profileData|json_encode|e('html_attr') }}\"> <!-- ... --> </div>",
+      "code": "data-*"
+    },
+    {
+      "description": "In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example: 1 2 3 4 5 6 <div class=\"js-user-rating\" data-is-authenticated=\"{{ app.user ? 'true' : 'false' }}\" data-user=\"{{ app.user|serialize(format = 'json')|e('html') }}\" > <!-- ... --> </div> Fetch this in JavaScript: 1 2 3 4 5 document.addEventListener('DOMContentLoaded', function() { const userRating = document.querySelector('.js-user-rating'); const isAuthenticated = userRating.getAttribute('data-is-authenticated'); const user = JSON.parse(userRating.getAttribute('data-user')); }); Note If you prefer to access data attributes via JavaScript's dataset property, the attribute names are converted from dash-style to camelCase. For example, data-number-of-reviews becomes dataset.numberOfReviews: 1 2 3 // ... const isAuthenticated = userRating.dataset.isAuthenticated; const user = JSON.parse(userRating.dataset.user); There is no size limit for the value of the data-* attributes, so you can store any content. In Twig, use the html_attr escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following: 1 2 3 <div data-user-profile=\"{{ app.user ? app.user.profileData|json_encode|e('html_attr') }}\"> <!-- ... --> </div>",
+      "code": "data-*"
+    },
+    {
+      "description": "In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example:",
+      "code": "data-*"
+    }
+  ],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/server-data.html"
+  ]
+}

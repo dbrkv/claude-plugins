@@ -1,0 +1,40 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/encore/custom-loaders-plugins.html",
+  "title": "Adding Custom Loaders & Plugins with Webpack Encore",
+  "content": "Encore already comes with a variety of different loaders out of the box, but if there is a specific loader that you want to use that is not currently supported, you can add your own loader through the addLoader function. The addLoader takes any valid webpack rules config.\n\nIf, for example, you want to add the handlebars-loader, call addLoader with your loader config\n\nSince the loader config accepts any valid Webpack rules object, you can pass any additional information your need for the loader\n\nEncore uses a variety of different plugins internally. But, you can add your own via the addPlugin() method. For example, if you use Moment.js, you might want to use the IgnorePlugin (see moment/moment#2373):\n\nOnline Symfony certification, take it now!\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Adding Custom Loaders & Plugins with Webpack Encore",
+      "id": "adding-custom-loaders-amp-plugins-with-webpack-encore"
+    },
+    {
+      "level": "h2",
+      "text": "Adding Custom Loaders",
+      "id": "adding-custom-loaders"
+    },
+    {
+      "level": "h2",
+      "text": "Adding Custom Plugins",
+      "id": "adding-custom-plugins"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "Encore\n    // ...\n    .addLoader({ test: /\\.handlebars$/, loader: 'handlebars-loader' })\n;",
+      "language": "unknown"
+    },
+    {
+      "code": "Encore\n    // ...\n    .addLoader({\n        test: /\\.handlebars$/,\n        loader: 'handlebars-loader',\n        options: {\n            helperDirs: [\n                __dirname + '/helpers1',\n                __dirname + '/helpers2',\n            ],\n            partialDirs: [\n                path.join(__dirname, 'templates', 'partials')\n            ]\n        }\n    })\n;",
+      "language": "unknown"
+    },
+    {
+      "code": "// webpack.config.js\n+ var webpack = require('webpack');\n\n  Encore\n      // ...\n\n+     .addPlugin(new webpack.IgnorePlugin({\n+         resourceRegExp: /^\\.\\/locale$/,\n+         contextRegExp: /moment$/,\n+     }))\n  ;",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/encore/custom-loaders-plugins.html"
+  ]
+}

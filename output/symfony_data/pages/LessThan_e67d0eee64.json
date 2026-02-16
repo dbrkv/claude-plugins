@@ -1,0 +1,127 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/LessThan.html",
+  "title": "LessThan",
+  "content": "Validates that a value is less than another value, defined in the options. To force that a value is less than or equal to another value, see LessThanOrEqual. To force a value is greater than another value, see GreaterThan.\n\nThe following constraints ensure that:\n\nThis constraint can be used to compare DateTime objects against any date string accepted by the DateTime constructor. For example, you could check that a date must be in the past like this:\n\nBe aware that PHP will use the server's configured timezone to interpret these dates. If you want to fix the timezone, append it to the date string:\n\nThe DateTime class also accepts relative dates or times. For example, you can check that a person must be at least 18 years old like this:\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: This value should be less than {{ compared_value }}.\n\nThis is the message that will be shown if the value is not less than the comparison value.\n\nYou can use the following parameters in this message:\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\ntype: string default: null\n\nIt defines the object property whose value is used to make the comparison.\n\nFor example, if you want to compare the $endDate property of some object with regard to the $startDate property of the same object, use propertyPath=\"startDate\" in the comparison constraint of $endDate.\n\nWhen using this option, its value is available in error messages as the {{ compared_value_path }} placeholder. Although it's not intended to include it in the error messages displayed to end users, it's useful when using APIs for doing any mapping logic on client-side.\n\nThis option is required. It defines the comparison value. It can be a string, number or object.\n\nGet your Sylius expertise recognized\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "LessThan",
+      "id": "lessthan"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Comparing Dates",
+      "id": "comparing-dates"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "message",
+      "id": "message"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    },
+    {
+      "level": "h3",
+      "text": "propertyPath",
+      "id": "propertypath"
+    },
+    {
+      "level": "h3",
+      "text": "value",
+      "id": "value"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Person\n{\n    #[Assert\\LessThan(5)]\n    protected int $siblings;\n\n    #[Assert\\LessThan(\n        value: 80,\n    )]\n    protected int $age;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Person:\n    properties:\n        siblings:\n            - LessThan: 5\n        age:\n            - LessThan:\n                value: 80",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Person\">\n        <property name=\"siblings\">\n            <constraint name=\"LessThan\">\n                5\n            </constraint>\n        </property>\n        <property name=\"age\">\n            <constraint name=\"LessThan\">\n                <option name=\"value\">80</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Person\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('siblings', new Assert\\LessThan(5));\n\n        $metadata->addPropertyConstraint('age', new Assert\\LessThan(\n            value: 80,\n        ));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Person\n{\n    #[Assert\\LessThan('today')]\n    protected \\DateTimeInterface $dateOfBirth;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Person:\n    properties:\n        dateOfBirth:\n            - LessThan: today",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Person\">\n        <property name=\"dateOfBirth\">\n            <constraint name=\"LessThan\">today</constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Person\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('dateOfBirth', new Assert\\LessThan('today'));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Person\n{\n    #[Assert\\LessThan('today UTC')]\n    protected \\DateTimeInterface $dateOfBirth;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Person:\n    properties:\n        dateOfBirth:\n            - LessThan: today UTC",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Person\">\n        <property name=\"dateOfBirth\">\n            <constraint name=\"LessThan\">today UTC</constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Person\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('age', new Assert\\LessThan('today UTC'));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Person\n{\n    #[Assert\\LessThan('-18 years')]\n    protected \\DateTimeInterface $dateOfBirth;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Person:\n    properties:\n        dateOfBirth:\n            - LessThan: -18 years",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Person\">\n        <property name=\"dateOfBirth\">\n            <constraint name=\"LessThan\">-18 years</constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Person.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Person\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('dateOfBirth', new Assert\\LessThan('-18 years'));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/LessThan.html",
+    "https://symfony.com/doc/7.3/reference/constraints/LessThanOrEqual.html",
+    "https://symfony.com/doc/7.3/reference/constraints/GreaterThan.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

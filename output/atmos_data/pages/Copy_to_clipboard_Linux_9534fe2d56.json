@@ -1,0 +1,8 @@
+{
+  "title": "Copy to clipboard (Linux)",
+  "content": "atmos auth console --print-only | xclip",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#copy-to-clipboard-(linux)",
+  "links": []
+}

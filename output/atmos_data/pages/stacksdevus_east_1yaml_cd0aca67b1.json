@@ -1,0 +1,13 @@
+{
+  "title": "stacks/dev/us-east-1.yaml",
+  "content": "components:\n  terraform:\n    vpc:\n      metadata:\n        component: vpc/1.3  # Latest version in dev\n      vars:\n        name: dev-vpc\nyaml",
+  "code_samples": [
+    {
+      "code": "</TabItem>\n\n<TabItem value=\"staging\" label=\"Staging\">\n\n**Release Control**: Manually update version pin in stack configuration, then deploy (with automation).",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#stacks/dev/us-east-1.yaml",
+  "links": []
+}

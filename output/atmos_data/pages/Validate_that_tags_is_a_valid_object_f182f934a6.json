@@ -1,0 +1,8 @@
+{
+  "title": "Validate that tags is a valid object",
+  "content": "errors[\"for the 'my-component' component, 'tags' in TF_CLI_ARGS must be a valid object\"] {\n    input.env_tf_cli_vars.tags\n    not is_object(input.env_tf_cli_vars.tags)\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#validate-that-tags-is-a-valid-object",
+  "links": []
+}

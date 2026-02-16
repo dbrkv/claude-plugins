@@ -1,0 +1,8 @@
+{
+  "title": "Set a theme via environment variable",
+  "content": "ATMOS_THEME=dracula atmos terraform plan",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-a-theme-via-environment-variable",
+  "links": []
+}

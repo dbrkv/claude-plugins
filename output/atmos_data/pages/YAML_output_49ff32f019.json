@@ -1,0 +1,28 @@
+{
+  "title": "YAML output",
+  "content": "$ atmos version list --format yaml\njson\n{\n  \"releases\": [\n    {\n      \"version\": \"v1.95.0\",\n      \"title\": \"Enhanced Vendoring and Bug Fixes\",\n      \"published_at\": \"2025-04-15T10:30:00Z\",\n      \"url\": \"https://github.com/cloudposse/atmos/releases/tag/v1.95.0\",\n      \"prerelease\": false,\n      \"current\": true\n    }\n  ]\n}\nbash",
+  "code_samples": [
+    {
+      "code": "**Example JSON output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Performance & Rate Limits\n\n### GitHub API Rate Limits\n\n**Without authentication:** 60 requests/hour\n**With authentication:** 5,000 requests/hour\n\nTo increase your rate limit, set a GitHub token:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Performance & Rate Limits",
+      "id": "performance-&-rate-limits"
+    },
+    {
+      "level": "h3",
+      "text": "GitHub API Rate Limits",
+      "id": "github-api-rate-limits"
+    }
+  ],
+  "url": "llms-txt#yaml-output",
+  "links": []
+}

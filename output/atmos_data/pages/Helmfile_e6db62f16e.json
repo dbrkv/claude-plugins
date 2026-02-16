@@ -1,0 +1,8 @@
+{
+  "title": "Helmfile",
+  "content": "atmos helmfile deploy <component> -s <stack>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#helmfile",
+  "links": []
+}

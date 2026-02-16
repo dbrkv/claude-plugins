@@ -1,0 +1,73 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Traverse.html",
+  "title": "Traverse",
+  "content": "Object properties are only validated if they are accessible, either by being public or having public accessor methods (e.g. a public getter). If your object needs to be traversed to validate its data, you can use this constraint.\n\nIn the following example, create two classes BookCollection and Book that all have constraints on their properties.\n\nWhen the object implements \\Traversable (like here with its child \\IteratorAggregate), its traversal strategy will implicitly be set and the object will be iterated over without defining the constraint. It's mostly useful to add it to be explicit or to disable the traversal using the traverse option. If a public getter exists to return the inner books collection like getBooks(): Collection, the Valid constraint can be used on the $books property instead.\n\nThe groups option is not available for this constraint.\n\ntype: boolean default: true\n\nInstances of \\Traversable are traversed by default, use this option to disable validating:\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nShow your Sylius expertise\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Traverse",
+      "id": "traverse"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "traverse",
+      "id": "traverse-1"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/BookCollection.php\nnamespace App\\Entity;\n\nuse App\\Entity\\Book;\nuse Doctrine\\Common\\Collections\\ArrayCollection;\nuse Doctrine\\Common\\Collections\\Collection;\nuse Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\n#[ORM\\Entity]\n#[Assert\\Traverse]\nclass BookCollection implements \\IteratorAggregate\n{\n    /**\n     * @var string\n     */\n    #[ORM\\Column]\n    #[Assert\\NotBlank]\n    protected string $name = '';\n\n    /**\n     * @var Collection|Book[]\n     */\n    #[ORM\\ManyToMany(targetEntity: Book::class)]\n    protected ArrayCollection $books;\n\n    // some other properties\n\n    public function __construct()\n    {\n        $this->books = new ArrayCollection();\n    }\n\n    // ... setter for name, adder and remover for books\n\n    // the name can be validated by calling the getter\n    public function getName(): string\n    {\n        return $this->name;\n    }\n\n    /**\n     * @return \\Generator|Book[] The books for a given author\n     */\n    public function getBooksForAuthor(Author $author): iterable\n    {\n        foreach ($this->books as $book) {\n            if ($book->isAuthoredBy($author)) {\n                yield $book;\n            }\n        }\n    }\n\n    // neither the method above nor any other specific getter\n    // could be used to validated all nested books;\n    // this object needs to be traversed to call the iterator\n    public function getIterator(): \\Iterator\n    {\n        return $this->books->getIterator();\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\BookCollection:\n    constraints:\n        - Traverse: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\BookCollection\">\n        <constraint name=\"Traverse\"/>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/BookCollection.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass BookCollection\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addConstraint(new Assert\\Traverse());\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/BookCollection.php\n\n// ... same as above\n\n/**\n * ...\n */\n #[Assert\\Traverse(false)]\n class BookCollection implements \\IteratorAggregate\n {\n     // ...\n }",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\BookCollection:\n    constraints:\n        - Traverse: false",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\BookCollection\">\n        <constraint name=\"Traverse\">false</constraint>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/BookCollection.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass BookCollection\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addConstraint(new Assert\\Traverse(false));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Traverse.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Valid.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

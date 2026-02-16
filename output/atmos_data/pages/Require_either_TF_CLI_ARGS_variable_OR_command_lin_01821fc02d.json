@@ -1,0 +1,8 @@
+{
+  "title": "Require either TF_CLI_ARGS variable OR command-line variable, but not both",
+  "content": "errors[\"for the 'my-component' component, 'environment' must be specified either via TF_CLI_ARGS or -var, but not both\"] {\n    input.env_tf_cli_vars.environment\n    input.tf_cli_vars.environment\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#require-either-tf_cli_args-variable-or-command-line-variable,-but-not-both",
+  "links": []
+}

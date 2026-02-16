@@ -1,0 +1,8 @@
+{
+  "title": "Now in authenticated shell, scoped ONLY to production",
+  "content": "aws s3 sync ./assets s3://prod-bucket/\naws ecs update-service --cluster prod --service api --force-new-deployment\naws rds describe-db-instances --region us-east-1\nexit",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#now-in-authenticated-shell,-scoped-only-to-production",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Full URL format",
+  "content": "atmos auth console --destination https://console.aws.amazon.com/s3\nshell",
+  "code_samples": [
+    {
+      "code": "**Supported aliases include**: `s3`, `ec2`, `lambda`, `dynamodb`, `rds`, `vpc`, `iam`, `cloudformation`, `cloudwatch`, `eks`, `ecs`, `sagemaker`, `bedrock`, and many more. Aliases are case-insensitive.\n\n### Scripting and Automation",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Scripting and Automation",
+      "id": "scripting-and-automation"
+    }
+  ],
+  "url": "llms-txt#full-url-format",
+  "links": []
+}

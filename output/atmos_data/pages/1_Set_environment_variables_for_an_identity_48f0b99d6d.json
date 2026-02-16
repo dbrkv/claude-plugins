@@ -1,0 +1,8 @@
+{
+  "title": "1. Set environment variables for an identity",
+  "content": "eval $(atmos auth env --identity prod-admin)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#1.-set-environment-variables-for-an-identity",
+  "links": []
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Validate numeric ranges for CLI variables",
+  "content": "errors[message] {\n  input.tf_cli_vars.max_instances\n  is_number(input.tf_cli_vars.max_instances)\n  input.tf_cli_vars.max_instances > 10\n  message = sprintf(\"max_instances cannot exceed 10, got %d\", [input.tf_cli_vars.max_instances])\n}\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</File>\n\n#### TF_CLI_ARGS Environment (`env_tf_cli_args`)\n\nParse and validate arguments from the `TF_CLI_ARGS` environment variable.\n\n<File title=\"validate-tf-cli-args.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#validate-numeric-ranges-for-cli-variables",
+  "links": []
+}

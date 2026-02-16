@@ -1,0 +1,8 @@
+{
+  "title": "Show a specific identity",
+  "content": "atmos auth whoami --identity dev-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#show-a-specific-identity",
+  "links": []
+}

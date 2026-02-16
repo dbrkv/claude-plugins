@@ -1,0 +1,8 @@
+{
+  "title": "Extension is detected as .json (query string ignored)",
+  "content": "vars: !include https://api.example.com/config.json?version=2&format=raw",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#extension-is-detected-as-.json-(query-string-ignored)",
+  "links": []
+}

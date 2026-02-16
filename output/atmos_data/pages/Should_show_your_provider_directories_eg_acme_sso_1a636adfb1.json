@@ -1,0 +1,98 @@
+{
+  "title": "Should show your provider directories (e.g., acme-sso/)",
+  "content": "yaml\nauth:\n  providers:\n    acme-sso: # (1)\n      kind: aws/iam-identity-center\n      region: us-east-1 # (5)\n      start_url: https://acme.awsapps.com/start/ # (1.a)\n\nidentities:\n    acme-identity: # (4)\n      kind: aws/permission-set\n      via:\n        provider: acme-sso\n      principal:\n        name: \"IdentityManagersTeamAccess\" # (3)\n        account:\n          name: \"core-identity\" # (2)\nyaml\nauth:\n  providers:\n    <provider-name>:\n      kind: aws/iam-identity-center\n      region: <region>\n      start_url: <your-sso-start-url>\nyaml\nauth:\n  providers:\n    acme-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://acme.awsapps.com/start/\nyaml\nauth:\n  identities:\n    <account-name>/<descriptive-role-name>:\n      kind: aws/permission-set\n      via:\n        provider: <provider-name>\n      principal:\n        name: \"<PermissionSetName>\"\n        account:\n          name: \"<account-name>\"\nyaml\nauth:\n  identities:\n    acme-identity:\n      kind: aws/permission-set\n      via:\n        provider: acme-sso\n      principal:\n        name: \"IdentityManagersTeamAccess\"\n        account:\n          name: \"core-identity\"\nyaml\nauth:\n  identities:\n    acme-identity:\n      default: true\n      kind: aws/permission-set\n      via:\n        provider: acme-sso\n      principal:\n        name: \"IdentityManagersTeamAccess\"\n        account:\n          name: \"core-identity\"\nbash",
+  "code_samples": [
+    {
+      "code": "## Next Steps\n\n- Learn about [authentication workflows](/cli/commands/auth/usage)\n- Explore [component-level authentication](/cli/commands/auth/usage#component-level-configuration)\n- Review the [Leapp migration guide](/cli/commands/auth/tutorials/migrating-from-leapp) if migrating\n\n## Getting Help\n\nIf you encounter issues:\n\n1. Run `atmos auth validate --verbose` to check configuration\n2. Check the [User Guide](/cli/commands/auth/usage) for common scenarios\n3. Verify your IAM Identity Center configuration is correct\n4. Review Geodesic logs for authentication errors\n\n---\n\n**Ready to configure?** Start by updating your Dockerfile with the environment variables above, then rebuild your Geodesic container.\n\n---\n\n## Migrating from Leapp\n\n> **Note**: This guide currently covers AWS IAM Identity Center (SSO) migrations only. Support for other authentication methods will be added in future updates.\n\n> **Note**: `atmos auth` requires minimum Atmos version `v1.194.1`\n\nThis guide helps you migrate from Leapp to the native `atmos auth` authentication system.\n\n## Overview\n\nLeapp is a standalone credential management application with a graphical interface. Atmos Auth provides similar functionality but integrates authentication directly into your infrastructure workflow with configuration-as-code.\n\n## Quick Migration Example\n\n### What You See in Leapp\n\n![Leapp Session Example](/img/leapp-example.png)\n\nA typical Leapp session shows:\n- **Provider**: acme (in sidebar under \"Integrations\")\n- **Session**: core-identity\n- **Identity**: IdentityManagersTeamAccess\n- **Named Profile**: acme-identity\n- **Region**: US-EAST-1\n\n### Equivalent `atmos auth` Configuration",
+      "language": "unknown"
+    },
+    {
+      "code": "**That's it!** The configuration maps directly from what you see in Leapp to your `atmos.yaml`. Now you can run `atmos auth login` and you're ready to go.\n\n## Step-by-Step Migration\n\nNeed more detail? Here's how to migrate each piece of your Leapp configuration:\n\n<details>\n<summary>Understanding Leapp Terminology (Optional)</summary>\n\nIn Leapp, authentication consists of:\n\n1. **Provider**: SSO integration (e.g., \"acme\") connecting to AWS IAM Identity Center\n2. **Session**: Individual AWS access configuration (account + permission set + provider)\n3. **Identity**: Permission set name (e.g., \"IdentityManagersTeamAccess\")\n4. **Named Profile**: Profile name used in AWS CLI\n5. **Region**: AWS region for the session\n\n</details>\n\n<details>\n<summary>Field Mapping Reference (Quick Lookup)</summary>\n\n| Leapp Field | `atmos auth` Location | Notes |\n|-------------|----------------------|-------|\n| (1) Provider name | `providers.<name>` | Use a descriptive name (e.g., `acme-sso`) |\n| (1.a) Start URL | `providers.<name>.start_url` | Found in AWS IAM Identity Center portal |\n| (5) Region | `providers.<name>.region` | From Leapp session's Region column |\n| (2) Session (account) | `identities.<name>.principal.account.name` | AWS account name |\n| (3) Identity (permission set) | `identities.<name>.principal.name` | Exact permission set name |\n| (4) Named Profile | `identities.<name>` (key) | Use descriptive naming: `account/role` |\n\n</details>\n\n### 1. Identify Your Provider Configuration\n\nIn Leapp, find your provider in the left sidebar under \"Integrations\".\n\n**Create the provider in `atmos.yaml`:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### 2. Convert Each Session to an Identity\n\nFor each session in Leapp you use, create an identity configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### 3. Set a Default Identity (Optional)\n\nMark one identity as default for convenience:",
+      "language": "unknown"
+    },
+    {
+      "code": "### 4. Test Your Configuration",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Help",
+      "id": "getting-help"
+    },
+    {
+      "level": "h2",
+      "text": "Migrating from Leapp",
+      "id": "migrating-from-leapp"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Migration Example",
+      "id": "quick-migration-example"
+    },
+    {
+      "level": "h3",
+      "text": "What You See in Leapp",
+      "id": "what-you-see-in-leapp"
+    },
+    {
+      "level": "h3",
+      "text": "Equivalent `atmos auth` Configuration",
+      "id": "equivalent-`atmos-auth`-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Step-by-Step Migration",
+      "id": "step-by-step-migration"
+    },
+    {
+      "level": "h3",
+      "text": "1. Identify Your Provider Configuration",
+      "id": "1.-identify-your-provider-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "2. Convert Each Session to an Identity",
+      "id": "2.-convert-each-session-to-an-identity"
+    },
+    {
+      "level": "h3",
+      "text": "3. Set a Default Identity (Optional)",
+      "id": "3.-set-a-default-identity-(optional)"
+    },
+    {
+      "level": "h3",
+      "text": "4. Test Your Configuration",
+      "id": "4.-test-your-configuration"
+    }
+  ],
+  "url": "llms-txt#should-show-your-provider-directories-(e.g.,-acme-sso/)",
+  "links": []
+}

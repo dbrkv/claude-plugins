@@ -1,0 +1,124 @@
+{
+  "title": "OR: Consistent component-first",
+  "content": "component: vpc/prod\ncomponent: eks/prod\ncomponent: rds/beta\ntext\ncomponents/\n  terraform/\n    vpc/\n      alpha/     # Alpha track for VPC\n        main.tf\n        variables.tf\n        versions.tf\n      beta/      # Beta track for VPC\n        main.tf\n        variables.tf\n        versions.tf\n      prod/      # Production track for VPC\n        main.tf\n        variables.tf\n        versions.tf\n    rds/\n      alpha/     # Alpha track for RDS\n        main.tf\n        variables.tf\n      beta/      # Beta track for RDS\n        main.tf\n        variables.tf\n      prod/      # Production track for RDS\n        main.tf\n        variables.tf\nyaml\ncomponents:\n  terraform:\n    vpc:\n      metadata:\n        component: vpc/prod  # Subscribe to VPC production track\n      settings:\n        workspace_key_prefix: \"vpc\"\n      vars:\n        name: \"prod-use1-vpc\"\n        cidr_block: \"10.0.0.0/16\"\n\nrds:\n      metadata:\n        component: rds/prod  # Subscribe to RDS production track\n      settings:\n        workspace_key_prefix: \"rds\"\n      vars:\n        instance_class: \"db.t3.large\"\ntext\ncomponents/\n  terraform/\n    alpha/      # Alpha track (all components)\n      vpc/\n        main.tf\n        variables.tf\n        versions.tf\n      rds/\n        main.tf\n        variables.tf\n      eks/\n        main.tf\n        variables.tf\n    beta/       # Beta track (all components)\n      vpc/\n        main.tf\n        variables.tf\n        versions.tf\n      rds/\n        main.tf\n        variables.tf\n      eks/\n        main.tf\n        variables.tf\n    prod/       # Production track (all components)\n      vpc/\n        main.tf\n        variables.tf\n        versions.tf\n      rds/\n        main.tf\n        variables.tf\n      eks/\n        main.tf\n        variables.tf\nyaml\ncomponents:\n  terraform:\n    vpc:\n      metadata:\n        component: prod/vpc  # VPC from production track\n      settings:\n        workspace_key_prefix: \"vpc\"\n      vars:\n        name: \"prod-use1-vpc\"\n        cidr_block: \"10.0.0.0/16\"\n\nrds:\n      metadata:\n        component: prod/rds  # RDS from production track\n      settings:\n        workspace_key_prefix: \"rds\"\n      vars:\n        instance_class: \"db.t3.large\"\nyaml\ncomponents:\n  terraform:\n    base_path: \"components/terraform/prod\"  # Stack-wide track prefix\n\nvpc:\n      # Resolves to: prod/vpc (no metadata.component needed)\n      vars:\n        name: \"prod-use1-vpc\"\n        cidr_block: \"10.0.0.0/16\"\n\nrds:\n      # Resolves to: prod/rds (no metadata.component needed)\n      vars:\n        instance_class: \"db.t3.large\"\nyaml",
+  "code_samples": [
+    {
+      "code": "## Versioning Schemes\n\nDifferent patterns work best with specific [versioning schemes](/design-patterns/version-management/versioning-schemes)ânaming conventions for identifying component versions:\n\n**Number-Based Schemes** (fixed points):\n- **SemVer** (`1.2.3`), **CalVer** (`2024.10.1`), **Sequential** (`v1`, `v2`)\n- Work with: [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning)\n- Create immutable version identifiers that never change\n\n**Label-Based Schemes** (moving targets):\n- **Maturity Levels** (`alpha`, `beta`, `stable`), **Environment Names** (`dev`, `staging`, `prod`)\n- Work with: [Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels)\n- Create stage identifiers that point to evolving versions\n\nSee the [Versioning Schemes reference](/design-patterns/version-management/versioning-schemes) for detailed guidance on choosing and implementing naming conventions.\n\n## Mixing Strategies\n\n:::tip Idiomatic Implementations\nThese strategies can be mixed and matched, but **the patterns shown here represent idiomatic implementations that work well together**. While technically possible to use any versioning scheme with any pattern, certain combinations are more natural and operationally efficient.\n:::\n\nYou don't need to use a single pattern exclusively. Common combinations include:\n\n- **Tracks for Applications, Pinning for Platform**: Use release tracks for frequently-updated application components while strictly pinning critical platform components\n- **Vendoring + Tracks**: Vendor third-party code while using release tracks for internal components\n- **Folder Versioning for Major Changes**: Use folder-based versioning for breaking changes while using tracks for routine updates\n- **Different Schemes per Component Type**: Platform components use SemVer while application components use maturity levels\n\n## Summary\n\nVersion management in infrastructure-as-code requires careful consideration of trade-offs. While strict version pinning provides reproducibility, it often creates more problems than it solves at scale. Atmos supports multiple patterns that allow you to optimize for your specific needsâwhether that's rapid convergence, strong rollback capabilities, or predictable promotion paths.\n\nThe key is to choose patterns deliberately based on your organization's culture, scale, and operational maturity. Start with simpler patterns and evolve as your needs grow. Remember that the goal isn't perfect reproducibilityâit's delivering reliable infrastructure changes with appropriate safety controls and feedback loops.\n\n:::tip Next Steps\nReview each pattern in detail to understand its implementation, trade-offs, and best practices. Start with the pattern that best matches your current workflow, then iterate based on experience.\n:::\n\n## Honorable Mention: Release Artifacts (Advanced)\n\nFor teams requiring immutable deployment records, consider creating **release artifacts** separate from Git that represent exactly what was deployed to each environment. These artifacts:\n\n- Provide an immutable audit trail independent of Git history\n- Support cryptographic signing for compliance requirements\n- Enable exact reproduction of any historical deployment\n- Decouple deployment records from version control changes\n\nThis pattern adds significant complexity. Beyond artifact generation, you must maintain a robust system of record that maps which artifact versions are deployed to each environment and manages their progression paths. This becomes particularly challenging in organizations with complex environment topologies that don't follow simple linear promotion flows.\n\n## Related Patterns\n\n- [Versioning Schemes](/design-patterns/version-management/versioning-schemes) - Naming conventions for component versions\n- [Component Inheritance](/design-patterns/component-inheritance) - Base components that serve as blueprints\n- [Component Catalog](/design-patterns/component-catalog) - Centralized component library\n- [Multiple Component Instances](/design-patterns/multiple-component-instances) - Deploying multiple instances of the same component\n\n---\n\n## Release Tracks/Channels\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport KeyPoints from '@site/src/components/KeyPoints'\nimport Tabs from '@theme/Tabs'\nimport TabItem from '@theme/TabItem'\n\n<PillBox>Atmos Design Pattern</PillBox>\n<Intro>\n**Release Tracks/Channels** extends [Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning) with named release channels using **label-based [versioning schemes](/design-patterns/version-management/versioning-schemes)** (`alpha/vpc`, `beta/vpc`, `prod/vpc`) within the [Continuous Version Deployment](/design-patterns/version-management/continuous-version-deployment) strategy. Environments subscribe to channels and converge to whatever version is in their track through progressive automated rollout.\n</Intro>\n\nThis approach provides a middle ground between simple folder-based versioning and [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning). By organizing components into channels using **moving targets** (labels that point to evolving versions), you promote tracks rather than individual environment pins, reducing operational overhead while maintaining control. Environments grouped to the same track converge together, providing early feedback on changes before broader rollout.\n\n:::info Label-Based Versioning Schemes\nRelease Tracks/Channels work with **label-based [versioning schemes](/design-patterns/version-management/versioning-schemes)** that create evolving stage identifiers:\n- **[Maturity Levels](/design-patterns/version-management/versioning-schemes#maturity-levels)** (`alpha`, `beta`, `stable`) - Stability indicators\n- **[Environment Names](/design-patterns/version-management/versioning-schemes#environment-names)** (`dev`, `staging`, `prod`) - Deployment stage alignment\n\nThese are **moving targets**âthe label stays the same but points to different versions as they're promoted through tracks. This contrasts with [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning) which uses **fixed points** (numbers like `1.2.3`) that never change once created.\n:::\n\n<KeyPoints>\n- How tracks reduce version management overhead across many environments\n- Why promoting tracks instead of environments improves convergence\n- The operational semantics of track-based promotion\n- Implementation strategies using folders, variables, or vendoring\n</KeyPoints>\n\n## Use Cases\n\nUse the **Release Tracks/Channels** pattern when:\n\n- You have **many environments** that would be burdensome to pin individually\n- You want **fast convergence** and early detection of breaking changes\n- Your team prefers to **roll forward** but needs the ability to roll back tracks\n- You need **clear promotion semantics** without per-environment overhead\n- You want **strong feedback** during planning across environment tiers\n- You can group environments into **logical promotion stages**\n\n## Problem\n\nManaging individual version pins across many environments creates several challenges:\n\n- **Pin Management Overhead**: Updating dozens or hundreds of individual pins\n- **Delayed Feedback**: Issues only surface when promoting to specific environments\n- **Convergence Drift**: Environments naturally diverge without constant updates\n- **Promotion Complexity**: Coordinating updates across many environments\n\nRelease Tracks solve these problems by introducing an abstraction layer between versions and environments.\n\n## Solution\n\nInstead of each environment pinning versions directly, define tracks that represent promotion stages. Environments subscribe to tracks, and you promote versions by updating the track definition.\n\n:::info Builds on Folder-Based Versioning\nThis pattern extends the [Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning) strategy by adding a layer of indirection. While folder-based versioning requires each environment to explicitly reference version folders, Release Tracks allow multiple environments to follow a shared track that points to the appropriate version.\n:::\n\n### Track Design Principles\n\n1. **Tracks are Moving Targets**: Unlike static versions, tracks point to the \"current\" version for their stage\n2. **Environments Follow Tracks**: Multiple environments can subscribe to the same track\n3. **Promote the Track**: Update the track's version reference to promote all subscribers\n4. **Gradual Rollout**: Versions flow through tracks (alpha â beta â prod)\n\n## Implementation Approaches\n\nAtmos supports multiple ways to implement release tracks. The two primary approaches differ in how they organize the track structure:\n\n<Tabs>\n<TabItem value=\"tracks-per-component\" label=\"Tracks Per Component\" default>\n\n### Component-Centric Organization\n\n<File title=\"Directory Structure\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nEach component has its own track folders, making it easy to see all tracks for a specific component.\n\n**Benefits:**\n- **Independent Component Evolution**: Each component can move through tracks at its own pace without affecting others\n- **Clear Version History**: Easy to trace how a specific component evolved through alpha, beta, and production stages\n- **Granular Control**: Teams can adopt cutting-edge versions of specific components while keeping others stable\n\n**Drawbacks:**\n- **Complex Dependency Management**: Components with interdependencies may require coordinated track updates\n- **Increased Cognitive Load**: Teams must understand the state of multiple components across different tracks\n- **Potential for Incompatibility**: Independent tracking can lead to version combinations that weren't tested together\n\n**Use This Approach When:**\n- Components have independent release cycles\n- Different teams own different components\n- You need fine-grained control over component versions\n\n</TabItem>\n<TabItem value=\"track-first\" label=\"Track-First Organization\">\n\n### Track-Centric Organization\n\n<File title=\"Directory Structure\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nAll components for a track are grouped together, making it easy to see what's available in each release track.\n\n**Benefits:**\n- **Component Visibility**: Immediately see which components are available in each track - as components are deprecated, they can be removed from tracks\n- **Cohesive Promotion**: All components in a track are tested and promoted together, ensuring compatibility\n- **Simplified Mental Model**: Teams only need to understand track states rather than individual component versions\n\n**Drawbacks:**\n- **Reduced Flexibility**: All components in a track must move together, even if only one needs updating\n- **Potential for Blocking**: A problem with one component can hold back the entire track\n- **Larger Blast Radius**: Issues affect all components in the track, not just the problematic one\n\n**Use This Approach When:**\n- You want strong consistency across components\n- Components are tightly coupled and should move together\n- You prefer simplicity over granular control\n\n</TabItem>\n</Tabs>\n\n:::tip Alternative: Stack-Level Base Path\nInstead of setting `metadata.component` with the track prefix on every component, you can set the stack-level `base_path` to apply the track prefix automatically to all components in that stack.\n\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**Trade-off**: This approach is more DRY (Don't Repeat Yourself) and keeps stack configurations cleaner, but it's less explicitâyou must check the stack-level `base_path` setting to know which track components are using. The explicit `metadata.component` approach shown above makes the track immediately visible in each component configuration.\n:::\n\n## Choosing Between Approaches\n\nThe choice between **Tracks Per Component** and **Track-First Organization** depends on your operational model:\n\n| Aspect | Tracks Per Component | Track-First Organization |\n|--------|---------------------|------------------------|\n| **Best For** | Microservices, independent teams | Monolithic apps, platform teams |\n| **Component Updates** | Independent per component | Coordinated across components |\n| **Testing Strategy** | Component-level validation | Full-stack integration testing |\n| **Rollback Scope** | Single component | Entire track |\n| **Complexity** | Higher (many tracks to manage) | Lower (fewer tracks to manage) |\n| **Flexibility** | Maximum | Limited but consistent |\n\n:::tip Choose Your Convention and Be Consistent\nThe examples above demonstrate both path conventions:\n- **Component-first** (`vpc/prod`, `rds/beta`) - Read as \"VPC's production version\" or \"RDS's beta version\"\n- **Track-first** (`prod/vpc`, `beta/rds`) - Read as \"Production track of VPC\" or \"Beta track of RDS\"\n\n**Both conventions work equally well.** The key is to **choose one and apply it consistently** throughout your infrastructure. Mixing conventions makes component paths harder to reason about and increases cognitive load on your team.\n\nIn this documentation, we show both to illustrate the optionsâyour organization should pick one based on whether you think primarily in terms of **components** (component-first) or **deployment stages** (track-first).\n:::\n\n## Naming Strategy Considerations\n\nThe choice of track names is a key design decision that shapes how teams think about promotion:\n\n### Maturity Model (alpha/beta/stable)\n**Benefits:**\n- Technology-agnostic naming that focuses on stability\n- Clear expectations about reliability and feature completeness\n- Works well for components at different maturity levels\n\n**Drawbacks:**\n- May not align with organizational deployment stages\n- Can be confusing if \"beta\" doesn't map to staging environment\n\n### Environment Stages (dev/staging/prod)\n**Benefits:**\n- Direct mapping to environment tiers\n- Intuitive for teams already using these environment names\n- Clear promotion path matching deployment pipeline\n\n**Drawbacks:**\n- Implies tight coupling between tracks and specific environments\n- Less flexible if you have multiple staging or dev environments\n\n:::tip\nChoose names that reflect your organization's mental model. If your team thinks in terms of stability (alpha/beta/stable), use those. If you think in terms of deployment stages (dev/staging/prod), use those instead.\n:::\n\n### Managing Track Versions\n\nWith folder-based tracks, versions are managed by vendoring components into track-specific folders:\n\n<File title=\"vendor.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Versioning Schemes",
+      "id": "versioning-schemes"
+    },
+    {
+      "level": "h2",
+      "text": "Mixing Strategies",
+      "id": "mixing-strategies"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Honorable Mention: Release Artifacts (Advanced)",
+      "id": "honorable-mention:-release-artifacts-(advanced)"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Release Tracks/Channels",
+      "id": "release-tracks/channels"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Problem",
+      "id": "problem"
+    },
+    {
+      "level": "h2",
+      "text": "Solution",
+      "id": "solution"
+    },
+    {
+      "level": "h3",
+      "text": "Track Design Principles",
+      "id": "track-design-principles"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation Approaches",
+      "id": "implementation-approaches"
+    },
+    {
+      "level": "h3",
+      "text": "Component-Centric Organization",
+      "id": "component-centric-organization"
+    },
+    {
+      "level": "h3",
+      "text": "Track-Centric Organization",
+      "id": "track-centric-organization"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing Between Approaches",
+      "id": "choosing-between-approaches"
+    },
+    {
+      "level": "h2",
+      "text": "Naming Strategy Considerations",
+      "id": "naming-strategy-considerations"
+    },
+    {
+      "level": "h3",
+      "text": "Maturity Model (alpha/beta/stable)",
+      "id": "maturity-model-(alpha/beta/stable)"
+    },
+    {
+      "level": "h3",
+      "text": "Environment Stages (dev/staging/prod)",
+      "id": "environment-stages-(dev/staging/prod)"
+    },
+    {
+      "level": "h3",
+      "text": "Managing Track Versions",
+      "id": "managing-track-versions"
+    }
+  ],
+  "url": "llms-txt#or:-consistent-component-first",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Run with heatmap for quick metrics",
+  "content": "atmos validate stacks --heatmap 2>&1 | tee perf-output.txt",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-with-heatmap-for-quick-metrics",
+  "links": []
+}

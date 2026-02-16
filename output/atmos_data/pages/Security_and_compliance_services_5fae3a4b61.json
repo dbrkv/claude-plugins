@@ -1,0 +1,49 @@
+{
+  "title": "Security and compliance services",
+  "content": "atmos auth console --destination guardduty\natmos auth console --destination securityhub\natmos auth console --destination iam\nshell",
+  "code_samples": [
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--identity` / `-i`</dt>\n  <dd>\n    Specify the Atmos identity to use for console access. This flag has three modes:\n\n    - **With value** (`--identity admin`): Use the specified identity\n    - **Without value** (`--identity`): Show interactive selector to choose identity\n    - **Omitted**: Use the default identity configured in `atmos.yaml`, or prompt if no default is set\n\n    **Environment variables:** `ATMOS_IDENTITY` or `IDENTITY` (checked in that order)\n  </dd>\n\n  <dt>`--destination`</dt>\n  <dd>\n    The specific console page or service to navigate to after authentication. Provider-specific URL format.\n\n    **AWS Examples:**\n    - `https://console.aws.amazon.com/s3` - S3 console\n    - `https://console.aws.amazon.com/ec2` - EC2 console\n    - `https://console.aws.amazon.com/cloudformation` - CloudFormation console\n\n    **Default:** Provider's main console page\n  </dd>\n\n  <dt>`--duration`</dt>\n  <dd>\n    The requested duration for the console session. Providers may enforce maximum limits.\n\n    **AWS:** Maximum 12 hours\n\n    **Default:** 1 hour, or the provider's `console.session_duration` configuration\n\n    **Format:** Go duration (e.g., `1h`, `2h30m`, `12h`)\n\n    **Example:** `--duration 4h`\n\n    **Note:** This flag overrides the provider's `console.session_duration` setting when specified.\n  </dd>\n\n  <dt>`--issuer`</dt>\n  <dd>\n    An identifier that appears in the console URL (AWS only). Useful for tracking or organizational purposes.\n\n    **Default:** `atmos`\n    **Example:** `--issuer my-team`\n  </dd>\n\n  <dt>`--print-only`</dt>\n  <dd>\n    Print the console URL to stdout instead of opening a browser. Useful for scripting or when you want to manually control when/how the URL is opened.\n\n    **Example:** `atmos auth console --print-only | pbcopy`\n  </dd>\n\n  <dt>`--no-open`</dt>\n  <dd>\n    Generate the console URL and display it, but don't automatically open the browser. The URL is still shown in the terminal output.\n\n    **Example:** `atmos auth console --no-open`\n  </dd>\n</dl>\n\n## How It Works\n\n### AWS Console Access\n\nFor AWS identities, Atmos uses the [AWS Federation Endpoint](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-custom-url.html) to generate temporary console sign-in URLs:\n\n1. **Authentication**: Atmos authenticates using your configured identity (AWS SSO, SAML, etc.) to obtain temporary credentials with a session token.\n\n2. **Federation Token**: The temporary credentials are sent to the AWS federation endpoint (`https://signin.aws.amazon.com/federation`) to request a signin token.\n\n3. **Console URL**: Atmos constructs a special URL containing the signin token that automatically logs you into the AWS console.\n\n4. **Browser Launch**: The URL is opened in your default browser, providing instant access to the AWS console.\n\n:::tip Security Note\nConsole signin tokens are valid for 15 minutes and should be treated as sensitive. Never share console URLs or paste them in logs or chat applications.\n:::\n\n### Azure and GCP (Coming Soon)\n\nSupport for Azure Portal and Google Cloud Console is planned for future releases. The command structure will remain the same across all providers.\n\n## Provider Support\n\n| Provider | Status | Notes |\n|----------|--------|-------|\n| AWS (IAM Identity Center) | â Supported | Full support with federation endpoint |\n| AWS (SAML) | â Supported | Full support with federation endpoint |\n| Azure | ð§ Planned | Coming in future release |\n| GCP | ð§ Planned | Coming in future release |\n\n## Common Use Cases\n\n### Quick Access During Incidents",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "AWS Console Access",
+      "id": "aws-console-access"
+    },
+    {
+      "level": "h3",
+      "text": "Azure and GCP (Coming Soon)",
+      "id": "azure-and-gcp-(coming-soon)"
+    },
+    {
+      "level": "h2",
+      "text": "Provider Support",
+      "id": "provider-support"
+    },
+    {
+      "level": "h2",
+      "text": "Common Use Cases",
+      "id": "common-use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "Quick Access During Incidents",
+      "id": "quick-access-during-incidents"
+    }
+  ],
+  "url": "llms-txt#security-and-compliance-services",
+  "links": []
+}

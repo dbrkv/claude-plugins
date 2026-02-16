@@ -1,0 +1,91 @@
+{
+  "title": "Atmos automatically handles authentication",
+  "content": "atmos terraform plan mycomponent -s dev\nyaml\nidentities:\n  # Base permission set from SSO\n  base-admin:\n    kind: aws/permission-set\n    via:\n      provider: my-sso\n    principal:\n      name: AdminAccess\n      account:\n        name: core-identity\n\n# Cross-account role using base permissions\n  prod-admin:\n    kind: aws/assume-role\n    via:\n      identity: base-admin # Chain through another identity\n    principal:\n      assume_role: arn:aws:iam::999999999999:role/ProductionAdmin\n      session_name: atmos-prod-access\nyaml\nauth:\n  providers:\n    company-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://company.awsapps.com/start\n\nidentities:\n    dev-admin:\n      kind: aws/permission-set\n      default: true\n      via:\n        provider: company-sso\n      principal:\n        name: AdminAccess\n        account:\n          name: development\n          # OR use account ID directly:\n          # id: \"123456789012\"\n\nprod-readonly:\n      kind: aws/permission-set\n      via:\n        provider: company-sso\n      principal:\n        name: ReadOnlyAccess\n        account:\n          name: production\nyaml\nauth:\n  providers:\n    okta-saml:\n      kind: aws/saml\n      region: us-east-1\n      url: https://company.okta.com/app/amazon_aws/abc123/sso/saml\n      idp_arn: arn:aws:iam::123456789012:saml-provider/okta-saml\n      # Optional: Specify SAML driver (Browser, GoogleApps, Okta, ADFS).\n      # Note: provider_type is deprecated; use driver instead.\n      # If not specified, Atmos automatically selects the best driver based on:\n      # 1. Browser (if Playwright drivers are installed)\n      # 2. Provider-specific fallback (GoogleApps for Google, Okta for Okta, ADFS for ADFS)\n      # 3. Browser with auto-download\n      driver: Browser\n\nidentities:\n    saml-admin:\n      kind: aws/assume-role\n      default: true\n      via:\n        provider: okta-saml\n      principal:\n        assume_role: arn:aws:iam::123456789012:role/AdminRole\nbash\n  # Install Playwright drivers\n  go run github.com/playwright-community/playwright-go/cmd/playwright@latest install\n  yaml\nauth:\n  providers:\n    github-oidc:\n      kind: github/oidc\n      region: us-east-1 # Required\n      spec:\n        audience: sts.us-east-1.amazonaws.com\n\nidentities:\n    github-deploy:\n      kind: aws/assume-role\n      default: true\n      via:\n        provider: github-oidc\n      principal:\n        assume_role: arn:aws:iam::123456789012:role/GitHubActionsRole\nyaml\nauth:\n  identities:\n    emergency-user:\n      kind: aws/user\n      credentials:\n        access_key_id: !env EMERGENCY_AWS_ACCESS_KEY_ID\n        secret_access_key: !env EMERGENCY_AWS_SECRET_ACCESS_KEY\n        region: us-east-1\nyaml\nauth:\n  identities:\n    emergency-user:\n      kind: aws/user\n      credentials:\n        region: us-east-1\nyaml\nauth:\n  identities:\n    emergency-user:\n      kind: aws/user\n      credentials:\n        access_key_id: !env EMERGENCY_AWS_ACCESS_KEY_ID\n        secret_access_key: !env EMERGENCY_AWS_SECRET_ACCESS_KEY\n        mfa_arn: arn:aws:iam::123456789012:mfa/username\n        region: us-east-1\nyaml",
+  "code_samples": [
+    {
+      "code": "## Authentication Concepts\n\n### Providers\n\n**Providers** are the upstream systems that Atmos Auth uses to obtain initial credentials:\n\n- **AWS SSO**: `aws/iam-identity-center`\n- **AWS SAML**: `aws/saml`\n- **GitHub OIDC**: `github/oidc`\n\n### Identities\n\n**Identities** represent the user accounts or roles available from provider credentials, such as:\n\n- **AWS Permission Set**: `aws/permission-set`\n- **AWS Assume Role**: `aws/assume-role`\n- **AWS User**: `aws/user`\n\n### Identity Chaining\n\nIdentity chaining (often called *role chaining*) is when one identity is used to obtain another, forming a sequence of temporary credentials.\n\nFor example, you might:\n1. Start with an SSO login to obtain base credentials.\n2. Use those credentials to assume a cross-account role.\n3. Optionally, chain again into another role with more limited or specialized permissions.\n\nThis allows you to:\n- Access multiple accounts or environments without long-lived keys.\n- Follow least-privilege practices by escalating only as needed.\n- Automate complex authentication flows while still relying on short-lived credentials.\n\nYou can chain identities to create complex authentication flows like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Configuration Examples\n\n### AWS SSO with Permission Sets\n\nAWS Permission Set identities assume roles via AWS IAM Identity Center (SSO). The `account` field specifies which AWS account contains the permission set.\n\n**Account Specification Options:**\n\nYou can specify the account using either:\n\n- `account.name` - Account name/alias (resolved via SSO ListAccounts API)\n- `account.id` - Numeric account ID (used directly, no lookup required)\n\n**Using account names is recommended** as it's more readable and maintainable. Account names match the account names/aliases configured in AWS Organizations.",
+      "language": "unknown"
+    },
+    {
+      "code": "### AWS SAML Authentication\n\n:::note\nThe `aws/saml` provider requires the next identity to be of kind `aws/assume-role`. This is because the `assume_role` is the chosen role to sign into after the SAML authentication.\n:::",
+      "language": "unknown"
+    },
+    {
+      "code": "#### SAML Driver Options\n\nThe `driver` field controls how Atmos authenticates with your SAML identity provider:\n\n- **`Browser`** (recommended): Opens your system browser for authentication. Requires Playwright drivers to be installed or enables auto-download when supported.",
+      "language": "unknown"
+    },
+    {
+      "code": "- **`GoogleApps`**: Uses Google Apps SAML API (no browser needed)\n- **`Okta`**: Uses Okta SAML API (no browser needed)\n- **`ADFS`**: Uses Active Directory Federation Services API (no browser needed)\n\nIf `driver` is not specified, Atmos automatically selects the best option based on your SAML URL and available drivers.\n\n### GitHub Actions OIDC",
+      "language": "unknown"
+    },
+    {
+      "code": "### AWS User (Break-glass)\n\nAWS User identities support static IAM user credentials with optional multi-factor authentication (MFA).\n\n#### Basic Configuration",
+      "language": "unknown"
+    },
+    {
+      "code": "Alternatively, store credentials in the system keychain:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then run `atmos auth user configure` to configure the credentials on the keychain. See [user configure](/cli/commands/auth/auth-user-configure) for details.\n\n#### Multi-Factor Authentication (MFA) for AWS\n\nAWS User identities support MFA devices for enhanced security. When an MFA device ARN is configured, Atmos will prompt for a time-based one-time password (TOTP) during authentication.\n\n:::note\nThis section describes MFA implementation for AWS IAM users. Other cloud providers will have their own MFA implementations in future releases.\n:::\n\n**Configuration with MFA:**",
+      "language": "unknown"
+    },
+    {
+      "code": "The `mfa_arn` can be specified in several ways:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Authentication Concepts",
+      "id": "authentication-concepts"
+    },
+    {
+      "level": "h3",
+      "text": "Providers",
+      "id": "providers"
+    },
+    {
+      "level": "h3",
+      "text": "Identities",
+      "id": "identities"
+    },
+    {
+      "level": "h3",
+      "text": "Identity Chaining",
+      "id": "identity-chaining"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration Examples",
+      "id": "configuration-examples"
+    },
+    {
+      "level": "h3",
+      "text": "AWS SSO with Permission Sets",
+      "id": "aws-sso-with-permission-sets"
+    },
+    {
+      "level": "h3",
+      "text": "AWS SAML Authentication",
+      "id": "aws-saml-authentication"
+    },
+    {
+      "level": "h3",
+      "text": "GitHub Actions OIDC",
+      "id": "github-actions-oidc"
+    },
+    {
+      "level": "h3",
+      "text": "AWS User (Break-glass)",
+      "id": "aws-user-(break-glass)"
+    }
+  ],
+  "url": "llms-txt#atmos-automatically-handles-authentication",
+  "links": []
+}

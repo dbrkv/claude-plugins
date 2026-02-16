@@ -1,0 +1,14 @@
+{
+  "title": "Community Resources",
+  "content": "<Intro>\nNeed help? Join the community!\n\nAtmos has a great community of active users who are all more than willing to help each other out. So, join us!\n</Intro>\n\nFound a bug or issue? Please report it in [our issue tracker](https://github.com/cloudposse/atmos/issues)\n\n:::tip Join us on Office Hours\n\nWe hold [\"office hours\" every Wednesday at 11:30am PST](/community/office-hours).\n\nAre you more into email? Sign up for [Cloud Posse's Weekly Newsletter](https://newsletter.cloudposse.com) to get the latest news about things happening in our community and other news about building Open Source infrastructureâstraight into your inbox.\n\nimport HubspotForm from 'react-hubspot-form'",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Office Hours",
+      "id": "office-hours"
+    }
+  ],
+  "url": "llms-txt#community-resources",
+  "links": []
+}

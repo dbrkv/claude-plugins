@@ -1,0 +1,8 @@
+{
+  "title": "Check production infrastructure",
+  "content": "atmos -C ~/projects/prod-infra describe affected",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-production-infrastructure",
+  "links": []
+}

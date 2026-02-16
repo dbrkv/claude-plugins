@@ -1,0 +1,134 @@
+{
+  "title": "Output: ð vpc @ tenant1-ue2-dev $",
+  "content": "shell\nexport ATMOS_COMPONENTS_TERRAFORM_AUTO_GENERATE_BACKEND_FILE=true\nexport ATMOS_COMPONENTS_TERRAFORM_INIT_RUN_RECONFIGURE=true\nexport ATMOS_COMPONENTS_TERRAFORM_WORKSPACES_ENABLED=true\nshell\natmos terraform shell top-level-component1 -s tenant1-ue2-dev\natmos terraform shell infra/vpc -s tenant1-ue2-staging\natmos terraform shell test/test-component-override-3 -s tenant2-ue2-prod\nshell\n        atmos terraform shell <component> -s <stack> --dry-run=true\n        shell\n        atmos terraform shell <component> -s <stack> --process-templates=false\n        shell\n        atmos terraform shell <component> -s <stack> --process-functions=false\n        shell\n        atmos terraform shell <component> -s <stack> --skip=eval --skip=include\n        atmos terraform shell <component> -s <stack> --skip=terraform.output,include\n        shell\natmos terraform workspace <component> -s <stack>\nyaml\ncomponents:\n  terraform:\n    # Run 'terraform init -reconfigure' when selecting workspace\n    init_run_reconfigure: true\n\n# Enable workspace management\n    workspaces_enabled: true\nshell\nexport ATMOS_COMPONENTS_TERRAFORM_INIT_RUN_RECONFIGURE=true\nexport ATMOS_COMPONENTS_TERRAFORM_WORKSPACES_ENABLED=true\nyaml\ncomponents:\n  terraform:\n    vpc:\n      backend:\n        # Use Go templates for dynamic workspace key prefix\n        workspace_key_prefix: \"{{.vars.namespace}}-{{.vars.environment}}-{{.vars.stage}}\"\nshell\natmos terraform workspace top-level-component1 -s tenant1-ue2-dev\natmos terraform workspace infra/vpc -s tenant1-ue2-staging\natmos terraform workspace test/test-component -s tenant1-ue2-dev\natmos terraform workspace test/test-component-override-2 -s tenant2-ue2-prod\natmos terraform workspace test/test-component-override-3 -s tenant1-ue2-dev\nshell\n        atmos terraform workspace <component> -s <stack> --dry-run=true\n        shell\n        atmos terraform workspace <component> -s <stack> --process-templates=false\n        shell\n        atmos terraform workspace <component> -s <stack> --process-functions=false\n        shell\n        atmos terraform workspace <component> -s <stack> --skip=eval --skip=include\n        atmos terraform workspace <component> -s <stack> --skip=terraform.output,include\n        shell",
+  "code_samples": [
+    {
+      "code": "These settings can also be controlled via environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n    <dt>`component` (required)</dt>\n    <dd>\n        Atmos terraform component.\n    </dd>\n</dl>\n\n## Flags\n\n<dl>\n    <dt>`--stack` (alias `-s`) (required)</dt>\n    <dd>\n        Atmos stack.\n    </dd>\n\n    <dt>`--dry-run` (optional)</dt>\n    <dd>\n        Dry run.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n    <dt>`--process-templates` (optional)</dt>\n    <dd>\n        Enable/disable Go template processing in Atmos stack manifests when executing terraform commands.\n\n        If the flag is not passed, template processing is enabled by default.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n    <dt>`--process-functions` (optional)</dt>\n    <dd>\n        Enable/disable YAML functions processing in Atmos stack manifestswhen executing terraform commands.\n\n        If the flag is not passed, YAML function processing is enabled by default.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n    <dt>`--skip` (optional)</dt>\n    <dd>\n        Skip processing a specific Atmos YAML function in Atmos stacks manifests when executing terraform commands.\n\n        To specify more than one function, use multiple `--skip` flags, or separate the functions with a comma.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n</dl>\n\n---\n\n## atmos terraform workspace\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to calculate the `terraform` workspace for an Atmos component (from the context variables and stack config). It will\nrun `terraform init -reconfigure` and then select the workspace by executing the `terraform workspace select` command.\n</Intro>\n\n<Screengrab title=\"atmos terraform workspace --help\" slug=\"atmos-terraform-workspace--help\" />\n\n## Usage\n\nExecute the `terraform workspace` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command calculates the `terraform` workspace for an Atmos component (from the context variables and stack config), then\nruns `terraform init -reconfigure`, then selects the workspace by executing the `terraform workspace select` command.\n\nIf the workspace does not exist, the command creates it by executing the `terraform workspace new` command.\n\n:::tip\nRun `atmos terraform workspace --help` to see all the available options\n:::\n\n## Configuration\n\nConfigure workspace behavior in your `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "These settings can also be controlled via environment variables:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Dynamic Workspace Naming\n\nThe `workspace_key_prefix` backend configuration supports Go templates for dynamic workspace naming. This is configured at the stack level, not in `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "This allows you to construct workspace names dynamically based on stack variables, providing flexible workspace organization strategies.\n\n## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n    <dt>`component` (required)</dt>\n    <dd>\n        Atmos terraform component.\n    </dd>\n</dl>\n\n## Flags\n\n<dl>\n    <dt>`--stack` (alias `-s`) (required)</dt>\n    <dd>\n        Atmos stack.\n    </dd>\n\n    <dt>`--dry-run` (optional)</dt>\n    <dd>\n        Dry run.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n    <dt>`--process-templates` (optional)</dt>\n    <dd>\n        Enable/disable Go template processing in Atmos stack manifests when executing terraform commands.\n\n        If the flag is not passed, template processing is enabled by default.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n    <dt>`--process-functions` (optional)</dt>\n    <dd>\n        Enable/disable YAML functions processing in Atmos stack manifestswhen executing terraform commands.\n\n        If the flag is not passed, YAML function processing is enabled by default.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n    <dt>`--skip` (optional)</dt>\n    <dd>\n        Skip processing a specific Atmos YAML function in Atmos stacks manifests when executing terraform commands.\n\n        To specify more than one function, use multiple `--skip` flags, or separate the functions with a comma.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n</dl>\n\n---\n\n## atmos terraform\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport DocCardList from '@theme/DocCardList'\nimport File from '@site/src/components/File'\nimport Terminal from '@site/src/components/Terminal'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse these subcommands to interact with Terraform and OpenTofu.\n</Intro>\n\n<Screengrab title=\"atmos terraform --help\" slug=\"atmos-terraform--help\" />\n\nAtmos Terraform/OpenTofu commands fall into two categories:\n\n  - Single-Component: Run Terraform for one component at a time\n\n  - Multi-Component (Filtered/Bulk): Run Terraform across multiple components using stack names, selectors, or change detection\n\nAtmos supports all Terraform and OpenTofu commands and options described in\n[Terraform CLI Overview](https://developer.hashicorp.com/terraform/cli/commands)\nand [OpenTofu Basic CLI Features](https://opentofu.org/docs/cli/commands/).\n\nIn addition, for the Single-Component commands, the `component` argument and `stack` flag are required to generate\nvariables and backend config for the component in the stack.\n\n:::note Disambiguation\nThe term \"Terraform\" is used in this documentation to refer to generic concepts such as providers, modules, stacks, the\nHCL-based domain-specific language and its interpreter. Atmos works with [OpenTofu](/core-concepts/projects/configuration/opentofu).\n:::\n\n## Single-Component Commands Usage\n\nUse single-component commands when you want to execute Terraform operations on one component at a time, offering precise control over individual resources.\n<Terminal>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos terraform workspace",
+      "id": "atmos-terraform-workspace"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Dynamic Workspace Naming",
+      "id": "dynamic-workspace-naming"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos terraform",
+      "id": "atmos-terraform"
+    },
+    {
+      "level": "h2",
+      "text": "Single-Component Commands Usage",
+      "id": "single-component-commands-usage"
+    }
+  ],
+  "url": "llms-txt#output:-ð-vpc-@-tenant1-ue2-dev-$",
+  "links": []
+}

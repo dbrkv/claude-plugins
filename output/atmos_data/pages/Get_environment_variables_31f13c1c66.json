@@ -1,0 +1,8 @@
+{
+  "title": "Get environment variables",
+  "content": "atmos auth env\natmos auth env --identity prod-admin --format bash\natmos auth env --format json\natmos auth env --format dotenv",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-environment-variables",
+  "links": []
+}

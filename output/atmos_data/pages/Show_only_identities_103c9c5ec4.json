@@ -1,0 +1,8 @@
+{
+  "title": "Show only identities",
+  "content": "atmos auth list --identities",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#show-only-identities",
+  "links": []
+}

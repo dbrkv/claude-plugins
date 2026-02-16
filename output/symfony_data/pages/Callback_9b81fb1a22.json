@@ -1,0 +1,110 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Callback.html",
+  "title": "Callback",
+  "content": "The purpose of the Callback constraint is to create completely custom validation rules and to assign any validation errors to specific fields on your object. If you're using validation with forms, this means that instead of displaying custom errors at the top of the form, you can display them next to the field they apply to.\n\nThis process works by specifying one or more callback methods, each of which will be called during the validation process. Each of those methods can do anything, including creating and assigning validation errors.\n\nA callback method itself doesn't fail or return any value. Instead, as you'll see in the example, a callback method has the ability to directly add validator \"violations\".\n\nThe callback method is passed a special ExecutionContextInterface object. You can set \"violations\" directly on this object and determine to which field those errors should be attributed:\n\nYou can also use the constraint with static methods. Since static methods don't have access to the object instance, they receive the object as the first argument:\n\nIf you want to execute a static callback method that is not located in the class of the validated object, you can configure the constraint to invoke an array callable as supported by PHP's call_user_func function. Suppose your validation function is Acme\\Validator::validate():\n\nYou can then use the following configuration to invoke this validator:\n\nThe Callback constraint does not support global callback functions nor is it possible to specify a global function or a service method as a callback. To validate using a service, you should create a custom validation constraint and add that new constraint to your class.\n\nWhen configuring the constraint via PHP, you can also pass a closure to the constructor of the Callback constraint:\n\nUsing a Closure together with attribute configuration will disable the attribute cache for that class/property/method because Closure cannot be cached. For best performance, it's recommended to use a static callback method.\n\ntype: string, array or Closure\n\nThe callback option accepts three different formats for specifying the callback method:\n\nConcrete callbacks receive an ExecutionContextInterface instance as the first argument and the payload option as the second argument.\n\nStatic or closure callbacks receive the validated object as the first argument, the ExecutionContextInterface instance as the second argument and the payload option as the third argument.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\nOnline exam, become Symfony certified today\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Callback",
+      "id": "callback"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "The Callback Method",
+      "id": "the-callback-method"
+    },
+    {
+      "level": "h2",
+      "text": "Static Callbacks",
+      "id": "static-callbacks"
+    },
+    {
+      "level": "h2",
+      "text": "External Callbacks and Closures",
+      "id": "external-callbacks-and-closures"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "callback",
+      "id": "callback-1"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Context\\ExecutionContextInterface;\n\nclass Author\n{\n    #[Assert\\Callback]\n    public function validate(ExecutionContextInterface $context, mixed $payload): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    constraints:\n        - Callback: validate",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <constraint name=\"Callback\">validate</constraint>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addConstraint(new Assert\\Callback('validate'));\n    }\n\n    public function validate(ExecutionContextInterface $context, mixed $payload): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\Validator\\Context\\ExecutionContextInterface;\n\nclass Author\n{\n    // ...\n    private string $firstName;\n\n    public function validate(ExecutionContextInterface $context, mixed $payload): void\n    {\n        // somehow you have an array of \"fake names\"\n        $fakeNames = [/* ... */];\n\n        // check if the name is actually a fake name\n        if (in_array($this->getFirstName(), $fakeNames)) {\n            $context->buildViolation('This name sounds totally fake!')\n                ->atPath('firstName')\n                ->addViolation();\n        }\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "public static function validate(mixed $value, ExecutionContextInterface $context, mixed $payload): void\n{\n    // somehow you have an array of \"fake names\"\n    $fakeNames = [/* ... */];\n\n    // check if the name is actually a fake name\n    if (in_array($value->getFirstName(), $fakeNames)) {\n        $context->buildViolation('This name sounds totally fake!')\n            ->atPath('firstName')\n            ->addViolation()\n        ;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace Acme;\n\nuse Symfony\\Component\\Validator\\Context\\ExecutionContextInterface;\n\nclass Validator\n{\n    public static function validate(mixed $value, ExecutionContextInterface $context, mixed $payload): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Acme\\Validator;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\n#[Assert\\Callback([Validator::class, 'validate'])]\nclass Author\n{\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    constraints:\n        - Callback: [Acme\\Validator, validate]",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <constraint name=\"Callback\">\n            <value>Acme\\Validator</value>\n            <value>validate</value>\n        </constraint>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Acme\\Validator;\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addConstraint(new Assert\\Callback([\n            Validator::class,\n            'validate',\n        ]));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Context\\ExecutionContextInterface;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $callback = function (mixed $value, ExecutionContextInterface $context, mixed $payload): void {\n            // ...\n        };\n\n        $metadata->addConstraint(new Assert\\Callback($callback));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Callback.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/custom_constraint.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

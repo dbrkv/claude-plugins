@@ -1,0 +1,134 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/forms/types/submit.html",
+  "title": "SubmitType Field",
+  "content": "The full list of options defined and inherited by this form type is available running this command in your app:\n\nThe Submit button has an additional method isClicked() that lets you check whether this button was used to submit the form. This is especially useful when a form has multiple submit buttons:\n\ntype: boolean default: true\n\nSet this option to false to disable the client-side validation of the form performed by the browser.\n\ntype: array default: []\n\nIf you want to add extra attributes to the HTML representation of the button, you can use attr option. It's an associative array with HTML attribute as a key. This can be useful when you need to set a custom class for the button:\n\ntype: boolean default: false\n\nIf you don't want a user to be able to click a button, you can set the disabled option to true. It will not be possible to submit the form with this button, not even when bypassing the browser and sending a request manually, for example with cURL.\n\ntype: string or TranslatableMessage default: The label is \"guessed\" from the field name\n\nSets the label that will be displayed on the button. The label can also be directly set inside the template:\n\ntype: string default: null\n\nConfigures the string used as the label of the field, in case the label option was not set. This is useful when using keyword translation messages.\n\nIf you're using keyword translation messages as labels, you often end up having multiple keyword messages for the same label (e.g. profile_address_street, invoice_address_street). This is because the label is built for each \"path\" to a field. To avoid duplicated keyword messages, you can configure the label format to a static value, like:\n\nThis option is inherited by the child types. With the code above, the label of the street field of both forms will use the form.address.street keyword message.\n\nTwo variables are available in the label format:\n\nThe default value (null) results in a \"humanized\" version of the field name.\n\nThe label_format option is evaluated in the form theme. Make sure to update your templates in case you customized form theming.\n\ntype: string default: messages\n\nThis is the translation domain that will be used for any labels or options that are rendered for this button.\n\ntype: array default: []\n\nThe content of the label option is translated before displaying it, so it can contain translation placeholders. This option defines the values used to replace those placeholders.\n\nGiven this translation message:\n\nYou can specify the placeholder values as follows:\n\nThe label_translation_parameters option of buttons is merged with the same option of its parents, so buttons can reuse and/or override any of the parent placeholders.\n\ntype: array default: []\n\nThe content of the title and placeholder values defined in the attr option is translated before displaying it, so it can contain translation placeholders. This option defines the values used to replace those placeholders.\n\nGiven this translation message:\n\nYou can specify the placeholder values as follows:\n\nThe attr_translation_parameters option of children fields is merged with the same option of their parents, so children can reuse and/or override any of the parent placeholders.\n\ntype: array default: []\n\nAn associative array of the HTML attributes added to the element which is used to render the form type row:\n\nUse the attr option if you want to add these attributes to the form type widget element.\n\ntype: array default: null\n\nWhen your form contains multiple submit buttons, you can change the validation group based on the clicked button. Read the article about using validation groups in Symfony forms.\n\nSymfony Code Performance Profiling\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "SubmitType Field",
+      "id": "submittype-field"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "validate",
+      "id": "validate"
+    },
+    {
+      "level": "h2",
+      "text": "Inherited Options",
+      "id": "inherited-options"
+    },
+    {
+      "level": "h3",
+      "text": "attr",
+      "id": "attr"
+    },
+    {
+      "level": "h3",
+      "text": "disabled",
+      "id": "disabled"
+    },
+    {
+      "level": "h3",
+      "text": "label",
+      "id": "label"
+    },
+    {
+      "level": "h3",
+      "text": "label_format",
+      "id": "label-format"
+    },
+    {
+      "level": "h3",
+      "text": "translation_domain",
+      "id": "translation-domain"
+    },
+    {
+      "level": "h3",
+      "text": "label_translation_parameters",
+      "id": "label-translation-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "attr_translation_parameters",
+      "id": "attr-translation-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "row_attr",
+      "id": "row-attr"
+    },
+    {
+      "level": "h3",
+      "text": "validation_groups",
+      "id": "validation-groups"
+    },
+    {
+      "level": "h2",
+      "text": "Form Variables",
+      "id": "form-variables"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# replace 'FooType' by the class name of your form type\n$ php bin/console debug:form FooType",
+      "language": "unknown"
+    },
+    {
+      "code": "if ($form->get('save')->isClicked()) {\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\SubmitType;\n// ...\n\n$builder->add('save', SubmitType::class, [\n    'attr' => ['class' => 'save'],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "{{ form_widget(form.save, { 'label': 'Click me' }) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "<?= $view['form']->widget($form['save'], ['label' => 'Click me']) ?>",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\n$profileFormBuilder->add('address', AddressType::class, [\n    'label_format' => 'form.address.%name%',\n]);\n\n$invoiceFormBuilder->add('invoice', AddressType::class, [\n    'label_format' => 'form.address.%name%',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# translations/messages.en.yaml\nform.order.submit_to_company: 'Send an order to %company%'",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\SubmitType;\n// ...\n\n$builder->add('send', SubmitType::class, [\n    'label' => 'form.order.submit_to_company',\n    'label_translation_parameters' => [\n        '%company%' => 'ACME Inc.',\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# translations/messages.en.yaml\nform.order.id.placeholder: 'Enter unique identifier of the order to %company%'\nform.order.id.title: 'This will be the reference in communications with %company%'",
+      "language": "unknown"
+    },
+    {
+      "code": "$builder->add('id', null, [\n    'attr' => [\n        'placeholder' => 'form.order.id.placeholder',\n        'title' => 'form.order.id.title',\n    ],\n    'attr_translation_parameters' => [\n        '%company%' => 'ACME Inc.',\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$builder->add('body', TextareaType::class, [\n    'row_attr' => ['class' => 'text-editor', 'id' => '...'],\n]);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/forms/types/submit.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/button.html",
+    "https://symfony.com/doc/7.3/form/multiple_buttons.html",
+    "https://symfony.com/doc/7.3/translation.html",
+    "https://symfony.com/doc/7.3/reference/twig_reference.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html",
+    "https://symfony.com/doc/7.3/reference/formats/message_format.html",
+    "https://symfony.com/doc/7.3/form/validation_groups.html"
+  ]
+}

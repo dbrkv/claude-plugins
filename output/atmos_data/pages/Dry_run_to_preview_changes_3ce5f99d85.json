@@ -1,0 +1,13 @@
+{
+  "title": "Dry run to preview changes",
+  "content": "atmos vendor pull --dry-run\nyaml",
+  "code_samples": [
+    {
+      "code": "Track vendor updates in your vendor manifest:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#dry-run-to-preview-changes",
+  "links": []
+}

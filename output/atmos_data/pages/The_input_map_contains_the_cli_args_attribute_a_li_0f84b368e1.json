@@ -1,0 +1,23 @@
+{
+  "title": "The `input` map contains the `cli_args` attribute (a list of the command line arguments and flags)",
+  "content": "errors[message] {\n  count(input.cli_args) >= 2\n  input.cli_args[0] == \"terraform\"\n  input.cli_args[1] == \"apply\"\n  input.vars.foo == \"foo\"\n  message = \"the component can't be applied if the 'foo' variable is set to 'foo'\"\n}\nconsole\nthe component can't be applied if the 'foo' variable is set to 'foo'\n\nexit status 1\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</File>\n\nThe rule checks if:\n - The `cli_args` list has at least two items\n - The command (first item in the `cli_args` list) is `terraform`\n - The subcommand (second item in the `cli_args` list) is `apply`\n - The variable `foo` is set to `\"foo\"`\n\nIf all conditions are true, the rule generates an error message.\n\nThe generated error message is added to the `errors` array.\nAtmos interprets the presence of any messages in `errors` as a policy violation and blocks the operation with the\nfollowing error:\n\n<Terminal title=\"atmos terraform apply component-1 -s nonprod\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n### Environment and Process Context Examples\n\nThe following examples demonstrate how to use the process environment and Terraform CLI context in OPA policies for advanced governance scenarios.\n\n#### Process Environment Variables (`process_env`)\n\nAccess environment variables from the current process to enforce security and compliance policies.\n\n<File title=\"validate-environment.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Environment and Process Context Examples",
+      "id": "environment-and-process-context-examples"
+    }
+  ],
+  "url": "llms-txt#the-`input`-map-contains-the-`cli_args`-attribute-(a-list-of-the-command-line-arguments-and-flags)",
+  "links": []
+}

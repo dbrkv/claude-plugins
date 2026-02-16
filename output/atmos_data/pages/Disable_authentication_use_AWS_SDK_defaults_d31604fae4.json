@@ -1,0 +1,197 @@
+{
+  "title": "Disable authentication (use AWS SDK defaults)",
+  "content": "atmos describe stacks --identity=false\natmos describe stacks -i my-aws-identity -s tenant1-ue2-dev\nshell\natmos describe workflows [options]\nshell\natmos describe workflows\natmos describe workflows --output map\natmos describe workflows -o list\natmos describe workflows -o all\natmos describe workflows -o list --format json\natmos describe workflows -o all -f yaml\natmos describe workflows -f json\natmos describe workflows --query <yq-expression>\nshell\natmos describe workflows\natmos describe workflows -o list\nyaml\n- file: compliance.yaml\n  workflow: deploy/aws-config/global-collector\n- file: compliance.yaml\n  workflow: deploy/aws-config/superadmin\n- file: compliance.yaml\n  workflow: destroy/aws-config/global-collector\n- file: compliance.yaml\n  workflow: destroy/aws-config/superadmin\n- file: datadog.yaml\n  workflow: deploy/datadog-integration\n- file: helpers.yaml\n  workflow: save/docker-config-json\n- file: networking.yaml\n  workflow: apply-all-components\n- file: networking.yaml\n  workflow: plan-all-vpc\n- file: networking.yaml\n  workflow: plan-all-vpc-flow-logs\nshell\natmos describe workflows -o map\nyaml\ncompliance.yaml:\n  - deploy/aws-config/global-collector\n  - deploy/aws-config/superadmin\n  - destroy/aws-config/global-collector\n  - destroy/aws-config/superadmin\ndatadog.yaml:\n  - deploy/datadog-integration\nhelpers.yaml:\n  - save/docker-config-json\nnetworking.yaml:\n  - apply-all-components\n  - plan-all-vpc\n  - plan-all-vpc-flow-logs\nshell\natmos describe workflows -o all\nyaml\nnetworking.yaml:\n  name: Networking & Logging\n  description: Atmos workflows for managing VPCs and VPC Flow Logs\n  workflows:\n    apply-all-components:\n      description: |\n        Run 'terraform apply' on all components in all stacks\n      steps:\n        - command: terraform apply vpc-flow-logs-bucket -s plat-ue2-dev -auto-approve\n        - command: terraform apply vpc -s plat-ue2-dev -auto-approve\n        - command: terraform apply vpc-flow-logs-bucket -s plat-uw2-dev -auto-approve\n        - command: terraform apply vpc -s plat-uw2-dev -auto-approve\n        - command: terraform apply vpc-flow-logs-bucket -s plat-ue2-staging -auto-approve\n        - command: terraform apply vpc -s plat-ue2-staging -auto-approve\n        - command: terraform apply vpc-flow-logs-bucket -s plat-uw2-staging -auto-approve\n        - command: terraform apply vpc -s plat-uw2-staging -auto-approve\n        - command: terraform apply vpc-flow-logs-bucket -s plat-ue2-prod -auto-approve\n        - command: terraform apply vpc -s plat-ue2-prod -auto-approve\n        - command: terraform apply vpc-flow-logs-bucket -s plat-uw2-prod -auto-approve\n        - command: terraform apply vpc -s plat-uw2-prod -auto-approve\n    plan-all-vpc:\n      description: |\n        Run 'terraform plan' on all 'vpc' components in all stacks\n      steps:\n        - command: terraform plan vpc -s plat-ue2-dev\n        - command: terraform plan vpc -s plat-uw2-dev\n        - command: terraform plan vpc -s plat-ue2-staging\n        - command: terraform plan vpc -s plat-uw2-staging\n        - command: terraform plan vpc -s plat-ue2-prod\n        - command: terraform plan vpc -s plat-uw2-prod\n    plan-all-vpc-flow-logs:\n      description: |\n        Run 'terraform plan' on all 'vpc-flow-logs-bucket' components in all stacks\n      steps:\n        - command: terraform plan vpc-flow-logs-bucket -s plat-ue2-dev\n        - command: terraform plan vpc-flow-logs-bucket -s plat-uw2-dev\n        - command: terraform plan vpc-flow-logs-bucket -s plat-ue2-staging\n        - command: terraform plan vpc-flow-logs-bucket -s plat-uw2-staging\n        - command: terraform plan vpc-flow-logs-bucket -s plat-ue2-prod\n        - command: terraform plan vpc-flow-logs-bucket -s plat-uw2-prod\nvalidation.yaml:\n  name: Validation\n  description: Atmos workflows for VPCs and VPC Flow Logs validation\n  workflows:\n    validate-all-vpc:\n      description: Validate all VPC components in all stacks\n      steps:\n        - command: validate component vpc -s plat-ue2-dev\n        - command: validate component vpc -s plat-uw2-dev\n        - command: validate component vpc -s plat-ue2-staging\n        - command: validate component vpc -s plat-uw2-staging\n        - command: validate component vpc -s plat-ue2-prod\n        - command: validate component vpc -s plat-uw2-prod\n    validate-all-vpc-flow-logs:\n      description: Validate all VPC Flow Logs bucket components in all stacks\n      steps:\n        - command: validate component vpc-flow-logs-bucket -s plat-ue2-dev\n        - command: validate component vpc-flow-logs-bucket -s plat-uw2-dev\n        - command: validate component vpc-flow-logs-bucket -s plat-ue2-staging\n        - command: validate component vpc-flow-logs-bucket -s plat-uw2-staging\n        - command: validate component vpc-flow-logs-bucket -s plat-ue2-prod\n        - command: validate component vpc-flow-logs-bucket -s plat-uw2-prod\nyaml\ndocs:\n  generate:\n    readme:\n      base-dir: .\n      input:\n        - \"./README.yaml\"\n      template: \"https://.../README.md.gotmpl\"\n      output: \"./README.md\"\n      terraform:\n        source: src/\n        enabled: false\n        format: \"markdown\"\n        show_providers: false\n        show_inputs: true\n        show_outputs: true\n        sort_by: \"name\"\n        hide_empty: false\n        indent_level: 2\n\nrelease-notes:\n      base-dir: .\n      input:\n        - \"./CHANGELOG.yaml\"\n      template: \"./release-notes.gotmpl\"\n      output: \"./RELEASE_NOTES.md\"\nyaml\n{{- $data := (ds \"config\") -}}\n\n{{ $data.name | default \"Project Title\" }}\n\n{{ $data.description | default \"No description provided.\" }}\n\n{{ if has $data \"extra_info\" }}\nExtra info: {{ $data.extra_info }}\n{{ end }}\n\n{{ if has $data \"terraform_docs\" }}\n## Terraform Docs\n{{ $data.terraform_docs }}\n{{ end }}\n\nshell\natmos docs generate readme2\natmos docs generate release-notes\nshell\natmos docs generate readme\nyaml\n    docs:\n      generate:\n        readme:\n          input:\n            - \"/Users/me/Documents/README.yaml\"\n          template: \"/Users/me/Documents/README.md.gotmpl\"\n    yaml\n    docs:\n      generate:\n        readme:\n          input:\n            - \"./README.yaml\"\n          template: \"./README.md.gotmpl\"\n    yaml\n    docs:\n      generate:\n        readme:\n          input:\n            - \"terraform/README.yaml\"\n          template: \"terraform/README.md.gotmpl\"\n    shell\natmos docs\natmos docs vpc\natmos docs eks/cluster\nshell\natmos helmfile generate varfile <component> -s <stack> [options]\nshell\natmos helmfile generate varfile echo-server -s tenant1-ue2-dev\natmos helmfile generate varfile echo-server -s tenant1-ue2-dev\natmos helmfile generate varfile echo-server -s tenant1-ue2-dev -f vars.yaml\natmos helmfile generate varfile echo-server --stack tenant1-ue2-dev --file=vars.yaml\n```\n\n<dl>\n  <dt>`component` (required)</dt>\n  <dd>Atmos helmfile component.</dd>\n</dl>\n\n<dl>\n  <dt>`--stack` / `-s` (required)</dt>\n  <dd>Atmos stack.</dd>\n\n<dt>`--file` / `-f` (optional)</dt>\n  <dd>File name to write the varfile to.If not specified, the varfile name is generated automatically from the context.</dd>\n\n<dt>`--dry-run` (optional)</dt>\n  <dd>Dry run.</dd>\n</dl>\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Terminal from '@site/src/components/Terminal'\nimport DocCardList from '@theme/DocCardList';\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse these subcommands to run `helmfile` commands.\n</Intro>\n\n<Screengrab title=\"atmos helmfile --help\" slug=\"atmos-helmfile--help\" />",
+  "code_samples": [
+    {
+      "code": ":::tip\nUse the `--query` flag (shorthand `-q`) to filter the output.\n:::\n\n## Flags\n\n<dl>\n  <dt>`--stack` / `-s` (optional)</dt>\n  <dd>Filter by a specific stack.Supports names of the top-level stack manifests(including subfolder paths),and Atmos stack names (derived from the context vars).</dd>\n\n  <dt>`--file` (optional)</dt>\n  <dd>If specified, write the result to the file.</dd>\n\n  <dt>`--format` (optional)</dt>\n  <dd>Specify the output format: `yaml` or `json` (`yaml` is default).</dd>\n\n  <dt>`--components` (optional)</dt>\n  <dd>Filter by specific Atmos components(comma-separated string of component names).</dd>\n\n  <dt>`--component-types` (optional)</dt>\n  <dd>Filter by specific component types: `terraform` or `helmfile`.</dd>\n\n  <dt>`--sections` (optional)</dt>\n  <dd>Output only the specified component sections.Available component sections: `backend`, `backend_type`, `component`, `deps`,`env`, `inheritance`, `metadata`, `remote_state_backend`,`remote_state_backend_type`, `settings`, `vars`.</dd>\n\n  <dt>`--process-templates` (optional)</dt>\n  <dd>Enable/disable processing of all `Go` templatesin Atmos stacks manifests when executing the command.Use the flag to see the stack configurationsbefore and after the templates are processed.If the flag is not provided, it's set to `true` by default.`atmos describe stacks --process-templates=false`.</dd>\n\n  <dt>`--process-functions` (optional)</dt>\n  <dd>Enable/disable processing of all Atmos YAML functionsin Atmos stacks manifests when executing the command.Use the flag to see the stack configurationsbefore and after the functions are processed.If the flag is not provided, it's set to `true` by default.`atmos describe stacks --process-functions=false`.</dd>\n\n  <dt>`--skip` (optional)</dt>\n  <dd>Skip processing a specific Atmos YAML functionin Atmos stacks manifests when executing the command.To specify more than one function,use multiple `--skip` flags, or separate the functions with a comma:`atmos describe stacks --skip=terraform.output --skip=include``atmos describe stacks --skip=terraform.output,include`.</dd>\n\n  <dt>`--query` / `-q` (optional)</dt>\n  <dd>Query the results of the command using `yq` expressions.`atmos describe stacks --query <yq-expression>`.For more details, refer to https://mikefarah.gitbook.io/yq.</dd>\n\n  <dt>`--identity` / `-i` (optional)</dt>\n  <dd>Authenticate with a specific identity before describing stacks.This is required when YAML template functions (e.g., `!terraform.state`, `!terraform.output`)need to access remote resources requiring authentication.Use without a value for interactive identity selection:`atmos describe stacks --identity` (interactive)`atmos describe stacks --identity my-aws-identity` (specific identity)For more details, refer to [Authentication](/cli/commands/auth/usage).</dd>\n</dl>\n\n:::note Provenance Tracking\nTo see provenance information (where configuration values originated with file:line:column details), use `atmos describe component <component> -s <stack> --provenance` for individual components. The `describe stacks` command does not currently support provenance display.\n:::\n\n---\n\n## atmos describe workflows\n\nimport Terminal from '@site/src/components/Terminal'\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to show all configured Atmos workflows.\n</Intro>\n\n<Screengrab title=\"atmos describe workflows --help\" slug=\"atmos-describe-workflows--help\" />\n\n## Usage\n\nExecute the `describe workflows` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": ":::tip\nRun `atmos describe workflows --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--format` / `-f` (optional)</dt>\n  <dd>Specify the output format: `yaml` or `json` (`yaml` is default).</dd>\n\n  <dt>`--output` / `-o` (optional)</dt>\n  <dd>Specify the output type: `list`, `map` or `all` (`list` is default).</dd>\n\n  <dt>`--query` / `-q` (optional)</dt>\n  <dd>Query the results of the command using `yq` expressions.`atmos describe workflows --query <yq-expression>`.For more details, refer to https://mikefarah.gitbook.io/yq.</dd>\n</dl>\n\nWhen the `--output list` flag is passed (default), the output of the command is a list of objects. Each object has the\nfollowing schema:\n\n- `file` - the workflow manifest file name\n- `workflow` - the name of the workflow defined in the workflow manifest file\n\nFor example:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "When the `--output map` flag is passed, the output of the command is a map of workflow manifests to the lists of\nworkflows defined in each manifest.\nFor example:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "When the `--output all` flag is passed, the output of the command is a map of workflow manifests to the maps of all\nworkflow definitions. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": ":::tip\nUse the [atmos workflow](/cli/commands/workflow) CLI command to execute an Atmos workflow\n:::\n\n---\n\n## atmos describe\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport DocCardList from '@theme/DocCardList';\n\n<Screengrab title=\"atmos describe --help\" slug=\"atmos-describe--help\" />\n\n## Subcommands\n\n<DocCardList />\n\n---\n\n## atmos docs generate\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\n\nUse this command to generate one of your documentation artifacts (e.g. a README) as defined by the **named** section under `docs.generate.<KEY>` in `atmos.yaml`.\n\nReplace `<KEY>` with the name of the section you want to run (for example, `readme`, `release-notes`, etc.).\n\n</Intro>\n\nIn `atmos.yaml`, you can define **one or more** documentationâgeneration blocks under `docs.generate`.  Each topâlevel key becomes a CLI argument:",
+      "language": "unknown"
+    },
+    {
+      "code": "For each CLI argument the command combines all local or remote YAML files specified at `input` and template file then generates the documentation artifact at the respective `output` folder. In case the template contains `terraform_docs` key, e.g.",
+      "language": "unknown"
+    },
+    {
+      "code": "the resultant file will also have a corresponding section rendered. By default `terraform.format` is set to `markdown table`, and can also be `markdown`, `tfvars hcl`, and `tfvars json`.\n\n## Dynamic Keys\n\nIf you add a new key under docs.generateâsay readme2 or release-notes âyou simply pass that key to the CLI:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Usage\n\n<Screengrab title=\"atmos docs generate --help\" slug=\"atmos-docs-generate--help\" />",
+      "language": "unknown"
+    },
+    {
+      "code": "## Supported Sources for README.yaml and template\n\n### Local Sources\n\nIt supports the following local file sources:\n\n  - Absolute paths",
+      "language": "unknown"
+    },
+    {
+      "code": "- Paths relative to the current working directory",
+      "language": "unknown"
+    },
+    {
+      "code": "- Paths relative to the `base_dir` defined in `atmos.yaml` CLI config file (then resolved as relative to cwd)",
+      "language": "unknown"
+    },
+    {
+      "code": "### Remote Sources\n\nTo download remote files, Atmos uses [`go-getter`](https://github.com/hashicorp/go-getter)\n(used by [Terraform](https://www.terraform.io/) for downloading modules)\n\n---\n\n## atmos docs\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport DocCardList from '@theme/DocCardList';\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to open the [Atmos docs](https://atmos.tools/)\n</Intro>\n\n<Screengrab title=\"atmos docs --help\" slug=\"atmos-docs--help\" />\n\n## Usage\n\nWhen run on its own, the `atmos docs` command opens [Atmos docs](https://atmos.tools/), but it can also display documentation for specified components. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Subcommands\n<DocCardList />\n\n---\n\n## atmos helmfile generate varfile\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Terminal from '@site/src/components/Terminal'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to generate a varfile for a `helmfile` component in a stack.\n</Intro>\n\n<Screengrab title=\"atmos helmfile generate varfile --help\" slug=\"atmos-helmfile-generate-varfile--help\" />\n\n## Usage\n\nExecute the `helmfile generate varfile` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command generates a varfile for a `helmfile` component in a stack.\n\n:::tip\nRun `atmos helmfile generate varfile --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos describe workflows",
+      "id": "atmos-describe-workflows"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos describe",
+      "id": "atmos-describe"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos docs generate",
+      "id": "atmos-docs-generate"
+    },
+    {
+      "level": "h2",
+      "text": "Terraform Docs",
+      "id": "terraform-docs"
+    },
+    {
+      "level": "h2",
+      "text": "Dynamic Keys",
+      "id": "dynamic-keys"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Supported Sources for README.yaml and template",
+      "id": "supported-sources-for-readme.yaml-and-template"
+    },
+    {
+      "level": "h3",
+      "text": "Local Sources",
+      "id": "local-sources"
+    },
+    {
+      "level": "h3",
+      "text": "Remote Sources",
+      "id": "remote-sources"
+    },
+    {
+      "level": "h2",
+      "text": "atmos docs",
+      "id": "atmos-docs"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos helmfile generate varfile",
+      "id": "atmos-helmfile-generate-varfile"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos helmfile",
+      "id": "atmos-helmfile"
+    }
+  ],
+  "url": "llms-txt#disable-authentication-(use-aws-sdk-defaults)",
+  "links": []
+}

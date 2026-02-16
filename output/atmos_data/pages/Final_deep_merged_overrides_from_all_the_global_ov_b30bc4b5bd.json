@@ -1,0 +1,8 @@
+{
+  "title": "Final deep-merged `overrides` from all the global `overrides` and Terraform `overrides` sections",
+  "content": "overrides:\n  command: tofu\n  env:\n    TEST_ENV_VAR1: test-env-var1-overridden\n  settings:\n    spacelift:\n      autodeploy: true\n  vars:\n    test_1: 1",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#final-deep-merged-`overrides`-from-all-the-global-`overrides`-and-terraform-`overrides`-sections",
+  "links": []
+}

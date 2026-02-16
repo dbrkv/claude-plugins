@@ -1,0 +1,8 @@
+{
+  "title": "WRONG - Template output may break indentation",
+  "content": "vars:\n  config: {{ atmos.Component \"vpc\" .stack }}  # Multi-line output breaks YAML",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#wrong---template-output-may-break-indentation",
+  "links": []
+}

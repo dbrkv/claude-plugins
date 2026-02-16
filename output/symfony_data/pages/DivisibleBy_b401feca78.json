@@ -1,0 +1,73 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/DivisibleBy.html",
+  "title": "DivisibleBy",
+  "content": "Validates that a value is divisible by another value, defined in the options.\n\nIf you need to validate that the number of elements in a collection is divisible by a certain number, use the Count constraint with the divisibleBy option.\n\nThe following constraints ensure that:\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: This value should be a multiple of {{ compared_value }}.\n\nThis is the message that will be shown if the value is not divisible by the comparison value.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\ntype: string default: null\n\nIt defines the object property whose value is used to make the comparison.\n\nFor example, if you want to compare the $endDate property of some object with regard to the $startDate property of the same object, use propertyPath=\"startDate\" in the comparison constraint of $endDate.\n\nWhen using this option, its value is available in error messages as the {{ compared_value_path }} placeholder. Although it's not intended to include it in the error messages displayed to end users, it's useful when using APIs for doing any mapping logic on client-side.\n\nThis option is required. It defines the comparison value. It can be a string, number or object.\n\nCode consumes server resources. Blackfire tells you how\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "DivisibleBy",
+      "id": "divisibleby"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "message",
+      "id": "message"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    },
+    {
+      "level": "h3",
+      "text": "propertyPath",
+      "id": "propertypath"
+    },
+    {
+      "level": "h3",
+      "text": "value",
+      "id": "value"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Item.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Item\n{\n    #[Assert\\DivisibleBy(0.25)]\n    protected float $weight;\n\n    #[Assert\\DivisibleBy(\n        value: 5,\n    )]\n    protected int $quantity;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Item:\n    properties:\n        weight:\n            - DivisibleBy: 0.25\n        quantity:\n            - DivisibleBy:\n                value: 5",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Item\">\n        <property name=\"weight\">\n            <constraint name=\"DivisibleBy\">\n                <value>0.25</value>\n            </constraint>\n        </property>\n        <property name=\"quantity\">\n            <constraint name=\"DivisibleBy\">\n                <option name=\"value\">5</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Item.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Item\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('weight', new Assert\\DivisibleBy(0.25));\n\n        $metadata->addPropertyConstraint('quantity', new Assert\\DivisibleBy(\n            value: 5,\n        ));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/DivisibleBy.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Count.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

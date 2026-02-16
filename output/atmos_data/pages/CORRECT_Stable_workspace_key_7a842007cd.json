@@ -1,0 +1,34 @@
+{
+  "title": "CORRECT: Stable workspace key",
+  "content": "settings:\n  workspace_key_prefix: \"vpc\"  # State path stays same across versions\nyaml",
+  "code_samples": [
+    {
+      "code": "### â Using Git Branches for Long-Lived Divergence Without Vendoring\n\n**Problem**: Creates merge conflicts, makes promotion difficult, and couples deployment to Git workflow.\n\n**Solution**: If using Git Flow, vendor branches to distinct local paths rather than deploying directly from branches.\n\n### â Mixing Trunk-Based and Git Flow Patterns\n\n**Problem**: Team confusion about promotion paths, unclear source of truth, competing workflows.\n\n**Solution**: Choose one deployment strategy (Continuous Version Deployment or Git Flow) and stick with it organization-wide.\n\n### â Over-Pinning Environments\n\n**Problem**: Every environment pinned to explicit versions creates:\n- High operational overhead (constant version updates)\n- Weak feedback loops (lower environments don't reveal production issues)\n- Requires lockstep promotions (all intermediate versions must be applied in order)\n\n**Solution**: Use convergence patterns (Continuous Version Deployment) unless you have specific compliance or rollback requirements that justify pinning.\n\n### â Inconsistent Path Conventions\n\n**Problem**: Mixing `{track}/{component}` with `{component}/{track}` makes reasoning about structure difficult.",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "â Using Git Branches for Long-Lived Divergence Without Vendoring",
+      "id": "â-using-git-branches-for-long-lived-divergence-without-vendoring"
+    },
+    {
+      "level": "h3",
+      "text": "â Mixing Trunk-Based and Git Flow Patterns",
+      "id": "â-mixing-trunk-based-and-git-flow-patterns"
+    },
+    {
+      "level": "h3",
+      "text": "â Over-Pinning Environments",
+      "id": "â-over-pinning-environments"
+    },
+    {
+      "level": "h3",
+      "text": "â Inconsistent Path Conventions",
+      "id": "â-inconsistent-path-conventions"
+    }
+  ],
+  "url": "llms-txt#correct:-stable-workspace-key",
+  "links": []
+}

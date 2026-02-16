@@ -1,0 +1,13 @@
+{
+  "title": "vendor.yaml - Specify the previous version",
+  "content": "spec:\n  sources:\n    - component: vpc\n      source: \"github.com/cloudposse/terraform-aws-vpc.git\"\n      version: \"2.0.0\"  # Was 2.1.0, rolling back\n      targets:\n        - \"components/terraform/vpc\"\nbash",
+  "code_samples": [
+    {
+      "code": "",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#vendor.yaml---specify-the-previous-version",
+  "links": []
+}

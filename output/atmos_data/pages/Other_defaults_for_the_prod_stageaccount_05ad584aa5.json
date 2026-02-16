@@ -1,0 +1,13 @@
+{
+  "title": "Other defaults for the `prod` stage/account",
+  "content": "yaml\nvars:\n  stage: staging",
+  "code_samples": [
+    {
+      "code": "</File>\n\nIn `stacks/mixins/stage/staging.yaml`, add the following config:\n\n<File title=\"stacks/mixins/stage/staging.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#other-defaults-for-the-`prod`-stage/account",
+  "links": []
+}

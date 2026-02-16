@@ -1,0 +1,55 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/parent_services.html",
+  "title": "How to Manage Common Dependencies with Parent Services",
+  "content": "As you add more functionality to your application, you may well start to have related classes that share some of the same dependencies. For example, you may have multiple repository classes which need the doctrine.orm.entity_manager service and an optional logger service:\n\nYour child service classes may look like this:\n\nThe service container allows you to extend parent services in order to avoid duplicated service definitions:\n\nIn this context, having a parent service implies that the arguments and method calls of the parent service should be used for the child services. Specifically, the EntityManager will be injected and setLogger() will be called when App\\Repository\\DoctrineUserRepository is instantiated.\n\nAll attributes on the parent service are shared with the child except for shared, abstract and tags. These are not inherited from the parent.\n\nIn the examples shown, the classes sharing the same configuration also extend from the same parent class in PHP. This isn't necessary at all. You can also extract common parts of similar service definitions into a parent service without also extending a parent class in PHP.\n\nThere may be times where you want to override what service is injected for one child service only. You can override most settings by specifying it in the child class:\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nPut the code quality back at the heart of your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Manage Common Dependencies with Parent Services",
+      "id": "how-to-manage-common-dependencies-with-parent-services"
+    },
+    {
+      "level": "h2",
+      "text": "Overriding Parent Dependencies",
+      "id": "overriding-parent-dependencies"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Repository/BaseDoctrineRepository.php\nnamespace App\\Repository;\n\nuse Doctrine\\ORM\\EntityManager;\nuse Psr\\Log\\LoggerInterface;\n\n// ...\nabstract class BaseDoctrineRepository\n{\n    protected LoggerInterface $logger;\n\n    public function __construct(\n        protected EntityManager $entityManager,\n    ) {\n    }\n\n    public function setLogger(LoggerInterface $logger): void\n    {\n        $this->logger = $logger;\n    }\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Repository/DoctrineUserRepository.php\nnamespace App\\Repository;\n\nuse App\\Repository\\BaseDoctrineRepository;\n\n// ...\nclass DoctrineUserRepository extends BaseDoctrineRepository\n{\n    // ...\n}\n\n// src/Repository/DoctrinePostRepository.php\nnamespace App\\Repository;\n\nuse App\\Repository\\BaseDoctrineRepository;\n\n// ...\nclass DoctrinePostRepository extends BaseDoctrineRepository\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Repository\\BaseDoctrineRepository:\n        abstract:  true\n        arguments: ['@doctrine.orm.entity_manager']\n        calls:\n            - setLogger: ['@logger']\n\n    App\\Repository\\DoctrineUserRepository:\n        # extend the App\\Repository\\BaseDoctrineRepository service\n        parent: App\\Repository\\BaseDoctrineRepository\n\n    App\\Repository\\DoctrinePostRepository:\n        parent: App\\Repository\\BaseDoctrineRepository\n\n    # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Repository\\BaseDoctrineRepository\" abstract=\"true\">\n            <argument type=\"service\" id=\"doctrine.orm.entity_manager\"/>\n\n            <call method=\"setLogger\">\n                <argument type=\"service\" id=\"logger\"/>\n            </call>\n        </service>\n\n        <!-- extends the App\\Repository\\BaseDoctrineRepository service -->\n        <service id=\"App\\Repository\\DoctrineUserRepository\"\n            parent=\"App\\Repository\\BaseDoctrineRepository\"\n        />\n\n        <service id=\"App\\Repository\\DoctrinePostRepository\"\n            parent=\"App\\Repository\\BaseDoctrineRepository\"\n        />\n\n        <!-- ... -->\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Repository\\BaseDoctrineRepository;\nuse App\\Repository\\DoctrinePostRepository;\nuse App\\Repository\\DoctrineUserRepository;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(BaseDoctrineRepository::class)\n        ->abstract()\n        ->args([service('doctrine.orm.entity_manager')])\n        ->call('setLogger', [service('logger')])\n    ;\n\n    $services->set(DoctrineUserRepository::class)\n        // extend the App\\Repository\\BaseDoctrineRepository service\n        ->parent(BaseDoctrineRepository::class)\n    ;\n\n    $services->set(DoctrinePostRepository::class)\n        ->parent(BaseDoctrineRepository::class)\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Repository\\DoctrineUserRepository:\n        parent: App\\Repository\\BaseDoctrineRepository\n\n        # overrides the private setting of the parent service\n        public: true\n\n        # appends the '@app.username_checker' argument to the parent\n        # argument list\n        arguments: ['@app.username_checker']\n\n    App\\Repository\\DoctrinePostRepository:\n        parent: App\\Repository\\BaseDoctrineRepository\n\n        # overrides the first argument (using the special index_N key)\n        arguments:\n            index_0: '@doctrine.custom_entity_manager'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <!-- overrides the private setting of the parent service -->\n        <service id=\"App\\Repository\\DoctrineUserRepository\"\n            parent=\"App\\Repository\\BaseDoctrineRepository\"\n            public=\"true\"\n        >\n            <!-- appends the '@app.username_checker' argument to the parent\n                 argument list -->\n            <argument type=\"service\" id=\"app.username_checker\"/>\n        </service>\n\n        <service id=\"App\\Repository\\DoctrinePostRepository\"\n            parent=\"App\\Repository\\BaseDoctrineRepository\"\n        >\n            <!-- overrides the first argument (using the index attribute) -->\n            <argument index=\"0\" type=\"service\" id=\"doctrine.custom_entity_manager\"/>\n        </service>\n\n        <!-- ... -->\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Repository\\BaseDoctrineRepository;\nuse App\\Repository\\DoctrinePostRepository;\nuse App\\Repository\\DoctrineUserRepository;\n// ...\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(BaseDoctrineRepository::class)\n        // ...\n    ;\n\n    $services->set(DoctrineUserRepository::class)\n        ->parent(BaseDoctrineRepository::class)\n\n        // overrides the private setting of the parent service\n        ->public()\n\n        // appends the '@app.username_checker' argument to the parent\n        // argument list\n        ->args([service('app.username_checker')])\n    ;\n\n    $services->set(DoctrinePostRepository::class)\n        ->parent(BaseDoctrineRepository::class)\n\n        # overrides the first argument\n        ->arg(0, service('doctrine.custom_entity_manager'))\n    ;\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/parent_services.html"
+  ]
+}

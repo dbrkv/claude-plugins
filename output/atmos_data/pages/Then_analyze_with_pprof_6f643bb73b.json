@@ -1,0 +1,199 @@
+{
+  "title": "Then analyze with pprof",
+  "content": "go tool pprof -http=:8080 analysis.prof\nyaml\n    # stacks/catalog/vpc.yaml\n    components:\n      terraform:\n        vpc:\n          # This cannot be enabled here in the older method due to the global\n          # AZ fragment importation\n          settings:\n            spacelift:\n              workspace_enabled: false\n          vars:\n            enabled: true\n            # ...etc...\n\n# stacks/gbl-ue2.yaml\n    components:\n      terraform:\n        vpc:\n          # This is the AZ fragment importation that's imported across all stacks\n          # even stacks without a vpc.\n          availability_zones:\n            - us-east-1a\n            - us-east-1b\n            - us-east-1c\n\n# stacks/plat-ue2-dev.yaml\n    import:\n      - gbl-ue2\n      - catalog/vpc\n\ncomponents:\n      terraform:\n        vpc:\n          component: vpc\n          # This is where spacelift has to be enabled\n          settings:\n            spacelift:\n              workspace_enabled: true\n          vars:\n            name: vpc\n            # ...etc...\n\nvpc1:\n          component: vpc\n          # This is where spacelift has to be enabled\n          settings:\n            spacelift:\n              workspace_enabled: true\n          vars:\n            name: vpc1\n            # ...etc...\n    sh\n    â¨  atmos terraform plan vpc --stack plat-ue2-dev\n    sh\n    â¨  wget https://raw.githubusercontent.com/cloudposse/atmos/main/examples/quick-start-advanced/components/terraform/vpc/component.yaml -O components/terraform/vpc/component.yaml\n    â¨  sed -i 's,infra/vpc-flow-logs-bucket,vpc,g' components/terraform/vpc/component.yaml\n    â¨  atmos vendor pull -c vpc\n    sh\n    â¨  atmos describe component vpc --stack plat-ue2-dev | grep ^workspace\n    workspace: plat-ue2-dev\n    sh\n    â¨  atmos describe stacks --components=vpc --sections=components | grep -oP '^[a-z0-9-]+' | wc -l\n    17\n    yaml\n    components:\n      terraform:\n        vpc/defaults:\n          metadata:\n            type: abstract\n          # spacelift can now be enabled in the catalog\n          settings:\n            spacelift:\n              workspace_enabled: true\n          vars:\n            enabled: true\n            # ...etc...\n    yaml\n        vpc:\n          metadata:\n            component: vpc\n            inherits:\n              - vpc/defaults\n          vars:\n            name: vpc\n    sh\n    â¨  atmos describe component vpc --stack plat-ue2-dev | grep ^workspace\n    workspace: plat-ue2-dev\n    yaml\n        vpc:\n          availability_zones:\n            - us-east-1a\n            - us-east-1b\n            - us-east-1c\n    yaml\n          availability_zones:\n            - a\n            - b\n            - c\n    sh\n    â¨  atmos describe stacks --components=vpc --sections=components | grep -oP '^[a-z0-9-]+' | wc -l\n    9\n    sh\n    â¨  atmos terraform plan vpc --stack plat-ue2-dev\n    sh\n    â¨  atmos describe component vpc --stack plat-ue2-dev | grep ^workspace\n    workspace: plat-ue2-dev\n    sh\n    â¨  atmos describe component vpc1 --stack plat-ue2-dev | grep ^workspace\n    workspace: plat-ue2-dev-vpc1\n    sh\n    â¨  cd components/terraform/vpc\n    â¨  terraform init\n    â¨  terraform workspace list\n    default\n    * plat-gbl-sandbox\n      plat-ue2-dev\n    sh\n    â¨  terraform workspace select plat-ue2-dev\n    sh\n    â¨  terraform state pull > plat-ue2-dev.tfstate\n    sh\n    â¨  terraform workspace select plat-ue2-dev-vpc1\n    â¨  terraform workspace new plat-ue2-dev-vpc1\n    Created and switched to workspace \"plat-ue2-dev-vpc1\"!\n    sh\n    â¨  terraform state push plat-ue2-dev.tfstate\n    Releasing state lock. This may take a few moments...\n    sh\n    â¨  atmos terraform plan vpc1 --stack plat-ue2-dev\n    yaml\n    # root stack: plat-ue2-dev\n    import:\n      - catalog/vpc\n\ncomponents:\n      terraform:\n        vpc1:\n          metadata:\n            terraform_workspace: plat-ue2-dev\n            component: vpc\n            inherits:\n              - vpc/defaults\n          vars:\n            name: vpc\n    \n    â¨  atmos describe component vpc1 --stack plat-ue2-dev | grep ^workspace\n    workspace: plat-ue2-dev\n    console\nÂ Â  âÂ Â \nÂ Â  âÂ Â  # Centralized stacks configuration\nÂ Â  âââ stacks/\nÂ Â  âÂ Â  â\nÂ Â  âÂ Â  âââ <stack_1>.yaml\nÂ Â  âÂ Â  âââ <stack_2>.yaml\nÂ Â  âÂ Â  âââ <stack_3>.yaml\nÂ Â  âÂ Â \nÂ Â  âÂ Â  # Centralized components configuration. Components are broken down by tool\nÂ Â  âââ components/\nÂ Â  âÂ Â  â\nÂ Â  âÂ Â  âââ terraform/   # Terraform components (Terraform root modules)\nÂ Â  âÂ Â  âÂ Â  âââ infra/\nÂ Â  âÂ Â  âÂ Â  âââ mixins/\nÂ Â  âÂ Â  âÂ Â  âââ test/test-component/\nÂ Â  âÂ Â  âÂ Â  âââ top-level-component1/\nÂ Â  âÂ Â  â\nÂ Â  âÂ Â  âââ helmfile/  # Helmfile components are organized by Helm chart\nÂ Â  âÂ Â   Â Â  âââ echo-server/\nÂ Â  âÂ Â   Â Â  âââ infra/infra-server\nÂ Â  âÂ Â \nÂ Â  âÂ Â  # Root filesystem for the Docker image (see `Dockerfile`)\nÂ Â  âââ rootfs/\nÂ   â\nÂ Â  âÂ Â  # Makefile for building the CLI\nÂ Â  âââ Makefile\nÂ Â  âÂ Â  # Atmos CLI configuration\nÂ Â  âââ atmos.yaml\nÂ Â  âÂ Â \nÂ Â  âÂ Â  # Docker image for shipping the CLI and all dependencies\nÂ Â  âââ Dockerfile (optional)\nyaml\nimport:\n  - orgs/cp/tenant1/staging/_defaults\n\nterraform:\n  vars: {}\n\ncomponents:\n  terraform:\n    vpc:\n      command: \"/usr/bin/terraform-0.15\"\n      backend:\n        s3:\n          workspace_key_prefix: \"vpc\"\n      vars:\n        cidr_block: \"10.102.0.0/18\"\n    eks:\n      backend:\n        s3:\n          workspace_key_prefix: \"eks\"\n      vars: {}\n\nhelmfile:\n    nginx-ingress:\n      vars:\n        installed: true\nbash\ngit clone git@github.com:cloudposse/tutorials.git",
+  "code_samples": [
+    {
+      "code": "## Related Documentation\n\n- [Error Messages](/troubleshoot/errors) - Common error messages and solutions\n\n---\n\n## Atmos component migration in YAML config\n\n## Migrate component from using deprecated key `component` to use `metadata.inherits`\n\n1. Identify the component to move, we'll use `vpc` for this example.\n\n    Here is an example of the older method of using the `component` key",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Verify terraform plan for `vpc` component is a `no change`. If not, configure it and apply it until it shows `no change`.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Pull down the latest `vpc` component and repeat the previous step (optional)",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Verify the current `workspace` name",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Count the current root stacks where the `vpc` component is defined",
+      "language": "unknown"
+    },
+    {
+      "code": "1. In the `vpc.yaml` stack catalog, rename `vpc` to be `vpc/defaults`\n\n    Add the `metadata` block",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Create a `vpc` component that inherits from `vpc/defaults`",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Verify the `workspace` is the same",
+      "language": "unknown"
+    },
+    {
+      "code": "NOTE: Since the `vpc` component name shares the same name as its base component, the `workspace` will remain the same.\n\n    NOTE: If the `workspace` has the `component` suffixed to it e.g. `plat-ue2-dev-vpc1` then the tfstate will have to be migrated. See component renaming and subsequent tfstate rename below before continuing.\n\n1. Add `availability_zones` to `vpc/defaults` and only add the letters and omit the region.\n\n1. Move any `vpc` component global overrides for `availability_zones` to `vpc/defaults`.\n\n    The `vpc` configuration may have a fragment in a global region file",
+      "language": "unknown"
+    },
+    {
+      "code": "It can now be set as this in the `vpc.yaml` catalog",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Count the root stacks again and verify the number is lower than previous",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Rerun the plan and verify `no changes` again",
+      "language": "unknown"
+    },
+    {
+      "code": "## Renaming components\n\nIf renaming a component is desired, for example, from `vpc` to `vpc1`, the workspace will change.\n\nFollow these steps to ensure your state is properly managed.\n\n1. Identify all the stacks affected by the component rename\n\n1. Select a root stack and the component. We will use `plat-ue2-dev` root stack and `vpc` component for this example.\n\n1. Verify terraform plan for `vpc` component is a `no change`. If not, configure and apply it.\n\n1. Verify the old and new workspaces.\n\n    Before renaming",
+      "language": "unknown"
+    },
+    {
+      "code": "After renaming",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Follow one of the guides below for migrating the state or overriding the workspace\n\n1. After you have completed the previous step, you will also need to rename any `component` keys in `remote-state.tf` files since the original reference to the component has been removed from the tfstate\n\n### Migrating state manually\n\nThis approach is recommended because this will allow the catalog to be imported without additional overrides.\n\n1. Navigate to the component and list the workspaces",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Select the original component's workspace",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Dump the terraform state into a new file",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Select or create the new workspace if it does not exist",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Push up the original workspace's state to the new workspace's state",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Verify terraform plan for the new component is a `no change`.",
+      "language": "unknown"
+    },
+    {
+      "code": "### Overriding the workspace name\n\nThe fastest approach would be to override the workspace name but is not recommended since this will need to be done for every root stack where the catalog is imported.\n\n1. In the root stack affected, instantiate the component and override the `terraform_workspace` to match the original.",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Verify the `workspace` is correct",
+      "language": "unknown"
+    },
+    {
+      "code": "1. Repeat the above steps for all the root stacks where the component is imported\n\n---\n\n## Atmos Example Infrastructure\n\nThe [example](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced) folder contains a complete solution that shows how to:\n\n- Structure the Terraform components\n- Configure the CLI\n- Add [stack configurations](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/stacks) for the Terraform and helmfile components (to\n  provision them to different environments and stages)\n\n## Example Filesystem Layout\n\nThis example provides a simple filesystem layout that looks like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Stack Configuration\n\nAtmos provides separation of configuration and code, allowing you to provision the same code into different regions, environments and stages.\n\nIn our example, all the code (Terraform and helmfiles) is in\nthe [components](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/components) folder.\n\nThe centralized stack configurations (variables for the Terraform and helmfile components) are in\nthe [stacks](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/stacks) folder.\n\nIn the example, all stack configuration files are broken down by environments and stages and use the predefined format `$environment-$stage.yaml`.\n\nEnvironments are abbreviations of AWS regions, e.g. `ue2` stands for `us-east-2`, whereas `uw2` would stand for `us-west-2`.\n\n`$environment-globals.yaml` is where you define the global values for all stages for a particular environment.\nThe global values get merged with the `$environment-$stage.yaml` configuration for a specific environment/stage by the CLI.\n\nIn the example, we defined a few config files:\n\n- [stacks/orgs/cp/tenant1/dev/us-east-2.yaml](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/stacks/orgs/cp/tenant1/dev/us-east-2.yaml)\n  - stack configuration (Terraform and helmfile variables) for the environment `ue2` and stage `dev`\n- [stacks/orgs/cp/tenant1/staging/us-east-2.yaml](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/stacks/orgs/cp/tenant1/staging/us-east-2.yaml)\n  - stack configuration (Terraform and helmfile variables) for the environment `ue2` and stage `staging`\n- [stacks/orgs/cp/tenant1/prod/us-east-2.yaml](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/stacks/orgs/cp/tenant1/prod/us-east-2.yaml)\n  - stack configuration (Terraform and helmfile variables) for the environment `ue2` and stage `prod`\n- [stacks/orgs/cp/tenant1/dev/global-region.yaml](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/stacks/ue2-globals.yaml) - global\n  settings for the environment `ue2` (e.g. `region`, `environment`)\n- [stacks/orgs/cp/_defaults.yaml](https://github.com/cloudposse/atmos/blob/main/examples/quick-start-advanced/stacks/orgs/cp/_defaults.yaml) - global settings\n  for the entire solution\n\n:::note\nThe stack configuration structure and the file names described above are just an example of how to name and structure the config files.\nYou can choose any file name for a stack. You can also include other configuration files (e.g., globals for the environment, and globals for the entire\nsolution) in a stack config using the `import` directive.\n:::\n\n:::info\nThe `_defaults.yaml` stack manifests are not imported into other Atmos manifests automatically.\nYou need to explicitly import them using [imports](/core-concepts/stacks/imports).\n:::\n\nStack configuration files have a predefined format:",
+      "language": "unknown"
+    },
+    {
+      "code": "It has the following main sections:\n\n- `import` - (optional) a list of stack configuration files to import and combine with the current configuration file\n- `vars` - (optional) a map of variables for all components (Terraform and helmfile) in the stack\n- `terraform` - (optional) configuration (variables) for all Terraform components\n- `helmfile` - (optional) configuration (variables) for all helmfile components\n- `components` - (required) configuration for the Terraform and helmfile components\n\nThe `components` section consists of the following:\n\n- `terraform` - defines variables, the binary to execute, and the backend for each Terraform component.\n  Terraform component names correspond to the Terraform components in\n  the [terraform](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/components/terraform) folder\n\n- `helmfile` - defines variables and the binary to execute for each helmfile component.\n  Helmfile component names correspond to the helmfile components in\n  the [helmfile](https://github.com/cloudposse/atmos/tree/main/examples/quick-start-advanced/components/helmfile) folder\n\n## Run the Example\n\nTo run the example, execute the following commands in a terminal:\n\n- `cd example`\n- `make all` - it will build the Docker image, build the CLI tool inside the image, and then start the container\n\n---\n\n## Getting Started with Atmos(Tutorials)\n\n## Introduction\n\nAtmos is part of the SweetOps toolchain and was built to make DevOps and Cloud automation easier across multiple tools. It has direct support for\nautomating Terraform, Helm, Helmfile, and Istio. By natively utilizing [stacks](/core-concepts/stacks), `atmos` enables you to effortlessly manage\nyour Terraform and Helmfile [components](/core-concepts/components) from your local machine or in your CI/CD pipelines.\n\nIn this tutorial we'll be looking at a simple (albeit contrived) example of automating multiple Terraform components together into a workflow. This\nwill give you some understanding of what `atmos` can do while also giving you some experience with using it at the command line.\n\n## Prerequisites\n\n### System Requirements\n\nTo accomplish this tutorial, you'll need to have [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)\nand [Docker](https://docs.docker.com/get-docker/) installed on your local machine.\n\n**That's it**.\n\n### Understanding\n\nPrior to starting this tutorial, you should be sure you understand [our various concepts and terminology](/core-concepts)) and have gone\nthrough our [Getting started with Geodesic](https://docs.cloudposse.com/tutorials/geodesic-getting-started/) tutorial because we'll be using Geodesic\nas our means to run `atmos`.\n\n## Tutorial\n\n### 1. Clone the tutorials repository, then run the `tutorials` image\n\nAs part of this tutorial (and others following in our tutorial series), we will utilize [our tutorials](https://github.com/cloudposse/tutorials)\nrepository](https://github.com/cloudposse/tutorials). The repository includes code and relevant materials for you to use alongside this tutorial\nwalkthrough.\n\nLet's clone it to your local machine and `cd` into it:",
+      "language": "unknown"
+    },
+    {
+      "code": "Now that we've got our code, we'll want to interact with it using our standard set of tools. Following the SweetOps methodology, we will use a docker\ntoolbox, a Docker image built on top of Geodesic. This entire `tutorials` repository is actually Dockerized to make that part easy, so let's run\nour `cloudposse/tutorials` image:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Related Documentation",
+      "id": "related-documentation"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos component migration in YAML config",
+      "id": "atmos-component-migration-in-yaml-config"
+    },
+    {
+      "level": "h2",
+      "text": "Migrate component from using deprecated key `component` to use `metadata.inherits`",
+      "id": "migrate-component-from-using-deprecated-key-`component`-to-use-`metadata.inherits`"
+    },
+    {
+      "level": "h2",
+      "text": "Renaming components",
+      "id": "renaming-components"
+    },
+    {
+      "level": "h3",
+      "text": "Migrating state manually",
+      "id": "migrating-state-manually"
+    },
+    {
+      "level": "h3",
+      "text": "Overriding the workspace name",
+      "id": "overriding-the-workspace-name"
+    },
+    {
+      "level": "h2",
+      "text": "Atmos Example Infrastructure",
+      "id": "atmos-example-infrastructure"
+    },
+    {
+      "level": "h2",
+      "text": "Example Filesystem Layout",
+      "id": "example-filesystem-layout"
+    },
+    {
+      "level": "h2",
+      "text": "Stack Configuration",
+      "id": "stack-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Run the Example",
+      "id": "run-the-example"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started with Atmos(Tutorials)",
+      "id": "getting-started-with-atmos(tutorials)"
+    },
+    {
+      "level": "h2",
+      "text": "Introduction",
+      "id": "introduction"
+    },
+    {
+      "level": "h2",
+      "text": "Prerequisites",
+      "id": "prerequisites"
+    },
+    {
+      "level": "h3",
+      "text": "System Requirements",
+      "id": "system-requirements"
+    },
+    {
+      "level": "h3",
+      "text": "Understanding",
+      "id": "understanding"
+    },
+    {
+      "level": "h2",
+      "text": "Tutorial",
+      "id": "tutorial"
+    },
+    {
+      "level": "h3",
+      "text": "1. Clone the tutorials repository, then run the `tutorials` image",
+      "id": "1.-clone-the-tutorials-repository,-then-run-the-`tutorials`-image"
+    }
+  ],
+  "url": "llms-txt#then-analyze-with-pprof",
+  "links": []
+}

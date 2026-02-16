@@ -1,0 +1,13 @@
+{
+  "title": "Script version discovery in CI/CD",
+  "content": "VERSION=$(atmos version list --format json | jq -r '.releases[0].version')\nbash",
+  "code_samples": [
+    {
+      "code": "**Changelog Review:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#script-version-discovery-in-ci/cd",
+  "links": []
+}

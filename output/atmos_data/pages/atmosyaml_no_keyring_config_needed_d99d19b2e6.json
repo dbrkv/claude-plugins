@@ -1,0 +1,19 @@
+{
+  "title": "atmos.yaml (no keyring config needed)",
+  "content": "auth:\n  providers:\n    my-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://mycompany.awsapps.com/start\nyaml",
+  "code_samples": [
+    {
+      "code": "Your credentials are stored in macOS Keychain, Windows Credential Manager, or Linux Secret Service.\n\n### Docker / Dev Container Development\n\nUse file keyring to share credentials between your host machine and containers:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Docker / Dev Container Development",
+      "id": "docker-/-dev-container-development"
+    }
+  ],
+  "url": "llms-txt#atmos.yaml-(no-keyring-config-needed)",
+  "links": []
+}

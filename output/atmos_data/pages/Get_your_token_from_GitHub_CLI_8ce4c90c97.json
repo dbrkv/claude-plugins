@@ -1,0 +1,8 @@
+{
+  "title": "Get your token from GitHub CLI",
+  "content": "export ATMOS_GITHUB_TOKEN=$(gh auth token)",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-your-token-from-github-cli",
+  "links": []
+}

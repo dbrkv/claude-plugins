@@ -1,0 +1,13 @@
+{
+  "title": "Show releases since specific date (ISO 8601 format)",
+  "content": "$ atmos version list --since 2025-01-01\nbash",
+  "code_samples": [
+    {
+      "code": "Include prerelease versions (beta, alpha, rc):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#show-releases-since-specific-date-(iso-8601-format)",
+  "links": []
+}

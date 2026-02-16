@@ -1,0 +1,150 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/factories.html",
+  "title": "Using a Factory to Create Services",
+  "content": "Symfony's Service Container provides multiple features to control the creation of objects, allowing you to specify arguments passed to the constructor as well as calling methods and setting parameters.\n\nHowever, sometimes you need to apply the factory design pattern to delegate the object creation to some special object called \"the factory\". In those cases, the service container can call a method on your factory to create the object rather than directly instantiating the class.\n\nSuppose you have a factory that configures and returns a new NewsletterManager object by calling the static createNewsletterManager() method:\n\nTo make the NewsletterManager object available as a service, use the factory option to define which method of which class must be called to create its object:\n\nWhen using a factory to create services, the value chosen for class has no effect on the resulting service. The actual class name only depends on the object that is returned by the factory. However, the configured class name may be used by compiler passes and therefore should be set to a sensible value.\n\nWhen the static factory method is on the same class as the created instance, the class name can be omitted from the factory declaration. Let's suppose the NewsletterManager class has a create() method that needs to be called to create the object and needs a sender:\n\nYou can omit the class on the factory declaration:\n\nIt is also possible to use the constructor option, instead of passing null as the factory class:\n\nIf your factory is using a regular method instead of a static one to configure and create the service, instantiate the factory itself as a service too. Configuration of the service container then looks like this:\n\nSuppose you now change your factory method to __invoke() so that your factory service can be used as a callback:\n\nServices can be created and configured via invokable factories by omitting the method name:\n\nInstead of using PHP classes as a factory, you can also use expressions. This allows you to e.g. change the service based on a parameter:\n\nArguments to your factory method are autowired if that's enabled for your service.\n\nIf you need to pass arguments to the factory method you can use the arguments option. For example, suppose the createNewsletterManager() method in the previous examples takes the templating service as an argument:\n\nMeasure & Improve Symfony Code Performance\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Using a Factory to Create Services",
+      "id": "using-a-factory-to-create-services"
+    },
+    {
+      "level": "h2",
+      "text": "Static Factories",
+      "id": "static-factories"
+    },
+    {
+      "level": "h2",
+      "text": "Using the Class as Factory Itself",
+      "id": "using-the-class-as-factory-itself"
+    },
+    {
+      "level": "h2",
+      "text": "Non-Static Factories",
+      "id": "non-static-factories"
+    },
+    {
+      "level": "h2",
+      "text": "Invokable Factories",
+      "id": "invokable-factories"
+    },
+    {
+      "level": "h2",
+      "text": "Using Expressions in Service Factories",
+      "id": "using-expressions-in-service-factories"
+    },
+    {
+      "level": "h2",
+      "text": "Passing Arguments to the Factory Method",
+      "id": "passing-arguments-to-the-factory-method"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Email/NewsletterManagerStaticFactory.php\nnamespace App\\Email;\n\n// ...\n\nclass NewsletterManagerStaticFactory\n{\n    public static function createNewsletterManager(): NewsletterManager\n    {\n        $newsletterManager = new NewsletterManager();\n\n        // ...\n\n        return $newsletterManager;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Email\\NewsletterManager:\n        # the first argument is the class and the second argument is the static method\n        factory: ['App\\Email\\NewsletterManagerStaticFactory', 'createNewsletterManager']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Email\\NewsletterManager\">\n            <!-- the first argument is the class and the second argument is the static method -->\n            <factory class=\"App\\Email\\NewsletterManagerStaticFactory\" method=\"createNewsletterManager\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManager;\nuse App\\Email\\NewsletterManagerStaticFactory;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(NewsletterManager::class)\n        // the first argument is the class and the second argument is the static method\n        ->factory([NewsletterManagerStaticFactory::class, 'createNewsletterManager']);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Email/NewsletterManager.php\nnamespace App\\Email;\n\n// ...\n\nclass NewsletterManager\n{\n    private string $sender;\n\n    public static function create(string $sender): self\n    {\n        $newsletterManager = new self();\n        $newsletterManager->sender = $sender;\n        // ...\n\n        return $newsletterManager;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Email\\NewsletterManager:\n        factory: [null, 'create']\n        arguments:\n            $sender: 'fabien@symfony.com'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Email\\NewsletterManager\">\n            <factory method=\"create\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManager;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    // Note that we are not using service()\n    $services->set(NewsletterManager::class)\n        ->factory([null, 'create']);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Email/NewsletterManager.php\nnamespace App\\Email;\n\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure;\n\n#[Autoconfigure(bind: ['$sender' => 'fabien@symfony.com'], constructor: 'create')]\nclass NewsletterManager\n{\n    private string $sender;\n\n    public static function create(string $sender): self\n    {\n        $newsletterManager = new self();\n        $newsletterManager->sender = $sender;\n        // ...\n\n        return $newsletterManager;\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Email\\NewsletterManager:\n        constructor: 'create'\n        arguments:\n            $sender: 'fabien@symfony.com'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Email\\NewsletterManager\" constructor=\"create\">\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManager;\n\nreturn function(ContainerConfigurator $containerConfigurator) {\n    $services = $containerConfigurator->services();\n\n    $services->set(NewsletterManager::class)\n        ->constructor('create');\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    # first, create a service for the factory\n    App\\Email\\NewsletterManagerFactory: ~\n\n    # second, use the factory service as the first argument of the 'factory'\n    # option and the factory method as the second argument\n    App\\Email\\NewsletterManager:\n        factory: ['@App\\Email\\NewsletterManagerFactory', 'createNewsletterManager']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- first, create a service for the factory -->\n        <service id=\"App\\Email\\NewsletterManagerFactory\"/>\n\n        <!-- second, use the factory service as the first argument of the 'factory'\n             option and the factory method as the second argument -->\n        <service id=\"App\\Email\\NewsletterManager\">\n            <factory service=\"App\\Email\\NewsletterManagerFactory\"\n                method=\"createNewsletterManager\"\n            />\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManager;\nuse App\\Email\\NewsletterManagerFactory;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    // first, create a service for the factory\n    $services->set(NewsletterManagerFactory::class);\n\n    // second, use the factory service as the first argument of the 'factory'\n    // method and the factory method as the second argument\n    $services->set(NewsletterManager::class)\n        ->factory([service(NewsletterManagerFactory::class), 'createNewsletterManager']);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Email/InvokableNewsletterManagerFactory.php\nnamespace App\\Email;\n\n// ...\nclass InvokableNewsletterManagerFactory\n{\n    public function __invoke(): NewsletterManager\n    {\n        $newsletterManager = new NewsletterManager();\n\n        // ...\n\n        return $newsletterManager;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Email\\NewsletterManager:\n        class:   App\\Email\\NewsletterManager\n        factory: '@App\\Email\\InvokableNewsletterManagerFactory'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"App\\Email\\NewsletterManager\"\n                 class=\"App\\Email\\NewsletterManager\">\n            <factory service=\"App\\Email\\InvokableNewsletterManagerFactory\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManager;\nuse App\\Email\\NewsletterManagerFactory;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(NewsletterManager::class)\n        ->factory(service(InvokableNewsletterManagerFactory::class));\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\Email\\NewsletterManagerInterface:\n        # use the \"tracable_newsletter\" service when debug is enabled, \"newsletter\" otherwise.\n        # \"@=\" indicates that this is an expression\n        factory: '@=parameter(\"kernel.debug\") ? service(\"tracable_newsletter\") : service(\"newsletter\")'\n\n    # you can use the arg() function to retrieve an argument from the definition\n    App\\Email\\NewsletterManagerInterface:\n        factory: '@=arg(0).createNewsletterManager() ?: service(\"default_newsletter_manager\")'\n        arguments:\n            - '@App\\Email\\NewsletterManagerFactory'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Email\\NewsletterManagerInterface\">\n            <!-- use the \"tracable_newsletter\" service when debug is enabled, \"newsletter\" otherwise -->\n            <factory expression=\"parameter('kernel.debug') ? service('tracable_newsletter') : service('newsletter')\"/>\n        </service>\n\n        <!-- you can use the arg() function to retrieve an argument from the definition -->\n        <service id=\"App\\Email\\NewsletterManagerInterface\">\n            <factory expression=\"arg(0).createNewsletterManager() ?: service('default_newsletter_manager')\"/>\n            <argument type=\"service\" id=\"App\\Email\\NewsletterManagerFactory\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManagerFactory;\nuse App\\Email\\NewsletterManagerInterface;\n\nreturn function(ContainerConfigurator $containerConfigurator) {\n    $services = $containerConfigurator->services();\n\n    $services->set(NewsletterManagerInterface::class)\n        // use the \"tracable_newsletter\" service when debug is enabled, \"newsletter\" otherwise.\n        ->factory(expr(\"parameter('kernel.debug') ? service('tracable_newsletter') : service('newsletter')\"))\n    ;\n\n    // you can use the arg() function to retrieve an argument from the definition\n    $services->set(NewsletterManagerInterface::class)\n        ->factory(expr(\"arg(0).createNewsletterManager() ?: service('default_newsletter_manager')\"))\n        ->args([\n            service(NewsletterManagerFactory::class),\n        ])\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Email\\NewsletterManager:\n        factory:   ['@App\\Email\\NewsletterManagerFactory', createNewsletterManager]\n        arguments: ['@templating']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"App\\Email\\NewsletterManager\">\n            <factory service=\"App\\Email\\NewsletterManagerFactory\" method=\"createNewsletterManager\"/>\n            <argument type=\"service\" id=\"templating\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Email\\NewsletterManager;\nuse App\\Email\\NewsletterManagerFactory;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(NewsletterManager::class)\n        ->factory([service(NewsletterManagerFactory::class), 'createNewsletterManager'])\n        ->args([service('templating')])\n    ;\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/factories.html",
+    "https://symfony.com/doc/7.3/service_container/expression_language.html",
+    "https://symfony.com/doc/7.3/service_container.html"
+  ]
+}

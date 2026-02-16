@@ -1,0 +1,54 @@
+{
+  "title": "Use Nested Custom Commands",
+  "content": "- name: \"github\"\n  commands:\n  - name: \"status\"\n    description: This command returns the number of stargazers for a GitHub repository\n    steps:\n      - curl -s https://www.githubstatus.com/api/v2/status.json | jq -r .status.description\nconsole\nAll Systems Operational\nconsole\n13.37.13.37\nyaml\nworkflows:\n  # Can also be set using 'ATMOS_WORKFLOWS_BASE_PATH' ENV var, or '--workflows-dir' command-line arguments\n  # Supports both absolute and relative paths\n  base_path: \"stacks/workflows\"\nconsole\nÂ Â  âÂ Â  # Centralized stacks configuration\nÂ Â  âââ stacks/\nÂ Â   Â Â  âââ workflows/\nÂ Â   Â Â Â Â Â Â  âââ weather.yaml\nyaml\nname: Workflows for Weather Station\ndescription: Atmos workflows for managing Weather Station\n\nplan-all:\n    description: |\n      Run 'terraform plan' on all 'station' components in all stacks\n    steps:\n      - command: terraform plan station -s dev\n      - command: terraform plan station -s staging\n      - command: terraform plan station -s prod\n\napply-all:\n    description: |\n      Run 'terraform apply' on all 'station' components in all stacks\n    steps:\n      - command: terraform apply station -auto-approve -s dev\n      - command: terraform apply station -auto-approve -s staging\n      - command: terraform apply station -auto-approve -s prod\nshell",
+  "code_samples": [
+    {
+      "code": "</File>\n\nRun the following Atmos command to get the current GitHub status.\n\n<Terminal command=\"atmos github status\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\nRun the following Atmos command to retrieve your current public IP address.\n\n<Terminal command=\"atmos ip\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n<ActionCard title=\"Want to go deeper on this topic?\">\n    Custom commands can accept flags, arguments, and even advanced templating.\n    <PrimaryCTA to=\"/core-concepts/custom-commands\">Learn More</PrimaryCTA>\n</ActionCard>\n\n---\n\n## Automate Common Workflows(Extra-credit)\n\nimport Terminal from '@site/src/components/Terminal'\nimport Step from '@site/src/components/Step'\nimport StepNumber from '@site/src/components/StepNumber'\nimport Intro from '@site/src/components/Intro'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\n\n<Intro>\n[Atmos Workflows](/core-concepts/workflows) combine multiple commands into executable units of work, ideal for automating common\ntasks and orchestrating âcold starts,â where you bring an environment up from scratch.\n</Intro>\n\nWorkflows can call other workflows and be combined with [Custom Commands](/core-concepts/custom-commands). Usually, we use\nworkflows to provision some combinations of [Terraform](/core-concepts/components/terraform) components.\n\nDefining workflows is entirely optional; use them if they are helpful for your project.\n\n<Step>\n## <StepNumber/> Configure Your Project to Support Workflows\n\nTo define workflows, update your `atmos.yaml` to tell it where to find your workflows.\n\nAdd the following `workflows` section and configure the base path to the workflows:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Step>\n\n<Step>\n## <StepNumber/> Create an Atmos Workflow\n\nNow, let's create a workflow in the `stacks/workflows` directory.",
+      "language": "unknown"
+    },
+    {
+      "code": "Add the following Atmos workflows to the `stacks/workflows/weather.yaml` file:",
+      "language": "unknown"
+    },
+    {
+      "code": "</Step>\n\n<Step>\n\n## <StepNumber/> Run the Atmos Workflow\n\nRun the following Atmos commands to execute the workflows:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Automate Common Workflows(Extra-credit)",
+      "id": "automate-common-workflows(extra-credit)"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Configure Your Project to Support Workflows",
+      "id": "<stepnumber/>-configure-your-project-to-support-workflows"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Create an Atmos Workflow",
+      "id": "<stepnumber/>-create-an-atmos-workflow"
+    },
+    {
+      "level": "h2",
+      "text": "<StepNumber/> Run the Atmos Workflow",
+      "id": "<stepnumber/>-run-the-atmos-workflow"
+    }
+  ],
+  "url": "llms-txt#use-nested-custom-commands",
+  "links": []
+}

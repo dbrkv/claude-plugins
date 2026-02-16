@@ -1,0 +1,150 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints.html",
+  "title": "Validation Constraints Reference",
+  "content": "The Validator is designed to validate objects against constraints. In real life, a constraint could be: \"The cake must not be burned\". In Symfony, constraints are similar: They are assertions that a condition is true.\n\nThe following constraints are natively available in Symfony:\n\nThese are the basic constraints: use them to assert very basic things about the value of properties or the return value of methods on your object.\n\nOnline exam, become Sylius certified today\n\nSave your teams and projects before they sink",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Validation Constraints Reference",
+      "id": "validation-constraints-reference"
+    },
+    {
+      "level": "h2",
+      "text": "Supported Constraints",
+      "id": "supported-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Constraints",
+      "id": "basic-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "String Constraints",
+      "id": "string-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Comparison Constraints",
+      "id": "comparison-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Number Constraints",
+      "id": "number-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Date Constraints",
+      "id": "date-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Choice Constraints",
+      "id": "choice-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "File Constraints",
+      "id": "file-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Financial and other Number Constraints",
+      "id": "financial-and-other-number-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Doctrine Constraints",
+      "id": "doctrine-constraints"
+    },
+    {
+      "level": "h3",
+      "text": "Other Constraints",
+      "id": "other-constraints"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Blank.html",
+    "https://symfony.com/doc/7.3/reference/constraints/IsFalse.html",
+    "https://symfony.com/doc/7.3/reference/constraints/IsNull.html",
+    "https://symfony.com/doc/7.3/reference/constraints/IsTrue.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotBlank.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotNull.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Type.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Charset.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Cidr.html",
+    "https://symfony.com/doc/7.3/reference/constraints/CssColor.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Email.html",
+    "https://symfony.com/doc/7.3/reference/constraints/ExpressionSyntax.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Hostname.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Ip.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Json.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Length.html",
+    "https://symfony.com/doc/7.3/reference/constraints/MacAddress.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NoSuspiciousCharacters.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotCompromisedPassword.html",
+    "https://symfony.com/doc/7.3/reference/constraints/PasswordStrength.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Regex.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Twig.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Ulid.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Url.html",
+    "https://symfony.com/doc/7.3/reference/constraints/UserPassword.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Uuid.html",
+    "https://symfony.com/doc/7.3/reference/constraints/WordCount.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Yaml.html",
+    "https://symfony.com/doc/7.3/reference/constraints/DivisibleBy.html",
+    "https://symfony.com/doc/7.3/reference/constraints/EqualTo.html",
+    "https://symfony.com/doc/7.3/reference/constraints/GreaterThan.html",
+    "https://symfony.com/doc/7.3/reference/constraints/GreaterThanOrEqual.html",
+    "https://symfony.com/doc/7.3/reference/constraints/IdenticalTo.html",
+    "https://symfony.com/doc/7.3/reference/constraints/LessThan.html",
+    "https://symfony.com/doc/7.3/reference/constraints/LessThanOrEqual.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotEqualTo.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotIdenticalTo.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Range.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Unique.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Negative.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NegativeOrZero.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Positive.html",
+    "https://symfony.com/doc/7.3/reference/constraints/PositiveOrZero.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Date.html",
+    "https://symfony.com/doc/7.3/reference/constraints/DateTime.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Time.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Timezone.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Week.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Choice.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Country.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Language.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Locale.html",
+    "https://symfony.com/doc/7.3/reference/constraints/File.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Image.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Bic.html",
+    "https://symfony.com/doc/7.3/reference/constraints/CardScheme.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Currency.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Iban.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Isbn.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Isin.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Issn.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Luhn.html",
+    "https://symfony.com/doc/7.3/reference/constraints/DisableAutoMapping.html",
+    "https://symfony.com/doc/7.3/reference/constraints/EnableAutoMapping.html",
+    "https://symfony.com/doc/7.3/reference/constraints/UniqueEntity.html",
+    "https://symfony.com/doc/7.3/reference/constraints/All.html",
+    "https://symfony.com/doc/7.3/reference/constraints/AtLeastOneOf.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Callback.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Cascade.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Collection.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Compound.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Count.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Expression.html",
+    "https://symfony.com/doc/7.3/validation/sequence_provider.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Sequentially.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Traverse.html",
+    "https://symfony.com/doc/7.3/reference/constraints/Valid.html",
+    "https://symfony.com/doc/7.3/reference/constraints/When.html"
+  ]
+}

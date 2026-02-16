@@ -1,0 +1,13 @@
+{
+  "title": "If called with no arguments, it brings up the identity selector",
+  "content": "function use-identity() {\n    if ! command -v atmos >/dev/null 2>&1; then\n        echo \"Error: atmos command not found. Please install atmos first.\" >&2\n        return 1\n    fi\n\n# Run atmos auth env and evaluate the output to set credentials\n    local auth_output\n    if [ $# -eq 0 ]; then\n        # No arguments: bring up the selector by passing --identity with no value\n        if ! auth_output=$(atmos auth env --identity --login 2>&1); then\n            echo \"Error running atmos auth: $auth_output\" >&2\n            return 1\n        fi\n    else\n        # Arguments provided: pass --identity=<value> with the first argument, then any additional flags\n        if ! auth_output=$(atmos auth env --identity=\"$1\" --login \"${@:2}\" 2>&1); then\n            echo \"Error running atmos auth: $auth_output\" >&2\n            return 1\n        fi\n    fi\n\n# Evaluate the output to set environment variables\n    eval \"$auth_output\"\n}\nbash",
+  "code_samples": [
+    {
+      "code": "**Usage examples:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#if-called-with-no-arguments,-it-brings-up-the-identity-selector",
+  "links": []
+}

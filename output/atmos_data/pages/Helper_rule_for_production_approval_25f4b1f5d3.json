@@ -1,0 +1,8 @@
+{
+  "title": "Helper rule for production approval",
+  "content": "production_approved {\n  input.process_env.DEPLOYMENT_APPROVED == \"true\"\n  input.process_env.APPROVED_BY\n  input.process_env.APPROVAL_TICKET\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#helper-rule-for-production-approval",
+  "links": []
+}

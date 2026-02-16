@@ -1,0 +1,8 @@
+{
+  "title": "Quickly review recent changes before upgrading",
+  "content": "atmos version list --limit 5",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#quickly-review-recent-changes-before-upgrading",
+  "links": []
+}

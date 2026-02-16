@@ -1,0 +1,8 @@
+{
+  "title": "`prod` account, `us-east-2` region",
+  "content": "atmos terraform apply vpc-flow-logs-bucket -s org2-plat-ue2-prod\natmos terraform apply vpc -s org2-plat-ue2-prod",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#`prod`-account,-`us-east-2`-region",
+  "links": []
+}

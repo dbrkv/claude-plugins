@@ -1,0 +1,21 @@
+{
+  "title": "Query network configuration",
+  "content": "atmos list values vpc --query .vars.ipv4_primary_cidr_block\nshell\natmos list values vpc --abstract\nshell\natmos list values vpc --max-columns 5\nshell",
+  "code_samples": [
+    {
+      "code": "Include abstract components:",
+      "language": "unknown"
+    },
+    {
+      "code": "Limit the number of columns:",
+      "language": "unknown"
+    },
+    {
+      "code": "Output in different formats:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#query-network-configuration",
+  "links": []
+}

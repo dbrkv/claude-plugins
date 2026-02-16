@@ -1,0 +1,50 @@
+{
+  "title": "With explicit HTTPS",
+  "content": "source: \"https://git.company.com/team/repository.git?ref=v1.0.0\"\nyaml\nsource: \"oci://<registry>/<namespace>/<image>:<tag>\"\nyaml\nsource: \"oci://ghcr.io/cloudposse/components/vpc:v1.0.0\"\nyaml\nsource: \"oci://public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:latest\"\nyaml\nsource: \"oci://docker.io/library/nginx:alpine\"\nbash",
+  "code_samples": [
+    {
+      "code": "</TabItem>\n\n  <TabItem value=\"oci\" label=\"OCI Registries\">\n\nAtmos supports pulling artifacts from OCI-compatible registries like GitHub Container Registry (ghcr.io), AWS ECR, Google Artifact Registry, and more.\n\n### OCI Syntax",
+      "language": "unknown"
+    },
+    {
+      "code": "### GitHub Container Registry",
+      "language": "unknown"
+    },
+    {
+      "code": "### AWS ECR Public",
+      "language": "unknown"
+    },
+    {
+      "code": "### Docker Hub",
+      "language": "unknown"
+    },
+    {
+      "code": ":::info OCI Authentication Precedence\nAtmos uses the following precedence order for OCI registry authentication:\n\n1. **Docker credentials** (highest precedence) - Credentials from `docker login` stored in `~/.docker/config.json`\n2. **Environment variables** - For GitHub Container Registry (ghcr.io):\n   - **Token:** `ATMOS_GITHUB_TOKEN` or `GITHUB_TOKEN`\n   - **Username:** `ATMOS_GITHUB_USERNAME`, `GITHUB_ACTOR`, or `GITHUB_USERNAME`\n3. **Anonymous** - Fallback for public images\n\n**Examples:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "OCI Syntax",
+      "id": "oci-syntax"
+    },
+    {
+      "level": "h3",
+      "text": "GitHub Container Registry",
+      "id": "github-container-registry"
+    },
+    {
+      "level": "h3",
+      "text": "AWS ECR Public",
+      "id": "aws-ecr-public"
+    },
+    {
+      "level": "h3",
+      "text": "Docker Hub",
+      "id": "docker-hub"
+    }
+  ],
+  "url": "llms-txt#with-explicit-https",
+  "links": []
+}

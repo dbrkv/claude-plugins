@@ -1,0 +1,19 @@
+{
+  "title": "Default behavior (no flag = pager disabled)",
+  "content": "atmos describe config                        # Pager is OFF by default\nbash",
+  "code_samples": [
+    {
+      "code": "### Color Control Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Color Control Examples",
+      "id": "color-control-examples"
+    }
+  ],
+  "url": "llms-txt#default-behavior-(no-flag-=-pager-disabled)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Extract a field from a JSON object",
+  "content": "database_host: !store.get redis app-config | query .database.host",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#extract-a-field-from-a-json-object",
+  "links": []
+}

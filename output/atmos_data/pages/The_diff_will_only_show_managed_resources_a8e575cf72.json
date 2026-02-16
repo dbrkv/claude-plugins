@@ -1,0 +1,74 @@
+{
+  "title": "The diff will only show managed resources:",
+  "content": "atmos terraform plan-diff myapp -s dev --orig=orig.plan\ntext\nResources:\n-----------\n+ aws_instance.web_server\n~ aws_s3_bucket.storage\n  ~ versioning.enabled: false => true\ntext\nThe planfiles are identical\ntext\nDiff Output\n=========\n\nVariables:\n----------\n+ added_var: \"new value\"\n- removed_var: \"old value\"\n~ changed_var: \"old value\" => \"new value\"\n\nResources:\n-----------\n+ aws_s3_bucket.new_bucket\n- aws_instance.removed_instance\n~ aws_security_group.modified_group\n  ~ ingress.cidr_blocks: [\"10.0.0.0/16\"] => [\"10.0.0.0/8\"]\n  + egress.port: 443\n\nOutputs:\n--------\n+ new_output: \"value\"\n- removed_output: \"value\"\n~ changed_output: \"old\" => \"new\"\nshell\natmos terraform shell <component> -s <stack>\nyaml\ncomponents:\n  terraform:\n    # Auto-generate backend configuration\n    auto_generate_backend_file: true\n\n# Run 'terraform init -reconfigure' when entering shell\n    init_run_reconfigure: true\n\n# Enable workspace management\n    workspaces_enabled: true\n\n# Customize the shell prompt using Go template syntax\n    shell:\n      prompt: \"atmos [{{.Stack}}] {{.Component}} $ \"\nyaml",
+  "code_samples": [
+    {
+      "code": "**Output:**",
+      "language": "unknown"
+    },
+    {
+      "code": "## Output Format\n\nWhen there are no differences between the two plan files:",
+      "language": "unknown"
+    },
+    {
+      "code": "When there are differences between the two plan files:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Exit Codes\n\n| Exit Code | Description                               |\n| --------- | ----------------------------------------- |\n| 0         | Success - no differences found            |\n| 1         | Error occurred during execution           |\n| 2         | Success - differences found between plans |\n\n## Use Cases\n\nThe `plan-diff` command is useful for:\n\n1. **Validating changes**: Compare a previously saved plan with the current state to see what has changed.\n2. **Reviewing variable impacts**: See how changing variables affects the infrastructure plan.\n3. **CI/CD workflows**: Use the exit code to determine if changes are expected or unexpected.\n4. **Documentation**: Generate human-readable diffs for change management and approvals.\n\n## How It Works\n\nThe command:\n\n1. Runs `terraform init` in the component directory\n2. If `--new` is not specified, runs a plan and captures the output\n3. Runs `terraform show -json` for each plan to get the JSON representation\n4. Sorts the JSON for consistent comparison\n5. Creates a diff between the two plans\n6. Handles sensitive values properly by displaying `(sensitive value)`\n7. Returns appropriate exit code based on whether differences were found\n\n---\n\n## atmos terraform shell\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nThis command starts a new `SHELL` configured with the environment for an Atmos component in a Stack to allow executing all native terraform commands\ninside the shell without using any atmos-specific arguments and flags.\n</Intro>\n\n<Screengrab title=\"atmos terraform shell --help\" slug=\"atmos-terraform-shell--help\" />\n\n## Usage\n\nExecute the `terraform shell` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "The command configures the environment for an Atmos component in a stack and starts a new shell suitable for executing all terraform commands natively\nwithout going through Atmos.\n\nThe command does the following:\n\n- Processes the stack manifests, generates the required variables for the Atmos component in the stack, and writes them to a file in the\n  component's folder\n\n- Generates a backend config file for the Atmos component in the stack and writes it to a file in the component's folder (or as specified by the\n  [Atmos configuration setting](/cli/configuration))\n\n- Creates a `terraform` workspace for the component in the stack\n\n- Drops the user into a separate shell (process) with all the required paths and ENV vars set\n\n- Inside the shell, the user can execute all `terraform` commands using the native syntax\n\n- Atmos sets the `ATMOS_SHLVL` environment variable to track the nesting level of shells:\n    - If `ATMOS_SHLVL` is not already set, Atmos initializes it to `1`.\n    - If `ATMOS_SHLVL` is already set, Atmos increments its value by `1` for each new nested shell.\n\n:::tip\nRun `atmos terraform shell --help` to see all the available options\n:::\n\n## Configuration\n\nConfigure shell behavior in your `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Shell Prompt Customization\n\nThe `shell.prompt` configuration supports Go template syntax with the following variables:\n\n| Variable | Description | Example |\n|----------|-------------|---------|\n| `{{.Component}}` | The Atmos component name | `vpc`, `eks`, `database` |\n| `{{.Stack}}` | The Atmos stack name | `tenant1-ue2-dev`, `prod-us-west-2` |\n\nShell-native format specifiers are preserved and will be expanded by your shell:\n- **Bash**: Escape sequences like `\\u` (username), `\\h` (hostname), `\\w` (working directory), `\\[` `\\]` (color codes)\n- **Zsh**: Percent sequences like `%n` (username), `%m` (hostname), `%~` (directory), `%F{color}` (colors)\n\n**Example prompts:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Output Format",
+      "id": "output-format"
+    },
+    {
+      "level": "h2",
+      "text": "Exit Codes",
+      "id": "exit-codes"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "atmos terraform shell",
+      "id": "atmos-terraform-shell"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Shell Prompt Customization",
+      "id": "shell-prompt-customization"
+    }
+  ],
+  "url": "llms-txt#the-diff-will-only-show-managed-resources:",
+  "links": []
+}

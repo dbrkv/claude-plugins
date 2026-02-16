@@ -1,0 +1,91 @@
+{
+  "title": "Apply rollback to production",
+  "content": "atmos terraform apply vpc --stack prod-us-east-1\nmarkdown\n  # Release Track Policy\n\n## Track Definitions\n  - **Alpha**: Latest development versions, updated daily\n  - **Beta**: Release candidates, updated weekly\n  - **Prod**: Stable versions, updated bi-weekly\n\n## Promotion Criteria\n  - Alpha â Beta: Passing all automated tests\n  - Beta â Prod: 7 days in staging without issues\n\n## Emergency Procedures\n  - Hotfixes can skip alpha and go directly to beta\n  - Critical security updates can be applied to all tracks simultaneously\n  yaml\napiVersion: atmos/v1\nkind: AtmosVendorConfig\nspec:\n  sources:\n    - component: vpc\n      source: \"github.com/acme/terraform-components.git//modules/vpc?ref={{.Version}}\"\n      version: \"v1.12.3\"  # Strict pin - referenced by {{.Version}} in source and targets\n      targets:\n        - \"components/terraform/vpc/{{.Version}}\"\nyaml\ncomponents:\n  terraform:\n    vpc:\n      metadata:\n        component: vpc/v1.12.3  # Points to vendored component at specific version\n      vars:\n        name: \"prod-vpc\"\n        cidr_block: \"10.0.0.0/16\"\n      settings:\n        # CRITICAL: Don't include version in workspace_key_prefix\n        workspace_key_prefix: \"vpc\"\nyaml",
+  "code_samples": [
+    {
+      "code": ":::tip\nTrack-based rollback affects all environments subscribed to that track, providing consistent rollback across similar environments. The folder structure (`prod/vpc`) stays the same, only the component code inside changes.\n:::\n\n## Best Practices\n\n- **Design Clear Track Hierarchy:** Define tracks that match your promotion flow: `alpha` or `dev` for latest changes with highest risk, `beta` or `staging` for pre-production validation, `prod` or `stable` for production-ready versions, and optionally `lts` for long-term support of critical systems.\n\n- **Automate Track Promotion:** Use CI/CD pipelines to automate version promotion through tracks by updating track configuration files (such as `tracks.yaml`) and running validation before deployment. This ensures consistent promotion processes and reduces manual errors.\n\n- **Monitor Track Health:** Monitor track version consistency to identify and address drift between environments subscribed to the same track.\n\n- **Document Track Policy:** Maintain clear documentation about track policies including track definitions, promotion criteria, and emergency procedures.\n\n  <File title=\"docs/track-policy.md\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n- **Plan Across Tracks:** Regularly run Terraform plans across all environments within a track to validate consistency and catch issues before deployment.\n\n## Summary\n\nRelease Tracks/Channels provide an excellent balance between control and operational efficiency. By grouping environments into tracks and promoting versions through tracks rather than individual environments, teams can maintain strong convergence and feedback loops while reducing management overhead. This pattern scales well and is particularly effective for organizations with many environments that need to stay relatively synchronized.\n\n:::tip Key Takeaway\nRelease tracks reduce the operational burden of version management while maintaining strong feedback loops. They're ideal for teams that want convergence without sacrificing control over the promotion process.\n:::\n\n## Related Patterns\n\n- [Versioning Schemes](./versioning-schemes) - Label-based schemes (Maturity Levels, Environment Names) that work with tracks\n- [Strict Version Pinning](./strict-version-pinning) - Individual version control per environment\n- [Folder-Based Versioning](./folder-based-versioning) - Version through repository structure\n- [Vendoring Components](./vendoring-components) - Local control with bulk updates\n- [Git Flow: Branches as Channels](./git-flow-branches-as-channels) - Branch-based track management\n\n---\n\n## Strict Version Pinning\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport KeyPoints from '@site/src/components/KeyPoints'\n\n<PillBox>Atmos Design Pattern</PillBox>\n<Intro>\n**Strict Version Pinning** extends [Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning) by creating explicit component versions using **number-based [versioning schemes](/design-patterns/version-management/versioning-schemes)** like SemVer (`vpc/1.2.3`, `vpc/2.0.0`) within the [Continuous Version Deployment](/design-patterns/version-management/continuous-version-deployment) strategy. This approach works particularly well when vendoring from external sources or managing shared component libraries within your organization.\n</Intro>\n\nThis folder organization approach provides the most granular version control by using **fixed-point versioning**âeach version folder represents a specific, immutable version. Components are organized into version-specific folders, making it explicit which exact version each environment uses. This is especially useful when [vendoring components](/design-patterns/version-management/vendoring-components) from external sources where you want to track specific upstream versions.\n\n:::info Number-Based Versioning Schemes\nStrict Version Pinning works with **number-based [versioning schemes](/design-patterns/version-management/versioning-schemes)** that create immutable version identifiers:\n- **[SemVer](/design-patterns/version-management/versioning-schemes#semantic-versioning-semver)** (`1.2.3`) - Communicates breaking vs. non-breaking changes\n- **[CalVer](/design-patterns/version-management/versioning-schemes#calendar-versioning-calver)** (`2024.10.1`) - Date-based versions for temporal tracking\n- **[Sequential](/design-patterns/version-management/versioning-schemes#sequential-versioning)** (`v1`, `v2`) - Simple incrementing numbers\n- **[Major/Minor](/design-patterns/version-management/versioning-schemes#majorminor-versioning)** (`1.0`, `2.0`) - Simplified SemVer\n\nThese are **fixed points**âonce created, the version never changes. This contrasts with [Release Tracks/Channels](/design-patterns/version-management/release-tracks-channels) which use **moving targets** (labels like `alpha`, `prod`) that point to evolving versions.\n:::\n\n<KeyPoints>\n- How strict pinning provides reproducibility but encourages environment divergence\n- Why lockstep promotion is critical when using strict version pinning\n- The operational overhead of managing individual pins across many environments\n- When strict pinning is appropriate despite its limitations\n</KeyPoints>\n\n## Use Cases\n\nUse the **Strict Version Pinning** pattern when:\n\n- **Reproducibility and auditability** are paramount requirements\n- Your **environment count is small** and carefully curated\n- You can enforce **lockstep promotion** across the SDLC without skipping versions\n- Your organization truly needs to **optimize for rollback** over roll-forward\n- You have **regulatory requirements** that mandate exact version tracking\n- You need a **clear audit trail** of what ran where and when\n\n## Problem\n\nWhile strict version pinning seems like the safest approach, it creates several challenges at scale:\n\n### 1. Optimizes for Divergence\nEach environment maintains its own version pins, causing environments to drift apart unless you continuously update them. This divergence makes it harder to reason about the overall system state.\n\n### 2. Weak Feedback Loop\nLower environments stay pinned to older versions, so running `terraform plan` doesn't reveal cross-environment impacts. Problems like:\n- Destructive operations\n- Resource incompatibilities\n- Dependency cycles\n- State migration issues\n\nThese often surface only during promotionâsometimes first appearing in production.\n\n### 3. Lockstep Promotion Required\nIf development or staging received 10 incremental releases, production must receive those same 10 releases in order. Skipping versions causes:\n- Hidden assumptions to break\n- Terraform dependency cycles to appear\n- State inconsistencies\n- \"Worked incrementally, fails when batched\" problems\n\n### 4. Operational Overhead\nAt scale, maintaining individual pins creates significant overhead:\n- Manual pin updates across dozens or hundreds of environments\n- PR storms from automated dependency update tools\n- Complex promotion orchestration\n- Version tracking and coordination burden\n\n## Solution\n\nWhen implementing strict version pinning in Atmos:\n\n### 1. Pin Versions Through Vendoring\n\nWith strict version pinning, components are vendored at specific versions using Atmos vendor manifests.\n\n:::tip Go Template Variables in Vendor Manifests\nAtmos vendor manifests support [Go template](https://pkg.go.dev/text/template) syntax. The template is executed with the source specification as context, giving you access to fields like `{{.Component}}`, `{{.Version}}`, `{{.Source}}`, etc. This allows you to write DRY configurations where values defined once can be reused in multiple places.\n\nIn the example below, `{{.Version}}` references the `version: \"v1.12.3\"` field, so the source URL becomes `...?ref=v1.12.3` and the target path becomes `components/terraform/vpc/v1.12.3`.\n:::\n\n<File title=\"vendor.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"stacks/prod/us-east-1.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n### 2. Maintain Stable Workspace Keys\n\n:::warning Critical Configuration\nNever include version information in `workspace_key_prefix`. This ensures state remains stable when versions change:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Strict Version Pinning",
+      "id": "strict-version-pinning"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Problem",
+      "id": "problem"
+    },
+    {
+      "level": "h3",
+      "text": "1. Optimizes for Divergence",
+      "id": "1.-optimizes-for-divergence"
+    },
+    {
+      "level": "h3",
+      "text": "2. Weak Feedback Loop",
+      "id": "2.-weak-feedback-loop"
+    },
+    {
+      "level": "h3",
+      "text": "3. Lockstep Promotion Required",
+      "id": "3.-lockstep-promotion-required"
+    },
+    {
+      "level": "h3",
+      "text": "4. Operational Overhead",
+      "id": "4.-operational-overhead"
+    },
+    {
+      "level": "h2",
+      "text": "Solution",
+      "id": "solution"
+    },
+    {
+      "level": "h3",
+      "text": "1. Pin Versions Through Vendoring",
+      "id": "1.-pin-versions-through-vendoring"
+    },
+    {
+      "level": "h3",
+      "text": "2. Maintain Stable Workspace Keys",
+      "id": "2.-maintain-stable-workspace-keys"
+    }
+  ],
+  "url": "llms-txt#apply-rollback-to-production",
+  "links": []
+}

@@ -1,0 +1,37 @@
+{
+  "title": "Atmos component configurations",
+  "content": "components:\n  terraform:\n    vpc/1:\n      metadata:\n        component: vpc  # Point to the Terraform component in `components/terraform/vpc` folder\n        inherits:\n          # Inherit from the `vpc/defaults` base Atmos component, which defines the default\n          # configuration for all VPCs in the infrastructure.\n          # The `vpc/defaults` base component is defined in the `catalog/vpc/defaults`\n          # manifest (which is imported above).\n          # This inheritance makes the `vpc/1` Atmos component config DRY.\n          - \"vpc/defaults\"\n      vars:\n        name: \"vpc-1\"\nyaml\n    devops_team: '{{ (datasource \"s3-tags\").tags.devops_team }}'\n    billing_team: '{{ (datasource \"s3-tags\").tags.billing_team }}'\n    service: '{{ (datasource \"s3-tags\").tags.service }}'\n    yaml\natmos_component: vpc/1\natmos_stack: plat-ue2-dev\nterraform_component: vpc\nterraform_workspace: plat-ue2-dev-vpc-1\ndevops_team: dev_networking\nbilling_team: billing_net\nservice: net\nyaml",
+  "code_samples": [
+    {
+      "code": "When executing an Atmos command like `atmos terraform apply vpc/1 -s plat-ue2-dev`, the above template will be processed\nin two evaluation steps:\n\n- Evaluation 1:\n\n  - `datasources.s3-tags.url` is set to `s3://mybucket/dev/tags.json`\n\n  - the tags that use the `datasource` templates are set to the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "- Evaluation 2:\n    - all `s3-tags` datasources get executed, the JSON file `s3://mybucket/dev/tags.json` with the tags\n      for the `dev` account is downloaded from the S3 bucket, and the tags are parsed and assigned in the\n      `terraform.vars.tags` section\n\nAfter executing the two evaluation steps, the resulting tags for the Atmos component `vpc/1` in the stack `plat-ue2-dev`\nwould look like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "The tags will be added to all the AWS resources provisioned by the `vpc` Terraform component in the `plat-ue2-dev` stack.\n\n---\n\n## Stack Manifest Templating\n\nimport File from '@site/src/components/File'\nimport Terminal from '@site/src/components/Terminal'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport ActionCard from '@site/src/components/ActionCard'\nimport PrimaryCTA from '@site/src/components/PrimaryCTA'\nimport SecondaryCTA from '@site/src/components/SecondaryCTA'\n\n<PillBox>Advanced</PillBox>\n\n<Intro>\n    Use templates as an _escape hatch_, when standard [inheritance](/core-concepts/stacks/inheritance) or\n    [Atmos Functions](/functions/yaml) are insufficient.\n    Atmos supports [Go templates](https://pkg.go.dev/text/template) in stack manifests and functions to customize Stack configurations.\n</Intro>\n\n:::note Template File Validation\nTemplate files (`.yaml.tmpl`, `.yml.tmpl`, `.tmpl`) are automatically detected and processed during normal operations (imports, etc.).\nHowever, they are excluded from YAML validation (`atmos validate stacks`) since they may contain template placeholders that are invalid YAML before being rendered.\nThis ensures that template files can contain valid Go template syntax without causing validation errors.\n:::\n\n### Enable Templating\n\nTemplating in Atmos stack manifests is configured in the `atmos.yaml` [CLI config file](/cli/configuration) in the\n`templates.settings` section.\n\n<dl>\n  <dt>`templates.settings`</dt>\n  <dd>In the `templates.settings` section in `atmos.yaml` [CLI config file](/cli/configuration)</dd>\n\n  <dt> `settings.templates.settings`</dt>\n  <dd>\n    In the `settings.templates.settings` section in [Atmos stack manifests](/core-concepts/stacks). The `settings.templates.settings` section can be defined globally per organization, tenant, account, or per component. Atmos deep-merges the configurations from all scopes into the final result using [inheritance](/core-concepts/stacks/inheritance).\n  </dd>\n\n  <dt>`templates.settings.enabled`</dt>\n  <dd>A boolean flag to enable/disable the processing of `Go` templates in Atmos stack manifests. If set to `false`, Atmos will not process `Go` templates in stack manifests.</dd>\n</dl>\n\n### Configure Templating\n\n<dl>\n\n  <dt>`templates.settings.env`</dt>\n  <dd>A map of environment variables to use when executing the templates.</dd>\n\n  <dt>`templates.settings.evaluations`</dt>\n  <dd>Number of evaluations/passes to process `Go` templates. If not defined, `evaluations` is automatically set to `1`. For more details, refer to [Template Evaluations and Template Processing Pipelines](#processing-pipelines).</dd>\n\n  <dt>`templates.settings.delimiters`</dt>\n  <dd>A list of left and right delimiters to use to process the templates. If not defined, the default `Go` template delimiters `[\"{{\", \"}}\"]` will be used.</dd>\n\n  <dt>`templates.settings.sprig.enabled`</dt>\n  <dd>A boolean flag to enable/disable the [Sprig Functions](https://masterminds.github.io/sprig/) in Atmos stack manifests.</dd>\n\n  <dt>`templates.settings.gomplate.enabled`</dt>\n  <dd>A boolean flag to enable/disable the [Gomplate Functions](https://docs.gomplate.ca/functions/) and [Gomplate Datasources](https://docs.gomplate.ca/datasources) in Atmos stack manifests.</dd>\n\n  <dt>`templates.settings.gomplate.timeout`</dt>\n  <dd>Timeout in seconds to execute [Gomplate Datasources](https://docs.gomplate.ca/datasources).</dd>\n\n</dl>\n\n:::warning\n\nSome functions are present in both [Sprig](https://masterminds.github.io/sprig/) and [Gomplate](https://docs.gomplate.ca/functions/).\n\nFor example, the `env` function has the same name in [Sprig](https://masterminds.github.io/sprig/os.html) and\n[Gomplate](https://docs.gomplate.ca/functions/env/), but has different syntax and accept different number of arguments.\n\nIf you use the `env` function from one templating engine and enable both [Sprig](https://masterminds.github.io/sprig/)\nand [Gomplate](https://docs.gomplate.ca/functions/), it will be invalid in the other templating engine, and an error will be thrown.\n\nTo be able to use the `env` function from both templating engines, you can do one of the following:\n\n- Use the `env` function from one templating engine, and disable the other templating engine by using the\n  `templates.settings.sprig.enabled` and `templates.settings,gomplate.enabled` settings\n\n- Enable both engines and use the Gomplate's `env` function via its\n  [`getenv`](https://docs.gomplate.ca/functions/env/#examples) alias\n\n:::\n\n#### Example Configuration\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Stack Manifest Templating",
+      "id": "stack-manifest-templating"
+    },
+    {
+      "level": "h3",
+      "text": "Enable Templating",
+      "id": "enable-templating"
+    },
+    {
+      "level": "h3",
+      "text": "Configure Templating",
+      "id": "configure-templating"
+    }
+  ],
+  "url": "llms-txt#atmos-component-configurations",
+  "links": []
+}

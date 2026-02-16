@@ -1,0 +1,47 @@
+{
+  "url": "https://symfony.com/doc/7.3/serializer/custom_name_converter.html",
+  "title": "How to Create your Custom Name Converter",
+  "content": "The Serializer Component uses name converters to transform the attribute names (e.g. from snake_case in JSON to CamelCase for PHP properties).\n\nImagine you have the following object:\n\nAnd in the serialized form, all attributes must be prefixed by org_ like the following:\n\nA custom name converter can handle such cases:\n\nAccessing the current class name, format and context via normalize() and denormalize() was introduced in Symfony 7.1.\n\nYou can also implement AdvancedNameConverterInterface to access the current class name, format and context.\n\nThen, configure the serializer to use your name converter:\n\nNow, when using the serializer in the application, all attributes will be prefixed by org_:\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nOnline Symfony certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Create your Custom Name Converter",
+      "id": "how-to-create-your-custom-name-converter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "namespace App\\Model;\n\nclass Company\n{\n    public string $name;\n    public string $address;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "{\"org_name\": \"Acme Inc.\", \"org_address\": \"123 Main Street, Big City\"}",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App\\Serializer;\n\nuse Symfony\\Component\\Serializer\\NameConverter\\NameConverterInterface;\n\nclass OrgPrefixNameConverter implements NameConverterInterface\n{\n    public function normalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string\n    {\n        // during normalization, add the prefix\n        return 'org_'.$propertyName;\n    }\n\n    public function denormalize(string $propertyName, ?string $class = null, ?string $format = null, array $context = []): string\n    {\n        // remove the 'org_' prefix on denormalizing\n        return str_starts_with($propertyName, 'org_') ? substr($propertyName, 4) : $propertyName;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/serializer.yaml\nframework:\n    serializer:\n        # pass the service ID of your name converter\n        name_converter: 'App\\Serializer\\OrgPrefixNameConverter'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/serializer.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <!-- pass the service ID of your name converter -->\n        <framework:serializer\n            name-converter=\"App\\Serializer\\OrgPrefixNameConverter\"\n        />\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/serializer.php\nuse App\\Serializer\\OrgPrefixNameConverter;\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework) {\n    $framework->serializer()\n        // pass the service ID of your name converter\n        ->nameConverter(OrgPrefixNameConverter::class)\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$company = new Company('Acme Inc.', '123 Main Street, Big City');\n\n$json = $serializer->serialize($company, 'json');\n// {\"org_name\": \"Acme Inc.\", \"org_address\": \"123 Main Street, Big City\"}\n$companyCopy = $serializer->deserialize($json, Company::class, 'json');\n// Same data as $company",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/serializer/custom_name_converter.html",
+    "https://symfony.com/doc/7.3/serializer.html"
+  ]
+}

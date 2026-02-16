@@ -1,0 +1,34 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/shared.html",
+  "title": "How to Define Non Shared Services",
+  "content": "In the service container, all services are shared by default. This means that each time you retrieve the service, you'll get the same instance. This is usually the behavior you want, but in some cases, you might want to always get a new instance.\n\nIn order to always get a new instance, set the shared setting to false in your service definition:\n\nNow, whenever you request the App\\SomeNonSharedService from the container, you will be passed a new instance.\n\nBecome certified from home\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Define Non Shared Services",
+      "id": "how-to-define-non-shared-services"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/SomeNonSharedService.php\nnamespace App;\n\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure;\n\n#[Autoconfigure(shared: false)]\nclass SomeNonSharedService\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\SomeNonSharedService:\n        shared: false\n        # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<services>\n    <service id=\"App\\SomeNonSharedService\" shared=\"false\"/>\n</services>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\SomeNonSharedService;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(SomeNonSharedService::class)\n        ->share(false);\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/shared.html"
+  ]
+}

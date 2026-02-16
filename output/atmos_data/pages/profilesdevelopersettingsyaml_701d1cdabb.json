@@ -1,0 +1,27 @@
+{
+  "title": "profiles/developer/settings.yaml",
+  "content": "settings:\n  terminal:\n    width: 120\nbash\natmos terraform plan vpc -s dev --profile developer\nbash\nexport ATMOS_PROFILE=developer\natmos terraform plan vpc -s dev\nbash",
+  "code_samples": [
+    {
+      "code": "Activate it with:",
+      "language": "unknown"
+    },
+    {
+      "code": "Or set it as your default:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Example: CI Profile\n\nCreate a profile for GitHub Actions with OIDC authentication, Sentry error tracking, and CI-friendly output:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Example: CI Profile",
+      "id": "example:-ci-profile"
+    }
+  ],
+  "url": "llms-txt#profiles/developer/settings.yaml",
+  "links": []
+}

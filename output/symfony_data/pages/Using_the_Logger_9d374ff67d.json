@@ -1,0 +1,50 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/console/logger.html",
+  "title": "Using the Logger",
+  "content": "The Console component comes with a standalone logger complying with the PSR-3 standard. Depending on the verbosity setting, log messages will be sent to the OutputInterface instance passed as a parameter to the constructor.\n\nThe logger does not have any external dependency except psr/log. This is useful for console applications and commands needing a lightweight PSR-3 compliant logger:\n\nYou can rely on the logger to use this dependency inside a command:\n\nThe dependency will use the instance of ConsoleLogger as logger. Log messages emitted will be displayed on the console output.\n\nDepending on the verbosity level that the command is run, messages may or may not be sent to the OutputInterface instance.\n\nBy default, the console logger behaves like the Monolog's Console Handler. The association between the log level and the verbosity can be configured through the second parameter of the ConsoleLogger constructor:\n\nThe logger outputs the log messages formatted with a color reflecting their level. This behavior is configurable through the third parameter of the constructor:\n\nThe Console logger includes a hasErrored() method which returns true as soon as any error message has been logged during the execution of the command. This is useful to decide which status code to return as the result of executing the command.\n\nMeasure & Improve Symfony Code Performance\n\nOnline Sylius certification, take it now!",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Using the Logger",
+      "id": "using-the-logger"
+    },
+    {
+      "level": "h2",
+      "text": "Verbosity",
+      "id": "verbosity"
+    },
+    {
+      "level": "h2",
+      "text": "Color",
+      "id": "color"
+    },
+    {
+      "level": "h2",
+      "text": "Errors",
+      "id": "errors"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "namespace Acme;\n\nuse Psr\\Log\\LoggerInterface;\n\nclass MyDependency\n{\n    public function __construct(\n        private LoggerInterface $logger,\n    ) {\n    }\n\n    public function doStuff(): void\n    {\n        $this->logger->info('I love Tony Vairelles\\' hairdresser.');\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace Acme\\Console\\Command;\n\nuse Acme\\MyDependency;\nuse Symfony\\Component\\Console\\Attribute\\AsCommand;\nuse Symfony\\Component\\Console\\Command\\Command;\nuse Symfony\\Component\\Console\\Logger\\ConsoleLogger;\nuse Symfony\\Component\\Console\\Output\\OutputInterface;\n\n#[AsCommand(\n    name: 'my:command',\n    description: 'Use an external dependency requiring a PSR-3 logger'\n)]\nclass MyCommand\n{\n    public function __invoke(OutputInterface $output): int\n    {\n        $logger = new ConsoleLogger($output);\n\n        $myDependency = new MyDependency($logger);\n        $myDependency->doStuff();\n\n        return Command::SUCCESS;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use Psr\\Log\\LogLevel;\n// ...\n\n$verbosityLevelMap = [\n    LogLevel::NOTICE => OutputInterface::VERBOSITY_NORMAL,\n    LogLevel::INFO   => OutputInterface::VERBOSITY_NORMAL,\n];\n\n$logger = new ConsoleLogger($output, $verbosityLevelMap);",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\n$formatLevelMap = [\n    LogLevel::CRITICAL => ConsoleLogger::ERROR,\n    LogLevel::DEBUG    => ConsoleLogger::INFO,\n];\n\n$logger = new ConsoleLogger($output, [], $formatLevelMap);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/console/logger.html",
+    "https://symfony.com/doc/7.3/logging/monolog_console.html"
+  ]
+}

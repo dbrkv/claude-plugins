@@ -1,0 +1,101 @@
+{
+  "url": "https://symfony.com/doc/7.3/controller/service.html",
+  "title": "How to Define Controllers as Services",
+  "content": "In Symfony, a controller does not need to be registered as a service. But if you're using the default services.yaml configuration, and your controllers extend the AbstractController class, they are automatically registered as services. This means you can use dependency injection like any other normal service.\n\nIf you prefer to not extend the AbstractController class, you can register your controllers as services in several ways:\n\nWhen using the #[Route] attribute to define routes on any PHP class, Symfony treats that class as a controller. It registers it as a public, non-lazy service and enables service argument injection in all its methods.\n\nThis is the simplest and recommended way to register controllers as services when not extending the base controller class.\n\nThe feature to register controllers as services when using the #[Route] attribute was introduced in Symfony 7.3.\n\nIf you prefer, you can use the #[AsController] PHP attribute to automatically apply the controller.service_arguments tag to your controller services:\n\nWhen using the #[Route] attribute, Symfony already registers the controller class as a service, so using the #[AsController] attribute is redundant.\n\nIf your controllers don't extend the AbstractController class and you don't use the #[AsController] or #[Route] attributes, you must register the controllers as public services manually and apply the controller.service_arguments service tag to enable service injection in controller actions:\n\nIf you don't use either autowiring or autoconfiguration and you extend the AbstractController, you'll need to apply other tags and make some method calls to register your controllers as services:\n\nRegistering your controller as a service is the first step, but you also need to update your routing config to reference the service properly, so that Symfony knows to use it.\n\nUse the service_id::method_name syntax to refer to the controller method. If the service id is the fully-qualified class name (FQCN) of your controller, as Symfony recommends, then the syntax is the same as if the controller was not a service like: App\\Controller\\HelloController::index:\n\nControllers can also define a single action using the __invoke() method, which is a common practice when following the ADR pattern (Action-Domain-Responder):\n\nWhen using a controller defined as a service, you can still extend the AbstractController base controller and use its shortcuts. But, you don't need to! You can choose to extend nothing, and use dependency injection to access different services.\n\nThe base Controller class source code is a great way to see how to accomplish common tasks. For example, $this->render() is usually used to render a Twig template and return a Response. But, you can also do this directly:\n\nIn a controller that's defined as a service, you can instead inject the twig service and use it directly:\n\nYou can also use a special action-based dependency injection to receive services as arguments to your controller action methods.\n\nThe best way to see how to replace base Controller convenience methods is to look at the AbstractController class that holds its logic.\n\nIf you want to know what type-hints to use for each service, see the getSubscribedServices() method in AbstractController.\n\nMeasure & Improve Symfony Code Performance\n\nTake the exam at home",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Define Controllers as Services",
+      "id": "how-to-define-controllers-as-services"
+    },
+    {
+      "level": "h2",
+      "text": "Using the #[Route] Attribute",
+      "id": "using-the-route-attribute"
+    },
+    {
+      "level": "h2",
+      "text": "Using the #[AsController] Attribute",
+      "id": "using-the-ascontroller-attribute"
+    },
+    {
+      "level": "h2",
+      "text": "Using the controller.service_arguments Service Tag",
+      "id": "using-the-controller-service-arguments-service-tag"
+    },
+    {
+      "level": "h2",
+      "text": "Invokable Controllers",
+      "id": "invokable-controllers"
+    },
+    {
+      "level": "h2",
+      "text": "Alternatives to base Controller Methods",
+      "id": "alternatives-to-base-controller-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Base Controller Methods and Their Service Replacements",
+      "id": "base-controller-methods-and-their-service-replacements"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Controller/HelloController.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Attribute\\AsController;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\n#[AsController]\nclass HelloController\n{\n    #[Route('/hello', name: 'hello', methods: ['GET'])]\n    public function index(): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\n\n# controllers are imported separately to make sure services can be injected\n# as action arguments even if you don't extend any base controller class\nApp\\Controller\\:\n   resource: '../src/Controller/'\n   tags: ['controller.service_arguments']",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\n\n# this extended configuration is only required when not using autowiring/autoconfiguration,\n# which is uncommon and not recommended\n\nabstract_controller.locator:\n    class: Symfony\\Component\\DependencyInjection\\ServiceLocator\n    arguments:\n        -\n            router: '@router'\n            request_stack: '@request_stack'\n            http_kernel: '@http_kernel'\n            session: '@session'\n            parameter_bag: '@parameter_bag'\n            # you can add more services here as you need them (e.g. the `serializer`\n            # service) and have a look at the AbstractController class to see\n            # which services are defined in the locator\n\nApp\\Controller\\:\n    resource: '../src/Controller/'\n    tags: ['controller.service_arguments']\n    calls:\n        - [setContainer, ['@abstract_controller.locator']]",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/HelloController.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\nclass HelloController\n{\n    #[Route('/hello', name: 'hello', methods: ['GET'])]\n    public function index(): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/routes.yaml\nhello:\n    path:       /hello\n    controller: App\\Controller\\HelloController::index\n    methods:    GET",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/routes.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<routes xmlns=\"http://symfony.com/schema/routing\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/routing\n        https://symfony.com/schema/routing/routing-1.0.xsd\">\n\n    <route id=\"hello\" path=\"/hello\" controller=\"App\\Controller\\HelloController::index\" methods=\"GET\"/>\n\n</routes>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/routes.php\nuse App\\Controller\\HelloController;\nuse Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator;\n\nreturn function (RoutingConfigurator $routes): void {\n    $routes->add('hello', '/hello')\n        ->controller([HelloController::class, 'index'])\n        ->methods(['GET'])\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/Hello.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\n#[Route('/hello/{name}', name: 'hello')]\nclass Hello\n{\n    public function __invoke(string $name = 'World'): Response\n    {\n        return new Response(sprintf('Hello %s!', $name));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/routes.yaml\nhello:\n    path:       /hello/{name}\n    controller: App\\Controller\\HelloController",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/routes.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<routes xmlns=\"http://symfony.com/schema/routing\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/routing\n        https://symfony.com/schema/routing/routing-1.0.xsd\">\n\n    <route id=\"hello\" path=\"/hello/{name}\">\n        <default key=\"_controller\">App\\Controller\\HelloController</default>\n    </route>\n\n</routes>",
+      "language": "unknown"
+    },
+    {
+      "code": "use App\\Controller\\HelloController;\n\n// app/config/routing.php\n$collection->add('hello', new Route('/hello', [\n    '_controller' => HelloController::class,\n]));",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Controller/HelloController.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Twig\\Environment;\n\nclass HelloController\n{\n    public function __construct(\n        private Environment $twig,\n    ) {\n    }\n\n    public function index(string $name): Response\n    {\n        $content = $this->twig->render(\n            'hello/index.html.twig',\n            ['name' => $name]\n        );\n\n        return new Response($content);\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/controller/service.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html",
+    "https://symfony.com/doc/7.3/controller.html"
+  ]
+}

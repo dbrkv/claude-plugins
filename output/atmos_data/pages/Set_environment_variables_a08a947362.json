@@ -1,0 +1,8 @@
+{
+  "title": "Set environment variables",
+  "content": "export ATMOS_PAGER=off\nexport ATMOS_COLOR=false\nexport ATMOS_LOGS_LEVEL=Debug",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#set-environment-variables",
+  "links": []
+}

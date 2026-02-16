@@ -1,0 +1,33 @@
+{
+  "title": "Use dev-account for all steps that don't specify their own identity",
+  "content": "atmos workflow deploy-multi-account --identity dev-account\nyaml\ncommands:\n  - name: deploy\n    description: Deploy infrastructure with authentication\n    identity: production-account\n    steps:\n      - terraform init\n      - terraform plan\n      - terraform apply\nbash",
+  "code_samples": [
+    {
+      "code": "**Precedence**: Step-level `identity` > `--identity` flag > no authentication\n\n### Use Cases\n\n- **Multi-account deployments**: Authenticate to different AWS accounts per step\n- **Cross-cloud workflows**: Switch between AWS, GCP, and Azure credentials\n- **Role assumption chains**: Use different identities that assume through other identities\n- **Environment-specific automation**: Dev, staging, and production credentials in a single workflow\n\n## Feature 2: Authentication for Custom Commands\n\nCustom commands now support authentication with the `identity` field:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Runtime Override with --identity Flag\n\nAll custom commands automatically get an `--identity` flag for runtime override:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Feature 2: Authentication for Custom Commands",
+      "id": "feature-2:-authentication-for-custom-commands"
+    },
+    {
+      "level": "h3",
+      "text": "Runtime Override with --identity Flag",
+      "id": "runtime-override-with---identity-flag"
+    }
+  ],
+  "url": "llms-txt#use-dev-account-for-all-steps-that-don't-specify-their-own-identity",
+  "links": []
+}

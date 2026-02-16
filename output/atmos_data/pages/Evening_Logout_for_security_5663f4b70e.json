@@ -1,0 +1,19 @@
+{
+  "title": "Evening: Logout for security",
+  "content": "atmos auth logout\nshell",
+  "code_samples": [
+    {
+      "code": "### 2. Multi-Identity Switching\n\nSwitch between development and production environments:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "2. Multi-Identity Switching",
+      "id": "2.-multi-identity-switching"
+    }
+  ],
+  "url": "llms-txt#evening:-logout-for-security",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Deploy to dev",
+  "content": "atmos terraform apply my-component -s dev --identity azure-dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#deploy-to-dev",
+  "links": []
+}

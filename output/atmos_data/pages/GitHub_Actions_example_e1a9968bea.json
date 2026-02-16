@@ -1,0 +1,19 @@
+{
+  "title": "GitHub Actions example",
+  "content": "- name: Deploy infrastructure\n  env:\n    ATMOS_ENVIRONMENT: production\n    CI_COMMIT_TAG: ${{ github.ref_name }}\n  run: |\n    atmos terraform apply vpc -s prod/us-east-1\nbash",
+  "code_samples": [
+    {
+      "code": "### Privacy & Security\n\n**PII-Safe Context:**\n\nAtmos uses structured context (via `.WithContext()`) that is designed to be PII-safe:\n\n- â Component names, stack names, regions\n- â File paths (relative, not absolute)\n- â Exit codes\n- â Error types\n\n**What is NOT sent:**\n\n- â Environment variable values (unless explicitly added)\n- â Secrets or credentials\n- â User input data\n- â File contents\n\n**Sensitive DSN Handling:**\n\nStore your Sentry DSN securely:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Privacy & Security",
+      "id": "privacy-&-security"
+    }
+  ],
+  "url": "llms-txt#github-actions-example",
+  "links": []
+}

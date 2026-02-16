@@ -1,0 +1,8 @@
+{
+  "title": "Execute `terraform <command>` on all components that have `vars.tags.team == \"data\"`, in all stacks",
+  "content": "atmos terraform <command> --query '.vars.tags.team == \"data\"'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#execute-`terraform-<command>`-on-all-components-that-have-`vars.tags.team-==-\"data\"`,-in-all-stacks",
+  "links": []
+}

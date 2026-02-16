@@ -1,0 +1,129 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/attributes.html",
+  "title": "Symfony Attributes Overview",
+  "content": "Attributes are the successor of annotations since PHP 8. Attributes are native to the language and Symfony takes full advantage of them across the framework and its different components.\n\nThe TaggedIterator and TaggedLocator attributes were deprecated in Symfony 7.1.\n\nEach validation constraint comes with a PHP attribute. See Validation Constraints Reference for a full list of validation constraints.\n\nShow your Symfony expertise\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Symfony Attributes Overview",
+      "id": "symfony-attributes-overview"
+    },
+    {
+      "level": "h2",
+      "text": "Doctrine Bridge",
+      "id": "doctrine-bridge"
+    },
+    {
+      "level": "h2",
+      "text": "Command",
+      "id": "command"
+    },
+    {
+      "level": "h2",
+      "text": "Contracts",
+      "id": "contracts"
+    },
+    {
+      "level": "h2",
+      "text": "Dependency Injection",
+      "id": "dependency-injection"
+    },
+    {
+      "level": "h2",
+      "text": "EventDispatcher",
+      "id": "eventdispatcher"
+    },
+    {
+      "level": "h2",
+      "text": "FrameworkBundle",
+      "id": "frameworkbundle"
+    },
+    {
+      "level": "h2",
+      "text": "HttpKernel",
+      "id": "httpkernel"
+    },
+    {
+      "level": "h2",
+      "text": "Messenger",
+      "id": "messenger"
+    },
+    {
+      "level": "h2",
+      "text": "RemoteEvent",
+      "id": "remoteevent"
+    },
+    {
+      "level": "h2",
+      "text": "Routing",
+      "id": "routing"
+    },
+    {
+      "level": "h2",
+      "text": "Scheduler",
+      "id": "scheduler"
+    },
+    {
+      "level": "h2",
+      "text": "Security",
+      "id": "security"
+    },
+    {
+      "level": "h2",
+      "text": "Serializer",
+      "id": "serializer"
+    },
+    {
+      "level": "h2",
+      "text": "Twig",
+      "id": "twig"
+    },
+    {
+      "level": "h2",
+      "text": "Symfony UX",
+      "id": "symfony-ux"
+    },
+    {
+      "level": "h2",
+      "text": "Validator",
+      "id": "validator"
+    },
+    {
+      "level": "h2",
+      "text": "Workflow",
+      "id": "workflow"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/attributes.html",
+    "https://symfony.com/doc/7.3/reference/constraints/UniqueEntity.html",
+    "https://symfony.com/doc/7.3/doctrine.html",
+    "https://symfony.com/doc/7.3/console.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html",
+    "https://symfony.com/doc/7.3/service_container/service_subscribers_locators.html",
+    "https://symfony.com/doc/7.3/service_container/alias_private.html",
+    "https://symfony.com/doc/7.3/service_container/service_decoration.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html",
+    "https://symfony.com/doc/7.3/service_container/lazy_services.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/event_dispatcher.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/controller/service.html",
+    "https://symfony.com/doc/7.3/controller/value_resolver.html",
+    "https://symfony.com/doc/7.3/http_cache.html",
+    "https://symfony.com/doc/7.3/controller.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/messenger.html",
+    "https://symfony.com/doc/7.3/webhook.html",
+    "https://symfony.com/doc/7.3/scheduler.html",
+    "https://symfony.com/doc/7.3/security.html",
+    "https://symfony.com/doc/7.3/security/csrf.html",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/templates.html",
+    "https://symfony.com/doc/7.3/reference/constraints.html",
+    "https://symfony.com/doc/7.3/validation/custom_constraint.html",
+    "https://symfony.com/doc/7.3/workflow.html"
+  ]
+}

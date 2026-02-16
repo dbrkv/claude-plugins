@@ -1,0 +1,132 @@
+{
+  "title": "atmos vendor pull --tags networking,storage",
+  "content": "yaml\n    source: \"github.com/cloudposse-terraform-components/aws-vpc-flow-logs-bucket.git?ref={{.Version}}\"\n    bash\n    export GITHUB_TOKEN=\"your-personal-access-token\"\n    # or\n    export ATMOS_GITHUB_TOKEN=\"your-personal-access-token\"\n    yaml\n    sources:\n      - component: \"vpc\"\n        source: \"github.com/your-org/private-repo.git//terraform/vpc?ref={{.Version}}\"\n        version: \"1.0.0\"\n        targets:\n          - \"components/terraform/vpc\"\n    yaml\n    settings:\n      inject_github_token: false\n    yaml\n    settings:\n      inject_gitlab_token: true\n      inject_bitbucket_token: true\n    yaml\n    sources:\n      - component: \"vpc\"\n        source: 'git::https://x-access-token:{{getenv \"GITHUB_TOKEN\"}}@github.com/org/private-repo.git?ref={{.Version}}'\n        version: \"1.0.0\"\n        targets:\n          - \"components/terraform/vpc\"\n    yaml\n    sources:\n      - component: \"vpc\"\n        source: 'git::https://{{getenv \"CUSTOM_GIT_TOKEN\"}}@custom-git-host.com/org/repo.git?ref={{.Version}}'\n        version: \"1.0.0\"\n        targets:\n          - \"components/terraform/vpc\"\n    yaml\n    source: 'git::https://x-access-token:{{getenv \"GITHUB_TOKEN\"}}@github.com/org/repo.git?ref={{.Version}}'\n    yaml\n    source: >-\n      git::https://x-access-token:{{getenv \"GITHUB_TOKEN\"}}@github.com/org/repo.git?ref={{.Version}}\n    yaml\n    source: \"git::https://x-access-token:{{getenv \"GITHUB_TOKEN\"}}@github.com/org/repo.git?ref={{.Version}}\"\n    \n    https://x-access-token:YOUR_TOKEN@github.com/...\n    yaml\n    targets:\n      # Vendor a component into a major-minor versioned folder like 1.2\n      - \"components/terraform/infra/vpc-flow-logs-bucket/{{ (first 2 (splitList \\\".\\\" .Version)) | join \\\".\\\" }}\"\n    yaml title=\"vendor.yaml\"\n  spec:\n    sources:\n      - component: \"vpc-flow-logs-bucket\"\n        source: \"github.com/cloudposse-terraform-components/aws-vpc-flow-logs-bucket.git?ref={{.Version}}\"\n        version: \"1.323.0\"\n        targets:\n          - \"components/terraform/vpc-flow-logs-bucket\"\n        included_paths:\n          - \"**/**\"\n          # If the component's folder has the `modules` sub-folder, it needs to be explicitly defined\n          - \"**/modules/**\"\n  yaml\n    targets:\n      - \"components/terraform/{{ .Component }}\"\n    yaml\n    targets:\n      - \"components/terraform/{{ .Component }}/{{ .Version }}\"\n    yaml\ntargets:\n  - \"components/terraform/{{ .Component }}/{{ (first 2 (splitList \\\".\\\" .Version)) | join \\\".\\\" }}\"\nyaml\nimports:\n  - \"layers/networking\"\n  - \"layers/security\"\n  - \"layers/data\"\n  - \"layers/analytics\"\n  - \"layers/firewalls\"\n  - \"layers/cicd\"\nyaml\napiVersion: atmos/v1\nkind: AtmosVendorConfig\nmetadata:\n  name: example-vendor-config\n  description: Atmos vendoring manifest\nspec:\n  imports:\n    - \"vendor/vendor2\"\n    - \"vendor/vendor3\"\n\nsources:\n    - component: \"vpc\"\n      source: \"oci://public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:{{.Version}}\"\n      version: \"latest\"\n      targets:\n        - \"components/terraform/infra/vpc3\"\n    - component: \"vpc-flow-logs-bucket\"\n      source: \"github.com/cloudposse-terraform-components/aws-vpc-flow-logs-bucket.git?ref={{.Version}}\"\n      version: \"1.323.0\"\n      targets:\n        - \"components/terraform/infra/vpc-flow-logs-bucket/{{.Version}}\"\nyaml\napiVersion: atmos/v1\nkind: AtmosVendorConfig\nmetadata:\n  name: example-vendor-config-2\n  description: Atmos vendoring manifest\nspec:\n  imports:\n    - \"vendor/vendor4\"\n\nsources:\n    - component: \"my-vpc1\"\n      source: \"oci://public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:{{.Version}}\"\n      version: \"1.0.2\"\n      targets:\n        - \"components/terraform/infra/my-vpc1\"\nyaml\napiVersion: atmos/v1\nkind: AtmosVendorConfig\nmetadata:\n  name: example-vendor-config-4\n  description: Atmos vendoring manifest\nspec:\n  imports:\n    - \"vendor/vendor5\"\n\nsources:\n    - component: \"my-vpc4\"\n      source: \"github.com/cloudposse-terraform-components/aws-vpc.git?ref={{.Version}}\"\n      version: \"1.319.0\"\n      targets:\n        - \"components/terraform/infra/my-vpc4\"\nshell\n> atmos vendor pull\n\nProcessing vendor config file 'vendor.yaml'\nPulling sources for the component 'my-vpc6' from 'github.com/cloudposse-terraform-components/aws-vpc.git?ref=1.315.0' into 'components/terraform/infra/my-vpc6'\nPulling sources for the component 'my-vpc5' from 'github.com/cloudposse-terraform-components/aws-vpc.git?ref=1.317.0' into 'components/terraform/infra/my-vpc5'\nPulling sources for the component 'my-vpc4' from 'github.com/cloudposse-terraform-components/aws-vpc.git?ref=1.319.0' into 'components/terraform/infra/my-vpc4'\nPulling sources for the component 'my-vpc1' from 'public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:1.0.2' into 'components/terraform/infra/my-vpc1'\nPulling sources for the component 'my-vpc2' from 'github.com/cloudposse-terraform-components/aws-vpc.git?ref=1.320.0' into 'components/terraform/infra/my-vpc2'\nPulling sources for the component 'vpc' from 'public.ecr.aws/cloudposse/components/terraform/stable/aws/vpc:latest' into 'components/terraform/infra/vpc3'\nPulling sources for the component 'vpc-flow-logs-bucket' from 'github.com/cloudposse-terraform-components/aws-vpc-flow-logs-bucket.git?ref=1.323.0' into 'components/terraform/infra/vpc-flow-logs-bucket/1.323.0'\n\ncomponents:\n  terraform:\n    # `vpc` is the Atmos component name\n    vpc:\n      # Backend configuration for the component\n      backend:\n        s3:\n          # Ensure the path in the bucket is stable across versions\n          # IMPORTANT: If not explicitly set, the `workspace_key_prefix` will include the version\n          #            This will cause the state to be lost when upgrading between versions.\n          workspace_key_prefix: vpc\n      metadata:\n        # Point to the Terraform component on the filesystem\n        component: vpc/1.2.3\nbash",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n## Vendoring Manifest Schema\n\nThe `vendor.yaml` vendoring manifest supports Kubernetes-style YAML config to describe vendoring configuration for components, stacks,\n  and other artifacts. The file is placed into the directory from which the `atmos vendor pull` command is executed (usually the root of the repo).\n\n<dl>\n  <dt>`version`</dt>\n  <dd>\n    The `version` attribute is used to specify the version of the artifact to download. The `version` attribute is used in the `source` and `targets` attributes as a template parameter using `{{ .Version }}`.\n  </dd>\n\n  <dt>`source`</dt>\n  <dd>\n    The `source` attribute supports all protocols (local files, Git, Mercurial, HTTP, HTTPS, Amazon S3, Google GCP), and all the URL and archive formats as described in [go-getter](https://github.com/hashicorp/go-getter), and also the `oci://` scheme to download artifacts from [OCI registries](https://opencontainers.org).\n\n    See [Vendor URL Syntax](/core-concepts/vendor/url-syntax) for complete documentation on supported URL formats, authentication, and subdirectory syntax.\n\n    **IMPORTANT:** Include the `{{ .Version }}` parameter in your `source` URI to ensure the correct version of the artifact is downloaded.\n\n    For example, for `http` and `https` sources, use the following format:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Authenticating to Private Git Repositories\n\n    Atmos provides **automatic token injection** for private repositories on GitHub, GitLab, and Bitbucket. This is the recommended approach for most users.\n\n    :::tip Automatic Token Injection (Recommended)\n    The easiest and most secure way to authenticate to private Git repositories is to use Atmos's automatic token injection.\n\n    **Step 1:** Set the authentication token as an environment variable:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Step 2:** Use simple URLs in your `vendor.yaml` (no manual credentials):",
+      "language": "unknown"
+    },
+    {
+      "code": "**Step 3:** Atmos automatically injects the token when downloading.\n\n    Supported environment variables:\n    - **GitHub:** `ATMOS_GITHUB_TOKEN` or `GITHUB_TOKEN`\n    - **GitLab:** `ATMOS_GITLAB_TOKEN` or `GITLAB_TOKEN`\n    - **Bitbucket:** `ATMOS_BITBUCKET_TOKEN` or `BITBUCKET_TOKEN`\n\n    **Token injection settings in `atmos.yaml`:**\n    - `inject_github_token: true` (default: **true**) - Enables automatic GitHub token injection\n    - `inject_gitlab_token: true` (default: **false**) - Enables automatic GitLab token injection\n    - `inject_bitbucket_token: true` (default: **false**) - Enables automatic Bitbucket token injection\n\n    GitHub token injection is enabled by default. To disable it:",
+      "language": "unknown"
+    },
+    {
+      "code": "To enable GitLab or Bitbucket token injection:",
+      "language": "unknown"
+    },
+    {
+      "code": ":::\n\n    :::note GitHub Actions Token Scope\n    The `GITHUB_TOKEN` provided by GitHub Actions is only valid for the current repository, or repositories marked as `internal` within GitHub Enterprise organizations. For cross-repository access, provision a [fine grained personal access token](https://docs.github.com/en/rest/authentication/permissions-required-for-fine-grained-personal-access-tokens?apiVersion=2022-11-28) with the necessary permissions.\n    :::\n\n    <details>\n    <summary>Advanced: Manual Token Injection with Templates</summary>\n\n    For custom Git hosts or scenarios where you need explicit control over authentication, you can manually inject credentials using Go templates.\n\n    **For GitHub (use correct authentication format):**",
+      "language": "unknown"
+    },
+    {
+      "code": "**For custom Git hosts:**",
+      "language": "unknown"
+    },
+    {
+      "code": ":::important YAML Quoting with Template Functions\n    When using Go template functions like `{{getenv \"TOKEN\"}}` that contain double quotes, you have **two options** to avoid YAML parsing errors:\n\n    **Option 1: Single-quoted YAML string (recommended)**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Option 2: YAML folded scalar**",
+      "language": "unknown"
+    },
+    {
+      "code": "**What doesn't work:**",
+      "language": "unknown"
+    },
+    {
+      "code": "This is because YAML parsers interpret nested double quotes as string terminators. Template processing happens **after** YAML parsing, so the YAML must be valid before templates are evaluated.\n\n    **Note:** Atmos v1.194.0+ upgraded the YAML parser from v3.0.1 to v3.0.4, which enforces YAML spec compliance more strictly. Configurations with nested double quotes that may have worked in earlier versions (v1.193.x and below) will now fail YAML validation. Use single quotes or folded scalars as shown above.\n    :::\n\n    :::note GitHub Authentication Format\n    GitHub requires the username to be `x-access-token` and the token to be the password:",
+      "language": "unknown"
+    },
+    {
+      "code": "While `https://YOUR_TOKEN@github.com/...` (token as username) may work with Git, using the documented format ensures compatibility.\n    :::\n\n    **Why automatic injection is recommended:**\n    - No need to manually specify `x-access-token:` username format\n    - Works automatically for GitHub, GitLab, and Bitbucket\n    - No YAML quoting complications\n    - Credentials are managed centrally via environment variables\n    - Easier to audit and rotate tokens\n\n    </details>\n\n    <dl>\n      <dt>`ref`</dt>\n      <dd>\n        Pass the `ref` as a query string with either the tag, branch, or commit hash to download the correct version of the artifact. e.g. `?ref={{.Version}}` will pass the `version` attribute to the `ref` query string.\n      </dd>\n      <dt>`depth`</dt>\n      <dd>\n        Pass the `depth` as a query string to download only the specified number of commits from the repository. e.g. `?depth=1` will download only the latest commit.\n      </dd>\n    </dl>\n\n  </dd>\n\n  <dt>`targets`</dt>\n  <dd>\n  The `targets` in each source supports absolute paths and relative paths (relative to the `vendor.yaml` file). Note: if the `targets` paths\n    are set as relative, and if the `vendor.yaml` file is detected by Atmos using the `base_path` setting in `atmos.yaml`, the `targets` paths\n    will be considered relative to the `base_path`. Multiple targets can be specified.\n  </dd>\n\n  <dt>`included_paths` and `excluded_paths`</dt>\n  <dd>\n  `included_paths` and `excluded_paths` support [POSIX-style greedy Globs](https://en.wikipedia.org/wiki/Glob_(programming)) for filenames/paths (double-star/globstar `**` is supported as well). For more details, see [Vendoring with Globs](#vendoring-with-globs).\n  </dd>\n\n  <dt>`component`</dt>\n  <dd>\n  The `component` attribute in each source is optional. It's used in the `atmos vendor pull -- component <component>` command if the component is passed in. In this case, Atmos will vendor only the specified component instead of vendoring all the artifacts configured in the `vendor.yaml` manifest.\n  </dd>\n\n  <dt>`source` and `targets` templates</dt>\n  <dd>\n  The `source` and `targets` attributes support [Go templates](https://pkg.go.dev/text/template) and [Sprig Functions](http://masterminds.github.io/sprig/). This can be used to templatise the `source` and `targets` paths with the component name specified in the `component` attribute and artifact versions specified in the `version` attribute.\n\n    :::note Template Evaluation Order\n    Templates in `source` and `targets` are evaluated **after** YAML parsing. This means:\n    - The `vendor.yaml` file itself must be valid YAML before template processing\n    - Only the **values** of `source` and `targets` fields are processed as templates\n    - The file structure is **not** a template - it's parsed as standard YAML first\n\n    When using template functions that require double quotes (like `{{getenv \"VAR\"}}`), wrap the entire YAML string value in single quotes to avoid nested double quote issues.\n    :::\n\n    Here's an advanced example showcasing how templates and Sprig functions can be used together with `targets`:",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n  <dt>`tags`</dt>\n  <dd>\n  The `tags` in each source specifies a list of tags to apply to the component. This allows you to only vendor the components that have the specified tags by executing a command `atmos vendor pull --tags <tag1>,<tag2>`\n  </dd>\n\n  <dt>`imports`</dt>\n  <dd>\n  The `imports` section defines the additional vendoring manifests that are merged into the main manifest. Hierarchical imports are supported at many levels (one vendoring manifest can import another, which in turn can import other manifests, etc.). Atmos processes all imports and all sources in the imported manifests in the order they are defined.\n\n  :::note\n  The imported file extensions are optional. Imports that do not include file extensions will default to the `.yaml` extension.\n  :::\n\n  <File title=\"vendor.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n  :::warning\n\n  The `glob` library that Atmos uses to download remote artifacts does not treat the double-star `**` as including sub-folders.\n  If the component's folder has sub-folders, and you need to vendor them, they have to be explicitly defined as in the following example.\n\n  :::\n  </dd>\n</dl>\n\n## Template Parameters\n\nThe vendor manifest supports basic template parameters, which is useful for versioning and other dynamic values. The following template parameters are supported:\n\n<dl>\n  <dt>`{{ .Component }}`</dt>\n  <dd>\n    Refers to the `component` attribute in the current section. The `component` attribute is used to specify the component name. This is useful to vendor components into folders by the same name.",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n  <dt>`{{ .Version }}`</dt>\n  <dd>\n    Refers to the `version` attribute the current section. The `version` attribute is used to specify the version of the artifact to download. This is useful to version components into different folders.",
+      "language": "unknown"
+    },
+    {
+      "code": "When stacks need to pin to different versions of the same component, the `{{ .Version }}` template parameter can be used to ensure the components are vendored into different folders.\n  </dd>\n</dl>\n\nYou can also use any of the [hundreds of go-template functions](/functions/template). For example, to extract the major and minor version from the `{{ .Version }}` attribute, use the following template:",
+      "language": "unknown"
+    },
+    {
+      "code": "For accessing environment variables in templates, the most common use case is authentication to private Git repositories. **We strongly recommend using Atmos's automatic token injection** (see [Authenticating to Private Git Repositories](#authenticating-to-private-git-repositories) above) instead of manually injecting credentials with `{{getenv}}`. Automatic injection is simpler, more secure, and works without YAML quoting complications.\n\n## Hierarchical Imports in Vendoring Manifests\n\nUse `imports` to split the main `vendor.yaml` manifest into smaller files for maintainability, or by their roles in the infrastructure.\n\nFor example, import separate manifests for networking, security, data management, CI/CD, and other layers:",
+      "language": "unknown"
+    },
+    {
+      "code": "Hierarchical imports are supported at many levels. For example, consider the following vendoring configurations:\n\n<File title=\"vendor.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"vendor/vendor2.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<File title=\"vendor/vendor4.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\nWhen you execute the `atmos vendor pull` command, Atmos processes the import chain and the sources in the imported manifests in the order they\nare defined:\n\n- First, the main `vendor.yaml` file is read based on search paths\n- The `vendor/vendor2` and `vendor/vendor3` manifests (defined in the main `vendor.yaml` file) are imported\n- The `vendor/vendor2` file is processed, and the `vendor/vendor4` manifest is imported\n- The `vendor/vendor4` file is processed, and the `vendor/vendor5` manifest is imported\n- Etc.\n- Then all the sources from all the imported manifests are processed and the artifacts are downloaded into the paths defined by the `targets`\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n## Vendoring Multiple Versions of Components\n\nAtmos supports vendoring multiple versions of the same component. This is useful when you need to pin stacks to different versions of the same component.\n\nWhen vendoring multiple versions of the same component, use the `{{ .Version }}` template parameter in the `targets` attribute to ensure the components are vendored into different folders. Then update the stack configuration to point to the correct version of the component, and ensure the `backend.s3.workspace_key_prefix` is defined _without the version_ to ensure you can seamlessly upgrade between versions of a component without losing the state. By default the `workspace_key_prefix` incorporates the `component` relative path, which will include the version if it's included in the path.",
+      "language": "unknown"
+    },
+    {
+      "code": ":::important\nIf not using the S3 backend, use the appropriate parameter for your backend to ensure the workspace is stable across versions of the component deployed.\n:::\n\n## Vendoring from OCI Registries\n\nAtmos supports vendoring from [OCI registries](https://opencontainers.org).\n\nTo specify a repository in an OCI registry, use the `oci://<registry>/<repository>:tag` scheme.\n\nArtifacts from OCI repositories are downloaded as Docker image tarballs, then all the layers are processed, un-tarred and un-compressed,\nand the files are written into the directories specified by the `targets` attribute of each `source`.\n\n### OCI Authentication\n\nAtmos uses the following precedence order for OCI registry authentication:\n\n1. **Docker credentials** (highest precedence) - Credentials from `docker login` stored in `~/.docker/config.json`\n2. **Environment variables** - For GitHub Container Registry (ghcr.io):\n   - **Token:** `ATMOS_GITHUB_TOKEN` or `GITHUB_TOKEN`\n   - **Username:** `ATMOS_GITHUB_USERNAME`, `GITHUB_ACTOR`, or `GITHUB_USERNAME`\n3. **Anonymous** - Fallback for public images\n\n#### GitHub Container Registry (ghcr.io) Requirements\n\nUnlike Git repository authentication, **GitHub Container Registry requires both a username and a token**:\n\n- **Username** must be your actual GitHub username (not `x-access-token`)\n- **Token** should be a GitHub Personal Access Token (PAT) or `GITHUB_TOKEN`\n- Without a username, authentication will fail even if the token is set\n\n**Authentication methods:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Vendoring Manifest Schema",
+      "id": "vendoring-manifest-schema"
+    },
+    {
+      "level": "h2",
+      "text": "Template Parameters",
+      "id": "template-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Hierarchical Imports in Vendoring Manifests",
+      "id": "hierarchical-imports-in-vendoring-manifests"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring Multiple Versions of Components",
+      "id": "vendoring-multiple-versions-of-components"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring from OCI Registries",
+      "id": "vendoring-from-oci-registries"
+    },
+    {
+      "level": "h3",
+      "text": "OCI Authentication",
+      "id": "oci-authentication"
+    }
+  ],
+  "url": "llms-txt#atmos-vendor-pull---tags-networking,storage",
+  "links": []
+}

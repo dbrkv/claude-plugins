@@ -1,0 +1,8 @@
+{
+  "title": "List metadata for dev stacks",
+  "content": "atmos list metadata --stack '*-dev-*'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-metadata-for-dev-stacks",
+  "links": []
+}

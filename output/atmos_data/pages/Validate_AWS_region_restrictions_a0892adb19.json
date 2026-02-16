@@ -1,0 +1,13 @@
+{
+  "title": "Validate AWS region restrictions",
+  "content": "errors[message] {\n  input.process_env.AWS_REGION\n  not input.process_env.AWS_REGION in [\"us-east-1\", \"us-west-2\", \"eu-west-1\"]\n  message = sprintf(\"AWS region '%s' is not allowed. Use: us-east-1, us-west-2, or eu-west-1\", [input.process_env.AWS_REGION])\n}\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</File>\n\n#### Terraform CLI Variables (`tf_cli_vars`)\n\nValidate variables passed via command-line `-var` arguments with proper type handling and JSON parsing.\n\n<File title=\"validate-cli-vars.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#validate-aws-region-restrictions",
+  "links": []
+}

@@ -1,0 +1,67 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/encore/virtual-machine.html",
+  "title": "Using Encore in a Virtual Machine",
+  "content": "Encore is compatible with virtual machines such as VirtualBox and VMWare but you may need to make some changes to your configuration to make it work.\n\nWhen using a virtual machine, your project root directory is shared with the virtual machine using NFS. This introduces issues with files watching, so you must enable the polling option to make it work:\n\nYou can skip this section if your application is running on http://localhost instead a custom local domain-name like http://app.vm.\n\nWhen running the development server, you will probably see the following errors in the web console:\n\nIf your Symfony application is running on a custom domain (e.g. http://app.vm), you must configure the public path explicitly in your package.json:\n\nAfter restarting Encore and reloading your web page, you will probably see different issues in the web console:\n\nYou still need to make other configuration changes, as explained in the following sections.\n\nAdd the --host 0.0.0.0 argument to the dev-server configuration in your package.json file to make the development server accept all incoming connections:\n\nMake sure to run the development server inside your virtual machine only; otherwise other computers can have access to it.\n\nWebpack will respond Invalid Host header when trying to access files from the dev-server. To fix this, set the allowedHosts option:\n\nBeware that it's not recommended to set allowedHosts to all in general, but here it's required to solve the issue when using Encore in a virtual machine.\n\nMeasure & Improve Symfony Code Performance\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Using Encore in a Virtual Machine",
+      "id": "using-encore-in-a-virtual-machine"
+    },
+    {
+      "level": "h2",
+      "text": "File Watching Issues",
+      "id": "file-watching-issues"
+    },
+    {
+      "level": "h2",
+      "text": "Development Server Issues",
+      "id": "development-server-issues"
+    },
+    {
+      "level": "h3",
+      "text": "Configure the Public Path",
+      "id": "configure-the-public-path"
+    },
+    {
+      "level": "h3",
+      "text": "Allow External Access",
+      "id": "allow-external-access"
+    },
+    {
+      "level": "h3",
+      "text": "Fix \"Invalid Host header\" Issue",
+      "id": "fix-invalid-host-header-issue"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// webpack.config.js\n\n// ...\n\n// will be applied for `encore dev --watch` and `encore dev-server` commands\nEncore.configureWatchOptions(watchOptions => {\n    watchOptions.poll = 250; // check for changes every 250 milliseconds\n});",
+      "language": "javascript"
+    },
+    {
+      "code": "GET http://localhost:8080/build/vendors~app.css net::ERR_CONNECTION_REFUSED\nGET http://localhost:8080/build/runtime.js net::ERR_CONNECTION_REFUSED\n...",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n      ...\n      \"scripts\": {\n-        \"dev-server\": \"encore dev-server\",\n+        \"dev-server\": \"encore dev-server --public http://app.vm:8080\",\n          ...\n      }\n  }",
+      "language": "unknown"
+    },
+    {
+      "code": "GET http://app.vm:8080/build/vendors~app.css net::ERR_CONNECTION_REFUSED\nGET http://app.vm:8080/build/runtime.js net::ERR_CONNECTION_REFUSED",
+      "language": "unknown"
+    },
+    {
+      "code": "{\n      ...\n      \"scripts\": {\n-        \"dev-server\": \"encore dev-server --public http://app.vm:8080\",\n+        \"dev-server\": \"encore dev-server --public http://app.vm:8080 --host 0.0.0.0\",\n          ...\n      }\n  }",
+      "language": "unknown"
+    },
+    {
+      "code": "// webpack.config.js\n// ...\n\nEncore\n    // ...\n\n    .configureDevServerOptions(options => {\n        options.allowedHosts = 'all';\n    })",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/encore/virtual-machine.html"
+  ]
+}

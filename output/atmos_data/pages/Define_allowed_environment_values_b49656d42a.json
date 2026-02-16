@@ -1,0 +1,19 @@
+{
+  "title": "Define allowed environment values",
+  "content": "allowed_environments := [\"development\", \"staging\", \"production\"]\n\nerrors[\"for the 'my-component' component, 'environment' variable in TF_CLI_ARGS must be one of: development, staging, production\"] {\n    input.env_tf_cli_vars.environment\n    not input.env_tf_cli_vars.environment in allowed_environments\n}\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Combine command-line and environment variable validation\n\nYou can create policies that validate both command-line variables (`tf_cli_vars`) and environment variables (`env_tf_cli_vars`) together:\n\n<File title=\"stacks/schemas/opa/my-component/validate-my-component.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Combine command-line and environment variable validation",
+      "id": "combine-command-line-and-environment-variable-validation"
+    }
+  ],
+  "url": "llms-txt#define-allowed-environment-values",
+  "links": []
+}

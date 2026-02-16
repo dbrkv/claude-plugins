@@ -1,0 +1,78 @@
+{
+  "title": "Component B references Component A",
+  "content": "vars:\n  transit_gateway_id: !terraform.state transit-gateway core tgw_id\n\ncircular dependency detected\n\nDependency chain:\n  1. Component 'vpc' in stack 'core'\n     â !terraform.state transit-gateway core transit_gateway_id\n  2. Component 'transit-gateway' in stack 'core'\n     â !terraform.state vpc core vpc_id\n  3. Component 'vpc' in stack 'core' (cycle detected)\n     â !terraform.state transit-gateway core transit_gateway_id\n\nTo fix this issue:\n  - Review your component dependencies and break the circular reference\n  - Consider using Terraform data sources or direct remote state instead\n  - Ensure dependencies flow in one direction only\nbash",
+  "code_samples": [
+    {
+      "code": "## How It Works\n\nWhen Atmos encounters a circular dependency, it now provides a detailed error message with the full dependency chain:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Performance Impact\n\nThe cycle detection adds negligible overhead (less than 0.001% of execution time) and uses goroutine-local storage to ensure thread safety.\n\n## Get Involved\n\n- [GitHub Pull Request](https://github.com/cloudposse/atmos/pull/1708)\n- Share your feedback in the [Atmos Community Slack](https://cloudposse.com/slack)\n\n---\n\n## Breaking Change: macOS Now Uses ~/.config for XDG Paths\n\nAtmos now follows CLI tool conventions on macOS, using `~/.config`, `~/.cache`, and `~/.local/share` instead of `~/Library/Application Support`. This ensures seamless integration with Geodesic and consistency with other DevOps tools.\n\n<!--truncate-->\n\n## What Changed\n\nStarting with this release, Atmos on **macOS** uses different default paths for XDG Base Directory Specification:\n\n**Before:**\n- Config: `~/Library/Application Support/atmos/`\n- Cache: `~/Library/Caches/atmos/`\n- Data: `~/Library/Application Support/atmos/`\n\n**After:**\n- Config: `~/.config/atmos/`\n- Cache: `~/.cache/atmos/`\n- Data: `~/.local/share/atmos/`\n\n**Note:** This only affects macOS. Linux and Windows paths remain unchanged.\n\n## Why This Change?\n\n### The Problem\n\nWhen we implemented XDG Base Directory Specification support, we used the `github.com/adrg/xdg` library which defaults to `~/Library/Application Support` on macOS. This follows macOS conventions for **GUI applications**.\n\nHowever, this created problems:\n\n1. **Geodesic Incompatibility**: Geodesic mounts `~/.config` by default, not `~/Library/Application Support`\n2. **Ecosystem Inconsistency**: Other CLI tools (gh, git, packer, stripe, op, kubectl, docker, terraform) all use `~/.config` on macOS\n3. **Platform Fragmentation**: Different paths on Linux vs macOS made cross-platform workflows confusing\n\n### CLI Tools vs GUI Applications\n\nResearch into the CLI tool ecosystem revealed a clear pattern:\n\n**CLI Tools** (command-line only):\n- Use `~/.config`, `~/.cache`, `~/.local/share` on **all platforms** including macOS\n- Examples: GitHub CLI (`gh`), HashiCorp Packer, Stripe CLI, 1Password CLI\n- Benefits: Consistent paths across Linux/macOS, works with containerized environments\n\n**GUI Applications** (native Mac apps):\n- Use `~/Library/Application Support`, `~/Library/Caches`\n- Provides better macOS system integration\n- Standard for applications in `/Applications`\n\nSince **Atmos is a CLI tool**, it should follow CLI conventions, not GUI conventions.\n\n## Impact on Users\n\n### Most Users Not Affected\n\nIf you're upgrading from versions **prior to v1.195.0**, you're not affected because:\n- Old versions used `~/.aws/atmos/` (legacy path)\n- The `~/Library/Application Support` path was never released in a stable version\n\n### macOS Users Running Unreleased Versions\n\nIf you were using Atmos auth on macOS from the main branch between v1.195.0 and this release:\n\n### Option 1: Use new path (recommended)",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Performance Impact",
+      "id": "performance-impact"
+    },
+    {
+      "level": "h2",
+      "text": "Get Involved",
+      "id": "get-involved"
+    },
+    {
+      "level": "h2",
+      "text": "Breaking Change: macOS Now Uses ~/.config for XDG Paths",
+      "id": "breaking-change:-macos-now-uses-~/.config-for-xdg-paths"
+    },
+    {
+      "level": "h2",
+      "text": "What Changed",
+      "id": "what-changed"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Change?",
+      "id": "why-this-change?"
+    },
+    {
+      "level": "h3",
+      "text": "The Problem",
+      "id": "the-problem"
+    },
+    {
+      "level": "h3",
+      "text": "CLI Tools vs GUI Applications",
+      "id": "cli-tools-vs-gui-applications"
+    },
+    {
+      "level": "h2",
+      "text": "Impact on Users",
+      "id": "impact-on-users"
+    },
+    {
+      "level": "h3",
+      "text": "Most Users Not Affected",
+      "id": "most-users-not-affected"
+    },
+    {
+      "level": "h3",
+      "text": "macOS Users Running Unreleased Versions",
+      "id": "macos-users-running-unreleased-versions"
+    },
+    {
+      "level": "h3",
+      "text": "Option 1: Use new path (recommended)",
+      "id": "option-1:-use-new-path-(recommended)"
+    }
+  ],
+  "url": "llms-txt#component-b-references-component-a",
+  "links": []
+}

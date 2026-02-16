@@ -1,0 +1,8 @@
+{
+  "title": "Describe stacks with specific identity",
+  "content": "atmos describe stacks --identity my-aws-identity",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#describe-stacks-with-specific-identity",
+  "links": []
+}

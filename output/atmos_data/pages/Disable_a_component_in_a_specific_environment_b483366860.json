@@ -1,0 +1,19 @@
+{
+  "title": "Disable a component in a specific environment",
+  "content": "components:\n  terraform:\n    vpc:\n      metadata:\n        type: real\n        enabled: false\n      vars:\n        name: primary-vpc\nyaml",
+  "code_samples": [
+    {
+      "code": "Using the `metadata.enabled` flag makes it easy to ensure that only the intended components are active in each environment.\n\n### Locking Components with `metadata.locked`\n\nThe `metadata.locked` parameter prevents changes to a component while still allowing read operations. When a component is locked, operations that would modify infrastructure (like `terraform apply`) are blocked, while read-only operations (like `terraform plan`) remain available. By default, components are unlocked. Setting `metadata.locked` to `true` prevents any change operations.\n\n:::info Note\nLocking a component does not affect the Terraform state. It's intended as a way to communicate intention and prevent accidental changes to sensitive or critical infrastructure.\n:::\n\n**Example**:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Locking Components with `metadata.locked`",
+      "id": "locking-components-with-`metadata.locked`"
+    }
+  ],
+  "url": "llms-txt#disable-a-component-in-a-specific-environment",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Run terraform with authenticated env (uses default identity)",
+  "content": "atmos auth exec -- terraform plan -var-file=env.tfvars",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#run-terraform-with-authenticated-env-(uses-default-identity)",
+  "links": []
+}

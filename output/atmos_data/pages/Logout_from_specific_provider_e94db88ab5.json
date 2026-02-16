@@ -1,0 +1,8 @@
+{
+  "title": "Logout from specific provider",
+  "content": "atmos auth logout --provider aws-sso",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#logout-from-specific-provider",
+  "links": []
+}

@@ -1,0 +1,512 @@
+{
+  "url": "https://symfony.com/doc/7.3/translation.html",
+  "title": "Translations",
+  "content": "The term \"internationalization\" (often abbreviated i18n) refers to the process of abstracting strings and other locale-specific pieces out of your application into a layer where they can be translated and converted based on the user's locale (i.e. language and country). For text, this means wrapping each with a function capable of translating the text (or \"message\") into the language of the user:\n\nThe term locale refers roughly to the user's language and country. It can be any string that your application uses to manage translations and other format differences (e.g. currency format). The ISO 639-1 language code, an underscore (_), then the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France) is recommended.\n\nTranslations can be organized into groups, called domains. By default, all messages use the default messages domain:\n\nThe translation process has several steps:\n\nFirst, run this command to install the translator before using it:\n\nSymfony includes several internationalization polyfills (symfony/polyfill-intl-icu, symfony/polyfill-intl-messageformatter, etc.) that allow you to use translation features even without the PHP intl extension. However, these polyfills only support English translations, so you must install the PHP intl extension when translating into other languages.\n\nThe previous command creates an initial config file where you can define the default locale of the application and the directory where the translation files are located:\n\nYou can also define the enabled_locales option to restrict the locales that your application is available in.\n\nTranslation of text is done through the translator service (Translator). To translate a block of text (called a message), use the trans() method. Suppose, for example, that you're translating a static message from inside a controller:\n\nWhen this code is run, Symfony will attempt to translate the message \"Symfony is great\" based on the locale of the user. For this to work, you need to tell Symfony how to translate the message via a \"translation resource\", which is usually a file that contains a collection of translations for a given locale. This \"dictionary\" of translations can be created in several different formats:\n\nYou can find more information on where these files should be located.\n\nNow, if the language of the user's locale is French (e.g. fr_FR or fr_BE), the message will be translated into Symfony est génial. You can also translate the message inside your templates.\n\nThis example illustrates the two different philosophies when creating messages to be translated:\n\nIn the first method, messages are written in the language of the default locale (English in this case). That message is then used as the \"id\" when creating translations.\n\nIn the second method, messages are actually \"keywords\" that convey the idea of the message. The keyword message is then used as the \"id\" for any translations. In this case, translations must be made for the default locale (i.e. to translate symfony.great to Symfony is great).\n\nThe second method is handy because the message key won't need to be changed in every translation file if you decide that the message should actually read \"Symfony is really great\" in the default locale.\n\nThe choice of which method to use is entirely up to you, but the \"keyword\" format is often recommended for multi-language applications, whereas for shared bundles that contain translation resources we recommend the real message, so your application can choose to disable the translator layer and you will see a readable message.\n\nAdditionally, the php and yaml file formats support nested ids to avoid repeating yourself if you use keywords instead of real text for your ids:\n\nTo actually translate the message, Symfony uses the following process when using the trans() method:\n\nSometimes, a message containing a variable needs to be translated:\n\nHowever, creating a translation for this string is impossible since the translator will try to look up the message including the variable portions (e.g. \"Hello Ryan\" or \"Hello Fabien\").\n\nAnother complication is when you have translations that may or may not be plural, based on some variable:\n\nTo manage these situations, Symfony follows the ICU MessageFormat syntax by using PHP's MessageFormatter class. Read more about this in How to Translate Messages using the ICU MessageFormat.\n\nSometimes translating contents in templates is cumbersome because you need the original message, the translation parameters and the translation domain for each content. Making the translation in the controller or services simplifies your templates, but requires injecting the translator service in different parts of your application and mocking it in your tests.\n\nInstead of translating a string at the time of creation, you can use a \"translatable object\", which is an instance of the TranslatableMessage class. This object stores all the information needed to fully translate its contents when needed:\n\nTemplates are now much simpler because you can pass translatable objects to the trans filter:\n\nThe translation parameters can also be a TranslatableMessage.\n\nThere's also a function called t(), available both in Twig and PHP, as a shortcut to create translatable objects.\n\nMost of the time, translation occurs in templates. Symfony provides native support for both Twig and PHP templates.\n\nThe trans filter can be used to translate variable texts and complex expressions:\n\nYou can set the translation domain for an entire Twig template with a single tag:\n\nNote that this only influences the current template, not any \"included\" template (in order to avoid side effects).\n\nBy default, the translated messages are output escaped; apply the raw filter after the translation filter to avoid the automatic escaping:\n\nSymfony provides a specialized Twig tag trans to help with message translation of static blocks of text:\n\nThe %var% notation of placeholders is required when translating in Twig templates using the tag.\n\nIf you need to use the percent character (%) in a string, escape it by doubling it: {% trans %}Percent: %percent%%%{% endtrans %}\n\nYou can also specify the message domain and pass some additional variables:\n\nUsing the translation tag has the same effect as the filter, but with one major difference: automatic output escaping is not applied to translations using a tag.\n\nThe global translation parameters feature was introduced in Symfony 7.3.\n\nIf the content of a translation parameter is repeated across multiple translation messages (e.g. a company name, or a version number), you can define it as a global translation parameter. This helps you avoid repeating the same values manually in each message.\n\nYou can configure these global parameters in the translations.globals option of your main configuration file using either %...% or {...} syntax:\n\nOnce defined, you can use these parameters in translation messages anywhere in your application:\n\nWhen translating a message, the translator uses the specified locale or the fallback locale if necessary. You can also manually specify the locale to use for translation:\n\nThe most time-consuming task when translating an application is to extract all the template contents to be translated and to keep all the translation files in sync. Symfony includes a command called translation:extract that helps you with these tasks:\n\nThe translation:extract command looks for missing translations in:\n\nInstall the nikic/php-parser package in your project to improve the results of the translation:extract command. This package enables an AST parser that can find many more translatable items:\n\nBy default, when the translation:extract command creates new entries in the translation file, it uses the same content as both the source and the pending translation. The only difference is that the pending translation is prefixed by __. You can customize this prefix using the --prefix option:\n\nAlternatively, you can use the --no-fill option to leave the pending translation completely empty when creating new entries in the translation catalog. This is particularly useful when using external translation tools, as it makes it easier to spot untranslated strings:\n\nThe --no-fill option was introduced in Symfony 7.2.\n\nSymfony looks for message files (i.e. translations) in the following default locations:\n\nThe locations are listed here with the highest priority first. That is, you can override the translation messages of a bundle in the first directory. Bundles are processed in the order in which they are listed in the config/bundles.php file, so bundles appearing earlier have higher priority.\n\nThe override mechanism works at a key level: only the overridden keys need to be listed in a higher priority message file. When a key is not found in a message file, the translator will automatically fall back to the lower priority message files.\n\nThe filename of the translation files is also important: each message file must be named according to the following path: domain.locale.loader:\n\nThe loader can be the name of any registered loader. By default, Symfony provides many loaders which are selected based on the following file extensions:\n\nThe choice of which loader to use is entirely up to you and is a matter of taste. The recommended option is to use YAML for simple projects and use XLIFF if you're generating translations with specialized programs or teams.\n\nEach time you create a new message catalog (or install a bundle that includes a translation catalog), be sure to clear your cache so that Symfony can discover the new translation resources:\n\nYou can add other directories with the paths option in the configuration:\n\nUnlike the contents of templates, it's not practical to translate the contents stored in Doctrine Entities using translation catalogs. Instead, use the Doctrine Translatable Extension.\n\nIf your translations use a format not supported by Symfony or you store them in a special way (e.g. not using files or Doctrine entities), you need to provide a custom class implementing the LoaderInterface interface. See the Built-in Symfony Service Tags tag for more information.\n\nWhen using external translators to translate your application, you must send them the new contents to translate frequently and merge the results back in the application.\n\nInstead of doing this manually, Symfony provides integration with several third-party translation services. You can upload and download (called \"push\" and \"pull\") translations to/from these services and merge the results automatically in the application.\n\nBefore pushing/pulling translations to a third-party provider, you must install the package that provides integration with that provider:\n\nEach library includes a Symfony Flex recipe that will add a configuration example to your .env file. For example, suppose you want to use Loco. First, install it:\n\nYou'll now have a new line in your .env file that you can uncomment:\n\nThe LOCO_DSN isn't a real address: it's a convenient format that offloads most of the configuration work to Symfony. The loco scheme activates the Loco provider that you installed, which knows all about how to push and pull translations via Loco. The only part you need to change is the API_KEY placeholder.\n\nThis table shows the full list of available DSN formats for each provider:\n\nTo enable a translation provider, customize the DSN in your .env file and configure the providers option:\n\nIf you use Phrase as a provider you must configure a user agent in your dsn. See Identification via User-Agent for reasoning and some examples.\n\nAlso make the locale _names_ in Phrase should be as defined in RFC4646 (e.g. pt-BR rather than pt_BR). Not doing so will result in Phrase creating a new locale for the imported keys.\n\nIf you use Crowdin as a provider and some of your locales are different from the Crowdin Language Codes, you have to set the Custom Language Codes in the Crowdin project for each of your locales, in order to override the default value. You need to select the \"locale\" placeholder and specify the custom code in the \"Custom Code\" field.\n\nIf you use Lokalise as a provider and a locale format following the ISO 639-1 (e.g. \"en\" or \"fr\"), you have to set the Custom Language Name setting in Lokalise for each of your locales, in order to override the default value (which follow the ISO 639-1 succeeded by a sub-code in capital letters that specifies the national variety (e.g. \"GB\" or \"US\" according to ISO 3166-1 alpha-2)).\n\nThe Phrase provider uses Phrase's tag feature to map translations to Symfony's translation domains. If you need some assistance with organising your tags in Phrase, you might want to consider the Phrase Tag Bundle which provides some commands helping you with that.\n\nAfter configuring the credentials to access the translation provider, you can now use the following commands to push (upload) and pull (download) translations:\n\nIn addition to using Symfony's built-in translation providers, you can create your own providers. To do so, you need to create two classes:\n\nProviderFactoryInterface (you can extend AbstractProviderFactory to simplify its creation).\n\nAfter creating these two classes, you need to register your factory as a service and tag it with translation.provider_factory.\n\nTranslating happens based on the user's locale. The locale of the current user is stored in the request and is accessible via the Request object:\n\nTo set the user's locale, you may want to create a custom event listener so that it's set before any other parts of the system (i.e. the translator) need it:\n\nThe custom listener must be called before LocaleListener, which initializes the locale based on the current request. To do so, set your listener priority to a higher value than LocaleListener priority (which you can obtain by running the debug:event kernel.request command).\n\nRead Sessions for more information on making the user's locale \"sticky\" to their session.\n\nSetting the locale using $request->setLocale() in the controller is too late to affect the translator. Either set the locale via a listener (like above), the URL (see next) or call setLocale() directly on the translator service.\n\nSee the Translations section below about setting the locale via routing.\n\nSince you can store the locale of the user in the session, it may be tempting to use the same URL to display a resource in different languages based on the user's locale. For example, http://www.example.com/contact could show content in English for one user and French for another user. Unfortunately, this violates a fundamental rule of the Web: that a particular URL returns the same resource regardless of the user. To further muddy the problem, which version of the content would be indexed by search engines?\n\nA better policy is to include the locale in the URL using the special _locale parameter:\n\nWhen using the special _locale parameter in a route, the matched locale is automatically set on the Request and can be retrieved via the getLocale() method. In other words, if a user visits the URI /fr/contact, the locale fr will automatically be set as the locale for the current request.\n\nYou can now use the locale to create routes to other translated pages in your application.\n\nDefine the locale requirement as a container parameter to avoid hardcoding its value in all your routes.\n\nWhat if the user's locale hasn't been determined? You can guarantee that a locale is set on each user's request by defining a default_locale for the framework:\n\nThis default_locale is also relevant for the translator, as shown in the next section.\n\nIf your application supports multiple languages, the first time a user visits your site it's common to redirect them to the best possible language according to their preferences. This is achieved with the getPreferredLanguage() method of the Request object:\n\nSymfony finds the best possible language based on the locales passed as argument and the value of the Accept-Language HTTP header. If it can't find a perfect match between them, Symfony will try to find a partial match based on the language (e.g. fr_CA would match fr_Latn_CH because their language is the same). If there's no perfect or partial match, this method returns the first locale passed as argument (that's why the order of the passed locales is important).\n\nThe feature to match locales partially was introduced in Symfony 7.1.\n\nImagine that the user's locale is es_AR and that you're translating the key Symfony is great. To find the Spanish translation, Symfony actually checks translation resources for several locales:\n\nIf the translation still isn't found, Symfony uses the fallbacks option, which can be configured as follows. When this option is not defined, it defaults to the default_locale setting mentioned in the previous section.\n\nWhen Symfony can't find a translation in the given locale, it will add the missing translation to the log file. For details, see Framework Configuration Reference (FrameworkBundle).\n\nSometimes you need to change the application's locale dynamically while running some code. For example, a console command that renders email templates in different languages. In such cases, you only need to switch the locale temporarily.\n\nThe LocaleSwitcher class allows you to do that:\n\nThe LocaleSwitcher class changes the locale of:\n\nThe LocaleSwitcher applies the new locale only for the current request, and its effect is lost on subsequent requests, such as after a redirect.\n\nSee how to make the locale persist across requests.\n\nWhen using autowiring, type-hint any controller or service argument with the LocaleSwitcher class to inject the locale switcher service. Otherwise, configure your services manually and inject the translation.locale_switcher service.\n\nWhen you work with many translation messages in different languages, it can be hard to keep track which translations are missing and which are not used anymore. The debug:translation command helps you to find these missing or unused translation messages templates:\n\nThe extractors can't find messages translated outside templates (like form labels or controllers) unless using translatable objects or calling the trans() method on a translator (since Symfony 5.3). Dynamic translations using variables or expressions in templates are not detected either:\n\nSuppose your application's default_locale is fr and you have configured en as the fallback locale (see configuration and fallback for how to configure these). And suppose you've already set up some translations for the fr locale:\n\nand for the en locale:\n\nTo inspect all messages in the fr locale for the application, run:\n\nIt shows you a table with the result when translating the message in the fr locale and the result when the fallback locale en would be used. On top of that, it will also show you when the translation is the same as the fallback translation (this could indicate that the message was not correctly translated). Furthermore, it indicates that the message Symfony is great is unused because it is translated, but you haven't used it anywhere yet.\n\nNow, if you translate the message in one of your templates, you will get this output:\n\nThe state is empty which means the message is translated in the fr locale and used in one or more templates.\n\nIf you delete the message Symfony is great from your translation file for the fr locale and run the command, you will get:\n\nThe state indicates the message is missing because it is not translated in the fr locale but it is still used in the template. Moreover, the message in the fr locale equals to the message in the en locale. This is a special case because the untranslated message id equals its translation in the en locale.\n\nIf you copy the content of the translation file in the en locale to the translation file in the fr locale and run the command, you will get:\n\nYou can see that the translations of the message are identical in the fr and en locales which means this message was probably copied from English to French and maybe you forgot to translate it.\n\nBy default, all domains are inspected, but it is possible to specify a single domain:\n\nWhen the application has a lot of messages, it is useful to display only the unused or only the missing messages, by using the --only-unused or --only-missing options:\n\nThe exit code of the debug:translation command changes depending on the status of the translations. Use the following public constants to check it:\n\nThese constants are defined as \"bit masks\", so you can combine them as follows:\n\nSymfony processes all the application translation files as part of the process that compiles the application code before executing it. If there's an error in any translation file, you'll see an error message explaining the problem.\n\nIf you prefer, you can also validate the syntax of any YAML and XLIFF translation file using the lint:yaml and lint:xliff commands:\n\nThe linter results can be exported to JSON using the --format option:\n\nWhen running these linters inside GitHub Actions, the output is automatically adapted to the format required by GitHub, but you can force that format too:\n\nThe Yaml component provides a stand-alone yaml-lint binary allowing you to lint YAML files without having to create a console application:\n\nThe lint:yaml and lint:xliff commands validate the YAML and XML syntax of the translation files, but not their contents. Use the following command to check that the translation contents are also correct:\n\nThe lint:translations command was introduced in Symfony 7.2.\n\nThe pseudolocalization translator is meant to be used for development only.\n\nThe following image shows a typical menu on a webpage:\n\nThis other image shows the same menu when the user switches the language to Spanish. Unexpectedly, some text is cut and other contents are so long that they overflow and you can't see them:\n\nThese kind of errors are very common, because different languages can be longer or shorter than the original application language. Another common issue is to only check if the application works when using basic accented letters, instead of checking for more complex characters such as the ones found in Polish, Czech, etc.\n\nThese problems can be solved with pseudolocalization, a software testing method used for testing internationalization. In this method, instead of translating the text of the software into a foreign language, the textual elements of an application are replaced with an altered version of the original language.\n\nFor example, Account Settings is translated as [!!! Àççôûñţ Šéţţîñĝš !!!]. First, the original text is expanded in length with characters like [!!! !!!] to test the application when using languages more verbose than the original one. This solves the first problem.\n\nIn addition, the original characters are replaced by similar but accented characters. This makes the text highly readable, while allowing to test the application with all kinds of accented and special characters. This solves the second problem.\n\nFull support for pseudolocalization was added to help you debug internationalization issues in your applications. You can enable and configure it in the translator configuration:\n\nThat's all. The application will now start displaying those strange, but readable, contents to help you internationalize it. See for example the difference in the Symfony Demo application. This is the original page:\n\nAnd this is the same page with pseudolocalization enabled:\n\nWith the Symfony Translation component, creating an internationalized application no longer needs to be a painful process and boils down to these steps:\n\nSymfony Code Performance Profiling\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Translations",
+      "id": "translations"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Translation",
+      "id": "basic-translation"
+    },
+    {
+      "level": "h3",
+      "text": "Using Real or Keyword Messages",
+      "id": "using-real-or-keyword-messages"
+    },
+    {
+      "level": "h3",
+      "text": "The Translation Process",
+      "id": "the-translation-process"
+    },
+    {
+      "level": "h2",
+      "text": "Message Format",
+      "id": "message-format"
+    },
+    {
+      "level": "h2",
+      "text": "Translatable Objects",
+      "id": "translatable-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Translations in Templates",
+      "id": "translations-in-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Using Twig Filters",
+      "id": "using-twig-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Using Twig Tags",
+      "id": "using-twig-tags"
+    },
+    {
+      "level": "h2",
+      "text": "Global Translation Parameters",
+      "id": "global-translation-parameters"
+    },
+    {
+      "level": "h2",
+      "text": "Forcing the Translator Locale",
+      "id": "forcing-the-translator-locale"
+    },
+    {
+      "level": "h2",
+      "text": "Extracting Translation Contents and Updating Catalogs Automatically",
+      "id": "extracting-translation-contents-and-updating-catalogs-automatically"
+    },
+    {
+      "level": "h2",
+      "text": "Translation Resource/File Names and Locations",
+      "id": "translation-resource-file-names-and-locations"
+    },
+    {
+      "level": "h3",
+      "text": "Translations of Doctrine Entities",
+      "id": "translations-of-doctrine-entities"
+    },
+    {
+      "level": "h3",
+      "text": "Custom Translation Resources",
+      "id": "custom-translation-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Translation Providers",
+      "id": "translation-providers"
+    },
+    {
+      "level": "h3",
+      "text": "Installing and Configuring a Third Party Provider",
+      "id": "installing-and-configuring-a-third-party-provider"
+    },
+    {
+      "level": "h3",
+      "text": "Pushing and Pulling Translations",
+      "id": "pushing-and-pulling-translations"
+    },
+    {
+      "level": "h3",
+      "text": "Creating Custom Providers",
+      "id": "creating-custom-providers"
+    },
+    {
+      "level": "h2",
+      "text": "Handling the User's Locale",
+      "id": "handling-the-user-s-locale"
+    },
+    {
+      "level": "h3",
+      "text": "The Locale and the URL",
+      "id": "the-locale-and-the-url"
+    },
+    {
+      "level": "h3",
+      "text": "Setting a Default Locale",
+      "id": "setting-a-default-locale"
+    },
+    {
+      "level": "h3",
+      "text": "Selecting the Language Preferred by the User",
+      "id": "selecting-the-language-preferred-by-the-user"
+    },
+    {
+      "level": "h2",
+      "text": "Fallback Translation Locales",
+      "id": "fallback-translation-locales"
+    },
+    {
+      "level": "h2",
+      "text": "Switch Locale Programmatically",
+      "id": "switch-locale-programmatically"
+    },
+    {
+      "level": "h2",
+      "text": "How to Find Missing or Unused Translation Messages",
+      "id": "how-to-find-missing-or-unused-translation-messages"
+    },
+    {
+      "level": "h3",
+      "text": "Debug Command Exit Codes",
+      "id": "debug-command-exit-codes"
+    },
+    {
+      "level": "h2",
+      "text": "How to Find Errors in Translation Files",
+      "id": "how-to-find-errors-in-translation-files"
+    },
+    {
+      "level": "h2",
+      "text": "Pseudo-localization translator",
+      "id": "pseudo-localization-translator"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// text will *always* print out in English\necho 'Hello World';\n\n// text can be translated into the end-user's language or\n// default to English\necho $translator->trans('Hello World');",
+      "language": "unknown"
+    },
+    {
+      "code": "echo $translator->trans('Hello World', domain: 'messages');",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require symfony/translation",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    default_locale: 'en'\n    translator:\n        default_path: '%kernel.project_dir%/translations'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config default-locale=\"en\">\n        <framework:translator\n            default-path=\"%kernel.project_dir%/translations\"\n        />\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translation.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    // ...\n    $framework\n        ->defaultLocale('en')\n        ->translator()\n            ->defaultPath('%kernel.project_dir%/translations')\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Contracts\\Translation\\TranslatorInterface;\n\npublic function index(TranslatorInterface $translator): Response\n{\n    $translated = $translator->trans('Symfony is great');\n\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# translations/messages.fr.yaml\nSymfony is great: Symfony est génial",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- translations/messages.fr.xlf -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\">\n        <body>\n            <trans-unit id=\"symfony_is_great\">\n                <source>Symfony is great</source>\n                <target>Symfony est génial</target>\n            </trans-unit>\n        </body>\n    </file>\n</xliff>",
+      "language": "unknown"
+    },
+    {
+      "code": "// translations/messages.fr.php\nreturn [\n    'Symfony is great' => 'Symfony est génial',\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "$translator->trans('Symfony is great');\n\n$translator->trans('symfony.great');",
+      "language": "unknown"
+    },
+    {
+      "code": "symfony:\n    is:\n        # id is symfony.is.great\n        great: Symfony is great\n        # id is symfony.is.amazing\n        amazing: Symfony is amazing\n    has:\n        # id is symfony.has.bundles\n        bundles: Symfony has bundles\nuser:\n    # id is user.login\n    login: Login",
+      "language": "unknown"
+    },
+    {
+      "code": "[\n    'symfony' => [\n        'is' => [\n            // id is symfony.is.great\n            'great'   => 'Symfony is great',\n            // id is symfony.is.amazing\n            'amazing' => 'Symfony is amazing',\n        ],\n        'has' => [\n            // id is symfony.has.bundles\n            'bundles' => 'Symfony has bundles',\n        ],\n    ],\n    'user' => [\n        // id is user.login\n        'login' => 'Login',\n    ],\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\n$translated = $translator->trans('Hello '.$name);",
+      "language": "unknown"
+    },
+    {
+      "code": "There is one apple.\nThere are 5 apples.",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Translation\\TranslatableMessage;\n\n// the first argument is required and it's the original message\n$message = new TranslatableMessage('Symfony is great!');\n// the optional second argument defines the translation parameters and\n// the optional third argument is the translation domain\n$status = new TranslatableMessage('order.status', ['%status%' => $order->getStatus()], 'store');",
+      "language": "javascript"
+    },
+    {
+      "code": "<h1>{{ message|trans }}</h1>\n<p>{{ status|trans }}</p>",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ message|trans }}\n\n{{ message|trans({'%name%': 'Fabien'}, 'app') }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% trans_default_domain 'app' %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% set message = '<h3>foo</h3>' %}\n\n{# strings and variables translated via a filter are escaped by default #}\n{{ message|trans|raw }}\n{{ '<h3>bar</h3>'|trans|raw }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% trans %}Hello %name%{% endtrans %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{% trans with {'%name%': 'Fabien'} from 'app' %}Hello %name%{% endtrans %}\n\n{% trans with {'%name%': 'Fabien'} from 'app' into 'fr' %}Hello %name%{% endtrans %}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translator.yaml\ntranslator:\n    # ...\n    globals:\n        # when using the '%' wrapping characters, you must escape them\n        '%%app_name%%': 'My application'\n        '{app_version}': '1.2.3'\n        '{url}': { message: 'url', parameters: { scheme: 'https://' }, domain: 'global' }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:translator>\n            <!-- ... -->\n             <!-- when using the '%' wrapping characters, you must escape them -->\n            <framework:global name=\"%%app_name%%\">My application</framework:global>\n            <framework:global name=\"{app_version}\" value=\"1.2.3\"/>\n            <framework:global name=\"{url}\" message=\"url\" domain=\"global\">\n                 <framework:parameter name=\"scheme\">https://</framework:parameter>\n             </framework:global>\n        </framework:translator>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translator.php\nuse Symfony\\Config\\TwigConfig;\n\nreturn static function (TwigConfig $translator): void {\n    // ...\n    // when using the '%' wrapping characters, you must escape them\n    $translator->globals('%%app_name%%')->value('My application');\n    $translator->globals('{app_version}')->value('1.2.3');\n    $translator->globals('{url}')->value(['message' => 'url', 'parameters' => ['scheme' => 'https://']]);\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "{{ 'Application version: {app_version}'|trans }}\n{# output: \"Application version: 1.2.3\" #}\n\n{# parameters passed to the message override global parameters #}\n{{ 'Package version: {app_version}'|trans({'{app_version}': '2.3.4'}) }}\n# Displays \"Package version: 2.3.4\"",
+      "language": "unknown"
+    },
+    {
+      "code": "$translator->trans('Symfony is great', locale: 'fr_FR');",
+      "language": "unknown"
+    },
+    {
+      "code": "# shows all the messages that should be translated for the French language\n$ php bin/console translation:extract --dump-messages fr\n\n# updates the French translation files with the missing strings for that locale\n$ php bin/console translation:extract --force fr\n\n# check out the command help to see its options (prefix, output format, domain, sorting, etc.)\n$ php bin/console translation:extract --help",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require nikic/php-parser",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console translation:extract --force --prefix=\"NEW_\" fr",
+      "language": "unknown"
+    },
+    {
+      "code": "# when using the --no-fill option, the --prefix option is ignored\n$ php bin/console translation:extract --force --no-fill fr",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console cache:clear",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    translator:\n        paths:\n            - '%kernel.project_dir%/custom/path/to/translations'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-Instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:translator>\n            <framework:path>%kernel.project_dir%/custom/path/to/translations</framework:path>\n        </framework:translator>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translation.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->translator()\n        ->paths(['%kernel.project_dir%/custom/path/to/translations'])\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require symfony/loco-translation-provider",
+      "language": "unknown"
+    },
+    {
+      "code": "# .env\nLOCO_DSN=loco://API_KEY@default",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    translator:\n        providers:\n            loco:\n                dsn: '%env(LOCO_DSN)%'\n                domains: ['messages']\n                locales: ['en', 'fr']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:translator>\n            <framework:provider name=\"loco\" dsn=\"%env(LOCO_DSN)%\">\n                <framework:domain>messages</framework:domain>\n                <!-- ... -->\n                <framework:locale>en</framework:locale>\n                <framework:locale>fr</framework:locale>\n                <!-- ... -->\n            </framework:provider>\n        </framework:translator>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.php\n$container->loadFromExtension('framework', [\n    'translator' => [\n        'providers' => [\n            'loco' => [\n                'dsn' => env('LOCO_DSN'),\n                'domains' => ['messages'],\n                'locales' => ['en', 'fr'],\n            ],\n        ],\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# push all local translations to the Loco provider for the locales and domains\n# configured in config/packages/translation.yaml file.\n# it will update existing translations already on the provider.\n$ php bin/console translation:push loco --force\n\n# push new local translations to the Loco provider for the French locale\n# and the validators domain.\n# it will **not** update existing translations already on the provider.\n$ php bin/console translation:push loco --locales fr --domains validators\n\n# push new local translations and delete provider's translations that not\n# exists anymore in local files for the French locale and the validators domain.\n# it will **not** update existing translations already on the provider.\n$ php bin/console translation:push loco --delete-missing --locales fr --domains validators\n\n# check out the command help to see its options (format, domains, locales, etc.)\n$ php bin/console translation:push --help",
+      "language": "unknown"
+    },
+    {
+      "code": "# pull all provider's translations to local files for the locales and domains\n# configured in config/packages/translation.yaml file.\n# it will overwrite completely your local files.\n$ php bin/console translation:pull loco --force\n\n# pull new translations from the Loco provider to local files for the French\n# locale and the validators domain.\n# it will **not** overwrite your local files, only add new translations.\n$ php bin/console translation:pull loco --locales fr --domains validators\n\n# check out the command help to see its options (format, domains, locales, intl-icu, etc.)\n$ php bin/console translation:pull --help\n\n# the \"--as-tree\" option will write YAML messages as a tree-like structure instead\n# of flat keys\n$ php bin/console translation:pull loco --force --as-tree",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\n\npublic function index(Request $request): void\n{\n    $locale = $request->getLocale();\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "public function onKernelRequest(RequestEvent $event): void\n{\n    $request = $event->getRequest();\n\n    // some logic to determine the $locale\n    $request->setLocale($locale);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/ContactController.php\nnamespace App\\Controller;\n\n// ...\nclass ContactController extends AbstractController\n{\n    #[Route(\n        path: '/{_locale}/contact',\n        name: 'contact',\n        requirements: [\n            '_locale' => 'en|fr|de',\n        ],\n    )]\n    public function contact(): Response\n    {\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/routes.yaml\ncontact:\n    path:       /{_locale}/contact\n    controller: App\\Controller\\ContactController::index\n    requirements:\n        _locale: en|fr|de",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/routes.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<routes xmlns=\"http://symfony.com/schema/routing\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/routing\n        https://symfony.com/schema/routing/routing-1.0.xsd\">\n\n    <route id=\"contact\" path=\"/{_locale}/contact\">\n        controller=\"App\\Controller\\ContactController::index\">\n        <requirement key=\"_locale\">en|fr|de</requirement>\n    </route>\n</routes>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/routes.php\nuse App\\Controller\\ContactController;\nuse Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator;\n\nreturn function (RoutingConfigurator $routes): void {\n    $routes->add('contact', '/{_locale}/contact')\n        ->controller([ContactController::class, 'index'])\n        ->requirements([\n            '_locale' => 'en|fr|de',\n        ])\n    ;\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    default_locale: en",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config default-locale=\"en\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translation.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->defaultLocale('en');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// get the Request object somehow (e.g. as a controller argument)\n$request = ...\n// pass an array of the locales (their script and region parts are optional) supported\n// by your application and the method returns the best locale for the current user\n$locale = $request->getPreferredLanguage(['pt', 'fr_Latn_CH', 'en_US'] );",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    translator:\n        fallbacks: ['en']\n        # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:translator>\n            <framework:fallback>en</framework:fallback>\n            <!-- ... -->\n        </framework:translator>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translation.php\nuse Symfony\\Config\\FrameworkConfig;\n\n return static function (FrameworkConfig $framework): void {\n     // ...\n     $framework->translator()\n         ->fallbacks(['en'])\n     ;\n };",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Translation\\LocaleSwitcher;\n\nclass SomeService\n{\n    public function __construct(\n        private LocaleSwitcher $localeSwitcher,\n    ) {\n    }\n\n    public function someMethod(): void\n    {\n        $currentLocale = $this->localeSwitcher->getLocale();\n\n        // set the application locale programmatically to 'fr' (French):\n        // this affects translation, URL generation, etc.\n        $this->localeSwitcher->setLocale('fr');\n\n        // reset the locale to the default one configured via the\n        // 'default_locale' option in config/packages/translation.yaml\n        $this->localeSwitcher->reset();\n\n        // run some code with a specific locale, temporarily, without\n        // changing the locale for the rest of the application\n        $this->localeSwitcher->runWithLocale('es', function() {\n            // e.g. render templates, send emails, etc. using the 'es' (Spanish) locale\n        });\n\n        // optionally, receive the current locale as an argument:\n        $this->localeSwitcher->runWithLocale('es', function(string $locale) {\n\n            // here, the $locale argument will be set to 'es'\n\n        });\n\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# messages can be found when using the trans filter and tag #}\n{% trans %}Symfony is great{% endtrans %}\n\n{{ 'Symfony is great'|trans }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# this translation uses a Twig variable, so it won't be detected #}\n{% set message = 'Symfony is great' %}\n{{ message|trans }}",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- translations/messages.fr.xlf -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\">\n        <body>\n            <trans-unit id=\"1\">\n                <source>Symfony is great</source>\n                <target>Symfony est génial</target>\n            </trans-unit>\n        </body>\n    </file>\n</xliff>",
+      "language": "unknown"
+    },
+    {
+      "code": "# translations/messages.fr.yaml\nSymfony is great: Symfony est génial",
+      "language": "unknown"
+    },
+    {
+      "code": "// translations/messages.fr.php\nreturn [\n    'Symfony is great' => 'Symfony est génial',\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "<!-- translations/messages.en.xlf -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<xliff version=\"1.2\" xmlns=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <file source-language=\"en\" datatype=\"plaintext\" original=\"file.ext\">\n        <body>\n            <trans-unit id=\"1\">\n                <source>Symfony is great</source>\n                <target>Symfony is great</target>\n            </trans-unit>\n        </body>\n    </file>\n</xliff>",
+      "language": "unknown"
+    },
+    {
+      "code": "# translations/messages.en.yaml\nSymfony is great: Symfony is great",
+      "language": "unknown"
+    },
+    {
+      "code": "// translations/messages.en.php\nreturn [\n    'Symfony is great' => 'Symfony is great',\n];",
+      "language": "javascript"
+    },
+    {
+      "code": "$ php bin/console debug:translation fr\n\n---------  ------------------  ----------------------  -------------------------------\n State      Id                  Message Preview (fr)    Fallback Message Preview (en)\n---------  ------------------  ----------------------  -------------------------------\n unused     Symfony is great    Symfony est génial      Symfony is great\n---------  ------------------  ----------------------  -------------------------------",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:translation fr\n\n---------  ------------------  ----------------------  -------------------------------\n State      Id                  Message Preview (fr)    Fallback Message Preview (en)\n---------  ------------------  ----------------------  -------------------------------\n            Symfony is great    Symfony est génial      Symfony is great\n---------  ------------------  ----------------------  -------------------------------",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:translation fr\n\n---------  ------------------  ----------------------  -------------------------------\n State      Id                  Message Preview (fr)    Fallback Message Preview (en)\n---------  ------------------  ----------------------  -------------------------------\n missing    Symfony is great    Symfony is great        Symfony is great\n---------  ------------------  ----------------------  -------------------------------",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:translation fr\n\n----------  ------------------  ----------------------  -------------------------------\n State       Id                  Message Preview (fr)    Fallback Message Preview (en)\n----------  ------------------  ----------------------  -------------------------------\n fallback    Symfony is great    Symfony is great        Symfony is great\n----------  ------------------  ----------------------  -------------------------------",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:translation en --domain=messages",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:translation en --only-unused\n$ php bin/console debug:translation en --only-missing",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Bundle\\FrameworkBundle\\Command\\TranslationDebugCommand;\n\n// generic failure (e.g. there are no translations)\nTranslationDebugCommand::EXIT_CODE_GENERAL_ERROR;\n\n// there are missing translations\nTranslationDebugCommand::EXIT_CODE_MISSING;\n\n// there are unused translations\nTranslationDebugCommand::EXIT_CODE_UNUSED;\n\n// some translations are using the fallback translation\nTranslationDebugCommand::EXIT_CODE_FALLBACK;",
+      "language": "unknown"
+    },
+    {
+      "code": "if (TranslationDebugCommand::EXIT_CODE_MISSING | TranslationDebugCommand::EXIT_CODE_UNUSED) {\n    // ... there are missing and/or unused translations\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# lint a single file\n$ php bin/console lint:yaml translations/messages.en.yaml\n$ php bin/console lint:xliff translations/messages.en.xlf\n\n# lint a whole directory\n$ php bin/console lint:yaml translations\n$ php bin/console lint:xliff translations\n\n# lint multiple files or directories\n$ php bin/console lint:yaml translations path/to/trans\n$ php bin/console lint:xliff translations/messages.en.xlf translations/messages.es.xlf",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console lint:yaml translations/ --format=json\n$ php bin/console lint:xliff translations/ --format=json",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console lint:yaml translations/ --format=github\n$ php bin/console lint:xliff translations/ --format=github",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php vendor/bin/yaml-lint translations/",
+      "language": "unknown"
+    },
+    {
+      "code": "# checks the contents of all the translation catalogues in all locales\n$ php bin/console lint:translations\n\n# checks the contents of the translation catalogues for Italian (it) and Japanese (ja) locales\n$ php bin/console lint:translations --locale=it --locale=ja",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/translation.yaml\nframework:\n    translator:\n        pseudo_localization:\n            # replace characters by their accented version\n            accents: true\n            # wrap strings with brackets\n            brackets: true\n            # controls how many extra characters are added to make text longer\n            expansion_factor: 1.4\n            # maintain the original HTML tags of the translated contents\n            parse_html: true\n            # also translate the contents of these HTML attributes\n            localizable_html_attributes: ['title']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/translation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:translator>\n            <!-- accents: replace characters by their accented version -->\n            <!-- brackets: wrap strings with brackets -->\n            <!-- expansion_factor: controls how many extra characters are added to make text longer -->\n            <!-- parse_html: maintain the original HTML tags of the translated contents -->\n            <framework:pseudo-localization\n                accents=\"true\"\n                brackets=\"true\"\n                expansion_factor=\"1.4\"\n                parse_html=\"true\"\n            >\n                <!-- also translate the contents of these HTML attributes -->\n                <framework:localizable-html-attribute>title</framework:localizable-html-attribute>\n            </framework:pseudo-localization>\n        </framework:translator>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/translation.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework) {\n    // ...\n    $framework\n        ->translator()\n            ->pseudoLocalization()\n                // replace characters by their accented version\n                ->accents(true)\n                // wrap strings with brackets\n                ->brackets(true)\n                // controls how many extra characters are added to make text longer\n                ->expansionFactor(1.4)\n                // maintain the original HTML tags of the translated contents\n                ->parseHtml(true)\n                // also translate the contents of these HTML attributes\n                ->localizableHtmlAttributes(['title'])\n    ;\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/translation.html",
+    "https://symfony.com/doc/7.3/session.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/reference/formats/message_format.html",
+    "https://symfony.com/doc/7.3/reference/twig_reference.html",
+    "https://symfony.com/doc/7.3/reference/configuration/twig.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/dic_tags.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/controller.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/reference/formats/xliff.html"
+  ]
+}

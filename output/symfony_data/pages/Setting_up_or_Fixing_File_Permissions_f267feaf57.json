@@ -1,0 +1,53 @@
+{
+  "url": "https://symfony.com/doc/7.3/setup/file_permissions.html",
+  "title": "Setting up or Fixing File Permissions",
+  "content": "Symfony generates certain files in the var/ directory of your project when running the application. In the dev environment, the bin/console and public/index.php files use umask() to make sure that the directory is writable. This means that you don't need to configure permissions when developing the application in your local machine.\n\nHowever, using umask() is not considered safe in production. That's why you often need to configure some permissions explicitly in your production servers as explained in this article.\n\nThese are the permissions required to run Symfony applications:\n\nOn Linux and macOS systems, if your web server user is different from your command line user, you need to configure permissions properly to avoid issues. There are several ways to achieve that:\n\nUsing Access Control Lists (ACL) permissions is the most safe and recommended method to make the var/ directory writable. You may need to install setfacl and enable ACL support on your disk partition before using this method. Then, use the following script to determine your web server user and grant the needed permissions:\n\nBoth of these commands assign permissions for the system user (the one running these commands) and the web server user.\n\nsetfacl isn't available on NFS mount points. However, storing cache and logs over NFS is strongly discouraged for performance reasons.\n\nEdit your web server configuration (commonly httpd.conf or apache2.conf for Apache) and set its user to be the same as your CLI user (e.g. for Apache, update the User and Group directives).\n\nIf this solution is used in a production server, be sure this user only has limited privileges (no access to private data or servers, execution of unsafe binaries, etc.) as a compromised server would give those privileges to the hacker.\n\nIf none of the previous methods work for you, change the umask so that the cache and log directories are group-writable or world-writable (depending if the web server user and the command line user are in the same group or not). To achieve this, put the following line at the beginning of the bin/console, and public/index.php files:\n\nChanging the umask is not thread-safe, so the ACL methods are recommended when they are available.\n\nSymfony Code Performance Profiling\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Setting up or Fixing File Permissions",
+      "id": "setting-up-or-fixing-file-permissions"
+    },
+    {
+      "level": "h2",
+      "text": "Permissions Required by Symfony Applications",
+      "id": "permissions-required-by-symfony-applications"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring Permissions for Symfony Applications",
+      "id": "configuring-permissions-for-symfony-applications"
+    },
+    {
+      "level": "h3",
+      "text": "1. Using ACL on a System that Supports setfacl (Linux/BSD)",
+      "id": "1-using-acl-on-a-system-that-supports-setfacl-linux-bsd"
+    },
+    {
+      "level": "h3",
+      "text": "2. Use the same User for the CLI and the Web Server",
+      "id": "2-use-the-same-user-for-the-cli-and-the-web-server"
+    },
+    {
+      "level": "h3",
+      "text": "3. Without Using ACL",
+      "id": "3-without-using-acl"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\\  -f1)\n\n# if the following commands don't work, try adding `-n` option to `setfacl`\n\n# set permissions for future files and folders\n$ sudo setfacl -dR -m u:\"$HTTPDUSER\":rwX -m u:$(whoami):rwX var\n# set permissions on the existing files and folders\n$ sudo setfacl -R -m u:\"$HTTPDUSER\":rwX -m u:$(whoami):rwX var",
+      "language": "unknown"
+    },
+    {
+      "code": "umask(0002); // This will let the permissions be 0775\n\n// or\n\numask(0000); // This will let the permissions be 0777",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/setup/file_permissions.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/components/cache/adapters/filesystem_adapter.html"
+  ]
+}

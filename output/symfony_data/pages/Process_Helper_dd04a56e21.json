@@ -1,0 +1,49 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/console/helpers/processhelper.html",
+  "title": "Process Helper",
+  "content": "The Process Helper shows processes as they're running and reports useful information about process status.\n\nTo display process details, use the ProcessHelper and run your command with verbosity. For example, running the following code with a very verbose verbosity (e.g. -vv):\n\nwill result in this output:\n\nIt will result in more detailed output with debug verbosity (e.g. -vvv):\n\nIn case the process fails, debugging is easier:\n\nBy default, the process helper uses the error output (stderr) as its default output. This behavior can be changed by passing an instance of StreamOutput to the run() method.\n\nThere are two ways to use the process helper:\n\nAn array of arguments:\n\nWhen running the helper against an array of arguments, be aware that these will be automatically escaped.\n\nPassing a Process instance:\n\nYou can display a customized error message using the third argument of the run() method:\n\nA custom process callback can be passed as the fourth argument. Refer to the Process Component for callback documentation:\n\nOnline Sylius certification, take it now!\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Process Helper",
+      "id": "process-helper"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Customized Display",
+      "id": "customized-display"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$helper = new ProcessHelper();\n$process = new Process(['figlet', 'Symfony']);\n\n$helper->run($output, $process);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n$helper->run($output, ['figlet', 'Symfony']);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n// ...\n$process = new Process(['figlet', 'Symfony']);\n\n$helper->run($output, $process);",
+      "language": "unknown"
+    },
+    {
+      "code": "$helper->run($output, $process, 'The process failed :(');",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$helper->run($output, $process, 'The process failed :(', function (string $type, string $data): void {\n    if (Process::ERR === $type) {\n        // ... do something with the stderr output\n    } else {\n        // ... do something with the stdout\n    }\n});",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/console/helpers/processhelper.html",
+    "https://symfony.com/doc/7.3/components/process.html"
+  ]
+}

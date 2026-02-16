@@ -1,0 +1,13 @@
+{
+  "title": "https://developer.hashicorp.com/packer/docs/commands/inspect",
+  "content": "> atmos packer inspect aws/bastion -s nonprod\n\nPacker Inspect: HCL2 mode\n\nvar.ami_name: \"bastion-al2023-1754457104\"\nvar.ami_org_arns: \"[\\n  \\\"arn:aws:organizations::xxxxxxxxxxxx:organization/o-xxxxxxxxx\\\",\\n]\"\nvar.ami_ou_arns: \"[]\"\nvar.ami_tags: \"{\\n  \\\"ScanStatus\\\" = \\\"pending\\\"\\n  \\\"SourceAMI\\\" = \\\"ami-0013ceeff668b979b\\\"\\n  \\\"SourceAMIDescription\\\" = \\\"Amazon Linux 2023 AMI 2023.7.20250527.1 arm64 HVM kernel-6.12\\\"\\n  \\\"SourceAMIName\\\" = \\\"al2023-ami-2023.7.20250527.1-kernel-6.12-arm64\\\"\\n  \\\"SourceAMIOwnerAccountId\\\" = \\\"137112412989\\\"\\n  \\\"Stage\\\" = \\\"nonprod\\\"\\n}\"\nvar.ami_users: \"[]\"\nvar.associate_public_ip_address: \"true\"\nvar.assume_role_arn: \"null\"\nvar.assume_role_duration_seconds: \"1800\"\nvar.assume_role_session_name: \"atmos-packer\"\nvar.encrypt_boot: \"false\"\nvar.force_delete_snapshot: \"false\"\nvar.force_deregister: \"false\"\nvar.instance_type: \"t4g.small\"\nvar.kms_key_arn: \"null\"\nvar.manifest_file_name: \"manifest.json\"\nvar.manifest_strip_path: \"false\"\nvar.provisioner_shell_commands: \"[\\n  \\\"sudo systemctl enable --now amazon-ssm-agent\\\",\\n  \\\"sudo -E bash -c 'dnf install -y jq && dnf clean all && cloud-init clean'\\\",\\n]\"\nvar.region: \"us-east-2\"\nvar.skip_create_ami: \"false\"\nvar.source_ami: \"ami-0013ceeff668b979b\"\nvar.ssh_username: \"ec2-user\"\nvar.stage: \"nonprod\"\nvar.volume_size: \"8\"\nvar.volume_type: \"gp3\"\n\n> <0>:\n    sources:\n      amazon-ebs.al2023\n\nprovisioners:\n      shell\n\npost-processors:\n      0:\n        manifest\nshell",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n<Terminal title=\"atmos packer init aws/bastion -s nonprod\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#https://developer.hashicorp.com/packer/docs/commands/inspect",
+  "links": []
+}

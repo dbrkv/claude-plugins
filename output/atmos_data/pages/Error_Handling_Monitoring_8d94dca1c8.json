@@ -1,0 +1,34 @@
+{
+  "title": "Error Handling & Monitoring",
+  "content": "Configure how Atmos formats and reports errors, including Sentry integration for monitoring command failures across your organization.\n\n## Why Monitor Atmos Errors?\n\nWhen running Atmos across an organizationâespecially in CI/CD pipelinesâstaying on top of failures can be a significant challenge. Atmos provides built-in error monitoring capabilities to help you:\n\n- **Track infrastructure deployment failures** across multiple teams and environments\n- **Identify patterns in configuration errors** before they affect production\n- **Debug CI/CD pipeline issues** with detailed stack traces and context\n- **Monitor the health** of your infrastructure automation at scale\n- **Receive alerts** when critical Atmos operations fail\n\nThe `errors` section in `atmos.yaml` controls error formatting and Sentry integration:\n\n<File title=\"atmos.yaml\">\n\nControl the level of detail in error messages with the `errors.format.verbose` setting:\n\n**Compact Mode** (`verbose: false` - default):\n- Clean, user-friendly error messages\n- Actionable hints and suggestions\n- Essential context only\n- Perfect for end-users and CI logs\n\n**Verbose Mode** (`verbose: true`):\n- Full stack traces with file/line information\n- Complete error chain showing how the error propagated\n- Detailed context tables with all metadata\n- Useful for debugging complex issues\n\nYou can also enable verbose mode temporarily:",
+  "code_samples": [
+    {
+      "code": "errors:\n  # Error formatting configuration\n  format:\n    # Show detailed stack traces and context (default: false)\n    # Can also be set via ATMOS_VERBOSE environment variable\n    verbose: false\n\n  # Sentry error reporting integration\n  sentry:\n    # Enable/disable Sentry error reporting (default: false)\n    enabled: true\n\n    # Sentry DSN (Data Source Name) - get this from your Sentry project settings\n    dsn: \"https://examplePublicKey@o0.ingest.sentry.io/0\"\n\n    # Environment name for error grouping (e.g., \"production\", \"staging\", \"ci\")\n    environment: \"production\"\n\n    # Release version for tracking errors by deployment\n    release: \"1.0.0\"\n\n    # Sample rate: 1.0 = 100% of errors sent, 0.5 = 50% (default: 1.0)\n    sample_rate: 1.0\n\n    # Enable debug mode for troubleshooting Sentry integration (default: false)\n    debug: false\n\n    # Include surrounding code context in stack traces (default: true)\n    capture_stack_context: true\n\n    # Custom tags for filtering and grouping errors in Sentry\n    tags:\n      team: \"platform\"\n      service: \"atmos\"\n      datacenter: \"us-east-1\"",
+      "language": "yaml"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Why Monitor Atmos Errors?",
+      "id": "why-monitor-atmos-errors?"
+    },
+    {
+      "level": "h2",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Error Formatting",
+      "id": "error-formatting"
+    },
+    {
+      "level": "h3",
+      "text": "Verbose Mode",
+      "id": "verbose-mode"
+    }
+  ],
+  "url": "llms-txt#error-handling-&-monitoring",
+  "links": []
+}

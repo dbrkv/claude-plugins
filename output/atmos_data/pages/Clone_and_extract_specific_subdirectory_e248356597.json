@@ -1,0 +1,19 @@
+{
+  "title": "Clone and extract specific subdirectory",
+  "content": "source: \"github.com/cloudposse-terraform-components/aws-vpc.git//modules/public-subnets?ref=v1.398.0\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### Explicit git:: Protocol",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Explicit git:: Protocol",
+      "id": "explicit-git::-protocol"
+    }
+  ],
+  "url": "llms-txt#clone-and-extract-specific-subdirectory",
+  "links": []
+}

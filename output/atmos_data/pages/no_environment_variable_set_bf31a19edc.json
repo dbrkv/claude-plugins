@@ -1,0 +1,42 @@
+{
+  "title": "(no environment variable set)",
+  "content": "yaml\n- name: Run Atmos\n  env:\n    # Explicitly unset to avoid using dev overrides in CI\n    TF_CLI_CONFIG_FILE: \"\"\n  run: |\n    atmos terraform plan myapp -s prod\n\nWarning: Provider development overrides are in effect\nbash",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n### CI/CD Integration\n\nEnsure your CI/CD pipeline doesn't use development overrides:\n\n<File title=\".github/workflows/terraform.yml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Troubleshooting\n\n### Warning Message\n\nWhen dev_overrides are active, Terraform shows a warning:",
+      "language": "unknown"
+    },
+    {
+      "code": "This is **expected behavior** and confirms your local provider is being used. To remove the warning, remove or comment out the `dev_overrides` block.\n\n### Provider Not Found\n\nIf Terraform can't find your provider:\n\n1. **Check the path** - Must be absolute path to the **directory** containing the binary\n2. **Check the binary name** - Must be `terraform-provider-<name>` (exact match)\n3. **Check the permissions** - Binary must be executable (`chmod +x`)\n4. **Check TF_CLI_CONFIG_FILE** - Verify the environment variable points to your `.terraformrc`\n\n<Terminal title=\"Debugging\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "CI/CD Integration",
+      "id": "ci/cd-integration"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Warning Message",
+      "id": "warning-message"
+    },
+    {
+      "level": "h3",
+      "text": "Provider Not Found",
+      "id": "provider-not-found"
+    }
+  ],
+  "url": "llms-txt#(no-environment-variable-set)",
+  "links": []
+}

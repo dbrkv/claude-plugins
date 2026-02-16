@@ -1,0 +1,173 @@
+{
+  "url": "https://symfony.com/doc/7.3/serializer/streaming_json.html",
+  "title": "Streaming JSON",
+  "content": "The JsonStreamer component was introduced in Symfony 7.3 as an experimental feature.\n\nSymfony can encode PHP data structures to JSON streams and decode JSON streams back into PHP data structures.\n\nTo do so, it relies on the JsonStreamer component, which is designed for high efficiency and can process large JSON data incrementally without needing to load the entire content into memory.\n\nThis component is ideal for handling APIs or interacting with third-party APIs. It transforms incoming JSON request payloads into PHP objects that your application can work with. Similarly, it converts processed PHP objects into a JSON stream for outgoing responses.\n\nIn applications using Symfony Flex, run this command to install the JsonStreamer component:\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nJsonStreamer only works with PHP classes that have no constructor and are composed solely of public properties, like DTO classes. Consider the following Cat class:\n\nTo encode Cat objects into a JSON stream (e.g., to send them in an API response), first apply the #[JsonStreamable] attribute to the class. This attribute is optional, but it improves performance by pre-generating encoding and decoding files during cache warm-up:\n\nNext, inject the JSON stream writer into your service. The service id is json_streamer.stream_writer, but you can also get it by type-hinting a $jsonStreamWriter argument with StreamWriterInterface.\n\nUse the write() method of the service to perform the actual JSON conversion:\n\nYou can explicitly inject the json_streamer.stream_writer service by using the #[Target('json_streamer.stream_writer')] autowire attribute.\n\nIn addition to encoding, you can decode JSON into PHP objects.\n\nTo do this, inject the JSON stream reader into your service. The service id is json_streamer.stream_reader, but you can also get it by type-hinting a $jsonStreamReader argument with StreamReaderInterface. Next, use the read() method to perform the actual JSON parsing:\n\nYou can explicitly inject the json_streamer.stream_reader service by using the #[Target('json_streamer.stream_reader')] autowire attribute.\n\nThe examples above demonstrate two different approaches to decoding JSON data using JsonStreamer:\n\nBoth methods handle the same JSON data but differ in memory usage and performance. Use streams if optimizing memory usage is more important. Use strings if performance is more important.\n\nIn the pickTheTenthCat method, the JSON data is read as a stream using fopen. This is useful for large files, as the data is processed incrementally rather than being fully loaded into memory.\n\nTo optimize memory usage, JsonStreamer creates ghost objects instead of fully instantiating them. These lightweight placeholders delay object creation until the data is actually needed.\n\nIn the listEligibleCatNames method, the entire JSON file is read into a string using file_get_contents. The decoder then instantiates all the objects immediately.\n\nThis approach is faster because all objects are created immediately, but it requires more memory.\n\nThe JsonStreamer component can read advanced PHPDoc type definitions (e.g., generics) and process complex PHP objects accordingly.\n\nConsider the Shelter class that defines a generic TAnimal type, which can be a Cat or a Dog:\n\nTo enable PHPDoc parsing, run:\n\nThen, when encoding/decoding a Shelter instance, you can specify the concrete type information, and JsonStreamer will correctly interpret the JSON structure:\n\nWhile it's usually best not to alter the shape or values of objects during serialization, sometimes it's necessary.\n\nYou can configure the JSON key for a property using the StreamedName attribute:\n\nThis maps the Duck::$id property to the @id JSON key:\n\nTo transform a property's value during encoding, use the ValueTransformer attribute. Its nativeToStream option accepts a callable or a value transformer service id.\n\nThe callable must be a public static method or non-anonymous function with this signature:\n\nThen specify it in the attribute:\n\nThe following example transforms the name and height properties during encoding:\n\nTo transform a property's value during decoding, use the ValueTransformer attribute. Its streamToNative option accepts a callable or a value transformer service id.\n\nThe callable must be a public static method or non-anonymous function with this signature:\n\nThen specify it in the attribute:\n\nThis will extract first and last names from a full name in the input JSON:\n\nWhen callables are not enough, you can use a service implementing the ValueTransformerInterface:\n\nThe getStreamValueType() method must return the value's type as it will appear in the JSON stream.\n\nTo use this transformer in a class, configure the #[ValueTransformer] attribute:\n\nValue transformers are called frequently during encoding and decoding. Keep them lightweight and avoid calls to external APIs or the database.\n\nJsonStreamer uses services that implement the PropertyMetadataLoaderInterface to control the shape and values of objects during encoding/decoding.\n\nThese services are highly flexible and can be decorated to support dynamic configurations, providing more flexibility than attributes:\n\nAlthough powerful, this approach introduces complexity. Decorating property metadata loaders requires a deep understanding of the internals.\n\nFor most use cases, attribute-based configuration is sufficient. Reserve dynamic loaders for advanced scenarios.\n\nThe JsonStreamable attribute marks a class as streamable. While not strictly required, it's highly recommended because it enables cache warm-up to pre-generate encoding/decoding files, improving performance.\n\nIt includes two optional properties: asObject and asList, which define how the class should be prepared during cache warm-up:\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nPut the code quality back at the heart of your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Streaming JSON",
+      "id": "streaming-json"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Encoding Objects",
+      "id": "encoding-objects"
+    },
+    {
+      "level": "h2",
+      "text": "Decoding Objects",
+      "id": "decoding-objects"
+    },
+    {
+      "level": "h3",
+      "text": "Decoding from a Stream",
+      "id": "decoding-from-a-stream"
+    },
+    {
+      "level": "h3",
+      "text": "Decoding from a String",
+      "id": "decoding-from-a-string"
+    },
+    {
+      "level": "h2",
+      "text": "Enabling PHPDoc Reading",
+      "id": "enabling-phpdoc-reading"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring Encoding/Decoding",
+      "id": "configuring-encoding-decoding"
+    },
+    {
+      "level": "h3",
+      "text": "Configuring the Encoded Name",
+      "id": "configuring-the-encoded-name"
+    },
+    {
+      "level": "h3",
+      "text": "Configuring the Encoded Value",
+      "id": "configuring-the-encoded-value"
+    },
+    {
+      "level": "h3",
+      "text": "Configuring the Decoded Value",
+      "id": "configuring-the-decoded-value"
+    },
+    {
+      "level": "h3",
+      "text": "Transforming Value Using Services",
+      "id": "transforming-value-using-services"
+    },
+    {
+      "level": "h3",
+      "text": "Configuring Keys and Values Dynamically",
+      "id": "configuring-keys-and-values-dynamically"
+    },
+    {
+      "level": "h2",
+      "text": "Marking Objects as Streamable",
+      "id": "marking-objects-as-streamable"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/json-streamer",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Dto/Cat.php\nnamespace App\\Dto;\n\nclass Cat\n{\n    public string $name;\n    public string $age;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Dto;\n\nuse Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\n\n#[JsonStreamable]\nclass Cat\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Controller/CatController.php\nnamespace App\\Controller;\n\nuse App\\Dto\\Cat;\nuse App\\Repository\\CatRepository;\nuse Symfony\\Component\\HttpFoundation\\StreamedResponse;\nuse Symfony\\Component\\JsonStreamer\\StreamWriterInterface;\nuse Symfony\\Component\\TypeInfo\\Type;\n\nclass CatController\n{\n    public function retrieveCats(StreamWriterInterface $jsonStreamWriter, CatRepository $catRepository): StreamedResponse\n    {\n        $cats = $catRepository->findAll();\n        $type = Type::list(Type::object(Cat::class));\n\n        $json = $jsonStreamWriter->write($cats, $type);\n\n        return new StreamedResponse($json);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Dto\\Cat;\nuse App\\Repository\\CatRepository;\nuse Symfony\\Component\\HttpFoundation\\StreamedResponse;\nuse Symfony\\Component\\JsonStreamer\\JsonStreamWriter;\nuse Symfony\\Component\\TypeInfo\\Type;\n\n// ...\n\n$jsonWriter = JsonStreamWriter::create();\n\n$cats = $catRepository->findAll();\n$type = Type::list(Type::object(Cat::class));\n\n$json = $jsonWriter->write($cats, $type);\n\n$response = new StreamedResponse($json);\n\n// ...",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Service/TombolaService.php\nnamespace App\\Service;\n\nuse App\\Dto\\Cat;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autowire;\nuse Symfony\\Component\\JsonStreamer\\StreamReaderInterface;\nuse Symfony\\Component\\TypeInfo\\Type;\n\nclass TombolaService\n{\n    private string $catsJsonFile;\n\n    public function __construct(\n        private StreamReaderInterface $jsonStreamReader,\n        #[Autowire(param: 'kernel.root_dir')]\n        string $rootDir,\n    ) {\n        $this->catsJsonFile = sprintf('%s/var/cats.json', $rootDir);\n    }\n\n    public function pickTheTenthCat(): ?Cat\n    {\n        $jsonResource = fopen($this->catsJsonFile, 'r');\n        $type = Type::iterable(Type::object(Cat::class));\n\n        /** @var iterable<Cat> $cats */\n        $cats = $this->jsonStreamReader->read($jsonResource, $type);\n\n        $i = 0;\n        foreach ($cats as $cat) {\n            if ($i === 9) {\n                return $cat;\n            }\n\n            ++$i;\n        }\n\n        return null;\n    }\n\n    /**\n     * @return list<string>\n     */\n    public function listEligibleCatNames(): array\n    {\n        $json = file_get_contents($this->catsJsonFile);\n        $type = Type::iterable(Type::object(Cat::class));\n\n        /** @var iterable<Cat> $cats */\n        $cats = $this->jsonStreamReader->read($json, $type);\n\n        return array_map(fn(Cat $cat) => $cat->name, iterator_to_array($cats));\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Service/TombolaService.php\nnamespace App\\Service;\n\nuse App\\Dto\\Cat;\nuse Symfony\\Component\\JsonStreamer\\JsonStreamReader;\nuse Symfony\\Component\\JsonStreamer\\StreamReaderInterface;\nuse Symfony\\Component\\TypeInfo\\Type;\n\nclass TombolaService\n{\n    private StreamReaderInterface $jsonStreamReader;\n    private string $catsJsonFile;\n\n    public function __construct(\n        private string $catsJsonFile,\n    ) {\n        $this->jsonStreamReader = JsonStreamReader::create();\n    }\n\n    public function pickTheTenthCat(): ?Cat\n    {\n        $jsonResource = fopen($this->catsJsonFile, 'r');\n        $type = Type::iterable(Type::object(Cat::class));\n\n        /** @var iterable<Cat> $cats */\n        $cats = $this->jsonStreamReader->read($jsonResource, $type);\n\n        $i = 0;\n        foreach ($cats as $cat) {\n            if ($i === 9) {\n                return $cat;\n            }\n\n            ++$i;\n        }\n\n        return null;\n    }\n\n    /**\n     * @return list<string>\n     */\n    public function listEligibleCatNames(): array\n    {\n        $json = file_get_contents($this->catsJsonFile);\n        $type = Type::iterable(Type::object(Cat::class));\n\n        /** @var iterable<Cat> $cats */\n        $cats = $this->jsonStreamReader->read($json, $type);\n\n        return array_map(fn(Cat $cat) => $cat->name, iterator_to_array($cats));\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Dto/Shelter.php\nnamespace App\\Dto;\n\nuse Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\n\n/**\n * @template TAnimal of Cat|Dog\n */\n#[JsonStreamable]\nclass Shelter\n{\n    /**\n     * @var list<TAnimal>\n     */\n    public array $animals;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$ composer require phpstan/phpdoc-parser",
+      "language": "unknown"
+    },
+    {
+      "code": "use App\\Dto\\Cat;\nuse App\\Dto\\Shelter;\nuse Symfony\\Component\\TypeInfo\\Type;\n\n$json = <<<JSON\n{\n  \"animals\": [\n    {\"name\": \"Eva\", \"age\": 29},\n    {...}\n  ]\n}\nJSON;\n\n// maps the TAnimal template in Shelter to the Cat concrete type\n$type = Type::generic(Type::object(Shelter::class), Type::object(Cat::class));\n\n$catShelter = $jsonStreamReader->read($json, $type); // will be populated with Cat instances",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Dto/Duck.php\nnamespace App\\Dto;\n\nuse Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\nuse Symfony\\Component\\JsonStreamer\\Attribute\\StreamedName;\n\n#[JsonStreamable]\nclass Duck\n{\n    #[StreamedName('@id')]\n    public string $id;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Dto\\Duck;\nuse Symfony\\Component\\TypeInfo\\Type;\n\n// ...\n\n$duck = new Duck();\n$duck->id = '/ducks/daffy';\n\necho (string) $jsonStreamWriter->write($duck, Type::object(Duck::class));\n\n// This will output:\n// {\n//   \"@id\": \"/ducks/daffy\"\n// }",
+      "language": "unknown"
+    },
+    {
+      "code": "$transformer = function (mixed $data, array $options = []): mixed { /* ... */ };",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Dto/Duck.php\nnamespace App\\Dto;\n\nuse Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\nuse Symfony\\Component\\JsonStreamer\\Attribute\\ValueTransformer;\n\n#[JsonStreamable]\nclass Duck\n{\n    #[ValueTransformer(nativeToStream: 'strtoupper')]\n    public string $name;\n\n    #[ValueTransformer(nativeToStream: [self::class, 'formatHeight'])]\n    public int $height;\n\n    public static function formatHeight(int $value, array $options = []): string\n    {\n        return sprintf('%.2fcm', $value / 100);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Dto\\Duck;\nuse Symfony\\Component\\TypeInfo\\Type;\n\n// ...\n\n$duck = new Duck();\n$duck->name = 'daffy';\n$duck->height = 5083;\n\necho (string) $jsonStreamWriter->write($duck, Type::object(Duck::class));\n\n// This will output:\n// {\n//   \"name\": \"DAFFY\",\n//   \"height\": \"50.83cm\"\n// }",
+      "language": "unknown"
+    },
+    {
+      "code": "$valueTransformer = function (mixed $data, array $options = []): mixed { /* ... */ };",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Dto/Duck.php\nnamespace App\\Dto;\n\nuse Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\nuse Symfony\\Component\\JsonStreamer\\Attribute\\ValueTransformer;\n\n#[JsonStreamable]\nclass Duck\n{\n    #[ValueTransformer(streamToNative: [self::class, 'retrieveFirstName'])]\n    public string $firstName;\n\n    #[ValueTransformer(streamToNative: [self::class, 'retrieveLastName'])]\n    public string $lastName;\n\n    public static function retrieveFirstName(string $normalized, array $options = []): string\n    {\n        return explode(' ', $normalized)[0];\n    }\n\n    public static function retrieveLastName(string $normalized, array $options = []): string\n    {\n        return explode(' ', $normalized)[1];\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "use App\\Dto\\Duck;\nuse Symfony\\Component\\TypeInfo\\Type;\n\n// ...\n\n$duck = $jsonStreamReader->read(\n    '{\"name\": \"Daffy Duck\"}',\n    Type::object(Duck::class),\n);\n\n// The $duck variable will contain:\n// object(Duck)#1 (1) {\n//   [\"firstName\"] => string(5) \"Daffy\"\n//   [\"lastName\"] => string(4) \"Duck\"\n// }",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Transformer/DogUrlTransformer.php\nnamespace App\\Transformer;\n\nuse Symfony\\Component\\JsonStreamer\\ValueTransformer\\ValueTransformerInterface;\nuse Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface;\nuse Symfony\\Component\\TypeInfo\\Type;\n\nclass DogUrlTransformer implements ValueTransformerInterface\n{\n    public function __construct(\n        private UrlGeneratorInterface $urlGenerator,\n    ) {\n    }\n\n    public function transform(mixed $value, array $options = []): string\n    {\n        if (!is_int($value)) {\n            throw new \\InvalidArgumentException(sprintf('The value must be \"int\", \"%s\" given.', get_debug_type($value)));\n        }\n\n        return $this->urlGenerator->generate('show_dog', ['id' => $value]);\n    }\n\n    public static function getStreamValueType(): Type\n    {\n        return Type::string();\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Dto/Dog.php\nnamespace App\\Dto;\n\nuse App\\Transformer\\DogUrlTransformer;\nuse Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\nuse Symfony\\Component\\JsonStreamer\\Attribute\\StreamedName;\nuse Symfony\\Component\\JsonStreamer\\Attribute\\ValueTransformer;\n\n#[JsonStreamable]\nclass Dog\n{\n    #[StreamedName('url')]\n    #[ValueTransformer(nativeToStream: DogUrlTransformer::class)]\n    public int $id;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Streamer\\SensitivePropertyMetadataLoader;\n\nuse App\\Dto\\SensitiveInterface;\nuse App\\Streamer\\ValueTransformer\\EncryptorValueTransformer;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AsDecorator;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\AutowireDecorated;\nuse Symfony\\Component\\JsonStreamer\\Mapping\\PropertyMetadata;\nuse Symfony\\Component\\JsonStreamer\\Mapping\\PropertyMetadataLoaderInterface;\nuse Symfony\\Component\\TypeInfo\\Type;\n\n#[AsDecorator('json_streamer.write.property_metadata_loader')]\nclass SensitivePropertyMetadataLoader implements PropertyMetadataLoaderInterface\n{\n    public function __construct(\n        #[AutowireDecorated]\n        private PropertyMetadataLoaderInterface $decorated,\n    ) {\n    }\n\n    public function load(string $className, array $options = [], array $context = []): array\n    {\n        $propertyMetadataMap = $this->decorated->load($className, $options, $context);\n\n        if (!is_a($className, SensitiveInterface::class, true)) {\n            return $propertyMetadataMap;\n        }\n\n        // you can configure value transformers\n        foreach ($propertyMetadataMap as $jsonKey => $metadata) {\n            if (in_array($metadata->getName(), $className::getPropertiesToEncrypt(), true)) {\n                $propertyMetadataMap[$jsonKey] = $metadata\n                    ->withType(Type::string())\n                    ->withAdditionalNativeToStreamValueTransformer(EncryptorValueTransformer::class);\n            }\n        }\n\n        // you can remove existing properties\n        foreach ($propertyMetadataMap as $jsonKey => $metadata) {\n            if (in_array($metadata->getName(), $className::getPropertiesToRemove(), true)) {\n                unset($propertyMetadataMap[$jsonKey]);\n            }\n        }\n\n        // you can rename JSON keys\n        foreach ($propertyMetadataMap as $jsonKey => $metadata) {\n            $propertyMetadataMap[md5($jsonKey)] = $propertyMetadataMap[$jsonKey];\n            unset($propertyMetadataMap[$jsonKey]);\n        }\n\n        // you can add virtual properties\n        $propertyMetadataMap['is_sensitive'] = new PropertyMetadata(\n            name: 'theNameWontBeUsed',\n            type: Type::bool(),\n            nativeToStreamValueTransformers: [fn() => true],\n        );\n\n        return $propertyMetadataMap;\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\JsonStreamer\\Attribute\\JsonStreamable;\n\n#[JsonStreamable(asObject: true, asList: true)]\nclass StreamableData\n{\n    // ...\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/serializer/streaming_json.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/components/using_components.html"
+  ]
+}

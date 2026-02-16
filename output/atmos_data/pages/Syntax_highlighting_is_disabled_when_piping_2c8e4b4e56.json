@@ -1,0 +1,19 @@
+{
+  "title": "Syntax highlighting is disabled when piping",
+  "content": "atmos describe config | grep base_path\n```\n</Note>\n\nAtmos supports a wide range of themes for syntax highlighting. You can find the full list of supported themes [here](https://xyproto.github.io/splash/docs/).\n\nimport Intro from '@site/src/components/Intro';\nimport Note from '@site/src/components/Note';",
+  "code_samples": [],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Supported Themes",
+      "id": "supported-themes"
+    },
+    {
+      "level": "h2",
+      "text": "Global Flags",
+      "id": "global-flags"
+    }
+  ],
+  "url": "llms-txt#syntax-highlighting-is-disabled-when-piping",
+  "links": []
+}

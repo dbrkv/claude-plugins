@@ -1,0 +1,108 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/encore/faq.html",
+  "title": "WebpackEncore: FAQ and Common Issues",
+  "content": "There are two important things to remember when deploying your assets.\n\n1) Compile Assets for Production\n\nOptimize your assets for production by running:\n\nThat will minify your assets and make other performance optimizations. Yay!\n\nBut, what server should you run this command on? That depends on how you deploy. For example, you could execute this locally (or on a build server), and use rsync or something else to transfer the generated files to your production server. Or, you could put your files on your production server first (e.g. via git pull) and then run this command on production (ideally, before traffic hits your code). In this case, you'll need to install Node.js on your production server.\n\n2) Only Deploy the Built Assets\n\nThe only files that need to be deployed to your production servers are the final, built assets (e.g. the public/build directory). You do not need to install Node.js, deploy webpack.config.js, the node_modules directory or even your source asset files, unless you plan on running encore production on your production machine. Once your assets are built, these are the only thing that need to live on the production server.\n\nNo, unless you plan to build your production assets on your production server, which is not recommended. See How Do I Deploy my Encore Assets?.\n\nYou should commit all of your files to git, except for the node_modules/ directory and the built files. Your .gitignore file should include:\n\nYou should commit all of your source asset files, package.json and package-lock.json.\n\nIf your app does not live at the root of your web server (i.e. it lives under a subdirectory, like /myAppSubdir), you will need to configure that when calling Encore.setPublicPath():\n\nIf you're using the encore_entry_script_tags() and encore_entry_link_tags() Twig shortcuts (or are processing your assets through entrypoints.json in some other way) you're done! These shortcut methods read from an entrypoints.json file that will now contain the subdirectory.\n\nThis error happens when your code (or some library that you are using) expects $ or jQuery to be a global variable. But, when you use Webpack and require('jquery'), no global variables are set.\n\nThe fix depends on if the error is happening in your code or inside some third-party code that you're using. See jQuery Plugins and Legacy Applications with Webpack Encore for the fix.\n\nIf you get this error, it's probably because you've forgotten to add a script tag for the runtime.js file that contains Webpack's runtime. If you're using the encore_entry_script_tags() Twig function, this should never happen: the file script tag is rendered automatically.\n\nUsually, after you install a package via npm, you can require / import it to use it. For example, after running npm install respond.js, you try to require that module:\n\nBut, instead of working, you see an error:\n\nThis dependency was not found:\n\nTypically, a package will \"advertise\" its \"main\" file by adding a main key to its package.json. But sometimes, old libraries won't have this. Instead, you'll need to specifically require the file you need. In this case, the file you should use is located at node_modules/respond.js/dest/respond.src.js. You can require this via:\n\nFor performance, Encore does not process libraries inside node_modules/ through Babel. But, you can change that via the configureBabel() method. See Configuring Babel with Encore for details.\n\nWebpack integration in PhpStorm and other IDEs makes your development more productive (for example by resolving aliases). However, you may face this error:\n\nIt fails because the Encore Runtime Environment is only configured when you are running it (e.g. when executing npx encore dev). Fix this issue calling to Encore.isRuntimeEnvironmentConfigured() and Encore.configureRuntimeEnvironment() methods:\n\nAfter installing Encore, you might see the following error when running tests locally or on your Continuous Integration server:\n\nThis is happening because you did not build your Encore assets, hence no entrypoints.json file. To solve this error, either build Encore assets or set the strict_mode option to false (this prevents Encore's Twig functions to trigger exceptions when there's no entrypoints.json file):\n\nCode consumes server resources. Blackfire tells you how\n\nGet your Sylius expertise recognized",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "WebpackEncore: FAQ and Common Issues",
+      "id": "webpackencore-faq-and-common-issues"
+    },
+    {
+      "level": "h2",
+      "text": "How Do I Deploy My Encore Assets?",
+      "id": "how-do-i-deploy-my-encore-assets"
+    },
+    {
+      "level": "h2",
+      "text": "Do I Need to Install Node.js on My Production Server?",
+      "id": "do-i-need-to-install-node-js-on-my-production-server"
+    },
+    {
+      "level": "h2",
+      "text": "What Files Should I Commit to git? And which Should I Ignore?",
+      "id": "what-files-should-i-commit-to-git-and-which-should-i-ignore"
+    },
+    {
+      "level": "h2",
+      "text": "My App Lives under a Subdirectory",
+      "id": "my-app-lives-under-a-subdirectory"
+    },
+    {
+      "level": "h2",
+      "text": "\"jQuery is not defined\" or \"$ is not defined\"",
+      "id": "jquery-is-not-defined-or-is-not-defined"
+    },
+    {
+      "level": "h2",
+      "text": "Uncaught ReferenceError: webpackJsonp is not defined",
+      "id": "uncaught-referenceerror-webpackjsonp-is-not-defined"
+    },
+    {
+      "level": "h2",
+      "text": "This dependency was not found: some-module in ./path/to/file.js",
+      "id": "this-dependency-was-not-found-some-module-in-path-to-file-js"
+    },
+    {
+      "level": "h2",
+      "text": "I need to execute Babel on a third-party Module",
+      "id": "i-need-to-execute-babel-on-a-third-party-module"
+    },
+    {
+      "level": "h2",
+      "text": "How Do I Integrate my Encore Configuration with my IDE?",
+      "id": "how-do-i-integrate-my-encore-configuration-with-my-ide"
+    },
+    {
+      "level": "h2",
+      "text": "My Tests are Failing Because of entrypoints.json File",
+      "id": "my-tests-are-failing-because-of-entrypoints-json-file"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ ./node_modules/.bin/encore production",
+      "language": "unknown"
+    },
+    {
+      "code": "/node_modules/\n# whatever path you're passing to Encore.setOutputPath()\n/public/build",
+      "language": "unknown"
+    },
+    {
+      "code": "// webpack.config.js\n  Encore\n      // ...\n\n      .setOutputPath('public/build/')\n\n-     .setPublicPath('/build')\n+     // this is your *true* public path\n+     .setPublicPath('/myAppSubdir/build')\n\n+     // this is now needed so that your manifest.json keys are still `build/foo.js`\n+     // (which is a file that's used by Symfony's `asset()` function)\n+     .setManifestKeyPrefix('build')\n  ;",
+      "language": "unknown"
+    },
+    {
+      "code": "require('respond.js');",
+      "language": "unknown"
+    },
+    {
+      "code": "// require a non-minified file whenever possible\nrequire('respond.js/dest/respond.src.js');",
+      "language": "unknown"
+    },
+    {
+      "code": "Encore.setOutputPath() cannot be called yet because the runtime environment\ndoesn't appear to be configured. Make sure you're using the encore executable\nor call Encore.configureRuntimeEnvironment() first if you're purposely not\ncalling Encore directly.",
+      "language": "unknown"
+    },
+    {
+      "code": "// webpack.config.js\nconst Encore = require('@symfony/webpack-encore')\n\nif (!Encore.isRuntimeEnvironmentConfigured()) {\n    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');\n}\n\n// ... the rest of the Encore configuration",
+      "language": "javascript"
+    },
+    {
+      "code": "Uncaught PHP Exception Twig\\Error\\RuntimeError:\n\"An exception has been thrown during the rendering of a template\n(\"Could not find the entrypoints file from Webpack:\nthe file \"/var/www/html/public/build/entrypoints.json\" does not exist.",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/test/webpack_encore.yaml\nwebpack_encore:\n    strict_mode: false\n    # ...",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/encore/faq.html",
+    "https://symfony.com/doc/7.3/frontend/encore/versioning.html",
+    "https://symfony.com/doc/7.3/frontend/encore/simple-example.html",
+    "https://symfony.com/doc/7.3/frontend/encore/legacy-applications.html",
+    "https://symfony.com/doc/7.3/frontend/encore/babel.html"
+  ]
+}

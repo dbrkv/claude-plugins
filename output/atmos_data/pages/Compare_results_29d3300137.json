@@ -1,0 +1,13 @@
+{
+  "title": "Compare results",
+  "content": "diff baseline.txt optimized.txt\nbash",
+  "code_samples": [
+    {
+      "code": "**CI/CD Integration:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#compare-results",
+  "links": []
+}

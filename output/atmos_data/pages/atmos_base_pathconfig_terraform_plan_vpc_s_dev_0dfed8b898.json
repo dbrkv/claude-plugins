@@ -1,0 +1,19 @@
+{
+  "title": "atmos --base-path=./config terraform plan vpc -s dev",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "### When to Use Each\n\n- Use `--chdir` when you want Atmos to run as if you had changed directories first\n- Use `--base-path` when your Atmos project root is in a non-standard location\n- Combine them when your working directory and Atmos project root are in different places",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "When to Use Each",
+      "id": "when-to-use-each"
+    }
+  ],
+  "url": "llms-txt#atmos---base-path=./config-terraform-plan-vpc--s-dev",
+  "links": []
+}

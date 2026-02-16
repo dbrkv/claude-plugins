@@ -1,0 +1,8 @@
+{
+  "title": "Terminal 1: Production operations",
+  "content": "atmos auth shell --identity prod-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#terminal-1:-production-operations",
+  "links": []
+}

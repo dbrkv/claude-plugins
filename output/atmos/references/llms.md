@@ -1,0 +1,333 @@
+# atmos
+
+> Universal tool for DevOps and Cloud Automation
+
+This file contains links to documentation sections following the llmstxt.org standard.
+
+## Table of Contents
+
+- [Best Practices](https://atmos.tools/docs/best-practices/best-practices): Learn the opinionated "Best Practices" for using Atmos
+- [Component Best Practices](https://atmos.tools/docs/best-practices/components): Learn the opinionated "Best Practices" for using Components with Atmos
+- [Stacks Best Practices](https://atmos.tools/docs/best-practices/stacks): Learn the opinionated "Best Practices" for using Stacks with Atmos
+- [Terraform Best Practices with Atmos](https://atmos.tools/docs/best-practices/terraform): Learn the opinionated "Best Practices" for using Terraform with Atmos
+- [CLI Commands Cheat Sheet](https://atmos.tools/docs/cheatsheets/commands): CLI Commands Cheat Sheet
+- [Atmos Cheatsheet](https://atmos.tools/docs/cheatsheets/common): import Link from '@docusaurus/Link'
+- [Components Cheatsheet](https://atmos.tools/docs/cheatsheets/components): import Link from '@docusaurus/Link'
+- [Stacks Cheatsheet](https://atmos.tools/docs/cheatsheets/stacks): import Link from '@docusaurus/Link'
+- [Vendoring Cheatsheet](https://atmos.tools/docs/cheatsheets/vendoring): import Card from '@site/src/components/Card'
+- [Atmos CLI](https://atmos.tools/docs/cli/cli): This command starts an interactive UI to select an Atmos command, component and stack. Press "Enter" to execute the command
+- [atmos atlantis generate repo-config](https://atmos.tools/docs/cli/commands/atlantis/atlantis-generate-repo-config): Use this command to generate a repository configuration for Atlantis.
+- [atmos atlantis](https://atmos.tools/docs/cli/commands/atlantis/usage): Atmos Atlantis Commands
+- [atmos auth env](https://atmos.tools/docs/cli/commands/auth/auth-env): Export temporary cloud credentials as environment variables for the selected identity.
+- [atmos auth exec](https://atmos.tools/docs/cli/commands/auth/auth-exec): Execute a command with authentication environment variables set for the selected identity.
+- [atmos auth list](https://atmos.tools/docs/cli/commands/auth/auth-list): List all configured authentication providers and identities with their relationships and chains.
+- [atmos auth login](https://atmos.tools/docs/cli/commands/auth/auth-login): Authenticate to cloud providers using an identity defined in atmos.yaml.
+- [atmos auth shell](https://atmos.tools/docs/cli/commands/auth/auth-shell): Launch an interactive shell with authentication environment variables configured for the selected identity.
+- [atmos auth user configure](https://atmos.tools/docs/cli/commands/auth/auth-user-configure): Configure static AWS user credentials and store them securely in your system keychain.
+- [atmos auth user](https://atmos.tools/docs/cli/commands/auth/auth-user): Manage cloud provider user credentials in the local keychain.
+- [atmos auth validate](https://atmos.tools/docs/cli/commands/auth/auth-validate): Validate the authentication configuration in atmos.yaml for syntax and logical errors.
+- [atmos auth whoami](https://atmos.tools/docs/cli/commands/auth/auth-whoami): Show current authentication status for the selected identity.
+- [atmos auth console](https://atmos.tools/docs/cli/commands/auth/console): Open cloud provider web console in your default browser using authenticated credentials.
+- [atmos auth logout](https://atmos.tools/docs/cli/commands/auth/logout): Remove locally cached credentials and session data
+- [Azure Authentication](https://atmos.tools/docs/cli/commands/auth/tutorials/azure-authentication): Complete guide for authenticating to Azure using Atmos Auth with device code flow, OIDC, and service principals.
+- [Configuring Geodesic with Atmos Auth](https://atmos.tools/docs/cli/commands/auth/tutorials/configuring-geodesic): Guide for configuring Geodesic to work with Atmos Auth for AWS authentication.
+- [Migrating from Leapp](https://atmos.tools/docs/cli/commands/auth/tutorials/migrating-from-leapp): Guide for migrating from Leapp to Atmos Auth for AWS IAM Identity Center authentication.
+- [atmos auth](https://atmos.tools/docs/cli/commands/auth/usage): Atmos Authentication Commands
+- [atmos aws eks update-kubeconfig](https://atmos.tools/docs/cli/commands/aws/aws-eks-update-kubeconfig): Use this command to download `kubeconfig` from an EKS cluster and saves it to a file.
+- [atmos aws](https://atmos.tools/docs/cli/commands/aws/usage): Atmos AWS Commands
+- [Atmos CLI Commands](https://atmos.tools/docs/cli/commands/commands): Atmos CLI Commands
+- [atmos completion](https://atmos.tools/docs/cli/commands/completion): Use this command to generate completion scripts for `Bash`, `Zsh`, `Fish` and `PowerShell`.
+- [atmos describe affected](https://atmos.tools/docs/cli/commands/describe/describe-affected): This command produces a list of the affected Atmos components and stacks given two Git commits.
+- [atmos describe component](https://atmos.tools/docs/cli/commands/describe/describe-component): Use this command to describe the complete configuration for an Atmos component in an Atmos stack.
+- [atmos describe config](https://atmos.tools/docs/cli/commands/describe/describe-config): Use this command to show the final (deep-merged) CLI configuration of all `atmos.yaml` file(s).
+- [atmos describe dependents](https://atmos.tools/docs/cli/commands/describe/describe-dependents): This command produces a list of Atmos components in Atmos stacks that depend on the provided Atmos component.
+- [atmos describe stacks](https://atmos.tools/docs/cli/commands/describe/describe-stacks): Use this command to show the fully deep-merged configuration for all stacks and the components in the stacks.
+- [atmos describe workflows](https://atmos.tools/docs/cli/commands/describe/describe-workflows): Use this command to show all configured Atmos workflows.
+- [atmos describe](https://atmos.tools/docs/cli/commands/describe/usage): Describe Atmos Configurations
+- [atmos docs generate](https://atmos.tools/docs/cli/commands/docs/docs-generate): Generate documentation artifacts based on a named section under `docs.generate` in atmos.yaml
+- [atmos docs](https://atmos.tools/docs/cli/commands/docs/usage): Use this command to open the Atmos docs
+- [atmos helmfile generate varfile](https://atmos.tools/docs/cli/commands/helmfile/helmfile-generate-varfile): Use this command to generate a varfile for a `helmfile` component in a stack.
+- [atmos helmfile](https://atmos.tools/docs/cli/commands/helmfile/usage): import Screengrab from '@site/src/components/Screengrab'
+- [atmos help](https://atmos.tools/docs/cli/commands/help): import Screengrab from '@site/src/components/Screengrab'
+- [atmos list components](https://atmos.tools/docs/cli/commands/list/list-components): Use this command to list Atmos components
+- [atmos list metadata](https://atmos.tools/docs/cli/commands/list/list-metadata): The `atmos list metadata` command displays component metadata across all stacks.
+- [atmos list settings](https://atmos.tools/docs/cli/commands/list/list-settings): The `atmos list settings` command displays component settings across all stacks.
+- [atmos list stacks](https://atmos.tools/docs/cli/commands/list/list-stacks): Use this command to list all Stack configurations or a stack of a specified component.
+- [atmos list values](https://atmos.tools/docs/cli/commands/list/list-values): The `atmos list values` command displays component values across all stacks where the component is used.
+- [atmos list vars](https://atmos.tools/docs/cli/commands/list/list-vars): The `atmos list vars` command displays component variables across all stacks where the component is used.
+- [atmos list workflows](https://atmos.tools/docs/cli/commands/list/list-workflows): The `atmos list workflows` command displays all Atmos workflows defined in your project.
+- [atmos list themes](https://atmos.tools/docs/cli/commands/list/themes): List available terminal themes for markdown rendering
+- [atmos list](https://atmos.tools/docs/cli/commands/list/usage): List Atmos Stacks and Components
+- [atmos packer build](https://atmos.tools/docs/cli/commands/packer/packer-build): import File from '@site/src/components/File'
+- [atmos packer init](https://atmos.tools/docs/cli/commands/packer/packer-init): import File from '@site/src/components/File'
+- [atmos packer inspect](https://atmos.tools/docs/cli/commands/packer/packer-inspect): import File from '@site/src/components/File'
+- [atmos packer output](https://atmos.tools/docs/cli/commands/packer/packer-output): import File from '@site/src/components/File'
+- [atmos packer validate](https://atmos.tools/docs/cli/commands/packer/packer-validate): import File from '@site/src/components/File'
+- [atmos packer version](https://atmos.tools/docs/cli/commands/packer/packer-version): import useBaseUrl from '@docusaurus/useBaseUrl';
+- [atmos packer](https://atmos.tools/docs/cli/commands/packer/usage): import Screengrab from '@site/src/components/Screengrab'
+- [atmos pro lock](https://atmos.tools/docs/cli/commands/pro/pro-lock): Use this command to lock a stack in Atmos Pro so that it cannot be planned or applied by another process (pull request, CI/CD, etc.)
+- [atmos pro unlock](https://atmos.tools/docs/cli/commands/pro/pro-unlock): Use this command to unlock a stack in Atmos Pro that has previously been locked by the lock command.
+- [atmos pro](https://atmos.tools/docs/cli/commands/pro/usage): Atmos Pro Commands
+- [atmos terraform clean](https://atmos.tools/docs/cli/commands/terraform/terraform-clean): import Screengrab from '@site/src/components/Screengrab'
+- [atmos terraform deploy](https://atmos.tools/docs/cli/commands/terraform/terraform-deploy): import Screengrab from '@site/src/components/Screengrab'
+- [atmos terraform generate backend](https://atmos.tools/docs/cli/commands/terraform/terraform-generate-backend): Use this command to generate a Terraform backend config file for an Atmos terraform component in a stack.
+- [atmos terraform generate backends](https://atmos.tools/docs/cli/commands/terraform/terraform-generate-backends): Use this command to generate the Terraform backend config files for all Atmos terraform components in all stacks.
+- [atmos terraform generate planfile](https://atmos.tools/docs/cli/commands/terraform/terraform-generate-planfile): import Screengrab from '@site/src/components/Screengrab'
+- [atmos terraform generate varfile](https://atmos.tools/docs/cli/commands/terraform/terraform-generate-varfile): import Screengrab from '@site/src/components/Screengrab'
+- [atmos terraform generate varfiles](https://atmos.tools/docs/cli/commands/terraform/terraform-generate-varfiles): Use this command to generate the Terraform varfiles (`.tfvar`) for all Atmos terraform components in all stacks.
+- [atmos terraform plan-diff](https://atmos.tools/docs/cli/commands/terraform/terraform-plan-diff): import Tabs from "@theme/Tabs";
+- [atmos terraform shell](https://atmos.tools/docs/cli/commands/terraform/terraform-shell): This command starts a new `SHELL` configured with the environment for an Atmos component in a stack to allow execution of all native terraform comm...
+- [atmos terraform workspace](https://atmos.tools/docs/cli/commands/terraform/terraform-workspace): This command calculates the `terraform` workspace for an Atmos component (from the context variables and stack config). It runs `terraform init -re...
+- [atmos terraform](https://atmos.tools/docs/cli/commands/terraform/usage): import Screengrab from '@site/src/components/Screengrab'
+- [Browse Themes](https://atmos.tools/docs/cli/commands/theme/browse): Browse and search available terminal themes
+- [atmos theme list](https://atmos.tools/docs/cli/commands/theme/list): List available terminal themes for Atmos CLI
+- [atmos theme show](https://atmos.tools/docs/cli/commands/theme/show): Show details and preview of a specific terminal theme
+- [atmos theme](https://atmos.tools/docs/cli/commands/theme/usage): Manage terminal themes for Atmos CLI
+- [atmos validate](https://atmos.tools/docs/cli/commands/validate/usage): Validate Atmos Configurations
+- [atmos validate component](https://atmos.tools/docs/cli/commands/validate/validate-component): Use this command to validate an Atmos component in a stack using JSON Schema and OPA policies.
+- [atmos validate editorconfig](https://atmos.tools/docs/cli/commands/validate/validate-editorconfig): Use this command to validate the workdir of the Atmos project against the rules defined in the .editorconfig file.
+- [atmos validate schema](https://atmos.tools/docs/cli/commands/validate/validate-schema): Use this command to validate the schema of yaml files of the Atmos project against the rules defined in the schema/manifest file.
+- [atmos validate stacks](https://atmos.tools/docs/cli/commands/validate/validate-stacks): Use this command to validate all Stack configurations.
+- [atmos vendor](https://atmos.tools/docs/cli/commands/vendor/usage): Vendor Atmos Components and Stacks
+- [atmos vendor pull](https://atmos.tools/docs/cli/commands/vendor/vendor-pull): Use this command to pull sources and mixins from remote repositories for Terraform and Helmfile components and stacks.
+- [atmos version list](https://atmos.tools/docs/cli/commands/version/list): List recent Atmos releases with pagination and filtering options
+- [atmos version show](https://atmos.tools/docs/cli/commands/version/show): Display detailed information about a specific Atmos release
+- [atmos version](https://atmos.tools/docs/cli/commands/version/usage): Use this command to get the Atmos CLI version
+- [atmos workflow](https://atmos.tools/docs/cli/commands/workflow): Use this command to perform sequential execution of `atmos` and `shell` commands defined as workflow steps.
+- [Customize Commands](https://atmos.tools/docs/cli/configuration/commands): Use the `atmos.yaml` to configure any custom commands you want to add to the Atmos CLI.
+- [Customize Component Behavior](https://atmos.tools/docs/cli/configuration/components): Use the `atmos.yaml` configuration file to specify default behaviors for components, such as what command to use when running Terraform commands, t...
+- [CLI Configuration](https://atmos.tools/docs/cli/configuration/configuration): Use the `atmos.yaml` configuration file to control the behavior of the Atmos CLI.
+- [Error Handling & Monitoring](https://atmos.tools/docs/cli/configuration/errors): Configure error formatting and Sentry integration to monitor Atmos failures across your organization
+- [Markdown Styling](https://atmos.tools/docs/cli/configuration/markdown-styling): Configure custom markdown styling for Atmos CLI output
+- [Secret Masking Configuration](https://atmos.tools/docs/cli/configuration/mask): Configure automatic secret masking for secure terminal output
+- [Customize Stack Behavior](https://atmos.tools/docs/cli/configuration/stacks): Use the `atmos.yaml` to configure where Atmos will discover stack configurations.
+- [Terminal Settings](https://atmos.tools/docs/cli/configuration/terminal): Configure terminal output settings including syntax highlighting
+- [Global Flags](https://atmos.tools/docs/cli/global-flags): Complete reference for all global command-line flags available in Atmos
+- [Atmos Manifest JSON Schema](https://atmos.tools/docs/cli/schemas): Atmos Schemas
+- [Telemetry](https://atmos.tools/docs/cli/telemetry): Collect Atmos usage telemetry
+- [Atmos Versioning](https://atmos.tools/docs/cli/versioning): import Intro from '@site/src/components/Intro'
+- [Community](https://atmos.tools/docs/community/community): Community
+- [Office Hours](https://atmos.tools/docs/community/office-hours): Office Hours with Cloud Posse
+- [#atmos](https://atmos.tools/docs/community/slack): Cloud Posse's SweetOps Slack Community
+- [Code of Conduct](https://atmos.tools/docs/contribute/coc): import Intro from '@site/src/components/Intro'
+- [Contributing](https://atmos.tools/docs/contribute/contributing): Contributing
+- [How to Contribute](https://atmos.tools/docs/contribute/how-to-contribute): Thanks for the interest in contributing to the Atmos project!
+- [Component Library](https://atmos.tools/docs/core-concepts/components/component-library): A component library is a collection of reusable building blocks.
+- [Atmos Components](https://atmos.tools/docs/core-concepts/components/components): Components are opinionated building blocks of infrastructure as code that solve one specific problem or use-case.
+- [Using Helmfiles](https://atmos.tools/docs/core-concepts/components/helmfile): import Intro from '@site/src/components/Intro'
+- [Terraform/OpenTofu Backends](https://atmos.tools/docs/core-concepts/components/terraform/backends): Configure Terraform/OpenTofu Backends.
+- [Brownfield Considerations](https://atmos.tools/docs/core-concepts/components/terraform/brownfield): import Intro from '@site/src/components/Intro'
+- [Terraform Providers](https://atmos.tools/docs/core-concepts/components/terraform/providers): Configure and override Terraform Providers.
+- [State Backend Configuration](https://atmos.tools/docs/core-concepts/components/terraform/state-backend): import Intro from '@site/src/components/Intro'
+- [Terraform Root Modules](https://atmos.tools/docs/core-concepts/components/terraform/terraform): Learn why Atmos can change how you think about the Terraform modules that you use to build your infrastructure.
+- [Terraform Workspaces](https://atmos.tools/docs/core-concepts/components/terraform/workspaces): Terraform Workspaces.
+- [Core Concepts of the Atmos Framework](https://atmos.tools/docs/core-concepts/core-concepts): Atmos Core Concepts
+- [Atmos Custom Commands](https://atmos.tools/docs/core-concepts/custom-commands/custom-commands): import File from '@site/src/components/File'
+- [Deploy Components](https://atmos.tools/docs/core-concepts/deploy/deploy): Deploy components with a single command or in a CI/CD pipeline.
+- [Describe Components](https://atmos.tools/docs/core-concepts/describe/components): Describe a component in a stack to view the fully deep-merged configuration
+- [Describe Configuration](https://atmos.tools/docs/core-concepts/describe/describe): Describing your configuration so you understand what's happening.
+- [Describe Stacks](https://atmos.tools/docs/core-concepts/describe/stacks): Describe stacks to view the fully deep-merged configuration
+- [Configure Atmos CLI](https://atmos.tools/docs/core-concepts/projects/configuration/configuration): CLI configuration for Atmos to find your Terraform components and Atmos stacks
+- [Configure Helmfile](https://atmos.tools/docs/core-concepts/projects/configuration/helmfile): import Intro from '@site/src/components/Intro'
+- [Configure OpenTofu](https://atmos.tools/docs/core-concepts/projects/configuration/opentofu): import useBaseUrl from '@docusaurus/useBaseUrl';
+- [Configure Packer](https://atmos.tools/docs/core-concepts/projects/configuration/packer): import useBaseUrl from '@docusaurus/useBaseUrl';
+- [Configure Stores](https://atmos.tools/docs/core-concepts/projects/configuration/stores): import Intro from '@site/src/components/Intro'
+- [Configure Terraform](https://atmos.tools/docs/core-concepts/projects/configuration/terraform): import useBaseUrl from '@docusaurus/useBaseUrl';
+- [Folder Structure](https://atmos.tools/docs/core-concepts/projects/layout): Recommended way to organize your Atmos stacks and components
+- [Setup Projects for Atmos](https://atmos.tools/docs/core-concepts/projects/projects): import DocCardList from '@theme/DocCardList'
+- [Configure Your Editor for Atmos](https://atmos.tools/docs/core-concepts/projects/setup-editor): import TabItem from "@theme/TabItem";
+- [Using Remote State](https://atmos.tools/docs/core-concepts/share-data/remote-state): import Intro from '@site/src/components/Intro'
+- [Share Data Between Components](https://atmos.tools/docs/core-concepts/share-data/share-data): Share data between loosely-coupled components in Atmos
+- [Stack Catalogs](https://atmos.tools/docs/core-concepts/stacks/catalogs): Organize Stack configurations into catalogs for easy imports.
+- [Configuring Components in Stacks](https://atmos.tools/docs/core-concepts/stacks/define-components): import Intro from '@site/src/components/Intro'
+- [Configure Dependencies Between Components](https://atmos.tools/docs/core-concepts/stacks/dependencies): import File from '@site/src/components/File'
+- [Manage Lifecycle Events with Hooks](https://atmos.tools/docs/core-concepts/stacks/hooks): Use lifecycle hooks to take action at various points in the lifecycle of your components.
+- [Import Stack Configurations](https://atmos.tools/docs/core-concepts/stacks/imports): import File from '@site/src/components/File'
+- [Inherit Configurations in Atmos Stacks](https://atmos.tools/docs/core-concepts/stacks/inheritance/inheritance): import File from '@site/src/components/File'
+- [Stack Mixins](https://atmos.tools/docs/core-concepts/stacks/inheritance/mixins): import File from '@site/src/components/File'
+- [Override Configurations](https://atmos.tools/docs/core-concepts/stacks/overrides): Use the 'Component Overrides' pattern to modify components' configuration and behavior in the current scope.
+- [Atmos Stacks](https://atmos.tools/docs/core-concepts/stacks/stacks): Use Stacks to configure Components for an environment
+- [Template Data Sources](https://atmos.tools/docs/core-concepts/stacks/templates/datasources): import File from '@site/src/components/File'
+- [Stack Manifest Templating](https://atmos.tools/docs/core-concepts/stacks/templates/templates): import File from '@site/src/components/File'
+- [EditorConfig Validation](https://atmos.tools/docs/core-concepts/validate/editorconfig): Use EditorConfig Checker to validate your configurations.
+- [JSON Schema Validation](https://atmos.tools/docs/core-concepts/validate/json-schema): Use JSON Schema policies to validate Stacks and Component configurations.
+- [Open Policy Agent (OPA) Validation](https://atmos.tools/docs/core-concepts/validate/opa): Use OPA policies to validate Stacks and Component configurations.
+- [Terraform Input Variables Validation](https://atmos.tools/docs/core-concepts/validate/terraform-variables): Use OPA policies to validate Terraform input variables.
+- [Validating Stack Configurations](https://atmos.tools/docs/core-concepts/validate/validate): Use JSON Schema, OPA policies, and EditorConfig Checker to validate Components.
+- [Component Manifest](https://atmos.tools/docs/core-concepts/vendor/components-manifest): Use Component manifests to make copies of 3rd-party components in your own repo.
+- [Vendor URL Syntax](https://atmos.tools/docs/core-concepts/vendor/url-syntax): Learn how to use URLs and paths in Atmos vendor manifests
+- [Vendor Manifest](https://atmos.tools/docs/core-concepts/vendor/vendor-manifest): Use Atmos vendoring to make copies of 3rd-party components, stacks, and other artifacts in your own repo.
+- [Vendoring](https://atmos.tools/docs/core-concepts/vendor/vendor): Use Atmos vendoring to make copies of 3rd-party components, stacks, and other artifacts in your own repo.
+- [Workflows](https://atmos.tools/docs/core-concepts/workflows/workflows): import File from '@site/src/components/File'
+- [Abstract Component](https://atmos.tools/docs/design-patterns/abstract-component): Abstract Component Atmos Design Pattern
+- [Component Catalog Patterns](https://atmos.tools/docs/design-patterns/component-catalog): Component Catalog Patterns in Atmos - Strategies for Organizing Reusable Component Configurations
+- [Component Catalog Template](https://atmos.tools/docs/design-patterns/component-catalog/template): Component Catalog Template Atmos Design Pattern
+- [Component Catalog with Mixins](https://atmos.tools/docs/design-patterns/component-catalog/with-mixins): Component Catalog with Mixins Atmos Design Pattern
+- [Component Inheritance](https://atmos.tools/docs/design-patterns/component-inheritance): Component Inheritance Atmos Design Pattern
+- [Component Overrides](https://atmos.tools/docs/design-patterns/component-overrides): Component Overrides Atmos Design Pattern
+- [The _defaults.yaml Design Pattern](https://atmos.tools/docs/design-patterns/defaults-pattern): A naming convention for organizing hierarchical configuration defaults in Atmos
+- [Atmos Design Patterns](https://atmos.tools/docs/design-patterns/design-patterns): Techniques of Reusable Infrastructure Configuration
+- [Inline Component Configuration](https://atmos.tools/docs/design-patterns/inline-component-configuration): Inline Component Configuration Atmos Design Pattern
+- [Inline Component Customization](https://atmos.tools/docs/design-patterns/inline-component-customization): Inline Component Customization Atmos Design Pattern
+- [Layered Stack Configuration](https://atmos.tools/docs/design-patterns/layered-stack-configuration): Layered Stack Configuration Atmos Design Pattern
+- [Multiple Component Instances](https://atmos.tools/docs/design-patterns/multiple-component-instances): Multiple Component Instances Atmos Design Pattern
+- [Organizational Structure Configuration](https://atmos.tools/docs/design-patterns/organizational-structure-configuration): Organizational Structure Configuration Atmos Design Pattern
+- [Partial Component Configuration](https://atmos.tools/docs/design-patterns/partial-component-configuration): Partial Component Configuration Atmos Design Pattern
+- [Partial Stack Configuration](https://atmos.tools/docs/design-patterns/partial-stack-configuration): Partial Stack Configuration Atmos Design Pattern
+- [Provider Development Pattern](https://atmos.tools/docs/design-patterns/provider-development): Develop and test custom Terraform providers locally with Atmos
+- [Summary](https://atmos.tools/docs/design-patterns/summary): Summary
+- [Continuous Version Deployment](https://atmos.tools/docs/design-patterns/version-management/continuous-version-deployment): Continuous Version Deployment - The recommended trunk-based deployment strategy with automated progressive rollout
+- [Folder-Based Versioning](https://atmos.tools/docs/design-patterns/version-management/folder-based-versioning): Folder-Based Versioning - The foundational approach for organizing components with explicit folder structure
+- [Git Flow - Branches as Channels](https://atmos.tools/docs/design-patterns/version-management/git-flow-branches-as-channels): Git Flow - The branch-based deployment strategy alternative to Continuous Version Deployment
+- [Version Management Patterns](https://atmos.tools/docs/design-patterns/version-management): Version Management Patterns in Atmos - Strategies for Managing Component Versions
+- [Release Tracks/Channels](https://atmos.tools/docs/design-patterns/version-management/release-tracks-channels): Release Tracks/Channels - Organize components by named channels within Continuous Version Deployment
+- [Strict Version Pinning](https://atmos.tools/docs/design-patterns/version-management/strict-version-pinning): Strict Version Pinning - Organize components using explicit SemVer versions within Continuous Version Deployment
+- [Vendoring Component Versions](https://atmos.tools/docs/design-patterns/version-management/vendoring-components): Vendoring Component Versions - A complementary technique for automating component version copying
+- [Versioning Schemes](https://atmos.tools/docs/design-patterns/version-management/versioning-schemes): Common versioning schemes for naming component versions in Atmos
+- [Atmos Functions](https://atmos.tools/docs/functions): Atmos Functions
+- [atmos.Component](https://atmos.tools/docs/functions/template/atmos.Component): Read the remote state or configuration of any Atmos component
+- [atmos.GomplateDatasource](https://atmos.tools/docs/functions/template/atmos.GomplateDatasource): Fetch external data from APIs, files, or cloud services with automatic caching
+- [atmos.Store](https://atmos.tools/docs/functions/template/atmos.Store): Read a value from a store
+- [Atmos Template Functions](https://atmos.tools/docs/functions/template): Atmos functions for the Go's template language.
+- [!env](https://atmos.tools/docs/functions/yaml/env): Retrieve environment variables from stack manifests or OS environment and assign them to sections in Atmos stack manifests
+- [!exec](https://atmos.tools/docs/functions/yaml/exec): Execute shell scripts and assign the results to the sections in Atmos stack manifests
+- [!include](https://atmos.tools/docs/functions/yaml/include): Download local or remote files from different sources, and insert their contents or specific values directly into sections of your stack manifests
+- [!include.raw](https://atmos.tools/docs/functions/yaml/include.raw): Force inclusion of files as raw strings regardless of their extension or content
+- [Atmos YAML Functions](https://atmos.tools/docs/functions/yaml): import File from '@site/src/components/File'
+- [!repo-root](https://atmos.tools/docs/functions/yaml/repo-root): Get the root directory of the Atmos repository
+- [!store.get](https://atmos.tools/docs/functions/yaml/store.get): Retrieve arbitrary keys directly from a store
+- [!store](https://atmos.tools/docs/functions/yaml/store): Read a value from a store for an Atmos component in a stack
+- [!template](https://atmos.tools/docs/functions/yaml/template): Handle outputs containing maps or lists returned from the atmos.Component template function
+- [!terraform.output](https://atmos.tools/docs/functions/yaml/terraform.output): Read the remote state of any Atmos component from Terraform/OpenTofu outputs
+- [!terraform.state](https://atmos.tools/docs/functions/yaml/terraform.state): The FASTEST way to retrieve Terraform outputs - reads directly from state backends without initializing Terraform or downloading providers
+- [Abstract Component](https://atmos.tools/docs/glossary/abstract-component): An *Abstract Component* is a component baseline required to be inherited by a *Real Component* in order to be instantiated.
+- [Catalog](https://atmos.tools/docs/glossary/catalog): A *Catalog* is a collection of reusable configurations, such as Stack configurations.
+- [Component Instance](https://atmos.tools/docs/glossary/component-instance): A *Component Instance* is a configuration of a real component in a parent stack that can be instantiated, such as deployed.
+- [Component](https://atmos.tools/docs/glossary/component): *Components* are reusable building blocks of some tool, such as terraform "root" modules.
+- [Concrete Component](https://atmos.tools/docs/glossary/concrete-component): Also known as a *Real Component*.
+- [Environment](https://atmos.tools/docs/glossary/environment): An *Environment* is a location where resources are deployed, such as `us-east-1`.
+- [Programming Framework](https://atmos.tools/docs/glossary/framework): Think of a programming framework like a toolkit or a set of building blocks for creating software. Just like how a carpenter uses specific tools an...
+- [Imports](https://atmos.tools/docs/glossary/imports): *Imports* are a mechanism to include one configuration in another for the purpose of reducing duplication.
+- [Glossary](https://atmos.tools/docs/glossary): Here's a list of the terms, concepts and conventions used throughout the Atmos project.
+- [Inheritance](https://atmos.tools/docs/glossary/inheritance): *Inheritance* is a mechanism to derive a configuration from a hierarchy of other configurations that share a set of attributes.
+- [Integration](https://atmos.tools/docs/glossary/integration): An *Integration* is a mechanism of working with other tools and APIs.
+- [Kubernetes Namespace](https://atmos.tools/docs/glossary/kubernetes-namespace): Frequently it will be represented by a variable named `kubernetes_namespace`; it should not be confused with what Atmos calls namespace.
+- [Library](https://atmos.tools/docs/glossary/library): A *Library* is a collection of "Components" that can be treated like reusable building blocks.
+- [Mixins](https://atmos.tools/docs/glossary/mixins): *Mixins* are a partial configuration that is imported for use by other stacks without having to be the parent stack.
+- [Multiple Inheritance](https://atmos.tools/docs/glossary/multiple-inheritance): *Multiple Inheritance* is a mechanism to inherit configurations from multiple sources.
+- [Namespace](https://atmos.tools/docs/glossary/namespace): A *Namespace* is a prefix for all resources in a Stack.
+- [Parent Stack](https://atmos.tools/docs/glossary/parent-stack): The *Parent Stack* configuration defines all components for an environment.
+- [Real Component](https://atmos.tools/docs/glossary/real-component): A *Real Component* is a component that is instantiated in a Parent Stack.
+- [Spacelift Stack](https://atmos.tools/docs/glossary/spacelift-stack): A Spacelift Stack is a Terraform root module. Atmos on the other hand treats a stack as a collection of Terraform root modules.
+- [Stack Manifest](https://atmos.tools/docs/glossary/stack-manifest): Stack manifests are YAML files in which the configuration for all Atmos stacks and components are defined.
+- [Stack](https://atmos.tools/docs/glossary/stack): An Atmos Stack serves as a configuration blueprint that describes a cohesive collection of components, automating the deployment, management,
+- [Stage](https://atmos.tools/docs/glossary/stage): Atmos defines "Stage" as a classification for different lifecycles in infrastructure management, such as Development, Production, Staging, QA, etc....
+- [Tenant](https://atmos.tools/docs/glossary/tenant): A *Tenant* is a logical grouping of resources. In AWS, we use the Tenant to represent the Organizational Unit (OU).
+- [Terraform "Child Module"](https://atmos.tools/docs/glossary/terraform-child-module): Any Terraform module that is invoked by another module, distinguishing itself by not maintaining a separate Terraform state.
+- [Terralith](https://atmos.tools/docs/glossary/terralith): A monolithic Terraform "root module" is also known as a Terralith. It's characterized by an expansive, all-encompassing Terraform configuration tha...
+- [Vendoring](https://atmos.tools/docs/glossary/vendoring): *Vendoring* is a mechanism of making a copy of 3rd-party components within your repository.
+- [Atlantis Integration](https://atmos.tools/docs/integrations/atlantis): import Terminal from '@site/src/components/Terminal'
+- [Affected Stacks](https://atmos.tools/docs/integrations/github-actions/affected-stacks): Identify the affected stacks and components in a pull request
+- [Atmos Terraform Apply](https://atmos.tools/docs/integrations/github-actions/atmos-terraform-apply): Run a `terraform apply` to provision changes
+- [Atmos Terraform Drift Detection](https://atmos.tools/docs/integrations/github-actions/atmos-terraform-drift-detection): Identify drift and create GitHub Issues for remediation
+- [Atmos Terraform Drift Remediation](https://atmos.tools/docs/integrations/github-actions/atmos-terraform-drift-remediation): Remediate Terraform drift using IssueOps
+- [Atmos Terraform Plan](https://atmos.tools/docs/integrations/github-actions/atmos-terraform-plan): Run a `terraform plan` to understand the impact of changes
+- [Component Updater](https://atmos.tools/docs/integrations/github-actions/component-updater): Easily update your vendored components with Pull Requests
+- [GitHub Actions](https://atmos.tools/docs/integrations/github-actions/github-actions): Use GitHub Actions with Atmos
+- [Setup Atmos](https://atmos.tools/docs/integrations/github-actions/setup-atmos): Install Atmos in your GitHub Action workflows
+- [Infrastructure CI/CD (GitOps)](https://atmos.tools/docs/integrations/integrations): Natively supported CI/CD integrations in Atmos
+- [Spacelift Integration](https://atmos.tools/docs/integrations/spacelift): import Intro from '@site/src/components/Intro'
+- [Atmos FAQ](https://atmos.tools/docs/introduction/faq): import ReactPlayer from 'react-player'
+- [Atmos Features](https://atmos.tools/docs/introduction/features): import Intro from '@site/src/components/Intro'
+- [Getting Started with Atmos](https://atmos.tools/docs/introduction): Atmos is a Component Oriented Framework and Orchestration Tool for DevOps that makes it easy to automate Terraform Environments and manage complex ...
+- [Atmos Use-Cases](https://atmos.tools/docs/introduction/use-cases): import Intro from '@site/src/components/Intro'
+- [Nirvana ð«](https://atmos.tools/docs/introduction/why-atmos/nirvana): Teams who adopt Atmos have total clarity of their infrastructure.
+- [Stage 0: ClickOps](https://atmos.tools/docs/introduction/why-atmos/stage-0): All infrastructure is manually provisioned using web interfaces.
+- [Stage 1: Introduction to Terraform](https://atmos.tools/docs/introduction/why-atmos/stage-1): Exploration into Terraform begins with a simple example.
+- [Stage 10: Terraform Bankruptcy ð¥](https://atmos.tools/docs/introduction/why-atmos/stage-10): Teams start looking for alternatives out of frustration.
+- [Stage 2: The Monolithic Root Module](https://atmos.tools/docs/introduction/why-atmos/stage-2): Terraform code expands into a monolithic root module.
+- [Stage 3: Move Towards Modularization](https://atmos.tools/docs/introduction/why-atmos/stage-3): In-house modules are created to avoid code duplication.
+- [Stage 4: Adoption of Open Source Modules](https://atmos.tools/docs/introduction/why-atmos/stage-4): Open Source modules replace in-house modules.
+- [Stage 5: Refactor Root Modules](https://atmos.tools/docs/introduction/why-atmos/stage-5): Root modules are refactored into smaller, more manageable units.
+- [Stage 6: Optimize for DRY Configuration](https://atmos.tools/docs/introduction/why-atmos/stage-6): Configuration management moves to `.tfvar` files.
+- [Stage 7: Terraform Scripting](https://atmos.tools/docs/introduction/why-atmos/stage-7): Scripts automate terraform to make it easier.
+- [Stage 8: Team Challenges](https://atmos.tools/docs/introduction/why-atmos/stage-8): Team expands and begins to struggle with Terraform
+- [Stage 9: DIY CI/CD with Terraform](https://atmos.tools/docs/introduction/why-atmos/stage-9): Terraform is deployed with a CI/CD pipeline
+- [Why Does Atmos Exist?](https://atmos.tools/docs/introduction/why-atmos/why-atmos): Learn about the typical Terraform journey when not using Atmos.
+- [Add Custom Commands](https://atmos.tools/docs/quick-start/advanced/add-custom-commands): import Terminal from '@site/src/components/Terminal'
+- [Advanced Tutorial](https://atmos.tools/docs/quick-start/advanced/advanced): Take 30 minutes to learn the most important Atmos concepts.
+- [Configure Atmos CLI](https://atmos.tools/docs/quick-start/advanced/configure-cli): import File from '@site/src/components/File'
+- [Configure Project Repository](https://atmos.tools/docs/quick-start/advanced/configure-repository): Atmos supports both the [monorepo and polyrepo architectures](https://en.wikipedia.org/wiki/Monorepo) when managing the configurations for components
+- [Configure Terraform Backend](https://atmos.tools/docs/quick-start/advanced/configure-terraform-backend): import File from '@site/src/components/File'
+- [Validate Configurations](https://atmos.tools/docs/quick-start/advanced/configure-validation): Atmos supports [Stack Schema Validation](/cli/schemas) and [Custom Policy Validation](/core-concepts/validate)
+- [Create Atmos Stacks](https://atmos.tools/docs/quick-start/advanced/create-atmos-stacks): import File from '@site/src/components/File'
+- [Automate Common Workflows](https://atmos.tools/docs/quick-start/advanced/create-workflows): import Terminal from '@site/src/components/Terminal'
+- [Final Notes](https://atmos.tools/docs/quick-start/advanced/final-notes): Atmos provides unlimited flexibility in defining and configuring stacks and components in the stacks.
+- [Next Steps](https://atmos.tools/docs/quick-start/advanced/next-steps): You have just learned the **essentials of Atmos**.
+- [Provision](https://atmos.tools/docs/quick-start/advanced/provision): Having configured the Terraform components, the Atmos components catalog, all the mixins and defaults, and the Atmos top-level stacks, we can now
+- [Vendor Components](https://atmos.tools/docs/quick-start/advanced/vendor-components): import Terminal from '@site/src/components/Terminal'
+- [Install Atmos](https://atmos.tools/docs/quick-start/install-atmos): import Tabs from '@theme/Tabs';
+- [Quick Start Introduction](https://atmos.tools/docs/quick-start/introduction): import Link from '@docusaurus/Link'
+- [Thinking Like Atmos](https://atmos.tools/docs/quick-start/mindset): import Link from '@docusaurus/Link'
+- [Configure Atmos CLI](https://atmos.tools/docs/quick-start/simple/configure-cli): import EmbedFile from '@site/src/components/EmbedFile'
+- [Start Your Project](https://atmos.tools/docs/quick-start/simple/configure-project): import KeyPoints from '@site/src/components/KeyPoints'
+- [Use Your Component in a Stack](https://atmos.tools/docs/quick-start/simple/configure-stacks): import File from '@site/src/components/File'
+- [Deploy Another App](https://atmos.tools/docs/quick-start/simple/extra-credit/add-another-component): Provision multiple components in the same stack
+- [Add Custom Commands](https://atmos.tools/docs/quick-start/simple/extra-credit/add-custom-commands): Extend Atmos with your own custom CLI commands
+- [Automate Common Workflows](https://atmos.tools/docs/quick-start/simple/extra-credit/create-workflows): Automate your repetitive tasks with workflows
+- [Extra Credit!](https://atmos.tools/docs/quick-start/simple/extra-credit/extra-credit): import KeyPoints from '@site/src/components/KeyPoints'
+- [Vendor Dependencies](https://atmos.tools/docs/quick-start/simple/extra-credit/vendor-components): Learn how to vendor components from remote sources
+- [Deploy Everything](https://atmos.tools/docs/quick-start/simple/provision): import KeyPoints from '@site/src/components/KeyPoints'
+- [Simple Atmos Tutorial](https://atmos.tools/docs/quick-start/simple/simple): Take 30 minutes to learn the most important Atmos concepts.
+- [Where to go from here...](https://atmos.tools/docs/quick-start/simple/summary): import KeyPoints from '@site/src/components/KeyPoints'
+- [Write Some Components](https://atmos.tools/docs/quick-start/simple/write-components): import EmbedFile from '@site/src/components/EmbedFile'
+- [Atmos Alternatives & Inspirations](https://atmos.tools/docs/reference/alternatives): import Intro from '@site/src/components/Intro'
+- [Reference](https://atmos.tools/docs/reference/reference): Reference
+- [Slides](https://atmos.tools/docs/reference/slides): import Slides from "@site/src/components/Slides";
+- [Debugging](https://atmos.tools/docs/troubleshoot/debugging): :::note
+- [Common Errors](https://atmos.tools/docs/troubleshoot/errors): For organizations running Atmos at scale, consider enabling [Error Handling & Monitoring](/cli/configuration/errors) to track failures across your ...
+- [Performance Profiling](https://atmos.tools/docs/troubleshoot/profiling): Profile and optimize Atmos performance using built-in heatmap visualization and pprof analysis tools.
+- [Atmos component migration in YAML config](https://atmos.tools/docs/tutorials/atmos-component-migrations-in-yaml): Learn how to migrate an Atmos component to a new name or to use the `metadata.inheritance`.
+- [Atmos Example Infrastructure](https://atmos.tools/docs/tutorials/atmos-example-infra): Learn about the Example Infrastructure that Atmos shows how to configure and provision
+- [Getting Started with Atmos](https://atmos.tools/docs/tutorials/atmos-getting-started): Learn what Atmos is and how you can start using it with stacks to simplify your DevOps Automation tasks.
+- [Your First Environment on AWS](https://atmos.tools/docs/tutorials/first-aws-environment): Get your first AWS environment deployed using Atmos, Stacks, and Vendoring
+- [Tutorials](https://atmos.tools/docs/tutorials/tutorials): Here are some lessons on how to implement Atmos in a project.
+- [Fixed: Nested Maps in Terraform Backend Configurations](https://atmos.tools/blog/2025-01-04-nested-backend-maps-support): Atmos now properly handles nested maps in Terraform backend configurations when using HCL format. This fixes an issue where complex backend setting...
+- [Introducing Atmos Auth: Native Cloud Authentication for Platform Teams](https://atmos.tools/blog/2025-10-13-introducing-atmos-auth): We're introducing `atmos auth` - native cloud authentication built directly into Atmos. After years of solving the same authentication problems rep...
+- [Introducing atmos auth shell: Isolated Shell Sessions for Secure Multi-Identity Workflows](https://atmos.tools/blog/2025-10-15-atmos-auth-shell): We're excited to introduce `atmos auth shell`, a new command that makes working with multiple cloud identities more secure.
+- [Introducing atmos auth list: Visualize Your Authentication Configuration](https://atmos.tools/blog/2025-10-15-introducing-atmos-auth-list): We're excited to announce a powerful new command for managing authentication in Atmos: `atmos auth list`. This command provides comprehensive visib...
+- [Pager Default Behavior Corrected](https://atmos.tools/blog/2025-10-15-pager-default-correction): We've identified and corrected a regression in Atmos where the pager was incorrectly enabled by default, contrary to the intended behavior document...
+- [Configuration Provenance Tracking: Know Where Every Value Comes From](https://atmos.tools/blog/2025-10-15-provenance-tracking): import Terminal from '@site/src/components/Terminal'
+- [Introducing the Command Registry Pattern: Toward Pluggable Commands](https://atmos.tools/blog/2025-10-16-command-registry-pattern): We're excited to announce the first step in a major architectural evolution for Atmos: the **Command Registry Pattern**. This foundational change w...
+- [Introducing atmos auth logout: Secure Credential Cleanup](https://atmos.tools/blog/2025-10-17-auth-logout-feature): We're excited to announce a new authentication command: **`atmos auth logout`**. This command provides secure, comprehensive cleanup of locally cac...
+- [Enhanced AWS SSO Authentication: Better UX with Styled Dialogs and Graceful Cancellation](https://atmos.tools/blog/2025-10-17-aws-sso-verification-code-display): We've significantly improved the AWS SSO authentication experience with styled verification code dialogs, animated status indicators, and proper Ct...
+- [Interactive Identity Selection for Auth Login](https://atmos.tools/blog/2025-10-17-interactive-identity-selection): Running `atmos auth login` without specifying an identity is now more user-friendly. When no `--identity` flag is provided, Atmos presents an inter...
+- [Browse and Explore Atmos Releases from Your Terminal](https://atmos.tools/blog/2025-10-17-version-list-command): We're introducing two new commands for exploring Atmos releases: `atmos version list` and `atmos version show`. Browse release history with date fi...
+- [New Guides for Atmos Auth: Leapp Migration and Geodesic Integration](https://atmos.tools/blog/2025-10-18-auth-tutorials-geodesic-leapp): We've published two comprehensive guides to help you adopt and integrate `atmos auth` into your workflows: migrating from Leapp and configuring Geo...
+- [Flexible Keyring Backends: System, File, and Memory Storage for Credentials](https://atmos.tools/blog/2025-10-18-keyring-backends): Atmos Auth supports flexible keyring backends, giving you control over how authentication credentials are stored. Use your **system keyring** for n...
+- [Introducing --chdir: Simplify Your Multi-Repo Workflows](https://atmos.tools/blog/2025-10-19-chdir-flag): We're excited to announce a new global flag that makes working with Atmos across multiple repositories and directories significantly easier: `--chd...
+- [Cloud Console Access with atmos auth console](https://atmos.tools/blog/2025-10-20-auth-console-web-access): Atmos now includes `atmos auth console`, a convenience command for opening cloud provider web consoles. Similar to `aws-vault login`, this command ...
+- [Auth Context: Centralizing Authentication State in Atmos](https://atmos.tools/blog/2025-10-21-auth-context-implementation): We've implemented a centralized authentication context system to enable **concurrent multi-provider identities** - allowing Atmos to manage AWS, Gi...
+- [Azure Blob Storage Support for !terraform.state Function](https://atmos.tools/blog/2025-10-21-azure-blob-terraform-state-support): Atmos now supports Azure Blob Storage backends in the `!terraform.state` YAML function. Read Terraform outputs directly from Azure-backed state fil...
+- [Atmos Now Detects Circular Dependencies in YAML Functions](https://atmos.tools/blog/2025-10-23-yaml-function-circular-dependency-detection): Atmos now detects circular dependencies in YAML function calls and provides a clear call stack showing exactly where the cycle occurs.
+- [Breaking Change: macOS Now Uses ~/.config for XDG Paths](https://atmos.tools/blog/2025-10-24-macos-xdg-cli-conventions): Atmos now follows CLI tool conventions on macOS, using `~/.config`, `~/.cache`, and `~/.local/share` instead of `~/Library/Application Support`. Th...
+- [Auth and Utility Commands No Longer Require Stack Configurations](https://atmos.tools/blog/2025-10-26-auth-and-utility-commands-no-longer-require-stacks): Atmos auth, documentation, and workflow management commands now work independently of stack configurations, making it easier to use Atmos in CI/CD ...
+- [Zero-Configuration Terminal Output: Write Once, Works Everywhere](https://atmos.tools/blog/2025-10-26-zero-config-terminal-output): Atmos now features intelligent terminal output that automatically adapts to any environment - from rich interactive terminals to plain CI logs - wi...
+- [Atmos Pro: Instances API Migration to Query Parameters](https://atmos.tools/blog/2025-10-28-pro-instances-api-query-params): Updated the Atmos Pro integration to use query parameters for the instances API endpoint, fixing issues with stack and component names containing s...
+- [Authentication Experience Improvements](https://atmos.tools/blog/2025-10-29-auth-ux-improvements): We've made several quality-of-life improvements to Atmos authentication commands, making identity management smoother and more intuitive.
+- [Authentication Support for Workflows and Custom Commands](https://atmos.tools/blog/2025-10-29-authentication-for-workflows-and-custom-commands): Add per-step authentication for workflows and custom commands with the new identity field and --identity flag
+- [Testing Custom Terraform Providers with Atmos Components](https://atmos.tools/blog/2025-10-30-terraform-provider-development): If you develop Terraform providers, you can now test them locally with Atmos-managed components using Terraform's development overrides feature. Th...
+- [Component-Aware Stack Tab Completion](https://atmos.tools/blog/2025-10-31-component-aware-stack-completion): Tab completion for the `--stack` flag is now context-aware, filtering suggestions based on the component you specify.
+- [Critical Fix: Proper Shell Argument Quoting in Custom Commands](https://atmos.tools/blog/2025-10-31-shell-argument-quoting-fix): We've fixed a critical bug in how Atmos handles arguments passed to custom commands via `{{ .TrailingArgs }}`. This fix improves security and ensur...
+- [Identity Flag Support for Describe Commands](https://atmos.tools/blog/2025-11-02-describe-commands-identity-flag): The `atmos describe` family of commands now supports the `--identity` flag, enabling runtime authentication when processing YAML template functions...
+- [Native Azure Authentication Support](https://atmos.tools/blog/2025-11-07-azure-authentication-support): Authenticate to Azure using Atmos with device code flow, OIDC, and service principals - works identically to az login
+- [Disable Identity Authentication with --identity=false](https://atmos.tools/blog/2025-11-07-disable-identity-authentication): You can now disable Atmos identity authentication by setting `--identity=false`, allowing you to use cloud provider SDK credential resolution instead.
+- [Run Atmos from Any Subdirectory](https://atmos.tools/blog/2025-11-08-git-root-discovery): Atmos now automatically discovers your repository root and runs from there, just like Git. No more `cd`-ing back to the root directory.
+- [Better Error Messages: Helpful Hints, Rich Context, and Enterprise Error Tracking](https://atmos.tools/blog/2025-11-08-helpful-errors): We've completely rebuilt Atmos error handling from the ground up to provide **helpful hints**, **rich context**, and **enterprise-grade error track...
+- [Customize Your Terminal with Atmos Themes](https://atmos.tools/blog/2025-11-08-terminal-themes): Atmos now includes 350+ terminal themes to customize your CLI experience. Choose from popular themes like Dracula, Solarized, or GitHub Dark, or br...
+- [Theme Commands Migrated to StandardFlagParser](https://atmos.tools/blog/2025-11-08-theme-commands-environment-variables): The theme commands have been migrated to use the modern `StandardFlagParser` infrastructure, bringing them in line with other Atmos commands.
+- [Atmos Profiles: One Configuration, Multiple Contexts](https://atmos.tools/blog/2025-11-11-atmos-profiles): Stop fighting with different Atmos configurations for development, CI/CD, and production. Profiles let you switch contexts with a single flag while...
+- [New Comprehensive Version Management Documentation](https://atmos.tools/blog/2025-11-14-comprehensive-version-management-docs): There's no one-size-fits-all approach to version management. Through years of experience implementing infrastructure across hundreds of organizatio...
+- [!env Function Now Reads from Stack Manifest env Sections](https://atmos.tools/blog/2025-11-14-env-function-stack-manifest-support): The `!env` YAML function now supports reading environment variables from `env` sections defined in your stack manifests and Atmos configuration. Th...
+- [Safe Logout: Preserve Keychain Credentials by Default](https://atmos.tools/blog/2025-11-14-safe-logout-preserves-keychain): `atmos auth logout` now preserves keychain credentials by default for faster re-authentication. Only session data is cleared. Use `--keychain` to p...
+- [Welcome to the Atmos Changelog](https://atmos.tools/blog/welcome): We're excited to launch the Atmos Changelogâyour go-to source for feature announcements, technical deep dives, and best practices for managing clou...

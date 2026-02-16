@@ -1,0 +1,8 @@
+{
+  "title": "Display config in YAML format with syntax highlighting",
+  "content": "atmos describe config -f yaml",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#display-config-in-yaml-format-with-syntax-highlighting",
+  "links": []
+}

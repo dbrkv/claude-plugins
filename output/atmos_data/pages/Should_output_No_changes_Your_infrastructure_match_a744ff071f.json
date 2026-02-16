@@ -1,0 +1,129 @@
+{
+  "title": "Should output: No changes. Your infrastructure matches the configuration.",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "The \"no changes\" output proves that the rollback was successfully applied to the infrastructure, not just the configuration.\n\n:::tip\nNo re-vendoring required! If you've maintained versioned folders through your vendor process, you can simply update the component reference to point to the previous version that's already vendored.\n:::\n\n## Benefits\n\nThe **Strict Version Pinning** pattern provides:\n\n- **Clear Audit Trail**: Exact tracking of what version ran where and when\n- **Simplified Rollback**: Easy to revert to previous versions by changing pins\n- **Git as Source of Truth**: Version history stored directly in Git\n- **Explicit Control**: No surprises from automatic version updates\n- **Regulatory Compliance**: Meets strict auditability requirements\n\n## Drawbacks\n\nThe pattern also has significant limitations:\n\n- **Environment Drift**: Environments naturally diverge without constant updates\n- **Weak Early Warning**: Problems surface late in the promotion cycle\n- **Lockstep Requirement**: Cannot safely skip versions during promotion\n- **High Overhead**: Manual pin management becomes burdensome at scale\n- **PR Storms**: Automated update tools create many pull requests\n\n## Best Practices\n\nWhen using strict version pinning:\n\n1. **Automate Carefully**: Tools like Renovate or Dependabot can help, but beware of [The Automation Tool Trap](#the-automation-tool-trap)âPR storms often create more problems than they solve\n2. **Monitor Divergence**: Set alerts when environments drift beyond acceptable thresholds\n3. **Test Incrementally**: Never skip versions; apply all updates in sequence\n4. **Plan Broadly**: Regularly run plans across all environments, not just the one being updated\n5. **Document Everything**: Maintain clear records of version histories and promotion decisions\n6. **Consider Escape Routes**: Design your workspace keys to allow migration to other patterns if needed\n\n## Drawbacks and Trade-offs\n\nWhile Strict Version Pinning provides strong reproducibility, it comes with significant trade-offs:\n\n### Operational Overhead\n- **Manual version management** for each environment\n- **Promotion fatigue** from constant version updates\n- **Coordination complexity** across teams and environments\n- **Documentation burden** to track version decisions\n\n### Environment Divergence\n- **Version drift** leads to \"snowflake\" environments\n- **Late feedback** - issues discovered only when promoting to production\n- **Difficult debugging** when environments behave differently\n- **Testing limitations** - can't test against production-like configurations early\n\n### Scaling Challenges\n- **Exponential complexity** as environment count grows\n- **Bottlenecks** in promotion processes\n- **Increased risk** of human error in version management\n- **Time-consuming** rollback coordination across environments\n\n### Innovation Impedance\n- **Slow adoption** of improvements and fixes\n- **Conservative bias** against making changes\n- **Delayed security patches** due to promotion overhead\n- **Reduced experimentation** due to high change cost\n\n### The Automation Tool Trap\n\nA common solution to strict pinning overhead is using dependency update tools like Dependabot or RenovateBot. While these tools automate version updates, they often create new problems:\n\n**Death by Pull Request:**\n- **PR Inundation**: Automated tools generate dozens or hundreds of version update PRs\n- **Lingering PRs**: Pull requests sit unmerged as teams struggle to keep up with review volume\n- **Growing Backlog**: PR queue grows exponentially while teams point fingers about responsibility\n- **Context Switching**: Developers move on to next sprint tasks, forgetting pending version PRs\n- **Review Fatigue**: Even when managed well, PR review becomes a routine chore rather than valuable work\n\n**The Real Question**: If your workflow requires constant automated PR generation to stay current, why optimize for this approach?\n\n**A Better Path**: Consider optimizing for the ideal solutionâ**all environments converging to the same version** with stability achieved through repetition and robust testing. Instead of managing version sprawl with automation tools, eliminate the need for per-environment version management entirely by embracing convergent patterns like [Continuous Version Deployment](/design-patterns/version-management/continuous-version-deployment) or [Release Tracks](/design-patterns/version-management/release-tracks-channels).\n\nFocus your effort on improving deployment workflows and testing practices rather than perfecting version update automation. The goal isn't to get better at managing complexityâit's to eliminate unnecessary complexity.\n\n## Summary\n\nStrict Version Pinning provides maximum control and reproducibility at the cost of operational overhead and environment divergence. It's best suited for small, carefully managed environment sets with strong regulatory requirements. For larger scales or teams preferring rapid iteration, consider patterns that promote convergence like [Release Tracks/Channels](./release-tracks-channels) or [Folder-Based Versioning](./folder-based-versioning).\n\n:::tip Key Takeaway\nMany teams successfully operate by optimizing for roll-forward with strong convergence rather than rollback capabilities. Choose strict pinning only when its benefits clearly outweigh the operational costs.\n:::\n\n## Related Patterns\n\n- [Versioning Schemes](./versioning-schemes) - Number-based schemes (SemVer, CalVer) that work with strict pinning\n- [Release Tracks/Channels](./release-tracks-channels) - Environments subscribe to moving version tracks\n- [Folder-Based Versioning](./folder-based-versioning) - Version through repository structure\n- [Vendoring Components](./vendoring-components) - Local control through vendoring\n- [Component Inheritance](/design-patterns/component-inheritance) - Base configurations for pinned components\n\n---\n\n## Vendoring Component Versions\n\nimport File from '@site/src/components/File'\nimport PillBox from '@site/src/components/PillBox'\nimport Intro from '@site/src/components/Intro'\nimport KeyPoints from '@site/src/components/KeyPoints'\n\n<PillBox>Atmos Design Pattern</PillBox>\n<Intro>\n**Vendoring Component Versions** is a complementary technique that automates copying component versions from multiple external sources into your repository. This works with any deployment strategyâ[Continuous Version Deployment](/design-patterns/version-management/continuous-version-deployment) or [Git Flow](/design-patterns/version-management/git-flow-branches-as-channels)âand can be combined with any folder organization approach.\n</Intro>\n\nVendoring gives teams local control over external dependencies by bringing component code in-house while maintaining metadata about origin and lineage. Whether you use [Folder-Based Versioning](/design-patterns/version-management/folder-based-versioning), [Release Tracks](/design-patterns/version-management/release-tracks-channels), or [Strict Version Pinning](/design-patterns/version-management/strict-version-pinning), vendoring provides predictable update cycles and the ability to apply custom modifications when necessary.\n\n<KeyPoints>\n- Why Atmos makes explicit what other tools do implicitly (just-in-time cloning)\n- Operational benefits: visibility, audit trail, emergency agility, explicit divergence\n- Developer experience benefits: searchability, readability, IDE support\n- How to converge with upstream when it makes sense and diverge when needed\n- The pragmatic approach that emerged from countless projects\n</KeyPoints>\n\n## Philosophy: Explicit Over Implicit\n\nMost tools that \"pin to remote sources\" actually do this behind the scenes:\n1. Clone the remote source to a temporary folder (just-in-time vendoring)\n2. Point Terraform/tooling at that temporary folder\n3. Clean up the folder after execution\n\n**Atmos makes this process explicit:**\n1. Vendor upstream components with `atmos vendor pull`\n2. Commit the vendored code to your repository\n3. Pin components to those vendored folders\n4. Update vendored code on your schedule\n\nThe result is functionally the same, but with critical advantages for operations and developer experience.\n\n### Why We Vendor: Lessons from Countless Projects\n\nThis approach emerged from real operational pain across countless projects. We tried pure remote sourcingâit created productivity blockers:\n\n**The Coordination Nightmare:**\nCross-cutting changes required opening dozens of PRs across multiple repositories. If you discovered a problem at any step, you started over. Or you took shortcuts (pinning to branches instead of versions), creating technical debt to clean up later.\n\n**The Developer Experience Problem:**\nWhen everything is a remote reference, developers can't search the codebase for definitions, IDE navigation breaks (\"Go to definition\" fails), and understanding requires dereferencing dozens of sources. The cognitive overhead compounds quickly.\n\n**The Emergency Response Problem:**\nSecurity patches get blocked waiting for upstream review and release cycles. When minutes matter, multi-repository coordination kills agility.\n\n**Pure DRY leads to complexity rashes.** The pragmatic approach: vendor explicitly, converge with upstream when it makes sense, diverge when you need to.\n\n## Benefits of Explicit Vendoring\n\n### Operational Benefits\n\n**Visibility via Git Diff:**\nWhen you update vendored dependencies, `git diff` shows the actual code changesânot just version number bumps. This makes code review meaningful and catches breaking changes before deployment.\n\n**Immutable Audit Trail:**\nEvery vendored update is a commit in your repository. You have a complete, immutable record of what code ran when, satisfying compliance requirements without additional tooling.\n\n**Emergency Agility:**\nNeed to patch a vulnerability? Make changes directly in the vendored folder and deploy immediately. No waiting for upstream PRs, reviews, or release cycles. Re-sync with upstream when the dust settles.\n\n**Explicit Divergence Signaling:**\nWhen you need to diverge from upstream (emergency patches, business-specific changes), disable the vendoring config for that component. This clearly signals to your team: \"we've intentionally diverged here.\"\n\n### Developer Experience Benefits\n\n**Searchable Codebase:**\n`grep` and IDE search work across all vendored components. Finding where something is defined takes seconds, not minutes of jumping between repositories.\n\n**Readable Code:**\nOpen files and understand implementation without dereferencing remote sources. The code is right there, readable and navigable.\n\n**IDE Functionality Works:**\n\"Go to definition\", \"Find references\", and other IDE features work across vendored components. Developer tools function as intended.\n\n**Reduced Cognitive Load:**\nNo constant context switching to external repositories. Everything needed to understand the system is in one place.\n\n**Better Onboarding:**\nNew team members can explore the actual code to learn how things work, not just read abstract documentation or hunt through remote references.\n\n:::tip AI-Assisted Development\nVendoring is exceptionally valuable for AI-powered editors and coding assistants (e.g., Claude Code, Cursor, etc.). When components are vendored locally, AI tools have full access to the actual implementation code, enabling them to:\n\n- Understand component behavior and dependencies accurately\n- Provide context-aware suggestions and completions\n- Catch integration issues before deployment\n- Generate infrastructure code that correctly uses vendored components\n\nRemote references force AI tools to work with limited context or make assumptions. Vendored code gives AI the complete picture.\n:::\n\n## Use Cases\n\nUse the **Vendoring Components** pattern when:\n\n- You need **predictable update windows** for third-party components\n- **Compliance requirements** mandate code auditing and approval\n- You need to **apply custom patches** to upstream components\n- **Network restrictions** limit access to external repositories\n- You want **resilience against upstream availability** issues\n- You need **consistent versioning** across all environments without external dependencies\n- **Upstream cadence** doesn't match your release schedule\n\n## Problem\n\nDirect dependencies on external repositories create several challenges:\n\n- **Upstream Breaking Changes**: Unexpected changes can break deployments\n- **Availability Risks**: External sources may become unavailable\n- **Audit Challenges**: Difficult to review all code changes in external dependencies\n- **Timing Mismatches**: Upstream release schedules may not align with your needs\n- **Patching Limitations**: Cannot modify external code without forking\n- **Network Dependencies**: Requires internet access during deployment\n\nVendoring addresses these issues by bringing code under local control while maintaining traceability.\n\n## Solution\n\nCopy external component code into your repository with clear metadata about its origin, version, and any local modifications. Use Atmos's vendor command to manage the process systematically.\n\n### Core Principles\n\n1. **Local Copies**: All external code is copied into your repository\n2. **Origin Tracking**: Maintain metadata about where code came from\n3. **Bulk Updates**: Update multiple components together in controlled windows\n4. **Intentional Divergence**: Clearly mark and track local modifications\n5. **Audit Trail**: Document all vendor updates and changes\n\n## Implementation with Atmos\n\nAtmos provides built-in vendoring support through the `vendor.yaml` manifest and `atmos vendor` command.\n\n### Basic Vendor Configuration\n\n:::tip Go Template Syntax in Vendor Manifests\nAtmos vendor manifests support [Go template](https://pkg.go.dev/text/template) syntax in `source` and `targets` fields. The template is executed with the source specification as the data context, allowing you to reference any field defined in that source entry (like `component`, `version`, `source`, etc.) using `{{.FieldName}}` syntax.\n\nThis creates DRY (Don't Repeat Yourself) configurations where you define values once and reference them in multiple places. For example, `{{.Version}}` in the `source` URL will be replaced with the value from the `version` field.\n:::\n\n<File title=\"vendor.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Benefits",
+      "id": "benefits"
+    },
+    {
+      "level": "h2",
+      "text": "Drawbacks",
+      "id": "drawbacks"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h2",
+      "text": "Drawbacks and Trade-offs",
+      "id": "drawbacks-and-trade-offs"
+    },
+    {
+      "level": "h3",
+      "text": "Operational Overhead",
+      "id": "operational-overhead"
+    },
+    {
+      "level": "h3",
+      "text": "Environment Divergence",
+      "id": "environment-divergence"
+    },
+    {
+      "level": "h3",
+      "text": "Scaling Challenges",
+      "id": "scaling-challenges"
+    },
+    {
+      "level": "h3",
+      "text": "Innovation Impedance",
+      "id": "innovation-impedance"
+    },
+    {
+      "level": "h3",
+      "text": "The Automation Tool Trap",
+      "id": "the-automation-tool-trap"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Related Patterns",
+      "id": "related-patterns"
+    },
+    {
+      "level": "h2",
+      "text": "Vendoring Component Versions",
+      "id": "vendoring-component-versions"
+    },
+    {
+      "level": "h2",
+      "text": "Philosophy: Explicit Over Implicit",
+      "id": "philosophy:-explicit-over-implicit"
+    },
+    {
+      "level": "h3",
+      "text": "Why We Vendor: Lessons from Countless Projects",
+      "id": "why-we-vendor:-lessons-from-countless-projects"
+    },
+    {
+      "level": "h2",
+      "text": "Benefits of Explicit Vendoring",
+      "id": "benefits-of-explicit-vendoring"
+    },
+    {
+      "level": "h3",
+      "text": "Operational Benefits",
+      "id": "operational-benefits"
+    },
+    {
+      "level": "h3",
+      "text": "Developer Experience Benefits",
+      "id": "developer-experience-benefits"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h2",
+      "text": "Problem",
+      "id": "problem"
+    },
+    {
+      "level": "h2",
+      "text": "Solution",
+      "id": "solution"
+    },
+    {
+      "level": "h3",
+      "text": "Core Principles",
+      "id": "core-principles"
+    },
+    {
+      "level": "h2",
+      "text": "Implementation with Atmos",
+      "id": "implementation-with-atmos"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Vendor Configuration",
+      "id": "basic-vendor-configuration"
+    }
+  ],
+  "url": "llms-txt#should-output:-no-changes.-your-infrastructure-matches-the-configuration.",
+  "links": []
+}

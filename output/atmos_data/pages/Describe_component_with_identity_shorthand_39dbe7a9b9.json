@@ -1,0 +1,8 @@
+{
+  "title": "Describe component with identity (shorthand)",
+  "content": "atmos describe component vpc -s prod -i dev-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#describe-component-with-identity-(shorthand)",
+  "links": []
+}

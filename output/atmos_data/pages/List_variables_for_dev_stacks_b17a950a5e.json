@@ -1,0 +1,8 @@
+{
+  "title": "List variables for dev stacks",
+  "content": "atmos list vars vpc --stack '*-dev-*'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#list-variables-for-dev-stacks",
+  "links": []
+}

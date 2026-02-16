@@ -1,0 +1,8 @@
+{
+  "title": "Dangerous input",
+  "content": "atmos mycmd -- echo \"foo;rm -rf /\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#dangerous-input",
+  "links": []
+}

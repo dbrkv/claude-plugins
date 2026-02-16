@@ -1,0 +1,19 @@
+{
+  "title": "Explicit git protocol",
+  "content": "source: \"git::https://github.com/cloudposse/atmos.git//examples?ref=main\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### SSH Authentication",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "SSH Authentication",
+      "id": "ssh-authentication"
+    }
+  ],
+  "url": "llms-txt#explicit-git-protocol",
+  "links": []
+}

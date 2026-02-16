@@ -1,0 +1,8 @@
+{
+  "title": "Emoji",
+  "content": "shell:\n  prompt: \"ð {{.Component}} @ {{.Stack}} $ \"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#emoji",
+  "links": []
+}

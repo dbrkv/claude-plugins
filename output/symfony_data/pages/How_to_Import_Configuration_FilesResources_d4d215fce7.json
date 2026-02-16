@@ -1,0 +1,102 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/import.html",
+  "title": "How to Import Configuration Files/Resources",
+  "content": "In this section, service configuration files are referred to as resources. While most configuration resources are files (e.g. YAML, XML, PHP), Symfony is able to load configuration from anywhere (e.g. a database or even via an external web service).\n\nThe service container is built using a single configuration resource (config/services.yaml by default). This gives you absolute flexibility over the services in your application.\n\nExternal service configuration can be imported in two different ways. The first method, commonly used to import other resources, is via the imports directive. The second method, using dependency injection extensions, is used by third-party bundles to load the configuration. Read on to learn more about both methods.\n\nBy default, service configuration lives in config/services.yaml. But if that file becomes large, you're free to organize into multiple files. Suppose you decided to move some configuration to a new file:\n\nTo import this file, use the imports key from any other file and pass either a relative or absolute path to the imported file:\n\nWhen loading a configuration file, Symfony first processes all imported files in the order they are listed under the imports key. After all imports are processed, it then processes the parameters and services defined directly in the current file. In practice, this means that later definitions override earlier ones.\n\nFor example, if you use the default services.yaml configuration as in the above example, your main config/services.yaml file uses the App\\ namespace to auto-discover services and loads them after all imported files. If an imported file (e.g. config/services/mailer.yaml) defines a service that is also auto-discovered, the definition from services.yaml will take precedence.\n\nTo make sure your specific service definitions are not overridden by auto-discovery, consider one of the following strategies:\n\nExclude services from auto-discovery\n\nAdjust the App\\ definition to use the exclude option. This prevents Symfony from auto-registering classes that are defined manually elsewhere:\n\nOverride services in the same file\n\nYou can define specific services after the App\\ auto-discovery block in the same file. These later definitions will override the auto-registered ones:\n\nMove the App\\ auto-discovery config to a separate file and import it before more specific service files. This way, specific service definitions can override the auto-discovered ones.\n\nDue to the way in which parameters are resolved, you cannot use them to build paths in imports dynamically. This means that something like the following does not work:\n\nThird-party bundle container configuration, including Symfony core services, are usually loaded using another method: a container extension.\n\nInternally, each bundle defines its services in files like you've seen so far. However, these files aren't imported using the import directive. Instead, bundles use a dependency injection extension to load the files automatically. As soon as you enable a bundle, its extension is called, which is able to load service configuration files.\n\nIn fact, each configuration file in config/packages/ is passed to the extension of its related bundle - e.g. FrameworkBundle or TwigBundle - and used to configure those services further.\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Import Configuration Files/Resources",
+      "id": "how-to-import-configuration-files-resources"
+    },
+    {
+      "level": "h2",
+      "text": "Importing Configuration with imports",
+      "id": "importing-configuration-with-imports"
+    },
+    {
+      "level": "h2",
+      "text": "Importing Configuration via Container Extensions",
+      "id": "importing-configuration-via-container-extensions"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/services/mailer.yaml\nparameters:\n    # ... some parameters\n\nservices:\n    # ... some services",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services/mailer.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <parameters>\n        <!-- ... some parameters -->\n    </parameters>\n\n    <services>\n        <!-- ... some services -->\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services/mailer.php\n\n// ... some parameters\n// ... some services",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nimports:\n    - { resource: services/mailer.yaml }\n    # If you want to import a whole directory:\n    - { resource: services/ }\nservices:\n    _defaults:\n        autowire: true\n        autoconfigure: true\n\n    App\\:\n        resource: '../src/*'\n\n    # ...",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <imports>\n        <import resource=\"services/mailer.xml\"/>\n        <!-- If you want to import a whole directory: -->\n        <import resource=\"services/\"/>\n    </imports>\n\n    <services>\n        <defaults autowire=\"true\" autoconfigure=\"true\"/>\n\n        <prototype namespace=\"App\\\" resource=\"../src/*\"/>\n\n        <!-- ... -->\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nreturn function(ContainerConfigurator $container): void {\n    $container->import('services/mailer.php');\n    // If you want to import a whole directory:\n    $container->import('services/');\n\n    $services = $container->services()\n        ->defaults()\n            ->autowire()\n            ->autoconfigure()\n    ;\n\n    $services->load('App\\\\', '../src/*');\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nimports:\n    - { resource: services/mailer.yaml }\n    # ... other imports\n\nservices:\n    _defaults:\n        autowire: true\n        autoconfigure: true\n\n    App\\:\n        resource: '../src/*'\n        exclude:\n            - '../src/Mailer/'\n            - '../src/SpecificClass.php'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <imports>\n        <import resource=\"services/mailer.xml\"/>\n        <!-- If you want to import a whole directory: -->\n        <import resource=\"services/\"/>\n    </imports>\n\n    <services>\n        <defaults autowire=\"true\" autoconfigure=\"true\"/>\n\n        <prototype namespace=\"App\\\" resource=\"../src/*\">\n            <exclude>../src/Mailer/</exclude>\n            <exclude>../src/SpecificClass.php</exclude>\n        </prototype>\n\n        <!-- ... -->\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nreturn function(ContainerConfigurator $container): void {\n    $container->import('services/mailer.php');\n    // If you want to import a whole directory:\n    $container->import('services/');\n\n    $services = $container->services()\n        ->defaults()\n            ->autowire()\n            ->autoconfigure()\n    ;\n\n    $services->load('App\\\\', '../src/*')\n        ->exclude([\n            '../src/Mailer/',\n            '../src/SpecificClass.php',\n        ]);\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    _defaults:\n        autowire: true\n        autoconfigure: true\n\n    App\\:\n        resource: '../src/*'\n\n    App\\Mailer\\MyMailer:\n        arguments: ['%env(MAILER_DSN)%']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <imports>\n        <import resource=\"services/mailer.xml\"/>\n        <!-- If you want to import a whole directory: -->\n        <import resource=\"services/\"/>\n    </imports>\n\n    <services>\n        <defaults autowire=\"true\" autoconfigure=\"true\"/>\n\n        <prototype namespace=\"App\\\" resource=\"../src/*\"/>\n\n        <service id=\"App\\Mailer\\MyMailer\">\n            <argument>%env(MAILER_DSN)%</argument>\n        </service>\n\n        <!-- ... -->\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services()\n        ->defaults()\n            ->autowire()\n            ->autoconfigure();\n\n    $services->load('App\\\\', '../src/*');\n\n    $services->set(App\\Mailer\\MyMailer::class)\n        ->arg(0, '%env(MAILER_DSN)%');\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services/autodiscovery.yaml\nservices:\n    _defaults:\n        autowire: true\n        autoconfigure: true\n\n    App\\:\n        resource: '../../src/*'\n        exclude:\n            - '../../src/Mailer/'\n\n# config/services/mailer.yaml\nservices:\n    App\\Mailer\\SpecificMailer:\n        # ... custom configuration\n\n# config/services.yaml\nimports:\n    - { resource: services/autodiscovery.yaml }\n    - { resource: services/mailer.yaml }\n    - { resource: services/ }\n\nservices:\n    # definitions here override anything from the imports above\n    # consider keeping most definitions inside imported files",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services/autodiscovery.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n           xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n           xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n               https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <defaults autowire=\"true\" autoconfigure=\"true\"/>\n\n        <prototype namespace=\"App\\\" resource=\"../../src/*\">\n            <exclude>../../src/Mailer/</exclude>\n        </prototype>\n    </services>\n</container>\n\n<!-- config/services/mailer.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n           xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n           xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n               https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\Mailer\\SpecificMailer\">\n            <!-- ... custom configuration -->\n        </service>\n    </services>\n</container>\n\n<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n           xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n           xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n               https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <imports>\n        <import resource=\"services/autodiscovery.xml\"/>\n        <import resource=\"services/mailer.xml\"/>\n        <import resource=\"services/\"/>\n    </imports>\n\n    <services>\n        <!-- definitions here override anything from the imports above -->\n        <!-- consider keeping most definitions inside imported files -->\n    </services>\n</container>",
+      "language": "python"
+    },
+    {
+      "code": "// config/services/autodiscovery.php\nuse Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator;\n\nreturn function (ContainerConfigurator $container): void {\n    $services = $container->services()\n        ->defaults()\n            ->autowire()\n            ->autoconfigure();\n\n    $services->load('App\\\\', '../../src/*')\n        ->exclude([\n            '../../src/Mailer/',\n        ]);\n};\n\n// config/services/mailer.php\nuse Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator;\n\nreturn function (ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(App\\Mailer\\SpecificMailer::class);\n    // Add any custom configuration here if needed\n};\n\n// config/services.php\nuse Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator;\n\nreturn function (ContainerConfigurator $container): void {\n    $container->import('services/autodiscovery.php');\n    $container->import('services/mailer.php');\n    $container->import('services/');\n\n    $services = $container->services();\n\n    // definitions here override anything from the imports above\n    // consider keeping most definitions inside imported files\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nimports:\n    - { resource: '%kernel.project_dir%/somefile.yaml' }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <imports>\n        <import resource=\"%kernel.project_dir%/somefile.yaml\"/>\n    </imports>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nreturn static function (ContainerConfigurator $container): void {\n    $container->import('%kernel.project_dir%/somefile.yaml');\n};",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/import.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/bundles/extension.html"
+  ]
+}

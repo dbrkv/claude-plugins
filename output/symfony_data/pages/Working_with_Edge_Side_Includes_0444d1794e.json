@@ -1,0 +1,68 @@
+{
+  "url": "https://symfony.com/doc/7.3/http_cache/esi.html",
+  "title": "Working with Edge Side Includes",
+  "content": "Gateway caches are a great way to make your website perform better. But they have one limitation: they can only cache whole pages. If your pages contain dynamic sections, such as the user name or a shopping cart, you are out of luck. Fortunately, Symfony provides a solution for these cases, based on a technology called ESI, or Edge Side Includes. Akamai wrote this specification in 2001 and it allows specific parts of a page to have a different caching strategy than the main page.\n\nThe ESI specification describes tags you can embed in your pages to communicate with the gateway cache. Only one tag is implemented in Symfony, include, as this is the only useful one outside of Akamai context:\n\nNotice from the example that each ESI tag requires a fully-qualified URL. An ESI tag represents a page fragment that can be fetched via the given URL.\n\nWhen a request is handled, the gateway cache fetches the entire page from its cache or requests it from the backend application. If the response contains one or more ESI tags, these are processed in the same way. In other words, the gateway cache either retrieves the included page fragment from its cache or requests the page fragment from the backend application again. When all the ESI tags have been resolved, the gateway cache merges each into the main page and sends the final content to the client.\n\nAll of this happens transparently at the gateway cache level (i.e. outside of your application). As you'll see, if you choose to take advantage of ESI tags, Symfony makes the process of including them almost effortless.\n\nFirst, to use ESI, be sure to enable it in your application configuration:\n\nNow, suppose you have a page that is relatively static, except for a news ticker at the bottom of the content. With ESI, you can cache the news ticker independently of the rest of the page:\n\nIn this example, the response is marked as public to make the full page cacheable for all requests with a lifetime of ten minutes. Next, include the news ticker in the template by embedding an action. This is done via the render() helper (for more details, see how to embed controllers in templates).\n\nAs the embedded content comes from another page (or controller for that matter), Symfony uses the standard render helper to configure ESI tags:\n\nBy using the esi renderer (via the render_esi() Twig function), you tell Symfony that the action should be rendered as an ESI tag. You might be wondering why you would want to use a helper instead of just writing the ESI tag yourself. That's because using a helper makes your application work even if there is no gateway cache installed.\n\nAs you'll see below, the maxPerPage variable you pass is available as an argument to your controller (i.e. $maxPerPage). The variables passed through render_esi also become part of the cache key so that you have unique caches for each combination of variables and values.\n\nWhen using the default render() function (or setting the renderer to inline), Symfony merges the included page content into the main one before sending the response to the client. But if you use the esi renderer (i.e. call render_esi()) and if Symfony detects that it's talking to a gateway cache that supports ESI, it generates an ESI include tag. But if there is no gateway cache or if it does not support ESI, Symfony will just merge the included page content within the main one as it would have done if you had used render().\n\nSymfony considers that a gateway cache supports ESI if its request include the Surrogate-Capability HTTP header and the value of that header contains the ESI/1.0 string anywhere.\n\nThe embedded action can now specify its own caching rules entirely independently of the main page:\n\nIn this example, the embedded action is cached publicly too because the contents are the same for all requests. However, in other cases you may need to make this response non-public and even non-cacheable, depending on your needs.\n\nPutting all the above code together, with ESI the full page cache will be valid for 600 seconds, but the news component cache will only last for 60 seconds.\n\nWhen using a controller reference, the ESI tag should reference the embedded action as an accessible URL so the gateway cache can fetch it independently of the rest of the page. Symfony takes care of generating a unique URL for any controller reference and it is able to route them properly thanks to the FragmentListener that must be enabled in your configuration:\n\nOne great advantage of the ESI renderer is that you can make your application as dynamic as needed and at the same time, hit the application as little as possible.\n\nThe fragment listener only responds to signed requests. Requests are only signed when using the fragment renderer and the render_esi Twig function.\n\nThe render_esi helper supports three other useful options:\n\nCode consumes server resources. Blackfire tells you how\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Working with Edge Side Includes",
+      "id": "working-with-edge-side-includes"
+    },
+    {
+      "level": "h2",
+      "text": "Using ESI in Symfony",
+      "id": "using-esi-in-symfony"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<!DOCTYPE html>\n<html>\n    <body>\n        <!-- ... some content -->\n\n        <!-- Embed the content of another page here -->\n        <esi:include src=\"http://...\"/>\n\n        <!-- ... more content -->\n    </body>\n</html>",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    esi: true",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <!-- ... -->\n        <framework:esi enabled=\"true\"/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->esi()\n        ->enabled(true)\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/DefaultController.php\nnamespace App\\Controller;\n\n// ...\nclass DefaultController extends AbstractController\n{\n    public function about(): Response\n    {\n        $response = $this->render('static/about.html.twig');\n        $response->setPublic();\n        $response->setMaxAge(600);\n\n        return $response;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "{# templates/static/about.html.twig #}\n\n{# you can use a controller reference #}\n{{ render_esi(controller('App\\\\Controller\\\\NewsController::latest', { 'maxPerPage': 5 })) }}\n\n{# ... or a URL #}\n{{ render_esi(url('latest_news', { 'maxPerPage': 5 })) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/NewsController.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpKernel\\Attribute\\Cache;\n// ...\n\nclass NewsController extends AbstractController\n{\n    #[Cache(smaxage: 60)]\n    public function latest(int $maxPerPage): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Controller/NewsController.php\nnamespace App\\Controller;\n\n// ...\nclass NewsController extends AbstractController\n{\n    public function latest(int $maxPerPage): Response\n    {\n        // ...\n\n        // sets to public and adds some expiration\n        $response->setSharedMaxAge(60);\n\n        return $response;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    fragments: { path: /_fragment }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <!-- ... -->\n    <framework:config>\n        <framework:fragment path=\"/_fragment\"/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    // ...\n    $framework->fragments()\n        ->path('/_fragment')\n    ;\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/http_cache/esi.html",
+    "https://symfony.com/doc/7.3/templates.html"
+  ]
+}

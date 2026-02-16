@@ -1,0 +1,19 @@
+{
+  "title": "https://atmos.tools/core-concepts/stacks/templates",
+  "content": "templates:\n  settings:\n    enabled: true\n    evaluations: 1\n    # https://masterminds.github.io/sprig\n    sprig:\n      enabled: true\n    # https://docs.gomplate.ca\n    gomplate:\n      enabled: true\n      timeout: 10\n      # https://docs.gomplate.ca/datasources\n      datasources: {}\nhcl",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Add Packer template (Packer component)\n\n<File title=\"components/packer/aws/bastion/main.pkr.hcl\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Add Packer template (Packer component)",
+      "id": "add-packer-template-(packer-component)"
+    }
+  ],
+  "url": "llms-txt#https://atmos.tools/core-concepts/stacks/templates",
+  "links": []
+}

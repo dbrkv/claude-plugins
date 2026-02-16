@@ -1,0 +1,13 @@
+{
+  "title": "Validate parallelism settings",
+  "content": "errors[message] {\n  some i\n  # equals form: -parallelism=50\n  startswith(input.env_tf_cli_args[i], \"-parallelism=\")\n  parallelism := to_number(replace(input.env_tf_cli_args[i], \"-parallelism=\", \"\"))\n  parallelism > 20\n  message = sprintf(\"Parallelism cannot exceed 20, got %d\", [parallelism])\n}\n\nerrors[message] {\n  some i\n  # space form: -parallelism 50\n  input.env_tf_cli_args[i] == \"-parallelism\"\n  i + 1 < count(input.env_tf_cli_args)\n  parallelism := to_number(input.env_tf_cli_args[i+1])\n  parallelism > 20\n  message = sprintf(\"Parallelism cannot exceed 20, got %d\", [parallelism])\n}\nrego\npackage atmos",
+  "code_samples": [
+    {
+      "code": "</File>\n\n#### TF_CLI_ARGS Variables (`env_tf_cli_vars`)\n\nAccess and validate variables extracted from `TF_CLI_ARGS` with JSON type conversion.\n\n<File title=\"validate-env-cli-vars.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#validate-parallelism-settings",
+  "links": []
+}

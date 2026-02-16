@@ -1,0 +1,43 @@
+{
+  "url": "https://symfony.com/doc/7.3/doctrine/custom_dql_functions.html",
+  "title": "How to Register custom DQL Functions",
+  "content": "Doctrine allows you to specify custom DQL functions. For more information on this topic, read Doctrine's cookbook article DQL User Defined Functions.\n\nIn Symfony, you can register your custom DQL functions as follows:\n\nIn case the entity_managers were named explicitly, configuring the functions with the ORM directly will trigger the exception Unrecognized option \"dql\" under \"doctrine.orm\". The dql configuration block must be defined under the named entity manager.\n\nDQL functions are instantiated by Doctrine outside of the Symfony service container so you can't inject services or parameters into a custom DQL function.\n\nSymfony Code Performance Profiling\n\nSave your teams and projects before they sink",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Register custom DQL Functions",
+      "id": "how-to-register-custom-dql-functions"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/doctrine.yaml\ndoctrine:\n    orm:\n        # ...\n        dql:\n            string_functions:\n                test_string: App\\DQL\\StringFunction\n                second_string: App\\DQL\\SecondStringFunction\n            numeric_functions:\n                test_numeric: App\\DQL\\NumericFunction\n            datetime_functions:\n                test_datetime: App\\DQL\\DatetimeFunction",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/doctrine.xml -->\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:doctrine=\"http://symfony.com/schema/dic/doctrine\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/doctrine\n        https://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd\">\n\n    <doctrine:config>\n        <doctrine:orm>\n            <!-- ... -->\n            <doctrine:dql>\n                <doctrine:string-function name=\"test_string\">App\\DQL\\StringFunction</doctrine:string-function>\n                <doctrine:string-function name=\"second_string\">App\\DQL\\SecondStringFunction</doctrine:string-function>\n                <doctrine:numeric-function name=\"test_numeric\">App\\DQL\\NumericFunction</doctrine:numeric-function>\n                <doctrine:datetime-function name=\"test_datetime\">App\\DQL\\DatetimeFunction</doctrine:datetime-function>\n            </doctrine:dql>\n        </doctrine:orm>\n    </doctrine:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/doctrine.php\nuse App\\DQL\\DatetimeFunction;\nuse App\\DQL\\NumericFunction;\nuse App\\DQL\\SecondStringFunction;\nuse App\\DQL\\StringFunction;\nuse Symfony\\Config\\DoctrineConfig;\n\nreturn static function (DoctrineConfig $doctrine): void {\n    $defaultDql = $doctrine->orm()\n        ->entityManager('default')\n            // ...\n            ->dql();\n\n    $defaultDql->stringFunction('test_string', StringFunction::class);\n    $defaultDql->stringFunction('second_string', SecondStringFunction::class);\n    $defaultDql->numericFunction('test_numeric', NumericFunction::class);\n    $defaultDql->datetimeFunction('test_datetime', DatetimeFunction::class);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/doctrine.yaml\ndoctrine:\n    orm:\n        # ...\n        entity_managers:\n            example_manager:\n                # Place your functions here\n                dql:\n                    datetime_functions:\n                        test_datetime: App\\DQL\\DatetimeFunction",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/doctrine.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:doctrine=\"http://symfony.com/schema/dic/doctrine\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/doctrine\n        https://symfony.com/schema/dic/doctrine/doctrine-1.0.xsd\">\n\n    <doctrine:config>\n        <doctrine:orm>\n            <!-- ... -->\n\n            <doctrine:entity-manager name=\"example_manager\">\n                <!-- place your functions here -->\n                <doctrine:dql>\n                    <doctrine:datetime-function name=\"test_datetime\">\n                        App\\DQL\\DatetimeFunction\n                    </doctrine:datetime-function>\n                </doctrine:dql>\n            </doctrine:entity-manager>\n        </doctrine:orm>\n    </doctrine:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/doctrine.php\nuse App\\DQL\\DatetimeFunction;\nuse Symfony\\Config\\DoctrineConfig;\n\nreturn static function (DoctrineConfig $doctrine): void {\n    $doctrine->orm()\n        // ...\n        ->entityManager('example_manager')\n            // place your functions here\n            ->dql()\n                ->datetimeFunction('test_datetime', DatetimeFunction::class);\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/doctrine/custom_dql_functions.html",
+    "https://symfony.com/doc/7.3/service_container.html"
+  ]
+}

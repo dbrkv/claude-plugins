@@ -1,0 +1,59 @@
+{
+  "title": "Preview the GitHub Dark theme",
+  "content": "atmos theme show \"github-dark\"\nshell",
+  "code_samples": [
+    {
+      "code": "## Arguments\n\n<dl>\n  <dt>`theme-name`</dt>\n  <dd>The name of the theme to preview. Use `atmos theme list` to see available themes.</dd>\n</dl>\n\n## Flags\n\nThis command does not have any flags.\n\n## Output\n\nThe command displays:\n\n1. **Theme Information**\n   - Theme name\n   - Type (Dark/Light)\n   - Recommended status\n   - Source attribution\n\n2. **Color Palette**\n   - All 16 ANSI colors with hex values\n   - Background and foreground colors\n   - Visual color blocks showing actual colors\n\n3. **Sample UI Elements**\n   - Status messages (success, warning, error, info)\n   - Sample table with themed styling\n   - Command examples with syntax highlighting\n\n4. **Activation Instructions**\n   - How to set the theme via environment variable\n   - How to configure the theme in `atmos.yaml`\n\n## Theme Selection Tips\n\n- **Dark themes** work best in terminals with dark backgrounds\n- **Light themes** are optimized for terminals with light backgrounds\n- **Recommended themes** (marked with â) have been tested for optimal readability\n- Test a theme with `ATMOS_THEME=<theme-name> atmos` before making it permanent\n\n## Related Commands\n\n- [`atmos theme list`](/cli/commands/theme/list) - List all available themes\n- [`atmos list themes`](/cli/commands/list/themes) - Alias for theme listing\n\n---\n\n## atmos theme\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport DocCardList from '@theme/DocCardList';\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nCustomize the look and feel of Atmos to make it your own. Configure and preview terminal themes that control the appearance of Atmos, including tables and markdown rendering.\n</Intro>\n\n<Screengrab title=\"atmos theme --help\" slug=\"atmos-theme--help\" />\n\n## Overview\n\nThe `atmos theme` command allows you to customize the visual appearance of Atmos CLI output. Themes control:\n\n- **Color schemes** for tables, status messages, and command output\n- **Syntax highlighting** for code blocks and configuration examples\n- **Markdown rendering** styles for help text and documentation\n- **UI element styling** including borders, headers, and emphasis\n\nAtmos includes a curated collection of themes optimized for both dark and light terminal backgrounds, with several recommended themes tested for optimal readability and accessibility.\n\n## Subcommands\n\n<DocCardList />\n\n## Quick Start",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Output",
+      "id": "output"
+    },
+    {
+      "level": "h2",
+      "text": "Theme Selection Tips",
+      "id": "theme-selection-tips"
+    },
+    {
+      "level": "h2",
+      "text": "Related Commands",
+      "id": "related-commands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos theme",
+      "id": "atmos-theme"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    }
+  ],
+  "url": "llms-txt#preview-the-github-dark-theme",
+  "links": []
+}

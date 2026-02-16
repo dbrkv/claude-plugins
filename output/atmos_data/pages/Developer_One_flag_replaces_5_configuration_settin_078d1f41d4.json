@@ -1,0 +1,8 @@
+{
+  "title": "Developer: One flag replaces 5+ configuration settings",
+  "content": "atmos terraform plan vpc -s dev --profile developer",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#developer:-one-flag-replaces-5+-configuration-settings",
+  "links": []
+}

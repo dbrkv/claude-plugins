@@ -1,0 +1,56 @@
+{
+  "url": "https://symfony.com/doc/7.3/serializer/custom_normalizer.html",
+  "title": "How to Create your Custom Normalizer",
+  "content": "The Serializer component uses normalizers to transform any data into an array. The component provides several built-in normalizers but you may need to create your own normalizer to transform an unsupported data structure.\n\nImagine you want add, modify, or remove some properties during the serialization process. For that you'll have to create your own normalizer. But it's usually preferable to let Symfony normalize the object, then hook into the normalization to customize the normalized data. To do that, you can inject a NormalizerInterface and wire it to Symfony's object normalizer. This will give you access to a $normalizer property which takes care of most of the normalization process:\n\nBefore using this normalizer in a Symfony application it must be registered as a service and tagged with serializer.normalizer. If you're using the default services.yaml configuration, this is done automatically!\n\nIf you're not using autoconfigure, you have to tag the service with serializer.normalizer. You can also use this method to set a priority (higher means it's called earlier in the process):\n\nBoth NormalizerInterface and DenormalizerInterface define a getSupportedTypes() method to declare which types they support and whether their supports*() result can be cached.\n\nThis does not cache the actual normalization or denormalization result. It only caches the decision of whether a normalizer supports a given type, allowing the Serializer to skip unnecessary supports*() calls and improve performance.\n\nThe getSupportedTypes() method should return an array where the keys represent the supported types, and the values indicate whether the result of the corresponding supports*() call can be cached. The array format is as follows:\n\nHere is an example of how to use the getSupportedTypes() method:\n\nThe supports*() method implementations should not assume that getSupportedTypes() has been called before.\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nPut the code quality back at the heart of your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Create your Custom Normalizer",
+      "id": "how-to-create-your-custom-normalizer"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a New Normalizer",
+      "id": "creating-a-new-normalizer"
+    },
+    {
+      "level": "h2",
+      "text": "Registering it in your Application",
+      "id": "registering-it-in-your-application"
+    },
+    {
+      "level": "h2",
+      "text": "Improving Performance of Normalizers/Denormalizers",
+      "id": "improving-performance-of-normalizers-denormalizers"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Serializer/TopicNormalizer.php\nnamespace App\\Serializer;\n\nuse App\\Entity\\Topic;\nuse Symfony\\Component\\DependencyInjection\\Attribute\\Autowire;\nuse Symfony\\Component\\Routing\\Generator\\UrlGeneratorInterface;\nuse Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface;\n\nclass TopicNormalizer implements NormalizerInterface\n{\n    public function __construct(\n        #[Autowire(service: 'serializer.normalizer.object')]\n        private readonly NormalizerInterface $normalizer,\n\n        private UrlGeneratorInterface $router,\n    ) {\n    }\n\n    public function normalize(mixed $data, ?string $format = null, array $context = []): array\n    {\n        $normalizedData = $this->normalizer->normalize($data, $format, $context);\n\n        // Here, add, edit, or delete some data:\n        $normalizedData['href']['self'] = $this->router->generate('topic_show', [\n            'id' => $data->getId(),\n        ], UrlGeneratorInterface::ABSOLUTE_URL);\n\n        return $normalizedData;\n    }\n\n    public function supportsNormalization($data, ?string $format = null, array $context = []): bool\n    {\n        return $data instanceof Topic;\n    }\n\n    public function getSupportedTypes(?string $format): array\n    {\n        return [\n            Topic::class => true,\n        ];\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\Serializer\\TopicNormalizer:\n        tags:\n            # register the normalizer with a high priority (called earlier)\n            - { name: 'serializer.normalizer', priority: 500 }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <!-- ... -->\n\n        <service id=\"App\\Serializer\\TopicNormalizer\">\n            <!-- register the normalizer with a high priority (called earlier) -->\n            <tag name=\"serializer.normalizer\"\n                priority=\"500\"\n            />\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Serializer\\TopicNormalizer;\n\nreturn function(ContainerConfigurator $container) {\n    // ...\n\n    // if you're using autoconfigure, the tag will be automatically applied\n    $services->set(TopicNormalizer::class)\n        // register the normalizer with a high priority (called earlier)\n        ->tag('serializer.normalizer', [\n            'priority' => 500,\n        ])\n    ;\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface;\n\nclass MyNormalizer implements NormalizerInterface\n{\n    // ...\n\n    public function getSupportedTypes(?string $format): array\n    {\n        return [\n            'object' => null,             // doesn't support any classes or interfaces\n            '*' => false,                 // supports any other types, but the decision is not cacheable\n            MyCustomClass::class => true, // supports MyCustomClass and decision is cacheable\n        ];\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/serializer/custom_normalizer.html",
+    "https://symfony.com/doc/7.3/serializer.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html",
+    "https://symfony.com/doc/7.3/service_container.html"
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/mime.html",
+  "title": "The Mime Component",
+  "content": "The Mime component allows manipulating the MIME messages used to send emails and provides utilities related to MIME types.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nMIME (Multipurpose Internet Mail Extensions) is an Internet standard that extends the original basic format of emails to support features like:\n\nThe entire MIME standard is complex and huge, but Symfony abstracts all that complexity to provide two ways of creating MIME messages:\n\nUse the Email class and their chainable methods to compose the entire email message:\n\nThe only purpose of this component is to create the email messages. Use the Mailer component to actually send them.\n\nThe Mime component comes with excellent integration with Twig, allowing you to create messages from Twig templates, embed images, inline CSS and more. Details on how to use those features can be found in the Mailer documentation: Twig: HTML & CSS.\n\nBut if you're using the Mime component without the Symfony framework, you'll need to handle a few setup details.\n\nTo integrate with Twig, use the BodyRenderer class to render the template and update the email message contents with the results:\n\nTo use the inline_css filter, first install the Twig extension:\n\nNow, enable the extension:\n\nThe same process should be used for enabling other extensions, like the MarkdownExtension and InkyExtension.\n\nThis is useful for advanced applications that need absolute control over every email part. It's not recommended for applications with regular email requirements because it adds complexity for no real gain.\n\nBefore continuing, it's important to have a look at the low level structure of an email message. Consider a message which includes some content as both text and HTML, a single PNG image embedded in those contents and a PDF file attached to it. The MIME standard allows structuring this message in different ways, but the following tree is the one that works on most email clients:\n\nThis is the purpose of each MIME message part:\n\nWhen using the low-level Message class to create the email message, you must keep all the above in mind to define the different parts of the email by hand:\n\nEmbedding images and attaching files is possible by creating the appropriate email multiparts:\n\nEmail messages created with either the Email or Message classes can be serialized because they are simple data objects:\n\nA common use case is to store serialized email messages, include them in a message sent with the Messenger component and recreate them later when sending them. Use the RawMessage class to recreate email messages from their serialized contents:\n\nAlthough MIME was designed mainly for creating emails, the content types (also known as MIME types and \"media types\") defined by MIME standards are also of importance in communication protocols outside of email, such as HTTP. That's why this component also provides utilities to work with MIME types.\n\nThe MimeTypes class transforms between MIME types and file name extensions:\n\nThese methods return arrays with one or more elements. The element position indicates its priority, so the first returned extension is the preferred one.\n\nAnother useful utility allows to guess the MIME type of any given file:\n\nGuessing the MIME type is a time-consuming process that requires inspecting part of the file contents. Symfony applies multiple guessing mechanisms, one of them based on the PHP fileinfo extension. It's recommended to install that extension to improve the guessing performance.\n\nYou can add your own MIME type guesser by creating a class that implements MimeTypeGuesserInterface:\n\nMIME type guessers must be registered as services and tagged with the mime.mime_type_guesser tag. If you're using the default services.yaml configuration, this is already done for you, thanks to autoconfiguration.\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The Mime Component",
+      "id": "the-mime-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Introduction",
+      "id": "introduction"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Twig Integration",
+      "id": "twig-integration"
+    },
+    {
+      "level": "h3",
+      "text": "Twig Setup",
+      "id": "twig-setup"
+    },
+    {
+      "level": "h3",
+      "text": "Inlining CSS Styles (and other Extensions)",
+      "id": "inlining-css-styles-and-other-extensions"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Raw Email Messages",
+      "id": "creating-raw-email-messages"
+    },
+    {
+      "level": "h2",
+      "text": "Serializing Email Messages",
+      "id": "serializing-email-messages"
+    },
+    {
+      "level": "h2",
+      "text": "MIME Types Utilities",
+      "id": "mime-types-utilities"
+    },
+    {
+      "level": "h3",
+      "text": "Guessing the MIME Type",
+      "id": "guessing-the-mime-type"
+    },
+    {
+      "level": "h4",
+      "text": "Adding a MIME Type Guesser",
+      "id": "adding-a-mime-type-guesser"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/mime",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Mime\\Email;\n\n$email = (new Email())\n    ->from('fabien@symfony.com')\n    ->to('foo@example.com')\n    ->cc('bar@example.com')\n    ->bcc('baz@example.com')\n    ->replyTo('fabien@symfony.com')\n    ->priority(Email::PRIORITY_HIGH)\n    ->subject('Important Notification')\n    ->text('Lorem ipsum...')\n    ->html('<h1>Lorem ipsum</h1> <p>...</p>')\n;",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Bridge\\Twig\\Mime\\BodyRenderer;\nuse Twig\\Environment;\nuse Twig\\Loader\\FilesystemLoader;\n\n// when using the Mime component inside a full-stack Symfony application, you\n// don't need to do this Twig setup. You only have to inject the 'twig' service\n$loader = new FilesystemLoader(__DIR__.'/templates');\n$twig = new Environment($loader);\n\n$renderer = new BodyRenderer($twig);\n// this updates the $email object contents with the result of rendering\n// the template defined earlier with the given context\n$renderer->render($email);",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require twig/cssinliner-extra",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Twig\\Extra\\CssInliner\\CssInlinerExtension;\n\n$loader = new FilesystemLoader(__DIR__.'/templates');\n$twig = new Environment($loader);\n$twig->addExtension(new CssInlinerExtension());",
+      "language": "unknown"
+    },
+    {
+      "code": "multipart/mixed\n├── multipart/related\n│   ├── multipart/alternative\n│   │   ├── text/plain\n│   │   └── text/html\n│   └── image/png\n└── application/pdf",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Mime\\Header\\Headers;\nuse Symfony\\Component\\Mime\\Message;\nuse Symfony\\Component\\Mime\\Part\\Multipart\\AlternativePart;\nuse Symfony\\Component\\Mime\\Part\\TextPart;\n\n$headers = (new Headers())\n    ->addMailboxListHeader('From', ['fabien@symfony.com'])\n    ->addMailboxListHeader('To', ['foo@example.com'])\n    ->addTextHeader('Subject', 'Important Notification')\n;\n\n$textContent = new TextPart('Lorem ipsum...');\n$htmlContent = new TextPart('<h1>Lorem ipsum</h1> <p>...</p>', null, 'html');\n$body = new AlternativePart($textContent, $htmlContent);\n\n$email = new Message($headers, $body);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\Mime\\Part\\DataPart;\nuse Symfony\\Component\\Mime\\Part\\Multipart\\MixedPart;\nuse Symfony\\Component\\Mime\\Part\\Multipart\\RelatedPart;\n\n// ...\n$embeddedImage = new DataPart(fopen('/path/to/images/logo.png', 'r'), null, 'image/png');\n$imageCid = $embeddedImage->getContentId();\n\n$attachedFile = new DataPart(fopen('/path/to/documents/terms-of-use.pdf', 'r'), null, 'application/pdf');\n\n$textContent = new TextPart('Lorem ipsum...');\n$htmlContent = new TextPart(sprintf(\n    '<img src=\"cid:%s\"/> <h1>Lorem ipsum</h1> <p>...</p>', $imageCid\n), null, 'html');\n$bodyContent = new AlternativePart($textContent, $htmlContent);\n$body = new RelatedPart($bodyContent, $embeddedImage);\n\n$messageParts = new MixedPart($body, $attachedFile);\n\n$email = new Message($headers, $messageParts);",
+      "language": "unknown"
+    },
+    {
+      "code": "$email = (new Email())\n    ->from('fabien@symfony.com')\n    // ...\n;\n\n$serializedEmail = serialize($email);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Mime\\RawMessage;\n\n// ...\n$serializedEmail = serialize($email);\n\n// later, recreate the original message to actually send it\n$message = new RawMessage(unserialize($serializedEmail));",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Mime\\MimeTypes;\n\n$mimeTypes = new MimeTypes();\n$exts = $mimeTypes->getExtensions('application/javascript');\n// $exts = ['js', 'jsm', 'mjs']\n$exts = $mimeTypes->getExtensions('image/jpeg');\n// $exts = ['jpeg', 'jpg', 'jpe']\n\n$types = $mimeTypes->getMimeTypes('js');\n// $types = ['application/javascript', 'application/x-javascript', 'text/javascript']\n$types = $mimeTypes->getMimeTypes('apk');\n// $types = ['application/vnd.android.package-archive']",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Mime\\MimeTypes;\n\n$mimeTypes = new MimeTypes();\n$mimeType = $mimeTypes->guessMimeType('/some/path/to/image.gif');\n// Guessing is not based on the file name, so $mimeType will be 'image/gif'\n// only if the given file is truly a GIF image",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App;\n\nuse Symfony\\Component\\Mime\\MimeTypeGuesserInterface;\n\nclass SomeMimeTypeGuesser implements MimeTypeGuesserInterface\n{\n    public function isGuesserSupported(): bool\n    {\n        // return true when the guesser is supported (might depend on the OS for instance)\n        return true;\n    }\n\n    public function guessMimeType(string $path): ?string\n    {\n        // inspect the contents of the file stored in $path to guess its\n        // type and return a valid MIME type ... or null if unknown\n\n        return '...';\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/mime.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/mailer.html",
+    "https://symfony.com/doc/7.3/components/messenger.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html"
+  ]
+}

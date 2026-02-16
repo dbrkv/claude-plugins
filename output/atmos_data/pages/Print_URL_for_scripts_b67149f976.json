@@ -1,0 +1,42 @@
+{
+  "title": "Print URL for scripts",
+  "content": "atmos auth console --print-only | pbcopy\nshell\natmos auth console\nshell\natmos auth console --identity prod-admin\nshell",
+  "code_samples": [
+    {
+      "code": "## How to Use It\n\n### Basic Usage\n\nOpen the cloud console with your default identity:",
+      "language": "unknown"
+    },
+    {
+      "code": "### With Specific Identity",
+      "language": "unknown"
+    },
+    {
+      "code": "### Navigate to Specific AWS Services\n\nAtmos supports 100+ AWS service aliases for convenient shorthand access:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "How to Use It",
+      "id": "how-to-use-it"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h3",
+      "text": "With Specific Identity",
+      "id": "with-specific-identity"
+    },
+    {
+      "level": "h3",
+      "text": "Navigate to Specific AWS Services",
+      "id": "navigate-to-specific-aws-services"
+    }
+  ],
+  "url": "llms-txt#print-url-for-scripts",
+  "links": []
+}

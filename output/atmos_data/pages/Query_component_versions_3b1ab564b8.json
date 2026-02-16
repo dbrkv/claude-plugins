@@ -1,0 +1,13 @@
+{
+  "title": "Query component versions",
+  "content": "atmos list metadata --query '.metadata.version'\nshell",
+  "code_samples": [
+    {
+      "code": "Output in different formats:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#query-component-versions",
+  "links": []
+}

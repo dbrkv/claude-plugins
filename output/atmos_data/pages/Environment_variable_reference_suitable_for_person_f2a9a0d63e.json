@@ -1,0 +1,8 @@
+{
+  "title": "Environment variable reference (suitable for personal configurations)",
+  "content": "mfa_arn: !env AWS_MFA_ARN",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#environment-variable-reference-(suitable-for-personal-configurations)",
+  "links": []
+}

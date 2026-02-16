@@ -1,0 +1,124 @@
+{
+  "title": "Check the plan looks good and doesn't have 'TODO' anywhere if so, be sure to run `bin/random-pet.sh`)",
+  "content": "atmos terraform apply tfstate-backend --stack ue2-root\nbash\natmos terraform generate backend tfstate-backend --stack ue2-root\nbash\natmos terraform plan tfstate-backend --stack ue2-root\ntxt\nDo you want to migrate all workspaces to \"s3\"?\nBoth the existing \"local\" backend and the newly configured \"s3\" backend\nsupport workspaces. When migrating between backends, Terraform will copy\nall workspaces (with the same names). THIS WILL OVERWRITE any conflicting\nstates in the destination.\n\nTerraform initialization doesn't currently migrate only select workspaces.\nIf you want to migrate a select number of workspaces, you must manually\npull and push those states.\n\nIf you answer \"yes\", Terraform will migrate all states. If you answer\n\"no\", Terraform will abort.\n\nEnter a value:\nbash\natmos terraform generate backend static-site --stack uw2-dev\nbash\natmos terraform deploy static-site --stack uw2-dev\ntxt\nApply complete! Resources: 7 added, 0 changed, 0 destroyed.\n\ndomain_name = \"CLOUDFRONT_ID.cloudfront.net\"\ns3_bucket_name = \"acme-uw2-dev-static-site-RANDOM_PET-origin\"\nyaml\nterraform:\n  backend:\n    s3:\n      bucket: \"my-terraform-states\"\n      assume_role:\n        role_arn: \"arn:aws:iam::123456789012:role/terraform\"\n        session_name: \"terraform-backend\"\nhcl\nterraform {\n  backend \"s3\" {\n    bucket = \"my-terraform-states\"\n    assume_role = {\n      role_arn     = \"arn:aws:iam::123456789012:role/terraform\"\n      session_name = \"terraform-backend\"\n    }\n  }\n}\nbash\natmos terraform generate backends --format hcl\nyaml\nauth:\n  providers:\n    company-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://company.awsapps.com/start/\n\nidentities:\n    prod-admin:\n      kind: aws/permission-set\n      via:\n        provider: company-sso\n      principal:\n        name: \"AdministratorAccess\"\n        account:\n          name: \"production\"\nbash",
+  "code_samples": [
+    {
+      "code": "This will provision our S3 bucket + Dynamo DB table for usage as our backend.\n\n3. Next, let's generate the configuration for that backend:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will look at our stack, find the imported `terraform.backend.s3` configuration and build a valid `backend.tf.json` file and put it in our component directory. Then going forward, whenever we `plan` or `apply` against that component it will be properly configured to use that S3 backend.\n\n4. Now that we have our `backend.tf.json` file, we can change over our `tfstate-backend` component from using local state to its S3 backend:",
+      "language": "unknown"
+    },
+    {
+      "code": "This will prompt you with the following:",
+      "language": "unknown"
+    },
+    {
+      "code": "Enter \"yes\" and this will migrate our local state to our S3 backend. Success!\n\n5. Now that we've migrated our single \"chicken or the egg\" component, we'll want to generate the `backend.tf.json` file for our other components as well considering we'll want them to use the S3 backend too. Luckily for us, there is only one, simple component as part of this tutorial: `components/terraform/static-site`. Let's go ahead and generate the backend config for that component:",
+      "language": "unknown"
+    },
+    {
+      "code": "Exactly the same as for our `tfstate-backend` component, our `atmos` `backend generate` command will put a `backend.tf.json` file in our `components/terraform/static-site/` directory so that component will always utilize the correct backend. If this were a real project that we were working on and practicing proper GitOps, then we'd actually check those files into git so that our backend configuration would persist going forward, but since this is a tutorial we'll skip that step.\n\n### 3. Apply our Static Site\n\nNext, let's move onto applying our `static-site` component to actually build something real on AWS. Well that's pretty simple actually:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command will plan and apply our `static-site` component with our configuration specified in our `stacks/uw2-dev.yaml` stack. This should output something similar to the following at the end:",
+      "language": "unknown"
+    },
+    {
+      "code": "If you copy the `domain_name` value and paste it into your browser then you should see our simple static site!\n\n![Static Site Example Image](/img/tutorial-3-static-site.png)\n\nAs you can see, this deploys our static site for our `dev` environment, but not our `prod` environment. This tutorial won't cover deploying the `prod` environment, but feel free to play around with the variables if you would like to mess around with it!\n\n## Conclusion\n\nIn this tutorial, we've given you a bit more of taste of what it looks like to work on a real project while following the SweetOps methodology:\n\n1. We've seen real world components: `tfstate-backend` and `static-site`. These are sharable root modules that you didn't need write yourself or touch to get up and running, you just need to supply the configuration. We have a whole library of components (which `tfstate-backend` is one of) over at [`cloudposse/terraform-aws-components`](https://github.com/cloudposse/terraform-aws-components).\n1. We utilized `atmos` to deploy our terraform state backend for our various components and then also generate the `backend.tf.json` files to ensure our components are properly being built from a central configuration in our `stacks/` directory.\n1. You now have an example of what it looks like to organize stack configurations **for different environments and regions**. This is immensely important and is why SweetOps is so powerful: Our stacks centrally define our environments, where they're deployed, and how they're configured; the components are completely agnostic to their environment and only responsible for business logic. This separation is critical to building reusable, composable infrastructure. Not to mention, we ensure that critical configurations are declared as code and not just committed to the memory of a few senior engineers.\n\nWith this knowledge, you're now ready to actually build projects on AWS using the SweetOps methodology!\n\n---\n\n## Tutorials\n\n\nHere are some lessons on how to implement Atmos in a project.\n\nimport DocCardList from '@theme/DocCardList'\n\n<DocCardList/>\n\n---\n\n## Fixed: Nested Maps in Terraform Backend Configurations\n\nAtmos now properly handles nested maps in Terraform backend configurations when using HCL format. This fixes an issue where complex backend settings like `assume_role` were silently dropped.\n\n<!--truncate-->\n\n## The Problem\n\nWhen generating backend configurations with `atmos terraform generate backends --format hcl`, nested maps were missing from the output. For example:",
+      "language": "unknown"
+    },
+    {
+      "code": "The generated `backend.tf` was missing the `assume_role` configuration entirely.\n\n## The Fix\n\nWe added a recursive type converter that handles nested maps, arrays, and all Go types when generating HCL output. The JSON and `backend-config` formats already worked correctly.\n\n## Example\n\nNow all nested configurations are properly preserved:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Usage\n\nUpgrade Atmos and regenerate your backend configurations:",
+      "language": "unknown"
+    },
+    {
+      "code": "All three formats (HCL, JSON, backend-config) now correctly handle nested structures.\n\n---\n\n## Introducing Atmos Auth: Native Cloud Authentication for Platform Teams\n\nWe're introducing `atmos auth` - native cloud authentication built directly into Atmos. After years of solving the same authentication problems repeatedly across different tools and teams, we've built a solution that works whether you adopt the entire Atmos framework or just need better credential management.\n\n<!--truncate-->\n\n## The Problem We're Solving\n\nPlatform teams face a persistent authentication challenge: **there's no unified, configuration-as-code approach to managing cloud credentials**. Teams typically resort to:\n\n- **Standalone tools** like [Leapp](https://www.leapp.cloud/) - the closest alternative we've found, but requires a separate GUI application\n- **Manual credential management** - copying and pasting temporary credentials, managing profiles across team members\n- **Wiki-based documentation** - maintaining wiki pages with authentication instructions that quickly become outdated\n- **Multiple point solutions** - aws-vault for AWS, different tools for Azure, GCP, etc.\n\nThis creates several pain points:\n\n1. **No shared configuration** - Each team member configures authentication independently, leading to inconsistencies and support burden\n2. **Context switching** - Jumping between credential managers, browsers, and CLI tools breaks workflow\n3. **Configuration drift** - When access requirements change, teams must update wikis, Slack messages, and individual setups\n4. **Framework lock-in** - Authentication solutions are often tied to specific tools or workflows\n\nOver the years, we've been heavily inspired by tools like [aws-vault](https://github.com/99designs/aws-vault), [aws2saml](https://github.com/Versent/saml2aws), and other utilities we cut our teeth on. These tools solved specific problems well, but we kept reimplementing authentication for each new project, cloud provider, or workflow.\n\n## Why We Built This\n\nAuthentication is **integral to every platform team's ability to deliver infrastructure**. When your team spends time debugging credential issues, updating wiki pages, or helping teammates configure access, that's time not spent delivering value.\n\nWe were tired of solving the same problem over and over. So we built native authentication into Atmos, following these principles:\n\n- **Configuration as code** - Authentication config lives in `atmos.yaml` alongside your infrastructure\n- **Shared by default** - Commit once, everyone on the team uses the same configuration\n- **Cloud-agnostic** - Works with AWS IAM Identity Center, SAML providers, and extensible to other providers\n- **Standalone or integrated** - Use it even if you don't adopt the whole Atmos framework\n\n## What Atmos Auth Provides\n\n### Native AWS IAM Identity Center Support",
+      "language": "unknown"
+    },
+    {
+      "code": "### Simple Authentication Flow",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "3. Apply our Static Site",
+      "id": "3.-apply-our-static-site"
+    },
+    {
+      "level": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "level": "h2",
+      "text": "Tutorials",
+      "id": "tutorials"
+    },
+    {
+      "level": "h2",
+      "text": "Fixed: Nested Maps in Terraform Backend Configurations",
+      "id": "fixed:-nested-maps-in-terraform-backend-configurations"
+    },
+    {
+      "level": "h2",
+      "text": "The Problem",
+      "id": "the-problem"
+    },
+    {
+      "level": "h2",
+      "text": "The Fix",
+      "id": "the-fix"
+    },
+    {
+      "level": "h2",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Introducing Atmos Auth: Native Cloud Authentication for Platform Teams",
+      "id": "introducing-atmos-auth:-native-cloud-authentication-for-platform-teams"
+    },
+    {
+      "level": "h2",
+      "text": "The Problem We're Solving",
+      "id": "the-problem-we're-solving"
+    },
+    {
+      "level": "h2",
+      "text": "Why We Built This",
+      "id": "why-we-built-this"
+    },
+    {
+      "level": "h2",
+      "text": "What Atmos Auth Provides",
+      "id": "what-atmos-auth-provides"
+    },
+    {
+      "level": "h3",
+      "text": "Native AWS IAM Identity Center Support",
+      "id": "native-aws-iam-identity-center-support"
+    },
+    {
+      "level": "h3",
+      "text": "Simple Authentication Flow",
+      "id": "simple-authentication-flow"
+    }
+  ],
+  "url": "llms-txt#check-the-plan-looks-good-and-doesn't-have-'todo'-anywhere-if-so,-be-sure-to-run-`bin/random-pet.sh`)",
+  "links": []
+}

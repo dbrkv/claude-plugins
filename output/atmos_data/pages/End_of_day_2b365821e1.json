@@ -1,0 +1,8 @@
+{
+  "title": "End of day",
+  "content": "$ atmos auth logout dev-admin\nâ Cleared session data\nâ Preserved keychain credentials",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#end-of-day",
+  "links": []
+}

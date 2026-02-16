@@ -1,0 +1,8 @@
+{
+  "title": "Specific identity",
+  "content": "atmos describe component <your-component> -s <your-stack> --identity <your-identity>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#specific-identity",
+  "links": []
+}

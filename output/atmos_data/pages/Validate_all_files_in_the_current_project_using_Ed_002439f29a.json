@@ -1,0 +1,19 @@
+{
+  "title": "Validate all files in the current project using EditorConfig",
+  "content": "atmos validate editorconfig\nini",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n### Configuration\n\nTo use the `atmos validate editorconfig` command, ensure that your project contains a properly configured `.editorconfig` file at the root level or in relevant directories. This file defines the coding styles for the project, such as indentation, line endings, and character encodings.\n\n<File title=\".editorconfig\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Configuration",
+      "id": "configuration"
+    }
+  ],
+  "url": "llms-txt#validate-all-files-in-the-current-project-using-editorconfig",
+  "links": []
+}

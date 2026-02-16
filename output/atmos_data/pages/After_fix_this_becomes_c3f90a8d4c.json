@@ -1,0 +1,8 @@
+{
+  "title": "After fix, this becomes:",
+  "content": "echo 'hello\\ \\ world'  # Double-escaped, backslashes will show",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#after-fix,-this-becomes:",
+  "links": []
+}

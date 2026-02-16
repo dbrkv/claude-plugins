@@ -1,0 +1,8 @@
+{
+  "title": "SSH protocol (requires SSH key setup)",
+  "content": "source: \"git::ssh://git@github.com/cloudposse-terraform-components/aws-vpc.git?ref=v1.0.0\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ssh-protocol-(requires-ssh-key-setup)",
+  "links": []
+}

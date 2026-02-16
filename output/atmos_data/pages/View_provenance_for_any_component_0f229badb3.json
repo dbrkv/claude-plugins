@@ -1,0 +1,8 @@
+{
+  "title": "View provenance for any component",
+  "content": "atmos describe component <component> -s <stack> --provenance",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#view-provenance-for-any-component",
+  "links": []
+}

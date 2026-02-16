@@ -1,0 +1,13 @@
+{
+  "title": "All atmos commands now run in that directory",
+  "content": "atmos terraform plan vpc -s prod\natmos describe stacks\natmos list components\nbash\nexport ATMOS_CHDIR=/default-infra",
+  "code_samples": [
+    {
+      "code": "The CLI flag takes precedence over the environment variable, allowing you to override the default when needed:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#all-atmos-commands-now-run-in-that-directory",
+  "links": []
+}

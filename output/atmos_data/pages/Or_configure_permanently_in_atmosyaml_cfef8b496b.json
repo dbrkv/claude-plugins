@@ -1,0 +1,178 @@
+{
+  "title": "Or configure permanently in atmos.yaml",
+  "content": "settings:\n  terminal:\n    theme: dracula\nshell\nexport ATMOS_THEME=dracula\natmos terraform plan\nyaml\nsettings:\n  terminal:\n    theme: dracula\nshell\natmos validate component <component> -s <stack> [options]\nshell\natmos validate component infra/vpc -s tenant1-ue2-dev\natmos validate component infra/vpc -s tenant1-ue2-dev --schema-path vpc/validate-infra-vpc-component.json --schema-type jsonschema\natmos validate component infra/vpc -s tenant1-ue2-dev --schema-path vpc/validate-infra-vpc-component.rego --schema-type opa\natmos validate component infra/vpc -s tenant1-ue2-dev --schema-path vpc/validate-infra-vpc-component.rego --schema-type opa --module-paths catalog/constants\natmos validate component infra/vpc -s tenant1-ue2-dev --schema-path vpc/validate-infra-vpc-component.rego --schema-type opa --module-paths catalog\natmos validate component infra/vpc -s tenant1-ue2-dev --timeout 15\nshell\natmos validate editorconfig\nshell\natmos validate editorconfig\natmos validate editorconfig --logs-level Trace\natmos validate editorconfig --no-color\natmos validate editorconfig --dry-run\nshell\natmos validate schema\nshell\natmos validate schema\natmos validate schema <my_custom_key>\nyaml\nschemas:\n    my_custom_key:\n        schema: !import https://www.jsonschema.com/example.json # json to be used for validation\n        matches:\n            - folder/*.yaml # pattern of the file to be validated\nshell\natmos validate stacks\nconsole\n        The Atmos component 'vpc' in the stack 'plat-ue2-dev' is defined in more than one\n        top-level stack manifest file: orgs/acme/plat/dev/us-east-2-extras, orgs/acme/plat/dev/us-east-2.\n\nThe component configurations in the stack manifests are different.\n\nTo check and compare the component configurations in the stack manifests, run the following commands:\n        - atmos describe component vpc -s orgs/acme/plat/dev/us-east-2-extras\n        - atmos describe component vpc -s orgs/acme/plat/dev/us-east-2\n\nYou can use the '--file' flag to write the results of the above commands to files\n        (refer to https://atmos.tools/cli/commands/describe/component).\n\nYou can then use the Linux 'diff' command to compare the files line by line and show the differences\n        (refer to https://man7.org/linux/man-pages/man1/diff.1.html)\n\nWhen searching for the component 'vpc' in the stack 'plat-ue2-dev', Atmos can't decide which\n        stack manifest file to use to get configuration for the component. This is a stack misconfiguration.\n\nConsider the following solutions to fix the issue:\n\n- Ensure that the same instance of the Atmos 'vpc' component in the stack 'plat-ue2-dev'\n          is only defined once (in one YAML stack manifest file)\n\n- When defining multiple instances of the same component in the stack,\n          ensure each has a unique name\n\n- Use multiple-inheritance to combine multiple configurations together\n          (refer to https://atmos.tools/core-concepts/stacks/inheritance)\n        shell",
+  "code_samples": [
+    {
+      "code": "## Theme Configuration\n\nYou can set a theme in two ways:\n\n### Environment Variable\n\nSet the `ATMOS_THEME` environment variable before running Atmos commands:",
+      "language": "unknown"
+    },
+    {
+      "code": "This is useful for testing themes or switching themes temporarily.\n\n### Configuration File\n\nAdd the theme to your `atmos.yaml` configuration:",
+      "language": "unknown"
+    },
+    {
+      "code": "This makes the theme setting persistent across all Atmos commands.\n\n## Choosing a Theme\n\n**[Browse all available themes â](/cli/commands/theme/browse)**\n\nBrowse our searchable theme gallery to explore all available themes with visual previews and color palettes.\n\n- **Dark terminals**: Use themes like `dracula`, `github-dark`, `monokai`, or `solarized-dark`\n- **Light terminals**: Use themes like `github-light`, `solarized-light`, or `vs`\n- **Recommended themes** (marked with â): Have been tested for optimal readability with Atmos\n- **Preview before committing**: Use `atmos theme show <name>` to see how a theme looks\n\n## Related Commands\n\n- [`atmos list themes`](/cli/commands/list/themes) - Alternative command to list themes (shows recommended by default)\n\n---\n\n## atmos validate\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport DocCardList from '@theme/DocCardList';\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse these subcommands to validate Atmos configurations.\n</Intro>\n\n<Screengrab title=\"atmos validate --help\" slug=\"atmos-validate--help\" />\n\n## Subcommands\n\n<DocCardList />\n\n---\n\n## atmos validate component\n\nimport Screengrab from '@site/src/components/Screengrab'\n\n:::note purpose\nUse this command to validate an Atmos component in a stack using JSON Schema and OPA policies.\n:::\n\n<Screengrab title=\"atmos validate component --help\" slug=\"atmos-validate-component--help\" />\n\n## Usage\n\nExecute the `validate component` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command validates an Atmos component in a stack using JSON Schema and OPA policies.\n\n:::tip\nRun `atmos validate component --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "## Arguments\n\n<dl>\n  <dt>`component` (required)</dt>\n  <dd>Atmos component.</dd>\n</dl>\n\n## Flags\n\n<dl>\n  <dt>`--stack` / `-s` (required)</dt>\n  <dd>Atmos stack.</dd>\n\n  <dt>`--schema-path` (optional)</dt>\n  <dd>Path to the schema file.Can be an absolute path or a path relative to `schemas.jsonschema.base_path`and `schemas.opa.base_path` defined in `atmos.yaml`.</dd>\n\n  <dt>`--schema-type` (optional)</dt>\n  <dd>Schema type: `jsonschema` or `opa`.</dd>\n\n  <dt>`--module-paths` (optional)</dt>\n  <dd>Comma-separated string of filesystem paths (folders or individual files) to the additional modulesfor schema validation. Each path can be an absolute path or a path relative to`schemas.opa.base_path` defined in `atmos.yaml`.</dd>\n\n  <dt>`--timeout` (optional)</dt>\n  <dd>Validation timeout in seconds. Can also be specified in `settings.validation` component config. If not provided, timeout of 20 seconds is used by default.</dd>\n</dl>\n\n---\n\n## atmos validate editorconfig\n\nimport Screengrab from '@site/src/components/Screengrab'\n\n:::note purpose\nUse this command to validate files against the rules defined in .editorconfig file.\n:::\n\n<Screengrab title=\"atmos validate editorconfig --help\" slug=\"atmos-validate-editorconfig--help\" />\n\n## Usage\n\nExecute the `validate editorconfig` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command validates files against the formatting rules defined in your .editorconfig file.\n\n:::tip\nRun `atmos validate editorconfig --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--config` (optional)</dt>\n  <dd>Path to the configuration file (e.g., `.editorconfig`, `.editorconfig-checker.json`, `.ecrc`).</dd>\n\n  <dt>`--disable-end-of-line` (optional)</dt>\n  <dd>Disable end-of-line check (default `false`).</dd>\n\n  <dt>`--disable-indent-size` (optional)</dt>\n  <dd>Disable indent size check (default `false`).</dd>\n\n  <dt>`--disable-indentation` (optional)</dt>\n  <dd>Disable indentation check (default `false`).</dd>\n\n  <dt>`--disable-insert-final-newline` (optional)</dt>\n  <dd>Disable final newline check (default `false`).</dd>\n\n  <dt>`--disable-max-line-length` (optional)</dt>\n  <dd>Disable max line length check (default `false`).</dd>\n\n  <dt>`--disable-trim-trailing-whitespace` (optional)</dt>\n  <dd>Disable trailing whitespace check (default `false`).</dd>\n\n  <dt>`--dry-run` (optional)</dt>\n  <dd>Show which files would be checked (default `false`).</dd>\n\n  <dt>`--exclude` (optional)</dt>\n  <dd>Regex to exclude files from checking.</dd>\n\n  <dt>`--format` (optional)</dt>\n  <dd>Specify the output format: default, gcc (default `default`).</dd>\n\n  <dt>`--help` (optional)</dt>\n  <dd>help for editorconfig.</dd>\n\n  <dt>`--ignore-defaults` (optional)</dt>\n  <dd>Ignore default excludes (default `false`).</dd>\n\n  <dt>`--init` (optional)</dt>\n  <dd>Create an initial configuration (default `false`).</dd>\n\n  <dt>`--no-color` (optional)</dt>\n  <dd>Don't print colors (default `false`).</dd>\n\n  <dt>`--version` (optional)</dt>\n  <dd>Print the version number (default `false`).</dd>\n</dl>\n\n---\n\n## atmos validate schema\n\nimport Screengrab from '@site/src/components/Screengrab'\n\n:::note purpose\nUse this command to validate files against the rules defined in your schema in atmos.yaml.\n:::\n\n<Screengrab title=\"atmos validate schema --help\" slug=\"atmos-validate-schema--help\" />\n\n## Usage\n\nExecute the `validate schema` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command validates files against the formatting rules defined in your .editorconfig file.\n\n:::tip\nRun `atmos validate schema --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    },
+    {
+      "code": "## How to set my schema validators?\n\nYou need to use the `schemas` key in atmos config.",
+      "language": "unknown"
+    },
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--schemas-atmos-manifest` (optional)</dt>\n  <dd>Specifies the path to a JSON schema file used to validate the structure and content of the Atmos manifest file.</dd>\n</dl>\n\n---\n\n## atmos validate stacks\n\nimport Screengrab from '@site/src/components/Screengrab'\nimport Terminal from '@site/src/components/Terminal'\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to validate Atmos stack manifest configurations.\n</Intro>\n\n<Screengrab title=\"atmos validate stacks --help\" slug=\"atmos-validate-stacks--help\" />\n\n## Usage\n\nExecute the `validate stacks` command like this:",
+      "language": "unknown"
+    },
+    {
+      "code": "This command validates Atmos stack manifests and checks the following:\n\n- All YAML manifest files for YAML errors and inconsistencies\n  - Note: Template files (`.yaml.tmpl`, `.yml.tmpl`, `.tmpl`) are excluded from validation since they may contain template placeholders that are invalid YAML before being rendered\n  - Template files are still automatically detected and processed during normal operations (imports, etc.)\n\n- All imports: if they are configured correctly, have valid data types, and point to existing manifest files\n\n- Schema: if all sections in all YAML manifest files are correctly configured and have valid data types\n\n- Misconfiguration and duplication of components in stacks. If the same Atmos component in the same Atmos stack is\n  defined in more than one stack manifest file, and the component configurations are different, an error message will\n  be displayed similar to the following:\n\n    <Terminal title=\"atmos validate stacks\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n:::tip\nRun `atmos validate stacks --help` to see all the available options\n:::\n\n## Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Theme Configuration",
+      "id": "theme-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Environment Variable",
+      "id": "environment-variable"
+    },
+    {
+      "level": "h3",
+      "text": "Configuration File",
+      "id": "configuration-file"
+    },
+    {
+      "level": "h2",
+      "text": "Choosing a Theme",
+      "id": "choosing-a-theme"
+    },
+    {
+      "level": "h2",
+      "text": "Related Commands",
+      "id": "related-commands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos validate",
+      "id": "atmos-validate"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "atmos validate component",
+      "id": "atmos-validate-component"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Arguments",
+      "id": "arguments"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos validate editorconfig",
+      "id": "atmos-validate-editorconfig"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos validate schema",
+      "id": "atmos-validate-schema"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "How to set my schema validators?",
+      "id": "how-to-set-my-schema-validators?"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "atmos validate stacks",
+      "id": "atmos-validate-stacks"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    }
+  ],
+  "url": "llms-txt#or-configure-permanently-in-atmos.yaml",
+  "links": []
+}

@@ -1,0 +1,67 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/cache_items.html",
+  "title": "Cache Items",
+  "content": "Cache items are the information units stored in the cache as a key/value pair. In the Cache component they are represented by the CacheItem class. They are used in both the Cache Contracts and the PSR-6 interfaces.\n\nThe key of a cache item is a plain string which acts as its identifier, so it must be unique for each cache pool. You can freely choose the keys, but they should only contain letters (A-Z, a-z), numbers (0-9) and the _ and . symbols. Other common symbols (such as { } ( ) / \\ @ :) are reserved by the PSR-6 standard for future uses.\n\nThe value of a cache item can be any data represented by a type which is serializable by PHP, such as basic types (string, integer, float, boolean, null), arrays and objects.\n\nThe only way to create cache items is via cache pools. When using the Cache Contracts, they are passed as arguments to the recomputation callback:\n\nWhen using PSR-6, they are created with the getItem($key) method of the cache pool:\n\nThen, use the Psr\\Cache\\CacheItemInterface::set method to set the data stored in the cache item (this step is done automatically when using the Cache Contracts):\n\nThe key and the value of any given cache item can be obtained with the corresponding getter methods:\n\nBy default, cache items are stored permanently. In practice, this \"permanent storage\" can vary greatly depending on the type of cache being used, as explained in the Cache Pools and Supported Adapters article.\n\nHowever, in some applications it's common to use cache items with a shorter lifespan. Consider for example an application which caches the latest news just for one minute. In those cases, use the expiresAfter() method to set the number of seconds to cache the item:\n\nCache items define another related method called expiresAt() to set the exact date and time when the item will expire:\n\nUsing a cache mechanism is important to improve the application performance, but it should not be required to make the application work. In fact, the PSR-6 document wisely states that caching errors should not result in application failures.\n\nIn practice with PSR-6, this means that the getItem() method always returns an object which implements the Psr\\Cache\\CacheItemInterface interface, even when the cache item doesn't exist. Therefore, you don't have to deal with null return values and you can safely store in the cache values such as false and null.\n\nIn order to decide if the returned object represents a value coming from the storage or not, caches use the concept of hits and misses:\n\nCache item objects define a boolean isHit() method which returns true for cache hits:\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.\n\nSave your teams and projects before they sink",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Cache Items",
+      "id": "cache-items"
+    },
+    {
+      "level": "h2",
+      "text": "Cache Item Keys and Values",
+      "id": "cache-item-keys-and-values"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Cache Items",
+      "id": "creating-cache-items"
+    },
+    {
+      "level": "h3",
+      "text": "Cache Item Expiration",
+      "id": "cache-item-expiration"
+    },
+    {
+      "level": "h2",
+      "text": "Cache Item Hits and Misses",
+      "id": "cache-item-hits-and-misses"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// $cache pool object was created before\n$productsCount = $cache->get('stats.products_count', function (ItemInterface $item): string {\n    // [...]\n});",
+      "language": "unknown"
+    },
+    {
+      "code": "// $cache pool object was created before\n$productsCount = $cache->getItem('stats.products_count');",
+      "language": "unknown"
+    },
+    {
+      "code": "// storing a simple integer\n$productsCount->set(4711);\n$cache->save($productsCount);\n\n// storing an array\n$productsCount->set([\n    'category1' => 4711,\n    'category2' => 2387,\n]);\n$cache->save($productsCount);",
+      "language": "javascript"
+    },
+    {
+      "code": "$cacheItem = $cache->getItem('exchange_rate');\n// ...\n$key = $cacheItem->getKey();\n$value = $cacheItem->get();",
+      "language": "unknown"
+    },
+    {
+      "code": "$latestNews->expiresAfter(60);  // 60 seconds = 1 minute\n\n// this method also accepts \\DateInterval instances\n$latestNews->expiresAfter(DateInterval::createFromDateString('1 hour'));",
+      "language": "unknown"
+    },
+    {
+      "code": "$mostPopularNews->expiresAt(new \\DateTime('tomorrow'));",
+      "language": "unknown"
+    },
+    {
+      "code": "$latestNews = $cache->getItem('latest_news');\n\nif (!$latestNews->isHit()) {\n    // do some heavy computation\n    $news = ...;\n    $cache->save($latestNews->set($news));\n} else {\n    $news = $latestNews->get();\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/cache_items.html",
+    "https://symfony.com/doc/7.3/components/cache/cache_pools.html"
+  ]
+}

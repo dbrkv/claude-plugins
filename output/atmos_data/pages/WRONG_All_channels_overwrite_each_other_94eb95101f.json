@@ -1,0 +1,13 @@
+{
+  "title": "WRONG: All channels overwrite each other",
+  "content": "spec:\n  sources:\n    - component: vpc-dev\n      source: \"git::...?ref=channels/dev\"\n      targets:\n        - \"components/terraform/vpc\"  # â Same path for all\n    - component: vpc-prod\n      source: \"git::...?ref=channels/prod\"\n      targets:\n        - \"components/terraform/vpc\"  # â Overwrites dev!\nyaml",
+  "code_samples": [
+    {
+      "code": "**Solution**: Vendor to distinct paths per version/channel:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#wrong:-all-channels-overwrite-each-other",
+  "links": []
+}

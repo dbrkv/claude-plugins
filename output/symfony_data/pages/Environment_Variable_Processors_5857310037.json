@@ -1,0 +1,285 @@
+{
+  "url": "https://symfony.com/doc/7.3/configuration/env_var_processors.html",
+  "title": "Environment Variable Processors",
+  "content": "Using env vars to configure Symfony applications is a common practice to make your applications truly dynamic.\n\nThe main issue of env vars is that their values can only be strings and your application may need other data types (integer, boolean, etc.). Symfony solves this problem with \"env var processors\", which transform the original contents of the given environment variables. The following example uses the integer processor to turn the value of the HTTP_PORT env var into an integer:\n\nSymfony provides the following env var processors:\n\nCasts FOO to a string:\n\nCasts FOO to a bool (true values are 'true', 'on', 'yes', all numbers except 0 and 0.0 and all numeric strings except '0' and '0.0'; everything else is false):\n\nCasts FOO to a bool (just as env(bool:...) does) except it returns the inverted value (falsy values are returned as true, truthy values are returned as false):\n\nFinds the const value named in FOO:\n\nDecodes the content of FOO, which is a JSON encoded string. It returns either an array or null:\n\nIf the content of FOO includes container parameters (with the syntax %parameter_name%), it replaces the parameters by their values:\n\nDecodes the content of FOO, which is a CSV-encoded string:\n\nRandomly shuffles values of the FOO env var, which must be an array.\n\nReturns the contents of a file whose path is the value of the FOO env var:\n\nrequire() the PHP file whose path is the value of the FOO env var and return the value returned from it.\n\nTrims the content of FOO env var, removing whitespaces from the beginning and end of the string. This is especially useful in combination with the file processor, as it'll remove newlines at the end of a file.\n\nRetrieves the value associated with the key FOO from the array whose contents are stored in the BAR env var:\n\nRetrieves the value of the parameter fallback_param when the BAR env var is not available:\n\nWhen the fallback parameter is omitted (e.g. env(default::API_KEY)), then the returned value is null.\n\nParses an absolute URL and returns its components as an associative array.\n\nIn order to ease extraction of the resource from the URL, the leading / is trimmed from the path component.\n\nParses the query string part of the given URL and returns its components as an associative array.\n\nTries to convert an environment variable to an actual \\BackedEnum value. This processor takes the fully qualified name of the \\BackedEnum as an argument:\n\nThe value stored in the CARD_SUIT env var would be a string (e.g. 'spades') but the application will use the enum value (e.g. Suit::Spades).\n\nEvaluates to true if the env var exists and its value is not '' (an empty string) or null; it returns false otherwise.\n\nEncodes the content of the FOO env var using the urlencode PHP function. This is especially useful when FOO value is not compatible with DSN syntax.\n\nThe env(urlencode:...) env var processor was introduced in Symfony 7.1.\n\nIt is also possible to combine any number of processors:\n\nIt's also possible to add your own processors for environment variables. First, create a class that implements EnvVarProcessorInterface:\n\nTo enable the new processor in the app, register it as a service and tag it with the container.env_var_processor tag. If you're using the default services.yaml configuration, this is already done for you, thanks to autoconfiguration.\n\nEnvironment variables are resolved at runtime, but you can also resolve them at compile time.\n\nShow your Sylius expertise\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Environment Variable Processors",
+      "id": "environment-variable-processors"
+    },
+    {
+      "level": "h2",
+      "text": "Built-In Environment Variable Processors",
+      "id": "built-in-environment-variable-processors"
+    },
+    {
+      "level": "h2",
+      "text": "Custom Environment Variable Processors",
+      "id": "custom-environment-variable-processors"
+    },
+    {
+      "level": "h2",
+      "text": "Resolving Environment Variable At Compile Time",
+      "id": "resolving-environment-variable-at-compile-time"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    router:\n        http_port: '%env(int:HTTP_PORT)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:router http-port=\"%env(int:HTTP_PORT)%\"/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->router()\n        ->httpPort('%env(int:HTTP_PORT)%')\n        // or\n        ->httpPort(env('HTTP_PORT')->int())\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(SECRET): 'some_secret'\nframework:\n    secret: '%env(string:SECRET)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(SECRET)\">some_secret</parameter>\n    </parameters>\n\n    <framework:config secret=\"%env(string:SECRET)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (ContainerBuilder $container, FrameworkConfig $framework): void {\n    $container->setParameter('env(SECRET)', 'some_secret');\n    $framework->secret(env('SECRET')->string());\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(HTTP_METHOD_OVERRIDE): 'true'\nframework:\n    http_method_override: '%env(bool:HTTP_METHOD_OVERRIDE)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(HTTP_METHOD_OVERRIDE)\">true</parameter>\n    </parameters>\n\n    <framework:config http-method-override=\"%env(bool:HTTP_METHOD_OVERRIDE)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (ContainerBuilder $container, FrameworkConfig $framework): void {\n    $container->setParameter('env(HTTP_METHOD_OVERRIDE)', 'true');\n    $framework->httpMethodOverride(env('HTTP_METHOD_OVERRIDE')->bool());\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nparameters:\n    safe_for_production: '%env(not:APP_DEBUG)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"safe_for_production\">%env(not:APP_DEBUG)%</parameter>\n    </parameters>\n\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\n$container->setParameter('safe_for_production', '%env(not:APP_DEBUG)%');",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/security.yaml\nparameters:\n    env(HEALTH_CHECK_METHOD): 'Symfony\\Component\\HttpFoundation\\Request::METHOD_HEAD'\nsecurity:\n    access_control:\n        - { path: '^/health-check$', methods: '%env(const:HEALTH_CHECK_METHOD)%' }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/security.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:security=\"http://symfony.com/schema/dic/security\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/security\n        https://symfony.com/schema/dic/security/security-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(HEALTH_CHECK_METHOD)\">Symfony\\Component\\HttpFoundation\\Request::METHOD_HEAD</parameter>\n    </parameters>\n\n    <security:config>\n        <rule path=\"^/health-check$\" methods=\"%env(const:HEALTH_CHECK_METHOD)%\"/>\n    </security:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/security.php\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Config\\SecurityConfig;\n\nreturn static function (ContainerBuilder $container, SecurityConfig $security): void {\n    $container->setParameter('env(HEALTH_CHECK_METHOD)', 'Symfony\\Component\\HttpFoundation\\Request::METHOD_HEAD');\n    $security->accessControl()\n        ->path('^/health-check$')\n        ->methods([env('HEALTH_CHECK_METHOD')->const()]);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(ALLOWED_LANGUAGES): '[\"en\",\"de\",\"es\"]'\n    app_allowed_languages: '%env(json:ALLOWED_LANGUAGES)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(ALLOWED_LANGUAGES)\">[\"en\",\"de\",\"es\"]</parameter>\n        <parameter key=\"app_allowed_languages\">%env(json:ALLOWED_LANGUAGES)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (ContainerBuilder $container): void {\n    $container->setParameter('env(ALLOWED_LANGUAGES)', '[\"en\",\"de\",\"es\"]');\n    $container->setParameter('app_allowed_languages', '%env(json:ALLOWED_LANGUAGES)%');\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/sentry.yaml\nparameters:\n    sentry_host: '10.0.0.1'\n    env(SENTRY_DSN): 'http://%sentry_host%/project'\nsentry:\n    dsn: '%env(resolve:SENTRY_DSN)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/sentry.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"sentry_host\">10.0.0.1</parameter>\n        <parameter key=\"env(SENTRY_DSN)\">http://%sentry_host%/project</parameter>\n    </parameters>\n\n    <sentry:config dsn=\"%env(resolve:SENTRY_DSN)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/sentry.php\n$container->setParameter('sentry_host', '10.0.0.1');\n$container->setParameter('env(SENTRY_DSN)', 'http://%sentry_host%/project');\n$container->loadFromExtension('sentry', [\n    'dsn' => '%env(resolve:SENTRY_DSN)%',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(ALLOWED_LANGUAGES): \"en,de,es\"\n    app_allowed_languages: '%env(csv:ALLOWED_LANGUAGES)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(ALLOWED_LANGUAGES)\">en,de,es</parameter>\n        <parameter key=\"app_allowed_languages\">%env(csv:ALLOWED_LANGUAGES)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (ContainerBuilder $container): void {\n    $container->setParameter('env(ALLOWED_LANGUAGES)', 'en,de,es');\n    $container->setParameter('app_allowed_languages', '%env(csv:ALLOWED_LANGUAGES)%');\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(REDIS_NODES): \"127.0.0.1:6380,127.0.0.1:6381\"\nservices:\n    RedisCluster:\n        class: RedisCluster\n        arguments: [null, \"%env(shuffle:csv:REDIS_NODES)%\"]",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(REDIS_NODES)\">redis://127.0.0.1:6380,redis://127.0.0.1:6381</parameter>\n    </parameters>\n\n    <services>\n        <service id=\"RedisCluster\" class=\"RedisCluster\">\n            <argument>null</argument>\n            <argument>%env(shuffle:csv:REDIS_NODES)%</argument>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nuse Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator;\n\nreturn static function (ContainerConfigurator $containerConfigurator): void {\n    $container = $containerConfigurator->services()\n        ->set(\\RedisCluster::class, \\RedisCluster::class)->args([null, '%env(shuffle:csv:REDIS_NODES)%']);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(AUTH_FILE): '%kernel.project_dir%/config/auth.json'\ngoogle:\n    auth: '%env(file:AUTH_FILE)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(AUTH_FILE)\">../config/auth.json</parameter>\n    </parameters>\n\n    <google auth=\"%env(file:AUTH_FILE)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\n$container->setParameter('env(AUTH_FILE)', '../config/auth.json');\n$container->loadFromExtension('google', [\n    'auth' => '%env(file:AUTH_FILE)%',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(PHP_FILE): '%kernel.project_dir%/config/.runtime-evaluated.php'\napp:\n    auth: '%env(require:PHP_FILE)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(PHP_FILE)\">../config/.runtime-evaluated.php</parameter>\n    </parameters>\n\n    <app auth=\"%env(require:PHP_FILE)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\n$container->setParameter('env(PHP_FILE)', '../config/.runtime-evaluated.php');\n$container->loadFromExtension('app', [\n    'auth' => '%env(require:PHP_FILE)%',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(AUTH_FILE): '%kernel.project_dir%/config/auth.json'\ngoogle:\n    auth: '%env(trim:file:AUTH_FILE)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(AUTH_FILE)\">../config/auth.json</parameter>\n    </parameters>\n\n    <google auth=\"%env(trim:file:AUTH_FILE)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\n$container->setParameter('env(AUTH_FILE)', '../config/auth.json');\n$container->loadFromExtension('google', [\n    'auth' => '%env(trim:file:AUTH_FILE)%',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/services.yaml\nparameters:\n    env(SECRETS_FILE): '/opt/application/.secrets.json'\n    database_password: '%env(key:database_password:json:file:SECRETS_FILE)%'\n    # if SECRETS_FILE contents are: {\"database_password\": \"secret\"} it returns \"secret\"",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(SECRETS_FILE)\">/opt/application/.secrets.json</parameter>\n        <parameter key=\"database_password\">%env(key:database_password:json:file:SECRETS_FILE)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\n$container->setParameter('env(SECRETS_FILE)', '/opt/application/.secrets.json');\n$container->setParameter('database_password', '%env(key:database_password:json:file:SECRETS_FILE)%');",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nparameters:\n    # if PRIVATE_KEY is not a valid file path, the content of raw_key is returned\n    private_key: '%env(default:raw_key:file:PRIVATE_KEY)%'\n    raw_key: '%env(PRIVATE_KEY)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n    <parameters>\n        <!-- if PRIVATE_KEY is not a valid file path, the content of raw_key is returned -->\n        <parameter key=\"private_key\">%env(default:raw_key:file:PRIVATE_KEY)%</parameter>\n        <parameter key=\"raw_key\">%env(PRIVATE_KEY)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\n\n// if PRIVATE_KEY is not a valid file path, the content of raw_key is returned\n$container->setParameter('private_key', '%env(default:raw_key:file:PRIVATE_KEY)%');\n$container->setParameter('raw_key', '%env(PRIVATE_KEY)%');",
+      "language": "unknown"
+    },
+    {
+      "code": "# .env\nDATABASE_URL=\"postgresql://db_user:db_password@127.0.0.1:5432/db_name\"",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    some_service:\n        arguments:\n            $host: '%env(string:key:host:url:DATABASE_URL)%'\n            $port: '%env(int:key:port:url:DATABASE_URL)%'\n            $username: '%env(string:key:user:url:DATABASE_URL)%'\n            $password: '%env(string:key:pass:url:DATABASE_URL)%'\n            $database_name: '%env(key:path:url:DATABASE_URL)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <services>\n        <!-- ... -->\n\n        <service id=\"some_service\">\n            <argument key=\"$host\">%env(string:key:host:url:DATABASE_URL)%</argument>\n            <argument key=\"$port\">%env(int:key:port:url:DATABASE_URL)%</argument>\n            <argument key=\"$username\">%env(string:key:user:url:DATABASE_URL)%</argument>\n            <argument key=\"$password\">%env(string:key:pass:url:DATABASE_URL)%</argument>\n            <argument key=\"$database_name\">%env(key:path:url:DATABASE_URL)%</argument>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "# .env\nDATABASE_URL=\"postgresql://db_user:db_password@127.0.0.1:5432/db_name?serverVersion=12.19&charset=utf8\"",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    some_service:\n        arguments:\n            $serverVersion: '%env(string:key:serverVersion:query_string:DATABASE_URL)%'\n            $charset: '%env(string:key:charset:query_string:DATABASE_URL)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\"\n>\n    <services>\n        <!-- ... -->\n\n        <service id=\"some_service\">\n            <argument key=\"$serverVersion\">%env(string:key:serverVersion:query_string:DATABASE_URL)%</argument>\n            <argument key=\"$charset\">%env(string:key:charset:query_string:DATABASE_URL)%</argument>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// App\\Enum\\Suit.php\nenum Suit: string\n{\n    case Clubs = 'clubs';\n    case Spades = 'spades';\n    case Diamonds = 'diamonds';\n    case Hearts = 'hearts';\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nparameters:\n    suit: '%env(enum:App\\Enum\\Suit:CARD_SUIT)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"suit\">%env(enum:App\\Enum\\Suit:CARD_SUIT)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\n$container->setParameter('suit', '%env(enum:App\\Enum\\Suit:CARD_SUIT)%');",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nparameters:\n    typed_env: '%env(defined:FOO)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"typed_env\"'%env(defined:FOO)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\n$container->setParameter('typed_env', '%env(defined:FOO)%');",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(DATABASE_URL): 'mysql://db_user:foo@b$r@127.0.0.1:3306/db_name'\n    encoded_database_url: '%env(urlencode:DATABASE_URL)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(DATABASE_URL)\">mysql://db_user:foo@b$r@127.0.0.1:3306/db_name</parameter>\n        <parameter key=\"encoded_database_url\">%env(urlencode:DATABASE_URL)%</parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (ContainerBuilder $container): void {\n    $container->setParameter('env(DATABASE_URL)', 'mysql://db_user:foo@b$r@127.0.0.1:3306/db_name');\n    $container->setParameter('encoded_database_url', '%env(urlencode:DATABASE_URL)%');\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nparameters:\n    env(AUTH_FILE): \"%kernel.project_dir%/config/auth.json\"\ngoogle:\n    # 1. gets the value of the AUTH_FILE env var\n    # 2. replaces the values of any config param to get the config path\n    # 3. gets the content of the file stored in that path\n    # 4. JSON-decodes the content of the file and returns it\n    auth: '%env(json:file:resolve:AUTH_FILE)%'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"env(AUTH_FILE)\">%kernel.project_dir%/config/auth.json</parameter>\n    </parameters>\n\n    <!-- 1. gets the value of the AUTH_FILE env var -->\n    <!-- 2. replaces the values of any config param to get the config path -->\n    <!-- 3. gets the content of the file stored in that path -->\n    <!-- 4. JSON-decodes the content of the file and returns it -->\n    <google auth=\"%env(json:file:resolve:AUTH_FILE)%\"/>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\n$container->setParameter('env(AUTH_FILE)', '%kernel.project_dir%/config/auth.json');\n// 1. gets the value of the AUTH_FILE env var\n// 2. replaces the values of any config param to get the config path\n// 3. gets the content of the file stored in that path\n// 4. JSON-decodes the content of the file and returns it\n$container->loadFromExtension('google', [\n    'auth' => '%env(json:file:resolve:AUTH_FILE)%',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\DependencyInjection\\EnvVarProcessorInterface;\n\nclass LowercasingEnvVarProcessor implements EnvVarProcessorInterface\n{\n    public function getEnv(string $prefix, string $name, \\Closure $getEnv): string\n    {\n        $env = $getEnv($name);\n\n        return strtolower($env);\n    }\n\n    public static function getProvidedTypes(): array\n    {\n        return [\n            'lowercase' => 'string',\n        ];\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/configuration/env_var_processors.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/components/dependency_injection/compilation.html"
+  ]
+}

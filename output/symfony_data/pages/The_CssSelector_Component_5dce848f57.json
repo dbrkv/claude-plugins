@@ -1,0 +1,63 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/css_selector.html",
+  "title": "The CssSelector Component",
+  "content": "The CssSelector component converts CSS selectors to XPath expressions.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nThis article explains how to use the CssSelector features as an independent component in any PHP application. Read the Symfony Functional Tests article to learn about how to use it when creating Symfony tests.\n\nWhen you're parsing an HTML or an XML document, by far the most powerful method is XPath.\n\nXPath expressions are incredibly flexible, so there is almost always an XPath expression that will find the element you need. Unfortunately, they can also become very complicated, and the learning curve is steep. Even common operations (such as finding an element with a particular class) can require long and unwieldy expressions.\n\nMany developers -- particularly web developers -- are more comfortable using CSS selectors to find elements. As well as working in stylesheets, CSS selectors are used in JavaScript with the querySelectorAll() function and in popular JavaScript libraries such as jQuery.\n\nCSS selectors are less powerful than XPath, but far easier to write, read and understand. Since they are less powerful, almost all CSS selectors can be converted to an XPath equivalent. This XPath expression can then be used with other functions and classes that use XPath to find elements in a document.\n\nThe component's only goal is to convert CSS selectors to their XPath equivalents, using toXPath():\n\nThis gives the following output:\n\nYou can use this expression with, for instance, DOMXPath or SimpleXMLElement to find elements in a document.\n\nThe Crawler::filter() method uses the CssSelector component to find elements based on a CSS selector string. See the The DomCrawler Component for more details.\n\nNot all CSS selectors can be converted to XPath equivalents.\n\nThere are several CSS selectors that only make sense in the context of a web-browser.\n\nPseudo-elements (:before, :after, :first-line, :first-letter) are not supported because they select portions of text rather than elements.\n\nPseudo-classes are partially supported:\n\nThe support for *:is and *:where was introduced in Symfony 7.1.\n\nCode consumes server resources. Blackfire tells you how\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The CssSelector Component",
+      "id": "the-cssselector-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h3",
+      "text": "Why Use CSS selectors?",
+      "id": "why-use-css-selectors"
+    },
+    {
+      "level": "h3",
+      "text": "The CssSelector Component",
+      "id": "the-cssselector-component-1"
+    },
+    {
+      "level": "h3",
+      "text": "Limitations of the CssSelector Component",
+      "id": "limitations-of-the-cssselector-component"
+    },
+    {
+      "level": "h2",
+      "text": "Learn more",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/css-selector",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\CssSelector\\CssSelectorConverter;\n\n$converter = new CssSelectorConverter();\nvar_dump($converter->toXPath('div.item > h4 > a'));",
+      "language": "unknown"
+    },
+    {
+      "code": "descendant-or-self::div[@class and contains(concat(' ',normalize-space(@class), ' '), ' item ')]/h4/a",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/css_selector.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/testing.html",
+    "https://symfony.com/doc/7.3/components/dom_crawler.html"
+  ]
+}

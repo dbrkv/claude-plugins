@@ -1,0 +1,19 @@
+{
+  "title": ".github/workflows/deploy.yml",
+  "content": "env:\n  ATMOS_PROFILE: ci  # Set it once, forget it\n\njobs:\n  deploy:\n    steps:\n      - run: atmos terraform apply vpc -s prod\n      # No flags needed - profile handles everything\nbash",
+  "code_samples": [
+    {
+      "code": "## Combining Profiles\n\nNeed to layer multiple contexts? Stack profiles from left to right, with rightmost values winning:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Combining Profiles",
+      "id": "combining-profiles"
+    }
+  ],
+  "url": "llms-txt#.github/workflows/deploy.yml",
+  "links": []
+}

@@ -1,0 +1,48 @@
+{
+  "title": "After: Spaces are preserved correctly",
+  "content": "atmos mycmd -- echo \"hello  world\"\nyaml\ncommands:\n  - name: deploy\n    steps:\n      - \"kubectl apply -f - << EOF\\n{{ .TrailingArgs }}\\nEOF\"\nbash",
+  "code_samples": [
+    {
+      "code": "**Your commands now work correctly!** No changes needed.\n\n#### You have complex shell commands",
+      "language": "unknown"
+    },
+    {
+      "code": "If you're doing **complex shell scripting** with heredocs or multi-line commands, test your custom commands to ensure they still work as expected.\n\n## Documentation Updates\n\nWe've updated the [Custom Commands documentation](/core-concepts/custom-commands) with:\n\n- Security best practices for `{{ .TrailingArgs }}`\n- Examples showing proper quoting behavior\n- Guidance on when to use trailing arguments\n\nWe've also added a comprehensive [Safe Argument Parsing PRD](https://github.com/cloudposse/atmos/blob/main/docs/prd/safe-argument-parsing.md) documenting the issue, fix, and best practices.\n\n## Getting Help\n\nIf you encounter any issues with this change:\n\n1. Check if you were manually escaping arguments (and can now remove that)\n2. Test your custom commands with the examples above\n3. [Open an issue](https://github.com/cloudposse/atmos/issues) if you find unexpected behavior\n\n## Conclusion\n\nThis fix makes Atmos custom commands **safer and more correct**. Arguments with whitespace, special characters, and shell metacharacters now work as users naturally expect.\n\nThank you to everyone who uses Atmos! Your security and data integrity are our top priorities.\n\nFor technical details, see the [Safe Argument Parsing PRD](https://github.com/cloudposse/atmos/blob/main/docs/prd/safe-argument-parsing.md).\n\n---\n\n## Identity Flag Support for Describe Commands\n\nThe `atmos describe` family of commands now supports the `--identity` flag, enabling runtime authentication when processing YAML template functions that access remote resources. This ensures that `!terraform.state` and `!terraform.output` functions work seamlessly without relying on ambient credentials.\n\n<!--truncate-->\n\n## What Changed\n\nAll `atmos describe` subcommands now accept the `--identity` flag for runtime authentication:\n\n- `atmos describe stacks --identity <name>`\n- `atmos describe component <component> -s <stack> --identity <name>`\n- `atmos describe affected --identity <name>`\n- `atmos describe dependents <component> -s <stack> --identity <name>`\n\nThis brings feature parity with `atmos terraform` and `atmos workflow` commands, which already support identity-based authentication.\n\n## The Problem We Solved\n\nBy default, all `atmos describe` commands execute YAML template functions (`!terraform.state`, `!terraform.output`) and Go templates during stack processing. When these functions access remote Terraform state backends (S3, Azure Blob, GCS), they require authenticated cloud provider credentials.\n\n**Before this change**, users had to:\n1. Manually run `atmos auth login --identity <identity>` before describe commands\n2. Rely on ambient AWS credentials (environment variables, `~/.aws/credentials`)\n3. Use EC2 instance profiles (not applicable for local development)\n\n**The failure scenario looked like this:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Documentation Updates",
+      "id": "documentation-updates"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Help",
+      "id": "getting-help"
+    },
+    {
+      "level": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "level": "h2",
+      "text": "Identity Flag Support for Describe Commands",
+      "id": "identity-flag-support-for-describe-commands"
+    },
+    {
+      "level": "h2",
+      "text": "What Changed",
+      "id": "what-changed"
+    },
+    {
+      "level": "h2",
+      "text": "The Problem We Solved",
+      "id": "the-problem-we-solved"
+    }
+  ],
+  "url": "llms-txt#after:-spaces-are-preserved-correctly",
+  "links": []
+}

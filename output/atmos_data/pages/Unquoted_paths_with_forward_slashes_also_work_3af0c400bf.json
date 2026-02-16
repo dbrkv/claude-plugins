@@ -1,0 +1,13 @@
+{
+  "title": "Unquoted paths with forward slashes also work",
+  "content": "components:\n  terraform:\n    base_path: C:/Users/username/projects/components/terraform\nyaml",
+  "code_samples": [
+    {
+      "code": "</TabItem>\n</Tabs>\n\n#### Incorrect Windows Path Format",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#unquoted-paths-with-forward-slashes-also-work",
+  "links": []
+}

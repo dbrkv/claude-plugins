@@ -1,0 +1,13 @@
+{
+  "title": "Other defaults for the `us-west-2` region",
+  "content": "yaml\nvars:\n  stage: dev",
+  "code_samples": [
+    {
+      "code": "</File>\n\nIn `stacks/mixins/stage/dev.yaml`, add the following config:\n\n<File title=\"stacks/mixins/stage/dev.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#other-defaults-for-the-`us-west-2`-region",
+  "links": []
+}

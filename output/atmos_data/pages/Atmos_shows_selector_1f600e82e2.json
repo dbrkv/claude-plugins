@@ -1,0 +1,19 @@
+{
+  "title": "Atmos shows selector:",
+  "content": "> dev-admin\n  prod-readonly\n  staging-deploy\nbash",
+  "code_samples": [
+    {
+      "code": "### Combining with Other Flags",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Combining with Other Flags",
+      "id": "combining-with-other-flags"
+    }
+  ],
+  "url": "llms-txt#atmos-shows-selector:",
+  "links": []
+}

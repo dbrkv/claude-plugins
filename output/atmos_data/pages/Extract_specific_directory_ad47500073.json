@@ -1,0 +1,19 @@
+{
+  "title": "Extract specific directory",
+  "content": "source: \"bitbucket.org/owner/repo.git//infrastructure?ref=main\"\nyaml",
+  "code_samples": [
+    {
+      "code": ":::tip Bitbucket Token Authentication\nSet `ATMOS_BITBUCKET_TOKEN` or `BITBUCKET_TOKEN` for automatic authentication.\n:::\n\n  </TabItem>\n\n  <TabItem value=\"azure\" label=\"Azure DevOps\">\n\n### Azure DevOps Repositories",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Azure DevOps Repositories",
+      "id": "azure-devops-repositories"
+    }
+  ],
+  "url": "llms-txt#extract-specific-directory",
+  "links": []
+}

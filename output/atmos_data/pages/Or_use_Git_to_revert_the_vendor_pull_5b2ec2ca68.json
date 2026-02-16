@@ -1,0 +1,8 @@
+{
+  "title": "Or use Git to revert the vendor pull",
+  "content": "git revert <vendor-update-commit>",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#or-use-git-to-revert-the-vendor-pull",
+  "links": []
+}

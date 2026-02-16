@@ -1,0 +1,13 @@
+{
+  "title": "atmos.yaml - minimal config for auth only",
+  "content": "auth:\n  providers:\n    aws-prod:\n      kind: aws-sso\n      type: aws\n      region: us-east-1\n      sso_start_url: https://mycompany.awsapps.com/start\n      sso_region: us-east-1\n      sso_account_id: \"123456789012\"\n      sso_role_name: AdministratorAccess\n\nidentities:\n    prod-admin:\n      provider: aws-prod\n      default: true\nbash",
+  "code_samples": [
+    {
+      "code": "Then use it with your existing Terraform:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#atmos.yaml---minimal-config-for-auth-only",
+  "links": []
+}

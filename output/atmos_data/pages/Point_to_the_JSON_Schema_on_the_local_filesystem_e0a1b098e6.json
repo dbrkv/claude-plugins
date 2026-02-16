@@ -1,0 +1,8 @@
+{
+  "title": "Point to the JSON Schema on the local filesystem",
+  "content": "atmos validate stacks --schemas-atmos-manifest schemas/atmos/atmos-manifest/1.0/atmos-manifest.json",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#point-to-the-json-schema-on-the-local-filesystem",
+  "links": []
+}

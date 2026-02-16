@@ -1,0 +1,30 @@
+{
+  "url": "https://symfony.com/doc/7.3/logging/monolog_exclude_http_codes.html",
+  "title": "How to Configure Monolog to Exclude Specific HTTP Codes from the Log",
+  "content": "Sometimes your logs become flooded with unwanted HTTP errors, for example, 403s and 404s. When using a fingers_crossed handler, you can exclude logging these HTTP codes based on the MonologBundle configuration:\n\nCombining excluded_http_codes with a passthru_level lower than error (i.e. debug, info, notice or warning) will not actually exclude log messages for those HTTP codes because they are logged with level of error or higher and passthru_level takes precedence over the HTTP codes being listed in excluded_http_codes.\n\nOnline Symfony certification, take it now!\n\nPut the code quality back at the heart of your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Configure Monolog to Exclude Specific HTTP Codes from the Log",
+      "id": "how-to-configure-monolog-to-exclude-specific-http-codes-from-the-log"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/prod/monolog.yaml\nmonolog:\n    handlers:\n        main:\n            # ...\n            type: fingers_crossed\n            handler: ...\n            excluded_http_codes: [403, 404, { 400: ['^/foo', '^/bar'] }]",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/prod/monolog.xml -->\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:monolog=\"http://symfony.com/schema/dic/monolog\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/monolog\n        https://symfony.com/schema/dic/monolog/monolog-1.0.xsd\">\n\n    <monolog:config>\n        <monolog:handler type=\"fingers_crossed\" name=\"main\" handler=\"...\">\n            <!-- ... -->\n            <monolog:excluded-http-code code=\"403\">\n                <monolog:url>^/foo</monolog:url>\n                <monolog:url>^/bar</monolog:url>\n            </monolog:excluded-http-code>\n            <monolog:excluded-http-code code=\"404\"/>\n        </monolog:handler>\n    </monolog:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/prod/monolog.php\nuse Symfony\\Config\\MonologConfig;\n\nreturn static function (MonologConfig $monolog): void {\n    $mainHandler = $monolog->handler('main')\n        // ...\n        ->type('fingers_crossed')\n        ->handler('...')\n    ;\n\n    $mainHandler->excludedHttpCode()->code(403);\n    $mainHandler->excludedHttpCode()->code(404);\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/logging/monolog_exclude_http_codes.html"
+  ]
+}

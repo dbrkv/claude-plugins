@@ -1,0 +1,232 @@
+{
+  "title": "JSON format",
+  "content": "atmos describe component vpc -s prod --provenance --format json\n\ncmd/\nâââ terraform.go        # All commands in one directory\nâââ describe.go\nâââ list.go\nâââ about.go\n\ncmd/\nâââ terraform/          # Each command is a package\nâ   âââ terraform.go\nâââ describe/\nâ   âââ describe.go\nâââ about/              # First migrated command\nâ   âââ about.go\nâââ internal/           # Registry infrastructure\n    âââ command.go      # CommandProvider interface\n    âââ registry.go     # Thread-safe registry\ngo\n// cmd/about/about.go\npackage about\n\nimport (\n    \"github.com/spf13/cobra\"\n    \"github.com/cloudposse/atmos/cmd/internal\"\n)\n\nfunc init() {\n    // Self-registration via init()\n    internal.Register(&AboutCommandProvider{})\n}\n\ntype AboutCommandProvider struct{}\n\nfunc (a *AboutCommandProvider) GetCommand() *cobra.Command {\n    return aboutCmd\n}\n\nfunc (a *AboutCommandProvider) GetName() string {\n    return \"about\"\n}\n\nfunc (a *AboutCommandProvider) GetGroup() string {\n    return \"Other Commands\"\n}\nshell\natmos auth logout dev-admin\nshell\nLogging out from identity: dev-admin\n\nBuilding authentication chain...\n  â Chain: aws-sso â dev-org-admin â dev-admin\n\nRemoving credentials...\n  â Keyring: aws-sso\n  â Keyring: dev-org-admin\n  â Keyring: dev-admin\n  â Files: ~/.aws/atmos/aws-sso/\n\nSuccessfully logged out from 3 identities\n\nâ ï¸  Note: This only removes local credentials. Your browser session\n   may still be active. Visit your identity provider to end your\n   browser session.\nshell\natmos auth logout\nshell\n? Choose what to logout from:\n  â¯ Identity: dev-admin\n    Identity: prod-admin\n    Identity: dev-readonly\n    Provider: aws-sso (removes all identities)\n    All identities (complete logout)\nshell\natmos auth logout --provider aws-sso\nshell\nLogging out from provider: aws-sso\n\nRemoving all credentials for provider...\n  â Keyring: aws-sso\n  â Keyring: dev-org-admin (via aws-sso)\n  â Keyring: dev-admin (via aws-sso)\n  â Keyring: prod-admin (via aws-sso)\n  â Files: ~/.aws/atmos/aws-sso/\n\nSuccessfully logged out from 4 identities\nshell\natmos auth logout dev-admin --dry-run\nshell\nDry run mode: No credentials will be removed\n\nWould remove from identity: dev-admin\n  â¢ Keyring: aws-sso\n  â¢ Keyring: dev-org-admin\n  â¢ Keyring: dev-admin\n  â¢ Files: ~/.aws/atmos/aws-sso/credentials\n  â¢ Files: ~/.aws/atmos/aws-sso/config\n\n3 identities would be logged out\nshell\naws-sso â dev-org-admin â dev-admin\n   â           â              â\nRemoved     Removed        Removed\nshell\nLogging out from identity: dev-admin\n\nRemoving credentials...\n  â Keyring: aws-sso\n  â Keyring: dev-admin (not found - already logged out)\n  â Files: ~/.aws/atmos/aws-sso/\n\nLogged out with warnings (2/3 successful)\n\nErrors encountered:\n  â¢ dev-admin: credential not found in keyring\nshell\natmos auth logout --provider aws-sso\nshell\natmos auth logout dev-admin\natmos auth login prod-admin\nshell\natmos auth logout dev-admin --dry-run  # Preview\natmos auth logout dev-admin            # Execute\natmos auth login dev-admin             # Fresh login\nshell\n2025-10-17T10:15:30Z DEBUG Starting logout identity=dev-admin\n2025-10-17T10:15:30Z DEBUG Authentication chain built chain=[aws-sso dev-org-admin dev-admin]\n2025-10-17T10:15:30Z DEBUG Removing keyring entry alias=aws-sso\n2025-10-17T10:15:30Z INFO Logout completed identity=dev-admin removed=3\nshell",
+  "code_samples": [
+    {
+      "code": "For complete documentation, see [atmos describe component](/cli/commands/describe/component).\n\n## Future Enhancements\n\nThe provenance system is built on an extensible interface that will enable:\n- **atmos.yaml provenance** - Track where Atmos configuration settings come from\n- **Vendor provenance** - Show origins of vendored components\n- **Workflow provenance** - Track workflow step origins\n- **IDE integration** - Hover-to-see-provenance in editors\n- **Diff mode** - Show provenance changes between versions\n\nWe'd love to hear how you're using provenance tracking. Share your use cases in [GitHub Discussions](https://github.com/cloudposse/atmos/discussions) or open an issue if you find any bugs.\n\n---\n\n## Introducing the Command Registry Pattern: Toward Pluggable Commands\n\nWe're excited to announce the first step in a major architectural evolution for Atmos: the **Command Registry Pattern**. This foundational change will eventually enable **pluggable commands**, allowing the community to extend Atmos with custom command packages without modifying the core codebase.\n\n<!-- truncate -->\n\n## Why This Matters\n\nToday, all Atmos commands live in a single monolithic `cmd/` directory. While this works well for built-in commands, it creates friction for:\n\n- **Plugin developers** who want to add new commands without forking Atmos\n- **Command maintainers** who need clear boundaries between command implementations\n- **Organizations** that want to distribute custom command packages internally\n\nThe Command Registry Pattern solves these challenges by treating commands as **self-contained packages** that register themselves with Atmos at startup.\n\n## What's Changing\n\n### Before: Monolithic Command Structure",
+      "language": "unknown"
+    },
+    {
+      "code": "### After: Package-Per-Command Architecture",
+      "language": "unknown"
+    },
+    {
+      "code": "## How It Works\n\nCommands implement a simple interface and register themselves during package initialization:",
+      "language": "unknown"
+    },
+    {
+      "code": "The registry pattern provides:\n- â **Self-registering commands** - No manual wiring required\n- â **Type-safe interfaces** - Compile-time guarantees\n- â **Thread-safe operation** - Concurrent registration support\n- â **Custom command compatibility** - Works seamlessly with existing `atmos.yaml` custom commands\n\n## Impact on Users\n\nThis is a **100% backward-compatible change** with zero impact on Atmos users. All existing functionality remains identical:\n\n- Custom commands in `atmos.yaml` work exactly as before\n- Command behavior is unchanged\n- No configuration updates required\n- All existing workflows continue to work\n\nFor context: The registry pattern actually enhances custom command capabilities by allowing them to extend built-in commands with subcommands, but this is an existing feature that continues to workânothing new from a user perspective.\n\n## The Road Ahead\n\nThis PR lays the **foundation** for pluggable commands. Here's what's coming next:\n\n### Phase 2: Migrate Core Commands\nSubsequent PRs will refactor existing commands into the new package structure:\n- `atmos terraform` â `cmd/terraform/`\n- `atmos describe` â `cmd/describe/`\n- `atmos list` â `cmd/list/`\n- `atmos validate` â `cmd/validate/`\n\nEach command family will move into its own **package** (Go's term for a self-contained code module).\n\n### Phase 3: External Plugin Support\nOnce all commands use the registry pattern, we'll enable:\n- **Plugin discovery** - Load commands from external Go modules\n- **Plugin packaging** - Distribute commands as standalone binaries\n- **Plugin marketplace** - Share and discover community commands\n\n## For Atmos Contributors\n\nThis change is **internal to Atmos development** and has no impact on Atmos users. End users won't notice any difference in behaviorâthis is purely an architectural improvement for maintainability and future extensibility.\n\n**If you're an Atmos contributor** interested in migrating commands or building plugins:\n- **[PRD: Command Registry Pattern](https://github.com/cloudposse/atmos/blob/main/docs/prd/command-registry-pattern.md)** - Complete architecture documentation\n- **[Developer Guide: Developing Atmos Commands](https://github.com/cloudposse/atmos/blob/main/docs/developing-atmos-commands.md)** - Step-by-step implementation guide\n\nThe `about` command has been migrated as a proof-of-concept in this PR, demonstrating the pattern works in production.\n\n## Get Involved\n\nWe're building this in the open and welcome contributions from the community:\n- ð¬ **Discuss** - Share your thoughts in [GitHub Discussions](https://github.com/cloudposse/atmos/discussions)\n- ð **Report Issues** - Found a bug? [Open an issue](https://github.com/cloudposse/atmos/issues)\n- ð **Contribute** - Help migrate commands in future PRs\n\nThis is the foundation for a more modular, extensible Atmos architecture.\n\n---\n\n**Want to learn more?** Check out the full [Command Registry Pattern PRD](https://github.com/cloudposse/atmos/blob/main/docs/prd/command-registry-pattern.md) for technical details.\n\n---\n\n## Introducing atmos auth logout: Secure Credential Cleanup\n\nWe're excited to announce a new authentication command: **`atmos auth logout`**. This command provides secure, comprehensive cleanup of locally cached credentials, making it easy to switch between identities, end work sessions, and maintain proper security hygiene.\n\n<!--truncate-->\n\n## Why This Matters\n\nMost cloud practitioners never log out of their cloud provider identities. Not because they don't want to, but because the tooling doesn't make it easy.\n\nWhen you authenticate with cloud providers, credentials get scattered across your filesystem:\n\n- **AWS**: `~/.aws/credentials`, `~/.aws/config`, session tokens\n- **Azure**: `~/.azure/` directory with multiple authentication artifacts\n- **Google Cloud**: `~/.config/gcloud/` with various credential files\n\nMost cloud provider tools don't provide a simple, comprehensive logout command. You're left to:\n\n- Manually hunt down and delete credential files across different locations\n- Navigate through provider-specific web consoles to revoke tokens\n- Hope that session expiration handles cleanup for you\n\nThis leads to **credential sprawl**: old, forgotten credentials littering your system, many still valid and exploitable.\n\nThe `atmos auth logout` command makes credential cleanup explicit, comprehensive, and easy.\n\n## What's New\n\n### Basic Usage\n\nLogout from a specific identity:",
+      "language": "unknown"
+    },
+    {
+      "code": "This removes credentials for `dev-admin` and all identities in its authentication chain:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Interactive Mode\n\nRun `atmos auth logout` without arguments for an interactive experience:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "The interactive mode uses **Charmbracelet Huh** with Atmos theming for a polished experience.\n\n### Provider Logout\n\nRemove all credentials for a specific provider:",
+      "language": "unknown"
+    },
+    {
+      "code": "This removes the provider credentials and all identities that authenticate through it:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Dry Run Mode\n\nPreview what would be removed without actually deleting anything:",
+      "language": "unknown"
+    },
+    {
+      "code": "",
+      "language": "unknown"
+    },
+    {
+      "code": "## How It Works\n\n### Authentication Chain Resolution\n\nAtmos intelligently resolves the complete authentication chain for your identity and removes credentials at each step:",
+      "language": "unknown"
+    },
+    {
+      "code": "This ensures no orphaned credentials are left behind.\n\n### Comprehensive Cleanup\n\nThe logout command removes credentials from **all storage locations**:\n\n- â **System keyring entries** - Credentials stored securely by your OS\n- â **AWS credential files** - `~/.aws/atmos/<provider>/credentials`\n- â **AWS config files** - `~/.aws/atmos/<provider>/config`\n- â **Empty directories** - Cleans up provider directories after removal\n\n### Best-Effort Error Handling\n\nThe logout command continues even if individual steps fail, ensuring maximum cleanup:",
+      "language": "unknown"
+    },
+    {
+      "code": "This best-effort approach means you always get as much cleanup as possible.\n\n## Security Best Practices\n\n### Browser Sessions\n\n:::warning Important\n`atmos auth logout` only removes **local credentials**. Your browser session with the identity provider (AWS SSO, Okta, etc.) remains active.\n:::\n\nTo completely end your session:\n\n1. Run `atmos auth logout` to remove local credentials\n2. Visit your identity provider's website (AWS SSO, Okta, etc.)\n3. Sign out from the browser session\n4. Close all browser windows.\n\nThe command displays this warning after every logout to ensure you don't forget.\n\n### When to Logout\n\n**Logout at the end of your work session:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Logout when switching contexts:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Logout when troubleshooting authentication:**",
+      "language": "unknown"
+    },
+    {
+      "code": "### Audit Trail\n\nAll logout operations are logged for security auditing:",
+      "language": "unknown"
+    },
+    {
+      "code": "Enable debug logging with `ATMOS_LOGS_LEVEL=Debug` to see detailed audit information.\n\n## Use Cases\n\n### 1. Daily Workflow\n\nStart and end your day with clean credential state:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Future Enhancements",
+      "id": "future-enhancements"
+    },
+    {
+      "level": "h2",
+      "text": "Introducing the Command Registry Pattern: Toward Pluggable Commands",
+      "id": "introducing-the-command-registry-pattern:-toward-pluggable-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h2",
+      "text": "What's Changing",
+      "id": "what's-changing"
+    },
+    {
+      "level": "h3",
+      "text": "Before: Monolithic Command Structure",
+      "id": "before:-monolithic-command-structure"
+    },
+    {
+      "level": "h3",
+      "text": "After: Package-Per-Command Architecture",
+      "id": "after:-package-per-command-architecture"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h2",
+      "text": "Impact on Users",
+      "id": "impact-on-users"
+    },
+    {
+      "level": "h2",
+      "text": "The Road Ahead",
+      "id": "the-road-ahead"
+    },
+    {
+      "level": "h3",
+      "text": "Phase 2: Migrate Core Commands",
+      "id": "phase-2:-migrate-core-commands"
+    },
+    {
+      "level": "h3",
+      "text": "Phase 3: External Plugin Support",
+      "id": "phase-3:-external-plugin-support"
+    },
+    {
+      "level": "h2",
+      "text": "For Atmos Contributors",
+      "id": "for-atmos-contributors"
+    },
+    {
+      "level": "h2",
+      "text": "Get Involved",
+      "id": "get-involved"
+    },
+    {
+      "level": "h2",
+      "text": "Introducing atmos auth logout: Secure Credential Cleanup",
+      "id": "introducing-atmos-auth-logout:-secure-credential-cleanup"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    },
+    {
+      "level": "h2",
+      "text": "What's New",
+      "id": "what's-new"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Interactive Mode",
+      "id": "interactive-mode"
+    },
+    {
+      "level": "h3",
+      "text": "Provider Logout",
+      "id": "provider-logout"
+    },
+    {
+      "level": "h3",
+      "text": "Dry Run Mode",
+      "id": "dry-run-mode"
+    },
+    {
+      "level": "h2",
+      "text": "How It Works",
+      "id": "how-it-works"
+    },
+    {
+      "level": "h3",
+      "text": "Authentication Chain Resolution",
+      "id": "authentication-chain-resolution"
+    },
+    {
+      "level": "h3",
+      "text": "Comprehensive Cleanup",
+      "id": "comprehensive-cleanup"
+    },
+    {
+      "level": "h3",
+      "text": "Best-Effort Error Handling",
+      "id": "best-effort-error-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Security Best Practices",
+      "id": "security-best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "Browser Sessions",
+      "id": "browser-sessions"
+    },
+    {
+      "level": "h3",
+      "text": "When to Logout",
+      "id": "when-to-logout"
+    },
+    {
+      "level": "h3",
+      "text": "Audit Trail",
+      "id": "audit-trail"
+    },
+    {
+      "level": "h2",
+      "text": "Use Cases",
+      "id": "use-cases"
+    },
+    {
+      "level": "h3",
+      "text": "1. Daily Workflow",
+      "id": "1.-daily-workflow"
+    }
+  ],
+  "url": "llms-txt#json-format",
+  "links": []
+}

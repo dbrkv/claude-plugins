@@ -1,0 +1,8 @@
+{
+  "title": "Generate documentation",
+  "content": "atmos auth list --format yaml > docs/auth-config.yml",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#generate-documentation",
+  "links": []
+}

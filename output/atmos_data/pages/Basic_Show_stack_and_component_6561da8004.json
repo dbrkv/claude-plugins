@@ -1,0 +1,8 @@
+{
+  "title": "Basic: Show stack and component",
+  "content": "shell:\n  prompt: \"atmos [{{.Stack}}] {{.Component}} $ \"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#basic:-show-stack-and-component",
+  "links": []
+}

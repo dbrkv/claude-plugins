@@ -1,0 +1,19 @@
+{
+  "title": "Deep analysis with pprof if issues found",
+  "content": "atmos describe stacks --profile-file=cpu.prof\ngo tool pprof -http=:8080 cpu.prof\nbash\n#!/bin/bash",
+  "code_samples": [
+    {
+      "code": "### CI/CD Integration",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "CI/CD Integration",
+      "id": "ci/cd-integration"
+    }
+  ],
+  "url": "llms-txt#deep-analysis-with-pprof-if-issues-found",
+  "links": []
+}

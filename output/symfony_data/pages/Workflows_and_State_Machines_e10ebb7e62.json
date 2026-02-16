@@ -1,0 +1,64 @@
+{
+  "url": "https://symfony.com/doc/7.3/workflow/workflow-and-state-machine.html",
+  "title": "Workflows and State Machines",
+  "content": "A workflow is a model of a process in your application. It may be the process of how a blog post goes from draft to review and publish. Another example is when a user submits a series of different forms to complete a task. Such processes are best kept away from your models and should be defined in configuration.\n\nA definition of a workflow consists of places and actions to get from one place to another. The actions are called transitions. A workflow also needs to know each object's position in the workflow. The marking store writes the current place to a property on the object.\n\nThe terminology above is commonly used when discussing workflows and Petri nets\n\nThe simplest workflow looks like this. It contains two places and one transition.\n\nWorkflows could be more complicated when they describe a real business case. The workflow below describes the process to fill in a job application.\n\nWhen you fill in a job application in this example there are 4 to 7 steps depending on the job you are applying for. Some jobs require personality tests, logic tests and/or formal requirements to be answered by the user. Some jobs don't. The GuardEvent is used to decide what next steps are allowed for a specific application.\n\nBy defining a workflow like this, there is an overview how the process looks like. The process logic is not mixed with the controllers, models or view. The order of the steps can be changed by changing the configuration only.\n\nA state machine is a subset of a workflow and its purpose is to hold a state of your model. The most important differences between them are:\n\nA pull request starts in an initial \"start\" state, then a state \"test\" for e.g. running tests on continuous integration stack. When this is finished, the pull request is in the \"review\" state, where contributors can require changes, reject or accept the pull request. At any time, you can also \"update\" the pull request, which will result in another continuous integration run.\n\nBelow is the configuration for the pull request state machine.\n\nYou can omit the places option if your transitions define all the places that are used in the workflow. Symfony will automatically extract the places from the transitions.\n\nThe support for omitting the places option was introduced in Symfony 7.1.\n\nSymfony automatically creates a service for each workflow (Workflow) or state machine (StateMachine) you have defined in your configuration. You can use the workflow inside a class by using service autowiring and using camelCased workflow name + Workflow as parameter name. If it is a state machine type, use camelCased workflow name + StateMachine:\n\nDuring cache warmup, Symfony validates the workflows and state machines that are defined in configuration files. If your workflows or state machines are defined programmatically instead of in a configuration file, you can validate them with the WorkflowValidator and StateMachineValidator:\n\nGet your Symfony expertise recognized\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Workflows and State Machines",
+      "id": "workflows-and-state-machines"
+    },
+    {
+      "level": "h2",
+      "text": "Workflows",
+      "id": "workflows"
+    },
+    {
+      "level": "h3",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h2",
+      "text": "State Machines",
+      "id": "state-machines"
+    },
+    {
+      "level": "h3",
+      "text": "Example",
+      "id": "example"
+    },
+    {
+      "level": "h2",
+      "text": "Automatic and Manual Validation",
+      "id": "automatic-and-manual-validation"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/workflow.yaml\nframework:\n    workflows:\n        pull_request:\n            type: 'state_machine'\n            marking_store:\n                 type: 'method'\n                 property: 'currentPlace'\n            # The \"supports\" option is useful only if you are using Twig functions ('workflow_*')\n            supports:\n                - App\\Entity\\PullRequest\n            initial_marking: start\n            places:\n                - start\n                - coding\n                - test\n                - review\n                - merged\n                - closed\n            transitions:\n                submit:\n                    from: start\n                    to: test\n                update:\n                    from: [coding, test, review]\n                    to: test\n                wait_for_review:\n                    from: test\n                    to: review\n                request_change:\n                    from: review\n                    to: coding\n                accept:\n                    from: review\n                    to: merged\n                reject:\n                    from: review\n                    to: closed\n                reopen:\n                    from: closed\n                    to: review",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/workflow.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\"\n>\n\n    <framework:config>\n        <framework:workflow name=\"pull_request\" type=\"state_machine\">\n            <framework:initial-marking>start</framework:initial-marking>\n\n            <framework:marking-store type=\"method\" property=\"currentPlace\"/>\n\n            <!-- The \"supports\" option is useful only if you are using Twig functions ('workflow_*') -->\n            <framework:support>App\\Entity\\PullRequest</framework:support>\n\n            <framework:place>start</framework:place>\n            <framework:place>coding</framework:place>\n            <framework:place>test</framework:place>\n            <framework:place>review</framework:place>\n            <framework:place>merged</framework:place>\n            <framework:place>closed</framework:place>\n\n            <framework:transition name=\"submit\">\n                <framework:from>start</framework:from>\n\n                <framework:to>test</framework:to>\n            </framework:transition>\n\n            <framework:transition name=\"update\">\n                <framework:from>coding</framework:from>\n                <framework:from>test</framework:from>\n                <framework:from>review</framework:from>\n\n                <framework:to>test</framework:to>\n            </framework:transition>\n\n            <framework:transition name=\"wait_for_review\">\n                <framework:from>test</framework:from>\n\n                <framework:to>review</framework:to>\n            </framework:transition>\n\n            <framework:transition name=\"request_change\">\n                <framework:from>review</framework:from>\n\n                <framework:to>coding</framework:to>\n            </framework:transition>\n\n            <framework:transition name=\"accept\">\n                <framework:from>review</framework:from>\n\n                <framework:to>merged</framework:to>\n            </framework:transition>\n\n            <framework:transition name=\"reject\">\n                <framework:from>review</framework:from>\n\n                <framework:to>closed</framework:to>\n            </framework:transition>\n\n            <framework:transition name=\"reopen\">\n                <framework:from>closed</framework:from>\n\n                <framework:to>review</framework:to>\n            </framework:transition>\n\n        </framework:workflow>\n\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/workflow.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $pullRequest = $framework->workflows()->workflows('pull_request');\n\n    $pullRequest\n        ->type('state_machine')\n        // The \"supports\" option is useful only if you are using Twig functions ('workflow_*')\n        ->supports(['App\\Entity\\PullRequest'])\n        ->initialMarking(['start']);\n\n    $pullRequest->markingStore()\n        ->type('method')\n        ->property('currentPlace');\n\n    $pullRequest->place()->name('start');\n    $pullRequest->place()->name('coding');\n    $pullRequest->place()->name('test');\n    $pullRequest->place()->name('review');\n    $pullRequest->place()->name('merged');\n    $pullRequest->place()->name('closed');\n\n    $pullRequest->transition()\n        ->name('submit')\n            ->from(['start'])\n            ->to(['test']);\n\n    $pullRequest->transition()\n        ->name('update')\n            ->from(['coding', 'test', 'review'])\n            ->to(['test']);\n\n    $pullRequest->transition()\n        ->name('wait_for_review')\n            ->from(['test'])\n            ->to(['review']);\n\n    $pullRequest->transition()\n        ->name('request_change')\n            ->from(['review'])\n            ->to(['coding']);\n\n    $pullRequest->transition()\n        ->name('accept')\n            ->from(['review'])\n            ->to(['merged']);\n\n    $pullRequest->transition()\n        ->name('reject')\n            ->from(['review'])\n            ->to(['closed']);\n\n    $pullRequest->transition()\n        ->name('reopen')\n            ->from(['closed'])\n            ->to(['review']);\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse App\\Entity\\PullRequest;\nuse Symfony\\Component\\Workflow\\WorkflowInterface;\n\nclass SomeService\n{\n    public function __construct(\n        // Symfony will inject the 'pull_request' state machine configured before\n        private WorkflowInterface $pullRequestStateMachine,\n    ) {\n    }\n\n    public function someMethod(PullRequest $pullRequest): void\n    {\n        $this->pullRequestStateMachine->apply($pullRequest, 'wait_for_review', [\n            'log_comment' => 'My logging comment for the wait for review transition.',\n        ]);\n        // ...\n    }\n\n    // ...\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\Workflow\\Definition;\nuse Symfony\\Component\\Workflow\\StateMachine;\nuse Symfony\\Component\\Workflow\\Validator\\StateMachineValidator;\n\n$states = ['created', 'activated', 'deleted'];\n$stateTransitions = [\n    new Transition('activate', 'created', 'activated'),\n    // This duplicate event \"from\" the \"created\" state is invalid\n    new Transition('activate', 'created', 'deleted'),\n    new Transition('delete', 'activated', 'deleted'),\n];\n\n// No validation is done upon initialization\n$definition = new Definition($states, $stateTransitions);\n\n$validator = new StateMachineValidator();\n// Throws InvalidDefinitionException in case of an invalid definition\n$validator->validate($definition, 'My First StateMachine');",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/workflow/workflow-and-state-machine.html",
+    "https://symfony.com/doc/7.3/service_container/autowiring.html"
+  ]
+}

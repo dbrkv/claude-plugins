@@ -1,0 +1,13 @@
+{
+  "title": "Check with verbose output",
+  "content": "atmos auth login --identity <name> --verbose\nbash",
+  "code_samples": [
+    {
+      "code": "**Permission Errors**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#check-with-verbose-output",
+  "links": []
+}

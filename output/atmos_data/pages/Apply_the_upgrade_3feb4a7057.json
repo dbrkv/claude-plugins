@@ -1,0 +1,24 @@
+{
+  "title": "Apply the upgrade",
+  "content": "atmos terraform apply vpc --stack prod-us-east-1\nyaml",
+  "code_samples": [
+    {
+      "code": "## Rollback Strategy\n\nFolder-based versioning makes rollback trivial - just switch the folder reference:\n\n### Update Stack Configuration",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Rollback Strategy",
+      "id": "rollback-strategy"
+    },
+    {
+      "level": "h3",
+      "text": "Update Stack Configuration",
+      "id": "update-stack-configuration"
+    }
+  ],
+  "url": "llms-txt#apply-the-upgrade",
+  "links": []
+}

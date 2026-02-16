@@ -1,0 +1,157 @@
+{
+  "url": "https://symfony.com/doc/7.3/security/csrf.html",
+  "title": "How to Implement CSRF Protection",
+  "content": "CSRF, or Cross-site request forgery, is a type of attack where a malicious actor tricks a user into performing actions on a web application without their knowledge or consent.\n\nThe attack is based on the trust that a web application has in a user's browser (e.g. on session cookies). Here's a real example of a CSRF attack: a malicious actor could create the following website:\n\nIf you visit this website (e.g. by clicking on some email link or some social network post) and you were already logged in on the https://example.com site, the malicious actor could change the email address associated to your account (effectively taking over your account) without you even being aware of it.\n\nAn effective way of preventing CSRF attacks is to use anti-CSRF tokens. These are unique tokens added to forms as hidden fields. The legit server validates them to ensure that the request originated from the expected source and not some other malicious website.\n\nAnti-CSRF tokens can be managed in two ways: using a stateful approach, where tokens are stored in the session and are unique per user and action; or a stateless approach, where tokens are generated on the client side.\n\nSymfony provides all the needed features to generate and validate the anti-CSRF tokens. Before using them, install this package in your project:\n\nThen, enable/disable the CSRF protection with the csrf_protection option (see the CSRF configuration reference for more information):\n\nBy default, the tokens used for CSRF protection are stored in the session. That's why a session is started automatically as soon as you render a form with CSRF protection.\n\nThis leads to many strategies to help with caching pages that include CSRF protected forms, among them:\n\nThe most effective way to cache pages that need CSRF protected forms is to use stateless CSRF tokens, as explained below.\n\nSymfony Forms include CSRF tokens by default and Symfony also checks them automatically for you. So, when using Symfony Forms, you don't have to do anything to be protected against CSRF attacks.\n\nBy default Symfony adds the CSRF token in a hidden field called _token, but this can be customized (1) globally for all forms and (2) on a form-by-form basis. Globally, you can configure it under the framework.form option:\n\nOn a form-by-form basis, you can configure the CSRF protection in the setDefaults() method of each form:\n\nYou can also customize the rendering of the CSRF form field by creating a custom form theme and using csrf_token as the prefix of the field (e.g. define {% block csrf_token_widget %} ... {% endblock %} to customize the entire form field contents).\n\nAlthough Symfony Forms provide automatic CSRF protection by default, you may need to generate and check CSRF tokens manually for example when using regular HTML forms not managed by the Symfony Form component.\n\nConsider a HTML form created to allow deleting items. First, use the csrf_token() Twig function to generate a CSRF token in the template and store it as a hidden form field:\n\nThen, get the value of the CSRF token in the controller action and use the isCsrfTokenValid() method to check its validity, passing the same token ID used in the template:\n\nAlternatively you can use the IsCsrfTokenValid attribute on the controller action:\n\nSuppose you want a CSRF token per item, so in the template you have something like the following:\n\nThis attribute can also be applied to a controller class. When used this way, the CSRF token validation will be applied to all actions defined in that controller:\n\nThe IsCsrfTokenValid attribute also accepts an Expression object evaluated to the id:\n\nBy default, the IsCsrfTokenValid attribute performs the CSRF token check for all HTTP methods. You can restrict this validation to specific methods using the methods parameter. If the request uses a method not listed in the methods array, the attribute is ignored for that request, and no CSRF validation occurs:\n\nThe IsCsrfTokenValid attribute was introduced in Symfony 7.1.\n\nThe methods parameter was introduced in Symfony 7.3.\n\nBREACH and CRIME are security exploits against HTTPS when using HTTP compression. Attackers can leverage information leaked by compression to recover targeted parts of the plaintext. To mitigate these attacks, and prevent an attacker from guessing the CSRF tokens, a random mask is prepended to the token and used to scramble it.\n\nStateless anti-CSRF protection was introduced in Symfony 7.2.\n\nTraditionally, CSRF tokens are stateful, meaning they're stored in the session. However, some token IDs can be declared as stateless using the stateless_token_ids option. Stateless CSRF tokens are enabled by default in applications using Symfony Flex.\n\nStateless CSRF tokens provide protection without relying on the session. This allows you to fully cache pages while still protecting against CSRF attacks.\n\nWhen validating a stateless CSRF token, Symfony checks the Origin and Referer headers of the incoming HTTP request. If either header matches the application's target origin (i.e. its domain), the token is considered valid.\n\nThis mechanism relies on the application being able to determine its own origin. If you're behind a reverse proxy, make sure it's properly configured. See How to Configure Symfony to Work behind a Load Balancer or a Reverse Proxy.\n\nStateful CSRF tokens are typically scoped per form or action, while stateless tokens don't require many identifiers.\n\nIn the example above, the authenticate and logout identifiers are listed because they are used by default in the Symfony Security component. The submit identifier is included so that form types defined by the application can also use CSRF protection by default.\n\nThe following configuration applies only to form types registered via autoconfiguration (which is the default for your own services), and it sets submit as their default token identifier:\n\nForms configured with a token identifier listed in the above stateless_token_ids option will use the stateless CSRF protection.\n\nIn addition to the Origin and Referer HTTP headers, stateless CSRF protection can also validate tokens using a cookie and a header (named csrf-token by default; see the CSRF configuration reference).\n\nThese additional checks are part of the defense-in-depth strategy provided by stateless CSRF protection. They are optional and require some JavaScript to be enabled. This JavaScript generates a cryptographically secure random token when a form is submitted. It then inserts the token into the form's hidden CSRF field and sends it in both a cookie and a request header.\n\nOn the server side, CSRF token validation compares the values in the cookie and the header. This \"double-submit\" protection relies on the browser's same-origin policy and is further hardened by:\n\nBy default, the Symfony JavaScript snippet expects the hidden CSRF field to be named _csrf_token or to include the data-controller=\"csrf-protection\" attribute. You can adapt this logic to your needs as long as the same protocol is followed.\n\nTo prevent validation from being downgraded, an extra behavioral check is performed: if (and only if) a session already exists, successful \"double-submit\" is remembered and becomes required for future requests. This ensures that once the optional cookie/header validation has been proven effective, it remains enforced for that session.\n\nEnforcing \"double-submit\" validation on all requests is not recommended, as it may lead to a broken user experience. The opportunistic approach described above is preferred, allowing the application to gracefully fall back to Origin / Referer checks when JavaScript is unavailable.\n\nSymfony Code Performance Profiling\n\nGet your Sylius expertise recognized",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Implement CSRF Protection",
+      "id": "how-to-implement-csrf-protection"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "CSRF Protection in Symfony Forms",
+      "id": "csrf-protection-in-symfony-forms"
+    },
+    {
+      "level": "h2",
+      "text": "CSRF Protection in Login Form and Logout Action",
+      "id": "csrf-protection-in-login-form-and-logout-action"
+    },
+    {
+      "level": "h2",
+      "text": "Generating and Checking CSRF Tokens Manually",
+      "id": "generating-and-checking-csrf-tokens-manually"
+    },
+    {
+      "level": "h2",
+      "text": "CSRF Tokens and Compression Side-Channel Attacks",
+      "id": "csrf-tokens-and-compression-side-channel-attacks"
+    },
+    {
+      "level": "h2",
+      "text": "Stateless CSRF Tokens",
+      "id": "stateless-csrf-tokens"
+    },
+    {
+      "level": "h3",
+      "text": "Using a Default Token ID",
+      "id": "using-a-default-token-id"
+    },
+    {
+      "level": "h3",
+      "text": "Generating CSRF Token Using Javascript",
+      "id": "generating-csrf-token-using-javascript"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "<html>\n    <body>\n        <form action=\"https://example.com/settings/update-email\" method=\"POST\">\n            <input type=\"hidden\" name=\"email\" value=\"malicious-actor-address@some-domain.com\"/>\n        </form>\n        <script>\n            document.forms[0].submit();\n        </script>\n\n        <!-- some content here to distract the user -->\n    </body>\n</html>",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require symfony/security-csrf",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    csrf_protection: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:csrf-protection enabled=\"true\"/>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->csrfProtection()\n        ->enabled(true)\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    # ...\n    form:\n        csrf_protection:\n            enabled: true\n            field_name: 'custom_token_name'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:form>\n            <framework:csrf-protection enabled=\"true\" field-name=\"custom_token_name\"/>\n        </framework:form>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework) {\n    $framework->form()->csrfProtection()\n        ->enabled(true)\n        ->fieldName('custom_token_name')\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Form/TaskType.php\nnamespace App\\Form;\n\n// ...\nuse App\\Entity\\Task;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass TaskType extends AbstractType\n{\n    // ...\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'data_class'      => Task::class,\n            // enable/disable CSRF protection for this form\n            'csrf_protection' => true,\n            // the name of the hidden HTML field that stores the token\n            'csrf_field_name' => 'custom_token_name',\n            // an arbitrary string used to generate the value of the token\n            // using a different string for each form improves its security\n            // when using stateful tokens (which is the default)\n            'csrf_token_id'   => 'task_item',\n        ]);\n    }\n\n    // ...\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "<form action=\"{{ url('admin_post_delete', { id: post.id }) }}\" method=\"post\">\n    {# the argument of csrf_token() is the ID of this token #}\n    <input type=\"hidden\" name=\"token\" value=\"{{ csrf_token('delete-item') }}\">\n\n    <button type=\"submit\">Delete item</button>\n</form>",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\n// ...\n\npublic function delete(Request $request): Response\n{\n    $submittedToken = $request->getPayload()->get('token');\n\n    // 'delete-item' is the same value used in the template to generate the token\n    if ($this->isCsrfTokenValid('delete-item', $submittedToken)) {\n        // ... do something, like deleting an object\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsCsrfTokenValid;\n// ...\n\n#[IsCsrfTokenValid('delete-item', tokenKey: 'token')]\npublic function delete(): Response\n{\n    // ... do something, like deleting an object\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "<form action=\"{{ url('admin_post_delete', { id: post.id }) }}\" method=\"post\">\n    {# the argument of csrf_token() is a dynamic id string used to generate the token #}\n    <input type=\"hidden\" name=\"token\" value=\"{{ csrf_token('delete-item-' ~ post.id) }}\">\n\n    <button type=\"submit\">Delete item</button>\n</form>",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsCsrfTokenValid;\n// ...\n\n#[IsCsrfTokenValid('the token ID')]\nfinal class SomeController extends AbstractController\n{\n    // ...\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\HttpFoundation\\Request;\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\Security\\Http\\Attribute\\IsCsrfTokenValid;\n// ...\n\n#[IsCsrfTokenValid(new Expression('\"delete-item-\" ~ args[\"post\"].getId()'), tokenKey: 'token')]\npublic function delete(Post $post): Response\n{\n    // ... do something, like deleting an object\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "#[IsCsrfTokenValid('delete-item', tokenKey: 'token', methods: ['DELETE'])]\npublic function delete(Post $post): Response\n{\n    // ... delete the object\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/csrf.yaml\nframework:\n    # ...\n    csrf_protection:\n        stateless_token_ids: ['submit', 'authenticate', 'logout']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/csrf.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:csrf-protection>\n            <framework:stateless-token-id>submit</framework:stateless-token-id>\n            <framework:stateless-token-id>authenticate</framework:stateless-token-id>\n            <framework:stateless-token-id>logout</framework:stateless-token-id>\n        </framework:csrf-protection>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/csrf.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->csrfProtection()\n        ->statelessTokenIds(['submit', 'authenticate', 'logout'])\n    ;\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/packages/csrf.yaml\nframework:\n    form:\n        csrf_protection:\n            token_id: 'submit'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/csrf.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:framework=\"http://symfony.com/schema/dic/symfony\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/symfony\n        https://symfony.com/schema/dic/symfony/symfony-1.0.xsd\">\n\n    <framework:config>\n        <framework:form>\n            <framework:csrf-protection token-id=\"submit\"/>\n        </framework:form>\n    </framework:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/csrf.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    $framework->form()\n        ->csrfProtection()\n            ->tokenId('submit')\n    ;\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/security/csrf.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/http_cache/esi.html",
+    "https://symfony.com/doc/7.3/templates.html",
+    "https://symfony.com/doc/7.3/forms.html",
+    "https://symfony.com/doc/7.3/form/form_themes.html",
+    "https://symfony.com/doc/7.3/security.html",
+    "https://symfony.com/doc/7.3/reference/configuration/security.html",
+    "https://symfony.com/doc/7.3/reference/twig_reference.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/deployment/proxies.html",
+    "https://symfony.com/doc/7.3/service_container.html"
+  ]
+}

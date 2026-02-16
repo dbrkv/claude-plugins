@@ -1,0 +1,8 @@
+{
+  "title": "Initialize Zsh completion system",
+  "content": "autoload -Uz compinit && compinit",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#initialize-zsh-completion-system",
+  "links": []
+}

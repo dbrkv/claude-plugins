@@ -1,0 +1,8 @@
+{
+  "title": "Enable verbose errors for a single command",
+  "content": "ATMOS_VERBOSE=true atmos terraform plan",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#enable-verbose-errors-for-a-single-command",
+  "links": []
+}

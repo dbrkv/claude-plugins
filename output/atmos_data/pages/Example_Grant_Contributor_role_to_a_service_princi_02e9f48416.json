@@ -1,0 +1,29 @@
+{
+  "title": "Example: Grant Contributor role to a service principal",
+  "content": "az role assignment create \\\n  --assignee YOUR_APP_CLIENT_ID \\\n  --role Contributor \\\n  --scope /subscriptions/YOUR_SUBSCRIPTION_ID\nbash",
+  "code_samples": [
+    {
+      "code": "## Documentation\n\nWe've created comprehensive documentation for Azure authentication:\n\n- **[Azure Authentication Guide](/cli/commands/auth/tutorials/azure-authentication)** - Complete tutorial covering all authentication methods\n- **[Auth Login Command](/cli/commands/auth/login)** - Updated with Azure examples\n- **[Auth Commands Reference](/cli/commands/auth/usage)** - All authentication commands\n\n## What's Next\n\nThis is just the beginning of Azure support in Atmos. Future enhancements include:\n\n- Azure Managed Identity support\n- Azure Government Cloud support\n- Azure CLI credential migration tools\n- Enhanced Azure-specific debugging and logging\n\n## Try It Out\n\nUpdate to the latest version of Atmos and try Azure authentication:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Documentation",
+      "id": "documentation"
+    },
+    {
+      "level": "h2",
+      "text": "What's Next",
+      "id": "what's-next"
+    },
+    {
+      "level": "h2",
+      "text": "Try It Out",
+      "id": "try-it-out"
+    }
+  ],
+  "url": "llms-txt#example:-grant-contributor-role-to-a-service-principal",
+  "links": []
+}

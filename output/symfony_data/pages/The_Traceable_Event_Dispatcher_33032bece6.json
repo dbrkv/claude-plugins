@@ -1,0 +1,30 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/event_dispatcher/traceable_dispatcher.html",
+  "title": "The Traceable Event Dispatcher",
+  "content": "The TraceableEventDispatcher is an event dispatcher that wraps any other event dispatcher and can then be used to determine which event listeners have been called by the dispatcher. Pass the event dispatcher to be wrapped and an instance of the Stopwatch to its constructor:\n\nNow, the TraceableEventDispatcher can be used like any other event dispatcher to register event listeners and dispatch events:\n\nAfter your application has been processed, you can use the getCalledListeners() method to retrieve an array of event listeners that have been called in your application. Similarly, the getNotCalledListeners() method returns an array of event listeners that have not been called:\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The Traceable Event Dispatcher",
+      "id": "the-traceable-event-dispatcher"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher;\nuse Symfony\\Component\\Stopwatch\\Stopwatch;\n\n// the event dispatcher to debug\n$dispatcher = ...;\n\n$traceableEventDispatcher = new TraceableEventDispatcher(\n    $dispatcher,\n    new Stopwatch()\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n\n// registers an event listener\n$eventListener = ...;\n$priority = ...;\n$traceableEventDispatcher->addListener(\n    'event.the_name',\n    $eventListener,\n    $priority\n);\n\n// dispatches an event\n$event = ...;\n$traceableEventDispatcher->dispatch($event, 'event.the_name');",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\n\n$calledListeners = $traceableEventDispatcher->getCalledListeners();\n$notCalledListeners = $traceableEventDispatcher->getNotCalledListeners();",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/event_dispatcher/traceable_dispatcher.html"
+  ]
+}

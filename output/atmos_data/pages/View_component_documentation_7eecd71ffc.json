@@ -1,0 +1,103 @@
+{
+  "title": "View component documentation",
+  "content": "atmos docs vpc\natmos docs eks-cluster\ngo\n// Traditional approach - painful!\nif isatty.IsTerminal(os.Stdout.Fd()) {\n    // Using Charm Bracelet's lipgloss for styling\n    successStyle := lipgloss.NewStyle().Foreground(lipgloss.Color(\"10\"))\n    fmt.Println(successStyle.Render(\"Success!\"))\n} else {\n    fmt.Println(\"Success!\")  // Plain for pipes\n}\n\n// And don't forget to mask secrets!\nif containsSecret(output) {\n    output = maskSecrets(output)\n}\nfmt.Println(output)\ngo\n// Atmos approach - simple!\nui.Success(\"Deployment complete!\")\ngo\nui.Markdown(\"# Deployment Report\\n\\n**Status:** Success\")\ngo\ndata.WriteJSON(config)  // Contains AWS_SECRET_ACCESS_KEY\njson\n{\n  \"aws_access_key_id\": \"AKIAIOSFODNN7EXAMPLE\",\n  \"aws_secret_access_key\": \"***MASKED***\"\n}\ngo\n// Data to stdout (pipeable)\ndata.WriteJSON(result)\n\n// Messages to stderr (human-readable)\nui.Info(\"Processing components...\")\nui.Success(\"Deployment complete!\")\nbash\natmos terraform output | jq .vpc_id",
+  "code_samples": [
+    {
+      "code": "### Incremental Adoption\nStart with authentication and vendor management, then gradually adopt stack-based configuration as your needs evolve. Each Atmos feature can be used independently.\n\n## What Hasn't Changed\n\nCommands that actually work with stacks still require stack configuration:\n\n- `atmos list stacks`\n- `atmos list components`\n- `atmos describe component`\n- `atmos terraform plan/apply`\n\nThis ensures that stack-dependent operations have the context they need while allowing utility commands to work independently.\n\n## Related Links\n\n- [PR #1717: Relax stack config requirement for commands that don't operate on stacks](https://github.com/cloudposse/atmos/pull/1717)\n- [Nobody Runs Native Terraform](https://cloudposse.com/blog/nobody-runs-native-terraform/)\n- [Authentication Documentation](/cli/commands/auth/usage)\n- [Vendor Configuration](/cli/commands/vendor/usage)\n\n---\n\n## Zero-Configuration Terminal Output: Write Once, Works Everywhere\n\n\nAtmos now features intelligent terminal output that adapts to any environment automatically. Developers can write code assuming a full-featured terminal, and Atmos handles the rest - capability detection, color adaptation, and secret masking happen transparently. No more capability checking, manual color detection, or masking code. Just write clean, simple output code and it works everywhere.\n\n<!--truncate-->\n\n## The Problem with Traditional CLI Output\n\nMost CLI tools force developers to make painful choices:",
+      "language": "unknown"
+    },
+    {
+      "code": "### What Existing Solutions Don't Solve\n\nWhile [Charm Bracelet's Lip Gloss](https://github.com/charmbracelet/lipgloss) and similar libraries handle **rendering** beautifully (styled components, layouts, colors), they don't solve critical infrastructure CLI challenges:\n\n- **Secret Masking**: No automatic redaction of sensitive data across all output channels\n- **Centralized I/O Control**: Output scattered across stdout/stderr without unified masking\n- **Security-First Design**: Secrets can leak through unmasked channels or error messages\n- **Atmos-Specific Requirements**: Infrastructure tools handle AWS keys, API tokens, and sensitive configs that must never appear in logs\n\nThis leads to:\n- ð« Duplicated capability checking throughout the codebase\n- ð« Inconsistent output behavior across commands\n- ð« **Secrets accidentally leaked to logs** (the primary driver for this work)\n- ð« Broken pipelines when output assumptions change\n- ð« Difficult testing (mocking TTY detection is painful)\n\n## The Atmos Solution: Write Once, Works Everywhere\n\n**Atmos's I/O system complements Charm Bracelet** by adding the infrastructure-critical layer that rendering libraries don't provide: centralized I/O control with automatic secret masking. Lip Gloss handles the beautiful rendering; Atmos ensures that rendering never exposes sensitive data.\n\nWith Atmos's new I/O system, developers write code once:",
+      "language": "unknown"
+    },
+    {
+      "code": "That's it. No capability checking, no color detection, no TTY handling. The system automatically:\n\n### ð¨ Color Degradation\n- **TrueColor terminal** (iTerm2, Windows Terminal): Full 24-bit colors\n- **256-color terminal**: 256-color palette\n- **16-color terminal** (basic xterm): ANSI colors\n- **No color** (CI, `NO_COLOR=1`, pipes): Plain text\n\n### ð Width Adaptation\n- **Wide terminal** (120+ cols): Uses full width with proper wrapping\n- **Narrow terminal** (80 cols): Wraps at 80 characters\n- **Config override**: Respects `atmos.yaml` `settings.terminal.max_width`\n- **Unknown width**: Sensible defaults\n\n### ð TTY Detection\n- **Interactive terminal**: Full styling, colors, icons, formatting\n- **Piped** (`atmos deploy | tee`): Plain text automatically\n- **Redirected** (`atmos > file`): Plain text automatically\n- **CI environment**: Detects CI and disables interactivity\n\n### ð­ Markdown Rendering",
+      "language": "unknown"
+    },
+    {
+      "code": "- **Color terminal**: Styled markdown with colors, bold, headers\n- **No-color terminal**: Plain text formatting (notty style)\n- **Render failure**: Gracefully falls back to plain content\n\n### ð Automatic Secret Masking",
+      "language": "unknown"
+    },
+    {
+      "code": "**Output automatically masked:**",
+      "language": "unknown"
+    },
+    {
+      "code": "No manual redaction needed. The system automatically detects and masks:\n- AWS access keys and secrets (AKIA*, ASIA*)\n- Sensitive environment variable patterns\n- Common token formats\n- JSON/YAML quoted variants\n\n### ð¯ Channel Separation",
+      "language": "unknown"
+    },
+    {
+      "code": "Users can now safely pipe data while seeing status:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Incremental Adoption",
+      "id": "incremental-adoption"
+    },
+    {
+      "level": "h2",
+      "text": "What Hasn't Changed",
+      "id": "what-hasn't-changed"
+    },
+    {
+      "level": "h2",
+      "text": "Related Links",
+      "id": "related-links"
+    },
+    {
+      "level": "h2",
+      "text": "Zero-Configuration Terminal Output: Write Once, Works Everywhere",
+      "id": "zero-configuration-terminal-output:-write-once,-works-everywhere"
+    },
+    {
+      "level": "h2",
+      "text": "The Problem with Traditional CLI Output",
+      "id": "the-problem-with-traditional-cli-output"
+    },
+    {
+      "level": "h3",
+      "text": "What Existing Solutions Don't Solve",
+      "id": "what-existing-solutions-don't-solve"
+    },
+    {
+      "level": "h2",
+      "text": "The Atmos Solution: Write Once, Works Everywhere",
+      "id": "the-atmos-solution:-write-once,-works-everywhere"
+    },
+    {
+      "level": "h3",
+      "text": "ð¨ Color Degradation",
+      "id": "ð¨-color-degradation"
+    },
+    {
+      "level": "h3",
+      "text": "ð Width Adaptation",
+      "id": "ð-width-adaptation"
+    },
+    {
+      "level": "h3",
+      "text": "ð TTY Detection",
+      "id": "ð-tty-detection"
+    },
+    {
+      "level": "h3",
+      "text": "ð­ Markdown Rendering",
+      "id": "ð­-markdown-rendering"
+    },
+    {
+      "level": "h3",
+      "text": "ð Automatic Secret Masking",
+      "id": "ð-automatic-secret-masking"
+    },
+    {
+      "level": "h3",
+      "text": "ð¯ Channel Separation",
+      "id": "ð¯-channel-separation"
+    }
+  ],
+  "url": "llms-txt#view-component-documentation",
+  "links": []
+}

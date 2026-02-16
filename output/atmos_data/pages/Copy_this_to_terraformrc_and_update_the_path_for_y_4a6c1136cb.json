@@ -1,0 +1,13 @@
+{
+  "title": "Copy this to .terraformrc and update the path for your environment",
+  "content": "provider_installation {\n  dev_overrides {\n    # Update this path to where you build the provider\n    \"registry.terraform.io/acme/cloud\" = \"/absolute/path/to/providers/terraform-provider-acme/bin\"\n  }\n  direct {}\n}\nbash",
+  "code_samples": [
+    {
+      "code": "</File>\n\nDevelopment workflow:\n\n<Terminal title=\"Development Workflow\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#copy-this-to-.terraformrc-and-update-the-path-for-your-environment",
+  "links": []
+}

@@ -1,0 +1,57 @@
+{
+  "title": "Show current authentication status",
+  "content": "atmos auth whoami\nyaml\nauth:\n  # Configure logging\n  ## Optional, defaults to Atmos log level\n  logs:\n    level: Info\n\nproviders:\n    my-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://mycompany.awsapps.com/start\n\n# Optional: Configure session durations\n      session:\n        duration: 1h  # Credential lifetime for auth shell/env/exec\n\nconsole:\n        session_duration: 12h  # Web console session duration (max 12h for AWS)\n\nidentities:\n    admin:\n      kind: aws/permission-set\n      default: true\n      via:\n        provider: my-sso\n      principal:\n        name: AdminAccess\n        account:\n          name: production\nbash\natmos auth validate\nbash",
+  "code_samples": [
+    {
+      "code": "## Flags\n\n<dl>\n  <dt>`--identity` (alias `-i`)</dt>\n  <dd>\n    Specify the identity to use for authentication. Can be:\n    \n      An identity name (e.g., <code>--identity admin</code>)\n      Empty for interactive selection (e.g., <code>--identity</code>)\n      <code>false</code> to disable authentication (e.g., <code>--identity=false</code>)\n    \n    When set to <code>false</code>, Atmos skips identity authentication and uses standard AWS credential resolution.\n  </dd>\n</dl>\n\n## Subcommands\n\n<DocCardList/>\n\n## Overview\n\nAtmos Auth provides a unified authentication system for cloud providers, supporting complex identity chaining and credential management. This guide will help you get started with configuring and using Atmos Auth for your infrastructure projects.\n\n## Quick Start\n\n### 1. Basic Configuration\n\nAdd authentication configuration to your `atmos.yaml`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Notes:\n\n- Region is required for the GitHub OIDC provider and is validated at construction time.\n\n### 2. Validate Configuration",
+      "language": "unknown"
+    },
+    {
+      "code": "### 3. Authenticate",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Subcommands",
+      "id": "subcommands"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h3",
+      "text": "1. Basic Configuration",
+      "id": "1.-basic-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "2. Validate Configuration",
+      "id": "2.-validate-configuration"
+    },
+    {
+      "level": "h3",
+      "text": "3. Authenticate",
+      "id": "3.-authenticate"
+    }
+  ],
+  "url": "llms-txt#show-current-authentication-status",
+  "links": []
+}

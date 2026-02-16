@@ -1,0 +1,48 @@
+{
+  "title": "Or set it as an environment variable for your session",
+  "content": "export ATMOS_CHDIR=/your/infra\nshell\natmos auth console\nshell",
+  "code_samples": [
+    {
+      "code": "## Conclusion\n\nThe `--chdir` flag is a small addition that makes a big difference in daily workflows. It removes friction from multi-repo operations, development workflows, and automation scripts.\n\nWe designed it to feel natural if you've used similar flags in other tools (`git -C`, `make -C`, `tar -C`), while integrating seamlessly with Atmos's existing flag system.\n\nTry it out and let us know what you think! We'd love to hear how you're using it in your workflows.\n\n## Resources\n\n- [Global Flags Documentation](/cli/global-flags)\n- [Atmos CLI Reference](/cli/commands)\n- [GitHub Repository](https://github.com/cloudposse/atmos)\n\n---\n\n*Have feedback or questions? Join our [Slack community](https://slack.cloudposse.com/) or [open an issue on GitHub](https://github.com/cloudposse/atmos/issues).*\n\n---\n\n## Cloud Console Access with atmos auth console\n\nAtmos now includes `atmos auth console`, a convenience command for opening cloud provider web consoles. Similar to `aws-vault login`, this command uses your authenticated Atmos identities to generate temporary console sign-in URLs and open them in your browser.\n\n<!--truncate-->\n\n## What Changed\n\nThe `atmos auth console` command generates temporary sign-in URLs for cloud provider web consoles and opens them in your default browser. This removes the need to manually copy credentials or log in separately.\n\n### Features\n\n- Single command to open cloud consoles\n- Provider-agnostic design (AWS available now, Azure and GCP planned)\n- Uses provider-native federation endpoints\n- Configurable session duration (up to 12 hours for AWS)\n- Service aliases: use `s3`, `ec2`, `lambda` instead of full URLs\n- Navigate directly to specific console pages (100+ AWS services)\n- Print URLs for scripting workflows\n\n## Why This Helps\n\nInstead of manually copying credentials or maintaining separate browser sessions, you can access cloud consoles with a single command:",
+      "language": "unknown"
+    },
+    {
+      "code": "The command integrates with your existing Atmos auth workflows:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Conclusion",
+      "id": "conclusion"
+    },
+    {
+      "level": "h2",
+      "text": "Resources",
+      "id": "resources"
+    },
+    {
+      "level": "h2",
+      "text": "Cloud Console Access with atmos auth console",
+      "id": "cloud-console-access-with-atmos-auth-console"
+    },
+    {
+      "level": "h2",
+      "text": "What Changed",
+      "id": "what-changed"
+    },
+    {
+      "level": "h3",
+      "text": "Features",
+      "id": "features"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Helps",
+      "id": "why-this-helps"
+    }
+  ],
+  "url": "llms-txt#or-set-it-as-an-environment-variable-for-your-session",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Export release data for compliance",
+  "content": "atmos version list --format json > releases.json",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#export-release-data-for-compliance",
+  "links": []
+}

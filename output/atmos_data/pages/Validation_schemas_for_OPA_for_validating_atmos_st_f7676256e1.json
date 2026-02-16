@@ -1,0 +1,66 @@
+{
+  "title": "Validation schemas for OPA for validating atmos stacks and components",
+  "content": "schemas:\n  # https://www.openpolicyagent.org\n  opa:\n    # Can also be set using `ATMOS_SCHEMAS_OPA_BASE_PATH` ENV var, or `--schemas-opa-dir` command-line arguments\n    # Supports both absolute and relative paths\n    base_path: \"stacks/schemas/opa\"\nconsole\nMapping public IPs on launch is not allowed in 'prod'. Set 'map_public_ip_on_launch' variable to 'false'\n\nexit status 1\nconsole\nIn 'dev', only 2 Availability Zones are allowed\nVPC name must be a valid string from 2 to 20 alphanumeric chars\n\nexit status 1\nbash\natmos terraform apply vpc -s plat-ue2-prod\natmos terraform apply vpc -s plat-ue2-dev\nrego",
+  "code_samples": [
+    {
+      "code": "</File>\n\nIn the component [manifest](https://github.com/cloudposse/atmos/blob/main/examples/quick-start-advanced/stacks/catalog/vpc/defaults.yaml), add\nthe `settings.validation` section:\n\n<EmbedFile filePath=\"examples/quick-start-advanced/stacks/catalog/vpc/defaults.yaml\" />\n\nAdd the following Rego package in the file [`stacks/schemas/opa/catalog/constants/constants.rego`](https://github.com/cloudposse/atmos/blob/main/examples/quick-start-advanced/stacks/schemas/opa/catalog/constants/constants.rego):\n\n<EmbedFile filePath=\"examples/quick-start-advanced/stacks/schemas/opa/catalog/constants/constants.rego\" />\n\nAdd the following OPA policy in the file [`stacks/schemas/opa/vpc/validate-vpc-component.rego`](https://github.com/cloudposse/atmos/blob/main/examples/quick-start-advanced/stacks/schemas/opa/vpc/validate-vpc-component.rego):\n\n<EmbedFile filePath=\"examples/quick-start-advanced/stacks/schemas/opa/vpc/validate-vpc-component.rego\" />\n\n### Use One Policy File or Many\n\nAtmos supports OPA policies for components validation in a single Rego file and in multiple Rego files.\n\nAs shown in the example above, you can define some Rego constants, modules and helper functions in a separate\nfile `stacks/schemas/opa/catalog/constants/constants.rego`, and then import them into the main policy\nfile `stacks/schemas/opa/vpc/validate-vpc-component.rego`.\n\nYou also need to specify the `module_paths` attribute in the component's `settings.validation` section.\nThe `module_paths` attribute is an array of filesystem paths (folders or individual files) to the additional modules for schema validation.\nEach path can be an absolute path or a path relative to `schemas.opa.base_path` defined in `atmos.yaml`.\nIf a folder is specified in `module_paths`, Atmos will recursively process the folder and all its sub-folders and load all Rego files into the OPA\nengine.\n\nThis allows you to separate the common OPA modules, constants and helper functions into a catalog of reusable Rego modules,\nand to structure your OPA policies to make them DRY.\n\n## Examples\n\n### Validate VPC Component in Stacks\n\nRun the following commands to validate the component in the stacks:\n\n<Terminal title=\"atmos validate component vpc -s plat-ue2-prod\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n<Terminal title=\"atmos validate component vpc -s plat-ue2-dev\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n### Validate Before Provisioning\n\nTry to run the following commands to provision the component in the stacks:\n\n<Terminal>",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\nSince the OPA validation policies don't pass, Atmos does not allow provisioning the component in the stacks:\n\n<Terminal title=\"atmos validate vpc --stack=plat-ue2-prod\">\n![atmos-validate-vpc-in-plat-ue2-prod](/img/atmos-validate-infra-vpc-in-tenant1-ue2-dev.png)\n</Terminal>\n\n<Terminal title=\"atmos validate vpc --stack=plat-ue2-dev\">\n![atmos-validate-vpc-in-plat-ue2-dev](/img/atmos-validate-infra-vpc-in-tenant1-ue2-dev.png)\n</Terminal>\n\n### Advanced Policy Examples\n\n<EmbedFile filePath=\"examples/quick-start-advanced/stacks/schemas/opa/vpc/validate-vpc-component.rego\" />\n\n:::note\n\n- If a regex pattern in the 're_match' function contains a backslash to escape special chars (e.g. '\\.' or '\\-'),\n  it must be escaped with another backslash when represented as a regular Go string ('\\\\.', '\\\\-').\n\n- The reason is that backslash is also used to escape special characters in Go strings like newline (\\n).\n\n- If you want to match the backslash character itself, you'll need four slashes.\n\n:::\n\n## Policy Execution Context\n\nAtmos allows enforcing custom governance rules based on metadata about Atmos commands and provides a powerful\npolicy evaluation mechanism by passing structured metadata to OPA policies at runtime.\n\nThis metadata enables fine-grained control over when certain actions (like `terraform apply`) are allowed or denied,\nbased on the context in which they're executed.\n\n### Policy Metadata\n\nWhen Atmos runs a command, it supplies an input object to OPA policies that contains detailed contextual information, such as:\n\n- `process_env`: a map of the environment variables in the current process\n- `cli_args`: a list of the command line arguments and flags (e.g., executing the `atmos terraform apply` command will generate the `[\"terraform\", \"apply\"]` list)\n- `tf_cli_vars`: a map of variables with proper type conversion from the command-line `-var` arguments\n- `env_tf_cli_args`: a list of arguments from the [`TF_CLI_ARGS`](https://developer.hashicorp.com/terraform/cli/config/environment-variables#tf_cli_args-and-tf_cli_args_name) environment variable\n- `env_tf_cli_vars`: a map of variables with proper type conversion from the [`TF_CLI_ARGS`](https://developer.hashicorp.com/terraform/cli/config/environment-variables#tf_cli_args-and-tf_cli_args_name) environment variable\n- `vars`: a map of variables passed to the command, either via the stack config files or [CLI flags](/core-concepts/validate/terraform-variables)\n- other contextual attributes that are returned from the [`atmos describe component`](/cli/commands/describe/component) command for a component in a stack\n\n### Policy Execution Context Example\n\nBelow is an OPA policy rule to enforce infrastructure governance during command execution.\nSpecifically, this rule blocks the execution of `atmos terraform apply` if the variable `foo` is set to the string `\"foo\"`.\n\n<File title=\"validate-component.rego\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Use One Policy File or Many",
+      "id": "use-one-policy-file-or-many"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Validate VPC Component in Stacks",
+      "id": "validate-vpc-component-in-stacks"
+    },
+    {
+      "level": "h3",
+      "text": "Validate Before Provisioning",
+      "id": "validate-before-provisioning"
+    },
+    {
+      "level": "h3",
+      "text": "Advanced Policy Examples",
+      "id": "advanced-policy-examples"
+    },
+    {
+      "level": "h2",
+      "text": "Policy Execution Context",
+      "id": "policy-execution-context"
+    },
+    {
+      "level": "h3",
+      "text": "Policy Metadata",
+      "id": "policy-metadata"
+    },
+    {
+      "level": "h3",
+      "text": "Policy Execution Context Example",
+      "id": "policy-execution-context-example"
+    }
+  ],
+  "url": "llms-txt#validation-schemas-for-opa-for-validating-atmos-stacks-and-components",
+  "links": []
+}

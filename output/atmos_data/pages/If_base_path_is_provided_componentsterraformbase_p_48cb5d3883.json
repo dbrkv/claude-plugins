@@ -1,0 +1,8 @@
+{
+  "title": "If 'base_path' is provided, 'components.terraform.base_path', 'components.helmfile.base_path', 'stacks.base_path'",
+  "content": "",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#if-'base_path'-is-provided,-'components.terraform.base_path',-'components.helmfile.base_path',-'stacks.base_path'",
+  "links": []
+}

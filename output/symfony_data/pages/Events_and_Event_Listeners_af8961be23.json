@@ -1,0 +1,207 @@
+{
+  "url": "https://symfony.com/doc/7.3/event_dispatcher.html",
+  "title": "Events and Event Listeners",
+  "content": "During the execution of a Symfony application, lots of event notifications are triggered. Your application can listen to these notifications and respond to them by executing any piece of code.\n\nSymfony triggers several events related to the kernel while processing the HTTP Request. Third-party bundles may also dispatch events, and you can even dispatch custom events from your own code.\n\nAll the examples shown in this article use the same KernelEvents::EXCEPTION event for consistency purposes. In your own application, you can use any event and even mix several of them in the same subscriber.\n\nThe most common way to listen to an event is to register an event listener:\n\nNow that the class is created, you need to register it as a service and notify Symfony that it is an event listener by using a special \"tag\":\n\nSymfony follows this logic to decide which method to call inside the event listener class:\n\nThere is an optional attribute for the kernel.event_listener tag called priority, which is a positive or negative integer that defaults to 0 and it controls the order in which listeners are executed (the higher the number, the earlier a listener is executed). This is useful when you need to guarantee that one listener is executed before another. The priorities of the internal Symfony listeners usually range from -256 to 256 but your own listeners can use any positive or negative integer.\n\nThere is an optional attribute for the kernel.event_listener tag called event which is useful when listener $event argument is not typed. If you configure it, it will change type of $event object. For the kernel.exception event, it is ExceptionEvent. Check out the Symfony events reference to see what type of object each event provides.\n\nWith this attribute, Symfony follows this logic to decide which method to call inside the event listener class:\n\nAn alternative way to define an event listener is to use the AsEventListener PHP attribute. This allows you to configure the listener inside its class, without having to add any configuration in external files:\n\nYou can add multiple #[AsEventListener] attributes to configure different methods. The method property is optional, and when not defined, it defaults to on + uppercased event name. In the example below, the 'foo' event listener doesn't explicitly define its method, so the onFoo() method will be called:\n\nAsEventListener can also be applied to methods directly:\n\nNote that the attribute doesn't require its event parameter to be set if the method already type-hints the expected event.\n\nAnother way to listen to events is via an event subscriber, which is a class that defines one or more methods that listen to one or various events. The main difference with the event listeners is that subscribers always know the events to which they are listening.\n\nIf different event subscriber methods listen to the same event, their order is defined by the priority parameter. This value is a positive or negative integer which defaults to 0. The higher the number, the earlier the method is called. Priority is aggregated for all listeners and subscribers, so your methods could be called before or after the methods defined in other listeners and subscribers. To learn more about event subscribers, read The EventDispatcher Component.\n\nThe following example shows an event subscriber that defines several methods which listen to the same kernel.exception event via its ExceptionEvent class:\n\nThat's it! Your services.yaml file should already be setup to load services from the EventSubscriber directory. Symfony takes care of the rest.\n\nIf your methods are not called when an exception is thrown, double-check that you're loading services from the EventSubscriber directory and have autoconfigure enabled. You can also manually add the kernel.event_subscriber tag.\n\nA single page can make several requests (one main request, and then multiple sub-requests - typically when embedding controllers in templates). For the core Symfony events, you might need to check to see if the event is for a \"main\" request or a \"sub request\":\n\nCertain things, like checking information on the real request, may not need to be done on the sub-request listeners.\n\nListeners and subscribers can be used in the same application indistinctly. The decision to use either of them is usually a matter of personal taste. However, there are some minor advantages for each of them:\n\nWhen configuring event listeners and subscribers via dependency injection, Symfony's core events can also be referred to by the fully qualified class name (FQCN) of the corresponding event class:\n\nInternally, the event FQCN are treated as aliases for the original event names. Since the mapping already happens when compiling the service container, event listeners and subscribers using FQCN instead of event names will appear under the original event name when inspecting the event dispatcher.\n\nThis alias mapping can be extended for custom events by registering the compiler pass AddEventAliasesPass:\n\nThe compiler pass will always extend the existing list of aliases. Because of that, it is safe to register multiple instances of the pass with different configurations.\n\nYou can find out what listeners are registered in the event dispatcher using the console. To show all events and their listeners, run:\n\nYou can get registered listeners for a particular event by specifying its name:\n\nor can get everything which partial matches the event name:\n\nThe security system uses an event dispatcher per firewall. Use the --dispatcher option to get the registered listeners for a particular event dispatcher:\n\nIt is quite common in web application development to need some logic to be performed right before or directly after your controller actions acting as filters or hooks.\n\nSome web frameworks define methods like preExecute() and postExecute(), but there is no such thing in Symfony. The good news is that there is a much better way to interfere with the Request -> Response process using the EventDispatcher component.\n\nImagine that you need to develop an API where some controllers are public but some others are restricted to one or some clients. For these private features, you might provide a token to your clients to identify themselves.\n\nSo, before executing your controller action, you need to check if the action is restricted or not. If it is restricted, you need to validate the provided token.\n\nPlease note that for simplicity in this recipe, tokens will be defined in config and neither database setup nor authentication via the Security component will be used.\n\nFirst, define some token configuration as parameters:\n\nA kernel.controller (aka KernelEvents::CONTROLLER) listener gets notified on every request, right before the controller is executed. So, first, you need some way to identify if the controller that matches the request needs token validation.\n\nA clean and simple way is to create an empty interface and make the controllers implement it:\n\nA controller that implements this interface looks like this:\n\nNext, you'll need to create an event subscriber, which will hold the logic that you want to be executed before your controllers. If you're not familiar with event subscribers, you can learn more about how to use them:\n\nThat's it! Your services.yaml file should already be setup to load services from the EventSubscriber directory. Symfony takes care of the rest. Your TokenSubscriber onKernelController() method will be executed on each request. If the controller that is about to be executed implements TokenAuthenticatedController, token authentication is applied. This lets you have a \"before\" filter on any controller you want.\n\nIf your subscriber is not called on each request, double-check that you're loading services from the EventSubscriber directory and have autoconfigure enabled. You can also manually add the kernel.event_subscriber tag.\n\nIn addition to having a \"hook\" that's executed before your controller, you can also add a hook that's executed after your controller. For this example, imagine that you want to add a sha1 hash (with a salt using that token) to all responses that have passed this token authentication.\n\nAnother core Symfony event - called kernel.response (aka KernelEvents::RESPONSE) - is notified on every request, but after the controller returns a Response object. To create an \"after\" listener, create a listener class and register it as a service on this event.\n\nFor example, take the TokenSubscriber from the previous example and first record the authentication token inside the request attributes. This will serve as a basic flag that this request underwent token authentication:\n\nNow, configure the subscriber to listen to another event and add onKernelResponse(). This will look for the auth_token flag on the request object and set a custom header on the response if it's found:\n\nThat's it! The TokenSubscriber is now notified before every controller is executed (onKernelController()) and after every controller returns a response (onKernelResponse()). By making specific controllers implement the TokenAuthenticatedController interface, your listener knows which controllers it should take action on. And by storing a value in the request's \"attributes\" bag, the onKernelResponse() method knows to add the extra header. Have fun!\n\nIf you want to do something right before, or directly after a method is called, you can dispatch an event respectively at the beginning or at the end of the method:\n\nIn this example, two events are dispatched:\n\nEach uses a custom Event class to communicate information to the listeners of the two events. For example, BeforeSendMailEvent might look like this:\n\nAnd the AfterSendMailEvent even like this:\n\nBoth events allow you to get some information (e.g. getMessage()) and even change that information (e.g. setMessage()).\n\nNow, you can create an event subscriber to hook into this event. For example, you could listen to the mailer.post_send event and change the method's return value:\n\nThat's it! Your subscriber should be called automatically (or read more about event subscriber configuration).\n\nCode consumes server resources. Blackfire tells you how\n\nGet your Sylius expertise recognized",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Events and Event Listeners",
+      "id": "events-and-event-listeners"
+    },
+    {
+      "level": "h2",
+      "text": "Creating an Event Listener",
+      "id": "creating-an-event-listener"
+    },
+    {
+      "level": "h3",
+      "text": "Defining Event Listeners with PHP Attributes",
+      "id": "defining-event-listeners-with-php-attributes"
+    },
+    {
+      "level": "h2",
+      "text": "Creating an Event Subscriber",
+      "id": "creating-an-event-subscriber"
+    },
+    {
+      "level": "h2",
+      "text": "Request Events, Checking Types",
+      "id": "request-events-checking-types"
+    },
+    {
+      "level": "h2",
+      "text": "Listeners or Subscribers",
+      "id": "listeners-or-subscribers"
+    },
+    {
+      "level": "h2",
+      "text": "Event Aliases",
+      "id": "event-aliases"
+    },
+    {
+      "level": "h2",
+      "text": "Debugging Event Listeners",
+      "id": "debugging-event-listeners"
+    },
+    {
+      "level": "h2",
+      "text": "How to Set Up Before and After Filters",
+      "id": "how-to-set-up-before-and-after-filters"
+    },
+    {
+      "level": "h3",
+      "text": "Token Validation Example",
+      "id": "token-validation-example"
+    },
+    {
+      "level": "h3",
+      "text": "Before Filters with the kernel.controller Event",
+      "id": "before-filters-with-the-kernel-controller-event"
+    },
+    {
+      "level": "h4",
+      "text": "Tag Controllers to Be Checked",
+      "id": "tag-controllers-to-be-checked"
+    },
+    {
+      "level": "h4",
+      "text": "Creating an Event Subscriber",
+      "id": "creating-an-event-subscriber-1"
+    },
+    {
+      "level": "h3",
+      "text": "After Filters with the kernel.response Event",
+      "id": "after-filters-with-the-kernel-response-event"
+    },
+    {
+      "level": "h2",
+      "text": "How to Customize a Method Behavior without Using Inheritance",
+      "id": "how-to-customize-a-method-behavior-without-using-inheritance"
+    },
+    {
+      "level": "h2",
+      "text": "Learn More",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/EventListener/ExceptionListener.php\nnamespace App\\EventListener;\n\nuse Symfony\\Component\\HttpFoundation\\Response;\nuse Symfony\\Component\\HttpKernel\\Event\\ExceptionEvent;\nuse Symfony\\Component\\HttpKernel\\Exception\\HttpExceptionInterface;\n\nclass ExceptionListener\n{\n    public function __invoke(ExceptionEvent $event): void\n    {\n        // You get the exception object from the received event\n        $exception = $event->getThrowable();\n        $message = sprintf(\n            'My Error says: %s with code: %s',\n            $exception->getMessage(),\n            $exception->getCode()\n        );\n\n        // Customize your response object to display the exception details\n        $response = new Response();\n        $response->setContent($message);\n        // the exception message can contain unfiltered user input;\n        // set the content-type to text to avoid XSS issues\n        $response->headers->set('Content-Type', 'text/plain; charset=utf-8');\n\n        // HttpExceptionInterface is a special type of exception that\n        // holds status code and header details\n        if ($exception instanceof HttpExceptionInterface) {\n            $response->setStatusCode($exception->getStatusCode());\n            $response->headers->replace($exception->getHeaders());\n        } else {\n            $response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);\n        }\n\n        // sends the modified response object to the event\n        $event->setResponse($response);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    App\\EventListener\\ExceptionListener:\n        tags: [kernel.event_listener]",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <services>\n        <service id=\"App\\EventListener\\ExceptionListener\">\n            <tag name=\"kernel.event_listener\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\EventListener\\ExceptionListener;\n\nreturn function(ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(ExceptionListener::class)\n        ->tag('kernel.event_listener')\n    ;\n};",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\EventListener;\n\nuse Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener;\n\n#[AsEventListener]\nfinal class MyListener\n{\n    public function __invoke(CustomEvent $event): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\EventListener;\n\nuse Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener;\n\n#[AsEventListener(event: CustomEvent::class, method: 'onCustomEvent')]\n#[AsEventListener(event: 'foo', priority: 42)]\n#[AsEventListener(event: 'bar', method: 'onBarEvent')]\nfinal class MyMultiListener\n{\n    public function onCustomEvent(CustomEvent $event): void\n    {\n        // ...\n    }\n\n    public function onFoo(): void\n    {\n        // ...\n    }\n\n    public function onBarEvent(): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\EventListener;\n\nuse Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener;\n\nfinal class MyMultiListener\n{\n    #[AsEventListener]\n    public function onCustomEvent(CustomEvent $event): void\n    {\n        // ...\n    }\n\n    #[AsEventListener(event: 'foo', priority: 42)]\n    public function onFoo(): void\n    {\n        // ...\n    }\n\n    #[AsEventListener(event: 'bar')]\n    public function onBarEvent(): void\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/EventSubscriber/ExceptionSubscriber.php\nnamespace App\\EventSubscriber;\n\nuse Symfony\\Component\\EventDispatcher\\EventSubscriberInterface;\nuse Symfony\\Component\\HttpKernel\\Event\\ExceptionEvent;\n\nclass ExceptionSubscriber implements EventSubscriberInterface\n{\n    public static function getSubscribedEvents(): array\n    {\n        // return the subscribed events, their methods and priorities\n        return [\n            ExceptionEvent::class => [\n                ['processException', 10],\n                ['logException', 0],\n                ['notifyException', -10],\n            ],\n        ];\n    }\n\n    public function processException(ExceptionEvent $event): void\n    {\n        // ...\n    }\n\n    public function logException(ExceptionEvent $event): void\n    {\n        // ...\n    }\n\n    public function notifyException(ExceptionEvent $event): void\n    {\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/EventListener/RequestListener.php\nnamespace App\\EventListener;\n\nuse Symfony\\Component\\HttpKernel\\Event\\RequestEvent;\n\nclass RequestListener\n{\n    public function onKernelRequest(RequestEvent $event): void\n    {\n        if (!$event->isMainRequest()) {\n            // don't do anything if it's not the main request\n            return;\n        }\n\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/EventSubscriber/RequestSubscriber.php\nnamespace App\\EventSubscriber;\n\nuse Symfony\\Component\\EventDispatcher\\EventSubscriberInterface;\nuse Symfony\\Component\\HttpKernel\\Event\\RequestEvent;\n\nclass RequestSubscriber implements EventSubscriberInterface\n{\n    public static function getSubscribedEvents(): array\n    {\n        return [\n            RequestEvent::class => 'onKernelRequest',\n        ];\n    }\n\n    public function onKernelRequest(RequestEvent $event): void\n    {\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Kernel.php\nnamespace App;\n\nuse App\\Event\\MyCustomEvent;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\EventDispatcher\\DependencyInjection\\AddEventAliasesPass;\nuse Symfony\\Component\\HttpKernel\\Kernel as BaseKernel;\n\nclass Kernel extends BaseKernel\n{\n    protected function build(ContainerBuilder $container): void\n    {\n        $container->addCompilerPass(new AddEventAliasesPass([\n            MyCustomEvent::class => 'my_custom_event',\n        ]));\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$ php bin/console debug:event-dispatcher",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:event-dispatcher kernel.exception",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:event-dispatcher kernel // matches \"kernel.exception\", \"kernel.response\" etc.\n$ php bin/console debug:event-dispatcher Security // matches \"Symfony\\Component\\Security\\Http\\Event\\CheckPassportEvent\"",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console debug:event-dispatcher --dispatcher=security.event_dispatcher.main",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/services.yaml\nparameters:\n    tokens:\n        client1: pass1\n        client2: pass2",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <parameters>\n        <parameter key=\"tokens\" type=\"collection\">\n            <parameter key=\"client1\">pass1</parameter>\n            <parameter key=\"client2\">pass2</parameter>\n        </parameter>\n    </parameters>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\n$container->setParameter('tokens', [\n    'client1' => 'pass1',\n    'client2' => 'pass2',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "namespace App\\Controller;\n\ninterface TokenAuthenticatedController\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Controller;\n\nuse App\\Controller\\TokenAuthenticatedController;\nuse Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController;\nuse Symfony\\Component\\HttpFoundation\\Response;\n\nclass FooController extends AbstractController implements TokenAuthenticatedController\n{\n    // An action that needs authentication\n    public function bar(): Response\n    {\n        // ...\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/EventSubscriber/TokenSubscriber.php\nnamespace App\\EventSubscriber;\n\nuse App\\Controller\\TokenAuthenticatedController;\nuse Symfony\\Component\\EventDispatcher\\EventSubscriberInterface;\nuse Symfony\\Component\\HttpKernel\\Event\\ControllerEvent;\nuse Symfony\\Component\\HttpKernel\\Exception\\AccessDeniedHttpException;\nuse Symfony\\Component\\HttpKernel\\KernelEvents;\n\nclass TokenSubscriber implements EventSubscriberInterface\n{\n    public function __construct(\n        private array $tokens\n    ) {\n    }\n\n    public function onKernelController(ControllerEvent $event): void\n    {\n        $controller = $event->getController();\n\n        // when a controller class defines multiple action methods, the controller\n        // is returned as [$controllerInstance, 'methodName']\n        if (is_array($controller)) {\n            $controller = $controller[0];\n        }\n\n        if ($controller instanceof TokenAuthenticatedController) {\n            $token = $event->getRequest()->query->get('token');\n            if (!in_array($token, $this->tokens)) {\n                throw new AccessDeniedHttpException('This action needs a valid token!');\n            }\n        }\n    }\n\n    public static function getSubscribedEvents(): array\n    {\n        return [\n            KernelEvents::CONTROLLER => 'onKernelController',\n        ];\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "public function onKernelController(ControllerEvent $event): void\n{\n    // ...\n\n    if ($controller instanceof TokenAuthenticatedController) {\n        $token = $event->getRequest()->query->get('token');\n        if (!in_array($token, $this->tokens)) {\n            throw new AccessDeniedHttpException('This action needs a valid token!');\n        }\n\n        // mark the request as having passed token authentication\n        $event->getRequest()->attributes->set('auth_token', $token);\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// add the new use statement at the top of your file\nuse Symfony\\Component\\HttpKernel\\Event\\ResponseEvent;\n\npublic function onKernelResponse(ResponseEvent $event): void\n{\n    // check to see if onKernelController marked this as a token \"auth'ed\" request\n    if (!$token = $event->getRequest()->attributes->get('auth_token')) {\n        return;\n    }\n\n    $response = $event->getResponse();\n\n    // create a hash and set it as a response header\n    $hash = sha1($response->getContent().$token);\n    $response->headers->set('X-CONTENT-HASH', $hash);\n}\n\npublic static function getSubscribedEvents(): array\n{\n    return [\n        KernelEvents::CONTROLLER => 'onKernelController',\n        KernelEvents::RESPONSE => 'onKernelResponse',\n    ];\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "class CustomMailer\n{\n    // ...\n\n    public function send(string $subject, string $message): mixed\n    {\n        // dispatch an event before the method\n        $event = new BeforeSendMailEvent($subject, $message);\n        $this->dispatcher->dispatch($event, 'mailer.pre_send');\n\n        // get $subject and $message from the event, they may have been modified\n        $subject = $event->getSubject();\n        $message = $event->getMessage();\n\n        // the real method implementation is here\n        $returnValue = ...;\n\n        // do something after the method\n        $event = new AfterSendMailEvent($returnValue);\n        $this->dispatcher->dispatch($event, 'mailer.post_send');\n\n        return $event->getReturnValue();\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Event/BeforeSendMailEvent.php\nnamespace App\\Event;\n\nuse Symfony\\Contracts\\EventDispatcher\\Event;\n\nclass BeforeSendMailEvent extends Event\n{\n    public function __construct(\n        private string $subject,\n        private string $message,\n    ) {\n    }\n\n    public function getSubject(): string\n    {\n        return $this->subject;\n    }\n\n    public function setSubject(string $subject): void\n    {\n        $this->subject = $subject;\n    }\n\n    public function getMessage(): string\n    {\n        return $this->message;\n    }\n\n    public function setMessage(string $message): void\n    {\n        $this->message = $message;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Event/AfterSendMailEvent.php\nnamespace App\\Event;\n\nuse Symfony\\Contracts\\EventDispatcher\\Event;\n\nclass AfterSendMailEvent extends Event\n{\n    public function __construct(\n        private mixed $returnValue,\n    ) {\n    }\n\n    public function getReturnValue(): mixed\n    {\n        return $this->returnValue;\n    }\n\n    public function setReturnValue(mixed $returnValue): void\n    {\n        $this->returnValue = $returnValue;\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/EventSubscriber/MailPostSendSubscriber.php\nnamespace App\\EventSubscriber;\n\nuse App\\Event\\AfterSendMailEvent;\nuse Symfony\\Component\\EventDispatcher\\EventSubscriberInterface;\n\nclass MailPostSendSubscriber implements EventSubscriberInterface\n{\n    public function onMailerPostSend(AfterSendMailEvent $event): void\n    {\n        $returnValue = $event->getReturnValue();\n        // modify the original $returnValue value\n\n        $event->setReturnValue($returnValue);\n    }\n\n    public static function getSubscribedEvents(): array\n    {\n        return [\n            'mailer.post_send' => 'onMailerPostSend',\n        ];\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/event_dispatcher.html",
+    "https://symfony.com/doc/7.3/reference/events.html",
+    "https://symfony.com/doc/7.3/components/event_dispatcher.html",
+    "https://symfony.com/doc/7.3/components/http_kernel.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/templates.html",
+    "https://symfony.com/doc/7.3/security.html"
+  ]
+}

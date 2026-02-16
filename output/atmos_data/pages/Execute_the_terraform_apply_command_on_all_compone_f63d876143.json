@@ -1,0 +1,13 @@
+{
+  "title": "Execute the `terraform apply` command on all components in the `prod` stack",
+  "content": "> atmos terraform apply --stack prod --dry-run\n\nExecuting command=\"atmos terraform apply vpc -s prod\"\nExecuting command=\"atmos terraform apply eks/cluster -s prod\"\nExecuting command=\"atmos terraform apply eks/external-dns -s prod\"\nExecuting command=\"atmos terraform apply eks/istio/base -s prod\"\nExecuting command=\"atmos terraform apply eks/istio/istiod -s prod\"\nExecuting command=\"atmos terraform apply eks/istio/test-app -s prod\"\nExecuting command=\"atmos terraform apply eks/karpenter -s prod\"\nExecuting command=\"atmos terraform apply eks/karpenter-node-pool -s prod\"\nshell",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n<Terminal title=\"atmos terraform apply --components vpc,eks/cluster --dry-run\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#execute-the-`terraform-apply`-command-on-all-components-in-the-`prod`-stack",
+  "links": []
+}

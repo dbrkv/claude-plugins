@@ -1,0 +1,8 @@
+{
+  "title": "Validate resource naming conventions from environment variables",
+  "content": "errors[message] {\n  input.env_tf_cli_vars.resource_name\n  not regex.match(\"^[a-z][a-z0-9-]*[a-z0-9]$\", input.env_tf_cli_vars.resource_name)\n  message = sprintf(\"Resource name '%s' must be lowercase alphanumeric with hyphens\", [input.env_tf_cli_vars.resource_name])\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#validate-resource-naming-conventions-from-environment-variables",
+  "links": []
+}

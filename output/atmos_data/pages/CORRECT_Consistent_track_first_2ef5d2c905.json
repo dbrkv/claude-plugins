@@ -1,0 +1,8 @@
+{
+  "title": "CORRECT: Consistent track-first",
+  "content": "component: prod/vpc\ncomponent: prod/eks\ncomponent: beta/rds",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#correct:-consistent-track-first",
+  "links": []
+}

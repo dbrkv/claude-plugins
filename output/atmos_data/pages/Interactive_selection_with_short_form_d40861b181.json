@@ -1,0 +1,19 @@
+{
+  "title": "Interactive selection with short form",
+  "content": "atmos auth console -i\nshell",
+  "code_samples": [
+    {
+      "code": "### AWS-Specific Examples\n\n#### Using Service Aliases (Shorthand)\n\nAtmos supports convenient aliases for common AWS services - just use the service name:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "AWS-Specific Examples",
+      "id": "aws-specific-examples"
+    }
+  ],
+  "url": "llms-txt#interactive-selection-with-short-form",
+  "links": []
+}

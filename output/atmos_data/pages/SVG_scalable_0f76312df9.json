@@ -1,0 +1,8 @@
+{
+  "title": "SVG (scalable)",
+  "content": "atmos auth list --format graphviz | dot -Tsvg > auth.svg",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#svg-(scalable)",
+  "links": []
+}

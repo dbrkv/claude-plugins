@@ -1,0 +1,8 @@
+{
+  "title": "Authenticate and query specific values",
+  "content": "atmos describe component vpc -s prod -i dev-admin --query .vars.cidr_block",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#authenticate-and-query-specific-values",
+  "links": []
+}

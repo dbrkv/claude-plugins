@@ -1,0 +1,66 @@
+{
+  "title": "Generate Markdown with embedded Mermaid",
+  "content": "atmos auth list --format markdown > auth.md\n\nprovider â identity1 â identity2 â target\n\nAuthentication Configuration\nââ aws-sso (aws-sso) [DEFAULT]\nâ  ââ Region: us-east-1\nâ  ââ Start URL: https://example.awsapps.com/start\nâ  ââ Session\nâ  â  ââ Duration: 12h\nâ  ââ Identities\nâ     ââ admin (aws/assume-role) [DEFAULT]\nâ     â  ââ Principal\nâ     â  â  ââ arn: arn:aws:iam::123456789012:role/AdminRole\nâ     â  ââ ops (aws/assume-role)\nâ     â     ââ Principal\nâ     â        ââ arn: arn:aws:iam::987654321098:role/OpsRole\nâ     ââ developer (aws/assume-role)\nâ        ââ Principal\nâ           ââ arn: arn:aws:iam::123456789012:role/DeveloperRole\ndot\ndigraph AuthConfig {\n  rankdir=LR;\n  node [shape=box, style=rounded];\n\n\"aws-sso\" [label=\"aws-sso\\n(aws-sso)\", style=\"rounded,filled\", fillcolor=lightblue];\n  \"admin\" [label=\"admin\\n(aws/assume-role)\", style=\"rounded,filled\", fillcolor=lightgreen];\n  \"developer\" [label=\"developer\\n(aws/assume-role)\"];\n\n\"aws-sso\" -> \"admin\";\n  \"aws-sso\" -> \"developer\";\n}\nshell",
+  "code_samples": [
+    {
+      "code": "## Output Formats\n\n<dl>\n  <dt>`table` (default)</dt>\n  <dd>\n    Displays providers and identities in formatted tables with columns for key attributes. Shows authentication chains inline for identities.\n  </dd>\n\n  <dt>`tree`</dt>\n  <dd>\n    Hierarchical tree view showing providers and identities with nested attributes. Visualizes authentication chains clearly with parent-child relationships.\n  </dd>\n\n  <dt>`json`</dt>\n  <dd>\n    Machine-readable JSON output containing the complete provider and identity configurations. Useful for programmatic access and integration with other tools.\n  </dd>\n\n  <dt>`yaml`</dt>\n  <dd>\n    Human-readable YAML output of provider and identity configurations. Good for reviewing configuration or generating documentation.\n  </dd>\n\n  <dt>`graphviz` / `dot`</dt>\n  <dd>\n    Graphviz DOT format for creating visual diagrams. Use with `dot` command to generate PNG, SVG, or PDF diagrams. Requires `brew install graphviz` on macOS.\n  </dd>\n\n  <dt>`mermaid`</dt>\n  <dd>\n    Mermaid diagram syntax for rendering in GitHub, GitLab, Confluence, and other Mermaid-compatible platforms. Shows providers and identities as a flowchart with styled nodes.\n  </dd>\n\n  <dt>`markdown` / `md`</dt>\n  <dd>\n    Markdown document with embedded Mermaid diagram in a code fence. Ready to commit to your repository documentation.\n  </dd>\n</dl>\n\n## Flags\n\n<dl>\n  <dt>`--format` / `-f`</dt>\n  <dd>\n    Output format: `table`, `tree`, `json`, `yaml`, `graphviz`, `mermaid`, or `markdown`. Default: `table`.\n  </dd>\n\n  <dt>`--providers [names]`</dt>\n  <dd>\n    Show only providers. Optionally filter by comma-separated provider names (e.g., `--providers=aws-sso,okta`). Cannot be used with `--identities`.\n  </dd>\n\n  <dt>`--identities [names]`</dt>\n  <dd>\n    Show only identities. Optionally filter by comma-separated identity names (e.g., `--identities=admin,dev`). Cannot be used with `--providers`.\n  </dd>\n</dl>\n\n## Understanding Authentication Chains\n\nAuthentication chains show how identities authenticate through providers or other identities. Chains are displayed in the format:",
+      "language": "unknown"
+    },
+    {
+      "code": "For example:\n- `aws-sso â admin` - Direct authentication through AWS SSO\n- `aws-sso â base-role â admin-role` - Multi-step authentication with role assumption\n- `okta â aws-dev â developer` - Authentication through Okta SSO, then assuming an AWS role\n\nChains can be arbitrarily long when using multiple role assumptions or identity federation.\n\n## Table Format Details\n\n### Providers Table\n\n- **NAME** - Provider configuration name\n- **KIND** - Provider type (e.g., `aws-sso`, `okta`)\n- **REGION** - Cloud region (if applicable)\n- **START URL / URL** - Authentication endpoint\n- **DEFAULT** - Marked with â if this is the default provider\n\n### Identities Table\n\n- **NAME** - Identity configuration name\n- **KIND** - Identity type (e.g., `aws/assume-role`, `aws/user`)\n- **VIA PROVIDER** - Provider used for authentication\n- **VIA IDENTITY** - Parent identity for multi-step authentication\n- **DEFAULT** - Marked with â if this is the default identity\n- **ALIAS** - Short alias for the identity\n\n## Tree Format Details\n\nThe tree format shows hierarchical relationships with providers as roots and their identities as children:",
+      "language": "unknown"
+    },
+    {
+      "code": "## Graphviz Format Example\n\nThe Graphviz format generates DOT language for creating professional diagrams:",
+      "language": "unknown"
+    },
+    {
+      "code": "Generate visualizations with:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Output Formats",
+      "id": "output-formats"
+    },
+    {
+      "level": "h2",
+      "text": "Flags",
+      "id": "flags"
+    },
+    {
+      "level": "h2",
+      "text": "Understanding Authentication Chains",
+      "id": "understanding-authentication-chains"
+    },
+    {
+      "level": "h2",
+      "text": "Table Format Details",
+      "id": "table-format-details"
+    },
+    {
+      "level": "h3",
+      "text": "Providers Table",
+      "id": "providers-table"
+    },
+    {
+      "level": "h3",
+      "text": "Identities Table",
+      "id": "identities-table"
+    },
+    {
+      "level": "h2",
+      "text": "Tree Format Details",
+      "id": "tree-format-details"
+    },
+    {
+      "level": "h2",
+      "text": "Graphviz Format Example",
+      "id": "graphviz-format-example"
+    }
+  ],
+  "url": "llms-txt#generate-markdown-with-embedded-mermaid",
+  "links": []
+}

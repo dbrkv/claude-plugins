@@ -1,0 +1,8 @@
+{
+  "title": "Server-based profiling for interactive analysis",
+  "content": "atmos terraform apply vpc -s prod --profiler-enabled --profiler-port=8080",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#server-based-profiling-for-interactive-analysis",
+  "links": []
+}

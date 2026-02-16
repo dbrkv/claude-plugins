@@ -1,0 +1,30 @@
+{
+  "url": "https://symfony.com/doc/7.3/logging/formatter.html",
+  "title": "How to Define a Custom Logging Formatter",
+  "content": "Each logging handler uses a Formatter to format the record before logging it. All Monolog handlers use an instance of Monolog\\Formatter\\LineFormatter by default but you can replace it. Your formatter must implement Monolog\\Formatter\\FormatterInterface.\n\nFor example, to use the built-in JsonFormatter, register it as a service then configure your handler to use it:\n\nMany built-in formatters are available in Monolog. A lot of them are declared as services and can be used in the formatter option:\n\nGet your Sylius expertise recognized\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Define a Custom Logging Formatter",
+      "id": "how-to-define-a-custom-logging-formatter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# config/packages/prod/monolog.yaml (and/or config/packages/dev/monolog.yaml)\nmonolog:\n    handlers:\n        file:\n            type: stream\n            level: debug\n            formatter: 'monolog.formatter.json'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/prod/monolog.xml (and/or config/packages/dev/monolog.xml) -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xmlns:monolog=\"http://symfony.com/schema/dic/monolog\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\n        http://symfony.com/schema/dic/monolog\n        https://symfony.com/schema/dic/monolog/monolog-1.0.xsd\">\n\n    <monolog:config>\n        <monolog:handler\n            name=\"file\"\n            type=\"stream\"\n            level=\"debug\"\n            formatter=\"monolog.formatter.json\"\n        />\n    </monolog:config>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/prod/monolog.php (and/or config/packages/dev/monolog.php)\nuse Symfony\\Config\\MonologConfig;\n\nreturn static function (MonologConfig $monolog): void {\n    $monolog->handler('file')\n        ->type('stream')\n        ->level('debug')\n        ->formatter('monolog.formatter.json')\n    ;\n};",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/logging/formatter.html"
+  ]
+}

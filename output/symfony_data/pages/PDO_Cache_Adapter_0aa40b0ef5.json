@@ -1,0 +1,23 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/adapters/pdo_adapter.html",
+  "title": "PDO Cache Adapter",
+  "content": "The PDO adapters store the cache items in a table of an SQL database.\n\nThis adapter implements PruneableInterface, allowing for manual pruning of expired cache entries by calling the prune() method.\n\nThe PdoAdapter requires a PDO, or DSN as its first parameter. You can pass a namespace, default cache lifetime, and options array as the other optional arguments:\n\nThe table where values are stored is created automatically on the first call to the save() method. You can also create this table explicitly by calling the createTable() method in your code.\n\nWhen passed a Data Source Name (DSN) string (instead of a database connection class instance), the connection will be lazy-loaded when needed.\n\nMeasure & Improve Symfony Code Performance\n\nShow your Sylius expertise",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "PDO Cache Adapter",
+      "id": "pdo-cache-adapter"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\PdoAdapter;\n\n$cache = new PdoAdapter(\n\n    // a PDO connection or DSN for lazy connecting through PDO\n    $databaseConnectionOrDSN,\n\n    // the string prefixed to the keys of the items stored in this cache\n    $namespace = '',\n\n    // the default lifetime (in seconds) for cache items that do not define their\n    // own lifetime, with a value 0 causing items to be stored indefinitely (i.e.\n    // until the database table is truncated or its rows are otherwise deleted)\n    $defaultLifetime = 0,\n\n    // an array of options for configuring the database table and connection\n    $options = []\n);",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/adapters/pdo_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/cache_pools.html"
+  ]
+}

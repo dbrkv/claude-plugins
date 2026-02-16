@@ -1,0 +1,13 @@
+{
+  "title": "DynamoDB Console (using alias)",
+  "content": "atmos auth console --destination dynamodb\nshell",
+  "code_samples": [
+    {
+      "code": "You can also use full URLs if preferred:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [],
+  "url": "llms-txt#dynamodb-console-(using-alias)",
+  "links": []
+}

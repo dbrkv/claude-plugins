@@ -1,0 +1,8 @@
+{
+  "title": "Use your personal cloud provider profile temporarily (e.g., AWS profile)",
+  "content": "export AWS_PROFILE=my-personal-profile\natmos terraform plan mycomponent --stack=dev --identity=false",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#use-your-personal-cloud-provider-profile-temporarily-(e.g.,-aws-profile)",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Test local changes against test environment",
+  "content": "./build/atmos -C ~/infra terraform plan vpc -s test",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#test-local-changes-against-test-environment",
+  "links": []
+}

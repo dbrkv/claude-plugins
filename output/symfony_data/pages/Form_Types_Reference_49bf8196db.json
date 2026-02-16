@@ -1,0 +1,111 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/forms/types.html",
+  "title": "Form Types Reference",
+  "content": "A form is composed of fields, each of which are built with the help of a field type (e.g. TextType, ChoiceType, etc). Symfony comes standard with a large list of field types that can be used in your application.\n\nThe following field types are natively available in Symfony:\n\nThese types are part of the Symfony UX Packages\n\nOnline exam, become Symfony certified today\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Form Types Reference",
+      "id": "form-types-reference"
+    },
+    {
+      "level": "h2",
+      "text": "Supported Field Types",
+      "id": "supported-field-types"
+    },
+    {
+      "level": "h3",
+      "text": "Text Fields",
+      "id": "text-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Choice Fields",
+      "id": "choice-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Date and Time Fields",
+      "id": "date-and-time-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Other Fields",
+      "id": "other-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Symfony UX Fields",
+      "id": "symfony-ux-fields"
+    },
+    {
+      "level": "h3",
+      "text": "UID Fields",
+      "id": "uid-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Field Groups",
+      "id": "field-groups"
+    },
+    {
+      "level": "h3",
+      "text": "Hidden Fields",
+      "id": "hidden-fields"
+    },
+    {
+      "level": "h3",
+      "text": "Buttons",
+      "id": "buttons"
+    },
+    {
+      "level": "h3",
+      "text": "Base Fields",
+      "id": "base-fields"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/forms/types.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/text.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/textarea.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/email.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/integer.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/money.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/number.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/password.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/percent.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/search.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/url.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/range.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/tel.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/color.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/choice.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/enum.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/entity.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/country.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/language.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/locale.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/timezone.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/currency.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/date.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/dateinterval.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/datetime.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/time.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/birthday.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/week.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/checkbox.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/file.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/radio.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/uuid.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/ulid.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/collection.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/repeated.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/hidden.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/button.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/reset.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/submit.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/form.html"
+  ]
+}

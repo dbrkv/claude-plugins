@@ -1,0 +1,8 @@
+{
+  "title": "Global Terraform config",
+  "content": "terraform:\n  # Global variables that are used by all Atmos components\n  vars:\n    tags:\n      atmos_component: \"{{ .atmos_component }}\"\n      atmos_stack: \"{{ .atmos_stack }}\"\n      terraform_component: \"{{ .component }}\"\n      terraform_workspace: \"{{ .workspace }}\"\n      devops_team: '{{`{{ (datasource \"s3-tags\").tags.devops_team }}`}}'\n      billing_team: '{{`{{ (datasource \"s3-tags\").tags.billing_team }}`}}'\n      service: '{{`{{ (datasource \"s3-tags\").tags.service }}`}}'",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#global-terraform-config",
+  "links": []
+}

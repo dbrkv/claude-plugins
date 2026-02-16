@@ -1,0 +1,22 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/encore/sourcemaps.html",
+  "title": "Enabling Source Maps with Webpack Encore",
+  "content": "Source maps allow browsers to access the original code related to some asset (e.g. the Sass code that was compiled to CSS or the TypeScript code that was compiled to JavaScript). Source maps are useful for debugging purposes but unnecessary when executing the application in production.\n\nEncore's default webpack.config.js file enables source maps in the dev build:\n\nCode consumes server resources. Blackfire tells you how\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Enabling Source Maps with Webpack Encore",
+      "id": "enabling-source-maps-with-webpack-encore"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// webpack.config.js\n// ...\n\nEncore\n    // ...\n\n    .enableSourceMaps(!Encore.isProduction())\n;",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/encore/sourcemaps.html"
+  ]
+}

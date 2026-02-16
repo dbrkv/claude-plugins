@@ -1,0 +1,42 @@
+{
+  "url": "https://symfony.com/doc/7.3/service_container/compiler_passes.html",
+  "title": "How to Work with Compiler Passes",
+  "content": "Compiler passes give you an opportunity to manipulate other service definitions that have been registered with the service container.\n\nIf your compiler pass is relatively small, you can define it inside the application's Kernel class instead of creating a separate compiler pass class.\n\nTo do so, make your kernel implement CompilerPassInterface and add the compiler pass code inside the process() method:\n\nIf you create separate compiler pass classes, enable them in the build() method of the application kernel:\n\nIf your compiler pass is relatively small, you can add it directly in the main bundle class. To do so, make your bundle implement the CompilerPassInterface and place the compiler pass code inside the process() method of the main bundle class:\n\nAlternatively, when using separate compiler pass classes, bundles can enable them in the build() method of their main bundle class:\n\nIf you are using custom service tags in a bundle, the convention is to format tag names by starting with the bundle's name in lowercase (using underscores as separators), followed by a dot, and finally the specific tag name. For example, to introduce a \"transport\" tag in your AcmeMailerBundle, you would name it acme_mailer.transport.\n\nGet your Sylius expertise recognized\n\nThe life jacket for your team and your project",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Work with Compiler Passes",
+      "id": "how-to-work-with-compiler-passes"
+    },
+    {
+      "level": "h2",
+      "text": "Working with Compiler Passes in Bundles",
+      "id": "working-with-compiler-passes-in-bundles"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Kernel.php\nnamespace App;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Kernel\\MicroKernelTrait;\nuse Symfony\\Component\\DependencyInjection\\Compiler\\CompilerPassInterface;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\HttpKernel\\Kernel as BaseKernel;\n\nclass Kernel extends BaseKernel implements CompilerPassInterface\n{\n    use MicroKernelTrait;\n\n    // ...\n\n    public function process(ContainerBuilder $container): void\n    {\n        // in this method you can manipulate the service container:\n        // for example, changing some container service:\n        $container->getDefinition('app.some_private_service')->setPublic(true);\n\n        // or processing tagged services:\n        foreach ($container->findTaggedServiceIds('some_tag') as $id => $tags) {\n            // ...\n        }\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Kernel.php\nnamespace App;\n\nuse App\\DependencyInjection\\Compiler\\CustomPass;\nuse Symfony\\Bundle\\FrameworkBundle\\Kernel\\MicroKernelTrait;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\HttpKernel\\Kernel as BaseKernel;\n\nclass Kernel extends BaseKernel\n{\n    use MicroKernelTrait;\n\n    // ...\n\n    protected function build(ContainerBuilder $container): void\n    {\n        $container->addCompilerPass(new CustomPass());\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/MyBundle/MyBundle.php\nnamespace App\\MyBundle;\n\nuse App\\DependencyInjection\\Compiler\\CustomPass;\nuse Symfony\\Component\\DependencyInjection\\Compiler\\CompilerPassInterface;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\HttpKernel\\Bundle\\AbstractBundle;\n\nclass MyBundle extends AbstractBundle implements CompilerPassInterface\n{\n    public function process(ContainerBuilder $container): void\n    {\n        // in this method you can manipulate the service container:\n        // for example, changing some container service:\n        $container->getDefinition('app.some_private_service')->setPublic(true);\n\n        // or processing tagged services:\n        foreach ($container->findTaggedServiceIds('some_tag') as $id => $tags) {\n            // ...\n        }\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/MyBundle/MyBundle.php\nnamespace App\\MyBundle;\n\nuse App\\DependencyInjection\\Compiler\\CustomPass;\nuse Symfony\\Component\\DependencyInjection\\ContainerBuilder;\nuse Symfony\\Component\\HttpKernel\\Bundle\\AbstractBundle;\n\nclass MyBundle extends AbstractBundle\n{\n    public function build(ContainerBuilder $container): void\n    {\n        parent::build($container);\n\n        $container->addCompilerPass(new CustomPass());\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/service_container/compiler_passes.html",
+    "https://symfony.com/doc/7.3/service_container/definitions.html",
+    "https://symfony.com/doc/7.3/components/dependency_injection/compilation.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html"
+  ]
+}

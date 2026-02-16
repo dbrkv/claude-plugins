@@ -1,0 +1,24 @@
+{
+  "title": "Vendor manifest tracking all component sources and versions",
+  "content": "apiVersion: atmos/v1\nkind: AtmosVendorConfig\nmetadata:\n  name: infrastructure-components\n  description: Vendor manifest for infrastructure components\n\nspec:\n  sources:\n    # VPC component - specific version\n    - component: vpc\n      source: \"github.com/cloudposse/terraform-aws-vpc.git///?ref={{.Version}}\"\n      version: \"2.1.0\"\n      targets:\n        - \"components/terraform/vpc\"\n      included_paths:\n        - \"**/*.tf\"\n        - \"**/*.tfvars\"\n        - \"README.md\"\n      tags:\n        - networking\n        - production\n\n# EKS component - specific version\n    - component: eks\n      source: \"github.com/cloudposse/terraform-aws-eks-cluster.git///?ref={{.Version}}\"\n      version: \"4.0.0\"\n      targets:\n        - \"components/terraform/eks\"\n      included_paths:\n        - \"**/*.tf\"\n        - \"**/*.tfvars\"\n      excluded_paths:\n        - \"test/**\"\n        - \"examples/**\"\n      tags:\n        - kubernetes\n        - production\n\n# RDS component from private repository\n    - component: rds\n      source: \"git::ssh://git@github.com/acme/terraform-modules.git//rds?ref={{.Version}}\"\n      version: \"v3.5.0\"\n      targets:\n        - \"components/terraform/rds\"\n      tags:\n        - database\n        - production\nbash",
+  "code_samples": [
+    {
+      "code": "</File>\n\n:::note Version Tracking\nThe `vendor.yaml` file IS your vendor manifest. It tracks:\n- **Source repository** and exact version for each component\n- **Target location** where the component is vendored\n- **Included/excluded paths** to control what gets vendored\n- **Tags** for organizing and filtering components\n\nTo see what version is currently vendored, check the `vendor.yaml` file.\n:::\n\n## Vendoring Workflow\n\n### 1. Initial Vendoring",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Vendoring Workflow",
+      "id": "vendoring-workflow"
+    },
+    {
+      "level": "h3",
+      "text": "1. Initial Vendoring",
+      "id": "1.-initial-vendoring"
+    }
+  ],
+  "url": "llms-txt#vendor-manifest-tracking-all-component-sources-and-versions",
+  "links": []
+}

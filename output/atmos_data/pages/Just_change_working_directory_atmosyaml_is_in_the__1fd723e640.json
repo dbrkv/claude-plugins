@@ -1,0 +1,8 @@
+{
+  "title": "Just change working directory (atmos.yaml is in the root)",
+  "content": "atmos -C /path/to/infra terraform plan vpc -s prod",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#just-change-working-directory-(atmos.yaml-is-in-the-root)",
+  "links": []
+}

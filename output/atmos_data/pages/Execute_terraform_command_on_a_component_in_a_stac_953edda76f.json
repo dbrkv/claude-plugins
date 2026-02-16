@@ -1,0 +1,19 @@
+{
+  "title": "Execute `terraform <command>` on a `component` in a `stack`",
+  "content": "atmos terraform <command> <component> -s <stack> [options]\natmos terraform <command> <component> --stack <stack> [options]\nshell",
+  "code_samples": [
+    {
+      "code": "</Terminal>\n\n## Multi-Component Commands (Bulk Operations) Usage\n\nUse multi-component commands to run Terraform operations across multiple components simultaneously. You can target components by stack, selector, query, or change detectionâoften making this approach more efficient than using Atmos workflows for certain use cases.\n\n<Terminal>",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Multi-Component Commands (Bulk Operations) Usage",
+      "id": "multi-component-commands-(bulk-operations)-usage"
+    }
+  ],
+  "url": "llms-txt#execute-`terraform-<command>`-on-a-`component`-in-a-`stack`",
+  "links": []
+}

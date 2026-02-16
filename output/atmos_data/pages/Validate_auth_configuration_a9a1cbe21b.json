@@ -1,0 +1,8 @@
+{
+  "title": "Validate auth configuration",
+  "content": "atmos auth validate\natmos auth validate --verbose",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#validate-auth-configuration",
+  "links": []
+}

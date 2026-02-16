@@ -1,0 +1,29 @@
+{
+  "title": "Use during development",
+  "content": "atmos-perf validate stacks\natmos-perf describe component vpc -s dev\nshell",
+  "code_samples": [
+    {
+      "code": "## pprof Profiling\n\n### Overview\n\n[pprof](https://pkg.go.dev/net/http/pprof) is Go's standard profiling tool that captures detailed runtime performance data.\n\n**Profile Types:**\n- **CPU Profile**: Where your program spends CPU time\n- **Heap Profile**: Current heap memory allocation patterns\n- **Allocs Profile**: All memory allocations since program start\n- **Goroutine Profile**: Active goroutines and call stacks\n- **Block Profile**: Operations blocking on synchronization\n- **Mutex Profile**: Lock contention patterns\n- **Thread Create Profile**: Stack traces leading to thread creation\n- **Trace Profile**: Detailed execution traces for analysis\n\n### File-Based Profiling\n\nCapture profiles directly to a file - ideal for CLI tools:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "pprof Profiling",
+      "id": "pprof-profiling"
+    },
+    {
+      "level": "h3",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h3",
+      "text": "File-Based Profiling",
+      "id": "file-based-profiling"
+    }
+  ],
+  "url": "llms-txt#use-during-development",
+  "links": []
+}

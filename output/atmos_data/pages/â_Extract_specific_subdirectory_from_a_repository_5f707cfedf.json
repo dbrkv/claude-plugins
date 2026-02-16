@@ -1,0 +1,8 @@
+{
+  "title": "â Extract specific subdirectory from a repository",
+  "content": "source: \"github.com/cloudposse-terraform-components/aws-vpc.git//modules/public-subnets?ref=v1.398.0\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#â-extract-specific-subdirectory-from-a-repository",
+  "links": []
+}

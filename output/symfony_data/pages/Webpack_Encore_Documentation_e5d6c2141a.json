@@ -1,0 +1,69 @@
+{
+  "url": "https://symfony.com/doc/7.3/frontend/encore/index.html",
+  "title": "Webpack Encore Documentation",
+  "content": "Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Webpack Encore Documentation",
+      "id": "webpack-encore-documentation"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h2",
+      "text": "Adding more Features",
+      "id": "adding-more-features"
+    },
+    {
+      "level": "h2",
+      "text": "Optimizing",
+      "id": "optimizing"
+    },
+    {
+      "level": "h2",
+      "text": "Guides",
+      "id": "guides"
+    },
+    {
+      "level": "h2",
+      "text": "Issues & Questions",
+      "id": "issues-questions"
+    },
+    {
+      "level": "h2",
+      "text": "Full API",
+      "id": "full-api"
+    }
+  ],
+  "code_samples": [],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/frontend/encore/index.html",
+    "https://symfony.com/doc/7.3/frontend/encore/installation.html",
+    "https://symfony.com/doc/7.3/frontend/encore/simple-example.html",
+    "https://symfony.com/doc/7.3/frontend/encore/css-preprocessors.html",
+    "https://symfony.com/doc/7.3/frontend/encore/postcss.html",
+    "https://symfony.com/doc/7.3/frontend/encore/reactjs.html",
+    "https://symfony.com/doc/7.3/frontend/encore/vuejs.html",
+    "https://symfony.com/doc/7.3/frontend/encore/copy-files.html",
+    "https://symfony.com/doc/7.3/frontend/encore/babel.html",
+    "https://symfony.com/doc/7.3/frontend/encore/sourcemaps.html",
+    "https://symfony.com/doc/7.3/frontend/encore/typescript.html",
+    "https://symfony.com/doc/7.3/frontend/encore/versioning.html",
+    "https://symfony.com/doc/7.3/frontend/encore/cdn.html",
+    "https://symfony.com/doc/7.3/frontend/encore/code-splitting.html",
+    "https://symfony.com/doc/7.3/frontend/encore/split-chunks.html",
+    "https://symfony.com/doc/7.3/frontend/encore/url-loader.html",
+    "https://symfony.com/doc/7.3/frontend/encore/bootstrap.html",
+    "https://symfony.com/doc/7.3/frontend/encore/legacy-applications.html",
+    "https://symfony.com/doc/7.3/frontend/encore/dev-server.html",
+    "https://symfony.com/doc/7.3/frontend/encore/custom-loaders-plugins.html",
+    "https://symfony.com/doc/7.3/frontend/encore/advanced-config.html",
+    "https://symfony.com/doc/7.3/frontend/encore/virtual-machine.html",
+    "https://symfony.com/doc/7.3/frontend/encore/faq.html"
+  ]
+}

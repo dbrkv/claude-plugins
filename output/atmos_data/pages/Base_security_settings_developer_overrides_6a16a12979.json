@@ -1,0 +1,32 @@
+{
+  "title": "Base security settings + developer overrides",
+  "content": "atmos terraform plan vpc -s dev --profile security-baseline --profile developer\nbash\natmos profile list\nbash\natmos profile show developer\nbash",
+  "code_samples": [
+    {
+      "code": "This is powerful for composing shared policies with role-specific settings.\n\n## Managing Profiles\n\nList available profiles:",
+      "language": "unknown"
+    },
+    {
+      "code": "View profile details:",
+      "language": "unknown"
+    },
+    {
+      "code": "The output shows you exactly what settings the profile provides, where it's located, and how to use it.\n\n## Why This Matters\n\nBefore profiles, you had two bad options:\n\n**Option 1: Flags everywhere**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Managing Profiles",
+      "id": "managing-profiles"
+    },
+    {
+      "level": "h2",
+      "text": "Why This Matters",
+      "id": "why-this-matters"
+    }
+  ],
+  "url": "llms-txt#base-security-settings-+-developer-overrides",
+  "links": []
+}

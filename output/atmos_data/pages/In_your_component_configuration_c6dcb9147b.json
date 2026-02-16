@@ -1,0 +1,24 @@
+{
+  "title": "In your component configuration",
+  "content": "components:\n  terraform:\n    myapp:\n      auth:\n        identities:\n          custom-role:\n            kind: aws/assume-role\n            via:\n              provider: my-sso\n            principal:\n              assume_role: arn:aws:iam::123456789012:role/MyAppRole\nbash\natmos auth env --format bash",
+  "code_samples": [
+    {
+      "code": "## Environment Variable Formats\n\n### Bash Format",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Environment Variable Formats",
+      "id": "environment-variable-formats"
+    },
+    {
+      "level": "h3",
+      "text": "Bash Format",
+      "id": "bash-format"
+    }
+  ],
+  "url": "llms-txt#in-your-component-configuration",
+  "links": []
+}

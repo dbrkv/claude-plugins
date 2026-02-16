@@ -1,0 +1,27 @@
+{
+  "title": "Run our docker image",
+  "content": "docker run -it \\\n          --rm \\\n          --volume \"$HOME\":/localhost \\\n          --volume \"$PWD\":/tutorials \\\n          --name sweetops-tutorials \\\n          cloudposse/tutorials:latest;\nbash\ncd /tutorials/03-first-aws-environment\nbash\nbin/random-pet.sh\nbash\natmos terraform plan tfstate-backend --stack ue2-root",
+  "code_samples": [
+    {
+      "code": "This will pull the `tutorials` image to your local machine, run a new container from that image, and mount the various tutorial folders so you can edit them on your host machine or in the container and the changes will propagate either direction.\n\n![Tutorial Shell](/img/tutorials-3-tutorials-shell.png)\n\nNow that we're running inside of our container, let's start a new shell as your AWS profile and get into our specific tutorial directory:",
+      "language": "unknown"
+    },
+    {
+      "code": "> _**Troubleshooting tip**:_ If you are logged in with Leapp using profile \"default\", you should already\nbe authenticated in Geodesic and see a green \"â\" at the beginning of the command line prompt.\n> If you are logged in with a different profile name, configure Geodesic to use it by\n> running `export AWS_PROFILE=profile-name` where \"profile-name\" is the Named Profile in your\n> Leapp session. If you have the profile names in sync but you see a red \"â\" instead of the green \"â\",\n> review the How-To on [authenticating with Leapp](https://docs.cloudposse.com/howto/geodesic/authenticate-with-leapp/) and get that working before proceeding further.\n\nThis `03-first-aws-environment/` directory that you're now in should be looking a little bit familiar from our `atmos` tutorial:\n\n* We've got a `components/` directory which holds terraform components that we're looking to `apply` to our AWS Account.\n* We've got a `stacks/` directory which holds the declarative descriptions of 3 environments:\n  * `uw2-dev.yaml`: Our dev environment hosted in us-west-2.\n  * `uw2-prod.yaml`: Our prod environment hosted in the same region.\n  * `ue2-root.yaml`: Our global resources hosted in us-east-2.\n* We've also got a `bin/random-pet.sh` file that we'll discuss shortly.\n\nCool, let's jump into our next step and actually do something with this small project.\n\n### 2. Build and generate our `tfstate-backend` for this project\n\nIn our last tutorial, we showed `atmos` being used to apply some fairly simple terraform projects that didn't actually create any resources in the cloud. For this tutorial however, we're going to be making a simple static site in AWS and as part of that we should be sure to follow one of the most important best practices in terraform: **Use remote state**. Luckily, `atmos` and stacks make that easy on us by providing a simple abstraction layer to configure all our terraform components with a single backend config. In this example, we'll be using the S3 backend and [the tfstate-backend component](https://github.com/cloudposse/terraform-aws-components/tree/master/modules/tfstate-backend) to automate the resources we need for that backend, so let's dive into that:\n\n1. To start off, we need to do something funky to generate unique resource names. This is due to this tutorial being used by many people, so it's not something a normal project setting would need. The reasoning is that this tutorial is creating S3 buckets and their names need to be globally unique across all AWS accounts. To make that easy on you, we've included a little helper script (`bin/random-pet.sh`) which was mentioned previously. This small script generates some random pet names and utilizes [`yq`](https://mikefarah.gitbook.io/yq/commands/evaluate) to update some of our stack files to include those random names. Let's run that now:",
+      "language": "unknown"
+    },
+    {
+      "code": "This should update most of our stack and catalog files to now include uniquely generated names.\n\n2. Next, we need to get our `tfstate-backend` component deployed using local state before we can actually utilize any backend. This is a good example of [the chicken or the egg problem](https://en.wikipedia.org/wiki/Chicken_or_the_egg), so it's a bit funky but luckily we only need to do this initial set of steps once for all components. To get started let's plan and apply our `tfstate-backend` component:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "2. Build and generate our `tfstate-backend` for this project",
+      "id": "2.-build-and-generate-our-`tfstate-backend`-for-this-project"
+    }
+  ],
+  "url": "llms-txt#run-our-docker-image",
+  "links": []
+}

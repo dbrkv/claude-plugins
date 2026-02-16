@@ -1,0 +1,34 @@
+{
+  "title": "Commands",
+  "content": "import Screengrab from '@site/src/components/Screengrab'\nimport Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\nimport Intro from '@site/src/components/Intro'\n\n<Intro>\nUse this command to generate completion scripts for `Bash`, `Zsh`, `Fish` and `PowerShell`.\n</Intro>\n\n<Screengrab title=\"atmos completion --help\" slug=\"atmos-completion--help\" />\n\nExecute the `completion` command like this:\n\nThis command generates completion scripts for `Bash`, `Zsh`, `Fish` and `powershell`.\n\nWhen the generated completion script is loaded into the shell, pressing the tab key twice displays the available commands and the help.\n\n:::tip\nRun `atmos completion --help` to see all the available options\n:::\n\n## Configuring Your Shell\n\nTo enable command completion, you need to configure your shell. The setup process depends on which shell youâre using (e.g., `zsh` or `bash`).\n\nSelect your shell below for detailed setup instructions.\n\n<Tabs>\n  <TabItem value=\"bash\" label=\"Bash\" default>\n## Bash Completion Setup\n\nTo enable tab completion for Atmos in Bash, add the following to your `~/.bashrc` or `~/.bash_profile`:",
+  "code_samples": [
+    {
+      "code": "atmos completion [bash|zsh|fish|powershell]",
+      "language": "shell"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "atmos completion",
+      "id": "atmos-completion"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring Your Shell",
+      "id": "configuring-your-shell"
+    },
+    {
+      "level": "h2",
+      "text": "Bash Completion Setup",
+      "id": "bash-completion-setup"
+    }
+  ],
+  "url": "llms-txt#commands",
+  "links": []
+}

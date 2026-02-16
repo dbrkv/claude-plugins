@@ -1,0 +1,8 @@
+{
+  "title": "Validate that instance_count is a valid number",
+  "content": "errors[\"for the 'my-component' component, 'instance_count' in TF_CLI_ARGS must be a valid positive integer\"] {\n    input.env_tf_cli_vars.instance_count\n    input.env_tf_cli_vars.instance_count <= 0\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#validate-that-instance_count-is-a-valid-number",
+  "links": []
+}

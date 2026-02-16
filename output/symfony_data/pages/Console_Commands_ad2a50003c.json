@@ -1,0 +1,199 @@
+{
+  "url": "https://symfony.com/doc/7.3/console.html",
+  "title": "Console Commands",
+  "content": "The Symfony framework provides lots of commands through the bin/console script (e.g. the well-known bin/console cache:clear command). These commands are created with the Console component. You can also use it to create your own commands.\n\nEach Symfony application comes with a large set of commands. You can use the list command to view all available commands in the application:\n\nlist is the default command, so running php bin/console is the same.\n\nIf you find the command you need, you can run it with the --help option to view the command's documentation:\n\n--help is one of the built-in global options from the Console component, which are available for all commands, including those you can create. To learn more about them, you can read this section.\n\nConsole commands run in the environment defined in the APP_ENV variable of the .env file, which is dev by default. It also reads the APP_DEBUG value to turn \"debug\" mode on or off (it defaults to 1, which is on).\n\nTo run the command in another environment or debug mode, edit the value of APP_ENV and APP_DEBUG. You can also define this env vars when running the command, for instance:\n\nIf you are using the Bash, Zsh or Fish shell, you can install Symfony's completion script to get auto completion when typing commands in the terminal. All commands support name and option completion, and some can even complete values.\n\nFirst, you have to install the completion script once. Run bin/console completion --help for the installation instructions for your shell.\n\nWhen using Bash, make sure you installed and setup the \"bash completion\" package for your OS (typically named bash-completion).\n\nAfter installing and restarting your terminal, you're all set to use completion (by default, by pressing the Tab key).\n\nMany PHP tools are built using the Symfony Console component (e.g. Composer, PHPstan and Behat). If they are using version 5.4 or higher, you can also install their completion script to enable console completion:\n\nIf you are using the Symfony CLI tool, follow these instructions to enable autocompletion.\n\nCommands are defined in classes and auto-registered using the #[AsCommand] attribute. For example, you may want a command to create a user:\n\nIf you can't use PHP attributes, register the command as a service and tag it with the console.command tag. If you're using the default services.yaml configuration, this is already done for you, thanks to autoconfiguration.\n\nYou can also use #[AsCommand] to add a description and longer help text for the command:\n\nAdditionally, you can extend the Command class to leverage advanced features like lifecycle hooks (e.g. initialize() and and interact()):\n\nAfter configuring and registering the command, you can run it in the terminal:\n\nAs you might expect, this command will do nothing as you didn't write any logic yet. Add your own logic inside the __invoke() method.\n\nThe __invoke() method has access to the output stream to write messages to the console:\n\nNow, try executing the command:\n\nThe regular console output can be divided into multiple independent regions called \"output sections\". Create one or more of these sections when you need to clear and overwrite the output information.\n\nSections are created with the ConsoleOutput::section() method, which returns an instance of ConsoleSectionOutput:\n\nA new line is appended automatically when displaying information in a section.\n\nOutput sections let you manipulate the Console output in advanced ways, such as displaying multiple progress bars which are updated independently and appending rows to tables that have already been rendered.\n\nTerminals only allow overwriting the visible content, so you must take into account the console height when trying to write/overwrite section contents.\n\nUse input options or arguments to pass information to the command:\n\nNow, you can pass the username to the command:\n\nRead Console Input (Arguments & Options) for more information about console options and arguments.\n\nTo actually create a new user, the command has to access some services. Since your command is already registered as a service, you can use normal dependency injection. Imagine you have a App\\Service\\UserManager service that you want to access:\n\nCommands have three lifecycle methods that are invoked when running the command:\n\nSymfony provides several tools to help you test your commands. The most useful one is the CommandTester class. It uses special input and output classes to ease testing without a real console:\n\nIf you are using a single-command application, call setAutoExit(false) on it to get the command result in CommandTester.\n\nYou can also test a whole console application by using ApplicationTester.\n\nWhen testing commands using the CommandTester class, console events are not dispatched. If you need to test those events, use the ApplicationTester instead.\n\nWhen testing commands using the ApplicationTester class, don't forget to disable the auto exit flag:\n\nWhen testing InputOption::VALUE_NONE command options, you must pass true to them:\n\nWhen using the Console component in a standalone project, use Application and extend the normal \\PHPUnit\\Framework\\TestCase.\n\nWhen testing your commands, it could be useful to understand how your command reacts on different settings like the width and the height of the terminal, or even the color mode being used. You have access to such information thanks to the Terminal class:\n\nWhenever an exception is thrown while running commands, Symfony adds a log message for it including the entire failing command. In addition, Symfony registers an event subscriber to listen to the ConsoleEvents::TERMINATE event and adds a log message whenever a command doesn't finish with the 0 exit status.\n\nWhen a command is running, many events are dispatched, one of them allows to react to signals, read more in this section.\n\nSymfony allows to profile the execution of any command, including yours. First, make sure that the debug mode and the profiler are enabled. Then, add the --profile option when running the command:\n\nSymfony will now collect data about the command execution, which is helpful to debug errors or check other issues. When the command execution is over, the profile is accessible through the web page of the profiler.\n\nIf you run the command in verbose mode (adding the -v option), Symfony will display in the output a clickable link to the command profile (if your terminal supports links). If you run it in debug verbosity (-vvv) you'll also see the time and memory consumed by the command.\n\nWhen profiling the messenger:consume command from the Messenger component, add the --no-reset option to the command or you won't get any profile. Moreover, consider using the --limit option to only process a few messages to make the profile more readable in the profiler.\n\nThe console component also contains a set of \"helpers\" - different small tools capable of helping you with different tasks:\n\nOnline Sylius certification, take it now!\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Console Commands",
+      "id": "console-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Running Commands",
+      "id": "running-commands"
+    },
+    {
+      "level": "h3",
+      "text": "APP_ENV & APP_DEBUG",
+      "id": "app-env-app-debug"
+    },
+    {
+      "level": "h3",
+      "text": "Console Completion",
+      "id": "console-completion"
+    },
+    {
+      "level": "h2",
+      "text": "Creating a Command",
+      "id": "creating-a-command"
+    },
+    {
+      "level": "h3",
+      "text": "Running the Command",
+      "id": "running-the-command"
+    },
+    {
+      "level": "h2",
+      "text": "Console Output",
+      "id": "console-output"
+    },
+    {
+      "level": "h3",
+      "text": "Output Sections",
+      "id": "output-sections"
+    },
+    {
+      "level": "h2",
+      "text": "Console Input",
+      "id": "console-input"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Services from the Service Container",
+      "id": "getting-services-from-the-service-container"
+    },
+    {
+      "level": "h2",
+      "text": "Command Lifecycle",
+      "id": "command-lifecycle"
+    },
+    {
+      "level": "h2",
+      "text": "Testing Commands",
+      "id": "testing-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Logging Command Errors",
+      "id": "logging-command-errors"
+    },
+    {
+      "level": "h2",
+      "text": "Using Events And Handling Signals",
+      "id": "using-events-and-handling-signals"
+    },
+    {
+      "level": "h2",
+      "text": "Profiling Commands",
+      "id": "profiling-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Learn More",
+      "id": "learn-more"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ php bin/console list\n...\n\nAvailable commands:\n  about             Display information about the current project\n  completion        Dump the shell completion script\n  help              Display help for a command\n  list              List commands\n assets\n  assets:install    Install bundle's web assets under a public directory\n cache\n  cache:clear       Clear the cache\n...",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console assets:install --help",
+      "language": "unknown"
+    },
+    {
+      "code": "# clears the cache for the prod environment\n$ APP_ENV=prod php bin/console cache:clear",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php vendor/bin/phpstan completion --help\n$ composer completion --help",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Command/CreateUserCommand.php\nnamespace App\\Command;\n\nuse Symfony\\Component\\Console\\Attribute\\AsCommand;\nuse Symfony\\Component\\Console\\Command\\Command;\n\n// the name of the command is what users type after \"php bin/console\"\n#[AsCommand(name: 'app:create-user')]\nclass CreateUserCommand\n{\n    public function __invoke(): int\n    {\n        // ... put here the code to create the user\n\n        // this method must return an integer number with the \"exit status code\"\n        // of the command. You can also use these constants to make code more readable\n\n        // return this if there was no problem running the command\n        // (it's equivalent to returning int(0))\n        return Command::SUCCESS;\n\n        // or return this if some error happened during the execution\n        // (it's equivalent to returning int(1))\n        // return Command::FAILURE;\n\n        // or return this to indicate incorrect command usage; e.g. invalid options\n        // or missing arguments (it's equivalent to returning int(2))\n        // return Command::INVALID\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "#[AsCommand(\n    name: 'app:create-user',\n    description: 'Creates a new user.', // the command description shown when running \"php bin/console list\"\n    help: 'This command allows you to create a user...', // the command help shown when running the command with the \"--help\" option\n)]\nclass CreateUserCommand\n{\n    public function __invoke(): int\n    {\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Console\\Attribute\\AsCommand;\nuse Symfony\\Component\\Console\\Command\\Command;\nuse Symfony\\Component\\Console\\Input\\InputInterface;\nuse Symfony\\Component\\Console\\Output\\OutputInterface;\n\n#[AsCommand(name: 'app:create-user')]\nclass CreateUserCommand extends Command\n{\n    public function initialize(InputInterface $input, OutputInterface $output): void\n    {\n        // ...\n    }\n\n    public function interact(InputInterface $input, OutputInterface $output): void\n    {\n        // ...\n    }\n\n    public function __invoke(): int\n    {\n        // ...\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console app:create-user",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\npublic function __invoke(OutputInterface $output): int\n{\n    // outputs multiple lines to the console (adding \"\\n\" at the end of each line)\n    $output->writeln([\n        'User Creator',\n        '============',\n        '',\n    ]);\n\n    // the value returned by someMethod() can be an iterator (https://php.net/iterator)\n    // that generates and returns the messages with the 'yield' PHP keyword\n    $output->writeln($this->someMethod());\n\n    // outputs a message followed by a \"\\n\"\n    $output->writeln('Whoa!');\n\n    // outputs a message without adding a \"\\n\" at the end of the line\n    $output->write('You are about to ');\n    $output->write('create a user.');\n\n    return Command::SUCCESS;\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console app:create-user\nUser Creator\n============\n\nWhoa!\nYou are about to create a user.",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\Console\\Output\\ConsoleOutputInterface;\n\n#[AsCommand(name: 'app:my-command')]\nclass MyCommand\n{\n    public function __invoke(OutputInterface $output): int\n    {\n        if (!$output instanceof ConsoleOutputInterface) {\n            throw new \\LogicException('This command accepts only an instance of \"ConsoleOutputInterface\".');\n        }\n\n        $section1 = $output->section();\n        $section2 = $output->section();\n\n        $section1->writeln('Hello');\n        $section2->writeln('World!');\n        sleep(1);\n        // Output displays \"Hello\\nWorld!\\n\"\n\n        // overwrite() replaces all the existing section contents with the given content\n        $section1->overwrite('Goodbye');\n        sleep(1);\n        // Output now displays \"Goodbye\\nWorld!\\n\"\n\n        // clear() deletes all the section contents...\n        $section2->clear();\n        sleep(1);\n        // Output now displays \"Goodbye\\n\"\n\n        // ...but you can also delete a given number of lines\n        // (this example deletes the last two lines of the section)\n        $section1->clear(2);\n        sleep(1);\n        // Output is now completely empty!\n\n        // setting the max height of a section will make new lines replace the old ones\n        $section1->setMaxHeight(2);\n        $section1->writeln('Line1');\n        $section1->writeln('Line2');\n        $section1->writeln('Line3');\n\n        return Command::SUCCESS;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Console\\Attribute\\Argument;\n\n// The #[Argument] attribute configures $username as a\n// required input argument and its value is automatically\n// passed to this parameter\npublic function __invoke(#[Argument('The username of the user.')] string $username, OutputInterface $output): int\n{\n    $output->writeln([\n        'User Creator',\n        '============',\n        '',\n    ]);\n\n    $output->writeln('Username: '.$username);\n\n    return Command::SUCCESS;\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console app:create-user Wouter\nUser Creator\n============\n\nUsername: Wouter",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse App\\Service\\UserManager;\nuse Symfony\\Component\\Console\\Attribute\\Argument;\nuse Symfony\\Component\\Console\\Attribute\\AsCommand;\n\n#[AsCommand(name: 'app:create-user')]\nclass CreateUserCommand\n{\n    public function __construct(\n        private UserManager $userManager\n    ) {\n    }\n\n    public function __invoke(#[Argument] string $username, OutputInterface $output): int\n    {\n        // ...\n\n        $this->userManager->create($username);\n\n        $output->writeln('User successfully generated!');\n\n        return Command::SUCCESS;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// tests/Command/CreateUserCommandTest.php\nnamespace App\\Tests\\Command;\n\nuse Symfony\\Bundle\\FrameworkBundle\\Console\\Application;\nuse Symfony\\Bundle\\FrameworkBundle\\Test\\KernelTestCase;\nuse Symfony\\Component\\Console\\Tester\\CommandTester;\n\nclass CreateUserCommandTest extends KernelTestCase\n{\n    public function testExecute(): void\n    {\n        self::bootKernel();\n        $application = new Application(self::$kernel);\n\n        $command = $application->find('app:create-user');\n        $commandTester = new CommandTester($command);\n        $commandTester->execute([\n            // pass arguments to the helper\n            'username' => 'Wouter',\n\n            // prefix the key with two dashes when passing options,\n            // e.g: '--some-option' => 'option_value',\n            // use brackets for testing array value,\n            // e.g: '--some-option' => ['option_value'],\n        ]);\n\n        $commandTester->assertCommandIsSuccessful();\n\n        // the output of the command in the console\n        $output = $commandTester->getDisplay();\n        $this->assertStringContainsString('Username: Wouter', $output);\n\n        // ...\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$application = new Application();\n$application->setAutoExit(false);\n\n$tester = new ApplicationTester($application);",
+      "language": "unknown"
+    },
+    {
+      "code": "$commandTester = new CommandTester($command);\n$commandTester->execute(['--some-option' => true]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Console\\Terminal;\n\n$terminal = new Terminal();\n\n// gets the number of lines available\n$height = $terminal->getHeight();\n\n// gets the number of columns available\n$width = $terminal->getWidth();\n\n// gets the color mode\n$colorMode = $terminal->getColorMode();\n\n// changes the color mode\n$colorMode = $terminal->setColorMode(AnsiColorMode::Ansi24);",
+      "language": "unknown"
+    },
+    {
+      "code": "$ php bin/console --profile app:my-command",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/console.html",
+    "https://symfony.com/doc/7.3/components/console.html",
+    "https://symfony.com/doc/7.3/console/input.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/setup/symfony_cli.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/progressbar.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/table.html",
+    "https://symfony.com/doc/7.3/components/console/single_command_tool.html",
+    "https://symfony.com/doc/7.3/event_dispatcher.html",
+    "https://symfony.com/doc/7.3/components/console/events.html",
+    "https://symfony.com/doc/7.3/configuration/front_controllers_and_kernel.html",
+    "https://symfony.com/doc/7.3/profiler.html",
+    "https://symfony.com/doc/7.3/messenger.html",
+    "https://symfony.com/doc/7.3/console/calling_commands.html",
+    "https://symfony.com/doc/7.3/console/coloring.html",
+    "https://symfony.com/doc/7.3/console/command_in_controller.html",
+    "https://symfony.com/doc/7.3/console/commands_as_services.html",
+    "https://symfony.com/doc/7.3/console/hide_commands.html",
+    "https://symfony.com/doc/7.3/console/lazy_commands.html",
+    "https://symfony.com/doc/7.3/console/lockable_trait.html",
+    "https://symfony.com/doc/7.3/console/style.html",
+    "https://symfony.com/doc/7.3/console/verbosity.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/questionhelper.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/formatterhelper.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/progressindicator.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/debug_formatter.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/processhelper.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/cursor.html",
+    "https://symfony.com/doc/7.3/components/console/helpers/tree.html"
+  ]
+}

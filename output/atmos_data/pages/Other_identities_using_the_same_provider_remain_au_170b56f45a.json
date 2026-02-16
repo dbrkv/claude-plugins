@@ -1,0 +1,61 @@
+{
+  "title": "Other identities using the same provider remain authenticated",
+  "content": "atmos auth whoami prod-admin  # Still works\nbash\nâ  Using legacy credentials path: ~/.aws/atmos/aws-sso/credentials\n  Run 'atmos auth login' to migrate to XDG-compliant path: ~/.config/atmos/aws/aws-sso/credentials\nbash\natmos auth shell my-identity\nyaml\nworkflows:\n  deploy-multi-account:\n    description: Deploy infrastructure across multiple AWS accounts\n    steps:\n      - name: Deploy to dev account\n        command: terraform apply\n        identity: dev-account\n\n- name: Deploy to staging account\n        command: terraform apply\n        identity: staging-account\n\n- name: Deploy to prod account\n        command: terraform apply\n        identity: prod-account\nbash",
+  "code_samples": [
+    {
+      "code": "The `auth logout` command now offers three levels of cleanup:\n\n- **`atmos auth logout <identity>`** - Clear one identity's cached credentials (keyring + files)\n- **`atmos auth logout --provider <name>`** - Clear provider and all identities using it (keyring + files + provider directory)\n- **`atmos auth logout --all`** - Clear all identities AND providers (complete cleanup)\n\n**Bug fix**: We discovered and fixed a bug where `--all` was only logging out identities but leaving orphaned provider credentials. This has been corrected and is now covered by a dedicated test to prevent regression.\n\nNote: Your `atmos.yaml` configuration is never modified - logout only removes cached credentials.\n\nEach identity in `atmos auth list` now shows authentication status indicators:\n- â Authenticated with valid credentials\n- â  Authenticated but credentials expiring soon\n- â Not authenticated or credentials expired\n\n## Legacy Path Warning (Once Per Session)\n\nIf you're using the legacy `~/.aws/atmos/` credential path, Atmos will now show the migration warning only once per execution instead of repeatedly:",
+      "language": "unknown"
+    },
+    {
+      "code": "This keeps the terminal output clean while still guiding you toward the recommended configuration.\n\n## Summary\n\nThese improvements focus on polish and ergonomicsâmaking authentication work the way you'd expect without getting in your way. Identity selection is more flexible, logout is more precise, and the overall experience is cleaner.\n\n---\n\n## Authentication Support for Workflows and Custom Commands\n\nWe're excited to announce two major improvements to Atmos authentication: **per-step authentication for workflows** and **authentication support for custom commands**. These features enable you to seamlessly use cloud credentials in your automation while maintaining security through file-based credential management.\n\n<!--truncate-->\n\n## Background: File-Based Credential Security\n\nAtmos uses a secure file-based credential approach to prevent credential exposure:\n\n- **Credentials are written to temporary files** following the XDG Base Directory Specification (e.g., `~/.config/atmos/aws/{provider-name}/credentials`, `~/.config/atmos/aws/{provider-name}/config`)\n- **Environment variables point to these files** (`AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`, `AWS_PROFILE`)\n- **Raw credentials are never exposed** in environment variables (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN` are never set)\n- **SDKs read credentials from files** using the standard credential chain\n- **Provider-organized structure** - credentials are organized by provider under XDG config directories\n\nThis approach ensures that credentials are isolated and never serialized in logs, process listings, or other outputs.\n\n## Bug Fix: Auth Shell Environment Variables\n\nWe fixed a regression in `atmos auth shell` where it wasn't setting the required environment variables for credential file resolution. Previously, when you ran:",
+      "language": "unknown"
+    },
+    {
+      "code": "The spawned shell didn't have `AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`, or `AWS_PROFILE` set, so AWS SDK commands couldn't find credentials even though authentication succeeded.\n\nThis is now fixed - `atmos auth shell` properly configures the environment with file-based credential paths.\n\n## Feature 1: Authentication for Workflows\n\nWorkflows now support per-step authentication with the new `identity` field:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Command-Line Override\n\nYou can also set a default identity for all steps using the `--identity` flag:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Legacy Path Warning (Once Per Session)",
+      "id": "legacy-path-warning-(once-per-session)"
+    },
+    {
+      "level": "h2",
+      "text": "Summary",
+      "id": "summary"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication Support for Workflows and Custom Commands",
+      "id": "authentication-support-for-workflows-and-custom-commands"
+    },
+    {
+      "level": "h2",
+      "text": "Background: File-Based Credential Security",
+      "id": "background:-file-based-credential-security"
+    },
+    {
+      "level": "h2",
+      "text": "Bug Fix: Auth Shell Environment Variables",
+      "id": "bug-fix:-auth-shell-environment-variables"
+    },
+    {
+      "level": "h2",
+      "text": "Feature 1: Authentication for Workflows",
+      "id": "feature-1:-authentication-for-workflows"
+    },
+    {
+      "level": "h3",
+      "text": "Command-Line Override",
+      "id": "command-line-override"
+    }
+  ],
+  "url": "llms-txt#other-identities-using-the-same-provider-remain-authenticated",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Zsh: With username and colors",
+  "content": "shell:\n  prompt: '%F{cyan}%n@%m%f:%F{blue}{{.Stack}}%f [{{.Component}}] %# '",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#zsh:-with-username-and-colors",
+  "links": []
+}

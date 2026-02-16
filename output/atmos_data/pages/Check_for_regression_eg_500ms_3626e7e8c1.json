@@ -1,0 +1,19 @@
+{
+  "title": "Check for regression (e.g., > 500ms)",
+  "content": "if [ $(echo \"$elapsed > 500\" | bc) -eq 1 ]; then\n  echo \"Performance regression: ${elapsed} > 500ms\"\n  # Deep profile for investigation\n  atmos validate stacks --profile-file=cpu.prof --profile-type=cpu\n  exit 1\nfi\nbash",
+  "code_samples": [
+    {
+      "code": "### Combined Analysis",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Combined Analysis",
+      "id": "combined-analysis"
+    }
+  ],
+  "url": "llms-txt#check-for-regression-(e.g.,->-500ms)",
+  "links": []
+}

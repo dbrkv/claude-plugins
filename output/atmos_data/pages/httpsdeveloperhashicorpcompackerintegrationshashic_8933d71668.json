@@ -1,0 +1,19 @@
+{
+  "title": "https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication",
+  "content": "variable \"assume_role_arn\" {\n  type        = string\n  description = \"Amazon Resource Name (ARN) of the IAM Role to assume. Refer to https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication\"\n}\n\nvariable \"assume_role_session_name\" {\n  type        = string\n  description = \"Assume role session name\"\n}\n\nvariable \"assume_role_duration_seconds\" {\n  type        = number\n  description = \"Assume role duration seconds\"\n}\n\nvariable \"manifest_file_name\" {\n  type        = string\n  description = \"Manifest file name. Refer to https://developer.hashicorp.com/packer/docs/post-processors/manifest\"\n}\n\nvariable \"manifest_strip_path\" {\n  type        = bool\n  description = \"Manifest strip path. Refer to https://developer.hashicorp.com/packer/docs/post-processors/manifest\"\n}\n\nvariable \"associate_public_ip_address\" {\n  type        = bool\n  description = \"If this is `true`, the new instance will get a Public IP\"\n}\n\nvariable \"provisioner_shell_commands\" {\n  type        = list(string)\n  description = \"List of commands to execute on the machine that Packer builds\"\n  default     = []\n}\n\nvariable \"force_deregister\" {\n  type        = bool\n  description = \"Force Packer to first deregister an existing AMI if one with the same name already exists\"\n  default     = false\n}\n\nvariable \"force_delete_snapshot\" {\n  type        = bool\n  description = \"Force Packer to delete snapshots associated with AMIs, which have been deregistered by `force_deregister`\"\n  default     = false\n}\n\nsource \"amazon-ebs\" \"al2023\" {\n  ami_name      = var.ami_name\n  source_ami    = var.source_ami\n  instance_type = var.instance_type\n  region        = var.region\n  ssh_username  = var.ssh_username\n  ami_org_arns  = var.ami_org_arns\n  ami_ou_arns   = var.ami_ou_arns\n  ami_users     = var.ami_users\n  kms_key_id    = var.kms_key_arn\n  encrypt_boot  = var.encrypt_boot\n\nforce_deregister      = var.force_deregister\n  force_delete_snapshot = var.force_delete_snapshot\n\nassociate_public_ip_address = var.associate_public_ip_address\n\nami_block_device_mappings {\n    device_name           = \"/dev/xvda\"\n    volume_size           = var.volume_size\n    volume_type           = var.volume_type\n    delete_on_termination = true\n  }\n\nassume_role {\n    role_arn         = var.assume_role_arn\n    session_name     = var.assume_role_session_name\n    duration_seconds = var.assume_role_duration_seconds\n  }\n\naws_polling {\n    delay_seconds = 5\n    max_attempts  = 100\n  }\n\ntags = var.ami_tags\n}\n\nbuild {\n  sources = [\"source.amazon-ebs.al2023\"]\n\nprovisioner \"shell\" {\n    inline = var.provisioner_shell_commands\n  }\n\n# https://developer.hashicorp.com/packer/tutorials/docker-get-started/docker-get-started-post-processors\n  # https://developer.hashicorp.com/packer/docs/post-processors\n  # https://developer.hashicorp.com/packer/docs/post-processors/manifest\n  post-processor \"manifest\" {\n    output     = var.manifest_file_name\n    strip_path = var.manifest_strip_path\n  }\n}\nyaml",
+  "code_samples": [
+    {
+      "code": "</File>\n\n### Configure defaults for the Packer component in the `catalog`\n\n<File title=\"stacks/catalog/aws/bastion/defaults.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Configure defaults for the Packer component in the `catalog`",
+      "id": "configure-defaults-for-the-packer-component-in-the-`catalog`"
+    }
+  ],
+  "url": "llms-txt#https://developer.hashicorp.com/packer/integrations/hashicorp/amazon#authentication",
+  "links": []
+}

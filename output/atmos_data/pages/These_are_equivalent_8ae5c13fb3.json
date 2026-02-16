@@ -1,0 +1,34 @@
+{
+  "title": "These are equivalent:",
+  "content": "atmos describe stacks --identity my-aws-identity\natmos describe --identity my-aws-identity stacks\nbash",
+  "code_samples": [
+    {
+      "code": "### AuthManager Propagation\n\nWhen `--identity` is specified:\n\n1. Command layer creates `AuthManager` with identity configuration\n2. Authenticates and populates `AuthContext` with credentials\n3. Passes `AuthManager` to execution functions\n4. Execution functions propagate `AuthContext` to `ConfigAndStacksInfo`\n5. YAML function processors access credentials from context\n\nThis ensures that `!terraform.state` and `!terraform.output` functions can access remote backends with proper authentication.\n\n### Performance\n\nAuthentication adds minimal overhead:\n- **First run**: ~2-3 seconds for AWS SSO authentication (with browser)\n- **Subsequent runs**: `<100ms` (uses cached credentials)\n- **Credential refresh**: Automatic when credentials expire\n\n## Related Documentation\n\n- [Authentication Overview](/cli/commands/auth/usage)\n- [`atmos describe stacks` command](/cli/commands/describe/stacks)\n- [`atmos describe component` command](/cli/commands/describe/component)\n- [`atmos describe affected` command](/cli/commands/describe/affected)\n- [`atmos describe dependents` command](/cli/commands/describe/dependents)\n- [YAML Functions](/functions/yaml)\n\n## Get Started\n\nTry it out with your existing Atmos configuration:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "AuthManager Propagation",
+      "id": "authmanager-propagation"
+    },
+    {
+      "level": "h3",
+      "text": "Performance",
+      "id": "performance"
+    },
+    {
+      "level": "h2",
+      "text": "Related Documentation",
+      "id": "related-documentation"
+    },
+    {
+      "level": "h2",
+      "text": "Get Started",
+      "id": "get-started"
+    }
+  ],
+  "url": "llms-txt#these-are-equivalent:",
+  "links": []
+}

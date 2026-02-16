@@ -1,0 +1,19 @@
+{
+  "title": "Quickly switch between different account consoles",
+  "content": "atmos auth console --identity dev-account\natmos auth console --identity staging-account\natmos auth console --identity prod-account\nshell",
+  "code_samples": [
+    {
+      "code": "### CI/CD Integration",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "CI/CD Integration",
+      "id": "ci/cd-integration"
+    }
+  ],
+  "url": "llms-txt#quickly-switch-between-different-account-consoles",
+  "links": []
+}

@@ -1,0 +1,19 @@
+{
+  "title": "Verify",
+  "content": "atmos auth whoami\nshell",
+  "code_samples": [
+    {
+      "code": "### 4. Compliance\n\nDemonstrate credential cleanup for security audits:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "4. Compliance",
+      "id": "4.-compliance"
+    }
+  ],
+  "url": "llms-txt#verify",
+  "links": []
+}

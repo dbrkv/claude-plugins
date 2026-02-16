@@ -1,0 +1,56 @@
+{
+  "url": "https://symfony.com/doc/7.3/setup/web_server_configuration.html",
+  "title": "Configuring a Web Server",
+  "content": "The preferred way to develop your Symfony application is to use Symfony local web server.\n\nHowever, when running the application in the production environment, you'll need to use a fully-featured web server. This article describes how to use Symfony with Apache, Nginx or Caddy.\n\nThe public directory is the home of all of your application's public and static files, including images, stylesheets and JavaScript files. It is also where the front controller (index.php) lives.\n\nThe public directory serves as the document root when configuring your web server. In the examples below, the public/ directory will be the document root. This directory is /var/www/project/public/.\n\nIf your hosting provider requires you to change the public/ directory to another location (e.g. public_html/) make sure you override the location of the public/ directory.\n\nAll configuration examples below use the PHP FastCGI process manager (PHP-FPM). Ensure that you have installed PHP-FPM (for example, on a Debian based system you have to install the php-fpm package).\n\nPHP-FPM uses so-called pools to handle incoming FastCGI requests. You can configure an arbitrary number of pools in the FPM configuration. In a pool you configure either a TCP socket (IP and port) or a Unix domain socket to listen on. Each pool can also be run under a different UID and GID:\n\nThe minimum configuration to get your application running under Nginx is:\n\nIf you use NGINX Unit, check out the official article about How to run Symfony applications using NGINX Unit.\n\nThis executes only index.php in the public directory. All other files ending in \".php\" will be denied.\n\nIf you have other PHP files in your public directory that need to be executed, be sure to include them in the location block above.\n\nAfter you deploy to production, make sure that you cannot access the index.php script (i.e. http://example.com/index.php).\n\nFor advanced Nginx configuration options, read the official Nginx documentation.\n\nIf you are running Apache 2.4+, you can use mod_proxy_fcgi to pass incoming requests to PHP-FPM. Install the Apache2 FastCGI mod (libapache2-mod-fastcgi on Debian), enable mod_proxy and mod_proxy_fcgi in your Apache configuration, and use the SetHandler directive to pass requests for PHP files to PHP FPM:\n\nIf you're running some quick tests with Apache, you can run composer require symfony/apache-pack to create an .htaccess file in the public/ directory with the rewrite rules needed to serve the Symfony application. Make sure Apache's AllowOverride setting is set to All for that directory; otherwise, the .htaccess file will be ignored.\n\nIn production, however, it's recommended to move these rules to the main Apache configuration file (as shown above) to improve performance.\n\nWhen using Caddy on the server, you can use a configuration like this:\n\nSee the official Caddy documentation for more examples, such as using Caddy in a container infrastructure.\n\nCode consumes server resources. Blackfire tells you how\n\nPeruse our complete Symfony & PHP solutions catalog for your web development needs.",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Configuring a Web Server",
+      "id": "configuring-a-web-server"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring PHP-FPM",
+      "id": "configuring-php-fpm"
+    },
+    {
+      "level": "h2",
+      "text": "Nginx",
+      "id": "nginx"
+    },
+    {
+      "level": "h2",
+      "text": "Apache",
+      "id": "apache"
+    },
+    {
+      "level": "h2",
+      "text": "Caddy",
+      "id": "caddy"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "; /etc/php/8.3/fpm/pool.d/www.conf\n\n; a pool called www\n[www]\nuser = www-data\ngroup = www-data\n\n; use a unix domain socket\nlisten = /var/run/php/php8.3-fpm.sock\n\n; or listen on a TCP connection\n; listen = 127.0.0.1:9000",
+      "language": "unknown"
+    },
+    {
+      "code": "# /etc/nginx/conf.d/example.com.conf\nserver {\n    server_name example.com www.example.com;\n    root /var/www/project/public;\n\n    location / {\n        # try to serve file directly, fallback to index.php\n        try_files $uri /index.php$is_args$args;\n    }\n\n    # optionally disable falling back to PHP script for the asset directories;\n    # nginx will return a 404 error when files are not found instead of passing the\n    # request to Symfony (improves performance but Symfony's 404 page is not displayed)\n    # location /bundles {\n    #     try_files $uri =404;\n    # }\n\n    location ~ ^/index\\.php(/|$) {\n        # when using PHP-FPM as a unix socket\n        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;\n\n        # when PHP-FPM is configured to use TCP\n        # fastcgi_pass 127.0.0.1:9000;\n\n        fastcgi_split_path_info ^(.+\\.php)(/.*)$;\n        include fastcgi_params;\n\n        # optionally set the value of the environment variables used in the application\n        # fastcgi_param APP_ENV prod;\n        # fastcgi_param APP_SECRET <app-secret-id>;\n        # fastcgi_param DATABASE_URL \"mysql://db_user:db_pass@host:3306/db_name\";\n\n        # When you are using symlinks to link the document root to the\n        # current version of your application, you should pass the real\n        # application path instead of the path to the symlink to PHP\n        # FPM.\n        # Otherwise, PHP's OPcache may not properly detect changes to\n        # your PHP files (see https://github.com/zendtech/ZendOptimizerPlus/issues/126\n        # for more information).\n        # Caveat: When PHP-FPM is hosted on a different machine from nginx\n        #         $realpath_root may not resolve as you expect! In this case try using\n        #         $document_root instead.\n        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;\n        fastcgi_param DOCUMENT_ROOT $realpath_root;\n        # Prevents URIs that include the front controller. This will 404:\n        # http://example.com/index.php/some-path\n        # Remove the internal directive to allow URIs like this\n        internal;\n    }\n\n    # return 404 for all other php files not matching the front controller\n    # this prevents access to other php files you don't want to be accessible.\n    location ~ \\.php$ {\n        return 404;\n    }\n\n    error_log /var/log/nginx/project_error.log;\n    access_log /var/log/nginx/project_access.log;\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "# /etc/apache2/conf.d/example.com.conf\n<VirtualHost *:80>\n    ServerName example.com\n    ServerAlias www.example.com\n\n    # Uncomment the following line to force Apache to pass the Authorization\n    # header to PHP: required for \"basic_auth\" under PHP-FPM and FastCGI\n    #\n    # SetEnvIfNoCase ^Authorization$ \"(.+)\" HTTP_AUTHORIZATION=$1\n\n    <FilesMatch \\.php$>\n        # when using PHP-FPM as a unix socket\n        SetHandler proxy:unix:/var/run/php/php8.3-fpm.sock|fcgi://dummy\n\n        # when PHP-FPM is configured to use TCP\n        # SetHandler proxy:fcgi://127.0.0.1:9000\n    </FilesMatch>\n\n    DocumentRoot /var/www/project/public\n    <Directory /var/www/project/public>\n        AllowOverride None\n        Require all granted\n        FallbackResource /index.php\n    </Directory>\n\n    # uncomment the following lines if you install assets as symlinks\n    # or run into problems when compiling LESS/Sass/CoffeeScript assets\n    # <Directory /var/www/project>\n    #     Options FollowSymlinks\n    # </Directory>\n\n    # optionally disable the fallback resource for the asset directories\n    # which will allow Apache to return a 404 error when files are\n    # not found instead of passing the request to Symfony\n    # <Directory /var/www/project/public/bundles>\n    #     DirectoryIndex disabled\n    #     FallbackResource disabled\n    # </Directory>\n\n    ErrorLog /var/log/apache2/project_error.log\n    CustomLog /var/log/apache2/project_access.log combined\n</VirtualHost>",
+      "language": "unknown"
+    },
+    {
+      "code": "# /etc/caddy/Caddyfile\nexample.com, www.example.com {\n    root * /var/www/project/public\n\n    # serve files directly if they can be found (e.g. CSS or JS files in public/)\n    encode zstd gzip\n    file_server\n\n    # otherwise, use PHP-FPM (replace \"unix//var/...\" with \"127.0.0.1:9000\" when using TCP)\n    php_fastcgi unix//var/run/php/php8.3-fpm.sock {\n        # only fall back to root index.php aka front controller.\n        try_files {path} index.php\n\n        # optionally set the value of the environment variables used in the application\n        # env APP_ENV \"prod\"\n        # env APP_SECRET \"<app-secret-id>\"\n        # env DATABASE_URL \"mysql://db_user:db_pass@host:3306/db_name\"\n\n        # Configure the FastCGI to resolve any symlinks in the root path.\n        # This ensures that OpCache is using the destination filenames,\n        # instead of the symlinks, to cache opcodes and php files see\n        # https://caddy.community/t/root-symlink-folder-updates-and-caddy-reload-not-working/10557\n        resolve_root_symlink\n    }\n\n    # return 404 for all other php files not matching the front controller\n    # this prevents access to other php files you don't want to be accessible.\n    @phpFile {\n        path *.php*\n    }\n    error @phpFile \"Not found\" 404\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/setup/web_server_configuration.html",
+    "https://symfony.com/doc/7.3/setup/symfony_cli.html",
+    "https://symfony.com/doc/7.3/configuration/override_dir_structure.html"
+  ]
+}

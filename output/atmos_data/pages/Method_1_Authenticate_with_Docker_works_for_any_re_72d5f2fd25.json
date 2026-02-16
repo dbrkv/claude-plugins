@@ -1,0 +1,8 @@
+{
+  "title": "Method 1: Authenticate with Docker (works for any registry)",
+  "content": "docker login ghcr.io -u YOUR_USERNAME",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#method-1:-authenticate-with-docker-(works-for-any-registry)",
+  "links": []
+}

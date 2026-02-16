@@ -1,0 +1,71 @@
+{
+  "title": "Then deep dive with pprof",
+  "content": "go tool pprof -http=:8080 cpu.prof\nshell\nbrew install graphviz\nshell\nsudo apt-get install graphviz\nshell\nsudo yum install graphviz\nbash",
+  "code_samples": [
+    {
+      "code": "## Dependencies\n\n### Graphviz (Optional for pprof)\n\nThe pprof web interface requires [Graphviz](https://graphviz.org/) for visual graphs:\n\n**macOS:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Ubuntu/Debian:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**CentOS/RHEL:**",
+      "language": "unknown"
+    },
+    {
+      "code": "Without Graphviz, text-based pprof analysis still works.\n\n## Best Practices\n\n### File-Based vs Server-Based (pprof)\n\n- **Use file-based profiling** for most CLI operations and performance analysis\n- **Use server-based profiling** for long-running operations or interactive profiling\n- Supports all profile types: `cpu`, `heap`, `allocs`, `goroutine`, `block`, `mutex`, `threadcreate`, `trace`\n\n### Performance Heatmap Usage\n\n- **Enable only when needed**: Zero overhead when not using `--heatmap` flag\n- **Use appropriate modes**: `bar` for quick comparison, `table` for detailed analysis\n- **Combine with logging**: Correlate performance with debug logs\n- **Automate in CI/CD**: Track performance regressions in pipelines\n\n### Profile Regularly\n\n- Profile before and after optimizations\n- Establish baseline profiles for typical operations\n- Profile different stack sizes and complexity levels\n- Compare heatmap metrics for quick validation, pprof for deep analysis\n\n### Security Considerations\n\n- Server-based profiling exposes runtime information through HTTP\n- Use `localhost` binding in production environments\n- Disable profiling in production unless actively debugging\n- Performance heatmap is safe (in-memory only, no network exposure)\n\n## Troubleshooting\n\n### Performance Heatmap Issues\n\n**Heatmap Not Showing:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Dependencies",
+      "id": "dependencies"
+    },
+    {
+      "level": "h3",
+      "text": "Graphviz (Optional for pprof)",
+      "id": "graphviz-(optional-for-pprof)"
+    },
+    {
+      "level": "h2",
+      "text": "Best Practices",
+      "id": "best-practices"
+    },
+    {
+      "level": "h3",
+      "text": "File-Based vs Server-Based (pprof)",
+      "id": "file-based-vs-server-based-(pprof)"
+    },
+    {
+      "level": "h3",
+      "text": "Performance Heatmap Usage",
+      "id": "performance-heatmap-usage"
+    },
+    {
+      "level": "h3",
+      "text": "Profile Regularly",
+      "id": "profile-regularly"
+    },
+    {
+      "level": "h3",
+      "text": "Security Considerations",
+      "id": "security-considerations"
+    },
+    {
+      "level": "h2",
+      "text": "Troubleshooting",
+      "id": "troubleshooting"
+    },
+    {
+      "level": "h3",
+      "text": "Performance Heatmap Issues",
+      "id": "performance-heatmap-issues"
+    }
+  ],
+  "url": "llms-txt#then-deep-dive-with-pprof",
+  "links": []
+}

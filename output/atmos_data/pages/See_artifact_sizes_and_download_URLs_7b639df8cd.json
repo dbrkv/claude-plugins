@@ -1,0 +1,34 @@
+{
+  "title": "See artifact sizes and download URLs",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "## Technical Details\n\n### Implementation Highlights\n\n- **Formatted table output** using [Charmbracelet lipgloss/table](https://github.com/charmbracelet/lipgloss) with automatic word wrapping\n- **Markdown rendering** powered by [Glamour](https://github.com/charmbracelet/glamour) preserving ANSI colors\n- **Loading spinner** built with [Charmbracelet Bubbletea](https://github.com/charmbracelet/bubbletea) for TTY detection\n- **GitHub API integration** using [go-github](https://github.com/google/go-github) with OAuth2 authentication\n- **Platform-specific filtering** matches assets to runtime.GOOS and runtime.GOARCH\n- **Terminal width detection** using Atmos's existing utilities\n- **Command registry pattern** for modular organization\n\n### For Developers\n\nIf you're interested in the implementation details, check out:\n- **[PRD: Version List Command](https://github.com/cloudposse/atmos/blob/main/docs/prd/version-list-command.md)** - Complete design document\n- **[CLI Documentation](https://atmos.tools/cli/commands/version/list)** - Usage reference\n\n## Try It Now\n\nUpgrade to the latest Atmos release and try it yourself:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Technical Details",
+      "id": "technical-details"
+    },
+    {
+      "level": "h3",
+      "text": "Implementation Highlights",
+      "id": "implementation-highlights"
+    },
+    {
+      "level": "h3",
+      "text": "For Developers",
+      "id": "for-developers"
+    },
+    {
+      "level": "h2",
+      "text": "Try It Now",
+      "id": "try-it-now"
+    }
+  ],
+  "url": "llms-txt#see-artifact-sizes-and-download-urls",
+  "links": []
+}

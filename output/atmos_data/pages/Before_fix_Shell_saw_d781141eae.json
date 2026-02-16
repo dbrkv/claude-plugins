@@ -1,0 +1,8 @@
+{
+  "title": "Before fix: Shell saw",
+  "content": "my-script echo hello world  # Double space lost!",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#before-fix:-shell-saw",
+  "links": []
+}

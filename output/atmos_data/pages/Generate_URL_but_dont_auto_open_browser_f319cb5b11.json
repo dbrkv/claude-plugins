@@ -1,0 +1,19 @@
+{
+  "title": "Generate URL but don't auto-open browser",
+  "content": "atmos auth console --no-open\nshell",
+  "code_samples": [
+    {
+      "code": "### Advanced Examples",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Advanced Examples",
+      "id": "advanced-examples"
+    }
+  ],
+  "url": "llms-txt#generate-url-but-don't-auto-open-browser",
+  "links": []
+}

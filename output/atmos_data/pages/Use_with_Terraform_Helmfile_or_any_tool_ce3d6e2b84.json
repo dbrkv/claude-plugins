@@ -1,0 +1,56 @@
+{
+  "title": "Use with Terraform, Helmfile, or any tool",
+  "content": "atmos terraform plan vpc -s prod\nyaml\ncomponents:\n  terraform:\n    vpc:\n      settings:\n        auth:\n          identity: network-admin\n\ndatabase:\n      settings:\n        auth:\n          identity: data-admin\nyaml\nauth:\n  providers:\n    my-company-sso:\n      kind: aws/iam-identity-center\n      region: us-east-1\n      start_url: https://mycompany.awsapps.com/start/\n\nidentities:\n    my-identity:\n      default: true\n      kind: aws/permission-set\n      via:\n        provider: my-company-sso\n      principal:\n        name: \"PowerUserAccess\"\n        account:\n          name: \"development\"\nbash\natmos auth login\nbash",
+  "code_samples": [
+    {
+      "code": "### Component-Level Authentication\n\nDifferent components can use different identities:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Credential Security\n\n- **Browser-based SSO flow** - Leverages your existing IAM Identity Center authentication\n- **Temporary credentials** - Short-lived credentials that expire automatically\n- **OS keyring integration** - Optionally stores refresh tokens in macOS Keychain, Linux Secret Service, or Windows Credential Manager\n- **No static credentials** - Never stores long-term access keys\n\n## Getting Started\n\n### 1. Configure Authentication in `atmos.yaml`",
+      "language": "unknown"
+    },
+    {
+      "code": "### 2. Authenticate",
+      "language": "unknown"
+    },
+    {
+      "code": "This opens your browser for IAM Identity Center authentication, then stores temporary credentials locally.\n\n### 3. Use with Your Infrastructure",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Component-Level Authentication",
+      "id": "component-level-authentication"
+    },
+    {
+      "level": "h3",
+      "text": "Credential Security",
+      "id": "credential-security"
+    },
+    {
+      "level": "h2",
+      "text": "Getting Started",
+      "id": "getting-started"
+    },
+    {
+      "level": "h3",
+      "text": "1. Configure Authentication in `atmos.yaml`",
+      "id": "1.-configure-authentication-in-`atmos.yaml`"
+    },
+    {
+      "level": "h3",
+      "text": "2. Authenticate",
+      "id": "2.-authenticate"
+    },
+    {
+      "level": "h3",
+      "text": "3. Use with Your Infrastructure",
+      "id": "3.-use-with-your-infrastructure"
+    }
+  ],
+  "url": "llms-txt#use-with-terraform,-helmfile,-or-any-tool",
+  "links": []
+}

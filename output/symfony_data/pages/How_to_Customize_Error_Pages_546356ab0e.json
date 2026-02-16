@@ -1,0 +1,115 @@
+{
+  "url": "https://symfony.com/doc/7.3/controller/error_pages.html",
+  "title": "How to Customize Error Pages",
+  "content": "In Symfony applications, all errors are treated as exceptions, no matter if they are a 404 Not Found error or a fatal error triggered by throwing some exception in your code.\n\nIn the development environment, Symfony catches all the exceptions and displays a special exception page with lots of debug information to help you discover the root problem:\n\nSince these pages contain a lot of sensitive internal information, Symfony won't display them in the production environment. Instead, it'll show a minimal and generic error page:\n\nError pages for the production environment can be customized in different ways depending on your needs:\n\nYou can use the built-in Twig error renderer to override the default error templates. Both the TwigBundle and TwigBridge need to be installed for this. Run this command to ensure both are installed:\n\nWhen the error page loads, TwigErrorRenderer is used to render a Twig template to show the user.\n\nThis renderer uses the HTTP status code and the following logic to determine the template filename:\n\nTo override these templates, rely on the standard Symfony method for overriding templates that live inside a bundle and put them in the templates/bundles/TwigBundle/Exception/ directory.\n\nA typical project that returns HTML pages might look like this:\n\nTo override the 404 error template for HTML pages, create a new error404.html.twig template located at templates/bundles/TwigBundle/Exception/:\n\nIn case you need them, the TwigErrorRenderer passes some information to the error template via the status_code and status_text variables that store the HTTP status code and message respectively.\n\nYou can customize the status code of an exception by implementing HttpExceptionInterface and its required getStatusCode() method. Otherwise, the status_code will default to 500.\n\nAdditionally you have access to the HttpException object via the exception Twig variable. For example, if the exception sets a message (e.g. using throw $this->createNotFoundException('The product does not exist')), use {{ exception.message }} to print that message. You can also output the stack trace using {{ exception.traceAsString }}, but don't do that for end users because the trace contains sensitive data.\n\nPHP errors are turned into exceptions as well by default, so you can also access these error details using exception.\n\nDue to the order of how routing and security are loaded, security information will not be available on your 404 pages. This means that it will appear as if your user is logged out on the 404 page (it will work while testing, but not on production).\n\nWhile you're in the development environment, Symfony shows the big exception page instead of your shiny new customized error page. So, how can you see what it looks like and debug it?\n\nFortunately, the default ErrorController allows you to preview your error pages during development.\n\nTo use this feature, you need to load some special routes provided by FrameworkBundle (if the application uses Symfony Flex they are loaded automatically when installing symfony/framework-bundle):\n\nWith this route added, you can use URLs like these to preview the error page for a given status code as HTML or for a given status code and format (you might need to replace http://localhost/ by the host used in your local setup):\n\nThe errors.php file was introduced in Symfony 7.3. Previously, you had to import errors.xml\n\nTo override non-HTML error output, the Serializer component needs to be installed.\n\nThe Serializer component has a built-in FlattenException normalizer (ProblemNormalizer) and JSON/XML/CSV/YAML encoders. When your application throws an exception, Symfony can output it in one of those formats. If you want to change the output contents, create a new Normalizer that supports the FlattenException input:\n\nIf you need a little more flexibility beyond just overriding the template, then you can change the controller that renders the error page. For example, you might need to pass some additional variables into your template.\n\nTo do this, create a new controller anywhere in your application and set the framework.error_controller configuration option to point to it:\n\nThe ErrorListener class used by the FrameworkBundle as a listener of the kernel.exception event creates the request that will be dispatched to your controller. In addition, your controller will be passed two parameters:\n\nThe error page preview also works for your own controllers set up this way.\n\nWhen an exception is thrown, the HttpKernel class catches it and dispatches a kernel.exception event. This gives you the power to convert the exception into a Response in a few different ways.\n\nWorking with this event is actually much more powerful than what has been explained before, but also requires a thorough understanding of Symfony internals. Suppose that your code throws specialized exceptions with a particular meaning to your application domain.\n\nWriting your own event listener for the kernel.exception event allows you to have a closer look at the exception and take different actions depending on it. Those actions might include logging the exception, redirecting the user to another page or rendering specialized error pages.\n\nIf your listener calls setResponse() on the ExceptionEvent event, propagation will be stopped and the response will be sent to the client.\n\nThis approach allows you to create centralized and layered error handling: instead of catching (and handling) the same exceptions in various controllers time and again, you can have just one (or several) listeners deal with them.\n\nSee ExceptionListener class code for a real example of an advanced listener of this type. This listener handles various security-related exceptions that are thrown in your application (like AccessDeniedException) and takes measures like redirecting the user to the login page, logging them out and other things.\n\nThe feature to dump error pages into static HTML files was introduced in Symfony 7.3.\n\nIf an error occurs before reaching your Symfony application, web servers display their own default error pages instead of your custom ones. Dumping your application's error pages to static HTML ensures users always see your defined pages and improves performance by allowing the server to deliver errors instantly without calling your application.\n\nSymfony provides the following command to turn your error pages into static HTML files:\n\nYou must also configure your web server to use these generated pages. For example, if you use Nginx:\n\nMeasure & Improve Symfony Code Performance\n\nShow your Symfony expertise",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Customize Error Pages",
+      "id": "how-to-customize-error-pages"
+    },
+    {
+      "level": "h2",
+      "text": "Overriding the Default Error Templates",
+      "id": "overriding-the-default-error-templates"
+    },
+    {
+      "level": "h2",
+      "text": "Example 404 Error Template",
+      "id": "example-404-error-template"
+    },
+    {
+      "level": "h2",
+      "text": "Security & 404 Pages",
+      "id": "security-404-pages"
+    },
+    {
+      "level": "h3",
+      "text": "Testing Error Pages during Development",
+      "id": "testing-error-pages-during-development"
+    },
+    {
+      "level": "h2",
+      "text": "Overriding Error output for non-HTML formats",
+      "id": "overriding-error-output-for-non-html-formats"
+    },
+    {
+      "level": "h2",
+      "text": "Overriding the Default ErrorController",
+      "id": "overriding-the-default-errorcontroller"
+    },
+    {
+      "level": "h2",
+      "text": "Working with the kernel.exception Event",
+      "id": "working-with-the-kernel-exception-event"
+    },
+    {
+      "level": "h2",
+      "text": "Dumping Error Pages as Static HTML Files",
+      "id": "dumping-error-pages-as-static-html-files"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/twig-pack",
+      "language": "unknown"
+    },
+    {
+      "code": "templates/\n└─ bundles/\n   └─ TwigBundle/\n      └─ Exception/\n         ├─ error404.html.twig\n         ├─ error403.html.twig\n         └─ error.html.twig      # All other HTML errors (including 500)",
+      "language": "unknown"
+    },
+    {
+      "code": "{# templates/bundles/TwigBundle/Exception/error404.html.twig #}\n{% extends 'base.html.twig' %}\n\n{% block body %}\n    <h1>Page not found</h1>\n\n    <p>\n        The requested page couldn't be located. Checkout for any URL\n        misspelling or <a href=\"{{ path('homepage') }}\">return to the homepage</a>.\n    </p>\n{% endblock %}",
+      "language": "unknown"
+    },
+    {
+      "code": "# config/routes/framework.yaml\nwhen@dev:\n    _errors:\n        resource: '@FrameworkBundle/Resources/config/routing/errors.php'\n        type:     php\n        prefix:   /_error",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/routes/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<routes xmlns=\"http://symfony.com/schema/routing\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/routing\n        https://symfony.com/schema/routing/routing-1.0.xsd\">\n\n    <when env=\"dev\">\n        <import resource=\"@FrameworkBundle/Resources/config/routing/errors.php\" type=\"php\" prefix=\"/_error\"/>\n    </when>\n</routes>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/routes/framework.php\nuse Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator;\n\nreturn function (RoutingConfigurator $routes): void {\n    if ('dev' === $routes->env()) {\n        $routes->import('@FrameworkBundle/Resources/config/routing/errors.php', 'php')\n            ->prefix('/_error')\n        ;\n    }\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "$ composer require symfony/serializer-pack",
+      "language": "unknown"
+    },
+    {
+      "code": "# src/Serializer/MyCustomProblemNormalizer.php\nnamespace App\\Serializer;\n\nuse Symfony\\Component\\ErrorHandler\\Exception\\FlattenException;\nuse Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface;\n\nclass MyCustomProblemNormalizer implements NormalizerInterface\n{\n    public function normalize($exception, ?string $format = null, array $context = []): array\n    {\n        return [\n            'content' => 'This is my custom problem normalizer.',\n            'exception'=> [\n                'message' => $exception->getMessage(),\n                'code' => $exception->getStatusCode(),\n            ],\n        ];\n    }\n\n    public function supportsNormalization($data, ?string $format = null, array $context = []): bool\n    {\n        return $data instanceof FlattenException;\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "# config/packages/framework.yaml\nframework:\n    error_controller: App\\Controller\\ErrorController::show",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/packages/framework.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/services\n        https://symfony.com/schema/dic/services/services-1.0.xsd\">\n\n    <framework:config>\n        <framework:error-controller>App\\Controller\\ErrorController::show</framework:error-controller>\n    </framework:config>\n\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/packages/framework.php\nuse Symfony\\Config\\FrameworkConfig;\n\nreturn static function (FrameworkConfig $framework): void {\n    // ...\n    $framework->errorController('App\\Controller\\ErrorController::show');\n};",
+      "language": "unknown"
+    },
+    {
+      "code": "# the first argument is the path where the HTML files are stored\n$ APP_ENV=prod php bin/console error:dump var/cache/prod/error_pages/\n\n# by default, it generates the pages of all 4xx and 5xx errors, but you can\n# pass a list of HTTP status codes to only generate those\n$ APP_ENV=prod php bin/console error:dump var/cache/prod/error_pages/ 401 403 404 500",
+      "language": "unknown"
+    },
+    {
+      "code": "# /etc/nginx/conf.d/example.com.conf\nserver {\n    # Existing server configuration\n    # ...\n\n    # Serve static error pages\n    error_page 400 /error_pages/400.html;\n    error_page 401 /error_pages/401.html;\n    # ...\n    error_page 510 /error_pages/510.html;\n    error_page 511 /error_pages/511.html;\n\n    location ^~ /error_pages/ {\n        root /path/to/your/symfony/var/cache/error_pages;\n        internal; # prevent direct URL access\n    }\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/controller/error_pages.html",
+    "https://symfony.com/doc/7.3/configuration.html",
+    "https://symfony.com/doc/7.3/bundles/override.html",
+    "https://symfony.com/doc/7.3/setup.html",
+    "https://symfony.com/doc/7.3/reference/configuration/framework.html",
+    "https://symfony.com/doc/7.3/event_dispatcher.html"
+  ]
+}

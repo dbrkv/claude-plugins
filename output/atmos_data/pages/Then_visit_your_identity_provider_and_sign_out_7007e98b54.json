@@ -1,0 +1,70 @@
+{
+  "title": "Then visit your identity provider and sign out",
+  "content": "shell\natmos auth logout  # Interactive mode to review and remove\nyaml\nauth:\n  providers:\n    azure-dev:\n      kind: azure/device-code\n      tenant_id: \"12345678-1234-1234-1234-123456789012\"\n      subscription_id: \"87654321-4321-4321-4321-210987654321\"\n      location: \"eastus\"\n\nidentities:\n    azure-dev-subscription:\n      default: true\n      kind: azure/subscription\n      via:\n        provider: azure-dev\n      principal:\n        subscription_id: \"87654321-4321-4321-4321-210987654321\"\n        location: \"eastus\"\nbash\natmos auth login\nyaml\nauth:\n  providers:\n    azure-interactive:\n      kind: azure/device-code\n      tenant_id: \"YOUR_TENANT_ID\"\n      subscription_id: \"YOUR_SUBSCRIPTION_ID\"\n      location: \"eastus\"\n\nidentities:\n    azure-dev:\n      kind: azure/subscription\n      via:\n        provider: azure-interactive\n      principal:\n        subscription_id: \"YOUR_SUBSCRIPTION_ID\"\n        location: \"eastus\"\nbash",
+  "code_samples": [
+    {
+      "code": "### 5. Regular Credential Cleanup\n\nPeriodically clean up unused credentials:",
+      "language": "unknown"
+    },
+    {
+      "code": "## See Also\n\n- [Atmos Authentication Overview](/cli/commands/auth/usage)\n- [AWS IAM Identity Center Configuration](https://docs.aws.amazon.com/singlesignon/latest/userguide/what-is.html)\n\n---\n\n## Azure Authentication\n\nThis guide shows you how to configure Azure authentication using the native `atmos auth` system.\n\n## Overview\n\nAtmos Auth provides native Azure authentication that works identically to `az login`, with support for:\n\n- **Device Code Flow** (browser-based authentication for users)\n- **OIDC** (workload identity for CI/CD pipelines)\n- **Service Principals** (client credentials for automation)\n\nAll authentication methods write credentials to the Azure CLI MSAL cache (`~/.azure/msal_token_cache.json`), ensuring full compatibility with Terraform's Azure providers (azurerm, azuread, azapi).\n\n## Quick Start\n\n### Basic Azure Device Code Authentication\n\nThe simplest Azure authentication uses device code flow for interactive user login:",
+      "language": "unknown"
+    },
+    {
+      "code": "**Authenticate:**",
+      "language": "unknown"
+    },
+    {
+      "code": "This will:\n1. Display a device code and verification URL\n2. Open your browser to https://microsoft.com/devicelogin\n3. Prompt you to enter the code and sign in\n4. Cache credentials for all Azure providers (azurerm, azuread, azapi)\n\n## Authentication Methods\n\n### Device Code Flow (Interactive)\n\nBest for: **Developer workstations, interactive sessions**\n\nDevice code flow provides browser-based authentication with full MFA support:",
+      "language": "unknown"
+    },
+    {
+      "code": "**How it works:**\n1. Atmos displays a device code (e.g., \"WDDD-HRQV\")\n2. Browser opens to Microsoft's device login page\n3. You enter the code and sign in (with MFA if configured)\n4. Atmos receives 3 token scopes:\n   - `https://management.azure.com/.default` (Azure Resource Manager)\n   - `https://graph.microsoft.com/.default` (Azure AD operations)\n   - `https://vault.azure.net/.default` (Azure KeyVault operations)\n\n**Usage:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "5. Regular Credential Cleanup",
+      "id": "5.-regular-credential-cleanup"
+    },
+    {
+      "level": "h2",
+      "text": "See Also",
+      "id": "see-also"
+    },
+    {
+      "level": "h2",
+      "text": "Azure Authentication",
+      "id": "azure-authentication"
+    },
+    {
+      "level": "h2",
+      "text": "Overview",
+      "id": "overview"
+    },
+    {
+      "level": "h2",
+      "text": "Quick Start",
+      "id": "quick-start"
+    },
+    {
+      "level": "h3",
+      "text": "Basic Azure Device Code Authentication",
+      "id": "basic-azure-device-code-authentication"
+    },
+    {
+      "level": "h2",
+      "text": "Authentication Methods",
+      "id": "authentication-methods"
+    },
+    {
+      "level": "h3",
+      "text": "Device Code Flow (Interactive)",
+      "id": "device-code-flow-(interactive)"
+    }
+  ],
+  "url": "llms-txt#then-visit-your-identity-provider-and-sign-out",
+  "links": []
+}

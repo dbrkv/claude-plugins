@@ -1,0 +1,260 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/process.html",
+  "title": "The Process Component",
+  "content": "The Process component executes commands in sub-processes.\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nThe Process class executes a command in a sub-process, taking care of the differences between operating system and escaping arguments to prevent security issues. It replaces PHP functions like exec, passthru, shell_exec and system:\n\nThe getOutput() method always returns the whole content of the standard output of the command and getErrorOutput() the content of the error output. Alternatively, the getIncrementalOutput() and getIncrementalErrorOutput() methods return the new output since the last call.\n\nThe clearOutput() method clears the contents of the output and clearErrorOutput() clears the contents of the error output.\n\nYou can also use the Process class with the for each construct to get the output while it is generated. By default, the loop waits for new output before going to the next iteration:\n\nThe Process component internally uses a PHP iterator to get the output while it is generated. That iterator is exposed via the getIterator() method to allow customizing its behavior:\n\nThe mustRun() method is identical to run(), except that it will throw a ProcessFailedException if the process couldn't be executed successfully (i.e. the process exited with a non-zero code):\n\nYou can get the last output time in seconds by using the getLastOutputTime() method. This method returns null if the process wasn't started!\n\nSymfony uses the PHP proc_open function to run the processes. You can configure the options passed to the other_options argument of proc_open() using the setOptions() method:\n\nMost of the options defined by proc_open() (such as create_new_console and suppress_errors) are only supported on Windows operating systems. Check out the PHP documentation for proc_open() before using them.\n\nUsing an array of arguments is the recommended way to define commands. This saves you from any escaping and allows sending signals seamlessly (e.g. to stop processes while they run):\n\nIf you need to use stream redirections, conditional execution, or any other feature provided by the shell of your operating system, you can also define commands as strings using the fromShellCommandline() static factory.\n\nEach operating system provides a different syntax for their command-lines, so it becomes your responsibility to deal with escaping and portability.\n\nWhen using strings to define commands, variable arguments are passed as environment variables using the second argument of the run(), mustRun() or start() methods. Referencing them is also OS-dependent:\n\nIf you prefer to create portable commands that are independent from the operating system, you can write the above command as follows:\n\nPortable commands require using a syntax that is specific to the component: when enclosing a variable name into \"${: and }\" exactly, the process object will replace it with its escaped value, or will fail if the variable is not found in the list of environment variables attached to the command.\n\nThe constructor of the Process class and all of its methods related to executing processes (run(), mustRun(), start(), etc.) allow passing an array of environment variables to set while running the process:\n\nIn addition to the env vars passed explicitly, processes inherit all the env vars defined in your system. You can prevent this by setting to false the env vars you want to remove:\n\nWhen executing a long running command (like rsync to a remote server), you can give feedback to the end user in real-time by passing an anonymous function to the run() method:\n\nThis feature won't work as expected in servers using PHP output buffering. In those cases, either disable the output_buffering PHP option or use the ob_flush PHP function to force sending the output buffer.\n\nYou can also start the subprocess and then let it run asynchronously, retrieving output and the status in your main process whenever you need it. Use the start() method to start an asynchronous process, the isRunning() method to check if the process is done and the getOutput() method to get the output:\n\nYou can also wait for a process to end if you started it asynchronously and are done doing other stuff:\n\nThe wait() method is blocking, which means that your code will halt at this line until the external process is completed.\n\nIf a Response is sent before a child process had a chance to complete, the server process will be killed (depending on your OS). It means that your task will be stopped right away. Running an asynchronous process is not the same as running a process that survives its parent process.\n\nIf you want your process to survive the request/response cycle, you can take advantage of the kernel.terminate event, and run your command synchronously inside this event. Be aware that kernel.terminate is called only if you use PHP-FPM.\n\nBeware also that if you do that, the said PHP-FPM process will not be available to serve any new request until the subprocess is finished. This means you can quickly block your FPM pool if you're not careful enough. That is why it's generally way better not to do any fancy things even after the request is sent, but to use a job queue instead.\n\nwait() takes one optional argument: a callback that is called repeatedly whilst the process is still running, passing in the output and its type:\n\nInstead of waiting until the process has finished, you can use the waitUntil() method to keep or stop waiting based on some PHP logic. The following example starts a long running process and checks its output to wait until its fully initialized:\n\nBefore a process is started, you can specify its standard input using either the setInput() method or the 4th argument of the constructor. The provided input can be a string, a stream resource or a Traversable object:\n\nWhen this input is fully written to the subprocess standard input, the corresponding pipe is closed.\n\nIn order to write to a subprocess standard input while it is running, the component provides the InputStream class:\n\nThe write() method accepts scalars, stream resources or Traversable objects as arguments. As shown in the above example, you need to explicitly call the close() method when you are done writing to the standard input of the subprocess.\n\nThe input of a process can also be defined using PHP streams:\n\nAll examples above show that your program has control over the input of a process (using setInput()) and the output from that process (using getOutput()). The Process component has two special modes that tweak the relationship between your program and the process: teletype (tty) and pseudo-teletype (pty).\n\nIn TTY mode, you connect the input and output of the process to the input and output of your program. This allows for instance to open an editor like Vim or Nano as a process. You enable TTY mode by calling setTty():\n\nIn PTY mode, your program behaves as a terminal for the process instead of a plain input and output. Some programs behave differently when interacting with a real terminal instead of another program. For instance, some programs prompt for a password when talking with a terminal. Use setPty() to enable this mode.\n\nAny asynchronous process can be stopped at any time with the stop() method. This method takes two arguments: a timeout and a signal. Once the timeout is reached, the signal is sent to the running process. The default signal sent to a process is SIGKILL. Please read the signal documentation below to find out more about signal handling in the Process component:\n\nIf you want to execute some PHP code in isolation, use the PhpProcess instead:\n\nWhen you start a PHP process, it uses the default configuration defined in your php.ini file. You can bypass these options with the -d command line option. For example, if memory_limit is set to 256M, you can disable this memory limit when running some command like this: php -d memory_limit=-1 bin/console app:my-command.\n\nHowever, if you run the command via the Symfony Process class, PHP will use the settings defined in the php.ini file. You can solve this issue by using the PhpSubprocess class to run the command:\n\nBy default processes have a timeout of 60 seconds, but you can change it passing a different timeout (in seconds) to the setTimeout() method:\n\nIf the timeout is reached, a ProcessTimedOutException is thrown.\n\nFor long running commands, it is your responsibility to perform the timeout check regularly:\n\nYou can get the process start time using the getStartTime() method.\n\nIn contrast to the timeout of the previous paragraph, the idle timeout only considers the time since the last output was produced by the process:\n\nIn the case above, a process is considered timed out, when either the total runtime exceeds 3600 seconds, or the process does not produce any output for 60 seconds.\n\nWhen running a program asynchronously, you can send it POSIX signals with the signal() method:\n\nYou can make the process ignore signals by using the setIgnoredSignals() method. The given signals won't be propagated to the child process:\n\nThe setIgnoredSignals() method was introduced in Symfony 7.1.\n\nYou can access the pid of a running process with the getPid() method:\n\nAs standard output and error output are always fetched from the underlying process, it might be convenient to disable output in some cases to save memory. Use disableOutput() and enableOutput() to toggle this feature:\n\nYou cannot enable or disable the output while the process is running.\n\nIf you disable the output, you cannot access getOutput(), getIncrementalOutput(), getErrorOutput(), getIncrementalErrorOutput() or setIdleTimeout().\n\nHowever, it is possible to pass a callback to the start, run or mustRun methods to handle process output in a streaming fashion.\n\nThe Process component provides a utility class called ExecutableFinder which finds and returns the absolute path of an executable:\n\nThe find() method also takes extra parameters to specify a default value to return and extra directories where to look for the executable:\n\nThis component also provides a special utility class called PhpExecutableFinder which returns the absolute path of the executable PHP binary available on your server:\n\nAnother utility provided by this component is a method called isTtySupported() which returns whether TTY is supported on the current operating system:\n\nCode consumes server resources. Blackfire tells you how\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The Process Component",
+      "id": "the-process-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Configuring Process Options",
+      "id": "configuring-process-options"
+    },
+    {
+      "level": "h2",
+      "text": "Using Features From the OS Shell",
+      "id": "using-features-from-the-os-shell"
+    },
+    {
+      "level": "h2",
+      "text": "Setting Environment Variables for Processes",
+      "id": "setting-environment-variables-for-processes"
+    },
+    {
+      "level": "h2",
+      "text": "Getting real-time Process Output",
+      "id": "getting-real-time-process-output"
+    },
+    {
+      "level": "h2",
+      "text": "Running Processes Asynchronously",
+      "id": "running-processes-asynchronously"
+    },
+    {
+      "level": "h2",
+      "text": "Streaming to the Standard Input of a Process",
+      "id": "streaming-to-the-standard-input-of-a-process"
+    },
+    {
+      "level": "h3",
+      "text": "Using PHP Streams as the Standard Input of a Process",
+      "id": "using-php-streams-as-the-standard-input-of-a-process"
+    },
+    {
+      "level": "h2",
+      "text": "Using TTY and PTY Modes",
+      "id": "using-tty-and-pty-modes"
+    },
+    {
+      "level": "h2",
+      "text": "Stopping a Process",
+      "id": "stopping-a-process"
+    },
+    {
+      "level": "h2",
+      "text": "Executing PHP Code in Isolation",
+      "id": "executing-php-code-in-isolation"
+    },
+    {
+      "level": "h2",
+      "text": "Executing a PHP Child Process with the Same Configuration",
+      "id": "executing-a-php-child-process-with-the-same-configuration"
+    },
+    {
+      "level": "h2",
+      "text": "Process Timeout",
+      "id": "process-timeout"
+    },
+    {
+      "level": "h2",
+      "text": "Process Idle Timeout",
+      "id": "process-idle-timeout"
+    },
+    {
+      "level": "h2",
+      "text": "Process Signals",
+      "id": "process-signals"
+    },
+    {
+      "level": "h2",
+      "text": "Process Pid",
+      "id": "process-pid"
+    },
+    {
+      "level": "h2",
+      "text": "Disabling Output",
+      "id": "disabling-output"
+    },
+    {
+      "level": "h2",
+      "text": "Finding an Executable",
+      "id": "finding-an-executable"
+    },
+    {
+      "level": "h2",
+      "text": "Finding the Executable PHP Binary",
+      "id": "finding-the-executable-php-binary"
+    },
+    {
+      "level": "h2",
+      "text": "Checking for TTY Support",
+      "id": "checking-for-tty-support"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/process",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Exception\\ProcessFailedException;\nuse Symfony\\Component\\Process\\Process;\n\n$process = new Process(['ls', '-lsa']);\n$process->run();\n\n// executes after the command finishes\nif (!$process->isSuccessful()) {\n    throw new ProcessFailedException($process);\n}\n\necho $process->getOutput();",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['ls', '-lsa']);\n$process->start();\n\nforeach ($process as $type => $data) {\n    if ($process::OUT === $type) {\n        echo \"\\nRead from stdout: \".$data;\n    } else { // $process::ERR === $type\n        echo \"\\nRead from stderr: \".$data;\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "$process = new Process(['ls', '-lsa']);\n$process->start();\n$iterator = $process->getIterator($process::ITER_SKIP_ERR | $process::ITER_KEEP_OUTPUT);\nforeach ($iterator as $data) {\n    echo $data.\"\\n\";\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Exception\\ProcessFailedException;\nuse Symfony\\Component\\Process\\Process;\n\n$process = new Process(['ls', '-lsa']);\n\ntry {\n    $process->mustRun();\n\n    echo $process->getOutput();\n} catch (ProcessFailedException $exception) {\n    echo $exception->getMessage();\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['...', '...', '...']);\n// this option allows a subprocess to continue running after the main script exited\n$process->setOptions(['create_new_console' => true]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$process = new Process(['/path/command', '--option', 'argument', 'etc.']);\n$process = new Process(['/path/to/php', '--define', 'memory_limit=1024M', '/path/to/script.php']);",
+      "language": "unknown"
+    },
+    {
+      "code": "// On Unix-like OSes (Linux, macOS)\n$process = Process::fromShellCommandline('echo \"$MESSAGE\"');\n\n// On Windows\n$process = Process::fromShellCommandline('echo \"!MESSAGE!\"');\n\n// On both Unix-like and Windows\n$process->run(null, ['MESSAGE' => 'Something to output']);",
+      "language": "javascript"
+    },
+    {
+      "code": "// works the same on Windows , Linux and macOS\n$process = Process::fromShellCommandline('echo \"${:MESSAGE}\"');",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['...'], null, ['ENV_VAR_NAME' => 'value']);\n$process = Process::fromShellCommandline('...', null, ['ENV_VAR_NAME' => 'value']);\n$process->run(null, ['ENV_VAR_NAME' => 'value']);",
+      "language": "javascript"
+    },
+    {
+      "code": "$process = new Process(['...'], null, [\n    'APP_ENV' => false,\n    'SYMFONY_DOTENV_VARS' => false,\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['ls', '-lsa']);\n$process->run(function ($type, $buffer): void {\n    if (Process::ERR === $type) {\n        echo 'ERR > '.$buffer;\n    } else {\n        echo 'OUT > '.$buffer;\n    }\n});",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['ls', '-lsa']);\n$process->start();\n\nwhile ($process->isRunning()) {\n    // waiting for process to finish\n}\n\necho $process->getOutput();",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['ls', '-lsa']);\n$process->start();\n\n// ... do other things\n\n$process->wait();\n\n// ... do things after the process has finished",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['ls', '-lsa']);\n$process->start();\n\n$process->wait(function ($type, $buffer): void {\n    if (Process::ERR === $type) {\n        echo 'ERR > '.$buffer;\n    } else {\n        echo 'OUT > '.$buffer;\n    }\n});",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['/usr/bin/php', 'slow-starting-server.php']);\n$process->start();\n\n// ... do other things\n\n// waits until the given anonymous function returns true\n$process->waitUntil(function ($type, $output): bool {\n    return $output === 'Ready. Waiting for commands...';\n});\n\n// ... do things after the process is ready",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['cat']);\n$process->setInput('foobar');\n$process->run();",
+      "language": "unknown"
+    },
+    {
+      "code": "$input = new InputStream();\n$input->write('foo');\n\n$process = new Process(['cat']);\n$process->setInput($input);\n$process->start();\n\n// ... read process output or do other things\n\n$input->write('bar');\n$input->close();\n\n$process->wait();\n\n// will echo: foobar\necho $process->getOutput();",
+      "language": "unknown"
+    },
+    {
+      "code": "$stream = fopen('php://temporary', 'w+');\n\n$process = new Process(['cat']);\n$process->setInput($stream);\n$process->start();\n\nfwrite($stream, 'foo');\n\n// ... read process output or do other things\n\nfwrite($stream, 'bar');\nfclose($stream);\n\n$process->wait();\n\n// will echo: 'foobar'\necho $process->getOutput();",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['vim']);\n$process->setTty(true);\n$process->run();\n\n// As the output is connected to the terminal, it is no longer possible\n// to read or modify the output from the process!\ndump($process->getOutput()); // null",
+      "language": "unknown"
+    },
+    {
+      "code": "$process = new Process(['ls', '-lsa']);\n$process->start();\n\n// ... do other things\n\n$process->stop(3, SIGINT);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\PhpProcess;\n\n$process = new PhpProcess(<<<EOF\n    <?= 'Hello World' ?>\nEOF\n);\n$process->run();",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Console\\Attribute\\AsCommand;\nuse Symfony\\Component\\Console\\Style\\SymfonyStyle;\nuse Symfony\\Component\\Process\\Process;\n\n#[AsCommand(name: 'app:my-command')]\nclass MyCommand\n{\n    public function __invoke(SymfonyStyle $io): int\n    {\n        // the memory_limit (and any other config option) of this command is\n        // the one defined in php.ini instead of the new values (optionally)\n        // passed via the '-d' command option\n        $childProcess = new Process(['bin/console', 'cache:pool:prune']);\n\n        // the memory_limit (and any other config option) of this command takes\n        // into account the values (optionally) passed via the '-d' command option\n        $childProcess = new PhpSubprocess(['bin/console', 'cache:pool:prune']);\n\n        return 0;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['ls', '-lsa']);\n$process->setTimeout(3600);\n$process->run();",
+      "language": "unknown"
+    },
+    {
+      "code": "$process->setTimeout(3600);\n$process->start();\n\nwhile ($condition) {\n    // ...\n\n    // check if the timeout is reached\n    $process->checkTimeout();\n\n    usleep(200000);\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['something-with-variable-runtime']);\n$process->setTimeout(3600);\n$process->setIdleTimeout(60);\n$process->run();",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['find', '/', '-name', 'rabbit']);\n$process->start();\n\n// will send a SIGKILL to the process\n$process->signal(SIGKILL);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['find', '/', '-name', 'rabbit']);\n$process->setIgnoredSignals([SIGKILL, SIGUSR1]);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['/usr/bin/php', 'worker.php']);\n$process->start();\n\n$pid = $process->getPid();",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = new Process(['/usr/bin/php', 'worker.php']);\n$process->disableOutput();\n$process->run();",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\ExecutableFinder;\n\n$executableFinder = new ExecutableFinder();\n$chromedriverPath = $executableFinder->find('chromedriver');\n// $chromedriverPath = '/usr/local/bin/chromedriver' (the result will be different on your computer)",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\ExecutableFinder;\n\n$executableFinder = new ExecutableFinder();\n$chromedriverPath = $executableFinder->find('chromedriver', '/path/to/chromedriver', ['local-bin/']);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\PhpExecutableFinder;\n\n$phpBinaryFinder = new PhpExecutableFinder();\n$phpBinaryPath = $phpBinaryFinder->find();\n// $phpBinaryPath = '/usr/local/bin/php' (the result will be different on your computer)",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Process\\Process;\n\n$process = (new Process())->setTty(Process::isTtySupported());",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/process.html",
+    "https://symfony.com/doc/7.3/components/using_components.html"
+  ]
+}

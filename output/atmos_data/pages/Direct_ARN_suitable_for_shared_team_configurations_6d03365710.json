@@ -1,0 +1,8 @@
+{
+  "title": "Direct ARN (suitable for shared team configurations)",
+  "content": "mfa_arn: arn:aws:iam::123456789012:mfa/username",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#direct-arn-(suitable-for-shared-team-configurations)",
+  "links": []
+}

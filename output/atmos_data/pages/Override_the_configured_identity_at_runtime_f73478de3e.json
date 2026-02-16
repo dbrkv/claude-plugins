@@ -1,0 +1,42 @@
+{
+  "title": "Override the configured identity at runtime",
+  "content": "atmos deploy --identity staging-account\nyaml\nworkflows:\n  multi-cloud-deploy:\n    description: Deploy across AWS and GCP\n    steps:\n      # AWS deployment\n      - name: Deploy AWS infrastructure\n        command: terraform apply -target=module.aws\n        identity: aws-production\n\n# GCP deployment\n      - name: Deploy GCP infrastructure\n        command: terraform apply -target=module.gcp\n        identity: gcp-production\n\n# No authentication needed\n      - name: Update documentation\n        command: ./scripts/update-docs.sh\nyaml\ncommands:\n  - name: plan-all\n    description: Plan all components in a stack\n    identity: developer\n    component_config:\n      component: \"{{ .Arguments.component }}\"\n      stack: \"{{ .Arguments.stack }}\"\n    steps:\n      - atmos terraform plan {{ .ComponentConfig.Component }} -s {{ .ComponentConfig.Stack }}\nbash",
+  "code_samples": [
+    {
+      "code": "**Precedence**: `--identity` flag > configured `identity` > no authentication\n\n### Shared Identity Across Steps\n\nAll steps in a custom command share the same identity - the command authenticates once and all steps execute with those credentials.\n\n## Examples\n\n### Workflow with Mixed Authentication",
+      "language": "unknown"
+    },
+    {
+      "code": "### Custom Command with Component Config",
+      "language": "unknown"
+    },
+    {
+      "code": "Run with override:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Shared Identity Across Steps",
+      "id": "shared-identity-across-steps"
+    },
+    {
+      "level": "h2",
+      "text": "Examples",
+      "id": "examples"
+    },
+    {
+      "level": "h3",
+      "text": "Workflow with Mixed Authentication",
+      "id": "workflow-with-mixed-authentication"
+    },
+    {
+      "level": "h3",
+      "text": "Custom Command with Component Config",
+      "id": "custom-command-with-component-config"
+    }
+  ],
+  "url": "llms-txt#override-the-configured-identity-at-runtime",
+  "links": []
+}

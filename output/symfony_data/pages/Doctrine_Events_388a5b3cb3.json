@@ -1,0 +1,87 @@
+{
+  "url": "https://symfony.com/doc/7.3/doctrine/events.html",
+  "title": "Doctrine Events",
+  "content": "Doctrine, the set of PHP libraries used by Symfony to work with databases, provides a lightweight event system to update entities during the application execution. These events, called lifecycle events, allow performing tasks such as \"update the createdAt property automatically right before persisting entities of this type\".\n\nDoctrine triggers events before/after performing the most common entity operations (e.g. prePersist/postPersist, preUpdate/postUpdate) and also on other common tasks (e.g. loadClassMetadata, onClear).\n\nThere are different ways to listen to these Doctrine events:\n\nThe performance of each type of listener depends on how many entities it applies to: lifecycle callbacks are faster than entity listeners, which in turn are faster than lifecycle listeners.\n\nThis article only explains the basics about Doctrine events when using them inside a Symfony application. Read the official docs about Doctrine events to learn everything about them.\n\nThis article covers listeners for Doctrine ORM. If you are using ODM for MongoDB, read the DoctrineMongoDBBundle documentation.\n\nLifecycle callbacks are defined as public methods inside the entity you want to modify. For example, suppose you want to set a createdAt date column to the current date, but only when the entity is first persisted (i.e. inserted). To do so, define a callback for the prePersist Doctrine event:\n\nSome lifecycle callbacks receive an argument that provides access to useful information such as the current entity manager (e.g. the preUpdate callback receives a PreUpdateEventArgs $event argument).\n\nEntity listeners are defined as PHP classes that listen to a single Doctrine event on a single entity class. For example, suppose that you want to send some notifications whenever a User entity is modified in the database.\n\nFirst, define a PHP class that handles the postUpdate Doctrine event:\n\nThen, add the #[AsEntityListener] attribute to the class to enable it as a Doctrine entity listener in your application:\n\nAlternatively, if you prefer to not use PHP attributes, you must configure a service for the entity listener and tag it with the doctrine.orm.entity_listener tag as follows:\n\nLifecycle listeners are defined as PHP classes that listen to a single Doctrine event on all the application entities. For example, suppose that you want to update some search index whenever a new entity is persisted in the database. To do so, define a listener for the postPersist Doctrine event:\n\nIn previous Doctrine versions, instead of PostPersistEventArgs, you had to use LifecycleEventArgs, which was deprecated in Doctrine ORM 2.14.\n\nThen, add the #[AsDoctrineListener] attribute to the class to enable it as a Doctrine listener in your application:\n\nAlternatively, if you prefer to not use PHP attributes, you must enable the listener in the Symfony application by creating a new service for it and tagging it with the doctrine.event_listener tag:\n\nThe AsDoctrineListener attribute was introduced in DoctrineBundle 2.8.0.\n\nThe value of the connection option can also be a configuration parameter.\n\nMeasure & Improve Symfony Code Performance\n\nGet your Sylius expertise recognized",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Doctrine Events",
+      "id": "doctrine-events"
+    },
+    {
+      "level": "h2",
+      "text": "Doctrine Lifecycle Callbacks",
+      "id": "doctrine-lifecycle-callbacks"
+    },
+    {
+      "level": "h2",
+      "text": "Doctrine Entity Listeners",
+      "id": "doctrine-entity-listeners"
+    },
+    {
+      "level": "h2",
+      "text": "Doctrine Lifecycle Listeners",
+      "id": "doctrine-lifecycle-listeners"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Product.php\nnamespace App\\Entity;\n\nuse Doctrine\\ORM\\Mapping as ORM;\n\n// When using attributes, don't forget to add #[ORM\\HasLifecycleCallbacks]\n// to the class of the entity where you define the callback\n\n#[ORM\\Entity]\n#[ORM\\HasLifecycleCallbacks]\nclass Product\n{\n    // ...\n\n    #[ORM\\PrePersist]\n    public function setCreatedAtValue(): void\n    {\n        $this->createdAt = new \\DateTimeImmutable();\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/doctrine/Product.orm.yml\nApp\\Entity\\Product:\n    type: entity\n    # ...\n    lifecycleCallbacks:\n        prePersist: ['setCreatedAtValue']",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/doctrine/Product.orm.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<doctrine-mapping xmlns=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://doctrine-project.org/schemas/orm/doctrine-mapping\n        https://doctrine-project.org/schemas/orm/doctrine-mapping.xsd\">\n\n    <entity name=\"App\\Entity\\Product\">\n        <!-- ... -->\n        <lifecycle-callbacks>\n            <lifecycle-callback type=\"prePersist\" method=\"setCreatedAtValue\"/>\n        </lifecycle-callbacks>\n    </entity>\n</doctrine-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/EventListener/UserChangedNotifier.php\nnamespace App\\EventListener;\n\nuse App\\Entity\\User;\nuse Doctrine\\ORM\\Event\\PostUpdateEventArgs;\n\nclass UserChangedNotifier\n{\n    // the entity listener methods receive two arguments:\n    // the entity instance and the lifecycle event\n    public function postUpdate(User $user, PostUpdateEventArgs $event): void\n    {\n        // ... do something to notify the changes\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/EventListener/UserChangedNotifier.php\nnamespace App\\EventListener;\n\n// ...\nuse App\\Entity\\User;\nuse Doctrine\\Bundle\\DoctrineBundle\\Attribute\\AsEntityListener;\nuse Doctrine\\ORM\\Events;\n\n#[AsEntityListener(event: Events::postUpdate, method: 'postUpdate', entity: User::class)]\nclass UserChangedNotifier\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\EventListener\\UserChangedNotifier:\n        tags:\n            -\n                # these are the options required to define the entity listener\n                name: 'doctrine.orm.entity_listener'\n                event: 'postUpdate'\n                entity: 'App\\Entity\\User'\n\n                # these are other options that you may define if needed\n\n                # set the 'lazy' option to TRUE to only instantiate listeners when they are used\n                # lazy: true\n\n                # set the 'entity_manager' option if the listener is not associated to the default manager\n                # entity_manager: 'custom'\n\n                # by default, Symfony looks for a method called after the event (e.g. postUpdate())\n                # if it doesn't exist, it tries to execute the '__invoke()' method, but you can\n                # configure a custom method name with the 'method' option\n                # method: 'checkUserChanges'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:doctrine=\"http://symfony.com/schema/dic/doctrine\">\n    <services>\n        <!-- ... -->\n\n        <service id=\"App\\EventListener\\UserChangedNotifier\">\n            <!--\n                * These are the options required to define the entity listener:\n                *   * name\n                *   * event\n                *   * entity\n                *\n                * These are other options that you may define if needed:\n                *   * lazy: if TRUE, listeners are only instantiated when they are used\n                *   * entity_manager: define it if the listener is not associated to the default manager\n                *   * method: by default, Symfony looks for a method called after the event (e.g. postUpdate())\n                *           if it doesn't exist, it tries to execute the '__invoke()' method, but\n                *           you can configure a custom method name with the 'method' option\n            -->\n            <tag name=\"doctrine.orm.entity_listener\"\n                event=\"postUpdate\"\n                entity=\"App\\Entity\\User\"\n                lazy=\"true\"\n                entity_manager=\"custom\"\n                method=\"checkUserChanges\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\Entity\\User;\nuse App\\EventListener\\UserChangedNotifier;\n\nreturn static function (ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    $services->set(UserChangedNotifier::class)\n        ->tag('doctrine.orm.entity_listener', [\n            // These are the options required to define the entity listener:\n            'event' => 'postUpdate',\n            'entity' => User::class,\n\n            // These are other options that you may define if needed:\n\n            // set the 'lazy' option to TRUE to only instantiate listeners when they are used\n            // 'lazy' => true,\n\n            // set the 'entity_manager' option if the listener is not associated to the default manager\n            // 'entity_manager' => 'custom',\n\n            // by default, Symfony looks for a method called after the event (e.g. postUpdate())\n            // if it doesn't exist, it tries to execute the '__invoke()' method, but you can\n            // configure a custom method name with the 'method' option\n            // 'method' => 'checkUserChanges',\n        ])\n    ;\n};",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/EventListener/SearchIndexer.php\nnamespace App\\EventListener;\n\nuse App\\Entity\\Product;\nuse Doctrine\\ORM\\Event\\PostPersistEventArgs;\n\nclass SearchIndexer\n{\n    // the listener methods receive an argument which gives you access to\n    // both the entity object of the event and the entity manager itself\n    public function postPersist(PostPersistEventArgs $args): void\n    {\n        $entity = $args->getObject();\n\n        // if this listener only applies to certain entity types,\n        // add some code to check the entity type as early as possible\n        if (!$entity instanceof Product) {\n            return;\n        }\n\n        $entityManager = $args->getObjectManager();\n        // ... do something with the Product entity\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/EventListener/SearchIndexer.php\nnamespace App\\EventListener;\n\nuse Doctrine\\Bundle\\DoctrineBundle\\Attribute\\AsDoctrineListener;\nuse Doctrine\\ORM\\Events;\n\n#[AsDoctrineListener(event: Events::postPersist, priority: 500, connection: 'default')]\nclass SearchIndexer\n{\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/services.yaml\nservices:\n    # ...\n\n    App\\EventListener\\SearchIndexer:\n        tags:\n            -\n                name: 'doctrine.event_listener'\n                # this is the only required option for the lifecycle listener tag\n                event: 'postPersist'\n\n                # listeners can define their priority in case listeners are associated\n                # to the same event (default priority = 0; higher numbers = listener is run earlier)\n                priority: 500\n\n                # you can also restrict listeners to a specific Doctrine connection\n                connection: 'default'",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/services.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<container xmlns=\"http://symfony.com/schema/dic/services\"\n    xmlns:doctrine=\"http://symfony.com/schema/dic/doctrine\">\n    <services>\n        <!-- ... -->\n\n        <!--\n            * 'event' is the only required option that defines the lifecycle listener\n            * 'priority': used when multiple listeners are associated to the same event\n            *             (default priority = 0; higher numbers = listener is run earlier)\n            * 'connection': restricts the listener to a specific Doctrine connection\n        -->\n        <service id=\"App\\EventListener\\SearchIndexer\">\n            <tag name=\"doctrine.event_listener\"\n                event=\"postPersist\"\n                priority=\"500\"\n                connection=\"default\"/>\n        </service>\n    </services>\n</container>",
+      "language": "unknown"
+    },
+    {
+      "code": "// config/services.php\nnamespace Symfony\\Component\\DependencyInjection\\Loader\\Configurator;\n\nuse App\\EventListener\\SearchIndexer;\n\nreturn static function (ContainerConfigurator $container): void {\n    $services = $container->services();\n\n    // listeners are applied by default to all Doctrine connections\n    $services->set(SearchIndexer::class)\n        ->tag('doctrine.event_listener', [\n            // this is the only required option for the lifecycle listener tag\n            'event' => 'postPersist',\n\n            // listeners can define their priority in case multiple listeners are associated\n            // to the same event (default priority = 0; higher numbers = listener is run earlier)\n            'priority' => 500,\n\n            # you can also restrict listeners to a specific Doctrine connection\n            'connection' => 'default',\n        ])\n    ;\n};",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/doctrine/events.html",
+    "https://symfony.com/doc/7.3/service_container/tags.html",
+    "https://symfony.com/doc/7.3/configuration.html"
+  ]
+}

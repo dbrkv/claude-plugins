@@ -1,0 +1,8 @@
+{
+  "title": "Query environment settings",
+  "content": "atmos list values vpc --query .vars.environment",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#query-environment-settings",
+  "links": []
+}

@@ -1,0 +1,51 @@
+{
+  "title": "Execute the workflow `validate-all-vpc` from the workflow manifest `validation.yaml`",
+  "content": "atmos workflow validate-all-vpc -f validation\nconsole\nExecuting the workflow 'plan-all-vpc' from 'stacks/workflows/networking.yaml'\n\nExecuting workflow step: terraform plan vpc -s plat-ue2-dev\nExecuting workflow step: terraform plan vpc -s plat-uw2-dev\nExecuting workflow step: terraform plan vpc -s plat-ue2-staging\nExecuting workflow step: terraform plan vpc -s plat-uw2-staging\nExecuting workflow step: terraform plan vpc -s plat-ue2-prod\nExecuting workflow step: terraform plan vpc -s plat-uw2-prod\nyaml\n  import:\n    - orgs/acme/plat/dev/_defaults\n    - mixins/region/us-east-2\n    # Import the defaults for all VPC components\n    - catalog/vpc/defaults\n\ncomponents:\n    terraform:\n      # Atmos component `vpc/1`\n      vpc/1:\n        metadata:\n          # Point to the Terraform component in `components/terraform/vpc`\n          component: vpc\n          # Inherit the defaults for all VPC components\n          inherits:\n            - vpc/defaults\n        # Define/override variables specific to this `vpc/1` component\n        vars:\n          name: vpc-1\n          ipv4_primary_cidr_block: 10.9.0.0/18\n\n# Atmos component `vpc/2`\n      vpc/2:\n        metadata:\n          # Point to the Terraform component in `components/terraform/vpc`\n          component: vpc\n          # Inherit the defaults for all VPC components\n          inherits:\n            - vpc/defaults\n        # Define/override variables specific to this `vpc/2` component\n        vars:\n          name: vpc-2\n          ipv4_primary_cidr_block: 10.10.0.0/18\n  shell\n  atmos terraform apply vpc/1 -s plat-ue2-dev\n  atmos terraform apply vpc/2 --stack plat-ue2-dev\n  shell",
+  "code_samples": [
+    {
+      "code": ":::tip\nRefer to [atmos workflow](/cli/commands/workflow) for more information on the `atmos workflow` CLI command\n:::\n\nThe `atmos workflow` CLI command supports the `--dry-run` flag. If passed, the command will just print information about\nthe executed workflow steps without executing them. For example:\n\n<Terminal title=\"atmos workflow plan-all-vpc -f networking --dry-run\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</Terminal>\n\n---\n\n## Final Notes\n\nAtmos provides unlimited flexibility in defining and configuring stacks and components in the stacks.\n\n- Terraform components can be in different sub-folders in the `components/terraform` directory. The sub-folders can be organized by type, by teams\n  that are responsible for the components, by operations that are performed on the components, or by any other category\n\n- Atmos stack manifests can have arbitrary names and can be located in any sub-folder in the `stacks` directory. Atmos stack filesystem layout is for\n  people to better organize the stacks and make the configurations DRY. Atmos (the CLI) does not care about the filesystem layout, all it cares about\n  is how to find the stacks and the components in the stacks by using the context variables `namespace`, `tenant`, `environment` and `stage`\n\n- An Atmos component can have any name that can be different from the Terraform component name. For example, two different Atmos components `vpc/1`\n  and `vpc/2` can provide configuration for the same Terraform component `vpc`\n\n- We can provision more than one instance of the same Terraform component (with the same or different settings) into the same environment by defining\n  many Atmos components that provide configuration for the Terraform component. For example, the following config shows how to define two Atmos\n  components, `vpc/1` and `vpc/2`, which both point to the same Terraform component `vpc`:",
+      "language": "unknown"
+    },
+    {
+      "code": "Then we can execute the following `atmos` commands to provision the two VPCs into the `dev` account in the `us-east-2` region:",
+      "language": "unknown"
+    },
+    {
+      "code": "All the above makes Atmos an ideal framework to organize infrastructure, to design for organizational complexity, and to provision multi-account\nenvironments for very complex organizations.\n\n---\n\n## Next Steps\n\nYou have just learned the **essentials of Atmos**.\n\nAtmos is a powerful enterprise-grade workflow automation tool with so **much more to offer**!\n\n## What's next?\n\nHere are some of the major differentiators of Atmos and topics worth exploring in greater depth:\n\n* [Atmos Design Patterns](/design-patterns)\n* [Third-party Integrations](/integrations)\n* [Atmos Vendoring](/core-concepts/vendor)\n* [Component Vendoring](/core-concepts/vendor/component-manifest)\n* [Imports](/core-concepts/stacks/imports) (mixins, catalogs)\n* [Workflow Automation](/core-concepts/workflows)\n* [Custom Commands](/core-concepts/custom-commands)\n* [Component Inheritance & Multiple Inheritance](/core-concepts/stacks/inheritance)\n* [JSON Schema & OPA Policy Enforcement](/core-concepts/validate)\n* [Atmos Manifest JSON Schema](/cli/schemas)\n\n---\n\n## Provision\n\nHaving configured the Terraform components, the Atmos components catalog, all the mixins and defaults, and the Atmos top-level stacks, we can now\nprovision the components in the stacks.\n\nThe `vpc` Atmos components use the remote state from the `vpc-flow-logs-bucket` components, therefore the `vpc-flow-logs-bucket` components must\nbe provisioned first.\n\n## Provision Atmos Components into all Stacks\n\nProvision the `vpc-flow-logs-bucket` Atmos component into the stacks:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Final Notes",
+      "id": "final-notes"
+    },
+    {
+      "level": "h2",
+      "text": "Next Steps",
+      "id": "next-steps"
+    },
+    {
+      "level": "h2",
+      "text": "What's next?",
+      "id": "what's-next?"
+    },
+    {
+      "level": "h2",
+      "text": "Provision",
+      "id": "provision"
+    },
+    {
+      "level": "h2",
+      "text": "Provision Atmos Components into all Stacks",
+      "id": "provision-atmos-components-into-all-stacks"
+    }
+  ],
+  "url": "llms-txt#execute-the-workflow-`validate-all-vpc`-from-the-workflow-manifest-`validation.yaml`",
+  "links": []
+}

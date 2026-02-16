@@ -1,0 +1,19 @@
+{
+  "title": "Or reset to a known good state",
+  "content": "git reset --hard <good-commit-sha>\nbash",
+  "code_samples": [
+    {
+      "code": "### Apply the Rollback",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Apply the Rollback",
+      "id": "apply-the-rollback"
+    }
+  ],
+  "url": "llms-txt#or-reset-to-a-known-good-state",
+  "links": []
+}

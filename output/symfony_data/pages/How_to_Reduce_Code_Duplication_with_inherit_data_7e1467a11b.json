@@ -1,0 +1,46 @@
+{
+  "url": "https://symfony.com/doc/7.3/form/inherit_data_option.html",
+  "title": "How to Reduce Code Duplication with \"inherit_data\"",
+  "content": "The inherit_data form field option can be very useful when you have some duplicated fields in different entities. For example, imagine you have two entities, a Company and a Customer:\n\nAs you can see, each entity shares a few of the same fields: address, zipcode, city, country.\n\nStart with building two forms for these entities, CompanyType and CustomerType:\n\nInstead of including the duplicated fields address, zipcode, city and country in both of these forms, create a third form called LocationType for that:\n\nThe location form has an interesting option set, namely inherit_data. This option lets the form inherit its data from its parent form. If embedded in the company form, the fields of the location form will access the properties of the Company instance. If embedded in the customer form, the fields will access the properties of the Customer instance instead. Convenient, eh?\n\nInstead of setting the inherit_data option inside LocationType, you can also (just like with any option) pass it in the third argument of $builder->add().\n\nFinally, make this work by adding the location form to your two original forms:\n\nThat's it! You have extracted duplicated field definitions to a separate location form that you can reuse wherever you need it.\n\nForms with the inherit_data option set cannot have *_SET_DATA event listeners.\n\nCode consumes server resources. Blackfire tells you how\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "How to Reduce Code Duplication with \"inherit_data\"",
+      "id": "how-to-reduce-code-duplication-with-quot-inherit-data-quot"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Company.php\nnamespace App\\Entity;\n\nclass Company\n{\n    private string $name;\n    private string $website;\n\n    private string $address;\n    private string $zipcode;\n    private string $city;\n    private string $country;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Customer.php\nnamespace App\\Entity;\n\nclass Customer\n{\n    private string $firstName;\n    private string $lastName;\n\n    private string $address;\n    private string $zipcode;\n    private string $city;\n    private string $country;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/Type/CompanyType.php\nnamespace App\\Form\\Type;\n\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\n\nclass CompanyType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder\n            ->add('name', TextType::class)\n            ->add('website', TextType::class);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/Type/CustomerType.php\nnamespace App\\Form\\Type;\n\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\n\nclass CustomerType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder\n            ->add('firstName', TextType::class)\n            ->add('lastName', TextType::class);\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Form/Type/LocationType.php\nnamespace App\\Form\\Type;\n\nuse Symfony\\Component\\Form\\AbstractType;\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\TextareaType;\nuse Symfony\\Component\\Form\\Extension\\Core\\Type\\TextType;\nuse Symfony\\Component\\Form\\FormBuilderInterface;\nuse Symfony\\Component\\OptionsResolver\\OptionsResolver;\n\nclass LocationType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        $builder\n            ->add('address', TextareaType::class)\n            ->add('zipcode', TextType::class)\n            ->add('city', TextType::class)\n            ->add('country', TextType::class);\n    }\n\n    public function configureOptions(OptionsResolver $resolver): void\n    {\n        $resolver->setDefaults([\n            'inherit_data' => true,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Form/Type/CompanyType.php\nnamespace App\\Form\\Type;\n\nuse App\\Entity\\Company;\nuse Symfony\\Component\\Form\\AbstractType;\n\n// ...\n\nclass CompanyType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        // ...\n\n        $builder->add('foo', LocationType::class, [\n            'data_class' => Company::class,\n        ]);\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "// src/Form/Type/CustomerType.php\nnamespace App\\Form\\Type;\n\nuse App\\Entity\\Customer;\nuse Symfony\\Component\\Form\\AbstractType;\n\nclass CustomerType extends AbstractType\n{\n    public function buildForm(FormBuilderInterface $builder, array $options): void\n    {\n        // ...\n\n        $builder->add('bar', LocationType::class, [\n            'data_class' => Customer::class,\n        ]);\n    }\n}",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/form/inherit_data_option.html"
+  ]
+}

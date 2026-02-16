@@ -1,0 +1,132 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/clock.html",
+  "title": "The Clock Component",
+  "content": "The Clock component decouples applications from the system clock. This allows you to fix time to improve testability of time-sensitive logic.\n\nThe component provides a ClockInterface with the following implementations for different use cases:\n\nIf you install this component outside of a Symfony application, you must require the vendor/autoload.php file in your code to enable the class autoloading mechanism provided by Composer. Read this article for more details.\n\nThe Clock class returns the current time and allows to use any PSR-20 compatible implementation as a global clock in your application:\n\nThe Clock component also provides the now() function:\n\nThe now() function takes an optional modifier argument which will be applied to the current time:\n\nYou can use any string accepted by the DateTime constructor.\n\nLater on this page you can learn how to use this clock in your services and tests. When using the Clock component, you manipulate DatePoint instances. You can learn more about it in the dedicated section.\n\nThe Clock component provides some ready-to-use implementations of the ClockInterface, which you can use as global clocks in your application depending on your needs.\n\nA clock service replaces creating a new DateTime or DateTimeImmutable object for the current time. Instead, you inject the ClockInterface and call now(). By default, your application will likely use a NativeClock, which always returns the current system time. In tests it is replaced with a MockClock.\n\nThe following example introduces a service utilizing the Clock component to determine the current time:\n\nThe MockClock is instantiated with a time and does not move forward on its own. The time is fixed until sleep() or modify() are called. This gives you full control over what your code assumes is the current time.\n\nWhen writing a test for this service, you can check both cases where something is expired or not, by modifying the clock's time:\n\nThe MonotonicClock allows you to implement a precise stopwatch; depending on the system up to nanosecond precision. It can be used to measure the elapsed time between two calls without being affected by inconsistencies sometimes introduced by the system clock, e.g. by updating it. Instead, it consistently increases time, making it especially useful for measuring performance.\n\nUsing the Clock component in your services to retrieve the current time makes them easier to test. For example, by using the MockClock implementation as the default one during tests, you will have full control to set the \"current time\" to any arbitrary date/time.\n\nIn order to use this component in your services, make their classes use the ClockAwareTrait. Thanks to service autoconfiguration, the setClock() method of the trait will automatically be called by the service container.\n\nYou can now call the $this->now() method to get the current time:\n\nThanks to the ClockAwareTrait, and by using the MockClock implementation, you can set the current time arbitrarily without having to change your service code. This will help you test every case of your method without the need of actually being in a month or another.\n\nThe Clock component uses a special DatePoint class. This is a small wrapper on top of PHP's DateTimeImmutable. You can use it seamlessly everywhere a DateTimeImmutable or DateTimeInterface is expected. The DatePoint object fetches the date and time from the Clock class. This means that if you did any changes to the clock as stated in the usage section, it will be reflected when creating a new DatePoint. You can also create a new DatePoint instance directly, for instance when using it as a default value:\n\nThe constructor also allows setting a timezone or custom referenced date:\n\nThe DatePoint class also provides a named constructor to create dates from timestamps:\n\nThe createFromTimestamp() method was introduced in Symfony 7.1.\n\nIn addition DatePoint offers stricter return types and provides consistent error handling across versions of PHP, thanks to polyfilling PHP 8.3's behavior on the topic.\n\nDatePoint also allows to set and get the microsecond part of the date and time:\n\nThis feature polyfills PHP 8.4's behavior on the topic, as microseconds manipulation is not available in previous versions of PHP.\n\nThe setMicrosecond() and getMicrosecond() methods were introduced in Symfony 7.1.\n\nIf you use Doctrine to work with databases, consider using the date_point Doctrine type, which converts to/from DatePoint objects automatically:\n\nThe DatePointType was introduced in Symfony 7.3.\n\nThe Clock component provides another trait, called ClockSensitiveTrait, to help you write time-sensitive tests. This trait provides methods to freeze time and restore the global clock after each test.\n\nUse the ClockSensitiveTrait::mockTime() method to interact with the mocked clock in your tests. This method accepts different types as its only argument:\n\nLet's say you want to test the method MonthSensitive::isWinterMonth() of the above example. This is how you can write that test:\n\nThis test will behave the same no matter which time of the year you run it. By combining the ClockAwareTrait and ClockSensitiveTrait, you have full control on your time-sensitive code's behavior.\n\nThe Clock component takes full advantage of some PHP DateTime exceptions. If you pass an invalid string to the clock (e.g. when creating a clock or modifying a MockClock) you'll get a DateMalformedStringException. If you pass an invalid timezone, you'll get a DateInvalidTimeZoneException:\n\nThese exceptions are available starting from PHP 8.3. However, thanks to the symfony/polyfill-php83 dependency required by the Clock component, you can use them even if your project doesn't use PHP 8.3 yet.\n\nBecome certified from home\n\nBe safe against critical risks to your projects and businesses",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "The Clock Component",
+      "id": "the-clock-component"
+    },
+    {
+      "level": "h2",
+      "text": "Installation",
+      "id": "installation"
+    },
+    {
+      "level": "h2",
+      "text": "Usage",
+      "id": "usage"
+    },
+    {
+      "level": "h2",
+      "text": "Available Clocks Implementations",
+      "id": "available-clocks-implementations"
+    },
+    {
+      "level": "h3",
+      "text": "NativeClock",
+      "id": "nativeclock"
+    },
+    {
+      "level": "h3",
+      "text": "MockClock",
+      "id": "mockclock"
+    },
+    {
+      "level": "h3",
+      "text": "Monotonic Clock",
+      "id": "monotonic-clock"
+    },
+    {
+      "level": "h2",
+      "text": "Using a Clock inside a Service",
+      "id": "using-a-clock-inside-a-service"
+    },
+    {
+      "level": "h2",
+      "text": "The DatePoint Class",
+      "id": "the-datepoint-class"
+    },
+    {
+      "level": "h3",
+      "text": "Storing DatePoints in the Database",
+      "id": "storing-datepoints-in-the-database"
+    },
+    {
+      "level": "h2",
+      "text": "Writing Time-Sensitive Tests",
+      "id": "writing-time-sensitive-tests"
+    },
+    {
+      "level": "h2",
+      "text": "Exceptions Management",
+      "id": "exceptions-management"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "$ composer require symfony/clock",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Clock\\Clock;\nuse Symfony\\Component\\Clock\\MockClock;\n\n// by default, Clock uses the NativeClock implementation, but you can change\n// this by setting any other implementation\nClock::set(new MockClock());\n\n// Then, you can get the clock instance\n$clock = Clock::get();\n\n// Additionally, you can set a timezone\n$clock->withTimeZone('Europe/Paris');\n\n// From here, you can get the current time\n$now = $clock->now();\n\n// And sleep for any number of seconds\n$clock->sleep(2.5);",
+      "language": "unknown"
+    },
+    {
+      "code": "use function Symfony\\Component\\Clock\\now;\n\n// Get the current time as a DatePoint instance\n$now = now();",
+      "language": "unknown"
+    },
+    {
+      "code": "$later = now('+3 hours');\n\n$yesterday = now('-1 day');",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Clock\\ClockInterface;\n\nclass ExpirationChecker\n{\n    public function __construct(\n        private ClockInterface $clock\n    ) {}\n\n    public function isExpired(DateTimeInterface $validUntil): bool\n    {\n        return $this->clock->now() > $validUntil;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "use PHPUnit\\Framework\\TestCase;\nuse Symfony\\Component\\Clock\\MockClock;\n\nclass ExpirationCheckerTest extends TestCase\n{\n    public function testIsExpired(): void\n    {\n        $clock = new MockClock('2022-11-16 15:20:00');\n        $expirationChecker = new ExpirationChecker($clock);\n        $validUntil = new DateTimeImmutable('2022-11-16 15:25:00');\n\n        // $validUntil is in the future, so it is not expired\n        $this->assertFalse($expirationChecker->isExpired($validUntil));\n\n        // Clock sleeps for 10 minutes, so now is '2022-11-16 15:30:00'\n        $clock->sleep(600); // Instantly changes time as if we waited for 10 minutes (600 seconds)\n\n        // modify the clock, accepts all formats supported by DateTimeImmutable::modify()\n        $this->assertTrue($expirationChecker->isExpired($validUntil));\n\n        $clock->modify('2022-11-16 15:00:00');\n\n        // $validUntil is in the future again, so it is no longer expired\n        $this->assertFalse($expirationChecker->isExpired($validUntil));\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "namespace App\\TimeUtils;\n\nuse Symfony\\Component\\Clock\\ClockAwareTrait;\n\nclass MonthSensitive\n{\n    use ClockAwareTrait;\n\n    public function isWinterMonth(): bool\n    {\n        $now = $this->now();\n\n        return match ($now->format('F')) {\n            'December', 'January', 'February', 'March' => true,\n            default => false,\n        };\n    }\n}",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Clock\\DatePoint;\n\nclass Post\n{\n    public function __construct(\n        // ...\n        private \\DateTimeImmutable $createdAt = new DatePoint(),\n    ) {\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// you can specify a timezone\n$withTimezone = new DatePoint(timezone: new \\DateTimezone('UTC'));\n\n// you can also create a DatePoint from a reference date\n$referenceDate = new \\DateTimeImmutable();\n$relativeDate = new DatePoint('+1month', reference: $referenceDate);",
+      "language": "unknown"
+    },
+    {
+      "code": "$dateOfFirstCommitToSymfonyProject = DatePoint::createFromTimestamp(1129645656);\n// equivalent to:\n// $dateOfFirstCommitToSymfonyProject = (new \\DateTimeImmutable())->setTimestamp(1129645656);\n\n// negative timestamps (for dates before January 1, 1970) and float timestamps\n// (for high precision sub-second datetimes) are also supported\n$dateOfFirstMoonLanding = DatePoint::createFromTimestamp(-14182940);",
+      "language": "unknown"
+    },
+    {
+      "code": "$datePoint = new DatePoint();\n$datePoint->setMicrosecond(345);\n$microseconds = $datePoint->getMicrosecond();",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Product.php\nnamespace App\\Entity;\n\nuse Doctrine\\ORM\\Mapping as ORM;\nuse Symfony\\Component\\Clock\\DatePoint;\n\n#[ORM\\Entity]\nclass Product\n{\n    // if you don't define the Doctrine type explicitly, Symfony will autodetect it:\n    #[ORM\\Column]\n    private DatePoint $createdAt;\n\n    // if you prefer to define the Doctrine type explicitly:\n    #[ORM\\Column(type: 'date_point')]\n    private DatePoint $updatedAt;\n\n    // ...\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "namespace App\\Tests\\TimeUtils;\n\nuse App\\TimeUtils\\MonthSensitive;\nuse PHPUnit\\Framework\\TestCase;\nuse Symfony\\Component\\Clock\\Test\\ClockSensitiveTrait;\n\nclass MonthSensitiveTest extends TestCase\n{\n    use ClockSensitiveTrait;\n\n    public function testIsWinterMonth(): void\n    {\n        $clock = static::mockTime(new \\DateTimeImmutable('2022-03-02'));\n\n        $monthSensitive = new MonthSensitive();\n        $monthSensitive->setClock($clock);\n\n        $this->assertTrue($monthSensitive->isWinterMonth());\n    }\n\n    public function testIsNotWinterMonth(): void\n    {\n        $clock = static::mockTime(new \\DateTimeImmutable('2023-06-02'));\n\n        $monthSensitive = new MonthSensitive();\n        $monthSensitive->setClock($clock);\n\n        $this->assertFalse($monthSensitive->isWinterMonth());\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "$userInput = 'invalid timezone';\n\ntry {\n    $clock = Clock::get()->withTimeZone($userInput);\n} catch (\\DateInvalidTimeZoneException $exception) {\n    // ...\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/clock.html",
+    "https://symfony.com/doc/7.3/components/using_components.html",
+    "https://symfony.com/doc/7.3/service_container.html",
+    "https://symfony.com/doc/7.3/doctrine.html"
+  ]
+}

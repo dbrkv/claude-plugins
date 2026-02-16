@@ -1,0 +1,28 @@
+{
+  "title": "Web interface",
+  "content": "open http://localhost:6060/debug/pprof/\nyaml\n    profiler:\n      enabled: true\n      host: \"localhost\"\n      port: 6060\n      file: \"profile.out\"           # Optional: file-based profiling\n      profile_type: \"cpu\"           # Optional: profile type\n    shell",
+  "code_samples": [
+    {
+      "code": "### Configuration\n\n**CLI Flags:**\n\n<dl>\n    <dt>`--profile-file`</dt>\n    <dd>Write profiling data to file instead of starting server</dd>\n\n    <dt>`--profile-type`</dt>\n    <dd>Type of profile to collect when using `--profile-file`. Options: `cpu`, `heap`, `allocs`, `goroutine`, `block`, `mutex`, `threadcreate`, `trace` (default: `cpu`)</dd>\n\n    <dt>`--profiler-enabled`</dt>\n    <dd>Enable pprof profiling server (default: `false`)</dd>\n\n    <dt>`--profiler-host`</dt>\n    <dd>Host for pprof profiling server (default: `localhost`)</dd>\n\n    <dt>`--profiler-port`</dt>\n    <dd>Port for pprof profiling server (default: `6060`)</dd>\n</dl>\n\n**Environment Variables:**\n\n<dl>\n    <dt>`ATMOS_PROFILER_ENABLED`</dt>\n    <dd>Enable pprof profiling server</dd>\n\n    <dt>`ATMOS_PROFILER_HOST`</dt>\n    <dd>Host address for profiling server</dd>\n\n    <dt>`ATMOS_PROFILER_PORT`</dt>\n    <dd>Port for profiling server</dd>\n\n    <dt>`ATMOS_PROFILE_FILE`</dt>\n    <dd>File path for file-based profiling</dd>\n\n    <dt>`ATMOS_PROFILE_TYPE`</dt>\n    <dd>Profile type for file-based profiling</dd>\n</dl>\n\n**Configuration File:**\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n**Configuration Precedence:**\n1. Command-line flags (highest priority)\n2. Environment variables\n3. Configuration file (`atmos.yaml`)\n4. Default values (lowest priority)\n\n### Analyzing Profiles\n\n**CPU and Memory Profiles:**",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Configuration",
+      "id": "configuration"
+    },
+    {
+      "level": "h3",
+      "text": "Analyzing Profiles",
+      "id": "analyzing-profiles"
+    }
+  ],
+  "url": "llms-txt#web-interface",
+  "links": []
+}

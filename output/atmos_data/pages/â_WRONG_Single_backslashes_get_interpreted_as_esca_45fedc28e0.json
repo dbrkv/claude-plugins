@@ -1,0 +1,62 @@
+{
+  "title": "â WRONG: Single backslashes get interpreted as escape sequences",
+  "content": "components:\n  terraform:\n    base_path: \"C:\\Users\\username\\projects\\components\\terraform\"\n    # This becomes: C:Usersusernameprojectscomponentsterraform (invalid)\nyaml\n    settings:\n      # `list_merge_strategy` specifies how lists are merged in Atmos stack manifests.\n      # Can also be set using 'ATMOS_SETTINGS_LIST_MERGE_STRATEGY' environment variable, or '--settings-list-merge-strategy' command-line argument\n      # The following strategies are supported:\n      # `replace`: Most recent list imported wins (the default behavior).\n      # `append`:  The sequence of lists is appended in the same order as imports.\n      # `merge`:   The items in the destination list are deep-merged with the items in the source list.\n      #            The items in the source list take precedence.\n      #            The items are processed starting from the first up to the length of the source list (the remaining items are not processed).\n      #            If the source and destination lists have the same length, all items in the destination lists are\n      #            deep-merged with all items in the source list.\n      list_merge_strategy: replace\n\n# Terminal settings for displaying content\n      terminal:\n        max_width: 120  # Maximum width for terminal output\n        pager: false    # Pager disabled by default\n        color: true     # Enable colored output\n      inject_github_token: true # Adds the GITHUB_TOKEN as a Bearer token for GitHub API requests.\n    yaml\n    settings:\n      inject_gitlab_token: true\n    yaml\n    settings:\n      inject_bitbucket_token: true\n    yaml\n    settings:\n      github_username: \"myusername\"\n    yaml\n    # In GitHub Actions, GITHUB_ACTOR is automatically available\n    # No additional configuration needed\n    - name: Pull from GHCR\n      run: atmos vendor pull -c my-component\n      env:\n        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\n        # GITHUB_ACTOR is automatically set by GitHub Actions\n    yaml\nerrors:\n  format:\n    verbose: false  # Show detailed stack traces\n  sentry:\n    enabled: true\n    dsn: \"https://your-key@sentry.io/project-id\"\n    environment: \"production\"\nyaml\nworkflows:\n  # Can also be set using 'ATMOS_WORKFLOWS_BASE_PATH' ENV var, or '--workflows-dir' command-line argument\n  # Supports both absolute and relative paths\n  base_path: \"stacks/workflows\"\nyaml",
+  "code_samples": [
+    {
+      "code": ":::tip Best Practice\nUse forward slashes (`/`) for all paths in `atmos.yaml`. They work correctly on all operating systems including Windows, Linux, and macOS.\n:::\n\n## Settings\n\nThe `settings` section configures Atmos global settings.\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n<dl>\n  <dt>`settings.list_merge_strategy`</dt>\n  <dd>\n    Specifies how lists are merged in Atmos stack manifests.\n\n    The following strategies are supported:\n    <dl>\n      <dt>`replace`</dt>\n      <dd>Most recent list imported wins (the default behavior).</dd>\n\n      <dt>`append`</dt>\n      <dd>The sequence of lists is appended in the same order as imports.</dd>\n\n      <dt>`merge`</dt>\n      <dd>The items in the destination list are deep-merged with the items in the source list. The items in the source list take precedence. The items are processed starting from the first up to the length of the source list (the remaining items are not processed). If the source and destination lists have the same length, all items in the destination lists are deep-merged with all items in the source list.</dd>\n    </dl>\n  </dd>\n\n  <dt>`settings.terminal`</dt>\n  <dd>\n    Specifies how content is displayed in the terminal.\n\n    The following settings are supported:\n    <dl>\n      <dt>`max_width`</dt>\n      <dd>The maximum width for displaying content in the terminal.</dd>\n\n      <dt>`pager`</dt>\n      <dd>Configure pager behavior. Can be set to `false` (disabled, default), `true` (enabled), or a specific pager like `less` or `more`.</dd>\n\n      <dt>`color`</dt>\n      <dd>Enable or disable colored output (default: `true`). Can be overridden with `--no-color` flag or `NO_COLOR`/`ATMOS_NO_COLOR` environment variables.</dd>\n    </dl>\n\n    :::info Environment Variables for Portability\n    **Configuration Deprecation**: The `no_color` field in `atmos.yaml` is deprecated. Use `color: false` instead.\n\n    **Environment Variables Still Supported**: The `NO_COLOR` and `ATMOS_NO_COLOR` environment variables remain fully supported for portability across different environments and CI/CD systems.\n    :::\n  </dd>\n\n  <dt>`settings.inject_github_token`</dt>\n  <dd>\n    Enables automatic GitHub token injection when vendoring from private GitHub repositories. Defaults to `true`.\n\n    When enabled, Atmos automatically injects authentication credentials from `ATMOS_GITHUB_TOKEN` or `GITHUB_TOKEN` environment variables. This eliminates the need to embed credentials in vendor URLs.\n\n    Set to `false` to disable automatic GitHub token injection.\n  </dd>\n\n  <dt>`settings.inject_gitlab_token`</dt>\n  <dd>\n    Enables automatic GitLab token injection when vendoring from private GitLab repositories. Defaults to `false`.\n\n    When enabled, Atmos automatically injects authentication credentials from `ATMOS_GITLAB_TOKEN` or `GITLAB_TOKEN` environment variables.\n\n    Set to `true` to enable automatic GitLab token injection:",
+      "language": "unknown"
+    },
+    {
+      "code": "</dd>\n\n  <dt>`settings.inject_bitbucket_token`</dt>\n  <dd>\n    Enables automatic Bitbucket token injection when vendoring from private Bitbucket repositories. Defaults to `false`.\n\n    When enabled, Atmos automatically injects authentication credentials from `ATMOS_BITBUCKET_TOKEN` or `BITBUCKET_TOKEN` environment variables.\n\n    Set to `true` to enable automatic Bitbucket token injection:",
+      "language": "unknown"
+    },
+    {
+      "code": "For Bitbucket, you can also configure a custom username via `bitbucket_username` setting. If not specified, defaults to `x-token-auth`.\n  </dd>\n\n  <dt>`settings.github_username`</dt>\n  <dd>\n    Specifies the GitHub username for OCI registry authentication to GitHub Container Registry (ghcr.io).\n\n    When pulling artifacts from ghcr.io using `oci://ghcr.io/...` sources, Atmos requires a GitHub username along with the token. The username can be configured via:\n\n    - `github_username` setting in `atmos.yaml`\n    - `ATMOS_GITHUB_USERNAME` environment variable (highest precedence)\n    - `GITHUB_ACTOR` environment variable (automatically set in GitHub Actions)\n    - `GITHUB_USERNAME` environment variable\n\n    **Configuration example:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**GitHub Actions usage:**",
+      "language": "unknown"
+    },
+    {
+      "code": "**Note:** Unlike Git repository authentication (which uses `x-access-token` as username), GitHub Container Registry requires your actual GitHub username. Without a username, authentication will fail even if `ATMOS_GITHUB_TOKEN` or `GITHUB_TOKEN` is set.\n  </dd>\n\n  <dt>`settings.docs` (Deprecated)</dt>\n  <dd>\n    :::warning Deprecated\n    The `settings.docs` section is deprecated and will be removed in a future version. Please use `settings.terminal` instead.\n    :::\n\n    <dl>\n      <dt>`max-width` (Deprecated)</dt>\n      <dd>Use `settings.terminal.max_width` instead.</dd>\n\n      <dt>`pagination` (Deprecated)</dt>\n      <dd>Use `settings.terminal.pager` instead.</dd>\n    </dl>\n  </dd>\n</dl>\n\n## Error Handling\n\nConfigure error formatting and Sentry integration for monitoring failures across your organization.\n\nSee [Error Handling & Monitoring](/cli/configuration/errors) for complete documentation.\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Workflows\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    },
+    {
+      "code": "</File>\n\n## Integrations\n\nAtmos supports many native Atmos integrations. They extend the core functionality of Atmos.\n\n<File title=\"atmos.yaml\">",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Settings",
+      "id": "settings"
+    },
+    {
+      "level": "h2",
+      "text": "Error Handling",
+      "id": "error-handling"
+    },
+    {
+      "level": "h2",
+      "text": "Workflows",
+      "id": "workflows"
+    },
+    {
+      "level": "h2",
+      "text": "Integrations",
+      "id": "integrations"
+    }
+  ],
+  "url": "llms-txt#â-wrong:-single-backslashes-get-interpreted-as-escape-sequences",
+  "links": []
+}

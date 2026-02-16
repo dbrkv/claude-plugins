@@ -1,0 +1,8 @@
+{
+  "title": "Check environment",
+  "content": "atmos auth env --identity azure-dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#check-environment",
+  "links": []
+}

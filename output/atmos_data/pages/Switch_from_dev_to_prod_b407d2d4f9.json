@@ -1,0 +1,8 @@
+{
+  "title": "Switch from dev to prod",
+  "content": "atmos auth logout dev-admin\natmos auth login prod-admin",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#switch-from-dev-to-prod",
+  "links": []
+}

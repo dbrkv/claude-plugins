@@ -1,0 +1,55 @@
+{
+  "url": "https://symfony.com/doc/7.3/components/cache/adapters/memcached_adapter.html",
+  "title": "Memcached Cache Adapter",
+  "content": "This adapter stores the values in-memory using one (or more) Memcached server instances. Unlike the APCu adapter, and similarly to the Redis adapter, it is not limited to the current server's shared memory; you can store contents independent of your PHP environment. The ability to utilize a cluster of servers to provide redundancy and/or fail-over is also available.\n\nRequirements: The Memcached PHP extension as well as a Memcached server must be installed, active, and running to use this adapter. Version 2.2 or greater of the Memcached PHP extension is required for this adapter.\n\nThis adapter expects a Memcached instance to be passed as the first parameter. A namespace and default cache lifetime can optionally be passed as the second and third parameters:\n\nThe createConnection() helper method allows creating and configuring a Memcached class instance using a Data Source Name (DSN) or an array of DSNs:\n\nThe Data Source Name (DSN) for this adapter must use the following format:\n\nThe DSN must include a IP/host (and an optional port) or a socket path, an optional username and password (for SASL authentication; it requires that the memcached extension was compiled with --enable-memcached-sasl) and an optional weight (for prioritizing servers in a cluster; its value is an integer between 0 and 100 which defaults to null; a higher value means more priority).\n\nBelow are common examples of valid DSNs showing a combination of available values:\n\nThe createConnection() helper method also accepts an array of options as its second argument. The expected format is an associative array of key => value pairs representing option names and their respective values:\n\nSpecifies the timeout (in milliseconds) of socket connection operations when the no_block option is enabled.\n\nValid option values include any positive integer.\n\nSpecifies the item key distribution method among the servers. Consistent hashing delivers better distribution and allows servers to be added to the cluster with minimal cache losses.\n\nValid option values include modula, consistent, and virtual_bucket.\n\nSpecifies the hashing algorithm used for item keys. Each hash algorithm has its advantages and its disadvantages. The default is suggested for compatibility with other clients.\n\nValid option values include default, md5, crc, fnv1_64, fnv1a_64, fnv1_32, fnv1a_32, hsieh, and murmur.\n\nSpecifies the number of replicas that should be stored for each item (on different servers). This does not dedicate certain memcached servers to store the replicas in, but instead stores the replicas together with all of the other objects (on the \"n\" next servers registered).\n\nValid option values include any positive integer.\n\nSpecifies a \"domain\" (or \"namespace\") prepended to your keys. It cannot be longer than 128 characters and reduces the maximum key size.\n\nValid option values include any alphanumeric string.\n\nSpecifies the amount of time (in seconds) before timing out during a socket polling operation.\n\nValid option values include any positive integer.\n\nSpecifies the amount of time (in microseconds) before timing out during an outgoing socket (read) operation. When the no_block option isn't enabled, this will allow you to still have timeouts on the reading of data.\n\nValid option values include 0 or any positive integer.\n\nSpecifies the amount of time (in seconds) before timing out and retrying a connection attempt.\n\nValid option values include any positive integer.\n\nSpecifies the amount of time (in microseconds) before timing out during an incoming socket (send) operation. When the no_block option isn't enabled, this will allow you to still have timeouts on the sending of data.\n\nValid option values include 0 or any positive integer.\n\nSpecifies the serializer to use for serializing non-scalar values. The igbinary options requires the igbinary PHP extension to be enabled, as well as the memcached extension to have been compiled with support for it.\n\nValid option values include php and igbinary.\n\nSpecifies the failure limit for server connection attempts before marking the server as \"dead\". The server will remain in the server pool unless auto_eject_hosts is enabled.\n\nValid option values include any positive integer.\n\nSpecified the maximum buffer size (in bytes) in the context of incoming (receive) socket connection data.\n\nValid option values include any positive integer, with a default value that varies by platform and kernel configuration.\n\nSpecified the maximum buffer size (in bytes) in the context of outgoing (send) socket connection data.\n\nValid option values include any positive integer, with a default value that varies by platform and kernel configuration.\n\nEnables or disables the use of User Datagram Protocol (UDP) mode (instead of Transmission Control Protocol (TCP) mode), where all operations are executed in a \"fire-and-forget\" manner; no attempt to ensure the operation has been received or acted on will be made once the client has executed it.\n\nNot all library operations are tested in this mode. Mixed TCP and UDP servers are not allowed.\n\nReference the Memcached extension's predefined constants documentation for additional information about the available options.\n\nCheck Code Performance in Dev, Test, Staging & Production\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Memcached Cache Adapter",
+      "id": "memcached-cache-adapter"
+    },
+    {
+      "level": "h2",
+      "text": "Configure the Connection",
+      "id": "configure-the-connection"
+    },
+    {
+      "level": "h2",
+      "text": "Configure the Options",
+      "id": "configure-the-options"
+    },
+    {
+      "level": "h3",
+      "text": "Available Options",
+      "id": "available-options"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter;\n\n$cache = new MemcachedAdapter(\n    // the client object that sets options and adds the server instance(s)\n    \\Memcached $client,\n\n    // a string prefixed to the keys of the items stored in this cache\n    $namespace = '',\n\n    // the default lifetime (in seconds) for cache items that do not define their\n    // own lifetime, with a value 0 causing items to be stored indefinitely (i.e.\n    // until MemcachedAdapter::clear() is invoked or the server(s) are restarted)\n    $defaultLifetime = 0\n);",
+      "language": "csharp"
+    },
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter;\n\n// pass a single DSN string to register a single server with the client\n$client = MemcachedAdapter::createConnection(\n    'memcached://localhost'\n    // the DSN can include config options (pass them as a query string):\n    // 'memcached://localhost:11222?retry_timeout=10'\n    // 'memcached://localhost:11222?socket_recv_size=1&socket_send_size=2'\n);\n\n// pass an array of DSN strings to register multiple servers with the client\n$client = MemcachedAdapter::createConnection([\n    'memcached://10.0.0.100',\n    'memcached://10.0.0.101',\n    'memcached://10.0.0.102',\n    // etc...\n]);\n\n// a single DSN can define multiple servers using the following syntax:\n// host[hostname-or-IP:port] (where port is optional). Sockets must include a trailing ':'\n$client = MemcachedAdapter::createConnection(\n    'memcached:?host[localhost]&host[localhost:12345]&host[/some/memcached.sock:]=3'\n);",
+      "language": "unknown"
+    },
+    {
+      "code": "memcached://[user:pass@][ip|host|socket[:port]][?weight=int]",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter;\n\n$client = MemcachedAdapter::createConnection([\n    // hostname + port\n    'memcached://my.server.com:11211'\n\n    // hostname without port + SASL username and password\n    'memcached://rmf:abcdef@localhost'\n\n    // IP address instead of hostname + weight\n    'memcached://127.0.0.1?weight=50'\n\n    // socket instead of hostname/IP + SASL username and password\n    'memcached://janesmith:mypassword@/var/run/memcached.sock'\n\n    // socket instead of hostname/IP + weight\n    'memcached:///var/run/memcached.sock?weight=20'\n]);",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter;\n\n$client = MemcachedAdapter::createConnection(\n    // a DSN string or an array of DSN strings\n    [],\n\n    // associative array of configuration options\n    [\n        'libketama_compatible' => true,\n        'serializer' => 'igbinary',\n    ]\n);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/components/cache/adapters/memcached_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/adapters/apcu_adapter.html",
+    "https://symfony.com/doc/7.3/components/cache/adapters/redis_adapter.html"
+  ]
+}

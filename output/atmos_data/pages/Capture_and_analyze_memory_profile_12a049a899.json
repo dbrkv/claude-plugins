@@ -1,0 +1,8 @@
+{
+  "title": "Capture and analyze memory profile",
+  "content": "go tool pprof http://localhost:6060/debug/pprof/heap",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#capture-and-analyze-memory-profile",
+  "links": []
+}

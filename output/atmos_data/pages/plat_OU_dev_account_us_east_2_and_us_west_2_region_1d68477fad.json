@@ -1,0 +1,8 @@
+{
+  "title": "`plat` OU, `dev` account, `us-east-2` and `us-west-2` regions",
+  "content": "atmos terraform apply vpc -s plat-ue2-dev\natmos terraform apply vpc -s plat-uw2-dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#`plat`-ou,-`dev`-account,-`us-east-2`-and-`us-west-2`-regions",
+  "links": []
+}

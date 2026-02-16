@@ -1,0 +1,8 @@
+{
+  "title": "Ensure required environment variables are set",
+  "content": "errors[message] {\n  required_vars := [\"AWS_REGION\", \"AWS_PROFILE\"]\n  missing_var := required_vars[_]\n  not input.process_env[missing_var]\n  message = sprintf(\"Required environment variable '%s' is not set\", [missing_var])\n}",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#ensure-required-environment-variables-are-set",
+  "links": []
+}

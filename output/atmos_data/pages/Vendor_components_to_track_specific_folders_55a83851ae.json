@@ -1,0 +1,24 @@
+{
+  "title": "Vendor components to track-specific folders",
+  "content": "spec:\n  sources:\n    # Alpha track - latest version\n    - component: alpha\n      source: \"git::https://github.com/acme/terraform-components.git//modules/vpc?ref=v1.14.0\"\n      targets:\n        - \"components/terraform/{{.Component}}/vpc\"\n\n# Beta track - stable version\n    - component: beta\n      source: \"git::https://github.com/acme/terraform-components.git//modules/vpc?ref=v1.13.2\"\n      targets:\n        - \"components/terraform/{{.Component}}/vpc\"\n\n# Production track - proven version\n    - component: prod\n      source: \"git::https://github.com/acme/terraform-components.git//modules/vpc?ref=v1.12.8\"\n      targets:\n        - \"components/terraform/{{.Component}}/vpc\"\nbash",
+  "code_samples": [
+    {
+      "code": "</File>\n\n## Track Promotion Workflow\n\nHere's a typical workflow for promoting versions through tracks:\n\n### 1. Development Testing\nNew versions land in the `alpha` track for initial testing:\n\n**Update vendor.yaml** to vendor the new version to the alpha track folder, then pull and test:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Track Promotion Workflow",
+      "id": "track-promotion-workflow"
+    },
+    {
+      "level": "h3",
+      "text": "1. Development Testing",
+      "id": "1.-development-testing"
+    }
+  ],
+  "url": "llms-txt#vendor-components-to-track-specific-folders",
+  "links": []
+}

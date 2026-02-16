@@ -1,0 +1,8 @@
+{
+  "title": "Delete all Terraform-related files for all components (with confirmation)",
+  "content": "atmos terraform clean",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#delete-all-terraform-related-files-for-all-components-(with-confirmation)",
+  "links": []
+}

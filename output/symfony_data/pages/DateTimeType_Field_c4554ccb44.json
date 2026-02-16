@@ -1,0 +1,273 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/forms/types/datetime.html",
+  "title": "DateTimeType Field",
+  "content": "This field type allows the user to modify data that represents a specific date and time (e.g. 1984-06-05 12:15:30).\n\nCan be rendered as a text input or select tags. The underlying format of the data can be a DateTime object, a string, a timestamp or an array.\n\nThe full list of options defined and inherited by this form type is available running this command in your app:\n\nThis option determines if the choice values should be translated and in which translation domain.\n\nThe values of the choice_translation_domain option can be true (reuse the current translation domain), false (disable translation), null (uses the parent translation domain or the default domain) or a string which represents the exact translation domain to use.\n\ntype: integer or string default: IntlDateFormatter::MEDIUM\n\nDefines the format option that will be passed down to the date field. See the DateType's format option for more details.\n\ntype: string | null default: The label is \"guessed\" from the field name\n\nSets the label that will be used when rendering the date widget. Setting it to false will suppress the label:\n\ntype: string default: single_text\n\nThe basic way in which this field should be rendered. Can be one of the following:\n\ntype: array default: 1 to 31\n\nList of days available to the day field type. This option is only relevant when the widget option is set to choice:\n\nIf your widget option is set to choice, then this field will be represented as a series of select boxes. When the placeholder value is a string, it will be used as the blank value of all select boxes:\n\nAlternatively, you can use an array that configures different placeholder values for the year, month, day, hour, minute and second fields:\n\ntype: string default: Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType::HTML5_FORMAT\n\nIf the widget option is set to single_text, this option specifies the format of the input, i.e. how Symfony will interpret the given input as a datetime string. It defaults to the datetime local format which is used by the HTML5 datetime-local field. Keeping the default value will cause the field to be rendered as an input field with type=\"datetime-local\". For more information on valid formats, see Date/Time Format Syntax.\n\ntype: array default: 0 to 23\n\nList of hours available to the hours field type. This option is only relevant when the widget option is set to choice.\n\ntype: boolean default: true\n\nIf this is set to true (the default), it'll use the HTML5 type (date, time or datetime-local) to render the field. When set to false, it'll use the text type.\n\nThis is useful when you want to use a custom JavaScript datepicker, which often requires a text type instead of an HTML5 type.\n\ntype: string default: datetime\n\nThe format of the input data - i.e. the format that the date is stored on your underlying object. Valid values are:\n\nThe value that comes back from the form will also be normalized back into this format.\n\nIf timestamp is used, DateType is limited to dates between Fri, 13 Dec 1901 20:45:54 UTC and Tue, 19 Jan 2038 03:14:07 UTC on 32bit systems. This is due to an integer overflow bug in 32bit systems known as the Year 2038 problem.\n\ntype: string default: Y-m-d H:i:s\n\nIf the input option is set to string, this option specifies the format of the date. This must be a valid PHP date format.\n\ntype: array default: 0 to 59\n\nList of minutes available to the minutes field type. This option is only relevant when the widget option is set to choice.\n\ntype: string default: system default timezone\n\nTimezone that the input data is stored in. This must be one of the PHP supported timezones.\n\ntype: array default: 1 to 12\n\nList of months available to the month field type. This option is only relevant when the widget option is set to choice.\n\ntype: array default: 0 to 59\n\nList of seconds available to the seconds field type. This option is only relevant when the widget option is set to choice.\n\ntype: string | null default: The label is \"guessed\" from the field name\n\nSets the label that will be used when rendering the time widget. Setting it to false will suppress the label:\n\ntype: string default: choice\n\nDefines the widget option for the TimeType.\n\ntype: string default: system default timezone\n\nTimezone for how the data should be shown to the user (and therefore also the data that the user submits). This must be one of the PHP supported timezones.\n\ntype: string default: null\n\nDefines the widget option for both the DateType and TimeType. This can be overridden with the date_widget and time_widget options.\n\ntype: boolean default: true\n\nWhether or not to include minutes in the input. This will result in an additional input to capture minutes.\n\ntype: boolean default: false\n\nWhether or not to include seconds in the input. This will result in an additional input to capture seconds.\n\ntype: array default: five years before to five years after the current year\n\nList of years available to the year field type. This option is only relevant when the widget option is set to choice.\n\nThe DateTime classes are treated as immutable objects.\n\ntype: boolean default: false\n\nThis option specifies whether the type contains child types or not. This option is managed internally for built-in types, so there is no need to configure it explicitly.\n\ntype: string default: null\n\nThe internal normalized representation of this type is an array, not a \\DateTime object. Therefore, the data_class option is initialized to null to avoid the FormType object from initializing it to \\DateTime.\n\ntype: string default: This value is not valid\n\nThis is the validation error message that's used if the data entered into this field doesn't make sense (i.e. fails validation).\n\nThis might happen, for example, if the user enters a nonsense string into a TimeType field that cannot be converted into a real time or if the user enters a string (e.g. apple) into a number field.\n\nNormal (business logic) validation (such as when setting a minimum length for a field) should be set using validation messages with your validation rules (reference).\n\nThese options inherit from the FormType:\n\ntype: array default: []\n\nIf you want to add extra attributes to an HTML field representation you can use the attr option. It's an associative array with HTML attributes as keys. This can be useful when you need to set a custom class for some widget:\n\nUse the row_attr option if you want to add these attributes to the form type row element.\n\ntype: mixed default: Defaults to field of the underlying structure.\n\nWhen you create a form, each field initially displays the value of the corresponding property of the form's domain data (e.g. if you bind an object to the form). If you want to override this initial value for the form or an individual field, you can set it in the data option:\n\nThe data option always overrides the value taken from the domain data (object) when rendering. This means the object value is also overridden when the form edits an already persisted object, causing it to lose its persisted value when the form is submitted.\n\ntype: boolean default: false\n\nIf you don't want a user to modify the value of a field, you can set the disabled option to true. Any submitted value will be ignored.\n\ntype: string or TranslatableInterface default: null\n\nAllows you to define a help message for the form field, which by default is rendered below the field:\n\ntype: array default: []\n\nSets the HTML attributes for the element used to display the help message of the form field. Its value is an associative array with HTML attribute names as keys. These attributes can also be set in the template:\n\ntype: boolean default: false\n\nBy default, the contents of the help option are escaped before rendering them in the template. Set this option to true to not escape them, which is useful when the help contains HTML elements.\n\ntype: boolean default: false\n\nThis option determines if the form will inherit data from its parent form. This can be useful if you have a set of fields that are duplicated across multiple forms. See How to Reduce Code Duplication with \"inherit_data\".\n\nWhen a field has the inherit_data option set, it uses the data of the parent form as is. This means that Data Transformers won't be applied to that field.\n\ntype: array default: []\n\nWhen setting the invalid_message option, you may need to include some variables in the string. This can be done by adding placeholders to that option and including the variables in this option:\n\ntype: boolean default: true\n\nIf you wish the field to be ignored when reading or writing to the object, you can set the mapped option to false.\n\ntype: array default: []\n\nAn associative array of the HTML attributes added to the element which is used to render the form type row:\n\nUse the attr option if you want to add these attributes to the form type widget element.\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nMake sure your project is risk free",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "DateTimeType Field",
+      "id": "datetimetype-field"
+    },
+    {
+      "level": "h2",
+      "text": "Field Options",
+      "id": "field-options"
+    },
+    {
+      "level": "h3",
+      "text": "date_format",
+      "id": "date-format"
+    },
+    {
+      "level": "h3",
+      "text": "date_label",
+      "id": "date-label"
+    },
+    {
+      "level": "h3",
+      "text": "date_widget",
+      "id": "date-widget"
+    },
+    {
+      "level": "h3",
+      "text": "days",
+      "id": "days"
+    },
+    {
+      "level": "h3",
+      "text": "placeholder",
+      "id": "placeholder"
+    },
+    {
+      "level": "h3",
+      "text": "format",
+      "id": "format"
+    },
+    {
+      "level": "h3",
+      "text": "hours",
+      "id": "hours"
+    },
+    {
+      "level": "h3",
+      "text": "html5",
+      "id": "html5"
+    },
+    {
+      "level": "h3",
+      "text": "input",
+      "id": "input"
+    },
+    {
+      "level": "h3",
+      "text": "input_format",
+      "id": "input-format"
+    },
+    {
+      "level": "h3",
+      "text": "minutes",
+      "id": "minutes"
+    },
+    {
+      "level": "h3",
+      "text": "model_timezone",
+      "id": "model-timezone"
+    },
+    {
+      "level": "h3",
+      "text": "months",
+      "id": "months"
+    },
+    {
+      "level": "h3",
+      "text": "seconds",
+      "id": "seconds"
+    },
+    {
+      "level": "h3",
+      "text": "time_label",
+      "id": "time-label"
+    },
+    {
+      "level": "h3",
+      "text": "time_widget",
+      "id": "time-widget"
+    },
+    {
+      "level": "h3",
+      "text": "view_timezone",
+      "id": "view-timezone"
+    },
+    {
+      "level": "h3",
+      "text": "widget",
+      "id": "widget"
+    },
+    {
+      "level": "h3",
+      "text": "with_minutes",
+      "id": "with-minutes"
+    },
+    {
+      "level": "h3",
+      "text": "with_seconds",
+      "id": "with-seconds"
+    },
+    {
+      "level": "h3",
+      "text": "years",
+      "id": "years"
+    },
+    {
+      "level": "h2",
+      "text": "Overridden Options",
+      "id": "overridden-options"
+    },
+    {
+      "level": "h3",
+      "text": "by_reference",
+      "id": "by-reference"
+    },
+    {
+      "level": "h3",
+      "text": "compound",
+      "id": "compound"
+    },
+    {
+      "level": "h3",
+      "text": "data_class",
+      "id": "data-class"
+    },
+    {
+      "level": "h3",
+      "text": "error_bubbling",
+      "id": "error-bubbling"
+    },
+    {
+      "level": "h3",
+      "text": "invalid_message",
+      "id": "invalid-message"
+    },
+    {
+      "level": "h2",
+      "text": "Inherited Options",
+      "id": "inherited-options"
+    },
+    {
+      "level": "h3",
+      "text": "attr",
+      "id": "attr"
+    },
+    {
+      "level": "h3",
+      "text": "data",
+      "id": "data"
+    },
+    {
+      "level": "h3",
+      "text": "disabled",
+      "id": "disabled"
+    },
+    {
+      "level": "h3",
+      "text": "help",
+      "id": "help"
+    },
+    {
+      "level": "h3",
+      "text": "help_attr",
+      "id": "help-attr"
+    },
+    {
+      "level": "h3",
+      "text": "help_html",
+      "id": "help-html"
+    },
+    {
+      "level": "h3",
+      "text": "inherit_data",
+      "id": "inherit-data"
+    },
+    {
+      "level": "h3",
+      "text": "invalid_message_parameters",
+      "id": "invalid-message-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "mapped",
+      "id": "mapped"
+    },
+    {
+      "level": "h3",
+      "text": "row_attr",
+      "id": "row-attr"
+    },
+    {
+      "level": "h2",
+      "text": "Field Variables",
+      "id": "field-variables"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# replace 'FooType' by the class name of your form type\n$ php bin/console debug:form FooType",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType;\n\n$builder->add('startDateTime', DateTimeType::class, [\n    'date_label' => 'Starts On',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "'days' => range(1,31)",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType;\n\n$builder->add('startDateTime', DateTimeType::class, [\n    'placeholder' => 'Select a value',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType;\n\n$builder->add('startDateTime', DateTimeType::class, [\n    'placeholder' => [\n        'year' => 'Year', 'month' => 'Month', 'day' => 'Day',\n        'hour' => 'Hour', 'minute' => 'Minute', 'second' => 'Second',\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType;\n\n$builder->add('startDateTime', DateTimeType::class, [\n    'time_label' => 'Starts On',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$builder->add('body', TextareaType::class, [\n    'attr' => ['class' => 'tinymce'],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\HiddenType;\n// ...\n\n$builder->add('token', HiddenType::class, [\n    'data' => 'abcdef',\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "use Symfony\\Component\\Translation\\TranslatableMessage;\n\n$builder\n    ->add('zipCode', null, [\n        'help' => 'The ZIP/Postal code for your credit card\\'s billing address.',\n    ])\n\n    // ...\n\n    ->add('status', null, [\n        'help' => new TranslatableMessage('order.status', ['%order_id%' => $order->getId()], 'store'),\n    ])\n;",
+      "language": "javascript"
+    },
+    {
+      "code": "{{ form_help(form.name, 'Your name', {\n    'help_attr': {'class': 'CUSTOM_LABEL_CLASS'}\n}) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "$builder->add('someField', SomeFormType::class, [\n    // ...\n    'invalid_message' => 'You entered an invalid value, it should include %num% letters',\n    'invalid_message_parameters' => ['%num%' => 6],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$builder->add('body', TextareaType::class, [\n    'row_attr' => ['class' => 'text-editor', 'id' => '...'],\n]);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/forms/types/datetime.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/form.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/date.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/time.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html",
+    "https://symfony.com/doc/7.3/form/inherit_data_option.html",
+    "https://symfony.com/doc/7.3/form/data_transformers.html"
+  ]
+}

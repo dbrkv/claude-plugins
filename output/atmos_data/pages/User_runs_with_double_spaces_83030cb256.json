@@ -1,0 +1,8 @@
+{
+  "title": "User runs with double spaces",
+  "content": "atmos run-script -- echo \"hello  world\"",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#user-runs-with-double-spaces",
+  "links": []
+}

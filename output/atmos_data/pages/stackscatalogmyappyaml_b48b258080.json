@@ -1,0 +1,19 @@
+{
+  "title": "stacks/catalog/myapp.yaml",
+  "content": "components:\n  terraform:\n    myapp:\n      env:\n        LOG_LEVEL: info\n        AWS_REGION: us-east-1\n        ENVIRONMENT: production\n      vars:\n        # References the env section above\n        log_level: !env LOG_LEVEL\n        region: !env AWS_REGION\nyaml",
+  "code_samples": [
+    {
+      "code": "### Referencing Other Environment Variables\n\nUse the `env` section to compose environment variables from other stack values:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "Referencing Other Environment Variables",
+      "id": "referencing-other-environment-variables"
+    }
+  ],
+  "url": "llms-txt#stacks/catalog/myapp.yaml",
+  "links": []
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Profile detailed execution",
+  "content": "atmos terraform plan large-component -s prod --profile-file=trace.out --profile-type=trace",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#profile-detailed-execution",
+  "links": []
+}

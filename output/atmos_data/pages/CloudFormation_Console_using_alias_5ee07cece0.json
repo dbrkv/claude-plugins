@@ -1,0 +1,8 @@
+{
+  "title": "CloudFormation Console (using alias)",
+  "content": "atmos auth console --destination cloudformation",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#cloudformation-console-(using-alias)",
+  "links": []
+}

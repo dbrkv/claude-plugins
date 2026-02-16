@@ -1,0 +1,152 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/constraints/Url.html",
+  "title": "Url",
+  "content": "Validates that a value is a valid URL string.\n\nThis constraint doesn't check that the host of the given URL really exists, because the information of the DNS records is not reliable. Use the checkdnsrr PHP function if you still want to check that.\n\nAs with most of the other constraints, null and empty strings are considered valid values. This is to allow them to be optional values. If the value is mandatory, a common solution is to combine this constraint with NotBlank.\n\ntype: array | string default: null\n\nIt defines the validation group or groups of this constraint. Read more about validation groups.\n\ntype: string default: This value is not a valid URL.\n\nThis message is shown if the URL is invalid.\n\nYou can use the following parameters in this message:\n\ntype: a PHP callable default: null\n\nThis option allows to define the PHP callable applied to the given value before checking if it is valid.\n\nFor example, you may want to pass the 'trim' string to apply the trim PHP function in order to ignore leading and trailing whitespace during validation.\n\ntype: mixed default: null\n\nThis option can be used to attach arbitrary domain-specific data to a constraint. The configured payload is not used by the Validator component, but its processing is completely up to you.\n\nFor example, you may want to use several error levels to present failed constraints differently in the front-end depending on the severity of the error.\n\ntype: array default: ['http', 'https']\n\nThe protocols considered to be valid for the URL. For example, if you also consider the ftp:// type URLs to be valid, redefine the protocols array, listing http, https, and also ftp.\n\ntype: boolean default: false\n\nIf true, the protocol is considered optional when validating the syntax of the given URL. This means that both http:// and https:// are valid but also relative URLs that contain no protocol (e.g. //example.com).\n\ntype: boolean default: false\n\nThe requireTld option was introduced in Symfony 7.1.\n\nNot setting the requireTld option is deprecated since Symfony 7.1 and will default to true in Symfony 8.0.\n\nBy default, URLs like https://aaa or https://foobar are considered valid because they are technically correct according to the URL spec. If you set this option to true, the host part of the URL will have to include a TLD (top-level domain name): e.g. https://example.com will be valid but https://example won't.\n\nThis constraint does not validate that the given TLD value is included in the list of official top-level domains (because that list is growing continuously and it's hard to keep track of it).\n\ntype: string default: This URL does not contain a TLD.\n\nThe tldMessage option was introduced in Symfony 7.1.\n\nThis message is shown if the requireTld option is set to true and the URL does not contain at least one TLD.\n\nYou can use the following parameters in this message:\n\nTake the exam at home\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Url",
+      "id": "url"
+    },
+    {
+      "level": "h2",
+      "text": "Basic Usage",
+      "id": "basic-usage"
+    },
+    {
+      "level": "h2",
+      "text": "Options",
+      "id": "options"
+    },
+    {
+      "level": "h3",
+      "text": "groups",
+      "id": "groups"
+    },
+    {
+      "level": "h3",
+      "text": "message",
+      "id": "message"
+    },
+    {
+      "level": "h3",
+      "text": "normalizer",
+      "id": "normalizer"
+    },
+    {
+      "level": "h3",
+      "text": "payload",
+      "id": "payload"
+    },
+    {
+      "level": "h3",
+      "text": "protocols",
+      "id": "protocols"
+    },
+    {
+      "level": "h3",
+      "text": "relativeProtocol",
+      "id": "relativeprotocol"
+    },
+    {
+      "level": "h3",
+      "text": "requireTld",
+      "id": "requiretld"
+    },
+    {
+      "level": "h3",
+      "text": "tldMessage",
+      "id": "tldmessage"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    #[Assert\\Url]\n    protected string $bioUrl;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        bioUrl:\n            - Url: ~",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <property name=\"bioUrl\">\n            <constraint name=\"Url\"/>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('bioUrl', new Assert\\Url());\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    #[Assert\\Url(\n        message: 'The url {{ value }} is not a valid url',\n    )]\n    protected string $bioUrl;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        bioUrl:\n            - Url:\n                message: The url \"{{ value }}\" is not a valid url.",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <property name=\"bioUrl\">\n            <constraint name=\"Url\">\n                <option name=\"message\">The url \"{{ value }}\" is not a valid url.</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('bioUrl', new Assert\\Url(\n            message: 'The url \"{{ value }}\" is not a valid url.',\n        ));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    #[Assert\\Url(\n        protocols: ['http', 'https', 'ftp'],\n    )]\n    protected string $bioUrl;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        bioUrl:\n            - Url: { protocols: [http, https, ftp] }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <property name=\"bioUrl\">\n            <constraint name=\"Url\">\n                <option name=\"protocols\">\n                    <value>http</value>\n                    <value>https</value>\n                    <value>ftp</value>\n                </option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('bioUrl', new Assert\\Url(\n            protocols: ['http', 'https', 'ftp'],\n        ));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Author\n{\n    #[Assert\\Url(\n        relativeProtocol: true,\n    )]\n    protected string $bioUrl;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Author:\n    properties:\n        bioUrl:\n            - Url: { relativeProtocol: true }",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Author\">\n        <property name=\"bioUrl\">\n            <constraint name=\"Url\">\n                <option name=\"relativeProtocol\">true</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Author.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Author\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('bioUrl', new Assert\\Url(\n            relativeProtocol: true,\n        ));\n    }\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "// src/Entity/Website.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\n\nclass Website\n{\n    #[Assert\\Url(\n        requireTld: true,\n        tldMessage: 'Add at least one TLD to the {{ value }} URL.',\n    )]\n    protected string $homepageUrl;\n}",
+      "language": "csharp"
+    },
+    {
+      "code": "# config/validator/validation.yaml\nApp\\Entity\\Website:\n    properties:\n        homepageUrl:\n            - Url:\n                requireTld: true\n                tldMessage: Add at least one TLD to the {{ value }} URL.",
+      "language": "unknown"
+    },
+    {
+      "code": "<!-- config/validator/validation.xml -->\n<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<constraint-mapping xmlns=\"http://symfony.com/schema/dic/constraint-mapping\"\n    xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n    xsi:schemaLocation=\"http://symfony.com/schema/dic/constraint-mapping https://symfony.com/schema/dic/constraint-mapping/constraint-mapping-1.0.xsd\">\n\n    <class name=\"App\\Entity\\Website\">\n        <property name=\"homepageUrl\">\n            <constraint name=\"Url\">\n                <option name=\"requireTld\">true</option>\n                <option name=\"tldMessage\">Add at least one TLD to the {{ value }} URL.</option>\n            </constraint>\n        </property>\n    </class>\n</constraint-mapping>",
+      "language": "unknown"
+    },
+    {
+      "code": "// src/Entity/Website.php\nnamespace App\\Entity;\n\nuse Symfony\\Component\\Validator\\Constraints as Assert;\nuse Symfony\\Component\\Validator\\Mapping\\ClassMetadata;\n\nclass Website\n{\n    // ...\n\n    public static function loadValidatorMetadata(ClassMetadata $metadata): void\n    {\n        $metadata->addPropertyConstraint('homepageUrl', new Assert\\Url(\n            requireTld: true,\n            tldMessage: 'Add at least one TLD to the {{ value }} URL.',\n        ));\n    }\n}",
+      "language": "csharp"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/constraints/Url.html",
+    "https://symfony.com/doc/7.3/validation.html",
+    "https://symfony.com/doc/7.3/reference/constraints/NotBlank.html",
+    "https://symfony.com/doc/7.3/validation/groups.html",
+    "https://symfony.com/doc/7.3/validation/severity.html"
+  ]
+}

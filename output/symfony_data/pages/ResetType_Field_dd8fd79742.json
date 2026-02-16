@@ -1,0 +1,97 @@
+{
+  "url": "https://symfony.com/doc/7.3/reference/forms/types/reset.html",
+  "title": "ResetType Field",
+  "content": "A button that resets all fields to their original values.\n\nThe full list of options defined and inherited by this form type is available running this command in your app:\n\ntype: array default: []\n\nIf you want to add extra attributes to the HTML representation of the button, you can use attr option. It's an associative array with HTML attribute as a key. This can be useful when you need to set a custom class for the button:\n\ntype: boolean default: false\n\nIf you don't want a user to be able to click a button, you can set the disabled option to true. It will not be possible to submit the form with this button, not even when bypassing the browser and sending a request manually, for example with cURL.\n\ntype: string or TranslatableMessage default: The label is \"guessed\" from the field name\n\nSets the label that will be displayed on the button. The label can also be directly set inside the template:\n\ntype: string default: messages\n\nThis is the translation domain that will be used for any labels or options that are rendered for this button.\n\ntype: array default: []\n\nThe content of the label option is translated before displaying it, so it can contain translation placeholders. This option defines the values used to replace those placeholders.\n\nGiven this translation message:\n\nYou can specify the placeholder values as follows:\n\nThe label_translation_parameters option of buttons is merged with the same option of its parents, so buttons can reuse and/or override any of the parent placeholders.\n\ntype: array default: []\n\nThe content of the title and placeholder values defined in the attr option is translated before displaying it, so it can contain translation placeholders. This option defines the values used to replace those placeholders.\n\nGiven this translation message:\n\nYou can specify the placeholder values as follows:\n\nThe attr_translation_parameters option of children fields is merged with the same option of their parents, so children can reuse and/or override any of the parent placeholders.\n\ntype: array default: []\n\nAn associative array of the HTML attributes added to the element which is used to render the form type row:\n\nUse the attr option if you want to add these attributes to the form type widget element.\n\nCode consumes server resources. Blackfire tells you how\n\nSave your teams and projects before they sink",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "ResetType Field",
+      "id": "resettype-field"
+    },
+    {
+      "level": "h2",
+      "text": "Inherited Options",
+      "id": "inherited-options"
+    },
+    {
+      "level": "h3",
+      "text": "attr",
+      "id": "attr"
+    },
+    {
+      "level": "h3",
+      "text": "disabled",
+      "id": "disabled"
+    },
+    {
+      "level": "h3",
+      "text": "label",
+      "id": "label"
+    },
+    {
+      "level": "h3",
+      "text": "translation_domain",
+      "id": "translation-domain"
+    },
+    {
+      "level": "h3",
+      "text": "label_translation_parameters",
+      "id": "label-translation-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "attr_translation_parameters",
+      "id": "attr-translation-parameters"
+    },
+    {
+      "level": "h3",
+      "text": "row_attr",
+      "id": "row-attr"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "# replace 'FooType' by the class name of your form type\n$ php bin/console debug:form FooType",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\ResetType;\n// ...\n\n$builder->add('save', ResetType::class, [\n    'attr' => ['class' => 'save'],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "{{ form_widget(form.save, { 'label': 'Click me' }) }}",
+      "language": "unknown"
+    },
+    {
+      "code": "<?= $view['form']->widget($form['save'], ['label' => 'Click me']) ?>",
+      "language": "javascript"
+    },
+    {
+      "code": "# translations/messages.en.yaml\nform.order.reset: 'Reset an order to %company%'",
+      "language": "unknown"
+    },
+    {
+      "code": "use Symfony\\Component\\Form\\Extension\\Core\\Type\\ResetType;\n// ...\n\n$builder->add('send', ResetType::class, [\n    'label' => 'form.order.reset',\n    'label_translation_parameters' => [\n        '%company%' => 'ACME Inc.',\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "# translations/messages.en.yaml\nform.order.id.placeholder: 'Enter unique identifier of the order to %company%'\nform.order.id.title: 'This will be the reference in communications with %company%'",
+      "language": "unknown"
+    },
+    {
+      "code": "$builder->add('id', null, [\n    'attr' => [\n        'placeholder' => 'form.order.id.placeholder',\n        'title' => 'form.order.id.title',\n    ],\n    'attr_translation_parameters' => [\n        '%company%' => 'ACME Inc.',\n    ],\n]);",
+      "language": "javascript"
+    },
+    {
+      "code": "$builder->add('body', TextareaType::class, [\n    'row_attr' => ['class' => 'text-editor', 'id' => '...'],\n]);",
+      "language": "javascript"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/reference/forms/types/reset.html",
+    "https://symfony.com/doc/7.3/reference/forms/types/button.html",
+    "https://symfony.com/doc/7.3/reference/formats/message_format.html",
+    "https://symfony.com/doc/7.3/form/form_customization.html"
+  ]
+}

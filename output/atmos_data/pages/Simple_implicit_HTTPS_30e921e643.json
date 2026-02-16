@@ -1,0 +1,19 @@
+{
+  "title": "Simple - implicit HTTPS",
+  "content": "source: \"bitbucket.org/owner/repo.git?ref=main\"\nyaml",
+  "code_samples": [
+    {
+      "code": "### With Subdirectory",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "With Subdirectory",
+      "id": "with-subdirectory"
+    }
+  ],
+  "url": "llms-txt#simple---implicit-https",
+  "links": []
+}

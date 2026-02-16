@@ -1,0 +1,8 @@
+{
+  "title": "Get environment variables for an identity",
+  "content": "atmos auth env --identity azure-dev",
+  "code_samples": [],
+  "headings": [],
+  "url": "llms-txt#get-environment-variables-for-an-identity",
+  "links": []
+}

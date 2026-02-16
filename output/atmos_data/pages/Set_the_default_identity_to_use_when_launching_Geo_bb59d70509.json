@@ -1,0 +1,33 @@
+{
+  "title": "Set the default identity to use when launching Geodesic",
+  "content": "ENV ATMOS_IDENTITY=\"acme-identity\"\nmakefile\nlogin:\n\t@atmos auth login --identity acme-identity\n\n## Start the geodesic shell by calling wrapper script\nrun: login\n\t@$(APP_NAME)\ndockerfile",
+  "code_samples": [
+    {
+      "code": "**That's it!** Atmos handles AWS credential management automatically. You **do not** need to set:\n- â `AWS_SHARED_CREDENTIALS_FILE` - Atmos manages this\n- â `AWS_CONFIG_FILE` - Atmos manages this\n- â `AWS_PROFILE` - Atmos manages this\n\n**Key Configuration Details:**\n\n- **`ATMOS_IDENTITY`**: The default identity to use (must match an identity in your `atmos.yaml`)\n\n:::note How Atmos Auth Works in Geodesic\nWhen you run Atmos commands inside Geodesic, Atmos automatically:\n1. Loads credentials from XDG-compliant paths (mounted from your host via `~/.config`)\n2. Sets up AWS SDK configuration to use the correct provider and identity\n3. Manages the AWS profile internally\n\n**You should NOT manually set AWS environment variables** like `AWS_SHARED_CREDENTIALS_FILE` or `AWS_CONFIG_FILE`. Setting these prevents Atmos from managing credentials properly and defeats the purpose of using `atmos auth`.\n:::\n\n:::tip Legacy Setup Migration\nIf your Dockerfile currently sets `AWS_SHARED_CREDENTIALS_FILE`, `AWS_CONFIG_FILE`, or `AWS_PROFILE`, **remove them**. These are legacy configurations that conflict with Atmos auth's credential management.\n:::\n\n### 2. Update Your Makefile\n\nAdd an automatic login step to your Makefile to ensure users are authenticated before starting the Geodesic shell:",
+      "language": "unknown"
+    },
+    {
+      "code": "This ensures that:\n- Users authenticate with Atmos before the shell starts\n- The specified identity is used for authentication\n- Credentials are fresh when starting work\n\n### 3. Configure XDG Paths for Geodesic\n\n**Important**: Geodesic sets system-wide XDG environment variables (`XDG_CONFIG_HOME=/etc/xdg_config_home`) that conflict with Atmos credential storage. You need to override these to use your home directory instead.\n\nAdd these environment variables to your Geodesic Dockerfile **or** your shell profile:",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h3",
+      "text": "2. Update Your Makefile",
+      "id": "2.-update-your-makefile"
+    },
+    {
+      "level": "h2",
+      "text": "Start the geodesic shell by calling wrapper script",
+      "id": "start-the-geodesic-shell-by-calling-wrapper-script"
+    },
+    {
+      "level": "h3",
+      "text": "3. Configure XDG Paths for Geodesic",
+      "id": "3.-configure-xdg-paths-for-geodesic"
+    }
+  ],
+  "url": "llms-txt#set-the-default-identity-to-use-when-launching-geodesic",
+  "links": []
+}

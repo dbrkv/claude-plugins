@@ -1,0 +1,61 @@
+{
+  "title": "Output:",
+  "content": "AWS_ACCESS_KEY_ID=AKIA...\nAWS_SECRET_ACCESS_KEY=...\nAWS_SESSION_TOKEN=...\nyaml\nidentities:\n  admin:\n    kind: aws/permission-set\n    default: true # This will be used by default\nbash\n$ atmos auth whoami\n? Multiple default identities found. Please choose one:\n  â¸ dev-admin\n    prod-admin\n    staging-admin\nbash\n$ atmos auth whoami\n? No default identity configured. Please choose an identity:\n  â¸ dev-admin\n    prod-admin\n    staging-admin\nbash",
+  "code_samples": [
+    {
+      "code": "## Default Identity Handling\n\nA **default identity** is the one Atmos Auth will use automatically when no specific identity is requested.\n\n- If you configure a single identity and mark it as `default: true`, Atmos will always use it without requiring you to pass `--identity`.\n- If multiple identities are defined, you can still mark one as default, but youâll need to explicitly choose another when you donât want the default.\n- If no default is set and multiple identities exist, Atmos will require you to specify which identity to use.\n\nThis makes workflows simpler because you can avoid passing extra flags for the identity you use most often.\n\n### Single Default\n\nWhen you have one default identity, it's used automatically:",
+      "language": "unknown"
+    },
+    {
+      "code": "### Multiple Defaults\n\nWhen multiple defaults exist, Atmos behavior depends on the environment:\n\n**Interactive Mode**: Prompts you to choose",
+      "language": "unknown"
+    },
+    {
+      "code": "### No Defaults\n\n**Interactive Mode**: Shows all available identities",
+      "language": "unknown"
+    },
+    {
+      "code": "## Disabling Identity Authentication\n\nIn some scenarios (e.g., CI/CD environments), you may want to **explicitly disable** Atmos-managed identity authentication and use standard AWS credential resolution instead.\n\n### When to Disable Authentication\n\n- **CI/CD pipelines** using GitHub Actions OIDC or other native cloud provider authentication\n- **Development environments** where you want to use local AWS profiles temporarily\n- **Testing scenarios** where you want to bypass Atmos authentication\n- **Mixed environments** where some contexts use Atmos auth and others don't\n\n### How to Disable\n\nYou can disable identity authentication by setting the `--identity` flag to `false` (or equivalent boolean false values):",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Default Identity Handling",
+      "id": "default-identity-handling"
+    },
+    {
+      "level": "h3",
+      "text": "Single Default",
+      "id": "single-default"
+    },
+    {
+      "level": "h3",
+      "text": "Multiple Defaults",
+      "id": "multiple-defaults"
+    },
+    {
+      "level": "h3",
+      "text": "No Defaults",
+      "id": "no-defaults"
+    },
+    {
+      "level": "h2",
+      "text": "Disabling Identity Authentication",
+      "id": "disabling-identity-authentication"
+    },
+    {
+      "level": "h3",
+      "text": "When to Disable Authentication",
+      "id": "when-to-disable-authentication"
+    },
+    {
+      "level": "h3",
+      "text": "How to Disable",
+      "id": "how-to-disable"
+    }
+  ],
+  "url": "llms-txt#output:",
+  "links": []
+}

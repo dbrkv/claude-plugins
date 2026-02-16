@@ -1,0 +1,27 @@
+{
+  "url": "https://symfony.com/doc/7.3/console/lockable_trait.html",
+  "title": "Prevent Running the Same Console Command Multiple Times",
+  "content": "You can use locks to prevent the same command from running multiple times on the same server. The Lock component provides multiple classes to create locks based on the filesystem (FlockStore), shared memory (SemaphoreStore) and even databases and Redis servers.\n\nIn addition, the Console component provides a PHP trait called LockableTrait that adds two convenient methods to lock and release commands:\n\nThe LockableTrait will use the SemaphoreStore if available and will default to FlockStore otherwise. You can override this behavior by setting a $lockFactory property with your own lock factory:\n\nThe $lockFactory property was introduced in Symfony 7.1.\n\nBe trained by SensioLabs experts (2 to 6 day sessions -- French or English).\n\nNo stress: we've got you covered with our 116 automated quality checks of your code",
+  "headings": [
+    {
+      "level": "h1",
+      "text": "Prevent Running the Same Console Command Multiple Times",
+      "id": "prevent-running-the-same-console-command-multiple-times"
+    }
+  ],
+  "code_samples": [
+    {
+      "code": "// ...\nuse Symfony\\Component\\Console\\Command\\Command;\nuse Symfony\\Component\\Console\\Command\\LockableTrait;\nuse Symfony\\Component\\Console\\Style\\SymfonyStyle;\n\n#[AsCommand(name: 'contents:update')]\nclass UpdateContentsCommand\n{\n    use LockableTrait;\n\n    public function __invoke(SymfonyStyle $io): int\n    {\n        if (!$this->lock()) {\n            $io->writeln('The command is already running in another process.');\n\n            return Command::SUCCESS;\n        }\n\n        // If you prefer to wait until the lock is released, use this:\n        // $this->lock(null, true);\n\n        // ...\n\n        // if not released explicitly, Symfony releases the lock\n        // automatically when the execution of the command ends\n        $this->release();\n\n        return Command::SUCCESS;\n    }\n}",
+      "language": "unknown"
+    },
+    {
+      "code": "// ...\nuse Symfony\\Component\\Console\\Command\\Command;\nuse Symfony\\Component\\Console\\Command\\LockableTrait;\nuse Symfony\\Component\\Lock\\LockFactory;\n\n#[AsCommand(name: 'contents:update')]\nclass UpdateContentsCommand\n{\n    use LockableTrait;\n\n    // don't use PHP constructor property promotion here because the\n    // LockableTrait already defines the `$lockFactory` property in this class\n    public function __construct(LockFactory $lockFactory)\n    {\n        $this->lockFactory = $lockFactory;\n    }\n\n    // ...\n}",
+      "language": "unknown"
+    }
+  ],
+  "patterns": [],
+  "links": [
+    "https://symfony.com/doc/7.3/console/lockable_trait.html",
+    "https://symfony.com/doc/7.3/components/lock.html"
+  ]
+}

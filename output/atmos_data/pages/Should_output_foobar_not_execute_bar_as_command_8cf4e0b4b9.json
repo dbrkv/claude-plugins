@@ -1,0 +1,49 @@
+{
+  "title": "Should output: foo;bar (not execute 'bar' as command)",
+  "content": "",
+  "code_samples": [
+    {
+      "code": "## Technical Details\n\n### How Arguments Are Now Quoted\n\nAtmos uses the industry-standard shell quoting library (`mvdan.cc/sh/v3/syntax`) to properly quote each argument:\n\n| Input | Quoted Output | Why |\n|-------|---------------|-----|\n| `hello  world` | `'hello  world'` | Preserves spaces |\n| `$VAR` | `'$VAR'` | Prevents expansion |\n| `foo;bar` | `'foo;bar'` | Treats `;` as literal |\n| Empty string | `''` | Preserves empty argument |\n| `line1\\nline2` | `$'line1\\nline2'` | Preserves newlines |\n\n### Other Commands Not Affected\n\nThis fix **only** affects custom commands using `{{ .TrailingArgs }}` in shell execution. These commands are **not affected**:\n\n- â `atmos terraform` - passes arguments directly to Terraform SDK\n- â `atmos helmfile` - passes arguments directly to Helmfile\n- â `atmos packer` - passes arguments directly to Packer\n- â `atmos auth exec` - passes arguments directly to subprocess\n- â `atmos auth shell` - passes arguments to shell initialization\n\n## What We Learned\n\nThis bug highlights the importance of **proper shell quoting**. Key lessons:\n\n1. **Never use `strings.Join()` for shell arguments** - always use proper quoting\n2. **Test with edge cases** - whitespace, special characters, and injection attempts\n3. **Fragmentation breeds bugs** - we consolidated 5 different parsing implementations into one safe utility\n\n## Unified Argument Parsing\n\nAs part of this fix, we've consolidated all argument parsing logic into a single, well-tested utility (`ExtractSeparatedArgs`). This reduces code duplication and makes the `--` separator pattern consistent across all Atmos commands.\n\n**Test coverage**: 70+ test cases covering edge cases, security scenarios, and integration with the actual shell parser.\n\n## Migration Guide\n\n### Common Scenarios\n\n#### You're passing simple arguments",
+      "language": "unknown"
+    }
+  ],
+  "headings": [
+    {
+      "level": "h2",
+      "text": "Technical Details",
+      "id": "technical-details"
+    },
+    {
+      "level": "h3",
+      "text": "How Arguments Are Now Quoted",
+      "id": "how-arguments-are-now-quoted"
+    },
+    {
+      "level": "h3",
+      "text": "Other Commands Not Affected",
+      "id": "other-commands-not-affected"
+    },
+    {
+      "level": "h2",
+      "text": "What We Learned",
+      "id": "what-we-learned"
+    },
+    {
+      "level": "h2",
+      "text": "Unified Argument Parsing",
+      "id": "unified-argument-parsing"
+    },
+    {
+      "level": "h2",
+      "text": "Migration Guide",
+      "id": "migration-guide"
+    },
+    {
+      "level": "h3",
+      "text": "Common Scenarios",
+      "id": "common-scenarios"
+    }
+  ],
+  "url": "llms-txt#should-output:-foo;bar-(not-execute-'bar'-as-command)",
+  "links": []
+}
