@@ -1,8 +1,0 @@
-{
-  "title": "Check Git history for the vendored component",
-  "content": "git log --oneline components/terraform/vpc/",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-git-history-for-the-vendored-component",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "File-based memory heap profiling",
-  "content": "atmos terraform plan vpc -s prod --profile-file=heap.prof --profile-type=heap",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#file-based-memory-heap-profiling",
-  "links": []
-}

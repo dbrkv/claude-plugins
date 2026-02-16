@@ -1,8 +1,0 @@
-{
-  "title": "Execution trace profiling",
-  "content": "atmos terraform plan vpc -s plat-ue2-dev --profile-file=trace.out --profile-type=trace",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#execution-trace-profiling",
-  "links": []
-}

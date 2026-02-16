@@ -1,8 +1,0 @@
-{
-  "title": "NOTE: These messages are printed to `/dev/stderr`",
-  "content": "Checking out Git ref 'refs/remotes/origin/HEAD' ...\nChecked out Git ref 'refs/remotes/origin/HEAD'\nCurrent HEAD: ffd2154e1daa32357b75460b9f45d268922b51e1 refs/heads/update-logs\nBASE: f7aa382aa8b3d48be8f06cfdb27aad344b89aff4 HEAD",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#note:-these-messages-are-printed-to-`/dev/stderr`",
-  "links": []
-}

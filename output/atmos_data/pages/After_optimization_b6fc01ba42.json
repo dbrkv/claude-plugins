@@ -1,8 +1,0 @@
-{
-  "title": "After optimization",
-  "content": "atmos describe stacks --heatmap 2>optimized.txt",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#after-optimization",
-  "links": []
-}

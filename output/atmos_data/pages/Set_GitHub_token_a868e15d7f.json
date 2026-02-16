@@ -1,8 +1,0 @@
-{
-  "title": "Set GitHub token",
-  "content": "export ATMOS_GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#set-github-token",
-  "links": []
-}

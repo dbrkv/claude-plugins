@@ -1,8 +1,0 @@
-{
-  "title": "Analyze",
-  "content": "go tool pprof -http=:8080 heap.prof\ngo tool pprof -http=:8080 allocs.prof",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#analyze",
-  "links": []
-}

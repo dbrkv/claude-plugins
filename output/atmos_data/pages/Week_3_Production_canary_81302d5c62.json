@@ -1,8 +1,0 @@
-{
-  "title": "Week 3: Production canary",
-  "content": "prod-canary:\n  vpc:\n    metadata:\n      component: vpc/v2",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#week-3:-production-canary",
-  "links": []
-}

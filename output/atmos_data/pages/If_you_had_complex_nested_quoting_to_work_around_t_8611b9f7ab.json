@@ -1,8 +1,0 @@
-{
-  "title": "If you had complex nested quoting to work around the bug:",
-  "content": "atmos mycmd -- bash -c 'echo \"hello  world\"'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#if-you-had-complex-nested-quoting-to-work-around-the-bug:",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Save to file",
-  "content": "atmos describe component vpc -s prod --provenance --file vpc-config.yaml",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#save-to-file",
-  "links": []
-}

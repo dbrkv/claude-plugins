@@ -1,8 +1,0 @@
-{
-  "title": "Profile CPU usage in slow operations",
-  "content": "atmos terraform plan large-component -s prod --profile-file=slow-plan.prof --profile-type=cpu",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#profile-cpu-usage-in-slow-operations",
-  "links": []
-}

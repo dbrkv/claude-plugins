@@ -1,8 +1,0 @@
-{
-  "title": "Clear and re-authenticate",
-  "content": "atmos auth logout dev-admin\natmos auth login dev-admin",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#clear-and-re-authenticate",
-  "links": []
-}

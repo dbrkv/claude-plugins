@@ -1,8 +1,0 @@
-{
-  "title": "Component A references Component B",
-  "content": "vars:\n  vpc_id: !terraform.state vpc core vpc_id",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#component-a-references-component-b",
-  "links": []
-}

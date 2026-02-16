@@ -1,8 +1,0 @@
-{
-  "title": "Before: Manual directory management",
-  "content": "cd /infrastructure\natmos terraform plan vpc -s prod\ncd -",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#before:-manual-directory-management",
-  "links": []
-}

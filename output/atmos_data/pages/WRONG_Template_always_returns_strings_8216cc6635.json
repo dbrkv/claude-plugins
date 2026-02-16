@@ -1,8 +1,0 @@
-{
-  "title": "WRONG - Template always returns strings",
-  "content": "count: {{ .vars.instance_count }}  # Returns \"3\" not 3",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#wrong---template-always-returns-strings",
-  "links": []
-}

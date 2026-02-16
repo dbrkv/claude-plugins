@@ -1,8 +1,0 @@
-{
-  "title": "Goroutine profile",
-  "content": "go tool pprof http://localhost:6060/debug/pprof/goroutine",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#goroutine-profile",
-  "links": []
-}

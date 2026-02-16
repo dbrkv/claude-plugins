@@ -1,8 +1,0 @@
-{
-  "title": "`staging` account, `us-west-2` region",
-  "content": "atmos terraform apply vpc-flow-logs-bucket -s org2-plat-uw2-staging\natmos terraform apply vpc -s org2-plat-uw2-staging",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#`staging`-account,-`us-west-2`-region",
-  "links": []
-}

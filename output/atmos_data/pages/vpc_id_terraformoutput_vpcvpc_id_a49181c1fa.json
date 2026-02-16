@@ -1,8 +1,0 @@
-{
-  "title": "vpc_id: !terraform.output vpc.vpc_id",
-  "content": "",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#vpc_id:-!terraform.output-vpc.vpc_id",
-  "links": []
-}

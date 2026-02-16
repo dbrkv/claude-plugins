@@ -1,8 +1,0 @@
-{
-  "title": "Override the variables, env, command and settings ONLY in the components managed by the `testing` Team.",
-  "content": "overrides:\n  env:\n    # This ENV variable will be added or overridden in all the components managed by the `testing` Team\n    TEST_ENV_VAR1: \"test-env-var1-overridden-2\"\n  settings: {}\n  vars: {}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#override-the-variables,-env,-command-and-settings-only-in-the-components-managed-by-the-`testing`-team.",
-  "links": []
-}

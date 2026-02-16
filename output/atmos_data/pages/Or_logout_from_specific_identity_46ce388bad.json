@@ -1,8 +1,0 @@
-{
-  "title": "Or logout from specific identity",
-  "content": "atmos auth logout <identity-name>",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#or-logout-from-specific-identity",
-  "links": []
-}

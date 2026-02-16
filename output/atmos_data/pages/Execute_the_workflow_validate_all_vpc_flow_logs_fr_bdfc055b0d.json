@@ -1,8 +1,0 @@
-{
-  "title": "Execute the workflow `validate-all-vpc-flow-logs` from the workflow manifest `validation.yaml`",
-  "content": "atmos workflow validate-all-vpc-flow-logs -f validation",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#execute-the-workflow-`validate-all-vpc-flow-logs`-from-the-workflow-manifest-`validation.yaml`",
-  "links": []
-}

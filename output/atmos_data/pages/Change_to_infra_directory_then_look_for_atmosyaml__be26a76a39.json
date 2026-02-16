@@ -1,8 +1,0 @@
-{
-  "title": "Change to /infra directory, then look for atmos.yaml in ./config subdirectory",
-  "content": "atmos -C /infra --base-path=./config terraform plan vpc -s dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#change-to-/infra-directory,-then-look-for-atmos.yaml-in-./config-subdirectory",
-  "links": []
-}

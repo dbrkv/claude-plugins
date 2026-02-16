@@ -1,8 +1,0 @@
-{
-  "title": "Authenticate interactively",
-  "content": "atmos auth login --identity azure-dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#authenticate-interactively",
-  "links": []
-}

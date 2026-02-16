@@ -1,8 +1,0 @@
-{
-  "title": "Before fix: Shell parsed as TWO commands",
-  "content": "echo foo\nrm -rf /  # DANGEROUS!",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#before-fix:-shell-parsed-as-two-commands",
-  "links": []
-}

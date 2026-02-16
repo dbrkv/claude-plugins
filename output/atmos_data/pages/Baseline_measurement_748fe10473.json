@@ -1,8 +1,0 @@
-{
-  "title": "Baseline measurement",
-  "content": "atmos describe stacks --heatmap 2>baseline.txt",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#baseline-measurement",
-  "links": []
-}

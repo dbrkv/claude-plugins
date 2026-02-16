@@ -1,8 +1,0 @@
-{
-  "title": "Execute command with authentication",
-  "content": "atmos auth exec --identity prod-admin -- aws sts get-caller-identity\natmos auth exec -- terraform plan",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#execute-command-with-authentication",
-  "links": []
-}

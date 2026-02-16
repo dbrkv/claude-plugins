@@ -1,8 +1,0 @@
-{
-  "title": "Export all releases to JSON",
-  "content": "$ atmos version list --limit 100 --format json > all-releases.json",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#export-all-releases-to-json",
-  "links": []
-}

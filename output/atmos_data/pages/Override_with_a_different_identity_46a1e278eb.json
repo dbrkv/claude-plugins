@@ -1,8 +1,0 @@
-{
-  "title": "Override with a different identity",
-  "content": "atmos deploy-infra vpc -s plat-ue2-prod --identity developer",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#override-with-a-different-identity",
-  "links": []
-}

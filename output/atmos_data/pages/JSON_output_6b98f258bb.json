@@ -1,8 +1,0 @@
-{
-  "title": "JSON output",
-  "content": "$ atmos version list --format json",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#json-output",
-  "links": []
-}

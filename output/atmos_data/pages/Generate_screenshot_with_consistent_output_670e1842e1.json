@@ -1,8 +1,0 @@
-{
-  "title": "Generate screenshot with consistent output",
-  "content": "atmos terraform plan --force-tty --force-color | screenshot.sh",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#generate-screenshot-with-consistent-output",
-  "links": []
-}

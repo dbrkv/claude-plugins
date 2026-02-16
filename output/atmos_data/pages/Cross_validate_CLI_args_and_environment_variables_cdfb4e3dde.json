@@ -1,8 +1,0 @@
-{
-  "title": "Cross-validate CLI args and environment variables",
-  "content": "errors[message] {\n  input.env_tf_cli_vars.region\n  input.process_env.AWS_REGION\n  input.env_tf_cli_vars.region != input.process_env.AWS_REGION\n  message = sprintf(\"Region mismatch: TF_CLI_ARGS region '%s' != AWS_REGION '%s'\", [\n    input.env_tf_cli_vars.region,\n    input.process_env.AWS_REGION\n  ])\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cross-validate-cli-args-and-environment-variables",
-  "links": []
-}

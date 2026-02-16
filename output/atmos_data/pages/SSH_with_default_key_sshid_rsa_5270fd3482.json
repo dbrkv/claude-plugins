@@ -1,8 +1,0 @@
-{
-  "title": "SSH with default key (~/.ssh/id_rsa)",
-  "content": "source: \"git@github.com:owner/private-repo.git?ref=main\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#ssh-with-default-key-(~/.ssh/id_rsa)",
-  "links": []
-}

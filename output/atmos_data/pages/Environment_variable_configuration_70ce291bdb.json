@@ -1,8 +1,0 @@
-{
-  "title": "Environment variable configuration",
-  "content": "export ATMOS_PROFILE_FILE=debug.prof\nexport ATMOS_PROFILE_TYPE=goroutine\natmos describe stacks",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#environment-variable-configuration",
-  "links": []
-}

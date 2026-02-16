@@ -1,8 +1,0 @@
-{
-  "title": "Reset to previous known good state",
-  "content": "git checkout channels/prod\ngit reset --hard <previous-good-commit>",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#reset-to-previous-known-good-state",
-  "links": []
-}

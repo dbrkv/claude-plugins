@@ -1,8 +1,0 @@
-{
-  "title": "Query component types",
-  "content": "atmos list metadata --query '.metadata.type'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#query-component-types",
-  "links": []
-}

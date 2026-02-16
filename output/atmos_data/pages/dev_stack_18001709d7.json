@@ -1,8 +1,0 @@
-{
-  "title": "`dev` stack",
-  "content": "atmos terraform apply vpc -s dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#`dev`-stack",
-  "links": []
-}

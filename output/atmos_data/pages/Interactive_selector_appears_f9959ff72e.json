@@ -1,8 +1,0 @@
-{
-  "title": "Interactive selector appears",
-  "content": "atmos terraform plan mycomponent -s mystack --identity",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#interactive-selector-appears",
-  "links": []
-}

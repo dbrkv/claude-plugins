@@ -1,8 +1,0 @@
-{
-  "title": "Read a simple value (string, number, boolean) from the store",
-  "content": "var1: '{{ atmos.Store \"<store_name>\" \"<stack>\" \"<component>\" \"<key>\" }}'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#read-a-simple-value-(string,-number,-boolean)-from-the-store",
-  "links": []
-}

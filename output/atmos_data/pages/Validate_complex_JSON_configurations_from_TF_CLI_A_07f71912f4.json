@@ -1,8 +1,0 @@
-{
-  "title": "Validate complex JSON configurations from TF_CLI_ARGS",
-  "content": "errors[message] {\n  input.env_tf_cli_vars.networking_config\n  is_object(input.env_tf_cli_vars.networking_config)\n  not input.env_tf_cli_vars.networking_config.vpc_id\n  message = \"Networking configuration must include vpc_id\"\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-complex-json-configurations-from-tf_cli_args",
-  "links": []
-}

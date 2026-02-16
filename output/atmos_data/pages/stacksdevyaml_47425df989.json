@@ -1,8 +1,0 @@
-{
-  "title": "stacks/dev.yaml",
-  "content": "components:\n  terraform:\n    vpc:\n      vars: {...}\n    myapp:\n      vars: {...}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#stacks/dev.yaml",
-  "links": []
-}

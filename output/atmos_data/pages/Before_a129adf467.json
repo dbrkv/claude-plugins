@@ -1,8 +1,0 @@
-{
-  "title": "Before",
-  "content": "vpc_id: !terraform.output vpc vpc_id",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#before",
-  "links": []
-}

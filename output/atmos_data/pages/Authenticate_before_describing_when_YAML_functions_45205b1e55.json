@@ -1,8 +1,0 @@
-{
-  "title": "Authenticate before describing (when YAML functions require credentials)",
-  "content": "atmos describe stacks --identity my-aws-identity\natmos describe stacks --identity # Interactive selection",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#authenticate-before-describing-(when-yaml-functions-require-credentials)",
-  "links": []
-}

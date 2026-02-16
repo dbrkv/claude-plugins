@@ -1,8 +1,0 @@
-{
-  "title": "Block dangerous flags in TF_CLI_ARGS",
-  "content": "errors[message] {\n  dangerous_flags := [\"-auto-approve\", \"-force\", \"-lock=false\"]\n  flag := dangerous_flags[_]\n  flag in input.env_tf_cli_args\n  input.process_env.ENVIRONMENT == \"production\"\n  message = sprintf(\"Flag '%s' is not allowed in production via TF_CLI_ARGS\", [flag])\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#block-dangerous-flags-in-tf_cli_args",
-  "links": []
-}

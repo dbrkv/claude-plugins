@@ -1,8 +1,0 @@
-{
-  "title": "Vendor promoted version to prod track",
-  "content": "atmos vendor pull --component vpc-prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#vendor-promoted-version-to-prod-track",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Short form (preferred for brevity)",
-  "content": "atmos -C /infra terraform plan vpc -s prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#short-form-(preferred-for-brevity)",
-  "links": []
-}

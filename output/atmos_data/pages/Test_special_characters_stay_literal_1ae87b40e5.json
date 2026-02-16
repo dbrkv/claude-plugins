@@ -1,8 +1,0 @@
-{
-  "title": "Test special characters stay literal",
-  "content": "atmos mycmd -- echo '$HOME'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#test-special-characters-stay-literal",
-  "links": []
-}

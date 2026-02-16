@@ -1,8 +1,0 @@
-{
-  "title": "Find specific values with grep",
-  "content": "atmos describe component vpc -s prod --provenance | grep cidr",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#find-specific-values-with-grep",
-  "links": []
-}

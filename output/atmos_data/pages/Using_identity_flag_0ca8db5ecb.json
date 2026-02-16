@@ -1,8 +1,0 @@
-{
-  "title": "Using --identity flag",
-  "content": "atmos auth logout --identity dev-admin",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#using---identity-flag",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Dotenv format",
-  "content": "atmos auth env --format dotenv",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#dotenv-format",
-  "links": []
-}

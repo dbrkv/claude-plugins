@@ -1,8 +1,0 @@
-{
-  "title": "Check what variables are set",
-  "content": "atmos auth env --identity <name>",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-what-variables-are-set",
-  "links": []
-}

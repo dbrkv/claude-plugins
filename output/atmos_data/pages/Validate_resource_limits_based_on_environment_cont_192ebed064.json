@@ -1,8 +1,0 @@
-{
-  "title": "Validate resource limits based on environment context",
-  "content": "errors[message] {\n  environment := get_environment\n  environment == \"development\"\n  total_instances := get_total_instances\n  total_instances > 5\n  message = sprintf(\"Development environment limited to 5 instances, requested %d\", [total_instances])\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-resource-limits-based-on-environment-context",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Disable masking for debugging",
-  "content": "atmos terraform plan --mask=false",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#disable-masking-for-debugging",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Deploy to staging",
-  "content": "atmos terraform apply my-component -s staging --identity azure-staging",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#deploy-to-staging",
-  "links": []
-}

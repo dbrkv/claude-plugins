@@ -1,8 +1,0 @@
-{
-  "title": "On a feature branch, see impact everywhere",
-  "content": "$ atmos terraform plan vpc -s dev/us-east-1\n$ atmos terraform plan vpc -s staging/us-east-1\n$ atmos terraform plan vpc -s prod/us-east-1",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#on-a-feature-branch,-see-impact-everywhere",
-  "links": []
-}

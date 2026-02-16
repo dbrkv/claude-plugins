@@ -1,8 +1,0 @@
-{
-  "title": "2. Authenticate (when needed) - opens browser for SSO",
-  "content": "atmos auth login --identity prod-admin",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#2.-authenticate-(when-needed)---opens-browser-for-sso",
-  "links": []
-}

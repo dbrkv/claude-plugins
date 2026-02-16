@@ -1,8 +1,0 @@
-{
-  "title": "Re-vendor the track folder with previous version",
-  "content": "atmos vendor pull --component vpc-prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#re-vendor-the-track-folder-with-previous-version",
-  "links": []
-}

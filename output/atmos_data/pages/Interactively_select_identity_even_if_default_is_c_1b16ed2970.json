@@ -1,8 +1,0 @@
-{
-  "title": "Interactively select identity (even if default is configured)",
-  "content": "atmos auth shell --identity",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#interactively-select-identity-(even-if-default-is-configured)",
-  "links": []
-}

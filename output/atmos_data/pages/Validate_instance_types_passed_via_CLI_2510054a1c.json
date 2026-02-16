@@ -1,8 +1,0 @@
-{
-  "title": "Validate instance types passed via CLI",
-  "content": "errors[message] {\n  input.tf_cli_vars.instance_type\n  not input.tf_cli_vars.instance_type in [\"t3.micro\", \"t3.small\", \"t3.medium\"]\n  message = sprintf(\"Instance type '%s' not allowed via CLI. Use t3.micro, t3.small, or t3.medium\", [input.tf_cli_vars.instance_type])\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-instance-types-passed-via-cli",
-  "links": []
-}

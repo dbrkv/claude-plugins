@@ -1,8 +1,0 @@
-{
-  "title": "Clean all components (with confirmation)",
-  "content": "atmos terraform clean",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#clean-all-components-(with-confirmation)",
-  "links": []
-}

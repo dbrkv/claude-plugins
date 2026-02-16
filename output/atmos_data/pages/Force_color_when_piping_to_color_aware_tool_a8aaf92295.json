@@ -1,8 +1,0 @@
-{
-  "title": "Force color when piping to color-aware tool",
-  "content": "atmos describe stacks --force-color | bat",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#force-color-when-piping-to-color-aware-tool",
-  "links": []
-}

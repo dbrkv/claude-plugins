@@ -1,8 +1,0 @@
-{
-  "title": "Use the identity from command config",
-  "content": "atmos deploy-infra vpc -s plat-ue2-prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use-the-identity-from-command-config",
-  "links": []
-}

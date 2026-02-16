@@ -1,8 +1,0 @@
-{
-  "title": "Show specific identities",
-  "content": "atmos auth list --identities=admin,developer",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#show-specific-identities",
-  "links": []
-}

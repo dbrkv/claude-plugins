@@ -1,8 +1,0 @@
-{
-  "title": "Verify environment variable",
-  "content": "echo $TF_CLI_CONFIG_FILE",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#verify-environment-variable",
-  "links": []
-}

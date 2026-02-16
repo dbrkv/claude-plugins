@@ -1,8 +1,0 @@
-{
-  "title": "File-based execution trace profiling",
-  "content": "atmos terraform plan vpc -s prod --profile-file=trace.out --profile-type=trace",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#file-based-execution-trace-profiling",
-  "links": []
-}

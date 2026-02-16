@@ -1,8 +1,0 @@
-{
-  "title": "Show only AWS SSO providers",
-  "content": "atmos auth list --providers=aws-sso",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#show-only-aws-sso-providers",
-  "links": []
-}

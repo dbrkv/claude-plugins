@@ -1,8 +1,0 @@
-{
-  "title": "CI: Set once in your workflow",
-  "content": "export ATMOS_PROFILE=ci\natmos terraform apply vpc -s prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#ci:-set-once-in-your-workflow",
-  "links": []
-}

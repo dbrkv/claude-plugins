@@ -1,8 +1,0 @@
-{
-  "title": "Development (local machine)",
-  "content": "export DEVELOPMENT=true\nexport SENTRY_ENABLED=false",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#development-(local-machine)",
-  "links": []
-}

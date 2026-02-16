@@ -1,8 +1,0 @@
-{
-  "title": "`dev` account, `us-west-2` region",
-  "content": "atmos terraform apply vpc-flow-logs-bucket -s org2-plat-uw2-dev\natmos terraform apply vpc -s org2-plat-uw2-dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#`dev`-account,-`us-west-2`-region",
-  "links": []
-}

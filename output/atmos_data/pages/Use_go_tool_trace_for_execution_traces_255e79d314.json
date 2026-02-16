@@ -1,8 +1,0 @@
-{
-  "title": "Use go tool trace for execution traces",
-  "content": "go tool trace trace.out",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use-go-tool-trace-for-execution-traces",
-  "links": []
-}

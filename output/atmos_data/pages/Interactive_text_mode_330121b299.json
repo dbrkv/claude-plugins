@@ -1,8 +1,0 @@
-{
-  "title": "Interactive text mode",
-  "content": "go tool pprof cpu.prof\ngo tool pprof heap.prof",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#interactive-text-mode",
-  "links": []
-}

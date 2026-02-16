@@ -1,8 +1,0 @@
-{
-  "title": "Extension is detected as .yaml (fragment ignored)",
-  "content": "settings: !include https://example.com/settings.yaml#section1",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#extension-is-detected-as-.yaml-(fragment-ignored)",
-  "links": []
-}

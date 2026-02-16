@@ -1,8 +1,0 @@
-{
-  "title": "Update specific component",
-  "content": "atmos vendor pull --component vpc",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#update-specific-component",
-  "links": []
-}

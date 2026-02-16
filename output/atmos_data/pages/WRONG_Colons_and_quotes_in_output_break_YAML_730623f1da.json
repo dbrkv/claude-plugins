@@ -1,8 +1,0 @@
-{
-  "title": "WRONG - Colons and quotes in output break YAML",
-  "content": "description: {{ .vars.description }}  # Fails if description contains \": \" or quotes",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#wrong---colons-and-quotes-in-output-break-yaml",
-  "links": []
-}

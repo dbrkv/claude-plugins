@@ -1,8 +1,0 @@
-{
-  "title": "Check that your release published correctly",
-  "content": "atmos version show v1.95.0",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-that-your-release-published-correctly",
-  "links": []
-}

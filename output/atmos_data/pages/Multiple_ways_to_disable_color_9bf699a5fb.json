@@ -1,8 +1,0 @@
-{
-  "title": "Multiple ways to disable color",
-  "content": "atmos describe config --no-color           # Using flag\nNO_COLOR=1 atmos describe config          # Using NO_COLOR standard\nATMOS_NO_COLOR=1 atmos describe config    # Using ATMOS_NO_COLOR\nATMOS_COLOR=false atmos describe config   # Using ATMOS_COLOR\nCOLOR=false atmos describe config         # Using COLOR",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#multiple-ways-to-disable-color",
-  "links": []
-}

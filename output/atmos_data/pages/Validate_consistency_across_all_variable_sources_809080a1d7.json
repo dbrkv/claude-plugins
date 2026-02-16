@@ -1,8 +1,0 @@
-{
-  "title": "Validate consistency across all variable sources",
-  "content": "errors[message] {\n  sources := [\n    object.get(input.vars, \"environment\", null),\n    object.get(input.tf_cli_vars, \"environment\", null),\n    object.get(input.env_tf_cli_vars, \"environment\", null),\n    object.get(input.process_env, \"ATMOS_ENVIRONMENT\", null)\n  ]\n\n# Remove null/undefined values\n  defined_envs := [env | env := sources[_]; env != null; env != \"\"]\n\n# Check if all defined environments match\n  count(defined_envs) > 1\n  not all_equal(defined_envs)\n  message = sprintf(\"Environment mismatch across sources: %v\", [defined_envs])\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-consistency-across-all-variable-sources",
-  "links": []
-}

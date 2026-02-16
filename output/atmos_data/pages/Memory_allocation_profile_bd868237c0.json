@@ -1,8 +1,0 @@
-{
-  "title": "Memory allocation profile",
-  "content": "go tool pprof http://localhost:6060/debug/pprof/heap",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#memory-allocation-profile",
-  "links": []
-}

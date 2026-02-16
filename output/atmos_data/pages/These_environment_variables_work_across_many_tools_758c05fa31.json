@@ -1,8 +1,0 @@
-{
-  "title": "These environment variables work across many tools, not just Atmos",
-  "content": "export NO_COLOR=1        # Disables color in Atmos and other NO_COLOR-compliant tools\nexport ATMOS_PAGER=off  # Properly disables paging in Atmos",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#these-environment-variables-work-across-many-tools,-not-just-atmos",
-  "links": []
-}

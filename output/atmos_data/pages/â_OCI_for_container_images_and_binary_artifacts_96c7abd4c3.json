@@ -1,8 +1,0 @@
-{
-  "title": "â OCI for container images and binary artifacts",
-  "content": "source: \"oci://ghcr.io/cloudposse/components/terraform/stable/aws/vpc:v1.0.0\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#â-oci-for-container-images-and-binary-artifacts",
-  "links": []
-}

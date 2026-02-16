@@ -1,8 +1,0 @@
-{
-  "title": "Validate JSON configuration passed via CLI",
-  "content": "errors[message] {\n  input.tf_cli_vars.config\n  is_object(input.tf_cli_vars.config)\n  input.tf_cli_vars.config.encryption_enabled != true\n  message = \"Configuration passed via CLI must have encryption_enabled set to true\"\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-json-configuration-passed-via-cli",
-  "links": []
-}

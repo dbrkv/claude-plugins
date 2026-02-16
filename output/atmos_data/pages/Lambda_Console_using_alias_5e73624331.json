@@ -1,8 +1,0 @@
-{
-  "title": "Lambda Console (using alias)",
-  "content": "atmos auth console --destination lambda",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#lambda-console-(using-alias)",
-  "links": []
-}

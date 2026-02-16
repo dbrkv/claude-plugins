@@ -1,8 +1,0 @@
-{
-  "title": "For each directly affected component, detect the dependent components and process them in dependency order, recursively.",
-  "content": "atmos terraform <command> --affected --include-dependents --stack prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#for-each-directly-affected-component,-detect-the-dependent-components-and-process-them-in-dependency-order,-recursively.",
-  "links": []
-}

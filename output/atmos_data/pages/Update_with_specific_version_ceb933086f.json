@@ -1,8 +1,0 @@
-{
-  "title": "Update with specific version",
-  "content": "atmos vendor pull --component vpc --version v2.2.0",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#update-with-specific-version",
-  "links": []
-}

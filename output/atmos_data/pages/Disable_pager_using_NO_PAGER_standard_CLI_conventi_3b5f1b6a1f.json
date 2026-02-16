@@ -1,8 +1,0 @@
-{
-  "title": "Disable pager using NO_PAGER (standard CLI convention)",
-  "content": "NO_PAGER=1 atmos describe config            # Standard way to disable pager\nexport NO_PAGER=1; atmos describe config    # Set for entire session",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#disable-pager-using-no_pager-(standard-cli-convention)",
-  "links": []
-}

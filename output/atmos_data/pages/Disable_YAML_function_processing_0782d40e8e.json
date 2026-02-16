@@ -1,8 +1,0 @@
-{
-  "title": "Disable YAML function processing",
-  "content": "atmos describe stacks --process-functions=false",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#disable-yaml-function-processing",
-  "links": []
-}

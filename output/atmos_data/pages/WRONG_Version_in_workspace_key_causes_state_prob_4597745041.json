@@ -1,8 +1,0 @@
-{
-  "title": "WRONG - Version in workspace key causes state problems",
-  "content": "settings:\n  workspace_key_prefix: \"prod/vpc/v2\"  # Don't do this!",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#wrong---version-in-workspace-key-causes-state-problems",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "or configs, but they are configured as dependencies of the components that are modified",
-  "content": "atmos terraform <command> --affected --include-dependents",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#or-configs,-but-they-are-configured-as-dependencies-of-the-components-that-are-modified",
-  "links": []
-}

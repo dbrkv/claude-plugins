@@ -1,8 +1,0 @@
-{
-  "title": "PNG image",
-  "content": "atmos auth list --format graphviz | dot -Tpng > auth.png",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#png-image",
-  "links": []
-}

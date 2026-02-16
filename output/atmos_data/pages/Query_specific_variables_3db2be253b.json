@@ -1,8 +1,0 @@
-{
-  "title": "Query specific variables",
-  "content": "atmos list values vpc --query .vars.enabled",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#query-specific-variables",
-  "links": []
-}

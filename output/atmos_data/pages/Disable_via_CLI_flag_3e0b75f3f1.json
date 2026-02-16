@@ -1,8 +1,0 @@
-{
-  "title": "Disable via CLI flag",
-  "content": "atmos terraform plan mycomponent --stack=dev --identity=false",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#disable-via-cli-flag",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Good: CI/CD with explicit identity",
-  "content": "export ATMOS_IDENTITY=ci-readonly\natmos describe affected --ref main",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#good:-ci/cd-with-explicit-identity",
-  "links": []
-}

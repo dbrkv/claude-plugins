@@ -1,8 +1,0 @@
-{
-  "title": "Authenticate and filter results",
-  "content": "atmos describe stacks --identity my-aws-identity --stack prod-use1 --format yaml",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#authenticate-and-filter-results",
-  "links": []
-}

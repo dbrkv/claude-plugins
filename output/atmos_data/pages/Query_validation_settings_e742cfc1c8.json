@@ -1,8 +1,0 @@
-{
-  "title": "Query validation settings",
-  "content": "atmos list settings --query '.settings.validation'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#query-validation-settings",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Show only specific providers",
-  "content": "atmos auth list --providers=aws-sso,okta",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#show-only-specific-providers",
-  "links": []
-}

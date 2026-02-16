@@ -1,8 +1,0 @@
-{
-  "title": "YAML format for configuration files",
-  "content": "atmos list workflows --format yaml",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#yaml-format-for-configuration-files",
-  "links": []
-}

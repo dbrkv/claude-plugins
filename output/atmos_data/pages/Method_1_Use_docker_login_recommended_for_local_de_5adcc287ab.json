@@ -1,8 +1,0 @@
-{
-  "title": "Method 1: Use docker login (recommended for local development)",
-  "content": "docker login ghcr.io -u YOUR_USERNAME",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#method-1:-use-docker-login-(recommended-for-local-development)",
-  "links": []
-}

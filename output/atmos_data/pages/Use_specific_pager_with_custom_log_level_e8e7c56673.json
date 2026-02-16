@@ -1,8 +1,0 @@
-{
-  "title": "Use specific pager with custom log level",
-  "content": "atmos describe stacks --pager=less --logs-level=Debug",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use-specific-pager-with-custom-log-level",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Export to JSON for CI/CD validation",
-  "content": "atmos auth list --format json | jq -r '.providers | keys[]'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#export-to-json-for-ci/cd-validation",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Show 20 releases",
-  "content": "$ atmos version list --limit 20",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#show-20-releases",
-  "links": []
-}

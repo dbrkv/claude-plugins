@@ -1,8 +1,0 @@
-{
-  "title": "Re-authenticate",
-  "content": "atmos auth login --identity <name>",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#re-authenticate",
-  "links": []
-}

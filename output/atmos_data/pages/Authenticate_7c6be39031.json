@@ -1,8 +1,0 @@
-{
-  "title": "Authenticate",
-  "content": "atmos auth login --identity azure-automation-prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#authenticate",
-  "links": []
-}

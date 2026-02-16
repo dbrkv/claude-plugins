@@ -1,8 +1,0 @@
-{
-  "title": "Configurations that should get deep-merged into this one",
-  "content": "import:\n  # each import is a \"Stack\" file. The `.yaml` extension is optional, and we do not recommend using it.\n  - ue2-globals",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#configurations-that-should-get-deep-merged-into-this-one",
-  "links": []
-}

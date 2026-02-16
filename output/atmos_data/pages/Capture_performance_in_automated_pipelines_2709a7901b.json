@@ -1,8 +1,0 @@
-{
-  "title": "Capture performance in automated pipelines",
-  "content": "atmos terraform plan vpc -s prod --heatmap 2>&1 | tee performance.log",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#capture-performance-in-automated-pipelines",
-  "links": []
-}

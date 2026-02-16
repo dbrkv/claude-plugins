@@ -1,19 +1,0 @@
-{
-  "title": "atmos.yaml (optional - this is the default)",
-  "content": "auth:\n  keyring:\n    type: system\nyaml",
-  "code_samples": [
-    {
-      "code": "**Best for**: Personal workstations where OS-level security is preferred.\n\n**Features**:\n- â OS-native secure storage\n- â Integration with system password managers\n- â Cannot list all stored credentials (API limitation)\n- â May not be available in CI/headless environments\n\n### 2. **File Keyring**\n\nEncrypted file-based storage using [99designs/keyring](https://github.com/99designs/keyring) with interactive password prompting via Charm Bracelet's `huh` library.",
-      "language": "unknown"
-    }
-  ],
-  "headings": [
-    {
-      "level": "h3",
-      "text": "2. **File Keyring**",
-      "id": "2.-**file-keyring**"
-    }
-  ],
-  "url": "llms-txt#atmos.yaml-(optional---this-is-the-default)",
-  "links": []
-}

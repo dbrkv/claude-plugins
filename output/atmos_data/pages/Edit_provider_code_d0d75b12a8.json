@@ -1,8 +1,0 @@
-{
-  "title": "Edit provider code",
-  "content": "vim providers/terraform-provider-myprovider/provider.go",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#edit-provider-code",
-  "links": []
-}

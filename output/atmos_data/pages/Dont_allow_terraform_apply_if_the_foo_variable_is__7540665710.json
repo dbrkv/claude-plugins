@@ -1,8 +1,0 @@
-{
-  "title": "Don't allow `terraform apply` if the `foo` variable is set to `foo`",
-  "content": "",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#don't-allow-`terraform-apply`-if-the-`foo`-variable-is-set-to-`foo`",
-  "links": []
-}

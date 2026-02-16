@@ -1,8 +1,0 @@
-{
-  "title": "Create a revert branch",
-  "content": "git checkout -b revert-deployment channels/prod\ngit revert -m 1 <merge-commit-hash>",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-a-revert-branch",
-  "links": []
-}

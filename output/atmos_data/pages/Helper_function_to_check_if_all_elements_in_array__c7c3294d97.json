@@ -1,8 +1,0 @@
-{
-  "title": "Helper function to check if all elements in array are equal",
-  "content": "all_equal(arr) {\n  count(arr) <= 1\n}\n\nall_equal(arr) {\n  count(arr) > 1\n  first := arr[0]\n  all_match := [x | x := arr[_]; x == first]\n  count(all_match) == count(arr)\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#helper-function-to-check-if-all-elements-in-array-are-equal",
-  "links": []
-}

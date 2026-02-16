@@ -1,8 +1,0 @@
-{
-  "title": "Use both tools for comprehensive analysis",
-  "content": "atmos terraform plan large-stack -s prod \\\n  --heatmap \\\n  --heatmap-mode=bar \\\n  --profile-file=analysis.prof \\\n  --profile-type=cpu \\\n  2>&1 | tee combined-analysis.log",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use-both-tools-for-comprehensive-analysis",
-  "links": []
-}

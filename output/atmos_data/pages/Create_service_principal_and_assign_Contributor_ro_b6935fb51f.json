@@ -1,8 +1,0 @@
-{
-  "title": "Create service principal and assign Contributor role",
-  "content": "az ad sp create-for-rbac \\\n  --name \"atmos-automation\" \\\n  --role Contributor \\\n  --scopes /subscriptions/YOUR_SUBSCRIPTION_ID",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#create-service-principal-and-assign-contributor-role",
-  "links": []
-}

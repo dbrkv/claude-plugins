@@ -1,8 +1,0 @@
-{
-  "title": "Compare with staging",
-  "content": "atmos -C ~/projects/staging-infra describe affected",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#compare-with-staging",
-  "links": []
-}

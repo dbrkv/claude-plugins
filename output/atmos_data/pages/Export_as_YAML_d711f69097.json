@@ -1,8 +1,0 @@
-{
-  "title": "Export as YAML",
-  "content": "atmos auth list --format yaml",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#export-as-yaml",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "CPU profiling (default)",
-  "content": "atmos terraform plan vpc -s plat-ue2-dev --profile-file=cpu.prof",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#cpu-profiling-(default)",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Execute `terraform <command>` on all components in the stack `prod`",
-  "content": "atmos terraform <command> --all --stack prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#execute-`terraform-<command>`-on-all-components-in-the-stack-`prod`",
-  "links": []
-}

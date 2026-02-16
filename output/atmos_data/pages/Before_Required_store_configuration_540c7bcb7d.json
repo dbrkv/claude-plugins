@@ -1,8 +1,0 @@
-{
-  "title": "Before: Required store configuration",
-  "content": "vpc_id: !store azurekeyvault plat-ue2-dev vpc vpc_id",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#before:-required-store-configuration",
-  "links": []
-}

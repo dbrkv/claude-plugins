@@ -1,8 +1,0 @@
-{
-  "title": "Just for authentication",
-  "content": "atmos auth login\neval $(atmos auth env)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#just-for-authentication",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Test semicolons are safe",
-  "content": "atmos mycmd -- echo \"foo;bar\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#test-semicolons-are-safe",
-  "links": []
-}

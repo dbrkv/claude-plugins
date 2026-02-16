@@ -1,8 +1,0 @@
-{
-  "title": "Validate 'vpc' component in the 'plat-ue2-prod' stack",
-  "content": "atmos validate component vpc -s plat-ue2-prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-'vpc'-component-in-the-'plat-ue2-prod'-stack",
-  "links": []
-}

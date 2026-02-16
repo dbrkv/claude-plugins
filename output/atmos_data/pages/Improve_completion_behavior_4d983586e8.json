@@ -1,8 +1,0 @@
-{
-  "title": "Improve completion behavior",
-  "content": "zstyle ':completion:*' menu select      # Enable menu selection\nzstyle ':completion:*' force-list always # Force vertical menu listing",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#improve-completion-behavior",
-  "links": []
-}

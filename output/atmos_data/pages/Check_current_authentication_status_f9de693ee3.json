@@ -1,8 +1,0 @@
-{
-  "title": "Check current authentication status",
-  "content": "atmos auth whoami\natmos auth whoami --identity dev-admin",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#check-current-authentication-status",
-  "links": []
-}

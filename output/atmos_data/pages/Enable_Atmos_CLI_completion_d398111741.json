@@ -1,8 +1,0 @@
-{
-  "title": "Enable Atmos CLI completion",
-  "content": "source <(atmos completion zsh)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#enable-atmos-cli-completion",
-  "links": []
-}

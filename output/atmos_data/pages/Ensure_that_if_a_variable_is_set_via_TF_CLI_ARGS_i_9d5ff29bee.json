@@ -1,8 +1,0 @@
-{
-  "title": "Ensure that if a variable is set via TF_CLI_ARGS, it cannot be overridden via command line",
-  "content": "errors[\"for the 'my-component' component, when 'environment' is set in TF_CLI_ARGS, it cannot be overridden with -var\"] {\n    input.env_tf_cli_vars.environment\n    input.tf_cli_vars.environment\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#ensure-that-if-a-variable-is-set-via-tf_cli_args,-it-cannot-be-overridden-via-command-line",
-  "links": []
-}

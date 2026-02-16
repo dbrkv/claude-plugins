@@ -1,8 +1,0 @@
-{
-  "title": "Show only providers",
-  "content": "atmos auth list --providers",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#show-only-providers",
-  "links": []
-}

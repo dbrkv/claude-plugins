@@ -1,8 +1,0 @@
-{
-  "title": "Vendor new version to alpha track",
-  "content": "atmos vendor pull --component vpc-alpha",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#vendor-new-version-to-alpha-track",
-  "links": []
-}

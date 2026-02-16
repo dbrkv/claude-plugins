@@ -1,8 +1,0 @@
-{
-  "title": "Provision the first weather station",
-  "content": "atmos terraform apply station/1 -s dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#provision-the-first-weather-station",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Terminal 1: Monitoring production",
-  "content": "atmos auth shell --identity prod-readonly\nwatch aws cloudwatch get-metric-statistics ...",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#terminal-1:-monitoring-production",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Validate environment-specific constraints",
-  "content": "errors[message] {\n  input.env_tf_cli_vars.environment == \"production\"\n  input.env_tf_cli_vars.instance_count\n  is_number(input.env_tf_cli_vars.instance_count)\n  input.env_tf_cli_vars.instance_count < 2\n  message = \"Production environment requires at least 2 instances\"\n}",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-environment-specific-constraints",
-  "links": []
-}

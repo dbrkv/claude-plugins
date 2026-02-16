@@ -1,8 +1,0 @@
-{
-  "title": "Custom CLI commands",
-  "content": "commands:\n- name: ip\n  description: Return my current IP\n  steps:\n    - curl -s https://ifconfig.me\n    - echo",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#custom-cli-commands",
-  "links": []
-}

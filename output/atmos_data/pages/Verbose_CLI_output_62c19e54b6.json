@@ -1,8 +1,0 @@
-{
-  "title": "Verbose CLI output",
-  "content": "atmos auth validate --verbose\natmos auth login --identity <name> --verbose",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#verbose-cli-output",
-  "links": []
-}

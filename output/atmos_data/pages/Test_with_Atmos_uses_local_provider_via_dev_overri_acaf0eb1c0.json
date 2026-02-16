@@ -1,8 +1,0 @@
-{
-  "title": "Test with Atmos (uses local provider via dev_overrides)",
-  "content": "atmos terraform plan myapp -s dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#test-with-atmos-(uses-local-provider-via-dev_overrides)",
-  "links": []
-}

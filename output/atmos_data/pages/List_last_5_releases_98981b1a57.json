@@ -1,8 +1,0 @@
-{
-  "title": "List last 5 releases",
-  "content": "$ atmos version list --limit 5",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#list-last-5-releases",
-  "links": []
-}

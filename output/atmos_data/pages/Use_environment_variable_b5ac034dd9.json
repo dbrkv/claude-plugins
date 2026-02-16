@@ -1,8 +1,0 @@
-{
-  "title": "Use environment variable",
-  "content": "export ATMOS_THEME_RECOMMENDED=true\natmos theme list",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use-environment-variable",
-  "links": []
-}

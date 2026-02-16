@@ -1,8 +1,0 @@
-{
-  "title": "Development workflow - point dev binary at different repo",
-  "content": "./build/atmos -C ~/projects/my-infrastructure describe stacks",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#development-workflow---point-dev-binary-at-different-repo",
-  "links": []
-}

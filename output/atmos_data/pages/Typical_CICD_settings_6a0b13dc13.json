@@ -1,8 +1,0 @@
-{
-  "title": "Typical CI/CD settings",
-  "content": "export ATMOS_NO_COLOR=true\nexport ATMOS_PAGER=off\nexport ATMOS_LOGS_LEVEL=Warning\nexport ATMOS_LOGS_FILE=/var/log/atmos.log",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#typical-ci/cd-settings",
-  "links": []
-}

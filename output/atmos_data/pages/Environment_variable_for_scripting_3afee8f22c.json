@@ -1,8 +1,0 @@
-{
-  "title": "Environment variable for scripting",
-  "content": "export ATMOS_CHDIR=/infrastructure\natmos terraform apply vpc -s prod",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#environment-variable-for-scripting",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Without filtering: overwhelming",
-  "content": "$ atmos terraform plan vpc --stack <TAB>\ndev-us-east-1  dev-us-west-2  dev-eu-west-1  dev-ap-south-1\nstaging-us-east-1  staging-us-west-2  staging-eu-west-1\nprod-us-east-1  prod-us-west-2  prod-eu-west-1  prod-ap-south-1\nsandbox-alice  sandbox-bob  sandbox-charlie\n... (100+ more stacks)",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#without-filtering:-overwhelming",
-  "links": []
-}

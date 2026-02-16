@@ -1,8 +1,0 @@
-{
-  "title": "Validate 'vpc' component using OPA policy in the 'plat-ue2-dev' stack with additional module paths 'catalog/constants'",
-  "content": "atmos validate component vpc -s plat-ue2-dev --schema-path vpc/validate-vpc-component.rego --schema-type opa --module-paths catalog/constants",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#validate-'vpc'-component-using-opa-policy-in-the-'plat-ue2-dev'-stack-with-additional-module-paths-'catalog/constants'",
-  "links": []
-}

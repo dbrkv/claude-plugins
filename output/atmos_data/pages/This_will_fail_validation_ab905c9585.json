@@ -1,8 +1,0 @@
-{
-  "title": "This will fail validation",
-  "content": "atmos terraform apply my-component -s plat-ue2-dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#this-will-fail-validation",
-  "links": []
-}

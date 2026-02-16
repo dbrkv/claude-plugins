@@ -1,8 +1,0 @@
-{
-  "title": "Atmos auth configuration",
-  "content": "ENV ATMOS_IDENTITY=\"acme-identity\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#atmos-auth-configuration",
-  "links": []
-}

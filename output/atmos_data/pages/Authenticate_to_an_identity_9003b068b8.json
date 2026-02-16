@@ -1,8 +1,0 @@
-{
-  "title": "Authenticate to an identity",
-  "content": "atmos auth login my-identity",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#authenticate-to-an-identity",
-  "links": []
-}

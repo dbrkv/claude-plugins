@@ -1,8 +1,0 @@
-{
-  "title": "Use --identity without a value for interactive selection",
-  "content": "$ atmos describe stacks --identity",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#use---identity-without-a-value-for-interactive-selection",
-  "links": []
-}

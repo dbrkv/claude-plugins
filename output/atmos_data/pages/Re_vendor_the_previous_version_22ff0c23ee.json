@@ -1,8 +1,0 @@
-{
-  "title": "Re-vendor the previous version",
-  "content": "atmos vendor pull --component vpc",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#re-vendor-the-previous-version",
-  "links": []
-}

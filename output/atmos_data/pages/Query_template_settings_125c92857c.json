@@ -1,8 +1,0 @@
-{
-  "title": "Query template settings",
-  "content": "atmos list settings --query '.settings.templates'",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#query-template-settings",
-  "links": []
-}

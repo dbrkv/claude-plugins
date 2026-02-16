@@ -1,8 +1,0 @@
-{
-  "title": "Open console with specific identity",
-  "content": "atmos auth console --identity prod-admin",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#open-console-with-specific-identity",
-  "links": []
-}

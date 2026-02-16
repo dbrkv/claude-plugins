@@ -1,8 +1,0 @@
-{
-  "title": "Relative path from current directory",
-  "content": "atmos --chdir=../other-repo list components",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#relative-path-from-current-directory",
-  "links": []
-}

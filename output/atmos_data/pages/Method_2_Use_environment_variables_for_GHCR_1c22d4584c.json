@@ -1,8 +1,0 @@
-{
-  "title": "Method 2: Use environment variables for GHCR",
-  "content": "export GITHUB_TOKEN=ghp_your_token\nexport GITHUB_ACTOR=your_username  # Or ATMOS_GITHUB_USERNAME",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#method-2:-use-environment-variables-for-ghcr",
-  "links": []
-}

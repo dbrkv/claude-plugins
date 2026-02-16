@@ -1,8 +1,0 @@
-{
-  "title": "Terminal 2: Staging testing",
-  "content": "atmos auth shell --identity staging-dev",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#terminal-2:-staging-testing",
-  "links": []
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Geodesic AWS configuration for assume-role",
-  "content": "ENV AWS_CONFIG_TEAMS=/etc/aws-config/aws-config-teams\nENV ASSUME_ROLE_INTERACTIVE_QUERY=${NAMESPACE}${TENANT:+-$TENANT}-gbl-",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#geodesic-aws-configuration-for-assume-role",
-  "links": []
-}

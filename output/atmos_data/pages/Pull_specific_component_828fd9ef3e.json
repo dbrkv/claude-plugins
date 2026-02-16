@@ -1,8 +1,0 @@
-{
-  "title": "Pull specific component",
-  "content": "atmos vendor pull --component vpc",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#pull-specific-component",
-  "links": []
-}

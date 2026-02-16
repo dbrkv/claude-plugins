@@ -1,8 +1,0 @@
-{
-  "title": "Quick sanity check - verify stack config points to correct folder",
-  "content": "atmos describe component vpc --stack prod-us-east-1 | grep \"component:\"",
-  "code_samples": [],
-  "headings": [],
-  "url": "llms-txt#quick-sanity-check---verify-stack-config-points-to-correct-folder",
-  "links": []
-}
