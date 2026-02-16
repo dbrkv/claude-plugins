@@ -1,6 +1,6 @@
 ---
 name: symfony
-description: Symfony framework
+description: Symfony PHP framework expert subagent. Provides comprehensive guidance for Symfony 7.x development including controllers, forms, security, routing, dependency injection, and console commands. Invoke as a subagent when the user needs help with Symfony-related tasks, PHP web development with Symfony, or questions about Symfony components and best practices.
 ---
 
 # Symfony Skill
