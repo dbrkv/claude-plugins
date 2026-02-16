@@ -1,88 +1,88 @@
 {
-	"name": "symfony",
-	"description": "Symfony framework",
-	"base_url": "https://symfony.com/doc",
-	"url_patterns": {
-		"include": ["/doc/7.3/"],
-		"exclude": ["/doc/7.3/contributing/", "/doc/cloud/", "/doc/7.3/cloud/"]
-	},
-	"selectors": {
-		"main_content": "#main-content",
-		"title": "h1",
-		"code_blocks": "pre code"
-	},
-	"categories": {
-		"getting_started": [
-			"installation",
-			"creating_pages",
-			"routing_generating_urls",
-			"controllers",
-			"templates_twig",
-			"configuration_env_vars"
-		],
-		"architecture": [
-			"requests_responses",
-			"kernel",
-			"services_di",
-			"events",
-			"contracts",
-			"bundles"
-		],
-		"basics": [
-			"databases_doctrine",
-			"forms",
-			"tests",
-			"sessions",
-			"cache",
-			"logger",
-			"errors_debugging"
-		],
-		"advanced_topics": [
-			"console",
-			"mailer_emails",
-			"validation",
-			"messaging_queues",
-			"scheduler_cron_tasks",
-			"notifications",
-			"serialization",
-			"translation_i18n"
-		],
-		"security": [
-			"introduction",
-			"users",
-			"authentication_firewalls",
-			"authorization_voters",
-			"passwords",
-			"csrf",
-			"ldap"
-		],
-		"front_end": [
-			"introduction",
-			"assetmapper",
-			"symfony_ux_stimulus",
-			"webpack_encore",
-			"weblink"
-		],
-		"utilities": [
-			"http_client",
-			"files_filesystem",
-			"expression_language",
-			"locks",
-			"workflows",
-			"strings_unicode",
-			"uid_uuid",
-			"php_polyfills",
-			"yaml_parser",
-			"webhooks"
-		],
-		"production": [
-			"deployment",
-			"performance",
-			"http_cache",
-			"cloud_platform_sh",
-			"symfony_ai"
-		]
-	},
-	"rate_limit": 0.3,
-	"max_pages": 500
+  "name": "symfony",
+  "description": "Symfony framework",
+  "base_url": "https://symfony.com/doc",
+  "url_patterns": {
+    "include": ["/doc/7.4/"],
+    "exclude": ["/doc/7.4/contributing/", "/doc/cloud/", "/doc/7.4/cloud/"]
+  },
+  "selectors": {
+    "main_content": "#main-content",
+    "title": "h1",
+    "code_blocks": "pre code"
+  },
+  "categories": {
+    "getting_started": [
+      "installation",
+      "creating_pages",
+      "routing_generating_urls",
+      "controllers",
+      "templates_twig",
+      "configuration_env_vars"
+    ],
+    "architecture": [
+      "requests_responses",
+      "kernel",
+      "services_di",
+      "events",
+      "contracts",
+      "bundles"
+    ],
+    "basics": [
+      "databases_doctrine",
+      "forms",
+      "tests",
+      "sessions",
+      "cache",
+      "logger",
+      "errors_debugging"
+    ],
+    "advanced_topics": [
+      "console",
+      "mailer_emails",
+      "validation",
+      "messaging_queues",
+      "scheduler_cron_tasks",
+      "notifications",
+      "serialization",
+      "translation_i18n"
+    ],
+    "security": [
+      "introduction",
+      "users",
+      "authentication_firewalls",
+      "authorization_voters",
+      "passwords",
+      "csrf",
+      "ldap"
+    ],
+    "front_end": [
+      "introduction",
+      "assetmapper",
+      "symfony_ux_stimulus",
+      "webpack_encore",
+      "weblink"
+    ],
+    "utilities": [
+      "http_client",
+      "files_filesystem",
+      "expression_language",
+      "locks",
+      "workflows",
+      "strings_unicode",
+      "uid_uuid",
+      "php_polyfills",
+      "yaml_parser",
+      "webhooks"
+    ],
+    "production": [
+      "deployment",
+      "performance",
+      "http_cache",
+      "cloud_platform_sh",
+      "symfony_ai"
+    ]
+  },
+  "rate_limit": 0.3,
+  "max_pages": 500
 }
