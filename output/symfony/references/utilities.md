@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/http_client.html
 
 **Contents:**
+
 - HTTP Client
 - Installation
 - Basic Usage
@@ -194,7 +195,7 @@ $response->getInfo() is non-blocking: it returns live information about the resp
 
 Call the stream() method to get chunks of the response sequentially instead of waiting for the entire response:
 
-By default, text/*, JSON and XML response bodies are buffered in a local php://temp stream. You can control this behavior by using the buffer option: set it to true/false to enable/disable buffering, or to a closure that should return the same based on the response headers it receives as an argument.
+By default, text/\*, JSON and XML response bodies are buffered in a local php://temp stream. You can control this behavior by using the buffer option: set it to true/false to enable/disable buffering, or to a closure that should return the same based on the response headers it receives as an argument.
 
 To abort a request (e.g. because it didn't complete in due time, or you want to fetch only the first bytes of the response, etc.), you can either use the cancel():
 
@@ -407,11 +408,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/http-client
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -444,6 +447,7 @@ class SymfonyDocs
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\HttpClient\HttpClient;
 
@@ -464,12 +468,13 @@ $content = $response->toArray();
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    http_client:
-        default_options:
-            max_redirects: 7
+  http_client:
+    default_options:
+      max_redirects: 7
 ```
 
 ---
@@ -479,6 +484,7 @@ framework:
 **URL:** https://symfony.com/doc/7.4/components/expression_language.html
 
 **Contents:**
+
 - The ExpressionLanguage Component
 - Installation
 - How can the Expression Language Help Me?
@@ -487,8 +493,8 @@ framework:
   - Parsing and Linting Expressions
 - Passing in Variables
 - Caching
-    - The Workflow
-    - Using Parsed and Serialized Expressions
+  - The Workflow
+  - Using Parsed and Serialized Expressions
 
 The ExpressionLanguage component provides an engine that can compile and evaluate expressions. An expression is a one-liner that returns a value (mostly, but not limited to, Booleans).
 
@@ -569,23 +575,29 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/expression-language
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # Get the special price if
+
 user.getGroup() in ['good_customers', 'collaborator']
 
 # Promote article to the homepage when
+
 article.commentCount > 100 and article.category not in ["misc"]
 
 # Send an alert when
+
 product.stock < 15
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -597,6 +609,7 @@ var_dump($expressionLanguage->compile('1 + 2')); // displays (1 + 2)
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -620,6 +633,7 @@ $expressionLanguage->lint('1 + a', []);
 **URL:** https://symfony.com/doc/7.4/reference/formats/expression_language.html
 
 **Contents:**
+
 - The Expression Syntax
 - Supported Literals
 - Working with Objects
@@ -713,9 +727,9 @@ The in and not in operators are using strict comparison.
 
 This will evaluate to true, because user.age is in the range from 18 to 45.
 
-Operator precedence determines the order in which operations are processed in an expression. For example, the result of the expression 1 + 2 * 4 is 9 and not 12 because the multiplication operator (*) takes precedence over the addition operator (+).
+Operator precedence determines the order in which operations are processed in an expression. For example, the result of the expression 1 + 2 _ 4 is 9 and not 12 because the multiplication operator (_) takes precedence over the addition operator (+).
 
-To avoid ambiguities (or to alter the default order of operations) add parentheses in your expressions (e.g. (1 + 2) * 4 or 1 + (2 * 4).
+To avoid ambiguities (or to alter the default order of operations) add parentheses in your expressions (e.g. (1 + 2) _ 4 or 1 + (2 _ 4).
 
 The following table summarizes the operators and their associativity from the highest to the lowest precedence:
 
@@ -728,12 +742,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (bash):
+
 ```bash
 echo $expressionLanguage->evaluate('"\\\\"'); // prints \
 $expressionLanguage->evaluate('"a\\\\b" matches "/^a\\\\\\\\b$/"'); // returns true
 ```
 
 Example 2 (php):
+
 ```php
 class Apple
 {
@@ -752,6 +768,7 @@ var_dump($expressionLanguage->evaluate(
 ```
 
 Example 3 (php):
+
 ```php
 class Robot
 {
@@ -777,6 +794,7 @@ var_dump($expressionLanguage->evaluate(
 ```
 
 Example 4 (swift):
+
 ```swift
 // these will throw an exception when `fruit` is `null`
 $expressionLanguage->evaluate('fruit.color', ['fruit' => '...'])
@@ -794,6 +812,7 @@ $expressionLanguage->evaluate('fruit?.getStock()', ['fruit' => '...'])
 **URL:** https://symfony.com/doc/7.4/service_container/expression_language.html
 
 **Contents:**
+
 - How to Inject Values Based on Complex Expressions
 
 The service container also supports an "expression" that allows you to inject very specific values into a service.
@@ -817,21 +836,23 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Mail\MailerConfiguration: ~
+  App\Mail\MailerConfiguration: ~
 
-    App\Mailer:
-        # the '@=' prefix is required when using expressions for arguments in YAML files
-        arguments: ['@=service("App\\Mail\\MailerConfiguration").getMailerMethod()']
-        # when using double-quoted strings, the backslash needs to be escaped twice (see https://yaml.org/spec/1.2/spec.html#id2787109)
-        # arguments: ["@=service('App\\\\Mail\\\\MailerConfiguration').getMailerMethod()"]
+  App\Mailer:
+    # the '@=' prefix is required when using expressions for arguments in YAML files
+    arguments: ['@=service("App\\Mail\\MailerConfiguration").getMailerMethod()']
+    # when using double-quoted strings, the backslash needs to be escaped twice (see https://yaml.org/spec/1.2/spec.html#id2787109)
+    # arguments: ["@=service('App\\\\Mail\\\\MailerConfiguration').getMailerMethod()"]
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -853,6 +874,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -872,12 +894,16 @@ return function(ContainerConfigurator $container): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Mailer:
-        # the '@=' prefix is required when using expressions for arguments in YAML files
-        arguments: ["@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'"]
+  App\Mailer:
+    # the '@=' prefix is required when using expressions for arguments in YAML files
+    arguments:
+      [
+        "@=container.hasParameter('some_param') ? parameter('some_param') : 'default_value'",
+      ]
 ```
 
 ---
@@ -887,6 +913,7 @@ services:
 **URL:** https://symfony.com/doc/7.4/lock.html
 
 **Contents:**
+
 - Dealing with Concurrency with Locks
 - Installing
 - Configuring
@@ -933,6 +960,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $lock = $lockFactory->createLock('pdf-creation');
 if (!$lock->acquire()) {
@@ -946,11 +974,13 @@ $lock->release();
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require symfony/lock
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/lock.yaml
 framework:
@@ -985,6 +1015,7 @@ framework:
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/lock.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1056,6 +1087,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/workflow/workflow-and-state-machine.html
 
 **Contents:**
+
 - Workflows and State Machines
 - Workflows
   - Examples
@@ -1098,51 +1130,53 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/workflow.yaml
 framework:
-    workflows:
-        pull_request:
-            type: 'state_machine'
-            marking_store:
-                 type: 'method'
-                 property: 'currentPlace'
-            # The "supports" option is useful only if you are using Twig functions ('workflow_*')
-            supports:
-                - App\Entity\PullRequest
-            initial_marking: start
-            places:
-                - start
-                - coding
-                - test
-                - review
-                - merged
-                - closed
-            transitions:
-                submit:
-                    from: start
-                    to: test
-                update:
-                    from: [coding, test, review]
-                    to: test
-                wait_for_review:
-                    from: test
-                    to: review
-                request_change:
-                    from: review
-                    to: coding
-                accept:
-                    from: review
-                    to: merged
-                reject:
-                    from: review
-                    to: closed
-                reopen:
-                    from: closed
-                    to: review
+  workflows:
+    pull_request:
+      type: "state_machine"
+      marking_store:
+        type: "method"
+        property: "currentPlace"
+      # The "supports" option is useful only if you are using Twig functions ('workflow_*')
+      supports:
+        - App\Entity\PullRequest
+      initial_marking: start
+      places:
+        - start
+        - coding
+        - test
+        - review
+        - merged
+        - closed
+      transitions:
+        submit:
+          from: start
+          to: test
+        update:
+          from: [coding, test, review]
+          to: test
+        wait_for_review:
+          from: test
+          to: review
+        request_change:
+          from: review
+          to: coding
+        accept:
+          from: review
+          to: merged
+        reject:
+          from: review
+          to: closed
+        reopen:
+          from: closed
+          to: review
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/workflow.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1220,6 +1254,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/workflow.php
 use Symfony\Config\FrameworkConfig;
@@ -1282,6 +1317,7 @@ return static function (FrameworkConfig $framework): void {
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 use App\Entity\PullRequest;
@@ -1314,6 +1350,7 @@ class SomeService
 **URL:** https://symfony.com/doc/7.4/workflow/dumping-workflows.html
 
 **Contents:**
+
 - How to Dump Workflows
 - Styling
 
@@ -1354,6 +1391,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (julia):
+
 ```julia
 # using Graphviz's 'dot' and SVG images
 $ php bin/console workflow:dump workflow-name | dot -Tsvg -o graph.svg
@@ -1372,6 +1410,7 @@ $ php bin/console workflow:dump workflow_name --dump-format=mermaid | mmdc -o gr
 ```
 
 Example 2 (php):
+
 ```php
 // Add this code to a PHP script; for example: dump-graph.php
 $dumper = new GraphvizDumper();
@@ -1383,64 +1422,67 @@ echo $dumper->dump($definition);
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # replace 'dump-graph.php' by the name of your PHP script
+
 $ php dump-graph.php | dot -Tsvg -o graph.svg
-$ php dump-graph.php | java -jar plantuml.jar -p  > graph.png
+$ php dump-graph.php | java -jar plantuml.jar -p > graph.png
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/workflow.yaml
 framework:
-    workflows:
-        pull_request:
-            type: 'state_machine'
-            marking_store:
-                type: 'method'
-                property: 'currentPlace'
-            supports:
-                - App\Entity\PullRequest
-            initial_marking: start
-            places:
-                start: ~
-                coding: ~
-                test: ~
-                review:
-                    metadata:
-                        description: Human review
-                merged: ~
-                closed:
-                    metadata:
-                        bg_color: DeepSkyBlue
-            transitions:
-                submit:
-                    from: start
-                    to: test
-                update:
-                    from: [coding, test, review]
-                    to: test
-                    metadata:
-                        arrow_color: Turquoise
-                wait_for_review:
-                    from: test
-                    to: review
-                    metadata:
-                        color: Orange
-                request_change:
-                    from: review
-                    to: coding
-                accept:
-                    from: review
-                    to: merged
-                    metadata:
-                        label: Accept PR
-                reject:
-                    from: review
-                    to: closed
-                reopen:
-                    from: closed
-                    to: review
+  workflows:
+    pull_request:
+      type: "state_machine"
+      marking_store:
+        type: "method"
+        property: "currentPlace"
+      supports:
+        - App\Entity\PullRequest
+      initial_marking: start
+      places:
+        start: ~
+        coding: ~
+        test: ~
+        review:
+          metadata:
+            description: Human review
+        merged: ~
+        closed:
+          metadata:
+            bg_color: DeepSkyBlue
+      transitions:
+        submit:
+          from: start
+          to: test
+        update:
+          from: [coding, test, review]
+          to: test
+          metadata:
+            arrow_color: Turquoise
+        wait_for_review:
+          from: test
+          to: review
+          metadata:
+            color: Orange
+        request_change:
+          from: review
+          to: coding
+        accept:
+          from: review
+          to: merged
+          metadata:
+            label: Accept PR
+        reject:
+          from: review
+          to: closed
+        reopen:
+          from: closed
+          to: review
 ```
 
 ---
