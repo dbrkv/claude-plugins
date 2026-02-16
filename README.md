@@ -12,6 +12,10 @@ skill-seekers enhance output/symfony/
 skill-seekers analyze --directory . --enhance
 ```
 
+Analuze command si to analyze source code
+
+- [Enhancement Modes Guide](https://github.com/yusufkaraaslan/Skill_Seekers/blob/development/docs/features/ENHANCEMENT_MODES.md)
+
 ```sh
 # 📦 Package your skill:
 skill-seekers-package output/symfony/
