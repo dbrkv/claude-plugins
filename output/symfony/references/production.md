@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/deployment.html
 
 **Contents:**
+
 - How to Deploy a Symfony Application
 - Symfony Deployment Basics
 - How to Deploy a Symfony Application
@@ -48,7 +49,7 @@ Most Symfony applications read their configuration from environment variables. W
 
 There is no significant advantage to either option: use whichever is most natural for your hosting environment.
 
-You might not want your application to process the .env.* files on every request. You can generate an optimized .env.local.php which overrides all other configuration files:
+You might not want your application to process the .env.\* files on every request. You can generate an optimized .env.local.php which overrides all other configuration files:
 
 The generated file will contain all the configuration stored in .env. If you want to rely only on environment variables, generate one without any values using:
 
@@ -81,32 +82,36 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/requirements-checker
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "...": "...",
+  "...": "...",
 
-    "scripts": {
-        "auto-scripts": {
-            "vendor/bin/requirements-checker": "php-script",
-            "...": "..."
-        },
+  "scripts": {
+    "auto-scripts": {
+      "vendor/bin/requirements-checker": "php-script",
+      "...": "..."
+    },
 
-        "...": "..."
-    }
+    "...": "..."
+  }
 }
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ composer dump-env prod
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ composer dump-env prod --empty
 ```
@@ -118,6 +123,7 @@ $ composer dump-env prod --empty
 **URL:** https://symfony.com/doc/7.4/performance.html
 
 **Contents:**
+
 - Performance
 - Performance Checklists
   - Restrict the Number of Locales Enabled in the Application
@@ -193,9 +199,9 @@ The getLastPeriod() method was introduced in Symfony 7.2.
 
 Sections are a way to split the profile timeline into groups. Example:
 
-All events that don't belong to any named section are added to the special section called __root__. This way you can get all stopwatch events, even if you don't know their names, as follows:
+All events that don't belong to any named section are added to the special section called **root**. This way you can get all stopwatch events, even if you don't know their names, as follows:
 
-The Stopwatch::ROOT constant as a shortcut for __root__ was introduced in Symfony 7.2.
+The Stopwatch::ROOT constant as a shortcut for **root** was introduced in Symfony 7.2.
 
 Symfony Code Performance Profiling
 
@@ -204,14 +210,16 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/services.yaml
 parameters:
-    # ...
-    .container.dumper.inline_factories: true
+  # ...
+  .container.dumper.inline_factories: true
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -227,6 +235,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -237,6 +246,7 @@ return function(ContainerConfigurator $container): void {
 ```
 
 Example 4 (unknown):
+
 ```unknown
 ; php.ini
 opcache.preload=/path/to/project/config/preload.php
@@ -252,6 +262,7 @@ opcache.preload_user=www-data
 **URL:** https://symfony.com/doc/7.4/deployment/proxies.html
 
 **Contents:**
+
 - How to Configure Symfony to Work behind a Load Balancer or a Reverse Proxy
 - Solution: setTrustedProxies()
 - But what if the IP of my Reverse Proxy Changes Constantly!
@@ -261,7 +272,7 @@ opcache.preload_user=www-data
 
 When you deploy your application, you may be behind a load balancer (e.g. an AWS Elastic Load Balancing) or a reverse proxy (e.g. Varnish for caching).
 
-For the most part, this doesn't cause any problems with Symfony. But, when a request passes through a proxy, certain request information is sent using either the standard Forwarded header or X-Forwarded-* headers. For example, instead of reading the REMOTE_ADDR header (which will now be the IP address of your reverse proxy), the user's true IP will be stored in a standard Forwarded: for="..." header or a X-Forwarded-For header.
+For the most part, this doesn't cause any problems with Symfony. But, when a request passes through a proxy, certain request information is sent using either the standard Forwarded header or X-Forwarded-\* headers. For example, instead of reading the REMOTE_ADDR header (which will now be the IP address of your reverse proxy), the user's true IP will be stored in a standard Forwarded: for="..." header or a X-Forwarded-For header.
 
 If you don't configure Symfony to look for these headers, you'll get incorrect information about the client's IP address, whether or not the client is connecting via HTTPS, the client's port and the hostname being requested.
 
@@ -275,7 +286,7 @@ Support for the SYMFONY_TRUSTED_PROXIES and SYMFONY_TRUSTED_HEADERS environment 
 
 Enabling the Request::HEADER_X_FORWARDED_HOST option exposes the application to HTTP Host header attacks. Make sure the proxy really sends an x-forwarded-host header.
 
-The Request object has several Request::HEADER_* constants that control exactly which headers from your reverse proxy are trusted. The argument is a bit field, so you can also pass your own value (e.g. 0b00110).
+The Request object has several Request::HEADER\_\* constants that control exactly which headers from your reverse proxy are trusted. The argument is a bit field, so you can also pass your own value (e.g. 0b00110).
 
 You can set a TRUSTED_PROXIES env var to configure proxies on a per-environment basis:
 
@@ -305,7 +316,7 @@ Some reverse proxies (like CloudFront with CloudFront-Forwarded-Proto) may force
 
 In this case, you'll need to set the header X-Forwarded-Proto with the value of Custom-Forwarded-Proto early enough in your application, i.e. before handling the request:
 
-Some cloud setups (like running a Docker container with the "Web App for Containers" in Microsoft Azure) do SSL termination and contact your web server over HTTP, but do not change the remote address nor set the X-Forwarded-* headers. This means the trusted proxy feature of Symfony can't help you.
+Some cloud setups (like running a Docker container with the "Web App for Containers" in Microsoft Azure) do SSL termination and contact your web server over HTTP, but do not change the remote address nor set the X-Forwarded-\* headers. This means the trusted proxy feature of Symfony can't help you.
 
 Once you made sure your server is only reachable through the cloud proxy over HTTPS and not through HTTP, you can override the information your web server sends to PHP. For Nginx, this could look like this:
 
@@ -316,6 +327,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
@@ -331,6 +343,7 @@ framework:
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -362,6 +375,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/framework.php
 use Symfony\Config\FrameworkConfig;
@@ -381,8 +395,10 @@ return static function (FrameworkConfig $framework): void {
 ```
 
 Example 4 (markdown):
+
 ```markdown
 # .env
+
 TRUSTED_PROXIES=127.0.0.1,10.0.0.0/8
 ```
 

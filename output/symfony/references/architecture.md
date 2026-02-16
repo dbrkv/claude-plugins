@@ -9,16 +9,17 @@
 **URL:** https://symfony.com/doc/7.4/components/http_kernel.html
 
 **Contents:**
+
 - The HttpKernel Component
 - Installation
 - The Request-Response Lifecycle
   - HttpKernel: Driven by Events
-  - 1) The kernel.request Event
-  - 2) Resolve the Controller
-  - 3) The kernel.controller Event
-  - 4) Getting the Controller Arguments
-  - 5) Calling the Controller
-  - 6) The kernel.view Event
+  - 1. The kernel.request Event
+  - 2. Resolve the Controller
+  - 3. The kernel.controller Event
+  - 4. Getting the Controller Arguments
+  - 5. Calling the Controller
+  - 6. The kernel.view Event
 
 The HttpKernel component provides a structured process for converting a Request into a Response by making use of the EventDispatcher component. It's flexible enough to create a full-stack framework (Symfony) or an advanced CMS (Drupal).
 
@@ -66,7 +67,7 @@ When setting a response for the kernel.request event, the propagation is stopped
 
 kernel.request in the Symfony Framework
 
-The most important listener to kernel.request in the Symfony Framework is the RouterListener. This class executes the routing layer, which returns an array of information about the matched request, including the _controller and any placeholders that are in the route's pattern (e.g. {slug}). See the Routing documentation.
+The most important listener to kernel.request in the Symfony Framework is the RouterListener. This class executes the routing layer, which returns an array of information about the matched request, including the \_controller and any placeholders that are in the route's pattern (e.g. {slug}). See the Routing documentation.
 
 This array of information is stored in the Request object's attributes array. Adding the routing information here doesn't do anything yet, but is used next when resolving the controller.
 
@@ -82,7 +83,7 @@ Resolving the Controller in the Symfony Framework
 
 The Symfony Framework uses the built-in ControllerResolver class (actually, it uses a subclass with some extra functionality mentioned below). This class leverages the information that was placed on the Request object's attributes property during the RouterListener.
 
-The ControllerResolver looks for a _controller key on the Request object's attributes property (recall that this information is typically placed on the Request via the RouterListener). This string is then transformed into a PHP callable by doing the following:
+The ControllerResolver looks for a \_controller key on the Request object's attributes property (recall that this information is typically placed on the Request via the RouterListener). This string is then transformed into a PHP callable by doing the following:
 
 Typical Purposes: Initialize things or change the controller just before the controller is executed.
 
@@ -206,11 +207,11 @@ This creates another full request-response cycle where this new Request is trans
 
 For example, a listener that only needs to act on the main request may look like this:
 
-The default value of the _format request attribute is html. If your sub request returns a different format (e.g. json) you can set it by defining the _format attribute explicitly on the request:
+The default value of the \_format request attribute is html. If your sub request returns a different format (e.g. json) you can set it by defining the \_format attribute explicitly on the request:
 
 The HttpKernel component is responsible of the bundle mechanism used in Symfony applications. One of the key features of the bundles is that you can use logic paths instead of physical paths to refer to any of their resources (config files, templates, controllers, translation files, etc.)
 
-This allows you to import resources even if you don't know where in the filesystem a bundle will be installed. For example, the services.xml file stored in the Resources/config/ directory of a bundle called FooBundle can be referenced as @FooBundle/Resources/config/services.xml instead of __DIR__/Resources/config/services.xml.
+This allows you to import resources even if you don't know where in the filesystem a bundle will be installed. For example, the services.xml file stored in the Resources/config/ directory of a bundle called FooBundle can be referenced as @FooBundle/Resources/config/services.xml instead of **DIR**/Resources/config/services.xml.
 
 This is possible thanks to the locateResource() method provided by the kernel, which transforms logical paths into physical paths:
 
@@ -221,11 +222,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/http-kernel
 ```
 
 Example 2 (php):
+
 ```php
 namespace Symfony\Component\HttpKernel;
 
@@ -247,6 +250,7 @@ interface HttpKernelInterface
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -280,6 +284,7 @@ $kernel->terminate($request, $response);
 ```
 
 Example 4 (php):
+
 ```php
 namespace Symfony\Component\HttpKernel\Controller;
 
@@ -298,6 +303,7 @@ interface ControllerResolverInterface
 **URL:** https://symfony.com/doc/7.4/reference/configuration/kernel.html
 
 **Contents:**
+
 - Configuring in the Kernel
 - kernel.build_dir
 - kernel.bundles
@@ -442,6 +448,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (json):
+
 ```json
 [
     'FrameworkBundle' => 'Symfony\Bundle\FrameworkBundle\FrameworkBundle',
@@ -451,6 +458,7 @@ Example 1 (json):
 ```
 
 Example 2 (json):
+
 ```json
 [
     'FrameworkBundle' => [
@@ -466,6 +474,7 @@ Example 2 (json):
 ```
 
 Example 3 (php):
+
 ```php
 // src/Kernel.php
 namespace App;
@@ -483,11 +492,12 @@ class Kernel extends BaseKernel
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/services.yaml
 parameters:
-    # ...
-    kernel.container_build_time: '1234567890'
+  # ...
+  kernel.container_build_time: "1234567890"
 ```
 
 ---
@@ -497,6 +507,7 @@ parameters:
 **URL:** https://symfony.com/doc/7.4/event_dispatcher.html
 
 **Contents:**
+
 - Events and Event Listeners
 - Creating an Event Listener
   - Defining Event Listeners with PHP Attributes
@@ -623,6 +634,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/EventListener/ExceptionListener.php
 namespace App\EventListener;
@@ -666,14 +678,16 @@ class ExceptionListener
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\EventListener\ExceptionListener:
-        tags: [kernel.event_listener]
+  App\EventListener\ExceptionListener:
+    tags: [kernel.event_listener]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -691,6 +705,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -713,6 +728,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/components/contracts.html
 
 **Contents:**
+
 - The Contracts Component
 - Installation
 - Usage
@@ -732,7 +748,7 @@ Depending on their semantics, some interfaces can be combined with autowiring to
 
 Others might be useful as labeling interfaces, to hint about a specific behavior that can be enabled when using autoconfiguration or manual service tagging (or any other means provided by your framework.)
 
-Packages that implement specific contracts should list them in the provide section of their composer.json file, using the symfony/*-implementation convention. For example:
+Packages that implement specific contracts should list them in the provide section of their composer.json file, using the symfony/\*-implementation convention. For example:
 
 When applicable, the provided contracts are built on top of PHP-FIG's PSRs. However, PHP-FIG has different goals and different processes. Symfony Contracts focuses on providing abstractions that are useful on their own while still compatible with implementations provided by Symfony.
 
@@ -743,6 +759,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/cache-contracts
 $ composer require symfony/event-dispatcher-contracts
@@ -753,12 +770,13 @@ $ composer require symfony/translation-contracts
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "...": "...",
-    "provide": {
-        "symfony/cache-implementation": "3.0"
-    }
+  "...": "...",
+  "provide": {
+    "symfony/cache-implementation": "3.0"
+  }
 }
 ```
 
@@ -769,6 +787,7 @@ Example 2 (json):
 **URL:** https://symfony.com/doc/7.4/bundles.html
 
 **Contents:**
+
 - The Bundle System
 - Creating a Bundle
 - Bundle Directory Structure
@@ -832,6 +851,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (typescript):
+
 ```typescript
 // config/bundles.php
 return [
@@ -850,6 +870,7 @@ return [
 ```
 
 Example 2 (php):
+
 ```php
 // src/AcmeBlogBundle.php
 namespace Acme\BlogBundle;
@@ -862,6 +883,7 @@ class AcmeBlogBundle extends AbstractBundle
 ```
 
 Example 3 (typescript):
+
 ```typescript
 // config/bundles.php
 return [
@@ -871,18 +893,19 @@ return [
 ```
 
 Example 4 (json):
+
 ```json
 {
-    "autoload": {
-        "psr-4": {
-            "Acme\\BlogBundle\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Acme\\BlogBundle\\Tests\\": "tests/"
-        }
+  "autoload": {
+    "psr-4": {
+      "Acme\\BlogBundle\\": "src/"
     }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Acme\\BlogBundle\\Tests\\": "tests/"
+    }
+  }
 }
 ```
 
@@ -893,6 +916,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/setup/bundles.html
 
 **Contents:**
+
 - Upgrading a Third-Party Bundle for a Major Symfony Version
 - Allowing to Install New Symfony Components
 - Look for Deprecations and Fix Them
@@ -933,28 +957,31 @@ Become certified from home
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {
-    "require": {
-        "symfony/framework-bundle": "^5.4",
-        "symfony/finder": "^5.4",
-        "symfony/validator": "^5.4"
-    }
+  "require": {
+    "symfony/framework-bundle": "^5.4",
+    "symfony/finder": "^5.4",
+    "symfony/validator": "^5.4"
+  }
 }
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "require": {
-        "symfony/framework-bundle": "^5.4|^6.4",
-        "symfony/finder": "^5.4|^6.4",
-        "symfony/validator": "^5.4|^6.4"
-    }
+  "require": {
+    "symfony/framework-bundle": "^5.4|^6.4",
+    "symfony/finder": "^5.4|^6.4",
+    "symfony/validator": "^5.4|^6.4"
+  }
 }
 ```
 
 Example 3 (julia):
+
 ```julia
 // ❌ don't do this - resulting code is fragile
 if (Kernel::VERSION_ID <= 50400) {
@@ -965,6 +992,7 @@ if (Kernel::VERSION_ID <= 50400) {
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -983,6 +1011,7 @@ if (!method_exists(OptionsResolver::class, 'setDefined')) {
 **URL:** https://symfony.com/doc/7.4/bundles/override.html
 
 **Contents:**
+
 - How to Override any Part of a Bundle
 - Templates
 - Routing
@@ -1036,6 +1065,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (sql):
+
 ```sql
 {# templates/bundles/AcmeUserBundle/registration/confirmed.html.twig #}
 {# the special '!' prefix avoids errors when extending from an overridden template #}
@@ -1047,20 +1077,21 @@ Example 1 (sql):
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 FOS\UserBundle\Model\User:
-    properties:
-        plainPassword:
-            - NotBlank:
-                groups: [AcmeValidation]
-            - Length:
-                min: 6
-                minMessage: fos_user.password.short
-                groups: [AcmeValidation]
+properties:
+plainPassword: - NotBlank:
+groups: [AcmeValidation] - Length:
+min: 6
+minMessage: fos_user.password.short
+groups: [AcmeValidation]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1096,6 +1127,7 @@ Example 3 (xml):
 **URL:** https://symfony.com/doc/7.4/configuration/micro_kernel_trait.html
 
 **Contents:**
+
 - Building your own Framework with the MicroKernelTrait
 - A Single-File Symfony Application
 - The Methods of a "Micro" Kernel
@@ -1163,11 +1195,13 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/framework-bundle symfony/runtime
 ```
 
 Example 2 (php):
+
 ```php
 // index.php
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -1206,6 +1240,7 @@ return static function (array $context) {
 ```
 
 Example 3 (php):
+
 ```php
 // index.php
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -1248,6 +1283,7 @@ return static function (array $context) {
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ symfony server:start
 ```
@@ -1259,6 +1295,7 @@ $ symfony server:start
 **URL:** https://symfony.com/doc/7.4/configuration/multiple_kernels.html
 
 **Contents:**
+
 - How to Create Multiple Symfony Applications with a Single Kernel
 - Turning a Single Application into Multiple Applications
   - Step 1) Create a new Application
@@ -1339,6 +1376,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 your-project/
 ├─ apps/
@@ -1358,18 +1396,20 @@ your-project/
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "autoload": {
-        "psr-4": {
-            "Shared\\": "src/",
-            "Api\\": "apps/api/src/"
-        }
+  "autoload": {
+    "psr-4": {
+      "Shared\\": "src/",
+      "Api\\": "apps/api/src/"
     }
+  }
 }
 ```
 
 Example 3 (php):
+
 ```php
 // src/Kernel.php
 namespace Shared;
@@ -1467,8 +1507,10 @@ class Kernel extends BaseKernel
 ```
 
 Example 4 (markdown):
+
 ```markdown
 # .env
+
 APP_ID=api
 ```
 
@@ -1479,6 +1521,7 @@ APP_ID=api
 **URL:** https://symfony.com/doc/7.4/reference/events.html
 
 **Contents:**
+
 - Built-in Symfony Events
 - Kernel Events
   - kernel.request
@@ -1569,11 +1612,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ php bin/console debug:event-dispatcher kernel.request
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
@@ -1587,11 +1632,13 @@ public function onKernelController(ControllerEvent $event): void
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ php bin/console debug:event-dispatcher kernel.controller
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 
@@ -1615,6 +1662,7 @@ public function onKernelControllerArguments(ControllerArgumentsEvent $event): vo
 **URL:** https://symfony.com/doc/7.4/bundles/extension.html
 
 **Contents:**
+
 - How to Load Service Configuration inside a Bundle
 - Loading Services Directly in your Bundle Class
 - Creating an Extension Class
@@ -1661,7 +1709,7 @@ If some class extends from other classes, all its parents are automatically incl
 
 Patterns are transformed into the actual class namespaces using the classmap generated by Composer. Therefore, before using these patterns, you must generate the full classmap executing the dump-autoload command of Composer.
 
-This technique can't be used when the classes to compile use the __DIR__ or __FILE__ constants, because their values will change when loading these classes from the classes.php file.
+This technique can't be used when the classes to compile use the **DIR** or **FILE** constants, because their values will change when loading these classes from the classes.php file.
 
 The addAnnotatedClassesToCompile() method was deprecated in Symfony 7.1 and will be removed in Symfony 8.0. No alternative is provided because the technique explained in this section is no longer necessary with modern PHP.
 
@@ -1672,6 +1720,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -1701,6 +1750,7 @@ class AcmeHelloBundle extends AbstractBundle
 ```
 
 Example 2 (php):
+
 ```php
 // src/DependencyInjection/AcmeHelloExtension.php
 namespace Acme\HelloBundle\DependencyInjection;
@@ -1718,6 +1768,7 @@ class AcmeHelloExtension extends Extension
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 use Acme\HelloBundle\DependencyInjection\UnconventionalExtensionClass;
@@ -1733,6 +1784,7 @@ class AcmeHelloBundle extends Bundle
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -1755,6 +1807,7 @@ public function load(array $configs, ContainerBuilder $container): void
 **URL:** https://symfony.com/doc/7.4/bundles/best_practices.html
 
 **Contents:**
+
 - Best Practices for Reusable Bundles
 - Bundle Name
 - Directory Structure
@@ -1842,7 +1895,7 @@ The example above assumes that you are installing the latest stable version of t
 
 Optionally, you can add more installation steps (Step 3, Step 4, etc.) to explain other required installation tasks, such as registering routes or dumping assets.
 
-If the bundle provides routes, they must be prefixed with the bundle alias. For example, if your bundle is called AcmeBlogBundle, all its routes must be prefixed with acme_blog_.
+If the bundle provides routes, they must be prefixed with the bundle alias. For example, if your bundle is called AcmeBlogBundle, all its routes must be prefixed with acme*blog*.
 
 If a bundle provides templates, they must use Twig. A bundle must not provide a main layout, except if it provides a full working application.
 
@@ -1880,7 +1933,7 @@ This information is used by Symfony to load the classes of the bundle. It's reco
 
 In order to make it easier for developers to find your bundle, register it on Packagist, the official repository for Composer packages.
 
-If the bundle references any resources (config files, translation files, etc.), you can use physical paths (e.g. __DIR__/config/services.xml).
+If the bundle references any resources (config files, translation files, etc.), you can use physical paths (e.g. **DIR**/config/services.xml).
 
 In the past, we recommended to only use logical paths (e.g. @AcmeBlogBundle/config/services.xml) and resolve them with the resource locator provided by the Symfony kernel, but this is no longer a recommended practice.
 
@@ -1891,6 +1944,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 <your-bundle>/
 ├── assets/
@@ -1910,6 +1964,7 @@ Example 1 (unknown):
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -1923,6 +1978,7 @@ class AcmeBlogBundle extends Bundle
 ```
 
 Example 3 (sql):
+
 ```sql
 # this requires Symfony 7.x for all Symfony packages
 export SYMFONY_REQUIRE=7.*
@@ -1939,7 +1995,8 @@ composer update --prefer-dist --no-progress
 ```
 
 Example 4 (typescript):
-```typescript
+
+````typescript
 Installation
 ============
 
@@ -1954,10 +2011,9 @@ Open a command console, enter your project directory and execute:
 
 ```console
 composer require <package-name>
-```
+````
 
-Applications that don't use Symfony Flex
-----------------------------------------
+## Applications that don't use Symfony Flex
 
 ### Step 1: Download the Bundle
 
@@ -1981,7 +2037,8 @@ return [
     <vendor>\<bundle-name>\<bundle-long-name>::class => ['all' => true],
 ];
 ```
-```
+
+````
 
 ---
 
@@ -2098,9 +2155,10 @@ Example 1 (yaml):
 # config/packages/framework.yaml
 framework:
     form: true
-```
+````
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -2119,6 +2177,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/framework.php
 use Symfony\Config\FrameworkConfig;
@@ -2129,6 +2188,7 @@ return static function (FrameworkConfig $framework): void {
 ```
 
 Example 4 (php):
+
 ```php
 // src/AcmeSocialBundle.php
 namespace Acme\SocialBundle;
@@ -2175,19 +2235,20 @@ class AcmeSocialBundle extends AbstractBundle
 **URL:** https://symfony.com/doc/7.4/bundles/prepend_extension.html
 
 **Contents:**
+
 - How to Simplify Configuration of Multiple Bundles
 - Prepending Extension in the Bundle Class
 - More than one Bundle using PrependExtensionInterface
 
 When building reusable and extensible applications, developers are often faced with a choice: either create a single large bundle or multiple smaller bundles. Creating a single bundle has the drawback that it's impossible for users to remove unused functionality. Creating multiple bundles has the drawback that configuration becomes more tedious and settings often need to be repeated for various bundles.
 
-It is possible to remove the disadvantage of the multiple bundle approach by enabling a single Extension to prepend the settings for any bundle. It can use the settings defined in the config/* files to prepend settings just as if they had been written explicitly by the user in the application configuration.
+It is possible to remove the disadvantage of the multiple bundle approach by enabling a single Extension to prepend the settings for any bundle. It can use the settings defined in the config/\* files to prepend settings just as if they had been written explicitly by the user in the application configuration.
 
 For example, this could be used to configure the entity manager name to use in multiple bundles. Or it can be used to enable an optional feature that depends on another bundle being loaded as well.
 
 To give an Extension the power to do this, it needs to implement PrependExtensionInterface:
 
-Inside the prepend() method, developers have full access to the ContainerBuilder instance just before the load() method is called on each of the registered bundle Extensions. In order to prepend settings to a bundle extension developers can use the prependExtensionConfig() method on the ContainerBuilder instance. As this method only prepends settings, any other settings done explicitly inside the config/* files would override these prepended settings.
+Inside the prepend() method, developers have full access to the ContainerBuilder instance just before the load() method is called on each of the registered bundle Extensions. In order to prepend settings to a bundle extension developers can use the prependExtensionConfig() method on the ContainerBuilder instance. As this method only prepends settings, any other settings done explicitly inside the config/\* files would override these prepended settings.
 
 The following example illustrates how to prepend a configuration setting in multiple bundles as well as disable a flag in multiple bundles in case a specific other bundle is not registered:
 
@@ -2212,6 +2273,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/DependencyInjection/AcmeHelloExtension.php
 namespace Acme\HelloBundle\DependencyInjection;
@@ -2232,6 +2294,7 @@ class AcmeHelloExtension extends Extension implements PrependExtensionInterface
 ```
 
 Example 2 (php):
+
 ```php
 // src/Acme/HelloBundle/DependencyInjection/AcmeHelloExtension.php
 public function prepend(ContainerBuilder $container): void
@@ -2273,19 +2336,21 @@ public function prepend(ContainerBuilder $container): void
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/acme_something.yaml
 acme_something:
-    # ...
-    use_acme_goodbye: false
-    entity_manager_name: non_default
+  # ...
+  use_acme_goodbye: false
+  entity_manager_name: non_default
 
 acme_other:
-    # ...
-    use_acme_goodbye: false
+  # ...
+  use_acme_goodbye: false
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/acme_something.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -2319,6 +2384,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/doctrine/events.html
 
 **Contents:**
+
 - Doctrine Events
 - Doctrine Lifecycle Callbacks
 - Doctrine Entity Listeners
@@ -2367,6 +2433,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Product.php
 namespace App\Entity;
@@ -2391,16 +2458,18 @@ class Product
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/doctrine/Product.orm.yml
+
 App\Entity\Product:
-    type: entity
-    # ...
-    lifecycleCallbacks:
-        prePersist: ['setCreatedAtValue']
+type: entity # ...
+lifecycleCallbacks:
+prePersist: ['setCreatedAtValue']
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/doctrine/Product.orm.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -2419,6 +2488,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/EventListener/UserChangedNotifier.php
 namespace App\EventListener;
@@ -2444,12 +2514,13 @@ class UserChangedNotifier
 **URL:** https://symfony.com/doc/7.4/form/events.html
 
 **Contents:**
+
 - Form Events
 - The Form Workflow
-  - 1) Pre-populating the Form (FormEvents::PRE_SET_DATA and FormEvents::POST_SET_DATA)
+  - 1. Pre-populating the Form (FormEvents::PRE_SET_DATA and FormEvents::POST_SET_DATA)
     - A) The FormEvents::PRE_SET_DATA Event
     - B) The FormEvents::POST_SET_DATA Event
-  - 2) Submitting a Form (FormEvents::PRE_SUBMIT, FormEvents::SUBMIT and FormEvents::POST_SUBMIT)
+  - 2. Submitting a Form (FormEvents::PRE_SUBMIT, FormEvents::SUBMIT and FormEvents::POST_SUBMIT)
     - A) The FormEvents::PRE_SUBMIT Event
     - B) The FormEvents::SUBMIT Event
     - C) The FormEvents::POST_SUBMIT Event
@@ -2534,6 +2605,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 
@@ -2552,6 +2624,7 @@ $form = $formFactory->createBuilder()
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 
@@ -2588,6 +2661,7 @@ $form = $formFactory->createBuilder()
 ```
 
 Example 3 (php):
+
 ```php
 // src/Form/SubscriptionType.php
 namespace App\Form;
@@ -2620,6 +2694,7 @@ class SubscriptionType extends AbstractType
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/EventListener/AddEmailFieldListener.php
 namespace App\Form\EventListener;
@@ -2681,6 +2756,7 @@ class AddEmailFieldListener implements EventSubscriberInterface
 **URL:** https://symfony.com/doc/7.4/form/dynamic_form_modification.html
 
 **Contents:**
+
 - How to Dynamically Modify Forms Using Form Events
 - Customizing your Form Based on the Underlying Data
   - Adding an Event Listener to a Form Class
@@ -2772,6 +2848,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Form/Type/ProductType.php
 namespace App\Form\Type;
@@ -2799,6 +2876,7 @@ class ProductType extends AbstractType
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/Type/ProductType.php
 namespace App\Form\Type;
@@ -2823,6 +2901,7 @@ class ProductType extends AbstractType
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -2843,6 +2922,7 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/EventSubscriber/AddNameFieldSubscriber.php
 namespace App\Form\EventSubscriber;
@@ -2880,6 +2960,7 @@ class AddNameFieldSubscriber implements EventSubscriberInterface
 **URL:** https://symfony.com/doc/7.4/components/console/events.html
 
 **Contents:**
+
 - Using Events
 - The ConsoleEvents::COMMAND Event
   - Disable Commands inside Listeners
@@ -2938,6 +3019,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -2950,6 +3032,7 @@ $application->run();
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -2973,6 +3056,7 @@ $dispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -2995,6 +3079,7 @@ $dispatcher->addListener(ConsoleEvents::COMMAND, function (ConsoleCommandEvent $
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleErrorEvent;
@@ -3021,6 +3106,7 @@ $dispatcher->addListener(ConsoleEvents::ERROR, function (ConsoleErrorEvent $even
 **URL:** https://symfony.com/doc/7.4/create_framework/http_kernel_controller_resolver.html
 
 **Contents:**
+
 - The HttpKernel Component: the Controller Resolver
 
 You might think that our framework is already pretty solid and you are probably right. But it can still be improved.
@@ -3035,11 +3121,11 @@ To solve this issue, and a bunch more, let's install and use the HttpKernel comp
 
 The HttpKernel component has many interesting features, but the ones we need right now are the controller resolver and argument resolver. A controller resolver knows how to determine the controller to execute and the argument resolver determines the arguments to pass to it, based on a Request object. All controller resolvers implement the following interface:
 
-The getController() method relies on the same convention as the one we have defined earlier: the _controller request attribute must contain the controller associated with the Request. Besides the built-in PHP callbacks, getController() also supports strings composed of a class name followed by two colons and a method name as a valid callback, like 'class::method':
+The getController() method relies on the same convention as the one we have defined earlier: the \_controller request attribute must contain the controller associated with the Request. Besides the built-in PHP callbacks, getController() also supports strings composed of a class name followed by two colons and a method name as a valid callback, like 'class::method':
 
 To make this code work, modify the framework code to use the controller resolver from HttpKernel:
 
-As an added bonus, the controller resolver properly handles the error management for you: when you forget to define a _controller attribute for a Route for instance.
+As an added bonus, the controller resolver properly handles the error management for you: when you forget to define a \_controller attribute for a Route for instance.
 
 Now, let's see how the controller arguments are guessed. getArguments() introspects the controller signature to determine which arguments to pass to it by using the native PHP reflection. This method is defined in the following interface:
 
@@ -3068,6 +3154,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 class LeapYearController
 {
@@ -3083,6 +3170,7 @@ class LeapYearController
 ```
 
 Example 2 (javascript):
+
 ```javascript
 $routes->add('leap_year', new Routing\Route('/is_leap_year/{year}', [
     'year' => null,
@@ -3091,11 +3179,13 @@ $routes->add('leap_year', new Routing\Route('/is_leap_year/{year}', [
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ composer require symfony/http-kernel
 ```
 
 Example 4 (php):
+
 ```php
 namespace Symfony\Component\HttpKernel\Controller;
 
@@ -3113,6 +3203,7 @@ interface ControllerResolverInterface
 **URL:** https://symfony.com/doc/7.4/create_framework/http_kernel_httpkernelinterface.html
 
 **Contents:**
+
 - The HttpKernel Component: HttpKernelInterface
 
 In the conclusion of the second chapter of this book, I've talked about one great benefit of using the Symfony components: the interoperability between all frameworks and applications using them. Let's do a big step towards this goal by making our framework implement HttpKernelInterface:
@@ -3162,6 +3253,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace Symfony\Component\HttpKernel;
 
@@ -3180,6 +3272,7 @@ interface HttpKernelInterface
 ```
 
 Example 2 (php):
+
 ```php
 // example.com/src/Framework.php
 
@@ -3201,6 +3294,7 @@ class Framework implements HttpKernelInterface
 ```
 
 Example 3 (php):
+
 ```php
 // example.com/web/front.php
 
@@ -3218,6 +3312,7 @@ $response->send();
 ```
 
 Example 4 (php):
+
 ```php
 // example.com/src/Calendar/Controller/LeapYearController.php
 
@@ -3244,6 +3339,7 @@ public function index(Request $request, int $year): Response
 **URL:** https://symfony.com/doc/7.4/create_framework/http_kernel_httpkernel_class.html
 
 **Contents:**
+
 - The HttpKernel Component: The HttpKernel Class
 
 If you were to use our framework right now, you would probably have to add support for custom error messages. We do have 404 and 500 error support but the responses are hardcoded in the framework itself. Making them customizable is straightforward though: dispatch a new event and listen to it. Doing it right means that the listener has to call a regular controller. But what if the error controller throws an exception? You will end up in an infinite loop. There should be an easier way, right?
@@ -3293,6 +3389,7 @@ Become certified from home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // example.com/src/Simplex/Framework.php
 namespace Simplex;
@@ -3305,6 +3402,7 @@ class Framework extends HttpKernel
 ```
 
 Example 2 (php):
+
 ```php
 // example.com/web/front.php
 require_once __DIR__.'/../vendor/autoload.php';
@@ -3335,6 +3433,7 @@ $response->send();
 ```
 
 Example 3 (php):
+
 ```php
 $errorHandler = function (Symfony\Component\ErrorHandler\Exception\FlattenException $exception): Response {
     $msg = 'Something went wrong! ('.$exception->getMessage().')';
@@ -3345,6 +3444,7 @@ $dispatcher->addSubscriber(new HttpKernel\EventListener\ErrorListener($errorHand
 ```
 
 Example 4 (php):
+
 ```php
 $listener = new HttpKernel\EventListener\ErrorListener(
     'Calendar\Controller\ErrorController::exception'

@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/frontend/asset_mapper.html
 
 **Contents:**
+
 - AssetMapper: Simple, Modern CSS & JS Management
 - Installation
 - Mapping and Referencing Assets
@@ -82,7 +83,7 @@ Sometimes, a package - like bootstrap - will have one or more dependencies, such
 
 If you get a 404 error, there might be some issue with the JavaScript package that prevents it from being served by the jsDelivr CDN. For example, the package might be missing properties like main or module in its package.json configuration file. Try to contact the package maintainer to ask them to fix those issues.
 
-If you see a network error like *Connection was reset for "https://cdn.jsdelivr.net/npm/..."*, it may be caused by a proxy or firewall restriction. In that case, you can temporarily configure a proxy to connect to the jsDelivr CDN:
+If you see a network error like _Connection was reset for "https://cdn.jsdelivr.net/npm/..."_, it may be caused by a proxy or firewall restriction. In that case, you can temporarily configure a proxy to connect to the jsDelivr CDN:
 
 Now you can import the bootstrap package like usual:
 
@@ -359,11 +360,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (powershell):
+
 ```powershell
 $ composer require symfony/asset-mapper symfony/asset symfony/twig-pack
 ```
 
 Example 2 (json):
+
 ```json
 {% block javascripts %}
 +    {% block importmap %}{{ importmap('app') }}{% endblock %}
@@ -371,11 +374,13 @@ Example 2 (json):
 ```
 
 Example 3 (jsx):
+
 ```jsx
 <img src="{{ asset('images/duck.png') }}">
 ```
 
 Example 4 (powershell):
+
 ```powershell
 $ php bin/console asset-map:compile
 ```
@@ -387,6 +392,7 @@ $ php bin/console asset-map:compile
 **URL:** https://symfony.com/doc/7.4/web_link.html
 
 **Contents:**
+
 - Asset Preloading and Resource Hints with HTTP/2 and WebLink
 - Installation
 - Preloading Assets
@@ -445,28 +451,31 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/web-link
 ```
 
 Example 2 (html):
+
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>My Application</title>
-    <link rel="stylesheet" href="/app.css">
-</head>
-<body>
+    <link rel="stylesheet" href="/app.css" />
+  </head>
+  <body>
     <main role="main" class="container">
-        <!-- ... -->
+      <!-- ... -->
     </main>
-</body>
+  </body>
 </html>
 ```
 
 Example 3 (jsx):
+
 ```jsx
 <head>
     <!-- ... -->
@@ -478,6 +487,7 @@ Example 3 (jsx):
 ```
 
 Example 4 (jsx):
+
 ```jsx
 <head>
     <!-- ... -->

@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/forms.html
 
 **Contents:**
+
 - Forms
 - Installation
 - Understanding How Forms Work
@@ -198,7 +199,7 @@ When building the form in a class, pass the action and method as form options:
 
 Finally, you can override the action and method in the template by passing them to the form() or the form_start() helper functions:
 
-If the form's method is not GET or POST, but PUT, PATCH or DELETE, Symfony will insert a hidden field with the name _method that stores this method. The form will be submitted in a normal POST request, but Symfony's routing is capable of detecting the _method parameter and will interpret it as a PUT, PATCH or DELETE request. The http_method_override option must be enabled for this to work.
+If the form's method is not GET or POST, but PUT, PATCH or DELETE, Symfony will insert a hidden field with the name \_method that stores this method. The form will be submitted in a normal POST request, but Symfony's routing is capable of detecting the \_method parameter and will interpret it as a PUT, PATCH or DELETE request. The http_method_override option must be enabled for this to work.
 
 For security, you can restrict which HTTP methods can be overridden using the allowed_http_method_override option.
 
@@ -309,11 +310,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/form
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Task.php
 namespace App\Entity;
@@ -347,6 +350,7 @@ class Task
 ```
 
 Example 3 (bash):
+
 ```bash
 FormType        (the root parent of all types)
 ├─ TextType    (renders a text input)
@@ -364,14 +368,18 @@ FormType        (the root parent of all types)
 ```
 
 Example 4 (markdown):
+
 ```markdown
 $ php bin/console debug:form
 
 # pass the form type FQCN to only show the options for that type, its parents and extensions
+
 # For built-in types, you can pass the short classname instead of the FQCN
+
 $ php bin/console debug:form BirthdayType
 
 # pass also an option name to only display the full definition of that option
+
 $ php bin/console debug:form BirthdayType label_attr
 ```
 
@@ -382,6 +390,7 @@ $ php bin/console debug:form BirthdayType label_attr
 **URL:** https://symfony.com/doc/7.4/session.html
 
 **Contents:**
+
 - Sessions
 - Installation
 - Basic Usage
@@ -395,7 +404,7 @@ $ php bin/console debug:form BirthdayType label_attr
 
 The Symfony HttpFoundation component has a very powerful and flexible session subsystem which is designed to provide session management that you can use to store information about the user between requests through a clear object-oriented interface using a variety of session storage drivers.
 
-Symfony sessions are designed to replace the usage of the $_SESSION super global and native PHP functions related to manipulating the session like session_start(), session_regenerate_id(), session_id(), session_name(), and session_destroy().
+Symfony sessions are designed to replace the usage of the $\_SESSION super global and native PHP functions related to manipulating the session like session_start(), session_regenerate_id(), session_id(), session_name(), and session_destroy().
 
 Sessions are only started if you read or write from it.
 
@@ -405,9 +414,9 @@ The session is available through the Request object and the RequestStack service
 
 From a Symfony controller, you can also type-hint an argument with Request:
 
-PHP's session management requires the use of the $_SESSION super-global. However, this interferes with code testability and encapsulation in an OOP paradigm. To help overcome this, Symfony uses session bags linked to the session to encapsulate a specific dataset of attributes.
+PHP's session management requires the use of the $\_SESSION super-global. However, this interferes with code testability and encapsulation in an OOP paradigm. To help overcome this, Symfony uses session bags linked to the session to encapsulate a specific dataset of attributes.
 
-This approach mitigates namespace pollution within the $_SESSION super-global because each bag stores all its data under a unique namespace. This allows Symfony to peacefully co-exist with other applications or libraries that might use the $_SESSION super-global and all data remains completely compatible with Symfony's session management.
+This approach mitigates namespace pollution within the $\_SESSION super-global because each bag stores all its data under a unique namespace. This allows Symfony to peacefully co-exist with other applications or libraries that might use the $\_SESSION super-global and all data remains completely compatible with Symfony's session management.
 
 A session bag is a PHP object that acts like an array:
 
@@ -545,11 +554,11 @@ If you would like to have a different TTL for different users or sessions for wh
 
 Symfony stores the locale setting in the Request, which means that this setting is not automatically saved ("sticky") across requests. But, you can store the locale in the session, so that it's used on subsequent requests.
 
-Create a new event subscriber. Typically, _locale is used as a routing parameter to signify the locale, though you can determine the correct locale however you want:
+Create a new event subscriber. Typically, \_locale is used as a routing parameter to signify the locale, though you can determine the correct locale however you want:
 
 If you're using the default services.yaml configuration, you're done! Symfony will automatically know about the event subscriber and call the onKernelRequest method on each request.
 
-To see it working, either set the _locale key on the session manually (e.g. via some "Change Locale" route & controller), or create a route with the _locale default.
+To see it working, either set the \_locale key on the session manually (e.g. via some "Change Locale" route & controller), or create a route with the \_locale default.
 
 Explicitly Configure the Subscriber
 
@@ -602,11 +611,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/http-foundation
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -630,6 +641,7 @@ class SomeService
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\HttpFoundation\Session\Session;
 
@@ -638,6 +650,7 @@ $session->start();
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -657,6 +670,7 @@ public function index(Request $request): Response
 **URL:** https://symfony.com/doc/7.4/cache.html
 
 **Contents:**
+
 - Cache
 - Configuring Cache with FrameworkBundle
 - Creating Custom (Namespaced) Pools
@@ -760,6 +774,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -780,15 +795,17 @@ $pool->delete('my_cache_key');
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/cache.yaml
 framework:
-    cache:
-        app: cache.adapter.filesystem
-        system: cache.adapter.system
+  cache:
+    app: cache.adapter.filesystem
+    system: cache.adapter.system
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/cache.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -810,6 +827,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/cache.php
 use Symfony\Config\FrameworkConfig;
@@ -829,6 +847,7 @@ return static function (FrameworkConfig $framework): void {
 **URL:** https://symfony.com/doc/7.4/http_cache.html
 
 **Contents:**
+
 - HTTP Cache
 - Caching on the Shoulders of Giants
 - Caching with a Gateway Cache
@@ -945,6 +964,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (python):
+
 ```python
 # config/packages/framework.yaml
 when@prod:
@@ -953,6 +973,7 @@ when@prod:
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -974,6 +995,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/framework.php
 use Symfony\Config\FrameworkConfig;
@@ -986,6 +1008,7 @@ return static function (FrameworkConfig $framework, string $env): void {
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/BlogController.php
 use Symfony\Component\HttpKernel\Attribute\Cache;
@@ -1005,6 +1028,7 @@ public function index(): Response
 **URL:** https://symfony.com/doc/7.4/reference/configuration/framework.html
 
 **Contents:**
+
 - Framework Configuration Reference (FrameworkBundle)
 - annotations
   - cache
@@ -1174,7 +1198,7 @@ type: boolean | string default: null
 
 Whether your service should be able to handle tags or not. Can also be the service id of another cache pool where tags will be stored.
 
-type: string default: _%kernel.project_dir%.%kernel.container_class%
+type: string default: \_%kernel.project_dir%.%kernel.container_class%
 
 This value is used as part of the "namespace" generated for the cache item keys. A common practice is to use the unique name of the application (e.g. symfony.com) because that prevents naming collisions when deploying multiple applications into the same path (on different servers) that share the same cache backend.
 
@@ -1214,7 +1238,7 @@ The cookie_name option was introduced in Symfony 7.2.
 
 type: string default: en
 
-The default locale is used if no _locale routing parameter has been set. It is available with the Request::getDefaultLocale method.
+The default locale is used if no \_locale routing parameter has been set. It is available with the Request::getDefaultLocale method.
 
 You can read more information about the default locale in Translations.
 
@@ -1222,7 +1246,7 @@ type: array default: [] (empty array = enable all locales)
 
 Symfony applications generate by default the translation files for validation and security messages in all locales. If your application only uses some locales, use this option to restrict the files generated by Symfony and improve performance a bit:
 
-An added bonus of defining the enabled locales is that they are automatically added as a requirement of the special _locale parameter. For example, if you define this value as ['ar', 'he', 'ja', 'zh'], the _locale routing parameter will have an ar|he|ja|zh requirement. If some user makes requests with a locale not included in this option, they'll see a 404 error.
+An added bonus of defining the enabled locales is that they are automatically added as a requirement of the special \_locale parameter. For example, if you define this value as ['ar', 'he', 'ja', 'zh'], the \_locale routing parameter will have an ar|he|ja|zh requirement. If some user makes requests with a locale not included in this option, they'll see a 404 error.
 
 type: boolean default: false
 
@@ -1232,7 +1256,7 @@ type: boolean default: false
 
 If this option is set to true, the Request locale will automatically be set to the value of the Accept-Language HTTP header.
 
-When the _locale request attribute is passed, the Accept-Language header is ignored.
+When the \_locale request attribute is passed, the Accept-Language header is ignored.
 
 type: boolean default: true when the debug mode is enabled, false otherwise.
 
@@ -1278,7 +1302,7 @@ type: boolean default: true
 
 Whether to enable CSRF protection for all forms. You can also disable CSRF protection for individual forms or disable it for your entire application (see framework.csrf_protection).
 
-type: string default: _token
+type: string default: \_token
 
 This is the field name that you should give to the CSRF token field of your forms.
 
@@ -1304,7 +1328,7 @@ Sets the content shown during the loading of the fragment or when JavaScript is 
 
 See Creating and Using Templates for more information about hinclude.
 
-type: string default: /_fragment
+type: string default: /\_fragment
 
 The path prefix for fragments. The fragment listener will only be executed when the request starts with this path.
 
@@ -1380,7 +1404,7 @@ A network interface name, IP address, a host name or a UNIX socket to use as the
 
 type: boolean | Closure
 
-Buffering the response means that you can access its content multiple times without performing the request again. Buffering is enabled by default when the content type of the response is text/*, application/json or application/xml.
+Buffering the response means that you can access its content multiple times without performing the request again. Buffering is enabled by default when the content type of the response is text/\*, application/json or application/xml.
 
 If this option is a boolean value, the response is buffered when the value is true. If this option is a closure, the response is buffered when the returned value is true (the closure receives as argument an array with the response headers).
 
@@ -1412,7 +1436,7 @@ The path to a directory that contains one or more certificate authority files.
 
 A list of the names of the ciphers allowed for the TLS connections. They can be separated by colons, commas or spaces (e.g. 'RC4-SHA:TLS13-AES-128-GCM-SHA256').
 
-The minimum version of TLS to accept. The value must be one of the STREAM_CRYPTO_METHOD_TLSv*_CLIENT constants defined by PHP.
+The minimum version of TLS to accept. The value must be one of the STREAM_CRYPTO_METHOD_TLSv\*\_CLIENT constants defined by PHP.
 
 Arbitrary additional data to pass to the HTTP client for further use. This can be particularly useful when decorating an existing client.
 
@@ -1440,7 +1464,7 @@ The maximum number of redirects to follow. Use 0 to not follow any redirection.
 
 type: string | null default: null
 
-A comma separated list of hosts that do not require a proxy to be reached, even if one is configured. Use the '*' wildcard to match all hosts and an empty string to match none (disables the proxy).
+A comma separated list of hosts that do not require a proxy to be reached, even if one is configured. Use the '\*' wildcard to match all hosts and an empty string to match none (disables the proxy).
 
 The passphrase used to encrypt the certificate stored in the file defined in the local_cert option.
 
@@ -1476,7 +1500,7 @@ The list of HTTP status codes that triggers a retry of the request.
 
 type: float default: 0.1 (must be between 0.0 and 1.0)
 
-This option adds some randomness to the delay. It's useful to avoid sending multiple requests to the server at the exact same time. The randomness is calculated as delay * jitter. For example: if delay is 1000ms and jitter is 0.2, the actual delay will be a number between 800 and 1200 (1000 +/- 20%).
+This option adds some randomness to the delay. It's useful to avoid sending multiple requests to the server at the exact same time. The randomness is calculated as delay \* jitter. For example: if delay is 1000ms and jitter is 0.2, the actual delay will be a number between 800 and 1200 (1000 +/- 20%).
 
 type: integer default: 0
 
@@ -1508,11 +1532,11 @@ If true, the certificate sent by other servers when negotiating a TLS connection
 
 type: boolean default: false
 
-This determines whether the _method request parameter is used as the intended HTTP method on POST requests. If enabled, the Request::enableHttpMethodParameterOverride method gets called automatically. It becomes the service container parameter named kernel.http_method_override.
+This determines whether the \_method request parameter is used as the intended HTTP method on POST requests. If enabled, the Request::enableHttpMethodParameterOverride method gets called automatically. It becomes the service container parameter named kernel.http_method_override.
 
 Changing the Action and HTTP Method of Symfony forms.
 
-If you're using the HttpCache Reverse Proxy with this option, the kernel will ignore the _method parameter, which could lead to errors.
+If you're using the HttpCache Reverse Proxy with this option, the kernel will ignore the \_method parameter, which could lead to errors.
 
 To fix this, invoke the enableHttpMethodParameterOverride() method before creating the Request object:
 
@@ -1520,7 +1544,7 @@ The allowed_http_method_override option was introduced in Symfony 7.4.
 
 type: array default: null
 
-This option controls which HTTP methods can be overridden via the _method request parameter or the X-HTTP-METHOD-OVERRIDE header when http_method_override is enabled.
+This option controls which HTTP methods can be overridden via the \_method request parameter or the X-HTTP-METHOD-OVERRIDE header when http_method_override is enabled.
 
 When set to null (the default), all HTTP methods can be overridden. When set to an empty array ([]), HTTP method overriding is completely disabled. When set to a specific list of methods, only those methods will be allowed as overrides:
 
@@ -1626,15 +1650,15 @@ When this is set to true, the profiler will only be enabled on the main requests
 
 type: boolean default: false
 
-When enabled, the property_accessor service uses PHP's magic __call() method when its getValue() method is called.
+When enabled, the property_accessor service uses PHP's magic \_\_call() method when its getValue() method is called.
 
 type: boolean default: true
 
-When enabled, the property_accessor service uses PHP's magic __get() method when its getValue() method is called.
+When enabled, the property_accessor service uses PHP's magic \_\_get() method when its getValue() method is called.
 
 type: boolean default: true
 
-When enabled, the property_accessor service uses PHP's magic __set() method when its setValue() method is called.
+When enabled, the property_accessor service uses PHP's magic \_\_set() method when its setValue() method is called.
 
 type: boolean default: false
 
@@ -1742,7 +1766,7 @@ A map of semaphore stores to be created by the framework extension, with the nam
 
 Name of the semaphore you want to create.
 
-The service id that is used as the circular reference handler of the default serializer. The service has to implement the magic __invoke($object) method.
+The service id that is used as the circular reference handler of the default serializer. The service has to implement the magic \_\_invoke($object) method.
 
 For more information, see How to Use the Serializer.
 
@@ -2047,24 +2071,29 @@ Online Sylius certification, take it now!
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference framework
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config framework
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    # ...
-    assets:
-        base_path: '/images'
+  # ...
+  assets:
+    base_path: "/images"
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -2082,6 +2111,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/framework.php
 use Symfony\Config\FrameworkConfig;
@@ -2100,6 +2130,7 @@ return static function (FrameworkConfig $framework): void {
 **URL:** https://symfony.com/doc/7.4/http_cache/esi.html
 
 **Contents:**
+
 - Working with Edge Side Includes
 - Using ESI in Symfony
 
@@ -2150,29 +2181,32 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (html):
+
 ```html
 <!DOCTYPE html>
 <html>
-    <body>
-        <!-- ... some content -->
+  <body>
+    <!-- ... some content -->
 
-        <!-- Embed the content of another page here -->
-        <esi:include src="http://..."/>
+    <!-- Embed the content of another page here -->
+    <esi:include src="http://..." />
 
-        <!-- ... more content -->
-    </body>
+    <!-- ... more content -->
+  </body>
 </html>
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    # ...
-    esi: true
+  # ...
+  esi: true
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -2192,6 +2226,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/framework.php
 use Symfony\Config\FrameworkConfig;
@@ -2210,6 +2245,7 @@ return static function (FrameworkConfig $framework): void {
 **URL:** https://symfony.com/doc/7.4/reference/forms/types.html
 
 **Contents:**
+
 - Form Types Reference
 - Supported Field Types
   - Text Fields
@@ -2238,6 +2274,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **URL:** https://symfony.com/doc/7.4/form/embedded.html
 
 **Contents:**
+
 - How to Embed Forms
 - Embedding a Single Object
 - Embedding a Collection of Forms
@@ -2273,6 +2310,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Category.php
 namespace App\Entity;
@@ -2287,6 +2325,7 @@ class Category
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 
@@ -2313,6 +2352,7 @@ class Task
 ```
 
 Example 3 (php):
+
 ```php
 // src/Form/CategoryType.php
 namespace App\Form;
@@ -2339,6 +2379,7 @@ class CategoryType extends AbstractType
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/TaskType.php
 use App\Form\CategoryType;
@@ -2359,6 +2400,7 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/form.html
 
 **Contents:**
+
 - FormType Field
 - Field Options
   - action
@@ -2538,7 +2580,7 @@ type: string default: POST
 
 This option specifies the HTTP method used to submit the form's data. Its value is rendered as the method attribute of the form element and is used to decide whether to process the form submission in the handleRequest() method after submission. Possible values are:
 
-When the method is PUT, PATCH, or DELETE, Symfony will automatically render a _method hidden field in your form. This is used to "fake" these HTTP methods, as they're not supported on standard browsers. This can be useful when matching routes by HTTP method.
+When the method is PUT, PATCH, or DELETE, Symfony will automatically render a \_method hidden field in your form. This is used to "fake" these HTTP methods, as they're not supported on standard browsers. This can be useful when matching routes by HTTP method.
 
 The PATCH method allows submitting partial data. In other words, if the submitted form data is missing certain fields, those will be ignored and the default values (if any) will be used. With all other HTTP methods, if the submitted form data is missing some fields, those fields are set to null.
 
@@ -2596,7 +2638,7 @@ type: string default: the form's name (see Knowing which block to customize)
 
 Allows you to add a custom block name to the ones used by default to render the form type. Useful for example if you have multiple instances of the same form and you need to personalize the rendering of the forms individually.
 
-If you set for example this option to my_custom_name and the field is of type text, Symfony will use the following names (and in this order) to find the block used to render the widget of the field: _my_custom_name_widget, text_widget and form_widget.
+If you set for example this option to my_custom_name and the field is of type text, Symfony will use the following names (and in this order) to find the block used to render the widget of the field: \_my_custom_name_widget, text_widget and form_widget.
 
 type: string or null default: null (see Knowing which block to customize)
 
@@ -2659,12 +2701,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -2682,6 +2726,7 @@ $builder
 ```
 
 Example 3 (php):
+
 ```php
 $article->setTitle('...');
 $article->getAuthor()->setName('...');
@@ -2689,6 +2734,7 @@ $article->getAuthor()->setEmail('...');
 ```
 
 Example 4 (php):
+
 ```php
 $article->setTitle('...');
 $author = clone $article->getAuthor();
@@ -2704,6 +2750,7 @@ $article->setAuthor($author);
 **URL:** https://symfony.com/doc/7.4/form/validation_groups.html
 
 **Contents:**
+
 - Configuring Validation Groups in Forms
 - Choosing Validation Groups Based on the Clicked Button
 - Choosing Validation Groups Based on Submitted Data
@@ -2745,6 +2792,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -2758,6 +2806,7 @@ public function configureOptions(OptionsResolver $resolver): void
 ```
 
 Example 2 (php):
+
 ```php
 $form = $this->createFormBuilder($user, [
     'validation_groups' => ['registration'],
@@ -2765,6 +2814,7 @@ $form = $this->createFormBuilder($user, [
 ```
 
 Example 3 (json):
+
 ```json
 [
     // ...
@@ -2773,6 +2823,7 @@ Example 3 (json):
 ```
 
 Example 4 (php):
+
 ```php
 $form = $this->createFormBuilder($task)
     // ...
@@ -2788,6 +2839,7 @@ $form = $this->createFormBuilder($task)
 **URL:** https://symfony.com/doc/7.4/form/form_collections.html
 
 **Contents:**
+
 - How to Embed a Collection of Forms
 - Allowing "new" Tags with the "Prototype"
   - JavaScript with Stimulus
@@ -2834,13 +2886,13 @@ Now add a button to dynamically add a new tag:
 
 If you want to customize the HTML code in the prototype, see How to Work with Form Themes.
 
-The form.tags.vars.prototype is a form element that looks and feels just like the individual form_widget(tag.*) elements inside your for loop. This means that you can call form_widget(), form_row() or form_label() on it. You could even choose to render only one of its fields (e.g. the name field):
+The form.tags.vars.prototype is a form element that looks and feels just like the individual form_widget(tag.\*) elements inside your for loop. This means that you can call form_widget(), form_row() or form_label() on it. You could even choose to render only one of its fields (e.g. the name field):
 
 If you render your whole "tags" sub-form at once (e.g. form_row(form.tags)), the data-prototype attribute is automatically added to the containing div, and you need to adjust the following JavaScript accordingly.
 
 Now add some JavaScript to read this attribute and dynamically add new tag forms when the user clicks the "Add a tag" link. Add a <script> tag somewhere on your page to include the required functionality with JavaScript:
 
-The addFormToCollection() function's job will be to use the data-prototype attribute to dynamically add a new form when this link is clicked. The data-prototype HTML contains the tag's text input element with a name of task[tags][__name__][name] and id of task_tags___name___name. The __name__ is a placeholder, which you'll replace with a unique, incrementing number (e.g. task[tags][3][name]):
+The addFormToCollection() function's job will be to use the data-prototype attribute to dynamically add a new form when this link is clicked. The data-prototype HTML contains the tag's text input element with a name of task[tags][__name__][name] and id of task_tags***name***name. The **name** is a placeholder, which you'll replace with a unique, incrementing number (e.g. task[tags][3][name]):
 
 Now, each time a user clicks the Add a tag link, a new sub form will appear on the page. When the form is submitted, any new tag forms will be converted into new Tag objects and added to the tags property of the Task object.
 
@@ -2907,6 +2959,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Task.php
 namespace App\Entity;
@@ -2941,6 +2994,7 @@ class Task
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Tag.php
 namespace App\Entity;
@@ -2962,6 +3016,7 @@ class Tag
 ```
 
 Example 3 (php):
+
 ```php
 // src/Form/TagType.php
 namespace App\Form;
@@ -2988,6 +3043,7 @@ class TagType extends AbstractType
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/TaskType.php
 namespace App\Form;
@@ -3026,6 +3082,7 @@ class TaskType extends AbstractType
 **URL:** https://symfony.com/doc/7.4/form/unit_testing.html
 
 **Contents:**
+
 - How to Unit Test your Forms
 - The Basics
 - Testing Types Registered as Services
@@ -3080,6 +3137,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // tests/Form/Type/TestedTypeTest.php
 namespace App\Tests\Form\Type;
@@ -3130,17 +3188,20 @@ class TestedTypeTest extends TypeTestCase
 ```
 
 Example 2 (php):
+
 ```php
 $form = $this->factory->create(TestedType::class, $formData);
 ```
 
 Example 3 (php):
+
 ```php
 $form->submit($formData);
 $this->assertTrue($form->isSynchronized());
 ```
 
 Example 4 (php):
+
 ```php
 $this->assertEquals($expected, $formData);
 ```
@@ -3152,6 +3213,7 @@ $this->assertEquals($expected, $formData);
 **URL:** https://symfony.com/doc/7.4/testing/bootstrap.html
 
 **Contents:**
+
 - How to Customize the Bootstrap Process before Running Tests
 
 Sometimes when running tests, you need to do additional bootstrap work before running those tests. For example, if you're running a functional test and have introduced a new translation resource, then you will need to clear your cache before running those tests.
@@ -3171,6 +3233,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // tests/bootstrap.php
   use Symfony\Component\Dotenv\Dotenv;
@@ -3192,6 +3255,7 @@ Example 1 (php):
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- phpunit.dist.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -3209,6 +3273,7 @@ Example 2 (xml):
 **URL:** https://symfony.com/doc/7.4/components/cache.html
 
 **Contents:**
+
 - The Cache Component
 - Installation
 - Cache Contracts versus PSR-6
@@ -3291,11 +3356,13 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/cache
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -3303,6 +3370,7 @@ $cache = new FilesystemAdapter();
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Contracts\Cache\ItemInterface;
 
@@ -3323,6 +3391,7 @@ $cache->delete('my_cache_key');
 ```
 
 Example 4 (php):
+
 ```php
 $userCache = $cache->withSubNamespace(sprintf('user-%d', $user->getId()));
 
@@ -3340,6 +3409,7 @@ $userCache->get('dashboard_data', function (ItemInterface $item): string {
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/apcu_adapter.html
 
 **Contents:**
+
 - APCu Cache Adapter
 
 This adapter is a high-performance, shared memory cache. It can significantly increase an application's performance, as its cache contents are stored in shared memory, a component appreciably faster than many others, such as the filesystem.
@@ -3359,6 +3429,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 
@@ -3385,6 +3456,7 @@ $cache = new ApcuAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/array_cache_adapter.html
 
 **Contents:**
+
 - Array Cache Adapter
 
 Generally, this adapter is useful for testing purposes, as its contents are stored in memory and not persisted outside the running PHP process in any way. It can also be useful while warming up caches, due to the getValues() method:
@@ -3398,6 +3470,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -3433,6 +3506,7 @@ $cache = new ArrayAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/doctrine_dbal_adapter.html
 
 **Contents:**
+
 - Doctrine DBAL Cache Adapter
 
 The Doctrine DBAL adapters store the cache items in a table of an SQL database.
@@ -3454,6 +3528,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\DoctrineDbalAdapter;
 
@@ -3482,6 +3557,7 @@ $cache = new DoctrineDbalAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/filesystem_adapter.html
 
 **Contents:**
+
 - Filesystem Cache Adapter
 - Working with Tags
 
@@ -3504,6 +3580,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -3525,6 +3602,7 @@ $cache = new FilesystemAdapter(
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 
@@ -3538,6 +3616,7 @@ $cache = new FilesystemTagAwareAdapter();
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/memcached_adapter.html
 
 **Contents:**
+
 - Memcached Cache Adapter
 - Configure the Connection
 - Configure the Options
@@ -3624,6 +3703,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 
@@ -3642,6 +3722,7 @@ $cache = new MemcachedAdapter(
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 
@@ -3669,11 +3750,13 @@ $client = MemcachedAdapter::createConnection(
 ```
 
 Example 3 (yaml):
+
 ```yaml
 memcached://[user:pass@][ip|host|socket[:port]][?weight=int]
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\MemcachedAdapter;
 
@@ -3702,6 +3785,7 @@ $client = MemcachedAdapter::createConnection([
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/pdo_adapter.html
 
 **Contents:**
+
 - PDO Cache Adapter
 
 The PDO adapters store the cache items in a table of an SQL database.
@@ -3721,6 +3805,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\PdoAdapter;
 
@@ -3749,6 +3834,7 @@ $cache = new PdoAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/proxy_adapter.html
 
 **Contents:**
+
 - Proxy Cache Adapter
 
 This adapter wraps a PSR-6 compliant cache item pool interface. It is used to integrate your application's cache item pool implementation with the Symfony Cache Component by consuming any implementation of Psr\Cache\CacheItemPoolInterface.
@@ -3764,6 +3850,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Cache\Adapter\ProxyAdapter;
@@ -3794,6 +3881,7 @@ $cache = new ProxyAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/redis_adapter.html
 
 **Contents:**
+
 - Redis Cache Adapter
 - Configure the Connection
 - Configure the Options
@@ -3847,7 +3935,7 @@ When using Redis as cache, you should configure the maxmemory and maxmemory-poli
 
 In order to use tag-based invalidation, you can wrap your adapter in TagAwareAdapter. However, when Redis is used as backend, it's often more interesting to use the dedicated RedisTagAwareAdapter. Since tag invalidation logic is implemented in Redis itself, this adapter offers better performance when using tag-based invalidation:
 
-When using RedisTagAwareAdapter, in order to maintain relationships between tags and cache items, you have to use either noeviction or volatile-* in the Redis maxmemory-policy eviction policy.
+When using RedisTagAwareAdapter, in order to maintain relationships between tags and cache items, you have to use either noeviction or volatile-\* in the Redis maxmemory-policy eviction policy.
 
 Read more about this topic in the official Redis LRU Cache Documentation.
 
@@ -3868,6 +3956,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
@@ -3893,6 +3982,7 @@ $cache = new RedisAdapter(
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
@@ -3903,11 +3993,13 @@ $client = RedisAdapter::createConnection(
 ```
 
 Example 3 (unknown):
+
 ```unknown
 redis[s]://[pass@][ip|host|socket[:port]][/db-index]
 ```
 
 Example 4 (json):
+
 ```json
 redis[s]:[[user]:pass@]?[ip|host|socket[:port]][&params]
 ```
@@ -3919,6 +4011,7 @@ redis[s]:[[user]:pass@]?[ip|host|socket[:port]][&params]
 **URL:** https://symfony.com/doc/7.4/components/console/logger.html
 
 **Contents:**
+
 - Using the Logger
 - Verbosity
 - Color
@@ -3947,6 +4040,7 @@ Take the exam at home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace Acme;
 
@@ -3967,6 +4061,7 @@ class MyDependency
 ```
 
 Example 2 (php):
+
 ```php
 namespace Acme\Console\Command;
 
@@ -3995,6 +4090,7 @@ class MyCommand
 ```
 
 Example 3 (php):
+
 ```php
 use Psr\Log\LogLevel;
 // ...
@@ -4008,6 +4104,7 @@ $logger = new ConsoleLogger($output, $verbosityLevelMap);
 ```
 
 Example 4 (typescript):
+
 ```typescript
 // ...
 $formatLevelMap = [
@@ -4025,6 +4122,7 @@ $logger = new ConsoleLogger($output, [], $formatLevelMap);
 **URL:** https://symfony.com/doc/7.4/http_cache/varnish.html
 
 **Contents:**
+
 - How to Use Varnish to Speed up my Website
 - Make Symfony Trust the Reverse Proxy
 - Routing and X-FORWARDED Headers
@@ -4037,7 +4135,7 @@ Because Symfony's cache uses the standard HTTP cache headers, the HTTP Cache can
 
 Varnish automatically forwards the IP as X-Forwarded-For and leaves the X-Forwarded-Proto header in the request. If you do not configure Varnish as trusted proxy, Symfony will see all requests as coming through insecure HTTP connections from the Varnish host instead of the real client.
 
-Remember to call the Request::setTrustedProxies() method in your front controller so that Varnish is seen as a trusted proxy and the X-Forwarded-* headers are used.
+Remember to call the Request::setTrustedProxies() method in your front controller so that Varnish is seen as a trusted proxy and the X-Forwarded-\* headers are used.
 
 To ensure that the Symfony Router generates URLs correctly with Varnish, an X-Forwarded-Port header must be present for Symfony to use the correct port number.
 
@@ -4084,6 +4182,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 sub vcl_recv {
     if (req.http.X-Forwarded-Proto == "https" ) {
@@ -4095,6 +4194,7 @@ sub vcl_recv {
 ```
 
 Example 2 (unknown):
+
 ```unknown
 sub vcl_recv {
     // Remove all cookies except for essential ones.
@@ -4114,6 +4214,7 @@ sub vcl_recv {
 ```
 
 Example 3 (unknown):
+
 ```unknown
 sub vcl_recv {
     // Remove all cookies except for essential ones.
@@ -4133,6 +4234,7 @@ sub vcl_recv {
 ```
 
 Example 4 (unknown):
+
 ```unknown
 sub vcl_fetch {
     // By default, Varnish3 ignores Cache-Control: no-cache and private
@@ -4153,6 +4255,7 @@ sub vcl_fetch {
 **URL:** https://symfony.com/doc/7.4/http_cache/cache_vary.html
 
 **Contents:**
+
 - Varying the Response for HTTP Cache
 
 So far, it's been assumed that each URI has exactly one representation of the target resource. By default, HTTP caching is done by using the URI of the resource as the cache key. If two people request the same URI of a cacheable resource, the second person will receive the cached version.
@@ -4172,11 +4275,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 Vary: Accept-Encoding, User-Agent
 ```
 
 Example 2 (php):
+
 ```php
 // this attribute takes an array with the name of the header(s)
 // names for which the response varies
@@ -4197,6 +4302,7 @@ public function bar(): Response
 ```
 
 Example 3 (php):
+
 ```php
 // this method takes a header name or an array of header names for
 // which the response varies
@@ -4211,6 +4317,7 @@ $response->setVary(['Accept-Encoding', 'User-Agent']);
 **URL:** https://symfony.com/doc/7.4/http_cache/cache_invalidation.html
 
 **Contents:**
+
 - Cache Invalidation
 
 "There are only two hard things in Computer Science: cache invalidation and naming things." -- Phil Karlton
@@ -4244,6 +4351,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/CacheKernel.php
 namespace App;
@@ -4281,6 +4389,7 @@ class CacheKernel extends HttpCache
 ```
 
 Example 2 (php):
+
 ```php
 // src/CacheKernel.php
 namespace App;
@@ -4298,18 +4407,20 @@ class CacheKernel extends HttpCache
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\CacheKernel:
-        decorates: http_cache
-        arguments:
-            - '@kernel'
-            - '@http_cache.store'
-            - '@?esi'
+  App\CacheKernel:
+    decorates: http_cache
+    arguments:
+      - "@kernel"
+      - "@http_cache.store"
+      - "@?esi"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -4335,6 +4446,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/http_cache/expiration.html
 
 **Contents:**
+
 - HTTP Cache Expiration
 - Expiration with the Cache-Control Header
 - Expiration with the Expires Header
@@ -4372,6 +4484,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\HttpKernel\Attribute\Cache;
 // ...
@@ -4384,6 +4497,7 @@ public function index(): Response
 ```
 
 Example 2 (php):
+
 ```php
 // sets the number of seconds after which the response
 // should no longer be considered fresh by shared caches
@@ -4392,11 +4506,13 @@ $response->setMaxAge(600);
 ```
 
 Example 3 (unknown):
+
 ```unknown
 Cache-Control: public, max-age=600
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\HttpKernel\Attribute\Cache;
 // ...
@@ -4415,6 +4531,7 @@ public function index(): Response
 **URL:** https://symfony.com/doc/7.4/http_cache/validation.html
 
 **Contents:**
+
 - HTTP Cache Validation
 - Validation with the ETag Header
 - Validation with the Last-Modified Header
@@ -4473,6 +4590,7 @@ Online exam, become Sylius certified today
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/DefaultController.php
 namespace App\Controller;
@@ -4496,11 +4614,13 @@ class DefaultController extends AbstractController
 ```
 
 Example 2 (swift):
+
 ```swift
 RequestHeader edit "If-None-Match" '^"((.*)-(gzip|br))"$' '"$1", "$2"'
 ```
 
 Example 3 (php):
+
 ```php
 // src/Controller/ArticleController.php
 namespace App\Controller;
@@ -4538,6 +4658,7 @@ class ArticleController extends AbstractController
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/ArticleController.php
 namespace App\Controller;
@@ -4589,6 +4710,7 @@ class ArticleController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/http_cache/ssi.html
 
 **Contents:**
+
 - Working with Server Side Includes
 - Using SSI in Symfony
 
@@ -4621,28 +4743,31 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (html):
+
 ```html
 <!DOCTYPE html>
 <html>
-    <body>
-        <!-- ... some content -->
+  <body>
+    <!-- ... some content -->
 
-        <!-- Embed the content of another page here -->
-        <!--#include virtual="/..." -->
+    <!-- Embed the content of another page here -->
+    <!--#include virtual="/..." -->
 
-        <!-- ... more content -->
-    </body>
+    <!-- ... more content -->
+  </body>
 </html>
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    ssi: { enabled: true }
+  ssi: { enabled: true }
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -4661,6 +4786,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/framework.php
 use Symfony\Config\FrameworkConfig;
@@ -4679,6 +4805,7 @@ return static function (FrameworkConfig $framework): void {
 **URL:** https://symfony.com/doc/7.4/components/cache/cache_pools.html
 
 **Contents:**
+
 - Cache Pools and Supported Adapters
 - Creating Cache Pools
 - Using the Cache Contracts
@@ -4743,6 +4870,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Contracts\Cache\ItemInterface;
@@ -4766,6 +4894,7 @@ $cache->delete('my_cache_key');
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
@@ -4774,12 +4903,14 @@ $latestNews = $cache->getItem('latest_news');
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 $stocks = $cache->getItems(['AAPL', 'FB', 'GOOGL', 'MSFT']);
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 $hasBadges = $cache->hasItem('user_'.$userId.'_badges');
@@ -4792,6 +4923,7 @@ $hasBadges = $cache->hasItem('user_'.$userId.'_badges');
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/chain_adapter.html
 
 **Contents:**
+
 - Chain Cache Adapter
 
 This adapter allows combining any number of the other available cache adapters. Cache items are fetched from the first adapter containing them and cache items are saved to all the given adapters. This exposes a simple and efficient method for creating a layered cache.
@@ -4811,6 +4943,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\ChainAdapter;
 
@@ -4824,6 +4957,7 @@ $cache = new ChainAdapter(
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\ChainAdapter;
@@ -4836,6 +4970,7 @@ $cache = new ChainAdapter([
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\ApcuAdapter;
 use Symfony\Component\Cache\Adapter\ChainAdapter;
@@ -4857,6 +4992,7 @@ $cache->prune();
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/couchbasebucket_adapter.html
 
 **Contents:**
+
 - Couchbase Bucket Cache Adapter
 - Configure the Connection
 - Configure the Options
@@ -4883,6 +5019,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\CouchbaseBucketAdapter;
 
@@ -4903,6 +5040,7 @@ $cache = new CouchbaseBucketAdapter(
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\CouchbaseBucketAdapter;
 
@@ -4930,6 +5068,7 @@ $client = CouchbaseBucketAdapter::createConnection(
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\CouchbaseBucketAdapter;
 
@@ -4953,6 +5092,7 @@ $client = CouchbaseBucketAdapter::createConnection(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/couchbasecollection_adapter.html
 
 **Contents:**
+
 - Couchbase Collection Cache Adapter
 - Configure the Connection
 - Configure the Options
@@ -4977,6 +5117,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\CouchbaseCollectionAdapter;
 
@@ -4994,6 +5135,7 @@ $cache = new CouchbaseCollectionAdapter(
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\CouchbaseCollectionAdapter;
 
@@ -5021,6 +5163,7 @@ $client = CouchbaseCollectionAdapter::createConnection(
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\CouchbaseCollectionAdapter;
 
@@ -5044,6 +5187,7 @@ $client = CouchbaseCollectionAdapter::createConnection(
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/php_array_cache_adapter.html
 
 **Contents:**
+
 - PHP Array Cache Adapter
 
 This adapter is a high performance cache for static data (e.g. application configuration) that is optimized and preloaded into OPcache memory storage. It is suited for any data that is mostly read-only after warm-up:
@@ -5057,6 +5201,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\PhpArrayAdapter;
@@ -5090,6 +5235,7 @@ echo $cacheItem->get();
 **URL:** https://symfony.com/doc/7.4/components/cache/adapters/php_files_adapter.html
 
 **Contents:**
+
 - PHP Files Cache Adapter
 
 Similarly to Filesystem Adapter, this cache implementation writes cache entries out to disk, but unlike the Filesystem cache adapter, the PHP Files cache adapter writes and reads back these cache files as native PHP code. For example, caching the value ['my', 'cached', 'array'] will write out a cache file similar to the following:
@@ -5109,6 +5255,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 <?php return [
 
@@ -5126,6 +5273,7 @@ Example 1 (php):
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
 
@@ -5153,6 +5301,7 @@ $cache = new PhpFilesAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/cache_invalidation.html
 
 **Contents:**
+
 - Cache Invalidation
 - Using Cache Tags
   - Tag Aware Adapters
@@ -5187,6 +5336,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $item = $cache->get('cache_key', function (ItemInterface $item): string {
     // [...]
@@ -5199,6 +5349,7 @@ $item = $cache->get('cache_key', function (ItemInterface $item): string {
 ```
 
 Example 2 (php):
+
 ```php
 // invalidate all items related to `tag_1` or `tag_3`
 $cache->invalidateTags(['tag_1', 'tag_3']);
@@ -5208,6 +5359,7 @@ $cache->delete('cache_key');
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
@@ -5228,6 +5380,7 @@ $cache = new TagAwareAdapter(
 **URL:** https://symfony.com/doc/7.4/components/cache/cache_items.html
 
 **Contents:**
+
 - Cache Items
 - Cache Item Keys and Values
 - Creating Cache Items
@@ -5236,7 +5389,7 @@ $cache = new TagAwareAdapter(
 
 Cache items are the information units stored in the cache as a key/value pair. In the Cache component they are represented by the CacheItem class. They are used in both the Cache Contracts and the PSR-6 interfaces.
 
-The key of a cache item is a plain string which acts as its identifier, so it must be unique for each cache pool. You can freely choose the keys, but they should only contain letters (A-Z, a-z), numbers (0-9) and the _ and . symbols. Other common symbols (such as { } ( ) / \ @ :) are reserved by the PSR-6 standard for future uses.
+The key of a cache item is a plain string which acts as its identifier, so it must be unique for each cache pool. You can freely choose the keys, but they should only contain letters (A-Z, a-z), numbers (0-9) and the \_ and . symbols. Other common symbols (such as { } ( ) / \ @ :) are reserved by the PSR-6 standard for future uses.
 
 The value of a cache item can be any data represented by a type which is serializable by PHP, such as basic types (string, integer, float, boolean, null), arrays and objects.
 
@@ -5271,6 +5424,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // $cache pool object was created before
 $productsCount = $cache->get('stats.products_count', function (ItemInterface $item) {
@@ -5279,6 +5433,7 @@ $productsCount = $cache->get('stats.products_count', function (ItemInterface $it
 ```
 
 Example 2 (php):
+
 ```php
 $productsCount = $cache->get('stats.products_count', function (ItemInterface $item): int {
     $item->expiresAfter(3600); // cache for 1 hour
@@ -5289,12 +5444,14 @@ $productsCount = $cache->get('stats.products_count', function (ItemInterface $it
 ```
 
 Example 3 (php):
+
 ```php
 // $cache pool object was created before
 $productsCount = $cache->getItem('stats.products_count');
 ```
 
 Example 4 (javascript):
+
 ```javascript
 // storing a simple integer
 $productsCount->set(4711);
@@ -5315,6 +5472,7 @@ $cache->save($productsCount);
 **URL:** https://symfony.com/doc/7.4/components/cache/psr6_psr16_adapters.html
 
 **Contents:**
+
 - Adapters For Interoperability between PSR-6 and PSR-16 Cache
 - Using a PSR-16 Cache Object as a PSR-6 Cache
 - Using a PSR-6 Cache Object as a PSR-16 Cache
@@ -5336,6 +5494,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Psr\Cache\CacheItemPoolInterface;
 
@@ -5353,6 +5512,7 @@ class GitHubApiClient
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\Psr16Adapter;
 
@@ -5366,6 +5526,7 @@ $githubApiClient = new GitHubApiClient($psr6Cache);
 ```
 
 Example 3 (php):
+
 ```php
 use Psr\SimpleCache\CacheInterface;
 
@@ -5383,6 +5544,7 @@ class GitHubApiClient
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\Cache\Psr16Cache;
@@ -5404,6 +5566,7 @@ $githubApiClient = new GitHubApiClient($psr16Cache);
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/date.html
 
 **Contents:**
+
 - DateType Field
 - Basic Usage
   - Rendering a single HTML5 Text Box
@@ -5594,12 +5757,14 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 // ...
@@ -5610,6 +5775,7 @@ $builder->add('publishedAt', DateType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 $builder->add('publishedAt', DateType::class, [
     'widget' => 'choice',
@@ -5618,6 +5784,7 @@ $builder->add('publishedAt', DateType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 // ...
@@ -5635,6 +5802,7 @@ $builder->add('publishedAt', DateType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/collection.html
 
 **Contents:**
+
 - CollectionType Field
 - Basic Usage
 - Field Options
@@ -5712,7 +5880,7 @@ The keep_as_list option was introduced in Symfony 7.1.
 
 type: boolean default: true
 
-This option is useful when using the allow_add option. If true (and if allow_add is also true), a special "prototype" attribute will be available so that you can render a "template" example on your page of what a new element should look like. The name attribute given to this element is __name__. This allows you to add a "add another" button via JavaScript which reads the prototype, replaces __name__ with some unique name or number and render it inside your form. When submitted, it will be added to your underlying array due to the allow_add option.
+This option is useful when using the allow_add option. If true (and if allow_add is also true), a special "prototype" attribute will be available so that you can render a "template" example on your page of what a new element should look like. The name attribute given to this element is **name**. This allows you to add a "add another" button via JavaScript which reads the prototype, replaces **name** with some unique name or number and render it inside your form. When submitted, it will be added to your underlying array due to the allow_add option.
 
 The prototype field can be rendered via the prototype variable in the collection field:
 
@@ -5726,7 +5894,7 @@ type: mixed default: null
 
 Allows you to define specific data for the prototype. Each new row added will initially contain the data set by this option. By default, the data configured for all entries with the entry_options option will be used:
 
-type: string default: __name__
+type: string default: **name**
 
 If you have several collections in your form, or worse, nested collections you may want to change the placeholder so that unrelated placeholders are not replaced with the same value.
 
@@ -5855,12 +6023,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -5877,11 +6047,13 @@ $builder->add('emails', CollectionType::class, [
 ```
 
 Example 3 (json):
+
 ```json
 {{ form_row(form.emails) }}
 ```
 
 Example 4 (json):
+
 ```json
 {{ form_label(form.emails) }}
 {{ form_errors(form.emails) }}
@@ -5903,6 +6075,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/text.html
 
 **Contents:**
+
 - TextType Field
 - Inherited Options
   - attr
@@ -6047,12 +6220,14 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -6060,6 +6235,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -6070,6 +6246,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -6084,6 +6261,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/textarea.html
 
 **Contents:**
+
 - TextareaType Field
 - Inherited Options
   - attr
@@ -6228,12 +6406,14 @@ Online exam, become Symfony certified today
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -6241,6 +6421,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -6251,6 +6432,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -6265,6 +6447,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/email.html
 
 **Contents:**
+
 - EmailType Field
 - Overridden Options
   - invalid_message
@@ -6403,12 +6586,14 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -6416,6 +6601,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -6426,6 +6612,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -6440,6 +6627,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/integer.html
 
 **Contents:**
+
 - IntegerType Field
 - Field Options
   - grouping
@@ -6592,12 +6780,14 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -6605,6 +6795,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -6615,6 +6806,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -6629,6 +6821,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/money.html
 
 **Contents:**
+
 - MoneyType Field
 - Field Options
   - currency
@@ -6813,12 +7006,14 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 // ...
@@ -6829,6 +7024,7 @@ $builder->add('price', MoneyType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -6836,6 +7032,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -6852,6 +7049,7 @@ $builder->add('token', HiddenType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/number.html
 
 **Contents:**
+
 - NumberType Field
 - Field Options
   - grouping
@@ -7020,12 +7218,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -7033,6 +7233,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -7043,6 +7244,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -7057,6 +7259,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/password.html
 
 **Contents:**
+
 - PasswordType Field
 - Field Options
   - always_empty
@@ -7209,12 +7412,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('plainPassword', PasswordType::class, [
     'hash_property_path' => 'password',
@@ -7223,6 +7428,7 @@ $builder->add('plainPassword', PasswordType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 $builder->add('plainPassword', RepeatedType::class, [
     'type' => PasswordType::class,
@@ -7233,6 +7439,7 @@ $builder->add('plainPassword', RepeatedType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -7246,6 +7453,7 @@ $builder->add('body', TextareaType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/percent.html
 
 **Contents:**
+
 - PercentType Field
 - Field Options
   - rounding_mode
@@ -7414,12 +7622,14 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -7427,6 +7637,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -7437,6 +7648,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -7451,6 +7663,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/search.html
 
 **Contents:**
+
 - SearchType Field
 - Overridden Options
   - invalid_message
@@ -7583,12 +7796,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -7596,6 +7811,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -7604,6 +7820,7 @@ $builder->add('name', null, [
 ```
 
 Example 4 (php):
+
 ```php
 public function configureOptions(OptionsResolver $resolver): void
 {
@@ -7622,6 +7839,7 @@ public function configureOptions(OptionsResolver $resolver): void
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/url.html
 
 **Contents:**
+
 - UrlType Field
 - Field Options
   - default_protocol
@@ -7770,12 +7988,14 @@ Take the exam at home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -7783,6 +8003,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -7793,6 +8014,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -7807,6 +8029,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/range.html
 
 **Contents:**
+
 - RangeType Field
 - Basic Usage
 - Overridden Options
@@ -7931,12 +8154,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 // ...
@@ -7950,6 +8175,7 @@ $builder->add('name', RangeType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -7957,6 +8183,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -7973,6 +8200,7 @@ $builder->add('token', HiddenType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/tel.html
 
 **Contents:**
+
 - TelType Field
 - Overridden Options
   - invalid_message
@@ -8113,12 +8341,14 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -8126,6 +8356,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -8136,6 +8367,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -8150,6 +8382,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/color.html
 
 **Contents:**
+
 - ColorType Field
 - Field Options
   - html5
@@ -8294,12 +8527,14 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -8307,6 +8542,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -8317,6 +8553,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -8331,6 +8568,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/choice.html
 
 **Contents:**
+
 - ChoiceType Field (select drop-downs, radio buttons & checkboxes)
 - Example Usage
 - Advanced Example (with Objects!)
@@ -8729,12 +8967,14 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -8749,6 +8989,7 @@ $builder->add('isAttending', ChoiceType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use App\Entity\Category;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -8789,6 +9030,7 @@ $builder->add('category', ChoiceType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -8814,6 +9056,7 @@ $builder->add('stockStatus', ChoiceType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/enum.html
 
 **Contents:**
+
 - EnumType Field
 - Example Usage
 - Field Options
@@ -9104,12 +9347,14 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (swift):
+
 ```swift
 // src/Config/TextAlign.php
 namespace App\Config;
@@ -9123,6 +9368,7 @@ enum TextAlign: string
 ```
 
 Example 3 (php):
+
 ```php
 use App\Config\TextAlign;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -9132,6 +9378,7 @@ $builder->add('alignment', EnumType::class, ['class' => TextAlign::class]);
 ```
 
 Example 4 (php):
+
 ```php
 // src/Config/TextAlign.php
 namespace App\Config;
@@ -9167,6 +9414,7 @@ enum TextAlign: string implements TranslatableInterface
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/entity.html
 
 **Contents:**
+
 - EntityType Field
 - Basic Usage
   - Using a Custom Query for the Entities
@@ -9200,7 +9448,7 @@ type: string, callable or PropertyPath
 
 This is the property that should be used for displaying the entities as text in the HTML element:
 
-If left blank, the entity object will be cast to a string and so must have a __toString() method. You can also pass a callback function for more control:
+If left blank, the entity object will be cast to a string and so must have a \_\_toString() method. You can also pass a callback function for more control:
 
 The method is called for each entity in the list and passed to the function. For more details, see the main choice_label documentation.
 
@@ -9489,12 +9737,14 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (sql):
+
 ```sql
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -9514,6 +9764,7 @@ $builder->add('users', EntityType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use App\Entity\User;
 use Doctrine\ORM\EntityRepository;
@@ -9532,6 +9783,7 @@ $builder->add('users', EntityType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -9550,6 +9802,7 @@ $builder->add('users', EntityType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/country.html
 
 **Contents:**
+
 - CountryType Field
 - Field Options
   - alpha3
@@ -9760,12 +10013,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -9783,6 +10038,7 @@ $builder->add('language', ChoiceType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 public function configureOptions(OptionsResolver $resolver): void
 {
@@ -9795,6 +10051,7 @@ public function configureOptions(OptionsResolver $resolver): void
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $resolver->setDefaults([
     'error_mapping' => [
@@ -9810,6 +10067,7 @@ $resolver->setDefaults([
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/language.html
 
 **Contents:**
+
 - LanguageType Field
 - Field Options
   - alpha3
@@ -10026,12 +10284,14 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -10049,6 +10309,7 @@ $builder->add('language', ChoiceType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 public function configureOptions(OptionsResolver $resolver): void
 {
@@ -10061,6 +10322,7 @@ public function configureOptions(OptionsResolver $resolver): void
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $resolver->setDefaults([
     'error_mapping' => [
@@ -10076,6 +10338,7 @@ $resolver->setDefaults([
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/locale.html
 
 **Contents:**
+
 - LocaleType Field
 - Field Options
   - choice_translation_locale
@@ -10089,7 +10352,7 @@ $resolver->setDefaults([
 
 The LocaleType is a subset of the ChoiceType that allows the user to select from a large list of locales (language+country). As an added bonus, the locale names are displayed in the language of the user.
 
-The "value" for each locale is either the two letter ISO 639-1 language code (e.g. fr), or the language code followed by an underscore (_), then the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France).
+The "value" for each locale is either the two letter ISO 639-1 language code (e.g. fr), or the language code followed by an underscore (\_), then the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France).
 
 The locale of your user is guessed using getDefault()
 
@@ -10282,12 +10545,14 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -10305,6 +10570,7 @@ $builder->add('language', ChoiceType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 public function configureOptions(OptionsResolver $resolver): void
 {
@@ -10317,6 +10583,7 @@ public function configureOptions(OptionsResolver $resolver): void
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $resolver->setDefaults([
     'error_mapping' => [
@@ -10332,6 +10599,7 @@ $resolver->setDefaults([
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/timezone.html
 
 **Contents:**
+
 - TimezoneType Field
 - Field Options
   - input
@@ -10542,12 +10810,14 @@ Become certified from home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -10565,6 +10835,7 @@ $builder->add('language', ChoiceType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -10578,6 +10849,7 @@ $builder->add('states', ChoiceType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -10594,6 +10866,7 @@ $builder->add('states', ChoiceType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/currency.html
 
 **Contents:**
+
 - CurrencyType Field
 - Field Options
   - choice_translation_locale
@@ -10808,12 +11081,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 
@@ -10823,6 +11098,7 @@ $builder->add('currency', CurrencyType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 
@@ -10832,6 +11108,7 @@ $builder->add('currency', CurrencyType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 // ...
@@ -10855,6 +11132,7 @@ $builder->add('language', ChoiceType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/dateinterval.html
 
 **Contents:**
+
 - DateIntervalType Field
 - Basic Usage
 - Field Options
@@ -11025,12 +11303,14 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('remindEvery', DateIntervalType::class, [
     'widget'      => 'integer', // render a text field for each part
@@ -11045,6 +11325,7 @@ $builder->add('remindEvery', DateIntervalType::class, [
 ```
 
 Example 3 (sql):
+
 ```sql
 // values displayed to users range from 0 to 30 (both inclusive)
 'days' => range(1, 31),
@@ -11054,6 +11335,7 @@ Example 3 (sql):
 ```
 
 Example 4 (php):
+
 ```php
 $builder->add('remindEvery', DateIntervalType::class, [
     'placeholder' => '',
@@ -11067,6 +11349,7 @@ $builder->add('remindEvery', DateIntervalType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/datetime.html
 
 **Contents:**
+
 - DateTimeType Field
 - Field Options
   - date_format
@@ -11255,12 +11538,14 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -11270,11 +11555,13 @@ $builder->add('startDateTime', DateTimeType::class, [
 ```
 
 Example 3 (javascript):
+
 ```javascript
 'days' => range(1,31)
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 
@@ -11290,6 +11577,7 @@ $builder->add('startDateTime', DateTimeType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/time.html
 
 **Contents:**
+
 - TimeType Field
 - Basic Usage
 - Field Options
@@ -11476,12 +11764,14 @@ Take the exam at home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 // ...
@@ -11493,6 +11783,7 @@ $builder->add('startTime', TimeType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 // ...
@@ -11504,6 +11795,7 @@ $builder->add('startTime', TimeType::class, [
 ```
 
 Example 4 (sql):
+
 ```sql
 $builder->add('startTime', TimeType::class, [
     'placeholder' => 'Select a value',
@@ -11517,6 +11809,7 @@ $builder->add('startTime', TimeType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/birthday.html
 
 **Contents:**
+
 - BirthdayType Field
 - Overridden Options
   - invalid_message
@@ -11659,17 +11952,20 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (javascript):
+
 ```javascript
 'days' => range(1,31)
 ```
 
 Example 3 (sql):
+
 ```sql
 $builder->add('birthdate', BirthdayType::class, [
     'placeholder' => 'Select a value',
@@ -11677,6 +11973,7 @@ $builder->add('birthdate', BirthdayType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 $builder->add('birthdate', BirthdayType::class, [
     'placeholder' => [
@@ -11692,6 +11989,7 @@ $builder->add('birthdate', BirthdayType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/week.html
 
 **Contents:**
+
 - WeekType Field
 - Field Options
   - placeholder
@@ -11822,12 +12120,14 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\WeekType;
 
@@ -11837,6 +12137,7 @@ $builder->add('startWeek', WeekType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\WeekType;
 
@@ -11849,6 +12150,7 @@ $builder->add('startDateTime', WeekType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -11863,6 +12165,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/checkbox.html
 
 **Contents:**
+
 - CheckboxType Field
 - Example Usage
 - Field Options
@@ -12003,12 +12306,14 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 // ...
@@ -12020,6 +12325,7 @@ $builder->add('public', CheckboxType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -12027,6 +12333,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -12043,6 +12350,7 @@ $builder->add('token', HiddenType::class, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/file.html
 
 **Contents:**
+
 - FileType Field
 - Basic Usage
 - Field Options
@@ -12185,12 +12493,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 // ...
@@ -12199,6 +12509,7 @@ $builder->add('attachment', FileType::class);
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -12220,6 +12531,7 @@ public function upload(): Response
 ```
 
 Example 4 (php):
+
 ```php
 // use the original file name
 $file->move($directory, $file->getClientOriginalName());
@@ -12244,6 +12556,7 @@ $file->move($directory, rand(1, 99999).'.'.$extension);
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/radio.html
 
 **Contents:**
+
 - RadioType Field
 - Overridden Options
   - invalid_message
@@ -12380,12 +12693,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -12393,6 +12708,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -12403,6 +12719,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (php):
+
 ```php
 public function configureOptions(OptionsResolver $resolver): void
 {
@@ -12421,6 +12738,7 @@ public function configureOptions(OptionsResolver $resolver): void
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/uuid.html
 
 **Contents:**
+
 - UuidType Field
 - Overridden Options
   - compound
@@ -12563,12 +12881,14 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -12576,6 +12896,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -12586,6 +12907,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -12600,6 +12922,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/ulid.html
 
 **Contents:**
+
 - UlidType Field
 - Overridden Options
   - compound
@@ -12742,12 +13065,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -12755,6 +13080,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -12765,6 +13091,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -12779,6 +13106,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/repeated.html
 
 **Contents:**
+
 - RepeatedType Field
 - Example Usage
   - Rendering
@@ -12901,12 +13229,14 @@ Become certified from home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -12923,11 +13253,13 @@ $builder->add('password', RepeatedType::class, [
 ```
 
 Example 3 (json):
+
 ```json
 {{ form_row(form.password) }}
 ```
 
 Example 4 (json):
+
 ```json
 {# .first and .second may vary in your use - see the note below #}
 {{ form_row(form.password.first) }}
@@ -12941,6 +13273,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/hidden.html
 
 **Contents:**
+
 - HiddenType Field
 - Overridden Options
   - compound
@@ -13031,12 +13364,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 $builder->add('body', TextareaType::class, [
     'attr' => ['class' => 'tinymce'],
@@ -13044,6 +13379,7 @@ $builder->add('body', TextareaType::class, [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 // ...
@@ -13054,6 +13390,7 @@ $builder->add('token', HiddenType::class, [
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $builder->add('name', null, [
     'required'   => false,
@@ -13068,6 +13405,7 @@ $builder->add('name', null, [
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/button.html
 
 **Contents:**
+
 - ButtonType Field
 - Inherited Options
   - attr
@@ -13138,12 +13476,14 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 // ...
@@ -13154,11 +13494,13 @@ $builder->add('save', ButtonType::class, [
 ```
 
 Example 3 (json):
+
 ```json
 {{ form_widget(form.save, { 'label': 'Click me' }) }}
 ```
 
 Example 4 (javascript):
+
 ```javascript
 <?= $view['form']->widget($form['save'], ['label' => 'Click me']) ?>
 ```
@@ -13170,6 +13512,7 @@ Example 4 (javascript):
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/reset.html
 
 **Contents:**
+
 - ResetType Field
 - Inherited Options
   - attr
@@ -13233,12 +13576,14 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\ResetType;
 // ...
@@ -13249,11 +13594,13 @@ $builder->add('save', ResetType::class, [
 ```
 
 Example 3 (json):
+
 ```json
 {{ form_widget(form.save, { 'label': 'Click me' }) }}
 ```
 
 Example 4 (javascript):
+
 ```javascript
 <?= $view['form']->widget($form['save'], ['label' => 'Click me']) ?>
 ```
@@ -13265,6 +13612,7 @@ Example 4 (javascript):
 **URL:** https://symfony.com/doc/7.4/reference/forms/types/submit.html
 
 **Contents:**
+
 - SubmitType Field
 - Options
   - validate
@@ -13351,12 +13699,14 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # replace 'FooType' by the class name of your form type
 $ php bin/console debug:form FooType
 ```
 
 Example 2 (php):
+
 ```php
 if ($form->get('save')->isClicked()) {
     // ...
@@ -13364,6 +13714,7 @@ if ($form->get('save')->isClicked()) {
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 // ...
@@ -13374,6 +13725,7 @@ $builder->add('save', SubmitType::class, [
 ```
 
 Example 4 (json):
+
 ```json
 {{ form_widget(form.save, { 'label': 'Click me' }) }}
 ```

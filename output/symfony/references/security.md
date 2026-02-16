@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/security/passwords.html
 
 **Contents:**
+
 - Password Hashing and Verification
 - Configuring a Password Hasher
 - Hashing the Password
@@ -127,27 +128,30 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/password-hasher
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
+  # ...
 
-    password_hashers:
-        # auto hasher with default options for the User class (and children)
-        App\Entity\User: 'auto'
+  password_hashers:
+    # auto hasher with default options for the User class (and children)
+    App\Entity\User: "auto"
 
-        # auto hasher with custom options for all PasswordAuthenticatedUserInterface instances
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-            algorithm: 'auto'
-            cost:      15
+    # auto hasher with custom options for all PasswordAuthenticatedUserInterface instances
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+      algorithm: "auto"
+      cost: 15
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -178,6 +182,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/security.php
 use App\Entity\User;
@@ -205,6 +210,7 @@ return static function (SecurityConfig $security): void {
 **URL:** https://symfony.com/doc/7.4/security/csrf.html
 
 **Contents:**
+
 - How to Implement CSRF Protection
 - Installation
 - CSRF Protection in Symfony Forms
@@ -241,7 +247,7 @@ According to OWASP best practices, CSRF protection is only required for state-ch
 
 If one of your forms uses GET (for example, a read-only search form), you can configure the form to disable CSRF protection.
 
-By default Symfony adds the CSRF token in a hidden field called _token, but this can be customized (1) globally for all forms and (2) on a form-by-form basis. Globally, you can configure it under the framework.form option:
+By default Symfony adds the CSRF token in a hidden field called \_token, but this can be customized (1) globally for all forms and (2) on a form-by-form basis. Globally, you can configure it under the framework.form option:
 
 On a form-by-form basis, you can configure the CSRF protection in the setDefaults() method of each form:
 
@@ -299,7 +305,7 @@ These additional checks are part of the defense-in-depth strategy provided by st
 
 On the server side, CSRF token validation compares the values in the cookie and the header. This "double-submit" protection relies on the browser's same-origin policy and is further hardened by:
 
-By default, the Symfony JavaScript snippet expects the hidden CSRF field to be named _csrf_token or to include the data-controller="csrf-protection" attribute. You can adapt this logic to your needs as long as the same protocol is followed.
+By default, the Symfony JavaScript snippet expects the hidden CSRF field to be named \_csrf_token or to include the data-controller="csrf-protection" attribute. You can adapt this logic to your needs as long as the same protocol is followed.
 
 To prevent validation from being downgraded, an extra behavioral check is performed: if (and only if) a session already exists, successful "double-submit" is remembered and becomes required for future requests. This ensures that once the optional cookie/header validation has been proven effective, it remains enforced for that session.
 
@@ -312,35 +318,43 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (html):
+
 ```html
 <html>
-    <body>
-        <form action="https://example.com/settings/update-email" method="POST">
-            <input type="hidden" name="email" value="malicious-actor-address@some-domain.com"/>
-        </form>
-        <script>
-            document.forms[0].submit();
-        </script>
+  <body>
+    <form action="https://example.com/settings/update-email" method="POST">
+      <input
+        type="hidden"
+        name="email"
+        value="malicious-actor-address@some-domain.com"
+      />
+    </form>
+    <script>
+      document.forms[0].submit();
+    </script>
 
-        <!-- some content here to distract the user -->
-    </body>
+    <!-- some content here to distract the user -->
+  </body>
 </html>
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require symfony/security-csrf
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    # ...
-    csrf_protection: ~
+  # ...
+  csrf_protection: ~
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -365,6 +379,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/security/ldap.html
 
 **Contents:**
+
 - Authenticating against an LDAP server
 - Installation
 - Ldap Configuration Reference
@@ -481,29 +496,32 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/ldap
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    Symfony\Component\Ldap\Ldap:
-        arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
-        tags:
-            - ldap
-    Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
-        arguments:
-            -   host: my-server
-                port: 389
-                encryption: tls
-                options:
-                    protocol_version: 3
-                    referrals: false
+  Symfony\Component\Ldap\Ldap:
+    arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+    tags:
+      - ldap
+  Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
+    arguments:
+      - host: my-server
+        port: 389
+        encryption: tls
+        options:
+          protocol_version: 3
+          referrals: false
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -532,6 +550,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 use Symfony\Component\Ldap\Adapter\ExtLdap\Adapter;
@@ -561,6 +580,7 @@ $container
 **URL:** https://symfony.com/doc/7.4/introduction/http_fundamentals.html
 
 **Contents:**
+
 - Symfony and HTTP Fundamentals
 - Requests and Responses in HTTP
   - Step 1: The Client Sends a Request
@@ -618,7 +638,7 @@ To learn more about the HTTP specification, read the original HTTP 1.1 RFC or th
 
 So how do you interact with the "request" and create a "response" when using PHP? In reality, PHP abstracts you a bit from the whole process:
 
-As strange as it sounds, this small application is in fact taking information from the HTTP request and using it to create an HTTP response. Instead of parsing the raw HTTP request message, PHP prepares superglobal variables (such as $_SERVER and $_GET) that contain all the information from the request. Similarly, instead of returning the HTTP-formatted text response, you can use the PHP header function to create response headers and print out the actual content that will be the content portion of the response message. PHP will create a true HTTP response and return it to the client:
+As strange as it sounds, this small application is in fact taking information from the HTTP request and using it to create an HTTP response. Instead of parsing the raw HTTP request message, PHP prepares superglobal variables (such as $\_SERVER and $\_GET) that contain all the information from the request. Similarly, instead of returning the HTTP-formatted text response, you can use the PHP header function to create response headers and print out the actual content that will be the content portion of the response message. PHP will create a true HTTP response and return it to the client:
 
 Symfony provides an alternative to the raw PHP approach via two classes that allow you to interact with the HTTP request and response in an easier way.
 
@@ -667,6 +687,7 @@ Online exam, become Sylius certified today
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 GET / HTTP/1.1
 Host: xkcd.com
@@ -675,23 +696,24 @@ User-Agent: Mozilla/5.0 (Macintosh)
 ```
 
 Example 2 (unknown):
+
 ```unknown
 DELETE /blog/15 HTTP/1.1
 ```
 
 Example 3 (html):
+
 ```html
-HTTP/1.1 200 OK
-Date: Sat, 02 Apr 2011 21:05:05 GMT
-Server: lighttpd/1.4.19
+HTTP/1.1 200 OK Date: Sat, 02 Apr 2011 21:05:05 GMT Server: lighttpd/1.4.19
 Content-Type: text/html
 
 <html>
-    <!-- ... HTML for the xkcd comic -->
+  <!-- ... HTML for the xkcd comic -->
 </html>
 ```
 
 Example 4 (bash):
+
 ```bash
 $uri = $_SERVER['REQUEST_URI'];
 $foo = $_GET['foo'];
@@ -708,6 +730,7 @@ echo 'The value of the "foo" parameter is: '.$foo;
 **URL:** https://symfony.com/doc/7.4/introduction/from_flat_php_to_symfony.html
 
 **Contents:**
+
 - Symfony versus Flat PHP
 - A Basic Blog in Flat PHP
   - Isolating the Presentation
@@ -834,6 +857,7 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (php):
+
 ```php
 <?php
 // index.php
@@ -867,6 +891,7 @@ $connection = null;
 ```
 
 Example 2 (sql):
+
 ```sql
 // index.php
 $connection = new PDO("mysql:host=localhost;dbname=blog_db", 'myuser', 'mypassword');
@@ -885,29 +910,29 @@ require 'templates/list.php';
 ```
 
 Example 3 (html):
+
 ```html
 <!-- templates/list.php -->
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>List of Posts</title>
-    </head>
-    <body>
-        <h1>List of Posts</h1>
-        <ul>
-            <?php foreach ($posts as $post): ?>
-            <li>
-                <a href="/show.php?id=<?= $post['id'] ?>">
-                    <?= $post['title'] ?>
-                </a>
-            </li>
-            <?php endforeach ?>
-        </ul>
-    </body>
+  <head>
+    <title>List of Posts</title>
+  </head>
+  <body>
+    <h1>List of Posts</h1>
+    <ul>
+      <?php foreach ($posts as $post): ?>
+      <li>
+        <a href="/show.php?id=<?= $post['id'] ?>"> <?= $post['title'] ?> </a>
+      </li>
+      <?php endforeach ?>
+    </ul>
+  </body>
 </html>
 ```
 
 Example 4 (php):
+
 ```php
 // model.php
 function open_database_connection()
@@ -945,6 +970,7 @@ function get_all_posts()
 **URL:** https://symfony.com/doc/7.4/create_framework/introduction.html
 
 **Contents:**
+
 - Introduction
 - Why would you Like to Create your Own Framework?
 - Before You Start
@@ -989,12 +1015,14 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ mkdir framework
 $ cd framework
 ```
 
 Example 2 (c):
+
 ```c
 // framework/index.php
 $name = $_GET['name'];
@@ -1003,6 +1031,7 @@ printf('Hello %s', $name);
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ symfony server:start
 ```
@@ -1014,6 +1043,7 @@ $ symfony server:start
 **URL:** https://symfony.com/doc/7.4/reference/constraints/PasswordStrength.html
 
 **Contents:**
+
 - PasswordStrength
 - Basic Usage
 - Available Options
@@ -1052,6 +1082,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -1066,15 +1097,17 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        rawPassword:
-            - PasswordStrength
+properties:
+rawPassword: - PasswordStrength
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1091,6 +1124,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -1114,6 +1148,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/security/entry_point.html
 
 **Contents:**
+
 - The Entry Point: Helping Users Start Authentication
 - Multiple Authenticators with Separate Entry Points
 
@@ -1136,23 +1171,24 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
+  # ...
+  firewalls:
+    main:
+      # allow authentication using a form or a custom authenticator
+      form_login: ~
+      custom_authenticators:
+        - App\Security\SocialConnectAuthenticator
 
-    # ...
-    firewalls:
-        main:
-            # allow authentication using a form or a custom authenticator
-            form_login: ~
-            custom_authenticators:
-                - App\Security\SocialConnectAuthenticator
-
-            # configure the form authentication as the entry point for unauthenticated users
-            entry_point: form_login
+      # configure the form authentication as the entry point for unauthenticated users
+      entry_point: form_login
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1181,6 +1217,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use App\Security\SocialConnectAuthenticator;
@@ -1203,23 +1240,24 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
-    firewalls:
-        api:
-            pattern: ^/api/
-            custom_authenticators:
-                - App\Security\ApiTokenAuthenticator
-        main:
-            lazy: true
-            form_login: ~
+  # ...
+  firewalls:
+    api:
+      pattern: ^/api/
+      custom_authenticators:
+        - App\Security\ApiTokenAuthenticator
+    main:
+      lazy: true
+      form_login: ~
 
-    access_control:
-        - { path: '^/login', roles: PUBLIC_ACCESS }
-        - { path: '^/api', roles: ROLE_API_USER }
-        - { path: '^/', roles: ROLE_USER }
+  access_control:
+    - { path: "^/login", roles: PUBLIC_ACCESS }
+    - { path: "^/api", roles: ROLE_API_USER }
+    - { path: "^/", roles: ROLE_USER }
 ```
 
 ---
@@ -1229,6 +1267,7 @@ security:
 **URL:** https://symfony.com/doc/7.4/components/ldap.html
 
 **Contents:**
+
 - The Ldap Component
 - Installation
 - Usage
@@ -1278,11 +1317,13 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/ldap
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Ldap\Ldap;
 
@@ -1293,6 +1334,7 @@ $ldap = Ldap::create('ext_ldap', [
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Ldap\Ldap;
 
@@ -1300,6 +1342,7 @@ $ldap = Ldap::create('ext_ldap', ['connection_string' => 'ldaps://my-server:636'
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Ldap\Ldap;
 // ...

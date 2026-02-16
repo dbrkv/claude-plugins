@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/controller/service.html
 
 **Contents:**
+
 - How to Define Controllers as Services
 - Using the #[Route] Attribute
 - Using the #[AsController] Attribute
@@ -40,7 +41,7 @@ Registering your controller as a service is the first step, but you also need to
 
 Use the service_id::method_name syntax to refer to the controller method. If the service id is the fully-qualified class name (FQCN) of your controller, as Symfony recommends, then the syntax is the same as if the controller was not a service like: App\Controller\HelloController::index:
 
-Controllers can also define a single action using the __invoke() method, which is a common practice when following the ADR pattern (Action-Domain-Responder):
+Controllers can also define a single action using the \_\_invoke() method, which is a common practice when following the ADR pattern (Action-Domain-Responder):
 
 When using a controller defined as a service, you can still extend the AbstractController base controller and use its shortcuts. But, you don't need to! You can choose to extend nothing, and use dependency injection to access different services.
 
@@ -71,6 +72,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/HelloController.php
 namespace App\Controller;
@@ -91,6 +93,7 @@ class HelloController
 ```
 
 Example 2 (php):
+
 ```php
 # config/services.yaml
 
@@ -102,33 +105,31 @@ App\Controller\:
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/services.yaml
 
 # this extended configuration is only required when not using autowiring/autoconfiguration,
+
 # which is uncommon and not recommended
 
 abstract_controller.locator:
-    class: Symfony\Component\DependencyInjection\ServiceLocator
-    arguments:
-        -
-            router: '@router'
-            request_stack: '@request_stack'
-            http_kernel: '@http_kernel'
-            session: '@session'
-            parameter_bag: '@parameter_bag'
-            # you can add more services here as you need them (e.g. the `serializer`
-            # service) and have a look at the AbstractController class to see
-            # which services are defined in the locator
+class: Symfony\Component\DependencyInjection\ServiceLocator
+arguments: -
+router: '@router'
+request_stack: '@request_stack'
+http_kernel: '@http_kernel'
+session: '@session'
+parameter_bag: '@parameter_bag' # you can add more services here as you need them (e.g. the `serializer` # service) and have a look at the AbstractController class to see # which services are defined in the locator
 
 App\Controller\:
-    resource: '../src/Controller/'
-    tags: ['controller.service_arguments']
-    calls:
-        - [setContainer, ['@abstract_controller.locator']]
+resource: '../src/Controller/'
+tags: ['controller.service_arguments']
+calls: - [setContainer, ['@abstract_controller.locator']]
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/HelloController.php
 namespace App\Controller;
@@ -153,6 +154,7 @@ class HelloController
 **URL:** https://symfony.com/doc/7.4/configuration/front_controllers_and_kernel.html
 
 **Contents:**
+
 - Understanding how the Front Controller, Kernel and Environments Work together
 - The Front Controller
 - The Kernel Class
@@ -210,7 +212,7 @@ Configuration environments allow you to execute the same code using different co
 
 More technically, these names are nothing more than strings passed from the front controller to the Kernel's constructor. This name can then be used in the configureContainer() method to decide which configuration files to load.
 
-Symfony's default Kernel class implements this method by loading first the config files found on config/packages/* and then, the files found on config/packages/ENVIRONMENT_NAME/. You are free to implement this method differently if you need a more sophisticated way of loading your configuration.
+Symfony's default Kernel class implements this method by loading first the config files found on config/packages/\* and then, the files found on config/packages/ENVIRONMENT_NAME/. You are free to implement this method differently if you need a more sophisticated way of loading your configuration.
 
 Symfony takes advantage of caching in many ways: the application configuration, routing configuration, Twig templates and more are cached to PHP objects stored in files on the filesystem.
 
@@ -227,31 +229,39 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 http://localhost/index.php/some/path/...
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # .env
+
 # set it to 1 to enable the debug mode
+
 APP_DEBUG=0
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # Use the debug mode defined in the .env file
+
 $ php bin/console command_name
 
 # Ignore the .env file and enable the debug mode for this command
+
 $ APP_DEBUG=1 php bin/console command_name
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/twig.yaml
 twig:
-    debug: '%kernel.debug%'
+  debug: "%kernel.debug%"
 ```
 
 ---
@@ -261,6 +271,7 @@ twig:
 **URL:** https://symfony.com/doc/7.4/frontend/encore/installation.html
 
 **Contents:**
+
 - Installing Encore
 - Installing Encore in Symfony Applications
 - Installing Encore in non Symfony Applications
@@ -304,96 +315,99 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/webpack-encore-bundle
 $ npm install
 ```
 
 Example 2 (python):
+
 ```python
 $ npm install @symfony/webpack-encore --save-dev
 ```
 
 Example 3 (javascript):
+
 ```javascript
-const Encore = require('@symfony/webpack-encore');
+const Encore = require("@symfony/webpack-encore");
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
-    Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+  Encore.configureRuntimeEnvironment(process.env.NODE_ENV || "dev");
 }
 
 Encore
-    // directory where compiled assets will be stored
-    .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
-    .setPublicPath('/build')
-    // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
+  // directory where compiled assets will be stored
+  .setOutputPath("public/build/")
+  // public path used by the web server to access the output path
+  .setPublicPath("/build")
+  // only needed for CDN's or sub-directory deploy
+  //.setManifestKeyPrefix('build/')
 
-    /*
-     * ENTRY CONFIG
-     *
-     * Each entry will result in one JavaScript file (e.g. app.js)
-     * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
-     */
-    .addEntry('app', './assets/app.js')
+  /*
+   * ENTRY CONFIG
+   *
+   * Each entry will result in one JavaScript file (e.g. app.js)
+   * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
+   */
+  .addEntry("app", "./assets/app.js")
 
-    // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
-    .enableStimulusBridge('./assets/controllers.json')
+  // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
+  .enableStimulusBridge("./assets/controllers.json")
 
-    // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
-    .splitEntryChunks()
+  // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
+  .splitEntryChunks()
 
-    // will require an extra script tag for runtime.js
-    // but, you probably want this, unless you're building a single-page app
-    .enableSingleRuntimeChunk()
+  // will require an extra script tag for runtime.js
+  // but, you probably want this, unless you're building a single-page app
+  .enableSingleRuntimeChunk()
 
-    /*
-     * FEATURE CONFIG
-     *
-     * Enable & configure other features below. For a full
-     * list of features, see:
-     * https://symfony.com/doc/current/frontend.html#adding-more-features
-     */
-    .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
-    .enableSourceMaps(!Encore.isProduction())
-    // enables hashed filenames (e.g. app.abc123.css)
-    .enableVersioning(Encore.isProduction())
+  /*
+   * FEATURE CONFIG
+   *
+   * Enable & configure other features below. For a full
+   * list of features, see:
+   * https://symfony.com/doc/current/frontend.html#adding-more-features
+   */
+  .cleanupOutputBeforeBuild()
+  .enableBuildNotifications()
+  .enableSourceMaps(!Encore.isProduction())
+  // enables hashed filenames (e.g. app.abc123.css)
+  .enableVersioning(Encore.isProduction())
 
-    .configureBabel((config) => {
-        config.plugins.push('@babel/plugin-transform-class-properties');
-    })
+  .configureBabel((config) => {
+    config.plugins.push("@babel/plugin-transform-class-properties");
+  })
 
-    // enables @babel/preset-env polyfills
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = 3;
-    })
+  // enables @babel/preset-env polyfills
+  .configureBabelPresetEnv((config) => {
+    config.useBuiltIns = "usage";
+    config.corejs = 3;
+  });
 
-    // enables Sass/SCSS support
-    //.enableSassLoader()
+// enables Sass/SCSS support
+//.enableSassLoader()
 
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
+// uncomment if you use TypeScript
+//.enableTypeScriptLoader()
 
-    // uncomment if you use React
-    //.enableReactPreset()
+// uncomment if you use React
+//.enableReactPreset()
 
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
+// uncomment to get integrity="..." attributes on your script & link tags
+// requires WebpackEncoreBundle 1.4 or higher
+//.enableIntegrityHashes(Encore.isProduction())
 
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
-;
+// uncomment if you're having problems with a jQuery plugin
+//.autoProvidejQuery()
 
 module.exports = Encore.getWebpackConfig();
 ```
 
 Example 4 (swift):
+
 ```swift
 // assets/app.js
 /*

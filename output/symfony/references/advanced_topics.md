@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4/console.html
 
 **Contents:**
+
 - Console Commands
 - Running Commands
   - APP_ENV & APP_DEBUG
@@ -60,13 +61,13 @@ Additionally, you can extend the Command class to leverage advanced features lik
 
 After configuring and registering the command, you can run it in the terminal:
 
-As you might expect, this command will do nothing as you didn't write any logic yet. Add your own logic inside the __invoke() method.
+As you might expect, this command will do nothing as you didn't write any logic yet. Add your own logic inside the \_\_invoke() method.
 
 You can define alternative names (aliases) for a command directly in its name using a pipe (|) separator. The first name in the list becomes the actual command name; the others are aliases that can also be used to run the command:
 
 The ability to define aliases through the command name was introduced in Symfony 7.4.
 
-The __invoke() method has access to the output stream to write messages to the console:
+The \_\_invoke() method has access to the output stream to write messages to the console:
 
 Now, try executing the command:
 
@@ -129,34 +130,38 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 $ php bin/console list
 ...
-
 Available commands:
   about             Display information about the current project
   completion        Dump the shell completion script
   help              Display help for a command
   list              List commands
- assets
+  assets
   assets:install    Install bundle's web assets under a public directory
- cache
+  cache
   cache:clear       Clear the cache
 ...
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php bin/console assets:install --help
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # clears the cache for the prod environment
+
 $ APP_ENV=prod php bin/console cache:clear
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ php vendor/bin/phpstan completion --help
 $ composer completion --help
@@ -169,6 +174,7 @@ $ composer completion --help
 **URL:** https://symfony.com/doc/7.4/validation.html
 
 **Contents:**
+
 - Validation
 - Installation
 - The Basics of Validation
@@ -279,11 +285,13 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/validator
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -295,6 +303,7 @@ class Author
 ```
 
 Example 3 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -310,12 +319,13 @@ class Author
 ```
 
 Example 4 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        name:
-            - NotBlank: ~
+properties:
+name: - NotBlank: ~
 ```
 
 ---
@@ -325,6 +335,7 @@ App\Entity\Author:
 **URL:** https://symfony.com/doc/7.4/notifier.html
 
 **Contents:**
+
 - Creating and Sending Notifications
 - Installation
 - Channels
@@ -346,7 +357,7 @@ The Desktop channel was introduced in Symfony 7.2.
 
 The SMS channel uses Texter classes to send SMS messages to mobile phones. This feature requires subscribing to a third-party service that sends SMS messages. Symfony provides integration with a couple popular SMS services:
 
-If any of the DSN values contains any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) * + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
+If any of the DSN values contains any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) \* + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
 
 Use Symfony configuration secrets to securely store your API tokens.
 
@@ -366,7 +377,7 @@ The TexterInterface class allows you to send SMS messages:
 
 The send() method returns a variable of type SentMessage which provides information such as the message ID and the original message contents.
 
-If any of the DSN values contains any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) * + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
+If any of the DSN values contains any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) \* + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
 
 The chat channel is used to send chat messages to users by using Chatter classes. Symfony provides integration with these chat services:
 
@@ -392,7 +403,7 @@ The email channel uses the Symfony Mailer to send notifications using the specia
 
 After this, configure the mailer. You can also set the default "from" email address that should be used to send the notification emails:
 
-If any of the DSN values contains any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) * + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
+If any of the DSN values contains any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) \* + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
 
 The push channel is used to send notifications to users by using Texter classes. Symfony provides integration with these push services:
 
@@ -467,26 +478,31 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/notifier
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # .env
+
 TWILIO_DSN=twilio://SID:TOKEN@default?from=FROM
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/notifier.yaml
 framework:
-    notifier:
-        texter_transports:
-            twilio: '%env(TWILIO_DSN)%'
+  notifier:
+    texter_transports:
+      twilio: "%env(TWILIO_DSN)%"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/notifier.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -515,6 +531,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints.html
 
 **Contents:**
+
 - Validation Constraints Reference
 - Supported Constraints
   - Basic Constraints
@@ -543,6 +560,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **URL:** https://symfony.com/doc/7.4/validation/raw_values.html
 
 **Contents:**
+
 - How to Validate Raw Values (Scalar Values and Arrays)
 
 Usually you will be validating entire objects. But sometimes, you want to validate a simple value - like to verify that a string is a valid email address. From inside a controller, it looks like this:
@@ -562,6 +580,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\Validator\Constraints as Assert;
@@ -594,6 +613,7 @@ public function addEmail(string $email, ValidatorInterface $validator): void
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
@@ -659,6 +679,7 @@ $violations = $validator->validate($input, $constraint, $groups);
 **URL:** https://symfony.com/doc/7.4/logging/monolog_console.html
 
 **Contents:**
+
 - How to Configure Monolog to Display Console Messages
 - Limiting Output to Interactive Mode
 
@@ -693,6 +714,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -711,6 +733,7 @@ public function __invoke(OutputInterface $output): int
 ```
 
 Example 2 (php):
+
 ```php
 // src/Command/MyCommand.php
 namespace App\Command;
@@ -738,22 +761,24 @@ class MyCommand
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/dev/monolog.yaml
 monolog:
-    handlers:
-        # ...
-        console:
-            type:   console
-            process_psr_3_messages: false
-            channels: ['!event', '!doctrine', '!console']
+  handlers:
+    # ...
+    console:
+      type: console
+      process_psr_3_messages: false
+      channels: ["!event", "!doctrine", "!console"]
 
-            # optionally configure the mapping between verbosity levels and log levels
-            # verbosity_levels:
-            #     VERBOSITY_NORMAL: NOTICE
+      # optionally configure the mapping between verbosity levels and log levels
+      # verbosity_levels:
+      #     VERBOSITY_NORMAL: NOTICE
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/dev/monolog.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -784,6 +809,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/components/console.html
 
 **Contents:**
+
 - The Console Component
 - Installation
 - Creating a Console Application
@@ -816,11 +842,13 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/console
 ```
 
 Example 2 (php):
+
 ```php
 #!/usr/bin/env php
 <?php
@@ -838,12 +866,14 @@ $application->run();
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 $application->addCommand(new GenerateAdminCommand());
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 $application->register('generate-admin')
@@ -862,6 +892,7 @@ $application->register('generate-admin')
 **URL:** https://symfony.com/doc/7.4/console/input.html
 
 **Contents:**
+
 - Console Input (Arguments & Options)
 - Using Command Arguments
   - Using Arguments in Invokable Commands
@@ -877,7 +908,7 @@ The most interesting part of the commands are the arguments and options that you
 
 Arguments are the strings - separated by spaces - that come after the command name itself. They are ordered, and can be optional or required.
 
-In invokable commands, use the Argument attribute to define arguments directly in the __invoke() method parameters:
+In invokable commands, use the Argument attribute to define arguments directly in the \_\_invoke() method parameters:
 
 The Argument attribute accepts the following parameters:
 
@@ -903,7 +934,7 @@ You can combine IS_ARRAY with REQUIRED or OPTIONAL like this:
 
 Unlike arguments, options are not ordered (meaning you can specify them in any order) and are specified with two dashes (e.g. --yell). Options are always optional, and can be setup to accept a value (e.g. --dir=src) or as a boolean flag without a value (e.g. --yell).
 
-In invokable commands, use the Option attribute to define options directly in the __invoke() method parameters:
+In invokable commands, use the Option attribute to define options directly in the \_\_invoke() method parameters:
 
 The Option attribute accepts the following parameters:
 
@@ -937,7 +968,7 @@ There are five option variants you can use:
 
 You need to combine VALUE_IS_ARRAY with VALUE_REQUIRED or VALUE_OPTIONAL like this:
 
-When a command has many arguments and options, the __invoke() method can become cluttered. To better organize the input, you can use the MapInput attribute to group arguments and options into a dedicated class (a Data Transfer Object, or DTO):
+When a command has many arguments and options, the \_\_invoke() method can become cluttered. To better organize the input, you can use the MapInput attribute to group arguments and options into a dedicated class (a Data Transfer Object, or DTO):
 
 Then, use the #[MapInput] attribute in your command to receive this DTO:
 
@@ -1000,6 +1031,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Attribute\Argument;
@@ -1023,6 +1055,7 @@ class GreetCommand
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Command\Command;
@@ -1044,6 +1077,7 @@ class GreetCommand extends Command
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Command\Command;
@@ -1071,6 +1105,7 @@ class GreetCommand extends Command
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ php bin/console app:greet Fabien
 Hi Fabien!
@@ -1086,6 +1121,7 @@ Hi Fabien Potencier!
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/progressbar.html
 
 **Contents:**
+
 - Progress Bar
 - Customizing the Progress Bar
   - Built-in Formats
@@ -1135,7 +1171,7 @@ Instead of relying on the verbosity mode of the current command, you can also fo
 
 The built-in formats are the following:
 
-If you don't set the number of steps for your progress bar, use the _nomax variants:
+If you don't set the number of steps for your progress bar, use the \_nomax variants:
 
 Instead of using the built-in formats, you can also set your own:
 
@@ -1155,7 +1191,7 @@ This code defines a new minimal format that you can then use for your progress b
 
 It is almost always better to redefine built-in formats instead of creating new ones as that allows the display to automatically vary based on the verbosity flag of the command.
 
-When defining a new style that contains placeholders that are only available when the maximum number of steps is known, you should create a _nomax variant:
+When defining a new style that contains placeholders that are only available when the maximum number of steps is known, you should create a \_nomax variant:
 
 When displaying the progress bar, the format will automatically be set to minimal_nomax if the bar does not have a maximum number of steps like in the example above.
 
@@ -1190,6 +1226,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Console\Helper\ProgressBar;
 
@@ -1215,6 +1252,7 @@ $progressBar->finish();
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Console\Helper\ProgressBar;
 
@@ -1226,6 +1264,7 @@ $progressBar->start(null, 25);
 ```
 
 Example 3 (php):
+
 ```php
 // start with a 50 units progressbar
 $progressBar = new ProgressBar($output, 50);
@@ -1235,6 +1274,7 @@ $progressBar->setMaxSteps(200);
 ```
 
 Example 4 (php):
+
 ```php
 $progressBar = new ProgressBar($output);
 ```
@@ -1246,6 +1286,7 @@ $progressBar = new ProgressBar($output);
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/table.html
 
 **Contents:**
+
 - Table Helper
 - Adding Table Separators
 - Adding Table Titles
@@ -1312,6 +1353,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -1342,6 +1384,7 @@ class MyCommand
 ```
 
 Example 2 (rust):
+
 ```rust
 +---------------+--------------------------+------------------+
 | ISBN          | Title                    | Author           |
@@ -1354,6 +1397,7 @@ Example 2 (rust):
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Console\Helper\TableSeparator;
 
@@ -1367,6 +1411,7 @@ $table->setRows([
 ```
 
 Example 4 (rust):
+
 ```rust
 +---------------+--------------------------+------------------+
 | ISBN          | Title                    | Author           |
@@ -1386,6 +1431,7 @@ Example 4 (rust):
 **URL:** https://symfony.com/doc/7.4/components/console/single_command_tool.html
 
 **Contents:**
+
 - Building a single Command Application
 
 When building a command line tool, you may not need to provide several commands. In such a case, having to pass the command name each time is tedious. Fortunately, it is possible to remove this need by declaring a single command application:
@@ -1401,6 +1447,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 #!/usr/bin/env php
 <?php
@@ -1423,6 +1470,7 @@ use Symfony\Component\Console\SingleCommandApplication;
 ```
 
 Example 2 (php):
+
 ```php
 #!/usr/bin/env php
 <?php
@@ -1447,13 +1495,14 @@ $application->run();
 **URL:** https://symfony.com/doc/7.4/console/calling_commands.html
 
 **Contents:**
+
 - How to Call Other Commands
 
 If a command depends on another one being run before it you can call that in the console command itself. This can be useful if you want to create a "meta" command that runs a bunch of other commands (for instance, all commands that need to be run when the project's code has changed on the production servers: clearing the cache, generating Doctrine proxies, dumping web assets, ...).
 
 Use the doRun(). Then, create a new ArrayInput with the arguments and options you want to pass to the command. The command name must be the first argument.
 
-Eventually, calling the doRun() method actually runs the command and returns the returned code from the command (return value from command __invoke() method):
+Eventually, calling the doRun() method actually runs the command and returns the returned code from the command (return value from command \_\_invoke() method):
 
 If you want to suppress the output of the executed command, pass a NullOutput as the second argument to $application->doRun().
 
@@ -1472,6 +1521,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Application;
@@ -1508,6 +1558,7 @@ class CreateUserCommand
 **URL:** https://symfony.com/doc/7.4/console/command_in_controller.html
 
 **Contents:**
+
 - How to Call a Command from a Controller
 - Showing Colorized Command Output
 
@@ -1534,6 +1585,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/DebugTwigController.php
 namespace App\Controller;
@@ -1576,11 +1628,13 @@ class DebugTwigController extends AbstractController
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require sensiolabs/ansi-to-html
 ```
 
 Example 3 (php):
+
 ```php
 // src/Controller/DebugTwigController.php
 namespace App\Controller;
@@ -1618,6 +1672,7 @@ class DebugTwigController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/console/commands_as_services.html
 
 **Contents:**
+
 - How to Define Commands as Services
 - Lazy Loading
 
@@ -1650,6 +1705,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace App\Command;
 
@@ -1675,6 +1731,7 @@ class SunshineCommand
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Console\Attribute\AsCommand;
 // ...
@@ -1687,17 +1744,19 @@ class SunshineCommand
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Command\SunshineCommand:
-        tags:
-            - { name: 'console.command', command: 'app:sunshine' }
+  App\Command\SunshineCommand:
+    tags:
+      - { name: "console.command", command: "app:sunshine" }
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1723,6 +1782,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/console/hide_commands.html
 
 **Contents:**
+
 - How to Hide Console Commands
 
 By default, all console commands are listed when executing the console application script without arguments or when using the list command.
@@ -1744,6 +1804,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Command/LegacyCommand.php
 namespace App\Command;
@@ -1758,6 +1819,7 @@ class LegacyCommand
 ```
 
 Example 2 (php):
+
 ```php
 // src/Command/LegacyCommand.php
 namespace App\Command;
@@ -1779,6 +1841,7 @@ class LegacyCommand extends Command
 **URL:** https://symfony.com/doc/7.4/console/lazy_commands.html
 
 **Contents:**
+
 - How to Make Commands Lazily Loaded
 - Built-in Command Loaders
   - FactoryCommandLoader
@@ -1788,7 +1851,7 @@ If you are using the Symfony full-stack framework, you are probably looking for 
 
 The traditional way of adding commands to your application is to use add(), which expects a Command instance as an argument.
 
-This approach can have downsides as some commands might be expensive to instantiate in which case you may want to lazy-load them. Note however that lazy-loading is not absolute. Indeed a few commands such as list, help or _complete can require instantiating other commands although they are lazy. For example list needs to get the name and description of all commands, which might require the command to be instantiated to get.
+This approach can have downsides as some commands might be expensive to instantiate in which case you may want to lazy-load them. Note however that lazy-loading is not absolute. Indeed a few commands such as list, help or \_complete can require instantiating other commands although they are lazy. For example list needs to get the name and description of all commands, which might require the command to be instantiated to get.
 
 In order to lazy-load commands, you need to register an intermediate loader which will be responsible for returning Command instances:
 
@@ -1813,6 +1876,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use App\Command\HeavyCommand;
 use Symfony\Component\Console\Application;
@@ -1831,6 +1895,7 @@ $application->run();
 ```
 
 Example 2 (php):
+
 ```php
 use App\Command\HeavyCommand;
 use Symfony\Component\Console\Application;
@@ -1854,6 +1919,7 @@ $application->run();
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\FactoryCommandLoader;
@@ -1865,6 +1931,7 @@ $commandLoader = new FactoryCommandLoader([
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -1885,6 +1952,7 @@ $commandLoader = new ContainerCommandLoader($container, [
 **URL:** https://symfony.com/doc/7.4/console/lockable_trait.html
 
 **Contents:**
+
 - Prevent Running the Same Console Command Multiple Times
 
 You can use locks to prevent the same command from running multiple times on the same server. The Lock component provides multiple classes to create locks based on the filesystem (FlockStore), shared memory (SemaphoreStore) and even databases and Redis servers.
@@ -1902,6 +1970,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Command\Command;
@@ -1936,6 +2005,7 @@ class UpdateContentsCommand
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Command\Command;
@@ -1965,6 +2035,7 @@ class UpdateContentsCommand
 **URL:** https://symfony.com/doc/7.4/console/style.html
 
 **Contents:**
+
 - How to Style a Console Command
 - Basic Usage
 - Helper Methods
@@ -1986,7 +2057,7 @@ Displaying a simple title requires three lines of code, to change the font color
 
 In order to reduce that boilerplate code, Symfony commands can optionally use the Symfony Style Guide. These styles are implemented as a set of helper methods which allow you to create semantic commands and forget about their styling.
 
-In your __invoke() method, add an argument of type SymfonyStyle. Then, you can start using any of its helpers, such as title(), which displays the title of the command:
+In your \_\_invoke() method, add an argument of type SymfonyStyle. Then, you can start using any of its helpers, such as title(), which displays the title of the command:
 
 The SymfonyStyle class defines some helper methods that cover the most common interactions performed by console commands.
 
@@ -2099,6 +2170,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Command/MyCommand.php
 namespace App\Command;
@@ -2125,6 +2197,7 @@ class MyCommand
 ```
 
 Example 2 (php):
+
 ```php
 // src/Command/MyCommand.php
 namespace App\Command;
@@ -2146,11 +2219,13 @@ class MyCommand
 ```
 
 Example 3 (php):
+
 ```php
 $io->title('Lorem ipsum dolor sit amet');
 ```
 
 Example 4 (swift):
+
 ```swift
 $io->section('Adding a User');
 
@@ -2168,6 +2243,7 @@ $io->section('Generating the Password');
 **URL:** https://symfony.com/doc/7.4/console/verbosity.html
 
 **Contents:**
+
 - Verbosity Levels
 
 Console commands have different verbosity levels, which determine the messages displayed in their output. By default, commands display only the most useful messages, but you can control their verbosity with the -q and -v options:
@@ -2195,28 +2271,36 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # suppress all output, including errors
+
 $ php bin/console some-command --silent
 
 # suppress all output (even the command result messages) but display errors
+
 $ php bin/console some-command -q
 $ php bin/console some-command --quiet
 
 # normal behavior, no option required (display only the useful messages)
+
 $ php bin/console some-command
 
 # increase verbosity of messages
+
 $ php bin/console some-command -v
 
 # display also the informative non essential messages
+
 $ php bin/console some-command -vv
 
 # display all messages (useful to debug errors)
+
 $ php bin/console some-command -vvv
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Attribute\Argument;
@@ -2260,6 +2344,7 @@ class CreateUserCommand
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/questionhelper.html
 
 **Contents:**
+
 - Question Helper
 - Asking the User for Confirmation
 - Asking the User for Information
@@ -2281,7 +2366,7 @@ Suppose you want to confirm an action before actually executing it. Add the foll
 
 In this case, the user will be asked "Continue with this action?". If the user answers with y (or any word, expression starting with y due to default answer regex, e.g yeti) it returns true or false otherwise, e.g. n.
 
-The second argument to __construct() is the default value to return if the user doesn't enter any valid input. If the second argument is not provided, true is assumed.
+The second argument to \_\_construct() is the default value to return if the user doesn't enter any valid input. If the second argument is not provided, true is assumed.
 
 You can customize the regex used to check if the answer means "yes" in the third argument of the constructor. For instance, to allow anything that starts with either y or j, you would set it to:
 
@@ -2364,11 +2449,13 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $helper = new QuestionHelper();
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -2397,6 +2484,7 @@ class MyCommand
 ```
 
 Example 3 (php):
+
 ```php
 $question = new ConfirmationQuestion(
     'Continue with this action?',
@@ -2406,6 +2494,7 @@ $question = new ConfirmationQuestion(
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Console\Question\Question;
 
@@ -2430,6 +2519,7 @@ public function __invoke(InputInterface $input, OutputInterface $output): int
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/formatterhelper.html
 
 **Contents:**
+
 - Formatter Helper
 - Print Messages in a Section
 - Print Messages in a Block
@@ -2482,16 +2572,19 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $formatter = new FormatterHelper();
 ```
 
 Example 2 (json):
+
 ```json
 [SomeSection] Here is some message related to that section
 ```
 
 Example 3 (php):
+
 ```php
 $formattedLine = $formatter->formatSection(
     'SomeSection',
@@ -2501,6 +2594,7 @@ $output->writeln($formattedLine);
 ```
 
 Example 4 (php):
+
 ```php
 $errorMessages = ['Error!', 'Something went wrong'];
 $formattedBlock = $formatter->formatBlock($errorMessages, 'error');
@@ -2514,6 +2608,7 @@ $output->writeln($formattedBlock);
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/progressindicator.html
 
 **Contents:**
+
 - Progress Indicator
 - Customizing the Progress Indicator
   - Built-in Formats
@@ -2557,6 +2652,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Console\Helper\ProgressIndicator;
 
@@ -2579,35 +2675,44 @@ $progressIndicator->finish('Finished');
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # OutputInterface::VERBOSITY_NORMAL (CLI with no verbosity flag)
- \ Processing...
- | Processing...
- / Processing...
- - Processing...
- ✔ Finished
+
+\ Processing...
+| Processing...
+/ Processing...
+
+- Processing...
+  ✔ Finished
 
 # OutputInterface::VERBOSITY_VERBOSE (-v)
- \ Processing... (1 sec)
- | Processing... (1 sec)
- / Processing... (1 sec)
- - Processing... (1 sec)
- ✔ Finished (1 sec)
+
+\ Processing... (1 sec)
+| Processing... (1 sec)
+/ Processing... (1 sec)
+
+- Processing... (1 sec)
+  ✔ Finished (1 sec)
 
 # OutputInterface::VERBOSITY_VERY_VERBOSE (-vv) and OutputInterface::VERBOSITY_DEBUG (-vvv)
- \ Processing... (1 sec, 6.0 MiB)
- | Processing... (1 sec, 6.0 MiB)
- / Processing... (1 sec, 6.0 MiB)
- - Processing... (1 sec, 6.0 MiB)
- ✔ Finished (1 sec, 6.0 MiB)
+
+\ Processing... (1 sec, 6.0 MiB)
+| Processing... (1 sec, 6.0 MiB)
+/ Processing... (1 sec, 6.0 MiB)
+
+- Processing... (1 sec, 6.0 MiB)
+  ✔ Finished (1 sec, 6.0 MiB)
 ```
 
 Example 3 (php):
+
 ```php
 $progressIndicator = new ProgressIndicator($output, 'verbose');
 ```
 
 Example 4 (php):
+
 ```php
 $progressIndicator = new ProgressIndicator($output, 'verbose', 100, ['⠏', '⠛', '⠹', '⢸', '⣰', '⣤', '⣆', '⡇']);
 ```
@@ -2619,6 +2724,7 @@ $progressIndicator = new ProgressIndicator($output, 'verbose', 100, ['⠏', '⠛
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/debug_formatter.html
 
 **Contents:**
+
 - Debug Formatter Helper
 - Using the Debug Formatter
 - Starting a Program
@@ -2663,11 +2769,13 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $debugFormatter = new DebugFormatterHelper();
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 $process = new Process(...);
@@ -2681,11 +2789,13 @@ $process->run();
 ```
 
 Example 3 (unknown):
+
 ```unknown
 RUN Some process description
 ```
 
 Example 4 (php):
+
 ```php
 $output->writeln($debugFormatter->start(
     spl_object_hash($process),
@@ -2703,6 +2813,7 @@ $output->writeln($debugFormatter->start(
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/processhelper.html
 
 **Contents:**
+
 - Process Helper
 - Arguments
 - Customized Display
@@ -2738,6 +2849,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Process\Process;
 
@@ -2748,12 +2860,14 @@ $helper->run($output, $process);
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 $helper->run($output, ['figlet', 'Symfony']);
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Process\Process;
 
@@ -2764,6 +2878,7 @@ $helper->run($output, $process);
 ```
 
 Example 4 (php):
+
 ```php
 $helper->run($output, $process, 'The process failed :(');
 ```
@@ -2775,6 +2890,7 @@ $helper->run($output, $process, 'The process failed :(');
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/cursor.html
 
 **Contents:**
+
 - Cursor Helper
 - Using the cursor
   - Moving the cursor
@@ -2782,7 +2898,7 @@ $helper->run($output, $process, 'The process failed :(');
 
 The Cursor allows you to change the cursor position in a console command. This allows you to write on any position of the output:
 
-Support for injecting the Cursor helper into the __invoke() method was introduced in Symfony 7.4.
+Support for injecting the Cursor helper into the \_\_invoke() method was introduced in Symfony 7.4.
 
 There are few methods to control moving the command cursor:
 
@@ -2799,6 +2915,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Command/MyCommand.php
 namespace App\Command;
@@ -2829,6 +2946,7 @@ class MyCommand
 ```
 
 Example 2 (sql):
+
 ```sql
 // moves the cursor 1 line up from its current position
 $cursor->moveUp();
@@ -2854,6 +2972,7 @@ $cursor->moveToPosition(7, 11);
 ```
 
 Example 3 (php):
+
 ```php
 $position = $cursor->getCurrentPosition();
 // $position[0] // columns (aka x coordinate)
@@ -2861,6 +2980,7 @@ $position = $cursor->getCurrentPosition();
 ```
 
 Example 4 (sql):
+
 ```sql
 // clears all the output from the current line
 $cursor->clearLine();
@@ -2882,6 +3002,7 @@ $cursor->clearScreen();
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/tree.html
 
 **Contents:**
+
 - Tree Helper
 - Rendering a Tree
   - Rendering a Tree from an Array
@@ -2925,6 +3046,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace App\Command;
 
@@ -2957,6 +3079,7 @@ class MyCommand
 ```
 
 Example 2 (unknown):
+
 ```unknown
 ├── config/
 ├── public/
@@ -2966,6 +3089,7 @@ Example 2 (unknown):
 ```
 
 Example 3 (php):
+
 ```php
 $tree = TreeHelper::createTree($io, null, [
     'src' =>  [
@@ -2984,6 +3108,7 @@ $tree->render();
 ```
 
 Example 4 (unknown):
+
 ```unknown
 ├── src
 │   ├── Command
@@ -3001,6 +3126,7 @@ Example 4 (unknown):
 **URL:** https://symfony.com/doc/7.4/validation/sequence_provider.html
 
 **Contents:**
+
 - How to Sequentially Apply Validation Groups
 - Group Sequence Providers
 - Advanced Validation Group Provider
@@ -3043,6 +3169,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -3071,25 +3198,23 @@ class User implements UserInterface
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    group_sequence:
-        - User
-        - Strict
-    getters:
-        passwordSafe:
-            - 'IsTrue':
-                message: 'The password cannot match your username'
-                groups: [Strict]
-    properties:
-        username:
-            - NotBlank: ~
-        password:
-            - NotBlank: ~
+group_sequence: - User - Strict
+getters:
+passwordSafe: - 'IsTrue':
+message: 'The password cannot match your username'
+groups: [Strict]
+properties:
+username: - NotBlank: ~
+password: - NotBlank: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -3124,6 +3249,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -3155,6 +3281,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/validation/custom_constraint.html
 
 **Contents:**
+
 - How to Create a Custom Validation Constraint
 - Creating the Constraint Class
   - Constraint with Private Properties
@@ -3176,7 +3303,7 @@ You can use #[HasNamedArguments] to make some constraint options required:
 
 Constraints are cached for performance reasons. To achieve this, the base Constraint class uses PHP's get_object_vars function, which excludes private properties of child classes.
 
-If your constraint defines private properties, you must explicitly include them in the __sleep() method to ensure they are serialized correctly:
+If your constraint defines private properties, you must explicitly include them in the \_\_sleep() method to ensure they are serialized correctly:
 
 As you can see, a constraint class is fairly minimal. The actual validation is performed by another "constraint validator" class. The constraint validator class is specified by the constraint's validatedBy() method, which has this default logic:
 
@@ -3227,6 +3354,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Validator/ContainsAlphanumeric.php
 namespace App\Validator;
@@ -3251,6 +3379,7 @@ class ContainsAlphanumeric extends Constraint
 ```
 
 Example 2 (php):
+
 ```php
 // src/Validator/ContainsAlphanumeric.php
 namespace App\Validator;
@@ -3275,6 +3404,7 @@ class ContainsAlphanumeric extends Constraint
 ```
 
 Example 3 (php):
+
 ```php
 // src/Validator/ContainsAlphanumeric.php
 namespace App\Validator;
@@ -3309,6 +3439,7 @@ class ContainsAlphanumeric extends Constraint
 ```
 
 Example 4 (php):
+
 ```php
 // in the base Symfony\Component\Validator\Constraint class
 public function validatedBy(): string
@@ -3324,6 +3455,7 @@ public function validatedBy(): string
 **URL:** https://symfony.com/doc/7.4/validation/groups.html
 
 **Contents:**
+
 - How to Apply only a Subset of all Your Validation Constraints (Validation Groups)
 
 By default, when validating an object all constraints of this class will be checked whether or not they actually pass. In some cases, however, you will need to validate an object against only some constraints on that class. To do this, you can organize each constraint into one or more "validation groups" and then apply validation against one group of constraints.
@@ -3355,6 +3487,7 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -3377,21 +3510,20 @@ class User implements UserInterface
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        email:
-            - Email: { groups: [registration] }
-        password:
-            - NotBlank: { groups: [registration] }
-            - Length: { min: 7, groups: [registration] }
-        city:
-            - Length:
-                min: 2
+properties:
+email: - Email: { groups: [registration] }
+password: - NotBlank: { groups: [registration] } - Length: { min: 7, groups: [registration] }
+city: - Length:
+min: 2
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -3435,6 +3567,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -3472,6 +3605,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/validation/severity.html
 
 **Contents:**
+
 - How to Handle Different Error Levels
 - 1. Assigning the Error Level
 - 2. Customize the Error Message Template
@@ -3495,6 +3629,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -3515,25 +3650,25 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        username:
-            - NotBlank:
-                payload:
-                    severity: error
-        password:
-            - NotBlank:
-                payload:
-                    severity: error
-        bankAccountNumber:
-            - Iban:
-                payload:
-                    severity: warning
+properties:
+username: - NotBlank:
+payload:
+severity: error
+password: - NotBlank:
+payload:
+severity: error
+bankAccountNumber: - Iban:
+payload:
+severity: warning
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -3568,6 +3703,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -3601,6 +3737,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/validation/translations.html
 
 **Contents:**
+
 - How to Translate Validation Constraint Messages
 - Custom Translation Domain
 
@@ -3633,11 +3770,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/translation
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -3649,6 +3788,7 @@ class Author
 ```
 
 Example 3 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -3663,12 +3803,13 @@ class Author
 ```
 
 Example 4 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        name:
-            - NotBlank: { message: 'author.name.not_blank' }
+properties:
+name: - NotBlank: { message: 'author.name.not_blank' }
 ```
 
 ---
@@ -3678,6 +3819,7 @@ App\Entity\Author:
 **URL:** https://symfony.com/doc/7.4/components/console/changing_default_command.html
 
 **Contents:**
+
 - Changing the Default Command
 - Learn More!
 
@@ -3698,6 +3840,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace Acme\Console\Command;
 
@@ -3718,6 +3861,7 @@ class HelloWorldCommand extends Command
 ```
 
 Example 2 (php):
+
 ```php
 // application.php
 use Acme\Console\Command\HelloWorldCommand;
@@ -3731,11 +3875,13 @@ $application->run();
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ php application.php
 ```
 
 Example 4 (unknown):
+
 ```unknown
 Hello World
 ```
@@ -3747,6 +3893,7 @@ Hello World
 **URL:** https://symfony.com/doc/7.4/components/console/console_arguments.html
 
 **Contents:**
+
 - Understanding how Console Arguments and Options Are Handled
 - Option Attribute Constraints
 
@@ -3775,6 +3922,7 @@ Online exam, become Symfony certified today
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace Acme\Console\Command;
 
@@ -3795,6 +3943,7 @@ class DemoArgsCommand
 ```
 
 Example 2 (php):
+
 ```php
 namespace Acme\Console\Command;
 
@@ -3829,6 +3978,7 @@ class DemoArgsCommand extends Command
 ```
 
 Example 3 (julia):
+
 ```julia
 // ...
 
@@ -3839,6 +3989,7 @@ new InputDefinition([
 ```
 
 Example 4 (php):
+
 ```php
 #[Option] bool $verbose = false           // VALUE_NONE
 #[Option] bool $colors = true             // VALUE_NEGATABLE (--colors or --no-colors)
@@ -3857,6 +4008,7 @@ Example 4 (php):
 **URL:** https://symfony.com/doc/7.4/components/console/helpers/index.html
 
 **Contents:**
+
 - The Console Helpers
 
 The Console component comes with some useful helpers. These helpers contain functions to ease some common tasks.
@@ -3872,6 +4024,7 @@ Save your teams and projects before they sink
 **URL:** https://symfony.com/doc/7.4/components/console/usage.html
 
 **Contents:**
+
 - Using Console Commands, Shortcuts and Built-in Commands
 - Built-in Commands
 - Global Options
@@ -3922,6 +4075,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 #!/usr/bin/env php
 <?php
@@ -3937,16 +4091,19 @@ $application->run();
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php application.php list
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ php application.php
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ php application.php help list
 ```

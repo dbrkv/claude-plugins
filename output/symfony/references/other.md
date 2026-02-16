@@ -9,6 +9,7 @@
 **URL:** https://symfony.com/doc/7.4
 
 **Contents:**
+
 - Symfony 7.4 Documentation
 - Getting Started
 - Architecture
@@ -55,6 +56,7 @@ Third-party packages that add features to your applications.
 **URL:** https://symfony.com/doc/7.4/setup.html
 
 **Contents:**
+
 - Installing & Setting up the Symfony Framework
 - Technical Requirements
 - Creating Symfony Applications
@@ -151,37 +153,47 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ symfony check:requirements
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # run this if you are building a traditional web application
-$ symfony new my_project_directory --version="7.4.*" --webapp
+
+$ symfony new my_project_directory --version="7.4.\*" --webapp
 
 # run this if you are building a microservice, console application or API
-$ symfony new my_project_directory --version="7.4.*"
+
+$ symfony new my_project_directory --version="7.4.\*"
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # run this if you are building a traditional web application
-$ composer create-project symfony/skeleton:"7.4.*" my_project_directory
+
+$ composer create-project symfony/skeleton:"7.4.\*" my_project_directory
 $ cd my_project_directory
 $ composer require webapp
 
 # run this if you are building a microservice, console application or API
-$ composer create-project symfony/skeleton:"7.4.*" my_project_directory
+
+$ composer create-project symfony/skeleton:"7.4.\*" my_project_directory
 ```
 
 Example 4 (markdown):
+
 ```markdown
 # clone the project to download its contents
+
 $ cd projects/
 $ git clone ...
 
 # make Composer install the project's dependencies into vendor/
+
 $ cd my-project/
 $ composer install
 ```
@@ -193,6 +205,7 @@ $ composer install
 **URL:** https://symfony.com/doc/7.4/page_creation.html
 
 **Contents:**
+
 - Create your First Page in Symfony
 - Creating a Page: Route and Controller
 - The bin/console Command
@@ -277,6 +290,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 <?php
 // src/Controller/LuckyController.php
@@ -298,6 +312,7 @@ class LuckyController
 ```
 
 Example 2 (php):
+
 ```php
 // src/Controller/LuckyController.php
 
@@ -315,11 +330,13 @@ Example 2 (php):
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ php bin/console
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ php bin/console debug:router
 ```
@@ -331,6 +348,7 @@ $ php bin/console debug:router
 **URL:** https://symfony.com/doc/7.4/routing.html
 
 **Contents:**
+
 - Routing
 - Creating Routes
   - Creating Routes as Attributes
@@ -372,7 +390,7 @@ By default, Symfony loads the routes defined in both YAML and PHP formats. If yo
 
 By default, routes match any HTTP verb (GET, POST, PUT, etc.) Use the methods option to restrict the verbs each route should respond to:
 
-HTML forms only support GET and POST methods. If you're calling a route with a different method from an HTML form, add a hidden field called _method with the method to use (e.g. <input type="hidden" name="_method" value="PUT">). If you create your forms with Symfony Forms this is done automatically for you when the framework.http_method_override option is true.
+HTML forms only support GET and POST methods. If you're calling a route with a different method from an HTML form, add a hidden field called \_method with the method to use (e.g. <input type="hidden" name="_method" value="PUT">). If you create your forms with Symfony Forms this is done automatically for you when the framework.http_method_override option is true.
 
 For security, you can restrict which HTTP methods can be overridden using the framework.allowed_http_method_override option.
 
@@ -474,11 +492,11 @@ In addition to your own parameters, routes can include any of the following spec
 
 Used to add query parameters to the generated URL.
 
-The _query parameter was introduced in Symfony 7.4.
+The \_query parameter was introduced in Symfony 7.4.
 
-Passing a value other than an array as the _query parameter was deprecated in Symfony 7.4.
+Passing a value other than an array as the \_query parameter was deprecated in Symfony 7.4.
 
-You can include these attributes (except _fragment) both in individual routes and in route imports. Symfony defines some special attributes with the same name (except for the leading underscore) so you can define them easier:
+You can include these attributes (except \_fragment) both in individual routes and in route imports. Symfony defines some special attributes with the same name (except for the leading underscore) so you can define them easier:
 
 In the defaults option of a route you can optionally define parameters not included in the route configuration. This is useful to pass extra arguments to the controllers of the routes:
 
@@ -488,7 +506,7 @@ A possible solution is to change the parameter requirements to be more permissiv
 
 If the route defines several parameters and you apply this permissive regular expression to all of them, you might get unexpected results. For example, if the route definition is /share/{path}/{token} and both path and token accept /, then token will only get the last part and the rest is matched by path.
 
-If the route includes the special {_format} parameter, you shouldn't use the .+ requirement for the parameters that allow slashes. For example, if the pattern is /share/{token}.{_format} and {token} allows any character, the /share/foo/bar.json URL will consider foo/bar.json as the token and the format will be empty. This can be solved by replacing the .+ requirement by [^.]+ to allow any character except dots.
+If the route includes the special {\_format} parameter, you shouldn't use the .+ requirement for the parameters that allow slashes. For example, if the pattern is /share/{token}.{\_format} and {token} allows any character, the /share/foo/bar.json URL will consider foo/bar.json as the token and the format will be empty. This can be solved by replacing the .+ requirement by [^.]+ to allow any character except dots.
 
 Route alias allows you to have multiple names for the same route and can be used to provide backward compatibility for routes that have been renamed. Let's say you have a route called product_show:
 
@@ -524,7 +542,7 @@ When defining routes as attributes, put the common configuration in the #[Route]
 
 The exclude option only works when the resource value is a glob string. If you use a regular string (e.g. '../src/Controller') the exclude value will be ignored.
 
-In this example, the route of the index() action will be called blog_index and its URL will be /blog/{_locale}. The route of the show() action will be called blog_show and its URL will be /blog/{_locale}/posts/{slug}. Both routes will also validate that the _locale parameter matches the regular expression defined in the class attribute.
+In this example, the route of the index() action will be called blog_index and its URL will be /blog/{\_locale}. The route of the show() action will be called blog_show and its URL will be /blog/{\_locale}/posts/{slug}. Both routes will also validate that the \_locale parameter matches the regular expression defined in the class attribute.
 
 If any of the prefixed routes defines an empty path, Symfony adds a trailing slash to it. In the previous example, an empty path prefixed with /blog will result in the /blog/ URL. If you want to avoid this behavior, set the trailing_slash_on_root option to false (this option is not available when using PHP attributes):
 
@@ -568,7 +586,7 @@ When the application uses full "language + territory" locales (e.g. fr_FR, fr_BE
 
 A common requirement for internationalized applications is to prefix all routes with a locale. This can be done by defining a different prefix for each locale (and setting an empty prefix for your default locale if you prefer it):
 
-If a route being imported includes the special _locale parameter in its own definition, Symfony will only import it for that locale and not for the other configured locale prefixes.
+If a route being imported includes the special \_locale parameter in its own definition, Symfony will only import it for that locale and not for the other configured locale prefixes.
 
 E.g. if a route contains locale: 'en' in its definition and it's being imported with en (prefix: empty) and nl (prefix: /nl) locales, that route will be available only in en locale and not in nl.
 
@@ -592,7 +610,7 @@ To generate a URL, you need to specify the name of the route (e.g. blog_show) an
 
 For that reason each route has an internal name that must be unique in the application. If you don't set the route name explicitly with the name option, Symfony generates an automatic name based on the controller and action.
 
-Symfony declares route aliases based on the FQCN if the target class has an __invoke() method that adds a route and if the target class added one route exactly. Symfony also automatically adds an alias for every method that defines only one route. Consider the following class:
+Symfony declares route aliases based on the FQCN if the target class has an \_\_invoke() method that adds a route and if the target class added one route exactly. Symfony also automatically adds an alias for every method that defines only one route. Consider the following class:
 
 Symfony will add a route alias named App\Controller\MainController::homepage.
 
@@ -620,9 +638,9 @@ Now you'll get the expected results when generating URLs in your commands:
 
 By default, the URLs generated for web assets use the same default_uri value, but you can change it with the asset.request_context.base_path and asset.request_context.secure container parameters.
 
-By default, routes generated outside the HTTP context use the default locale as the value of the _locale parameter. You can override this by providing a different value for the _locale parameter when generating each route.
+By default, routes generated outside the HTTP context use the default locale as the value of the \_locale parameter. You can override this by providing a different value for the \_locale parameter when generating each route.
 
-The default locale is used as the value of the _locale parameter starting from Symfony 7.4.
+The default locale is used as the value of the \_locale parameter starting from Symfony 7.4.
 
 In highly dynamic applications, it may be necessary to check whether a route exists before using it to generate a URL. In those cases, don't use the getRouteCollection() method because that regenerates the routing cache and slows down the application.
 
@@ -650,7 +668,7 @@ Symfony provides a utility to sign URIs via the UriSigner service, which you can
 
 For security reasons, it's common to make signed URIs expire after some time (e.g. when using them to reset user credentials). By default, signed URIs don't expire, but you can define an expiration date/time using the $expiration argument of sign():
 
-The expiration date/time is included in the signed URIs as a timestamp via the _expiration query parameter.
+The expiration date/time is included in the signed URIs as a timestamp via the \_expiration query parameter.
 
 The feature to add an expiration date for a signed URI was introduced in Symfony 7.1.
 
@@ -689,13 +707,15 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/routes.yaml
 controllers:
-    resource: routing.controllers
+  resource: routing.controllers
 ```
 
 Example 2 (php):
+
 ```php
 // src/Controller/BlogController.php
 namespace App\Controller;
@@ -715,19 +735,21 @@ class BlogController extends AbstractController
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/routes.yaml
 blog_list:
-    path: /blog
-    # the controller value has the format 'controller_class::method_name'
-    controller: App\Controller\BlogController::list
+  path: /blog
+  # the controller value has the format 'controller_class::method_name'
+  controller: App\Controller\BlogController::list
 
-    # if the action is implemented as the __invoke() method of the
-    # controller class, you can skip the '::method_name' part:
-    # controller: App\Controller\BlogController
+  # if the action is implemented as the __invoke() method of the
+  # controller class, you can skip the '::method_name' part:
+  # controller: App\Controller\BlogController
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/routes.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -753,6 +775,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/controller.html
 
 **Contents:**
+
 - Controller
 - A Basic Controller
   - Mapping a URL to a Controller
@@ -971,6 +994,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/LuckyController.php
 namespace App\Controller;
@@ -993,6 +1017,7 @@ class LuckyController
 ```
 
 Example 2 (php):
+
 ```php
 // src/Controller/LuckyController.php
   namespace App\Controller;
@@ -1007,11 +1032,13 @@ Example 2 (php):
 ```
 
 Example 3 (php):
+
 ```php
 $url = $this->generateUrl('app_lucky_number', ['max' => 10]);
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -1051,6 +1078,7 @@ public function index(): RedirectResponse
 **URL:** https://symfony.com/doc/7.4/templates.html
 
 **Contents:**
+
 - Creating and Using Templates
 - Installation
 - Twig Templating Language
@@ -1315,35 +1343,35 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/twig-bundle
 ```
 
 Example 2 (html):
+
 ```html
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Welcome to Symfony!</title>
-    </head>
-    <body>
-        <h1>{{ page_title }}</h1>
+  <head>
+    <title>Welcome to Symfony!</title>
+  </head>
+  <body>
+    <h1>{{ page_title }}</h1>
 
-        {% if user.isLoggedIn %}
-            Hello {{ user.name }}!
-        {% endif %}
-
-        {# ... #}
-    </body>
+    {% if user.isLoggedIn %} Hello {{ user.name }}! {% endif %} {# ... #}
+  </body>
 </html>
 ```
 
 Example 3 (json):
+
 ```json
 {{ title|upper }}
 ```
 
 Example 4 (json):
+
 ```json
 {# templates/user/notifications.html.twig #}
 <h1>Hello {{ user_first_name }}!</h1>
@@ -1357,6 +1385,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/configuration.html
 
 **Contents:**
+
 - Configuring Symfony
 - Configuration Files
   - Configuration Formats
@@ -1448,7 +1477,7 @@ Use the special syntax %env(ENV_VAR_NAME)% to reference environment variables. T
 
 This example shows how you could configure the application secret using an env var:
 
-Your env vars can also be accessed via the PHP super globals $_ENV and $_SERVER (both are equivalent):
+Your env vars can also be accessed via the PHP super globals $\_ENV and $\_SERVER (both are equivalent):
 
 However, in Symfony applications there's no need to use this, because the configuration system provides a better way of working with env vars.
 
@@ -1462,13 +1491,13 @@ Some hosts - like Upsun - offer easy utilities to manage env vars in production.
 
 Some configuration features are not compatible with env vars. For example, defining some container parameters conditionally based on the existence of another configuration option. When using an env var, the configuration option always exists, because its value will be null when the related env var is not defined.
 
-Beware that dumping the contents of the $_SERVER and $_ENV variables or outputting the phpinfo() contents will display the values of the environment variables, exposing sensitive information such as the database credentials.
+Beware that dumping the contents of the $\_SERVER and $\_ENV variables or outputting the phpinfo() contents will display the values of the environment variables, exposing sensitive information such as the database credentials.
 
 The values of the env vars are also exposed in the web interface of the Symfony profiler. In practice this shouldn't be a problem because the web profiler must never be enabled in production.
 
 Instead of defining env vars in your shell or your web server, Symfony provides a convenient way to define them inside a .env (with a leading dot) file located at the root of your project.
 
-The .env file is read and parsed on every request and its env vars are added to the $_ENV & $_SERVER PHP variables. Any existing env vars are never overwritten by the values defined in .env, so you can combine both.
+The .env file is read and parsed on every request and its env vars are added to the $\_ENV & $\_SERVER PHP variables. Any existing env vars are never overwritten by the values defined in .env, so you can combine both.
 
 For example, to define the DATABASE_URL env var shown earlier in this article, you can add:
 
@@ -1500,7 +1529,7 @@ If you need to override an environment value (e.g. to a different value on your 
 
 This file should be ignored by git and should not be committed to your repository. Several other .env files are available to set environment variables in just the right situation:
 
-Real environment variables always win over env vars created by any of the .env files. Note that this behavior depends on the variables_order configuration, which must contain an E to expose the $_ENV superglobal. This is the default configuration in PHP.
+Real environment variables always win over env vars created by any of the .env files. Note that this behavior depends on the variables_order configuration, which must contain an E to expose the $\_ENV superglobal. This is the default configuration in PHP.
 
 The .env and .env.<environment> files should be committed to the repository because they are the same for all developers and machines. However, the env files ending in .local (.env.local and .env.<environment>.local) should not be committed because only you will use them. In fact, the .gitignore file that comes with Symfony prevents them from being committed.
 
@@ -1528,7 +1557,7 @@ If you use the Runtime component, the dotenv path is part of the options you can
 
 As an alternate option, you can directly invoke the Dotenv class in your bootstrap.php file or any other file of your application:
 
-Symfony will then look for the environment variables in that file, but also in the local and environment-specific files (e.g. .*.local and .*.<environment>.local). Read how to override environment variables to learn more about this.
+Symfony will then look for the environment variables in that file, but also in the local and environment-specific files (e.g. ._.local and ._.<environment>.local). Read how to override environment variables to learn more about this.
 
 If you need to know the path to the .env file that Symfony is using, you can read the SYMFONY_DOTENV_PATH environment variable in your application.
 
@@ -1558,7 +1587,7 @@ In controllers extending from the AbstractController, use the getParameter() hel
 
 In services and controllers not extending from AbstractController, inject the parameters as arguments of their constructors. You must inject them explicitly because service autowiring doesn't work for parameters:
 
-If you inject the same parameters over and over again, use the services._defaults.bind option instead. The arguments defined in that option are injected automatically whenever a service constructor or controller action defines an argument with that exact name. For example, to inject the value of the kernel.project_dir parameter whenever a service/controller defines a $projectDir argument, use this:
+If you inject the same parameters over and over again, use the services.\_defaults.bind option instead. The arguments defined in that option are injected automatically whenever a service constructor or controller action defines an argument with that exact name. For example, to inject the value of the kernel.project_dir parameter whenever a service/controller defines a $projectDir argument, use this:
 
 Read the article about binding arguments by name and/or type to learn more about this powerful feature.
 
@@ -1575,6 +1604,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 your-project/
 ├─ config/
@@ -1588,18 +1618,20 @@ your-project/
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/api_platform.yaml
 api_platform:
-    mapping:
-        paths: ['%kernel.project_dir%/src/Entity']
+  mapping:
+    paths: ["%kernel.project_dir%/src/Entity"]
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/services.yaml
-imports:
-    - { resource: 'legacy_config.php' }
+
+imports: - { resource: 'legacy_config.php' }
 
     # glob expressions are also supported to load multiple files
     - { resource: '/etc/myapp/*.yaml' }
@@ -1613,6 +1645,7 @@ imports:
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -1645,6 +1678,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/service_container.html
 
 **Contents:**
+
 - Service Container
 - Fetching and using Services
 - Creating/Configuring Services in the Container
@@ -1692,17 +1726,17 @@ If you'd prefer to manually wire your service, you can use explicit configuratio
 
 You can limit service registration to specific environments as follows:
 
-The _defaults section applies only to services defined in the same services block. Each when@<env> block has its own scope and does not inherit _defaults from the main services section. Redefine _defaults in every when@<env> block where you need it:
+The \_defaults section applies only to services defined in the same services block. Each when@<env> block has its own scope and does not inherit \_defaults from the main services section. Redefine \_defaults in every when@<env> block where you need it:
 
 If you want to exclude a service from being registered in a specific environment, you can use the #[WhenNot] attribute:
 
 The #[WhenNot] attribute was introduced in Symfony 7.2.
 
-What if you need to access the logger service from within MessageGenerator? No problem! Create a __construct() method with a $logger argument that has the LoggerInterface type-hint. Set this on a new $logger property and use it later:
+What if you need to access the logger service from within MessageGenerator? No problem! Create a \_\_construct() method with a $logger argument that has the LoggerInterface type-hint. Set this on a new $logger property and use it later:
 
-That's it! The container will automatically know to pass the logger service when instantiating the MessageGenerator. How does it know to do this? Autowiring. The key is the LoggerInterface type-hint in your __construct() method and the autowire: true config in services.yaml. When you type-hint an argument, the container will automatically find the matching service. If it can't, you'll see a clear exception with a helpful suggestion.
+That's it! The container will automatically know to pass the logger service when instantiating the MessageGenerator. How does it know to do this? Autowiring. The key is the LoggerInterface type-hint in your \_\_construct() method and the autowire: true config in services.yaml. When you type-hint an argument, the container will automatically find the matching service. If it can't, you'll see a clear exception with a helpful suggestion.
 
-By the way, this method of adding dependencies to your __construct() method is called dependency injection.
+By the way, this method of adding dependencies to your \_\_construct() method is called dependency injection.
 
 How should you know to use LoggerInterface for the type-hint? You can either read the docs for whatever feature you're using, or get a list of autowireable type-hints by running:
 
@@ -1712,17 +1746,17 @@ Suppose you also want to email a site administrator each time a site update is m
 
 This needs the MessageGenerator and the Mailer service. That's no problem, we ask them by type hinting their class and interface names! Now, this new service is ready to be used. In a controller, for example, you can type-hint the new SiteUpdateManager class and use it:
 
-Thanks to autowiring and your type-hints in __construct(), the container creates the SiteUpdateManager object and passes it the correct argument. In most cases, this works perfectly.
+Thanks to autowiring and your type-hints in \_\_construct(), the container creates the SiteUpdateManager object and passes it the correct argument. In most cases, this works perfectly.
 
 But there are a few cases when an argument to a service cannot be autowired. For example, suppose you want to make the admin email configurable:
 
 If you make this change and refresh, you'll see an error:
 
-Cannot autowire service "App\Service\SiteUpdateManager": argument "$adminEmail" of method "__construct()" must have a type-hint or be given a value explicitly.
+Cannot autowire service "App\Service\SiteUpdateManager": argument "$adminEmail" of method "\_\_construct()" must have a type-hint or be given a value explicitly.
 
 That makes sense! There is no way that the container knows what value you want to pass here. No problem! In your configuration, you can explicitly set this argument:
 
-Thanks to this, the container will pass manager@example.com to the $adminEmail argument of __construct when creating the SiteUpdateManager service. The other arguments will still be autowired.
+Thanks to this, the container will pass manager@example.com to the $adminEmail argument of \_\_construct when creating the SiteUpdateManager service. The other arguments will still be autowired.
 
 But, isn't this fragile? Fortunately, no! If you rename the $adminEmail argument to something else - e.g. $mainEmail - you will get a clear exception when you reload the next page (even if that page doesn't use this service).
 
@@ -1742,7 +1776,7 @@ However, there are multiple services in the container that implement LoggerInter
 
 In these situations, the container is usually configured to automatically choose one of the services - logger in this case (read more about why in Defining Services Dependencies Automatically (Autowiring)). But, you can control this and pass in a different logger:
 
-This tells the container that the $logger argument to __construct should use service whose id is monolog.logger.request.
+This tells the container that the $logger argument to \_\_construct should use service whose id is monolog.logger.request.
 
 For a list of possible logger services that can be used with autowiring, run:
 
@@ -1762,7 +1796,7 @@ Closures can be injected by using autowiring and its dedicated attributes.
 
 You can also use the bind keyword to bind specific arguments by name or type:
 
-By putting the bind key under _defaults, you can specify the value of any argument for any service defined in this file! You can bind arguments by name (e.g. $adminEmail), by type (e.g. Psr\Log\LoggerInterface) or both (e.g. Psr\Log\LoggerInterface $requestLogger).
+By putting the bind key under \_defaults, you can specify the value of any argument for any service defined in this file! You can bind arguments by name (e.g. $adminEmail), by type (e.g. Psr\Log\LoggerInterface) or both (e.g. Psr\Log\LoggerInterface $requestLogger).
 
 The bind config can also be applied to specific services or when loading many services at once).
 
@@ -1772,11 +1806,11 @@ In those cases, you can use the abstract argument type to define at least the na
 
 If you don't replace the value of an abstract argument during runtime, a RuntimeException will be thrown with a message like Argument "$rootNamespace" of service "App\Service\MyService" is abstract: should be defined by Pass.
 
-Above, the services.yaml file has autowire: true in the _defaults section so that it applies to all services defined in that file. With this setting, you're able to type-hint arguments in the __construct() method of your services and the container will automatically pass you the correct arguments. This entire entry has been written around autowiring.
+Above, the services.yaml file has autowire: true in the \_defaults section so that it applies to all services defined in that file. With this setting, you're able to type-hint arguments in the \_\_construct() method of your services and the container will automatically pass you the correct arguments. This entire entry has been written around autowiring.
 
 For more details about autowiring, check out Defining Services Dependencies Automatically (Autowiring).
 
-Above, the services.yaml file has autoconfigure: true in the _defaults section so that it applies to all services defined in that file. With this setting, the container will automatically apply certain configuration to your services, based on your service's class. This is mostly used to auto-tag your services.
+Above, the services.yaml file has autoconfigure: true in the \_defaults section so that it applies to all services defined in that file. With this setting, the container will automatically apply certain configuration to your services, based on your service's class. This is mostly used to auto-tag your services.
 
 For example, to create a Twig extension, you need to create a class, register it as a service, and tag it with twig.extension.
 
@@ -1804,7 +1838,7 @@ You've already seen that you can import many services at once by using the resou
 
 The value of the resource and exclude options can be any valid glob pattern. If you want to exclude only a few services, you may use the Exclude attribute directly on your class to exclude it:
 
-This can be used to quickly make many classes available as services and apply some default configuration. The id of each service is its fully-qualified class name. You can override any service that's imported by using its id (class name) below (e.g. see how to manually wire arguments). If you override a service, none of the options (e.g. public) are inherited from the import (but the overridden service does still inherit from _defaults).
+This can be used to quickly make many classes available as services and apply some default configuration. The id of each service is its fully-qualified class name. You can override any service that's imported by using its id (class name) below (e.g. see how to manually wire arguments). If you override a service, none of the options (e.g. public) are inherited from the import (but the overridden service does still inherit from \_defaults).
 
 You can also exclude certain paths. This is optional, but will slightly increase performance in the dev environment: excluded paths are not tracked and so modifying them will not cause the container to be rebuilt.
 
@@ -1843,6 +1877,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/ProductController.php
 namespace App\Controller;
@@ -1865,6 +1900,7 @@ class ProductController extends AbstractController
 ```
 
 Example 2 (json):
+
 ```json
 $ php bin/console debug:autowiring
 
@@ -1888,6 +1924,7 @@ $ php bin/console debug:autowiring
 ```
 
 Example 3 (php):
+
 ```php
 // src/Service/MessageGenerator.php
 namespace App\Service;
@@ -1910,6 +1947,7 @@ class MessageGenerator
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/ProductController.php
 use App\Service\MessageGenerator;
@@ -1940,6 +1978,7 @@ class ProductController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/doctrine.html
 
 **Contents:**
+
 - Databases and the Doctrine ORM
 - Installing Doctrine
   - Configuring the Database
@@ -1961,7 +2000,7 @@ First, install Doctrine support via the orm Symfony pack, as well as the MakerBu
 
 The database connection information is stored as an environment variable called DATABASE_URL. For development, you can find and customize this inside .env:
 
-If the username, password, host or database name contain any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) * + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters. You can use the urlencode function to encode them or the urlencode environment variable processor. In this case you need to remove the resolve: prefix in config/packages/doctrine.yaml to avoid errors: url: '%env(DATABASE_URL)%'
+If the username, password, host or database name contain any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) \* + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters. You can use the urlencode function to encode them or the urlencode environment variable processor. In this case you need to remove the resolve: prefix in config/packages/doctrine.yaml to avoid errors: url: '%env(DATABASE_URL)%'
 
 To avoid URL-encoding issues with special characters in credentials, you can use separate connection parameters instead of the URL format. Define each value as its own environment variable and wrap it in single quotes in the .env file to prevent characters like $ and # from being interpreted:
 
@@ -2170,12 +2209,14 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/orm-pack
 $ composer require --dev symfony/maker-bundle
 ```
 
 Example 2 (python):
+
 ```python
 # .env (or override DATABASE_URL in .env.local to avoid committing your changes)
 
@@ -2199,22 +2240,25 @@ DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # .env
+
 DATABASE_PASSWORD='p@ss$wo#rd'
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
-    dbal:
-        user:     '%env(DATABASE_USER)%'
-        password: '%env(DATABASE_PASSWORD)%'
-        host:     '%env(DATABASE_HOST)%'
-        port:     '%env(DATABASE_PORT)%'
-        dbname:   '%env(DATABASE_NAME)%'
-        driver:   pdo_mysql
+  dbal:
+    user: "%env(DATABASE_USER)%"
+    password: "%env(DATABASE_PASSWORD)%"
+    host: "%env(DATABASE_HOST)%"
+    port: "%env(DATABASE_PORT)%"
+    dbname: "%env(DATABASE_NAME)%"
+    driver: pdo_mysql
 ```
 
 ---
@@ -2224,6 +2268,7 @@ doctrine:
 **URL:** https://symfony.com/doc/7.4/testing.html
 
 **Contents:**
+
 - Testing
 - Types of Tests
 - Installation
@@ -2303,7 +2348,7 @@ After that, you can create the test database and all tables using:
 
 You can run these commands to create the database during the test bootstrap process.
 
-A common practice is to append the _test suffix to the original database names in tests. If the database name in production is called project_acme the name of the testing database could be project_acme_test.
+A common practice is to append the \_test suffix to the original database names in tests. If the database name in production is called project_acme the name of the testing database could be project_acme_test.
 
 Tests should be independent from each other to avoid side effects. For example, if some test modifies the database (by adding or removing an entity) it could change the results of other tests.
 
@@ -2458,28 +2503,35 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/test-pack
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php bin/phpunit
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # run all tests of the application
+
 $ php bin/phpunit
 
 # run all tests in the Form/ directory
+
 $ php bin/phpunit tests/Form
 
 # run tests for the UserType class
+
 $ php bin/phpunit tests/Form/UserTypeTest.php
 ```
 
 Example 4 (php):
+
 ```php
 // tests/Service/NewsletterGeneratorTest.php
 namespace App\Tests\Service;
@@ -2504,6 +2556,7 @@ class NewsletterGeneratorTest extends KernelTestCase
 **URL:** https://symfony.com/doc/7.4/logging.html
 
 **Contents:**
+
 - Logging
 - Logging a Message
 - Monolog
@@ -2586,6 +2639,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Psr\Log\LoggerInterface;
 // ...
@@ -2611,30 +2665,33 @@ public function index(LoggerInterface $logger): Response
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require symfony/monolog-bundle
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/prod/monolog.yaml
 monolog:
-    handlers:
-        # this "file_log" key could be anything
-        file_log:
-            type: stream
-            # log to var/log/(environment).log
-            path: "%kernel.logs_dir%/%kernel.environment%.log"
-            # log *all* messages (debug is lowest level)
-            level: debug
+  handlers:
+    # this "file_log" key could be anything
+    file_log:
+      type: stream
+      # log to var/log/(environment).log
+      path: "%kernel.logs_dir%/%kernel.environment%.log"
+      # log *all* messages (debug is lowest level)
+      level: debug
 
-        syslog_handler:
-            type: syslog
-            # log error-level messages and higher
-            level: error
+    syslog_handler:
+      type: syslog
+      # log error-level messages and higher
+      level: error
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/prod/monolog.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -2667,6 +2724,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/controller/error_pages.html
 
 **Contents:**
+
 - How to Customize Error Pages
 - Overriding the Default Error Templates
 - Example 404 Error Template
@@ -2756,11 +2814,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/twig-pack
 ```
 
 Example 2 (unknown):
+
 ```unknown
 templates/
 └─ bundles/
@@ -2772,6 +2832,7 @@ templates/
 ```
 
 Example 3 (jsx):
+
 ```jsx
 {# templates/bundles/TwigBundle/Exception/error404.html.twig #}
 {% extends 'base.html.twig' %}
@@ -2787,6 +2848,7 @@ Example 3 (jsx):
 ```
 
 Example 4 (python):
+
 ```python
 # config/routes/framework.yaml
 when@dev:
@@ -2803,6 +2865,7 @@ when@dev:
 **URL:** https://symfony.com/doc/7.4/mailer.html
 
 **Contents:**
+
 - Sending Emails with Mailer
 - Installation
 - Transport Setup
@@ -2818,7 +2881,7 @@ Symfony's Mailer & Mime components form a powerful system for creating and sendi
 
 Emails are delivered via a "transport". By default, you can deliver emails over SMTP by configuring the DSN in your .env file (the user, pass and port parameters are optional):
 
-If the username, password or host contain any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) * + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
+If the username, password or host contain any character considered special in a URI (such as : / ? # [ ] @ ! $ & ' ( ) \* + , ; =), you must encode them. See RFC 3986 for the full list of reserved characters or use the urlencode function to encode them.
 
 When using native://default, if php.ini uses the sendmail -t command, you won't have error reporting and Bcc headers won't be removed. It's highly recommended to NOT use native://default as you cannot control how sendmail is configured (prefer using sendmail://default if possible).
 
@@ -3157,25 +3220,30 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/mailer
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # .env
+
 MAILER_DSN=smtp://user:pass@smtp.example.com:port
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/mailer.yaml
 framework:
-    mailer:
-        dsn: '%env(MAILER_DSN)%'
+  mailer:
+    dsn: "%env(MAILER_DSN)%"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/mailer.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -3199,6 +3267,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/messenger.html
 
 **Contents:**
+
 - Messenger: Sync & Queued Message Handling
 - Installation
 - Creating a Message & Handler
@@ -3218,7 +3287,7 @@ Messenger centers around two different classes that you'll create: (1) a message
 
 There are no specific requirements for a message class, except that it can be serialized:
 
-A message handler is a PHP callable, the recommended way to create it is to create a class that has the AsMessageHandler attribute and has an __invoke() method that's type-hinted with the message class (or a message interface):
+A message handler is a PHP callable, the recommended way to create it is to create a class that has the AsMessageHandler attribute and has an \_\_invoke() method that's type-hinted with the message class (or a message interface):
 
 You can also use the #[AsMessageHandler] attribute on individual class methods. You may use the attribute on as many methods in a single class as you like, allowing you to group the handling of multiple related types of messages.
 
@@ -3244,11 +3313,11 @@ Thanks to this, the App\Message\SmsNotification will be sent to the async transp
 
 If you configure routing with both YAML/XML/PHP configuration files and PHP attributes, the configuration always takes precedence over the class attribute. This behavior allows you to override routing on a per-environment basis.
 
-When configuring the routing in separate YAML/XML/PHP files, you can use a partial PHP namespace like 'App\Message\*' to match all the messages within the matching namespace. The only requirement is that the '*' wildcard has to be placed at the end of the namespace.
+When configuring the routing in separate YAML/XML/PHP files, you can use a partial PHP namespace like 'App\Message\*' to match all the messages within the matching namespace. The only requirement is that the '\*' wildcard has to be placed at the end of the namespace.
 
-You may use '*' as the message class. This will act as a default routing rule for any message not matched under routing. This is useful to ensure no message is handled synchronously by default.
+You may use '\*' as the message class. This will act as a default routing rule for any message not matched under routing. This is useful to ensure no message is handled synchronously by default.
 
-The only drawback is that '*' will also apply to the emails sent with the Symfony Mailer (which uses SendEmailMessage when Messenger is available). This could cause issues if your emails are not serializable (e.g. if they include file attachments as PHP resources/streams).
+The only drawback is that '\*' will also apply to the emails sent with the Symfony Mailer (which uses SendEmailMessage when Messenger is available). This could cause issues if your emails are not serializable (e.g. if they include file attachments as PHP resources/streams).
 
 You can also route classes by their parent class or interface. Or send messages to multiple transports:
 
@@ -3630,7 +3699,7 @@ If a handler does not have from_transport config, it will be executed on every t
 
 You can declare "special" handlers which will process messages by batch. By doing so, the handler will wait for a certain amount of messages to be pending before processing them. The declaration of a batch handler is done by implementing BatchHandlerInterface. The BatchHandlerTrait is also provided in order to ease the declaration of these special handlers:
 
-When the $ack argument of __invoke() is null, the message is expected to be handled synchronously. Otherwise, __invoke() is expected to return the number of pending messages. The BatchHandlerTrait handles this for you.
+When the $ack argument of **invoke() is null, the message is expected to be handled synchronously. Otherwise, **invoke() is expected to return the number of pending messages. The BatchHandlerTrait handles this for you.
 
 By default, pending batches are flushed when the worker is idle as well as when it is stopped.
 
@@ -3706,7 +3775,7 @@ By default, each handler will be available to handle messages on all of your bus
 
 This way, the App\MessageHandler\SomeCommandHandler handler will only be known by the command.bus bus.
 
-You can also automatically add this tag to a number of classes by using the _instanceof service configuration. Using this, you can determine the message bus based on an implemented interface:
+You can also automatically add this tag to a number of classes by using the \_instanceof service configuration. Using this, you can determine the message bus based on an implemented interface:
 
 The debug:messenger command lists available messages & handlers per bus. You can also restrict the list to a specific bus by providing its name as an argument.
 
@@ -3723,11 +3792,13 @@ Show your Sylius expertise
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/messenger
 ```
 
 Example 2 (php):
+
 ```php
 // src/Message/SmsNotification.php
 namespace App\Message;
@@ -3747,6 +3818,7 @@ class SmsNotification
 ```
 
 Example 3 (php):
+
 ```php
 // src/MessageHandler/SmsNotificationHandler.php
 namespace App\MessageHandler;
@@ -3765,6 +3837,7 @@ class SmsNotificationHandler
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ php bin/console debug:messenger
 ```
@@ -3776,6 +3849,7 @@ $ php bin/console debug:messenger
 **URL:** https://symfony.com/doc/7.4/scheduler.html
 
 **Contents:**
+
 - Scheduler
 - Installation
 - Symfony Scheduler Basics
@@ -3839,11 +3913,11 @@ You can also use some special values that represent common cron expressions:
 
 You can also define cron tasks using the AsCronTask attribute.
 
-If you have many triggers scheduled at same time (for example, at midnight, 0 0 * * *) this will create a very long running list of schedules at that exact time. This may cause an issue if a task has a memory leak.
+If you have many triggers scheduled at same time (for example, at midnight, 0 0 \* \* \*) this will create a very long running list of schedules at that exact time. This may cause an issue if a task has a memory leak.
 
-You can add a hash symbol (#) in expressions to generate random values. Although the values are random, they are predictable and consistent because they are generated based on the message. A message with string representation my task and a defined frequency of # # * * * will have an idempotent frequency of 56 20 * * * (every day at 8:56pm).
+You can add a hash symbol (#) in expressions to generate random values. Although the values are random, they are predictable and consistent because they are generated based on the message. A message with string representation my task and a defined frequency of # # \* \* _ will have an idempotent frequency of 56 20 _ \* \* (every day at 8:56pm).
 
-You can also use hash ranges (#(x-y)) to define the list of possible values for that random part. For example, # #(0-7) * * * means daily, some time between midnight and 7am. Using the # without a range creates a range of any valid value for the field. # # # # # is short for #(0-59) #(0-23) #(1-28) #(1-12) #(0-6).
+You can also use hash ranges (#(x-y)) to define the list of possible values for that random part. For example, # #(0-7) \* \* \* means daily, some time between midnight and 7am. Using the # without a range creates a range of any valid value for the field. # # # # # is short for #(0-59) #(0-23) #(1-28) #(1-12) #(0-6).
 
 You can also use some special values that represent common hashed cron expressions:
 
@@ -3879,7 +3953,7 @@ Essentially, this means you can dynamically, at runtime, define your message(s) 
 
 There is also another way to build a RecurringMessage, and this can be done by adding one of these attributes to a service or a command: AsPeriodicTask and AsCronTask.
 
-For both of these attributes, you have the ability to define the schedule to use via the schedule option. By default, the default named schedule will be used. Also, by default, the __invoke method of your service will be called but, it's also possible to specify the method to call via the method option and you can define arguments via arguments option if necessary.
+For both of these attributes, you have the ability to define the schedule to use via the schedule option. By default, the default named schedule will be used. Also, by default, the \_\_invoke method of your service will be called but, it's also possible to specify the method to call via the method option and you can define arguments via arguments option if necessary.
 
 This is the most basic way to define a cron trigger with this attribute:
 
@@ -3982,11 +4056,13 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/scheduler
 ```
 
 Example 2 (php):
+
 ```php
 // src/Scheduler/Message/SendDailySalesReports.php
 namespace App\Scheduler\Message;
@@ -4003,6 +4079,7 @@ class SendDailySalesReports
 ```
 
 Example 3 (php):
+
 ```php
 // src/Scheduler/Handler/SendDailySalesReportsHandler.php
 namespace App\Scheduler\Handler;
@@ -4021,6 +4098,7 @@ class SendDailySalesReportsHandler
 ```
 
 Example 4 (php):
+
 ```php
 // src/Scheduler/SaleTaskProvider.php
 namespace App\Scheduler;
@@ -4046,6 +4124,7 @@ class SaleTaskProvider implements ScheduleProviderInterface
 **URL:** https://symfony.com/doc/7.4/serializer.html
 
 **Contents:**
+
 - How to Use the Serializer
 - Installation
 - Serializing an Object
@@ -4384,11 +4463,13 @@ Online exam, become Sylius certified today
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/serializer-pack
 ```
 
 Example 2 (php):
+
 ```php
 // src/Model/Person.php
 namespace App\Model;
@@ -4420,6 +4501,7 @@ class Person
 ```
 
 Example 3 (php):
+
 ```php
 // src/Controller/PersonController.php
 namespace App\Controller;
@@ -4445,6 +4527,7 @@ class PersonController extends AbstractController
 ```
 
 Example 4 (php):
+
 ```php
 use App\Model\Person;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
@@ -4468,6 +4551,7 @@ $jsonContent = $serializer->serialize($person, 'json');
 **URL:** https://symfony.com/doc/7.4/translation.html
 
 **Contents:**
+
 - Translations
 - Installation
 - Configuration
@@ -4481,7 +4565,7 @@ $jsonContent = $serializer->serialize($person, 'json');
 
 The term "internationalization" (often abbreviated i18n) refers to the process of abstracting strings and other locale-specific pieces out of your application into a layer where they can be translated and converted based on the user's locale (i.e. language and country). For text, this means wrapping each with a function capable of translating the text (or "message") into the language of the user:
 
-The term locale refers roughly to the user's language and country. It can be any string that your application uses to manage translations and other format differences (e.g. currency format). The ISO 639-1 language code, an underscore (_), then the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France) is recommended.
+The term locale refers roughly to the user's language and country. It can be any string that your application uses to manage translations and other format differences (e.g. currency format). The ISO 639-1 language code, an underscore (\_), then the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France) is recommended.
 
 Translations can be organized into groups, called domains. By default, all messages use the default messages domain:
 
@@ -4601,7 +4685,7 @@ The translation:extract command looks for missing translations in:
 
 Install the nikic/php-parser package in your project to improve the results of the translation:extract command. This package enables an AST parser that can find many more translatable items:
 
-By default, when the translation:extract command creates new entries in the translation file, it uses the same content as both the source and the pending translation. The only difference is that the pending translation is prefixed by __. You can customize this prefix using the --prefix option:
+By default, when the translation:extract command creates new entries in the translation file, it uses the same content as both the source and the pending translation. The only difference is that the pending translation is prefixed by \_\_. You can customize this prefix using the --prefix option:
 
 Alternatively, you can use the --no-fill option to leave the pending translation completely empty when creating new entries in the translation catalog. This is particularly useful when using external translation tools, as it makes it easier to spot untranslated strings:
 
@@ -4675,9 +4759,9 @@ See the Translations section below about setting the locale via routing.
 
 Since you can store the locale of the user in the session, it may be tempting to use the same URL to display a resource in different languages based on the user's locale. For example, http://www.example.com/contact could show content in English for one user and French for another user. Unfortunately, this violates a fundamental rule of the Web: that a particular URL returns the same resource regardless of the user. To further muddy the problem, which version of the content would be indexed by search engines?
 
-A better policy is to include the locale in the URL using the special _locale parameter:
+A better policy is to include the locale in the URL using the special \_locale parameter:
 
-When using the special _locale parameter in a route, the matched locale is automatically set on the Request and can be retrieved via the getLocale() method. In other words, if a user visits the URI /fr/contact, the locale fr will automatically be set as the locale for the current request.
+When using the special \_locale parameter in a route, the matched locale is automatically set on the Request and can be retrieved via the getLocale() method. In other words, if a user visits the URI /fr/contact, the locale fr will automatically be set as the locale for the current request.
 
 You can now use the locale to create routes to other translated pages in your application.
 
@@ -4786,6 +4870,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (bash):
+
 ```bash
 // text will *always* print out in English
 echo 'Hello World';
@@ -4796,22 +4881,25 @@ echo $translator->trans('Hello World');
 ```
 
 Example 2 (bash):
+
 ```bash
 echo $translator->trans('Hello World', domain: 'messages');
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ composer require symfony/translation
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/translation.yaml
 framework:
-    default_locale: 'en'
-    translator:
-        default_path: '%kernel.project_dir%/translations'
+  default_locale: "en"
+  translator:
+    default_path: "%kernel.project_dir%/translations"
 ```
 
 ---
@@ -4821,6 +4909,7 @@ framework:
 **URL:** https://symfony.com/doc/7.4/security.html
 
 **Contents:**
+
 - Security
 - The User
   - Loading the User: The User Provider
@@ -4882,7 +4971,7 @@ The firewalls section of config/packages/security.yaml is the most important sec
 
 Only one firewall is active on each request: Symfony uses the pattern key to find the first match (you can also match by host or other things). Here, all real URLs are handled by the main firewall (no pattern key means it matches all URLs).
 
-The dev firewall is really a fake firewall: it makes sure that you don't accidentally block Symfony's dev tools - which live under URLs like /_profiler and /_wdt.
+The dev firewall is really a fake firewall: it makes sure that you don't accidentally block Symfony's dev tools - which live under URLs like /\_profiler and /\_wdt.
 
 When matching several routes, instead of creating a long regex you can also use an array of simpler regexes to match each route:
 
@@ -4932,7 +5021,7 @@ Actually, all of this can be configured under the form_login key. See Security C
 
 This login form is currently not protected against CSRF attacks. Read Security on how to protect your login form.
 
-And that's it! When you submit the form, the security system automatically reads the _username and _password POST parameter, loads the user via the user provider, checks the user's credentials and either authenticates the user or sends them back to the login form where the error can be displayed.
+And that's it! When you submit the form, the security system automatically reads the \_username and \_password POST parameter, loads the user via the user provider, checks the user's credentials and either authenticates the user or sends them back to the login form where the error can be displayed.
 
 To review the whole process:
 
@@ -4942,7 +5031,7 @@ Login CSRF attacks can be prevented using the same technique of adding hidden CS
 
 First, you need to enable CSRF on the form login:
 
-Then, use the csrf_token() function in the Twig template to generate a CSRF token and store it as a hidden field of the form. By default, the HTML field must be called _csrf_token and the string used to generate the value must be authenticate:
+Then, use the csrf_token() function in the Twig template to generate a CSRF token and store it as a hidden field of the form. By default, the HTML field must be called \_csrf_token and the string used to generate the value must be authenticate:
 
 After this, you have protected your login form against CSRF attacks.
 
@@ -5012,7 +5101,7 @@ Internally, Symfony uses the Rate Limiter component which by default uses Symfon
 
 The storage_service and cache_pool options for login_throttling were introduced in Symfony 7.4.
 
-Login attempts are limited on max_attempts (default: 5) failed requests for IP address + username and 5 * max_attempts failed requests for IP address. The second limit protects against an attacker using multiple usernames from bypassing the first limit, without disrupting normal users on big networks (such as offices).
+Login attempts are limited on max_attempts (default: 5) failed requests for IP address + username and 5 \* max_attempts failed requests for IP address. The second limit protects against an attacker using multiple usernames from bypassing the first limit, without disrupting normal users on big networks (such as offices).
 
 Limiting the failed login attempts is only one basic protection against brute force attacks. The OWASP Brute Force Attacks guidelines mention several other protections that you should consider depending on the level of protection required.
 
@@ -5030,7 +5119,7 @@ To enable logging out, activate the logout config parameter under your firewall:
 
 Symfony will then un-authenticate users navigating to the configured path, and redirect them to the configured target.
 
-If you need to reference the logout path, you can use the _logout_<firewallname> route name (e.g. _logout_main).
+If you need to reference the logout path, you can use the _logout_<firewallname> route name (e.g. \_logout_main).
 
 If your project does not use Symfony Flex, make sure you have imported the logout route loader in your routes:
 
@@ -5062,7 +5151,7 @@ The process of authorization has two different sides:
 
 When a user logs in, Symfony calls the getRoles() method on your User object to determine which roles this user has. In the User class that was generated earlier, the roles are an array that's stored in the database and every user is always given at least one role: ROLE_USER:
 
-This is a nice default, but you can do whatever you want to determine which roles a user should have. The only rule is that every role must start with the ROLE_ prefix - otherwise, things won't work as expected. Other than that, a role is just a string and you can invent whatever you need (e.g. ROLE_PRODUCT_ADMIN).
+This is a nice default, but you can do whatever you want to determine which roles a user should have. The only rule is that every role must start with the ROLE\_ prefix - otherwise, things won't work as expected. Other than that, a role is just a string and you can invent whatever you need (e.g. ROLE_PRODUCT_ADMIN).
 
 You'll use these roles next to grant access to specific sections of your site.
 
@@ -5158,7 +5247,7 @@ At the end of every request (unless your firewall is stateless), your User objec
 
 Then, the two User objects (the original from the session and the refreshed User object) are "compared" to see if they are "equal". By default, the core AbstractToken class compares the return values of the getPassword(), getSalt() and getUserIdentifier() methods. If any of these are different, your user will be logged out. This is a security measure to make sure that malicious users can be de-authenticated if core user data changes.
 
-Storing the (plain or hashed) password in the session can be a security risk. To mitigate this, implement the __serialize() magic method in your user class to exclude or transform the password before storing the serialized user object in the session.
+Storing the (plain or hashed) password in the session can be a security risk. To mitigate this, implement the \_\_serialize() magic method in your user class to exclude or transform the password before storing the serialized user object in the session.
 
 Two strategies are supported:
 
@@ -5170,7 +5259,7 @@ Support for hashing passwords with crc32c in session serialization was introduce
 
 If you're having problems authenticating, it could be that you are authenticating successfully, but you immediately lose authentication after the first redirect.
 
-In that case, review the serialization logic (e.g. the __serialize() or serialize() methods) on your user class (if you have any) to make sure that all the fields necessary are serialized and also exclude all the fields not necessary to be serialized (e.g. Doctrine relations).
+In that case, review the serialization logic (e.g. the \_\_serialize() or serialize() methods) on your user class (if you have any) to make sure that all the fields necessary are serialized and also exclude all the fields not necessary to be serialized (e.g. Doctrine relations).
 
 Or, if you need more control over the "compare users" process, make your User class implement EquatableInterface. Then, your isEqualTo() method will be called when comparing users instead of the core logic.
 
@@ -5185,44 +5274,47 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/security-bundle
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        users_in_memory: { memory: null }
-    firewalls:
-        dev:
-            # 'assets/' is for AssetMapper, 'build/' for Webpack Encore.
-            # (Note: no regex delimiters needed; Symfony adds `{}` automatically.)
-            pattern: ^/(_profiler|_wdt|assets|build)/
-            security: false
-        main:
-            lazy: true
-            provider: users_in_memory
+  # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    users_in_memory: { memory: null }
+  firewalls:
+    dev:
+      # 'assets/' is for AssetMapper, 'build/' for Webpack Encore.
+      # (Note: no regex delimiters needed; Symfony adds `{}` automatically.)
+      pattern: ^/(_profiler|_wdt|assets|build)/
+      security: false
+    main:
+      lazy: true
+      provider: users_in_memory
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#firewalls-authentication
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
 
-    # An easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+  # An easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    # - { path: ^/admin, roles: ROLE_ADMIN }
+    # - { path: ^/profile, roles: ROLE_USER }
 ```
 
 Example 3 (yaml):
+
 ```yaml
 $ php bin/console make:user
  The name of the security user class (e.g. User) [User]:
@@ -5246,6 +5338,7 @@ $ php bin/console make:user
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -5344,6 +5437,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 **URL:** https://symfony.com/doc/7.4/frontend.html
 
 **Contents:**
+
 - Front-end Tools: Handling CSS & JavaScript
 - Using PHP & Twig
   - AssetMapper (Recommended)
@@ -5396,14 +5490,18 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # Remove AssetMapper & Turbo/Stimulus temporarily
+
 $ composer remove symfony/ux-turbo symfony/asset-mapper symfony/stimulus-bundle
 
 # Add Webpack Encore & Turbo/Stimulus back
+
 $ composer require symfony/webpack-encore-bundle symfony/ux-turbo symfony/stimulus-bundle
 
 # Install & Build Assets
+
 $ npm install
 $ npm run dev
 ```
@@ -5415,6 +5513,7 @@ $ npm run dev
 **URL:** https://symfony.com/doc/7.4/frontend/encore/index.html
 
 **Contents:**
+
 - Webpack Encore Documentation
 - Getting Started
 - Adding more Features
@@ -5434,6 +5533,7 @@ Online Symfony certification, take it now!
 **URL:** https://symfony.com/doc/7.4/components/filesystem.html
 
 **Contents:**
+
 - The Filesystem Component
 - Installation
 - Usage
@@ -5592,11 +5692,13 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/filesystem
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -5614,11 +5716,13 @@ try {
 ```
 
 Example 3 (php):
+
 ```php
 $filesystem->mkdir('/tmp/photos', 0700);
 ```
 
 Example 4 (php):
+
 ```php
 // if this absolute directory exists, returns true
 $filesystem->exists('/tmp/photos');
@@ -5635,6 +5739,7 @@ $filesystem->exists(['rabbit.jpg', 'bottle.png']);
 **URL:** https://symfony.com/doc/7.4/components/lock.html
 
 **Contents:**
+
 - The Lock Component
 - Installation
 - Usage
@@ -5852,7 +5957,7 @@ When the Memcached service is shared and used for multiple usage, Locks could be
 
 The method flush() must not be called, or locks should be stored in a dedicated Memcached service away from Cache.
 
-The locked resource name is indexed in the _id field of the lock collection. Beware that an indexed field's value in MongoDB can be a maximum of 1024 bytes in length including the structural overhead.
+The locked resource name is indexed in the \_id field of the lock collection. Beware that an indexed field's value in MongoDB can be a maximum of 1024 bytes in length including the structural overhead.
 
 A TTL index must be used to automatically clean up expired locks. Such an index can be created manually:
 
@@ -5921,11 +6026,13 @@ Online exam, become Symfony certified today
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/lock
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\SemaphoreStore;
@@ -5935,6 +6042,7 @@ $factory = new LockFactory($store);
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 $lock = $factory->createLock('pdf-creation');
@@ -5948,6 +6056,7 @@ if ($lock->acquire()) {
 ```
 
 Example 4 (php):
+
 ```php
 // src/Lock/RefreshTaxonomy.php
 namespace App\Lock;
@@ -5981,6 +6090,7 @@ class RefreshTaxonomy
 **URL:** https://symfony.com/doc/7.4/workflow.html
 
 **Contents:**
+
 - Workflow
 - Installation
 - Configuration
@@ -6203,48 +6313,52 @@ Show your Sylius expertise
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/workflow
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php bin/console config:dump-reference framework workflows
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/workflow.yaml
 framework:
-    workflows:
-        blog_publishing:
-            type: 'workflow' # or 'state_machine'
-            audit_trail:
-                enabled: true
-            marking_store:
-                type: 'method'
-                property: 'currentPlace'
-            supports:
-                - App\Entity\BlogPost
-            initial_marking: draft
-            places:          # defining places manually is optional
-                - draft
-                - reviewed
-                - rejected
-                - published
-            transitions:
-                to_review:
-                    from: draft
-                    to:   reviewed
-                publish:
-                    from: reviewed
-                    to:   published
-                reject:
-                    from: reviewed
-                    to:   rejected
+  workflows:
+    blog_publishing:
+      type: "workflow" # or 'state_machine'
+      audit_trail:
+        enabled: true
+      marking_store:
+        type: "method"
+        property: "currentPlace"
+      supports:
+        - App\Entity\BlogPost
+      initial_marking: draft
+      places: # defining places manually is optional
+        - draft
+        - reviewed
+        - rejected
+        - published
+      transitions:
+        to_review:
+          from: draft
+          to: reviewed
+        publish:
+          from: reviewed
+          to: published
+        reject:
+          from: reviewed
+          to: rejected
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/workflow.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -6296,6 +6410,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/components/string.html
 
 **Contents:**
+
 - Creating and Manipulating Strings
 - What is a String?
 - Usage
@@ -6392,11 +6507,13 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/string
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\String\UnicodeString;
 
@@ -6413,6 +6530,7 @@ if ($content->ignoreCase()->startsWith('नमस्ते')) {
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\String\ByteString;
 use Symfony\Component\String\CodePointString;
@@ -6425,6 +6543,7 @@ $baz = new UnicodeString('hello');
 ```
 
 Example 4 (php):
+
 ```php
 $contents = ByteString::wrap(['hello', 'world']);        // $contents = ByteString[]
 $contents = UnicodeString::wrap(['I', '❤️', 'Symfony']); // $contents = UnicodeString[]
@@ -6442,6 +6561,7 @@ $contents = UnicodeString::unwrap([
 **URL:** https://symfony.com/doc/7.4/components/uid.html
 
 **Contents:**
+
 - The UID Component
 - Installation
 - UUIDs
@@ -6513,7 +6633,7 @@ You can also convert some UUID versions to others:
 
 The toV6(), toV7() and toV7() methods were introduced in Symfony 7.1.
 
-UUID objects created with the Uuid class can use the following methods (which are equivalent to the uuid_*() method of the PHP extension):
+UUID objects created with the Uuid class can use the following methods (which are equivalent to the uuid\_\*() method of the PHP extension):
 
 If you're working with different UUIDs format and want to validate them, you can use the $format parameter of the isValid() method to specify the UUID format you're expecting:
 
@@ -6584,11 +6704,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/uid
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Uid\Uuid;
 
@@ -6597,6 +6719,7 @@ $uuid = Uuid::v1();
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Uid\Uuid;
 
@@ -6611,6 +6734,7 @@ $uuid = Uuid::v3($namespace, $name);
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Uid\Uuid;
 
@@ -6625,6 +6749,7 @@ $uuid = Uuid::v4();
 **URL:** https://symfony.com/doc/7.4/components/yaml.html
 
 **Contents:**
+
 - The Yaml Component
 - Installation
 - Why?
@@ -6680,7 +6805,7 @@ By default, the YAML component will use 4 spaces for indentation. This can be ch
 
 Long numeric literals, being integer, float or hexadecimal, are known for their poor readability in code and configuration files. That's why YAML files allow adding underscores to improve their readability:
 
-During the parsing of the YAML contents, all the _ characters are removed from the numeric literal contents, so there is not a limit in the number of underscores you can include or the way you group contents.
+During the parsing of the YAML contents, all the \_ characters are removed from the numeric literal contents, so there is not a limit in the number of underscores you can include or the way you group contents.
 
 You can dump objects by using the DUMP_OBJECT flag:
 
@@ -6761,11 +6886,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/yaml
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Yaml\Yaml;
 
@@ -6774,6 +6901,7 @@ $value = Yaml::parse("foo: bar");
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Yaml\Exception\ParseException;
 
@@ -6785,6 +6913,7 @@ try {
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Yaml\Yaml;
 
@@ -6798,6 +6927,7 @@ $value = Yaml::parseFile('/path/to/file.yaml');
 **URL:** https://symfony.com/doc/7.4/webhook.html
 
 **Contents:**
+
 - Webhook
 - Installation
 - Usage in Combination with the Mailer Component
@@ -6849,22 +6979,25 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/webhook
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    webhook:
-        routing:
-            mailer_mailgun:
-                service: 'mailer.webhook.request_parser.mailgun'
-                secret: '%env(MAILER_MAILGUN_SECRET)%'
+  webhook:
+    routing:
+      mailer_mailgun:
+        service: "mailer.webhook.request_parser.mailgun"
+        secret: "%env(MAILER_MAILGUN_SECRET)%"
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -6886,6 +7019,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/framework.php
 use App\Webhook\MailerWebhookParser;
@@ -6907,6 +7041,7 @@ return static function (FrameworkConfig $frameworkConfig): void {
 **URL:** https://symfony.com/doc/7.4/setup/file_permissions.html
 
 **Contents:**
+
 - Setting up or Fixing File Permissions
 - Permissions Required by Symfony Applications
 - Configuring Permissions for Symfony Applications
@@ -6943,18 +7078,23 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
-$ HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\  -f1)
+$ HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx' | grep -v root | head -1 | cut -d\ -f1)
 
 # if the following commands don't work, try adding `-n` option to `setfacl`
 
 # set permissions for future files and folders
+
 $ sudo setfacl -dR -m u:"$HTTPDUSER":rwX -m u:$(whoami):rwX var
+
 # set permissions on the existing files and folders
+
 $ sudo setfacl -R -m u:"$HTTPDUSER":rwX -m u:$(whoami):rwX var
 ```
 
 Example 2 (unknown):
+
 ```unknown
 umask(0002); // This will let the permissions be 0775
 
@@ -6970,6 +7110,7 @@ umask(0000); // This will let the permissions be 0777
 **URL:** https://symfony.com/doc/7.4/setup/web_server_configuration.html
 
 **Contents:**
+
 - Configuring a Web Server
 - Configuring PHP-FPM
 - Nginx
@@ -7019,6 +7160,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (json):
+
 ```json
 ; /etc/php/8.3/fpm/pool.d/www.conf
 
@@ -7035,6 +7177,7 @@ listen = /var/run/php/php8.3-fpm.sock
 ```
 
 Example 2 (bash):
+
 ```bash
 # /etc/nginx/conf.d/example.com.conf
 server {
@@ -7098,6 +7241,7 @@ server {
 ```
 
 Example 3 (jsx):
+
 ```jsx
 # /etc/apache2/conf.d/example.com.conf
 <VirtualHost *:80>
@@ -7144,6 +7288,7 @@ Example 3 (jsx):
 ```
 
 Example 4 (julia):
+
 ```julia
 # /etc/caddy/Caddyfile
 example.com, www.example.com {
@@ -7186,6 +7331,7 @@ example.com, www.example.com {
 **URL:** https://symfony.com/doc/7.4/setup/symfony_cli.html
 
 **Contents:**
+
 - Symfony CLI
 - Installation
   - Shell Autocompletion
@@ -7309,7 +7455,7 @@ Similar to other web servers, this tool automatically exposes all environment va
 
 If your service names don't match Symfony conventions, use labels:
 
-In this example, the service is named db, so environment variables would be prefixed with DB_, but as the com.symfony.server.service-prefix is set to DATABASE, the web server creates environment variables starting with DATABASE_ instead as expected by the default Symfony configuration.
+In this example, the service is named db, so environment variables would be prefixed with DB*, but as the com.symfony.server.service-prefix is set to DATABASE, the web server creates environment variables starting with DATABASE* instead as expected by the default Symfony configuration.
 
 Use the run command provided by the Symfony CLI to manage long-running processes like Webpack watchers:
 
@@ -7338,18 +7484,23 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # install autocompletion (do this only once)
+
 $ symfony completion bash | sudo tee /etc/bash_completion.d/symfony
 
 # for Zsh users
+
 $ symfony completion zsh > ~/.symfony_completion && echo "source ~/.symfony_completion" >> ~/.zshrc
 
 # for Fish users
+
 $ symfony completion fish | source
 ```
 
 Example 2 (julia):
+
 ```julia
 # create a new Symfony project based on the latest stable version
 $ symfony new my_project
@@ -7373,6 +7524,7 @@ $ symfony new my_project --demo
 ```
 
 Example 3 (json):
+
 ```json
 $ cd my-project/
 $ symfony server:start
@@ -7382,6 +7534,7 @@ $ symfony server:start
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ symfony open:local
 ```
@@ -7393,6 +7546,7 @@ $ symfony open:local
 **URL:** https://symfony.com/doc/7.4/setup/docker.html
 
 **Contents:**
+
 - Using Docker with Symfony
 - Complete Docker Environment
 - Flex Recipes & Docker Configuration
@@ -7425,12 +7579,14 @@ Become certified from home
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 ###> recipes ###
 ###< recipes ###
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ docker-compose up --build
 ```
@@ -7442,6 +7598,7 @@ $ docker-compose up --build
 **URL:** https://symfony.com/doc/7.4/setup/flex.html
 
 **Contents:**
+
 - Upgrading Existing Applications to Symfony Flex
 - Customizing Flex Paths
 - Learn more
@@ -7468,7 +7625,7 @@ Make sure that your previous configuration files don't have imports declarations
 
 Move the rest of the app/ contents as follows (and after that, remove the app/ directory):
 
-Move the original PHP source code files from src/AppBundle/*, except bundle specific files (like AppBundle.php and DependencyInjection/), to src/ and update the namespace of each moved file to be App\... (advanced IDEs can do this automatically).
+Move the original PHP source code files from src/AppBundle/\*, except bundle specific files (like AppBundle.php and DependencyInjection/), to src/ and update the namespace of each moved file to be App\... (advanced IDEs can do this automatically).
 
 In addition to moving the files, update the autoload and autoload-dev values of the composer.json file as shown in this example to use App\ and App\Tests\ as the application namespaces.
 
@@ -7487,6 +7644,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 your-project/
 ├── assets/
@@ -7510,16 +7668,19 @@ your-project/
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require symfony/flex
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ composer remove symfony/symfony
 ```
 
 Example 4 (json):
+
 ```json
 {
       "require": {
@@ -7538,6 +7699,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/setup/homestead.html
 
 **Contents:**
+
 - Using Symfony with Homestead/Vagrant
 - Install Vagrant and Homestead
 - Setting Up a Symfony Application
@@ -7569,25 +7731,29 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # ...
 folders:
-    - map: ~/projects
-      to: /home/vagrant/projects
+  - map: ~/projects
+    to: /home/vagrant/projects
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # ...
 sites:
-    - map: symfony-demo.test
-      to: /home/vagrant/projects/symfony_demo/public
-      type: symfony4
+  - map: symfony-demo.test
+    to: /home/vagrant/projects/symfony_demo/public
+    type: symfony4
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # /etc/hosts (unix) or C:\Windows\System32\drivers\etc\hosts (Windows)
+
 192.168.10.10 symfony-demo.test
 ```
 
@@ -7598,6 +7764,7 @@ Example 3 (markdown):
 **URL:** https://symfony.com/doc/7.4/setup/flex_private_recipes.html
 
 **Contents:**
+
 - How To Configure and Use Flex Private Recipe Repositories
 - Create a Private Repository
   - GitHub
@@ -7714,69 +7881,64 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {
-    "manifests": {
-        "acme/package-name": {
-            "manifest": {
-            },
-            "ref": "7405f3af1312d1f9121afed4dddef636c6c7ff00"
-        }
+  "manifests": {
+    "acme/package-name": {
+      "manifest": {},
+      "ref": "7405f3af1312d1f9121afed4dddef636c6c7ff00"
     }
+  }
 }
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "manifests": {
-        "acme/private-bundle": {
-            "manifest": {
-                "bundles": {
-                    "Acme\\PrivateBundle\\AcmePrivateBundle": [
-                        "all"
-                    ]
-                }
-            },
-            "ref": "7405f3af1312d1f9121afed4dddef636c6c7ff00"
+  "manifests": {
+    "acme/private-bundle": {
+      "manifest": {
+        "bundles": {
+          "Acme\\PrivateBundle\\AcmePrivateBundle": ["all"]
         }
+      },
+      "ref": "7405f3af1312d1f9121afed4dddef636c6c7ff00"
     }
+  }
 }
 ```
 
 Example 3 (bash):
+
 ```bash
 echo bin2hex(random_bytes(20));
 ```
 
 Example 4 (json):
+
 ```json
 {
-    "manifests": {
-        "acme/private-bundle": {
-            "manifest": {
-                "bundles": {
-                    "Acme\\PrivateBundle\\AcmePrivateBundle": [
-                        "all"
-                    ]
-                },
-                "copy-from-recipe": {
-                    "config/": "%CONFIG_DIR%"
-                }
-            },
-            "files": {
-                "config/packages/acme_private.yaml": {
-                    "contents": [
-                        "acme_private:",
-                        "    encode: true",
-                        ""
-                    ],
-                    "executable": false
-                }
-            },
-            "ref": "7405f3af1312d1f9121afed4dddef636c6c7ff00"
+  "manifests": {
+    "acme/private-bundle": {
+      "manifest": {
+        "bundles": {
+          "Acme\\PrivateBundle\\AcmePrivateBundle": ["all"]
+        },
+        "copy-from-recipe": {
+          "config/": "%CONFIG_DIR%"
         }
+      },
+      "files": {
+        "config/packages/acme_private.yaml": {
+          "contents": ["acme_private:", "    encode: true", ""],
+          "executable": false
+        }
+      },
+      "ref": "7405f3af1312d1f9121afed4dddef636c6c7ff00"
     }
+  }
 }
 ```
 
@@ -7787,6 +7949,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/setup/unstable_versions.html
 
 **Contents:**
+
 - How to Install or Upgrade to the Latest, Unreleased Symfony Version
 - Creating a New Project Based on an Unstable Symfony Version
 - Upgrading your Project to an Unstable Symfony Version
@@ -7799,9 +7962,9 @@ Once the command finishes, you'll have a new Symfony project created in the my_p
 
 Suppose again that Symfony 6.0 hasn't been released yet and you want to upgrade an existing application to test that your project works with it.
 
-First, open the composer.json file located in the root directory of your project. Then, edit the value of all of the symfony/* libraries to the new version and change your minimum-stability to beta:
+First, open the composer.json file located in the root directory of your project. Then, edit the value of all of the symfony/\* libraries to the new version and change your minimum-stability to beta:
 
-You can also use set minimum-stability to dev, or omit this line entirely, and opt into your stability on each package by using constraints like 6.0.*@beta.
+You can also use set minimum-stability to dev, or omit this line entirely, and opt into your stability on each package by using constraints like 6.0.\*@beta.
 
 Finally, from a terminal, update your project's dependencies:
 
@@ -7816,12 +7979,15 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # Download the absolute latest commit
+
 $ composer create-project symfony/skeleton my_project -s dev
 ```
 
 Example 2 (json):
+
 ```json
 {
       "require": {
@@ -7834,11 +8000,13 @@ Example 2 (json):
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ composer update
 ```
 
 Example 4 (sql):
+
 ```sql
 $ cd projects/my_project/
 $ git checkout -b testing_new_symfony
@@ -7857,14 +8025,15 @@ $ git branch -D testing_new_symfony
 **URL:** https://symfony.com/doc/7.4/setup/upgrade_major.html
 
 **Contents:**
+
 - Upgrading a Major Version (e.g. 6.4.0 to 7.0.0)
-- 1) Make your Code Deprecation Free
+- 1. Make your Code Deprecation Free
   - Deprecations in PHPUnit
-- 2) Update to the New Major Version via Composer
+- 2. Update to the New Major Version via Composer
   - Dependency Errors
   - Upgrading other Packages
-- 3) Updating Recipes
-- 4) Update your Code to Work with the New Version
+- 3. Updating Recipes
+- 4. Update your Code to Work with the New Version
 - Upgrading to Symfony 6: Add Native Return Types
 
 Every two years, Symfony releases a new major version release (the first number changes). These releases are the trickiest to upgrade, as they are allowed to break backward compatibility. However, Symfony makes this upgrade process as smooth as possible.
@@ -7875,7 +8044,7 @@ There are a couple of steps to upgrading a major version:
 
 During the lifecycle of a major release, new features are added and method signatures and public API usages are changed. However, minor versions should not contain any backwards incompatible changes. To accomplish this, the "old" (e.g. functions, classes, etc) code still works, but is marked as deprecated, indicating that it will be removed/changed in the future and that you should stop using it.
 
-When the major version is released (e.g. 7.0.0), all deprecated features and functionality are removed. So, as long as you've updated your code to stop using these deprecated features in the last version before the major (e.g. 6.4.*), you should be able to upgrade without a problem. That means that you should first upgrade to the last minor version (e.g. 5.4) so that you can see all the deprecations.
+When the major version is released (e.g. 7.0.0), all deprecated features and functionality are removed. So, as long as you've updated your code to stop using these deprecated features in the last version before the major (e.g. 6.4.\*), you should be able to upgrade without a problem. That means that you should first upgrade to the last minor version (e.g. 5.4) so that you can see all the deprecations.
 
 To help you find deprecations, notices are triggered whenever you end up using a deprecated feature. When visiting your application in the dev environment in your browser, these notices are shown in the web dev toolbar:
 
@@ -7919,7 +8088,7 @@ A best practice after updating to a new major version is to clear the cache. Ins
 
 If you get a dependency error, it may mean that you also need to upgrade other libraries that are dependencies of the Symfony libraries. To allow that, pass the --with-all-dependencies flag:
 
-This updates symfony/* and all packages that those packages depend on. By using tight version constraints in composer.json, you can control what versions each library upgrades to.
+This updates symfony/\* and all packages that those packages depend on. By using tight version constraints in composer.json, you can control what versions each library upgrades to.
 
 If this still doesn't work, your composer.json file may specify a version for a library that is not compatible with the newer Symfony version. In that case, updating that library to a newer version in composer.json may solve the issue.
 
@@ -7980,11 +8149,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/phpunit-bridge
 ```
 
 Example 2 (sql):
+
 ```sql
 # this command is available after running "composer require --dev symfony/phpunit-bridge"
 $ ./bin/phpunit
@@ -8003,6 +8174,7 @@ request instead: 6x
 ```
 
 Example 3 (jsx):
+
 ```jsx
 <!-- phpunit.dist.xml -->
 <phpunit>
@@ -8015,6 +8187,7 @@ Example 3 (jsx):
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ SYMFONY_DEPRECATIONS_HELPER=max[total]=999999 php ./bin/phpunit
 ```
@@ -8026,12 +8199,13 @@ $ SYMFONY_DEPRECATIONS_HELPER=max[total]=999999 php ./bin/phpunit
 **URL:** https://symfony.com/doc/7.4/setup/upgrade_minor.html
 
 **Contents:**
+
 - Upgrading a Minor Version (e.g. 6.3.0 to 6.4.0)
-- 1) Update the Symfony Library via Composer
+- 1. Update the Symfony Library via Composer
   - Dependency Errors
   - Upgrading other Packages
-- 2) Updating your Code to Work with the new Version
-- 3) Updating Recipes
+- 2. Updating your Code to Work with the new Version
+- 3. Updating Recipes
 
 If you're upgrading a minor version (where the middle number changes), then you should not encounter significant backward compatibility changes. For details, see the Symfony backward compatibility promise.
 
@@ -8047,7 +8221,7 @@ Next, use Composer to download new versions of the libraries:
 
 If you get a dependency error, it may mean that you also need to upgrade other libraries that are dependencies of the Symfony libraries. To allow that, pass the --with-all-dependencies flag:
 
-This updates symfony/* and all packages that those packages depend on. By using tight version constraints in composer.json, you can control what versions each library upgrades to.
+This updates symfony/\* and all packages that those packages depend on. By using tight version constraints in composer.json, you can control what versions each library upgrades to.
 
 If this still doesn't work, your composer.json file may specify a version for a library that is not compatible with the newer Symfony version. In that case, updating that library to a newer version in composer.json may solve the issue.
 
@@ -8082,6 +8256,7 @@ Become certified from home
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {
       "...": "...",
@@ -8104,6 +8279,7 @@ Example 1 (json):
 ```
 
 Example 2 (json):
+
 ```json
 "extra": {
       "symfony": {
@@ -8115,11 +8291,13 @@ Example 2 (json):
 ```
 
 Example 3 (sql):
+
 ```sql
 $ composer update "symfony/*"
 ```
 
 Example 4 (sql):
+
 ```sql
 $ composer update "symfony/*" --with-all-dependencies
 ```
@@ -8131,6 +8309,7 @@ $ composer update "symfony/*" --with-all-dependencies
 **URL:** https://symfony.com/doc/7.4/setup/upgrade_patch.html
 
 **Contents:**
+
 - Upgrading a Patch Version (e.g. 6.0.0 to 6.0.1)
 - Upgrading other Packages
 
@@ -8151,6 +8330,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer update
 ```
@@ -8162,6 +8342,7 @@ $ composer update
 **URL:** https://symfony.com/doc/7.4/best_practices.html
 
 **Contents:**
+
 - The Symfony Framework Best Practices
 - Creating the Project
   - Use the Symfony Binary to Create Symfony Applications
@@ -8239,7 +8420,7 @@ If the logic to get an entity from a route variable is more complex, instead of 
 
 Use lowercase snake_case for template names, directories, and variables (e.g. user_profile instead of userProfile and product/edit_form.html.twig instead of Product/EditForm.html.twig).
 
-Template fragments, also called "partial templates", allow you to reuse template contents. Prefix their names with an underscore to better differentiate them from complete templates (e.g. _user_metadata.html.twig or _caution_message.html.twig).
+Template fragments, also called "partial templates", allow you to reuse template contents. Prefix their names with an underscore to better differentiate them from complete templates (e.g. \_user_metadata.html.twig or \_caution_message.html.twig).
 
 Creating forms in classes allows reusing them in different parts of the application. Besides, not creating forms in controllers simplifies the code and maintenance of the controllers.
 
@@ -8284,11 +8465,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ symfony new my_project_directory
 ```
 
 Example 2 (unknown):
+
 ```unknown
 your_project/
 ├─ assets/
@@ -8323,20 +8506,22 @@ your_project/
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 parameters:
-    # don't do this: 'dir' is too generic, and it doesn't convey any meaning
-    app.dir: '...'
-    # do this: short but easy to understand names
-    app.contents_dir: '...'
-    # it's OK to use dots, underscores, dashes or nothing, but always
-    # be consistent and use the same format for all the parameters
-    app.dir.contents: '...'
-    app.contents-dir: '...'
+  # don't do this: 'dir' is too generic, and it doesn't convey any meaning
+  app.dir: "..."
+  # do this: short but easy to understand names
+  app.contents_dir: "..."
+  # it's OK to use dots, underscores, dashes or nothing, but always
+  # be consistent and use the same format for all the parameters
+  app.dir.contents: "..."
+  app.contents-dir: "..."
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Post.php
 namespace App\Entity;
@@ -8356,6 +8541,7 @@ class Post
 **URL:** https://symfony.com/doc/7.4/components/http_foundation.html
 
 **Contents:**
+
 - The HttpFoundation Component
 - Installation
 - Request
@@ -8364,12 +8550,12 @@ class Post
   - Simulating a Request
   - Accessing the Session
   - Processing HTTP Headers
-  - Accessing Accept-* Headers Data
+  - Accessing Accept-\* Headers Data
   - Anonymizing IP Addresses
 
 The HttpFoundation component defines an object-oriented layer for the HTTP specification.
 
-In PHP, the request is represented by some global variables ($_GET, $_POST, $_FILES, $_COOKIE, $_SESSION, ...) and the response is generated by some functions (echo, header(), setcookie(), ...).
+In PHP, the request is represented by some global variables ($\_GET, $\_POST, $\_FILES, $\_COOKIE, $\_SESSION, ...) and the response is generated by some functions (echo, header(), setcookie(), ...).
 
 The Symfony HttpFoundation component replaces these default PHP global variables and functions by an object-oriented layer.
 
@@ -8379,7 +8565,7 @@ This article explains how to use the HttpFoundation features as an independent c
 
 The most common way to create a request is to base it on the current PHP global variables with createFromGlobals():
 
-which is almost equivalent to the more verbose, but also more flexible, __construct() call:
+which is almost equivalent to the more verbose, but also more flexible, \_\_construct() call:
 
 A Request object holds information about the client request. This information can be accessed via several public properties:
 
@@ -8401,7 +8587,7 @@ For instance, this may be useful to process an XML string sent to the applicatio
 
 If the request body is a JSON string, it can be accessed using toArray():
 
-If the request data could be $_POST data or a JSON string, you can use the getPayload() method which returns an instance of InputBag wrapping this data:
+If the request data could be $\_POST data or a JSON string, you can use the getPayload() method which returns an instance of InputBag wrapping this data:
 
 In your application, you need a way to identify a request; most of the time, this is done via the "path info" of the request, which can be accessed via the getPathInfo() method:
 
@@ -8417,11 +8603,11 @@ If you have a session attached to the request, you can access it via the getSess
 
 Processing HTTP headers is not a trivial task because of the escaping and white space handling of their contents. Symfony provides a HeaderUtils class that abstracts this complexity and defines some methods for the most common tasks:
 
-You can access basic data extracted from Accept-* headers by using the following methods:
+You can access basic data extracted from Accept-\* headers by using the following methods:
 
 If you need to get full access to parsed data from Accept, Accept-Language, Accept-Charset or Accept-Encoding, you can use AcceptHeader utility class:
 
-The default values that can be optionally included in the Accept-* headers are also supported:
+The default values that can be optionally included in the Accept-\* headers are also supported:
 
 An increasingly common need for applications to comply with user protection regulations is to anonymize IP addresses before logging and storing them for analysis purposes. Use the anonymize() method from the IpUtils to do that:
 
@@ -8574,11 +8760,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/http-foundation
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\HttpFoundation\Request;
 
@@ -8586,6 +8774,7 @@ $request = Request::createFromGlobals();
 ```
 
 Example 3 (json):
+
 ```json
 $request = new Request(
     $_GET,
@@ -8598,6 +8787,7 @@ $request = new Request(
 ```
 
 Example 4 (php):
+
 ```php
 // the query string is '?foo=bar'
 
@@ -8618,6 +8808,7 @@ $request->query->get('bar', 'baz');
 **URL:** https://symfony.com/doc/7.4/configuration/env_var_processors.html
 
 **Contents:**
+
 - Environment Variable Processors
 - Built-In Environment Variable Processors
 - Custom Environment Variable Processors
@@ -8688,14 +8879,16 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 framework:
-    router:
-        http_port: '%env(int:HTTP_PORT)%'
+  router:
+    http_port: "%env(int:HTTP_PORT)%"
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/framework.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -8714,6 +8907,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/framework.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -8730,12 +8924,13 @@ return static function (FrameworkConfig $framework): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/framework.yaml
 parameters:
-    env(SECRET): 'some_secret'
+  env(SECRET): "some_secret"
 framework:
-    secret: '%env(string:SECRET)%'
+  secret: "%env(string:SECRET)%"
 ```
 
 ---
@@ -8745,6 +8940,7 @@ framework:
 **URL:** https://symfony.com/doc/7.4/routing/custom_route_loader.html
 
 **Contents:**
+
 - How to Create a custom Route Loader
 - Built-in Route Loaders
 - What is a Custom Route Loader
@@ -8817,6 +9013,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 # config/routes.yaml
 app_file:
@@ -8852,6 +9049,7 @@ app_bundle:
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/routes.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -8883,6 +9081,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/routes.php
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -8914,11 +9113,12 @@ return static function (RoutingConfigurator $routes): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/routes.yaml
 controllers:
-    resource: ../src/Controller/
-    type: attribute
+  resource: ../src/Controller/
+  type: attribute
 ```
 
 ---
@@ -8928,6 +9128,7 @@ controllers:
 **URL:** https://symfony.com/doc/7.4/service_container/request.html
 
 **Contents:**
+
 - How to Retrieve the Request from the Service Container
 
 Whenever you need to access the current request in a service, you can either add it as an argument to the methods that need the request or inject the request_stack service and access the Request by calling the getCurrentRequest() method:
@@ -8943,6 +9144,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Newsletter/NewsletterManager.php
 namespace App\Newsletter;
@@ -8973,6 +9175,7 @@ class NewsletterManager
 **URL:** https://symfony.com/doc/7.4/service_container/autowiring.html
 
 **Contents:**
+
 - Defining Services Dependencies Automatically (Autowiring)
 - An Autowiring Example
 - Autowiring Logic Explained
@@ -9105,6 +9308,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Util/Rot13Transformer.php
 namespace App\Util;
@@ -9119,6 +9323,7 @@ class Rot13Transformer
 ```
 
 Example 2 (php):
+
 ```php
 // src/Service/TwitterClient.php
 namespace App\Service;
@@ -9143,23 +9348,25 @@ class TwitterClient
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
-    # ...
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  # ...
 
-    App\Service\TwitterClient:
-        # redundant thanks to _defaults, but value is overridable on each service
-        autowire: true
+  App\Service\TwitterClient:
+    # redundant thanks to _defaults, but value is overridable on each service
+    autowire: true
 
-    App\Util\Rot13Transformer:
-        autowire: true
+  App\Util\Rot13Transformer:
+    autowire: true
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -9186,6 +9393,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/security/force_https.html
 
 **Contents:**
+
 - How to Force HTTPS or HTTP for different URLs
 
 The best policy is to force https on all URLs, which can be done via your web server configuration or access_control.
@@ -9207,19 +9415,21 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
+  # ...
 
-    access_control:
-        - { path: '^/secure', roles: ROLE_ADMIN, requires_channel: https }
-        - { path: '^/login', roles: PUBLIC_ACCESS, requires_channel: https }
-        # catch all other URLs
-        - { path: '^/', roles: PUBLIC_ACCESS, requires_channel: https }
+  access_control:
+    - { path: "^/secure", roles: ROLE_ADMIN, requires_channel: https }
+    - { path: "^/login", roles: PUBLIC_ACCESS, requires_channel: https }
+    # catch all other URLs
+    - { path: "^/", roles: PUBLIC_ACCESS, requires_channel: https }
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -9242,6 +9452,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Config\SecurityConfig;
@@ -9276,6 +9487,7 @@ return static function (SecurityConfig $security): void {
 **URL:** https://symfony.com/doc/7.4/components/clock.html
 
 **Contents:**
+
 - The Clock Component
 - Installation
 - Usage
@@ -9366,11 +9578,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/clock
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Clock\MockClock;
@@ -9393,6 +9607,7 @@ $clock->sleep(2.5);
 ```
 
 Example 3 (typescript):
+
 ```typescript
 use function Symfony\Component\Clock\now;
 
@@ -9401,6 +9616,7 @@ $now = now();
 ```
 
 Example 4 (php):
+
 ```php
 $later = now('+3 hours');
 
@@ -9414,6 +9630,7 @@ $yesterday = now('-1 day');
 **URL:** https://symfony.com/doc/7.4/routing/routing_from_database.html
 
 **Contents:**
+
 - Looking up Routes from a Database: Symfony CMF DynamicRouter
 
 The core Symfony Routing System is excellent at handling complex sets of routes. A highly optimized routing cache is dumped during deployments.
@@ -9441,6 +9658,7 @@ Make sure your project is risk free
 **URL:** https://symfony.com/doc/7.4/controller/value_resolver.html
 
 **Contents:**
+
 - Extending Action Argument Resolving
 - Built-In Value Resolvers
 - Managing Value Resolvers
@@ -9545,6 +9763,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (swift):
+
 ```swift
 namespace App\Model;
 
@@ -9558,6 +9777,7 @@ enum Suit: string
 ```
 
 Example 2 (php):
+
 ```php
 class CardController
 {
@@ -9572,6 +9792,7 @@ class CardController
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 
@@ -9595,6 +9816,7 @@ class CardController
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/DefaultController.php
 namespace App\Controller;
@@ -9620,6 +9842,7 @@ class DefaultController
 **URL:** https://symfony.com/doc/7.4/mercure.html
 
 **Contents:**
+
 - Pushing Data to Clients Using the Mercure Protocol
 - Installation
   - Installing the Symfony Bundle
@@ -9699,9 +9922,9 @@ If you want to access to this URL from an external JavaScript file, generate the
 
 Then retrieve it from your JS file:
 
-Mercure also allows subscribing to several topics, and to use URI Templates or the special value * (matched by all topics) as patterns:
+Mercure also allows subscribing to several topics, and to use URI Templates or the special value \* (matched by all topics) as patterns:
 
-However, on the client side (i.e. in JavaScript's EventSource), there is no built-in way to know which topic a certain message originates from. If this (or any other meta information) is important to you, you need to include it in the message's data (e.g. by adding a key to the JSON, or a data-* attribute to the HTML).
+However, on the client side (i.e. in JavaScript's EventSource), there is no built-in way to know which topic a certain message originates from. If this (or any other meta information) is important to you, you need to include it in the message's data (e.g. by adding a key to the JSON, or a data-\* attribute to the HTML).
 
 Test if a URI Template matches a URL using the online debugger
 
@@ -9790,34 +10013,38 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require mercure
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ symfony server:start --no-tls -d
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/mercure.yaml
 mercure:
-    hubs:
-        default:
-            url: '%env(string:MERCURE_URL)%'
-            public_url: '%env(string:MERCURE_PUBLIC_URL)%'
-            jwt:
-                secret: '%env(string:MERCURE_JWT_SECRET)%'
-                publish: ['https://example.com/foo1', 'https://example.com/foo2']
-                subscribe: ['https://example.com/bar1', 'https://example.com/bar2']
-                algorithm: 'hmac.sha256'
-                provider: 'My\Provider'
-                factory: 'My\Factory'
-                value: 'my.jwt'
+  hubs:
+    default:
+      url: "%env(string:MERCURE_URL)%"
+      public_url: "%env(string:MERCURE_PUBLIC_URL)%"
+      jwt:
+        secret: "%env(string:MERCURE_JWT_SECRET)%"
+        publish: ["https://example.com/foo1", "https://example.com/foo2"]
+        subscribe: ["https://example.com/bar1", "https://example.com/bar2"]
+        algorithm: "hmac.sha256"
+        provider: 'My\Provider'
+        factory: 'My\Factory'
+        value: "my.jwt"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/mercure.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -9850,6 +10077,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/controller/forwarding.html
 
 **Contents:**
+
 - How to Forward Requests to another Controller
 
 Though not very common, you can also forward to another controller internally with the forward() method provided by the AbstractController class.
@@ -9860,7 +10088,7 @@ The array passed to the method becomes the arguments for the resulting controlle
 
 Like when creating a controller for a route, the order of the arguments of the target method (fancy() in the above example) doesn't matter: the matching is done by name.
 
-Twig's app.current_route, app.current_route_parameters, and _route_params will be empty after such a ->forward() call. However, you can set them manually by adding a _route and _route_params keys to the array passed as the second argument of forward():
+Twig's app.current_route, app.current_route_parameters, and \_route_params will be empty after such a ->forward() call. However, you can set them manually by adding a \_route and \_route_params keys to the array passed as the second argument of forward():
 
 Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 
@@ -9869,6 +10097,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 public function index(string $name): Response
 {
@@ -9884,6 +10113,7 @@ public function index(string $name): Response
 ```
 
 Example 2 (php):
+
 ```php
 public function fancy(string $name, string $color): Response
 {
@@ -9892,6 +10122,7 @@ public function fancy(string $name, string $color): Response
 ```
 
 Example 3 (php):
+
 ```php
 $response = $this->forward('App\Controller\OtherController::fancy', [
     // ...
@@ -9907,6 +10138,7 @@ $response = $this->forward('App\Controller\OtherController::fancy', [
 **URL:** https://symfony.com/doc/7.4/controller/upload_file.html
 
 **Contents:**
+
 - How to Upload Files
 - Creating an Uploader Service
 - Using a Doctrine Listener
@@ -9954,6 +10186,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Product.php
 namespace App\Entity;
@@ -9982,6 +10215,7 @@ class Product
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/ProductType.php
 namespace App\Form;
@@ -10033,6 +10267,7 @@ class ProductType extends AbstractType
 ```
 
 Example 3 (json):
+
 ```json
 {# templates/product/new.html.twig #}
 <h1>Adding a new product</h1>
@@ -10045,6 +10280,7 @@ Example 3 (json):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/ProductController.php
 namespace App\Controller;
@@ -10116,6 +10352,7 @@ class ProductController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/reference/twig_reference.html
 
 **Contents:**
+
 - Twig Extensions Defined by Symfony
 - Functions
   - render
@@ -10135,7 +10372,7 @@ Makes a request to the given internal URI or controller and returns the result. 
 
 It's similar to the render function and defines the same arguments. However, it generates an ESI tag when ESI support is enabled or falls back to the behavior of render otherwise.
 
-The render_esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render_*() functions.
+The render*esi() function is an example of the shortcut functions of render. It automatically sets the strategy based on what's given in the function name, e.g. render_hinclude() will use the hinclude.js strategy. This works for all render*\*() functions.
 
 Generates the URI of a fragment.
 
@@ -10255,7 +10492,7 @@ The emoji set used to generate the textual representation (slack, github, gitlab
 
 It transforms the textual representation of an emoji (e.g. :wave:) into the actual emoji (👋):
 
-Sets the resources to override the form theme for the given form view instance. You can use _self as resources to set it to the current resource. More information in How to Customize Form Rendering.
+Sets the resources to override the form theme for the given form view instance. You can use \_self as resources to set it to the current resource. More information in How to Customize Form Rendering.
 
 Renders the translation of the content. More information in Translations.
 
@@ -10274,21 +10511,25 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {{ render(uri, options = []) }}
 ```
 
 Example 2 (json):
+
 ```json
 {{ render_esi(uri, options = []) }}
 ```
 
 Example 3 (json):
+
 ```json
 {{ fragment_uri(controller, absolute = false, strict = true, sign = true) }}
 ```
 
 Example 4 (json):
+
 ```json
 {{ controller(controller, attributes = [], query = []) }}
 ```
@@ -10300,6 +10541,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/reference/configuration/twig.html
 
 **Contents:**
+
 - Twig Configuration Reference (TwigBundle)
 - auto_reload
 - autoescape_service
@@ -10321,7 +10563,7 @@ If true, whenever a template is rendered, Symfony checks first if its source cod
 
 type: string default: null
 
-The escaping strategy applied by default to the template (to prevent XSS attacks) is determined during compilation time based on the filename of the template. This means for example that the contents of a *.html.twig template are escaped for HTML and the contents of *.js.twig are escaped for JavaScript.
+The escaping strategy applied by default to the template (to prevent XSS attacks) is determined during compilation time based on the filename of the template. This means for example that the contents of a _.html.twig template are escaped for HTML and the contents of _.js.twig are escaped for JavaScript.
 
 This option allows you to define the Symfony service which will be used to determine the default escaping applied to the template.
 
@@ -10329,7 +10571,7 @@ type: string default: null
 
 If autoescape_service option is defined, then this option defines the method called to determine the default escaping applied to the template.
 
-If the service defined in autoescape_service is invocable (i.e. it defines the `__invoke() PHP magic method`_) you can omit this option.
+If the service defined in autoescape*service is invocable (i.e. it defines the `__invoke() PHP magic method`*) you can omit this option.
 
 type: string default: Twig\Template
 
@@ -10367,7 +10609,7 @@ The timezone used when formatting date values with the date filter and no specif
 
 type: boolean default: %kernel.debug%
 
-If true, the compiled templates include a __toString() method that can be used to display their nodes.
+If true, the compiled templates include a \_\_toString() method that can be used to display their nodes.
 
 This option also controls the behavior of the Twig dump utilities. If this option is false, the dump() function doesn't output any contents.
 
@@ -10377,7 +10619,7 @@ The path to the directory where Symfony will look for the application Twig templ
 
 type: string or array of string default: []
 
-Some applications store their front-end assets in the same directory as Twig templates. The lint:twig command filters those files to only lint the ones that match the *.twig filename pattern.
+Some applications store their front-end assets in the same directory as Twig templates. The lint:twig command filters those files to only lint the ones that match the \*.twig filename pattern.
 
 However, the cache:warmup command tries to compile all files, including non-Twig templates (and it ignores compilation errors). The result is an unnecessary consumption of CPU and disk resources.
 
@@ -10436,23 +10678,28 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference twig
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config twig
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/twig.yaml
 twig:
-    file_name_pattern: ['*.twig', 'specific_file.html']
-    # ...
+  file_name_pattern: ["*.twig", "specific_file.html"]
+  # ...
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/twig.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -10472,6 +10719,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/twig.php
 use Symfony\Config\TwigConfig;
@@ -10493,6 +10741,7 @@ return static function (TwigConfig $twig): void {
 **URL:** https://symfony.com/doc/7.4/components/asset.html
 
 **Contents:**
+
 - The Asset Component
 - Installation
 - Usage
@@ -10571,6 +10820,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (jsx):
+
 ```jsx
 <link rel="stylesheet" type="text/css" href="/css/main.css">
 
@@ -10580,11 +10830,13 @@ Example 1 (jsx):
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require symfony/asset
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
@@ -10601,6 +10853,7 @@ echo $package->getUrl('image.png');
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\VersionStrategy\StaticVersionStrategy;
@@ -10623,6 +10876,7 @@ echo $package->getUrl('image.png');
 **URL:** https://symfony.com/doc/7.4/components/var_dumper.html
 
 **Contents:**
+
 - The VarDumper Component
 - Installation
 - The dump() Function
@@ -10740,7 +10994,7 @@ The HtmlDumper limits string length and nesting depth of the output to make it m
 
 The output format of a dumper can be fine tuned by the two flags DUMP_STRING_LENGTH and DUMP_LIGHT_ARRAY which are passed as a bitmap in the third constructor argument. They can also be set via environment variables when using assertDumpEquals($dump, $data, $filter, $message) during unit testing.
 
-The $filter argument of assertDumpEquals() can be used to pass a bit field of Caster::EXCLUDE_* constants and influences the expected output produced by the different casters.
+The $filter argument of assertDumpEquals() can be used to pass a bit field of Caster::EXCLUDE\_\* constants and influences the expected output produced by the different casters.
 
 If DUMP_STRING_LENGTH is set, then the length of a string is displayed next to its content:
 
@@ -10762,9 +11016,9 @@ Casters are responsible for returning the properties of the object or resource b
 
 Here is a simple caster not doing anything:
 
-For objects, the $array parameter comes pre-populated using PHP's native (array) casting operator or with the return value of $object->__debugInfo() if the magic method exists. Then, the return value of one Caster is given as the array argument to the next Caster in the chain.
+For objects, the $array parameter comes pre-populated using PHP's native (array) casting operator or with the return value of $object->\_\_debugInfo() if the magic method exists. Then, the return value of one Caster is given as the array argument to the next Caster in the chain.
 
-When casting with the (array) operator, PHP prefixes protected properties with a \0*\0 and private ones with the class owning the property. For example, \0Foobar\0 will be the prefix for all private properties of objects of type Foobar. Casters follow this convention and add two more prefixes: \0~\0 is used for virtual properties and \0+\0 for dynamic ones (runtime added properties not in the class declaration).
+When casting with the (array) operator, PHP prefixes protected properties with a \0\*\0 and private ones with the class owning the property. For example, \0Foobar\0 will be the prefix for all private properties of objects of type Foobar. Casters follow this convention and add two more prefixes: \0~\0 is used for virtual properties and \0+\0 for dynamic ones (runtime added properties not in the class declaration).
 
 Although you can, it is advised to not alter the state of an object while casting it in a Caster.
 
@@ -10781,11 +11035,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/var-dumper
 ```
 
 Example 2 (php):
+
 ```php
 require __DIR__.'/vendor/autoload.php';
 
@@ -10799,6 +11055,7 @@ dump($someObject)->someMethod();
 ```
 
 Example 3 (json):
+
 ```json
 # displays the dumped data in the console:
 $ php bin/console server:dump
@@ -10809,10 +11066,11 @@ $ php bin/console server:dump --format=html > dump.html
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/debug.yaml
 debug:
-   dump_destination: "tcp://%env(VAR_DUMPER_SERVER)%"
+  dump_destination: "tcp://%env(VAR_DUMPER_SERVER)%"
 ```
 
 ---
@@ -10822,6 +11080,7 @@ debug:
 **URL:** https://symfony.com/doc/7.4/service_container/tags.html
 
 **Contents:**
+
 - How to Work with Service Tags
 - Autoconfiguring Tags
 - Creating custom Tags
@@ -10843,7 +11102,7 @@ For most users, this is all you need to know. If you want to go further and lear
 
 If you enable autoconfigure, then some tags are automatically applied for you. That's true for the twig.extension tag: the container sees that your class extends AbstractExtension (or more accurately, that it implements ExtensionInterface) and adds the tag for you.
 
-If you want to apply tags automatically for your own services, use the _instanceof option:
+If you want to apply tags automatically for your own services, use the \_instanceof option:
 
 If you're using PHP configuration, you need to call instanceof before any service registration to make sure tags are correctly applied.
 
@@ -10950,14 +11209,16 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Twig\AppExtension:
-        tags: ['twig.extension']
+  App\Twig\AppExtension:
+    tags: ["twig.extension"]
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -10975,6 +11236,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -10990,15 +11252,16 @@ return function(ContainerConfigurator $container): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # this config only applies to the services created by this file
-    _instanceof:
-        # services whose classes are instances of CustomInterface will be tagged automatically
-        App\Security\CustomInterface:
-            tags: ['app.custom_tag']
-    # ...
+  # this config only applies to the services created by this file
+  _instanceof:
+    # services whose classes are instances of CustomInterface will be tagged automatically
+    App\Security\CustomInterface:
+      tags: ["app.custom_tag"]
+  # ...
 ```
 
 ---
@@ -11008,13 +11271,14 @@ services:
 **URL:** https://symfony.com/doc/7.4/reference/index.html
 
 **Contents:**
+
 - Reference Documents
 - Configuration Options
 - Forms and Validation
 - Format Specifications
 - Others
 
-Ever wondered what configuration options you have available to you in config/packages/*.yaml files? In this section, all the available configuration is broken down by the key (e.g. framework) that defines each possible section of your Symfony configuration.
+Ever wondered what configuration options you have available to you in config/packages/\*.yaml files? In this section, all the available configuration is broken down by the key (e.g. framework) that defines each possible section of your Symfony configuration.
 
 Check Code Performance in Dev, Test, Staging & Production
 
@@ -11027,6 +11291,7 @@ Online Sylius certification, take it now!
 **URL:** https://symfony.com/doc/7.4/reference/formats/yaml.html
 
 **Contents:**
+
 - The YAML Format
 - Scalars
   - Strings
@@ -11048,7 +11313,7 @@ Quoted styles are useful when a string starts or end with one or more relevant s
 
 When using single-quoted strings, any single quote ' inside its contents must be doubled to escape it:
 
-Strings containing any of the following characters must be quoted: : { } [ ] , & * # ? | - < > = ! % @ Although you can use double quotes, for these characters it is more convenient to use single quotes, which avoids having to escape any backslash \.
+Strings containing any of the following characters must be quoted: : { } [ ] , & \* # ? | - < > = ! % @ Although you can use double quotes, for these characters it is more convenient to use single quotes, which avoids having to escape any backslash \.
 
 The double-quoted style provides a way to express arbitrary strings, by using \ to escape characters and sequences. For instance, it is very useful when you need to embed a \n or a Unicode character in a string.
 
@@ -11127,6 +11392,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 A string in YAML
 
@@ -11136,16 +11402,19 @@ A string in YAML
 ```
 
 Example 2 (unknown):
+
 ```unknown
 'A single quote '' inside a single-quoted string'
 ```
 
 Example 3 (unknown):
+
 ```unknown
 "A double-quoted string in YAML\n"
 ```
 
 Example 4 (unknown):
+
 ```unknown
 |
   \/ /| |\/| |
@@ -11159,6 +11428,7 @@ Example 4 (unknown):
 **URL:** https://symfony.com/doc/7.4/components/config.html
 
 **Contents:**
+
 - The Config Component
 - Installation
 - Learn More
@@ -11176,6 +11446,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/config
 ```
@@ -11187,6 +11458,7 @@ $ composer require symfony/config
 **URL:** https://symfony.com/doc/7.4/service_container/compiler_passes.html
 
 **Contents:**
+
 - How to Work with Compiler Passes
 - Working with Compiler Passes in Bundles
 
@@ -11211,6 +11483,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Kernel.php
 namespace App;
@@ -11241,6 +11514,7 @@ class Kernel extends BaseKernel implements CompilerPassInterface
 ```
 
 Example 2 (php):
+
 ```php
 // src/Kernel.php
 namespace App;
@@ -11264,6 +11538,7 @@ class Kernel extends BaseKernel
 ```
 
 Example 3 (php):
+
 ```php
 // src/MyBundle/MyBundle.php
 namespace App\MyBundle;
@@ -11282,6 +11557,7 @@ class MyBundle extends AbstractBundle
 ```
 
 Example 4 (php):
+
 ```php
 // src/MyBundle/MyBundle.php
 namespace App\MyBundle;
@@ -11320,6 +11596,7 @@ class MyBundle extends AbstractBundle implements CompilerPassInterface
 **URL:** https://symfony.com/doc/7.4/profiler.html
 
 **Contents:**
+
 - Profiler
 - Installation
 - Accessing Profiling Data Programmatically
@@ -11339,7 +11616,7 @@ In applications using Symfony Flex, run this command to install the profiler Sym
 
 Now, browse any page of your application in the development environment to let the profiler collect information. Then, click on any element of the debug toolbar injected at the bottom of your pages to open the web interface of the Symfony Profiler, which will look like this:
 
-The debug toolbar is only injected into HTML responses. For other kinds of contents (e.g. JSON responses in API requests) the profiler URL is available in the X-Debug-Token-Link HTTP response header. Browse the /_profiler URL to see all profiles.
+The debug toolbar is only injected into HTML responses. For other kinds of contents (e.g. JSON responses in API requests) the profiler URL is available in the X-Debug-Token-Link HTTP response header. Browse the /\_profiler URL to see all profiles.
 
 To limit the storage used by profiles on disk, they are probabilistically removed after 2 days.
 
@@ -11428,23 +11705,27 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/profiler-pack
 ```
 
 Example 2 (php):
+
 ```php
 // ... $profiler is the 'profiler' service
 $profile = $profiler->loadProfileFromResponse($response);
 ```
 
 Example 3 (php):
+
 ```php
 $token = $response->headers->get('X-Debug-Token');
 $profile = $profiler->loadProfile($token);
 ```
 
 Example 4 (php):
+
 ```php
 // gets the latest 10 tokens
 $tokens = $profiler->find('', '', 10, '', '', '');
@@ -11469,6 +11750,7 @@ $tokens = $profiler->find('', '', 10, '', '4 days ago', '2 days ago');
 **URL:** https://symfony.com/doc/7.4/components/runtime.html
 
 **Contents:**
+
 - The Runtime Component
 - Installation
 - Usage
@@ -11495,7 +11777,7 @@ To make a console application, the bootstrap code would look like:
 
 The default Runtime is SymfonyRuntime. It works excellent on most applications running with a webserver using PHP-FPM like Nginx or Apache.
 
-The component also provides a GenericRuntime, which uses PHP's $_SERVER, $_POST, $_GET, $_FILES and $_SESSION superglobals. You may also use a custom Runtime (e.g. to integrate with Swoole or AWS Lambda).
+The component also provides a GenericRuntime, which uses PHP's $\_SERVER, $\_POST, $\_GET, $\_FILES and $\_SESSION superglobals. You may also use a custom Runtime (e.g. to integrate with Swoole or AWS Lambda).
 
 Use the APP_RUNTIME environment variable or by specifying the extra.runtime.class in composer.json to change the Runtime class:
 
@@ -11572,11 +11854,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/runtime
 ```
 
 Example 2 (php):
+
 ```php
 // public/index.php
 use App\Kernel;
@@ -11589,6 +11873,7 @@ return function (array $context): Kernel {
 ```
 
 Example 3 (php):
+
 ```php
 #!/usr/bin/env php
 <?php
@@ -11609,16 +11894,17 @@ return function (array $context): Application {
 ```
 
 Example 4 (json):
+
 ```json
 {
-    "require": {
-        "...": "..."
-    },
-    "extra": {
-        "runtime": {
-            "class": "Symfony\\Component\\Runtime\\GenericRuntime"
-        }
+  "require": {
+    "...": "..."
+  },
+  "extra": {
+    "runtime": {
+      "class": "Symfony\\Component\\Runtime\\GenericRuntime"
     }
+  }
 }
 ```
 
@@ -11629,6 +11915,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/configuration/secrets.html
 
 **Contents:**
+
 - How to Keep Sensitive Information Secret
 - Generate Cryptographic Keys
 - Create or Update Secrets
@@ -11713,27 +12000,33 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ php bin/console secrets:generate-keys
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ APP_RUNTIME_ENV=prod php bin/console secrets:generate-keys
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # the input is hidden as you type for security reasons
 
 # set your default development value (can be overridden locally)
+
 $ php bin/console secrets:set DATABASE_PASSWORD
 
 # set your production value
+
 $ APP_RUNTIME_ENV=prod php bin/console secrets:set DATABASE_PASSWORD
 ```
 
 Example 4 (sql):
+
 ```sql
 # provide a file where to read the secret from
 $ php bin/console secrets:set DATABASE_PASSWORD ~/Download/password.json
@@ -11752,6 +12045,7 @@ $ php bin/console secrets:set REMEMBER_ME --random
 **URL:** https://symfony.com/doc/7.4/configuration/override_dir_structure.html
 
 **Contents:**
+
 - How to Override Symfony's default Directory Structure
 - Override the Environment (DotEnv) Files Directory
 - Override the Configuration Directory
@@ -11815,6 +12109,7 @@ Online exam, become Symfony certified today
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 your-project/
 ├─ assets/
@@ -11837,19 +12132,21 @@ your-project/
 ```
 
 Example 2 (json):
+
 ```json
 {
+  "...": "...",
+  "extra": {
     "...": "...",
-    "extra": {
-        "...": "...",
-        "runtime": {
-            "dotenv_path": "my/custom/path/to/.env"
-        }
+    "runtime": {
+      "dotenv_path": "my/custom/path/to/.env"
     }
+  }
 }
 ```
 
 Example 3 (bash):
+
 ```bash
 // bin/console
 
@@ -11861,6 +12158,7 @@ require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 ```
 
 Example 4 (bash):
+
 ```bash
 // public/index.php
 
@@ -11878,6 +12176,7 @@ require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 **URL:** https://symfony.com/doc/7.4/configuration/using_parameters_in_dic.html
 
 **Contents:**
+
 - Using Parameters within a Dependency Injection Class
 
 You have seen how to use configuration parameters within Symfony service containers. There are special cases such as when you want, for instance, to use the %kernel.debug% parameter to make the services in your bundle enter debug mode. For this case there is more work to do in order to make the system understand the parameter value. By default, your parameter %kernel.debug% will be treated as a string. Consider the following example:
@@ -11897,6 +12196,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // inside Configuration class
 $rootNode
@@ -11912,6 +12212,7 @@ var_dump($config['logging']);
 ```
 
 Example 2 (yaml):
+
 ```yaml
 my_bundle:
     logging: true
@@ -11931,6 +12232,7 @@ my_bundle: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -11957,6 +12259,7 @@ Example 3 (xml):
 ```
 
 Example 4 (typescript):
+
 ```typescript
 $container->loadFromExtension('my_bundle', [
         'logging' => true,
@@ -11986,6 +12289,7 @@ $container->loadFromExtension('my_bundle');
 **URL:** https://symfony.com/doc/7.4/components/index.html
 
 **Contents:**
+
 - The Components
 
 Check Code Performance in Dev, Test, Staging & Production
@@ -11999,6 +12303,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **URL:** https://symfony.com/doc/7.4/components/using_components.html
 
 **Contents:**
+
 - How to Install and Use the Symfony Components
 - Using the Finder Component
 - Now what?
@@ -12026,11 +12331,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/finder
 ```
 
 Example 2 (php):
+
 ```php
 // Project structure example:
 // my_project/
@@ -12061,6 +12368,7 @@ $finder->in('../data/');
 **URL:** https://symfony.com/doc/7.4/components/event_dispatcher.html
 
 **Contents:**
+
 - The EventDispatcher Component
 - Introduction
 - Installation
@@ -12100,7 +12408,7 @@ To take advantage of an existing event, you need to connect a listener to the di
 
 The addListener() method takes up to three arguments:
 
-A PHP callable is a PHP variable that can be used by the call_user_func() function and returns true when passed to the is_callable() function. It can be a \Closure instance, an object implementing an __invoke() method (which is what closures are in fact), a string representing a function or an array representing an object method or a class method.
+A PHP callable is a PHP variable that can be used by the call_user_func() function and returns true when passed to the is_callable() function. It can be a \Closure instance, an object implementing an \_\_invoke() method (which is what closures are in fact), a string representing a function or an array representing an object method or a class method.
 
 So far, you've seen how PHP objects can be registered as listeners. You can also register PHP Closures as event listeners:
 
@@ -12161,11 +12469,13 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/event-dispatcher
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -12173,12 +12483,14 @@ $dispatcher = new EventDispatcher();
 ```
 
 Example 3 (php):
+
 ```php
 $listener = new AcmeListener();
 $dispatcher->addListener('acme.foo.action', [$listener, 'onFooAction']);
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -12194,6 +12506,7 @@ $dispatcher->addListener('acme.foo.action', function (Event $event): void {
 **URL:** https://symfony.com/doc/7.4/service_container/debug.html
 
 **Contents:**
+
 - How to Debug the Service Container & List Services
 - Debugging Service Tags
 - Detailed Info about a Single Service
@@ -12217,24 +12530,29 @@ Get your Symfony expertise recognized
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 $ php bin/console debug:container
 
 # add this option to display "hidden services" too (those whose ID starts with a dot)
+
 $ php bin/console debug:container --show-hidden
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php bin/console debug:autowiring
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ php bin/console debug:container --tag=kernel.event_listener
 ```
 
 Example 4 (json):
+
 ```json
 $ php bin/console debug:container --tag=kernel
 
@@ -12255,6 +12573,7 @@ Select one of the following tags to display its information:
 **URL:** https://symfony.com/doc/7.4/components/dependency_injection/compilation.html
 
 **Contents:**
+
 - Compiling the Container
 - Managing Configuration with Extensions
 - Prepending Configuration Passed to the Extension
@@ -12381,16 +12700,19 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $container->compile();
 ```
 
 Example 2 (php):
+
 ```php
 $container->registerExtension($extension);
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12413,6 +12735,7 @@ class AcmeDemoExtension implements ExtensionInterface
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 
@@ -12434,6 +12757,7 @@ class AcmeDemoExtension implements ExtensionInterface
 **URL:** https://symfony.com/doc/7.4/service_container/service_subscribers_locators.html
 
 **Contents:**
+
 - Service Subscribers & Locators
 - Defining a Service Subscriber
 - Including Services
@@ -12529,13 +12853,13 @@ If some service class doesn't define the method configured in default_index_meth
 
 You can combine both options in the same locator. Symfony will process them in the following order:
 
-The ServiceMethodsSubscriberTrait provides an implementation for ServiceSubscriberInterface that looks through all methods in your class that are marked with the SubscribedService attribute. It describes the services needed by the class based on each method's return type. The service id is __METHOD__. This allows you to add dependencies to your services based on type-hinted helper methods:
+The ServiceMethodsSubscriberTrait provides an implementation for ServiceSubscriberInterface that looks through all methods in your class that are marked with the SubscribedService attribute. It describes the services needed by the class based on each method's return type. The service id is **METHOD**. This allows you to add dependencies to your services based on type-hinted helper methods:
 
 The ServiceMethodsSubscriberTrait was introduced in Symfony 7.1. In previous Symfony versions it was called ServiceSubscriberTrait.
 
 This allows you to create helper traits like RouterAware, LoggerAware, etc... and compose your services with them:
 
-When creating these helper traits, the service id cannot be __METHOD__ as this will include the trait name, not the class name. Instead, use __CLASS__.'::'.__FUNCTION__ as the service id.
+When creating these helper traits, the service id cannot be **METHOD** as this will include the trait name, not the class name. Instead, use **CLASS**.'::'.**FUNCTION** as the service id.
 
 You can use the attributes argument of SubscribedService to add any of the following dependency injection attributes:
 
@@ -12554,6 +12878,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/CommandBus.php
 namespace App;
@@ -12586,6 +12911,7 @@ $commandBus->handle(new FooCommand());
 ```
 
 Example 2 (php):
+
 ```php
 // src/CommandBus.php
 namespace App;
@@ -12624,6 +12950,7 @@ class CommandBus implements ServiceSubscriberInterface
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 $handler = $this->locator->get($commandClass);
@@ -12632,6 +12959,7 @@ return $handler->handle($command);
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 $numberOfHandlers = count($this->locator);
@@ -12650,6 +12978,7 @@ foreach ($this->locator as $serviceId => $service) {
 **URL:** https://symfony.com/doc/7.4/service_container/alias_private.html
 
 **Contents:**
+
 - How to Create Service Aliases and Mark Services as Private
 - Marking Services as Public / Private
 - Aliasing
@@ -12718,22 +13047,25 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // only public services can be accessed in this way
 $doctrine = $container->get('doctrine');
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Service\Foo:
-        public: true
+  App\Service\Foo:
+    public: true
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -12748,6 +13080,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -12769,6 +13102,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/service_container/calls.html
 
 **Contents:**
+
 - Service Method Calls and Setter Injection
 
 If you're using autowiring, you can use #[Required] to automatically configure method calls.
@@ -12792,6 +13126,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Service/MessageGenerator.php
 namespace App\Service;
@@ -12812,16 +13147,18 @@ class MessageGenerator
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Service\MessageGenerator:
-        # ...
-        calls:
-            - setLogger: ['@logger']
+  App\Service\MessageGenerator:
+    # ...
+    calls:
+      - setLogger: ["@logger"]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -12842,6 +13179,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -12863,6 +13201,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/service_container/configurators.html
 
 **Contents:**
+
 - How to Configure a Service with a Configurator
 - Using the Configurator
 
@@ -12886,7 +13225,7 @@ While this example uses a PHP class method, configurators can be any valid PHP c
 
 You can configure the service configurator using the configurator option. If you're using the default services.yaml configuration, all the classes are already loaded as services. All you need to do is specify the configurator:
 
-Services can be configured via invokable configurators (replacing the configure() method with __invoke()) by omitting the method name:
+Services can be configured via invokable configurators (replacing the configure() method with \_\_invoke()) by omitting the method name:
 
 That's it! When requesting the App\Mail\NewsletterManager or App\Mail\GreetingCardManager service, the created instance will first be passed to the EmailConfigurator::configure() method.
 
@@ -12897,6 +13236,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Mail/NewsletterManager.php
 namespace App\Mail;
@@ -12915,6 +13255,7 @@ class NewsletterManager implements EmailFormatterAwareInterface
 ```
 
 Example 2 (php):
+
 ```php
 // src/Mail/GreetingCardManager.php
 namespace App\Mail;
@@ -12933,6 +13274,7 @@ class GreetingCardManager implements EmailFormatterAwareInterface
 ```
 
 Example 3 (php):
+
 ```php
 // src/Mail/EmailFormatterManager.php
 namespace App\Mail;
@@ -12954,6 +13296,7 @@ class EmailFormatterManager
 ```
 
 Example 4 (php):
+
 ```php
 // src/Mail/EmailConfigurator.php
 namespace App\Mail;
@@ -12983,6 +13326,7 @@ class EmailConfigurator
 **URL:** https://symfony.com/doc/7.4/service_container/definitions.html
 
 **Contents:**
+
 - How to work with Service Definition Objects
 - Getting and Setting Service Definitions
 - Working with a Definition
@@ -13023,6 +13367,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -13045,6 +13390,7 @@ $container->register('app.number_generator', \App\NumberGenerator::class);
 ```
 
 Example 2 (php):
+
 ```php
 use App\Config\CustomConfigManager;
 use App\Config\UserConfigManager;
@@ -13060,6 +13406,7 @@ $class = $definition->getClass();
 ```
 
 Example 3 (php):
+
 ```php
 use App\Config\DoctrineConfigManager;
 use Symfony\Component\DependencyInjection\Definition;
@@ -13091,6 +13438,7 @@ $definition->setArguments($arguments);
 ```
 
 Example 4 (php):
+
 ```php
 // gets all configured method calls
 $methodCalls = $definition->getMethodCalls();
@@ -13112,6 +13460,7 @@ $definition->setMethodCalls($methodCalls);
 **URL:** https://symfony.com/doc/7.4/service_container/factories.html
 
 **Contents:**
+
 - Using a Factory to Create Services
 - Static Factories
 - Using the Class as Factory Itself
@@ -13144,7 +13493,7 @@ It is also possible to use the constructor option, instead of passing null as th
 
 If your factory is using a regular method instead of a static one to configure and create the service, instantiate the factory itself as a service too. Configuration of the service container then looks like this:
 
-Suppose you now change your factory method to __invoke() so that your factory service can be used as a callback:
+Suppose you now change your factory method to \_\_invoke() so that your factory service can be used as a callback:
 
 Services can be created and configured via invokable factories by omitting the method name:
 
@@ -13161,6 +13510,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Email/NewsletterManagerStaticFactory.php
 namespace App\Email;
@@ -13181,17 +13531,20 @@ class NewsletterManagerStaticFactory
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Email\NewsletterManager:
-        # the first argument is the class and the second argument is the static method
-        factory: ['App\Email\NewsletterManagerStaticFactory', 'createNewsletterManager']
+  App\Email\NewsletterManager:
+    # the first argument is the class and the second argument is the static method
+    factory:
+      ['App\Email\NewsletterManagerStaticFactory', "createNewsletterManager"]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13210,6 +13563,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -13233,6 +13587,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/service_container/import.html
 
 **Contents:**
+
 - How to Import Configuration Files/Resources
 - Importing Configuration with imports
 - Importing Configuration via Container Extensions
@@ -13278,16 +13633,18 @@ Online exam, become Symfony certified today
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/services/mailer.yaml
 parameters:
-    # ... some parameters
+  # ... some parameters
 
 services:
-    # ... some services
+  # ... some services
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services/mailer.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13307,6 +13664,7 @@ Example 2 (xml):
 ```
 
 Example 3 (unknown):
+
 ```unknown
 // config/services/mailer.php
 
@@ -13315,21 +13673,22 @@ Example 3 (unknown):
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/services.yaml
 imports:
-    - { resource: services/mailer.yaml }
-    # If you want to import a whole directory:
-    - { resource: services/ }
+  - { resource: services/mailer.yaml }
+  # If you want to import a whole directory:
+  - { resource: services/ }
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
+  _defaults:
+    autowire: true
+    autoconfigure: true
 
-    App\:
-        resource: '../src/*'
+  App\:
+    resource: "../src/*"
 
-    # ...
+  # ...
 ```
 
 ---
@@ -13339,6 +13698,7 @@ services:
 **URL:** https://symfony.com/doc/7.4/service_container/injection_types.html
 
 **Contents:**
+
 - Types of Injection
 - Constructor Injection
 - Immutable-setter Injection
@@ -13388,6 +13748,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Mail/NewsletterManager.php
 namespace App\Mail;
@@ -13405,16 +13766,18 @@ class NewsletterManager
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Mail\NewsletterManager:
-        arguments: ['@mailer']
+  App\Mail\NewsletterManager:
+    arguments: ["@mailer"]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13434,6 +13797,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -13455,6 +13819,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/service_container/lazy_services.html
 
 **Contents:**
+
 - Lazy Services
 - Why Lazy Services?
 - Configuration
@@ -13505,14 +13870,16 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Twig\AppExtension:
-        lazy: true
+  App\Twig\AppExtension:
+    lazy: true
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13528,6 +13895,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -13542,6 +13910,7 @@ return function(ContainerConfigurator $container): void {
 ```
 
 Example 4 (php):
+
 ```php
 namespace App\Twig;
 
@@ -13562,6 +13931,7 @@ class AppExtension implements ExtensionInterface
 **URL:** https://symfony.com/doc/7.4/service_container/optional_dependencies.html
 
 **Contents:**
+
 - How to Make Service Arguments/References Optional
 - Setting Missing Dependencies to null
 - Ignoring Missing Dependencies
@@ -13587,6 +13957,7 @@ Get your Symfony expertise recognized
 **Examples:**
 
 Example 1 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13606,6 +13977,7 @@ Example 1 (xml):
 ```
 
 Example 2 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -13621,15 +13993,17 @@ return function(ContainerConfigurator $container): void {
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Newsletter\NewsletterManager:
-        calls:
-            - setLogger: ['@?logger']
+  App\Newsletter\NewsletterManager:
+    calls:
+      - setLogger: ["@?logger"]
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13655,6 +14029,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/service_container/parent_services.html
 
 **Contents:**
+
 - How to Manage Common Dependencies with Parent Services
 - Overriding Parent Dependencies
 
@@ -13679,6 +14054,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Repository/BaseDoctrineRepository.php
 namespace App\Repository;
@@ -13706,6 +14082,7 @@ abstract class BaseDoctrineRepository
 ```
 
 Example 2 (php):
+
 ```php
 // src/Repository/DoctrineUserRepository.php
 namespace App\Repository;
@@ -13731,26 +14108,28 @@ class DoctrinePostRepository extends BaseDoctrineRepository
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Repository\BaseDoctrineRepository:
-        abstract:  true
-        arguments: ['@doctrine.orm.entity_manager']
-        calls:
-            - setLogger: ['@logger']
+  App\Repository\BaseDoctrineRepository:
+    abstract: true
+    arguments: ["@doctrine.orm.entity_manager"]
+    calls:
+      - setLogger: ["@logger"]
 
-    App\Repository\DoctrineUserRepository:
-        # extend the App\Repository\BaseDoctrineRepository service
-        parent: App\Repository\BaseDoctrineRepository
+  App\Repository\DoctrineUserRepository:
+    # extend the App\Repository\BaseDoctrineRepository service
+    parent: App\Repository\BaseDoctrineRepository
 
-    App\Repository\DoctrinePostRepository:
-        parent: App\Repository\BaseDoctrineRepository
+  App\Repository\DoctrinePostRepository:
+    parent: App\Repository\BaseDoctrineRepository
 
-    # ...
+  # ...
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13789,6 +14168,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/service_container/service_closures.html
 
 **Contents:**
+
 - Service Closures
 - Using a Service Closure in a Compiler Pass
 
@@ -13811,6 +14191,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Service/MyService.php
 namespace App\Service;
@@ -13842,24 +14223,26 @@ class MyService
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Service\MyService:
-        arguments: [!service_closure '@mailer']
+  App\Service\MyService:
+    arguments: [!service_closure "@mailer"]
 
-        # In case the dependency is optional
-        # arguments: [!service_closure '@?mailer']
+    # In case the dependency is optional
+    # arguments: [!service_closure '@?mailer']
 
-    # you can also use the special '@>' syntax as a shortcut of '!service_closure'
-    App\Service\AnotherService:
-        arguments: ['@>mailer']
+  # you can also use the special '@>' syntax as a shortcut of '!service_closure'
+  App\Service\AnotherService:
+    arguments: ["@>mailer"]
 
-        # the shortcut also works for optional dependencies
-        # arguments: ['@>?mailer']
+    # the shortcut also works for optional dependencies
+    # arguments: ['@>?mailer']
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13881,6 +14264,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -13906,6 +14290,7 @@ return function (ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/service_container/service_decoration.html
 
 **Contents:**
+
 - How to Decorate Services
 - Decoration Priority
 - Stacking Decorators
@@ -13960,6 +14345,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
@@ -13972,6 +14358,7 @@ services:
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -13990,6 +14377,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -14009,6 +14397,7 @@ return function(ContainerConfigurator $container): void {
 ```
 
 Example 4 (php):
+
 ```php
 // src/DecoratingMailer.php
 namespace App;
@@ -14030,6 +14419,7 @@ class DecoratingMailer
 **URL:** https://symfony.com/doc/7.4/service_container/shared.html
 
 **Contents:**
+
 - How to Define Non Shared Services
 
 In the service container, all services are shared by default. This means that each time you retrieve the service, you'll get the same instance. This is usually the behavior you want, but in some cases, you might want to always get a new instance.
@@ -14045,6 +14435,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/SomeNonSharedService.php
 namespace App;
@@ -14059,15 +14450,17 @@ class SomeNonSharedService
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\SomeNonSharedService:
-        shared: false
-        # ...
+  App\SomeNonSharedService:
+    shared: false
+    # ...
 ```
 
 Example 3 (jsx):
+
 ```jsx
 <!-- config/services.xml -->
 <services>
@@ -14076,6 +14469,7 @@ Example 3 (jsx):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -14097,6 +14491,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/service_container/synthetic_services.html
 
 **Contents:**
+
 - How to Inject Instances into the Container
 
 In some applications, you may need to inject a class instance as service, instead of configuring the container to create a new instance.
@@ -14116,6 +14511,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -14136,15 +14532,17 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # synthetic services don't specify a class
-    app.synthetic_service:
-        synthetic: true
+  # synthetic services don't specify a class
+  app.synthetic_service:
+    synthetic: true
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -14163,6 +14561,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -14183,6 +14582,7 @@ return function(ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/doctrine/dbal.html
 
 **Contents:**
+
 - How to Use Doctrine DBAL
 - Registering custom Mapping Types
 - Registering custom Mapping Types in the SchemaTool
@@ -14216,19 +14616,23 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/orm-pack
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # .env (or override DATABASE_URL in .env.local to avoid committing your changes)
 
 # customize this line!
+
 DATABASE_URL="mysql://db_user:db_password@127.0.0.1:3306/db_name?serverVersion=8.0.37"
 ```
 
 Example 3 (php):
+
 ```php
 // src/Controller/UserController.php
 namespace App\Controller;
@@ -14249,13 +14653,14 @@ class UserController extends AbstractController
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
-    dbal:
-        types:
-            custom_first:  App\Type\CustomFirst
-            custom_second: App\Type\CustomSecond
+  dbal:
+    types:
+      custom_first: App\Type\CustomFirst
+      custom_second: App\Type\CustomSecond
 ```
 
 ---
@@ -14265,6 +14670,7 @@ doctrine:
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NotNull.html
 
 **Contents:**
+
 - NotNull
 - Basic Usage
 - Options
@@ -14299,6 +14705,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -14313,15 +14720,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        firstName:
-            - NotNull: ~
+properties:
+firstName: - NotNull: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -14338,6 +14747,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -14363,6 +14773,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/components/property_info.html
 
 **Contents:**
+
 - The PropertyInfo Component
 - Installation
 - Usage
@@ -14428,7 +14839,7 @@ Each object will provide 6 attributes, available in the 6 methods:
 
 The Type::getBuiltinType() method returns the built-in PHP data type, which can be one of these string values: array, bool, callable, float, int, iterable, null, object, resource or string.
 
-Constants inside the Type class, in the form Type::BUILTIN_TYPE_*, are provided for convenience.
+Constants inside the Type class, in the form Type::BUILTIN*TYPE*\*, are provided for convenience.
 
 The Type::isNullable() method will return a boolean value indicating whether the property parameter can be set to null.
 
@@ -14489,11 +14900,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/property-info
 ```
 
 Example 2 (php):
+
 ```php
 use Example\Namespace\YourAwesomeCoolClass;
 use Symfony\Component\PropertyInfo\Extractor\PhpDocExtractor;
@@ -14533,6 +14946,7 @@ $properties = $propertyInfo->getProperties($class);
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Bridge\Doctrine\PropertyInfo\DoctrineExtractor;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -14556,6 +14970,7 @@ $propertyInfo = new PropertyInfoExtractor(
 ```
 
 Example 4 (php):
+
 ```php
 // bad! It may work, but not with all extractors
 $propertyInfo->getProperties($awesomeObject);
@@ -14573,6 +14988,7 @@ $propertyInfo->getProperties(YourAwesomeClass::class);
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Type.html
 
 **Contents:**
+
 - Type
 - Basic Usage
 - Options
@@ -14607,11 +15023,11 @@ For example, you may want to use several error levels to present failed constrai
 
 type: string or array
 
-This required option defines the type or collection of types allowed for the given value. Each type is either the FQCN (fully qualified class name) of some PHP class/interface or a valid PHP datatype (checked by PHP's is_() functions):
+This required option defines the type or collection of types allowed for the given value. Each type is either the FQCN (fully qualified class name) of some PHP class/interface or a valid PHP datatype (checked by PHP's is\_() functions):
 
 If you're dealing with arrays, you can use the following types in the constraint:
 
-Also, you can use ctype_*() functions from corresponding built-in PHP extension. Consider a list of ctype functions:
+Also, you can use ctype\_\*() functions from corresponding built-in PHP extension. Consider a list of ctype functions:
 
 Make sure that the proper locale is set before using one of these.
 
@@ -14626,6 +15042,7 @@ Become certified from home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -14653,13 +15070,14 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        emailAddress:
-            - Type:
-                type: Symfony\Component\Mime\Address
+properties:
+emailAddress: - Type:
+type: Symfony\Component\Mime\Address
 
         firstName:
             - Type:
@@ -14676,6 +15094,7 @@ App\Entity\Author:
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -14713,6 +15132,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -14750,6 +15170,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/UniqueEntity.html
 
 **Contents:**
+
 - UniqueEntity
 - Basic Usage
 - Options
@@ -14811,7 +15232,7 @@ type: string default: This value is already used.
 
 The message that's displayed when this constraint fails. This message is by default mapped to the first field causing the violation. When using multiple fields in the constraint, the mapping can be specified via the errorPath property.
 
-Messages can include the {{ value }} placeholder to display a string representation of the invalid entity. If the entity doesn't define the __toString() method, the following generic value will be used: "Object of class __CLASS__ identified by <comma separated IDs>"
+Messages can include the {{ value }} placeholder to display a string representation of the invalid entity. If the entity doesn't define the **toString() method, the following generic value will be used: "Object of class **CLASS\_\_ identified by <comma separated IDs>"
 
 You can use the following parameters in this message:
 
@@ -14834,6 +15255,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -14856,18 +15278,19 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: email
-    properties:
-        email:
-            - Email: ~
+constraints: - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
+fields: email
+properties:
+email: - Email: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -14887,6 +15310,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -14941,6 +15365,7 @@ class UserType extends AbstractType
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Length.html
 
 **Contents:**
+
 - Length
 - Basic Usage
 - Options
@@ -15033,6 +15458,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Participant.php
 namespace App\Entity;
@@ -15052,19 +15478,21 @@ class Participant
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Participant:
-    properties:
-        firstName:
-            - Length:
-                min: 2
-                max: 50
-                minMessage: 'Your first name must be at least {{ limit }} characters long'
-                maxMessage: 'Your first name cannot be longer than {{ limit }} characters'
+properties:
+firstName: - Length:
+min: 2
+max: 50
+minMessage: 'Your first name must be at least {{ limit }} characters long'
+maxMessage: 'Your first name cannot be longer than {{ limit }} characters'
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -15090,6 +15518,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Participant.php
 namespace App\Entity;
@@ -15120,6 +15549,7 @@ class Participant
 **URL:** https://symfony.com/doc/7.4/doctrine/resolve_target_entity.html
 
 **Contents:**
+
 - Referencing Entities with Abstract Classes and Interfaces
 - Background
 - Set up
@@ -15152,6 +15582,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Customer.php
 namespace App\Entity;
@@ -15170,6 +15601,7 @@ class Customer extends BaseCustomer implements InvoiceSubjectInterface
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Invoice.php
 namespace App\Entity;
@@ -15187,6 +15619,7 @@ class Invoice
 ```
 
 Example 3 (php):
+
 ```php
 // src/Model/InvoiceSubjectInterface.php
 namespace App\Model;
@@ -15208,14 +15641,15 @@ interface InvoiceSubjectInterface
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
+  # ...
+  orm:
     # ...
-    orm:
-        # ...
-        resolve_target_entities:
-            App\Model\InvoiceSubjectInterface: App\Entity\Customer
+    resolve_target_entities:
+      App\Model\InvoiceSubjectInterface: App\Entity\Customer
 ```
 
 ---
@@ -15225,6 +15659,7 @@ doctrine:
 **URL:** https://symfony.com/doc/7.4/reference/configuration/doctrine.html
 
 **Contents:**
+
 - Doctrine Configuration Reference (DoctrineBundle)
 - Doctrine DBAL Configuration
   - Disable Autocommit Mode
@@ -15254,7 +15689,7 @@ If you want to configure multiple connections in YAML, put them under the connec
 
 The database_connection service always refers to the default connection, which is the first one defined or the one configured via the default_connection parameter.
 
-Each connection is also accessible via the doctrine.dbal.[name]_connection service where [name] is the name of the connection. In a controller you can access it using the getConnection() method and the name of the connection:
+Each connection is also accessible via the doctrine.dbal.[name]\_connection service where [name] is the name of the connection. In a controller you can access it using the getConnection() method and the name of the connection:
 
 By default, autocommit is enabled when using Doctrine DBAL. This means that each INSERT, UPDATE, or DELETE statement is immediately committed after it runs. You don't need to call commit() or rollback() because there's no open transaction.
 
@@ -15300,7 +15735,7 @@ For example, the following looks for entity classes in the Entity namespace in t
 
 If the type on the bundle configuration isn't set, the DoctrineBundle will try to detect the correct mapping configuration format for the bundle.
 
-DoctrineBundle will look for files matching *.orm.[FORMAT] (e.g. Post.orm.yaml) in the configured dir of your mapping (if you're mapping a bundle, then dir is relative to the bundle's directory).
+DoctrineBundle will look for files matching \*.orm.[FORMAT] (e.g. Post.orm.yaml) in the configured dir of your mapping (if you're mapping a bundle, then dir is relative to the bundle's directory).
 
 The bundle looks for (in this order) XML, YAML and PHP files. Using the auto_mapping feature, every bundle can have only one configuration format. The bundle will stop as soon as it locates one.
 
@@ -15323,47 +15758,52 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference doctrine
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config doctrine
 ```
 
 Example 2 (yaml):
+
 ```yaml
 doctrine:
-    dbal:
-        dbname:               database
-        host:                 localhost
-        port:                 1234
-        user:                 user
-        password:             secret
-        driver:               pdo_mysql
-        # if the url option is specified, it will override the above config
-        url:                  mysql://db_user:db_password@127.0.0.1:3306/db_name
-        # the DBAL driverClass option
-        driver_class:         App\DBAL\MyDatabaseDriver
-        # the DBAL driverOptions option
-        options:
-            foo: bar
-        path:                 '%kernel.project_dir%/var/data/data.sqlite'
-        memory:               true
-        unix_socket:          /tmp/mysql.sock
-        # the DBAL wrapperClass option
-        wrapper_class:        App\DBAL\MyConnectionWrapper
-        charset:              utf8mb4
-        logging:              '%kernel.debug%'
-        platform_service:     App\DBAL\MyDatabasePlatformService
-        server_version:       '8.0.37'
-        mapping_types:
-            enum: string
-        types:
-            custom: App\DBAL\MyCustomType
+  dbal:
+    dbname: database
+    host: localhost
+    port: 1234
+    user: user
+    password: secret
+    driver: pdo_mysql
+    # if the url option is specified, it will override the above config
+    url: mysql://db_user:db_password@127.0.0.1:3306/db_name
+    # the DBAL driverClass option
+    driver_class: App\DBAL\MyDatabaseDriver
+    # the DBAL driverOptions option
+    options:
+      foo: bar
+    path: "%kernel.project_dir%/var/data/data.sqlite"
+    memory: true
+    unix_socket: /tmp/mysql.sock
+    # the DBAL wrapperClass option
+    wrapper_class: App\DBAL\MyConnectionWrapper
+    charset: utf8mb4
+    logging: "%kernel.debug%"
+    platform_service: App\DBAL\MyDatabasePlatformService
+    server_version: "8.0.37"
+    mapping_types:
+      enum: string
+    types:
+      custom: App\DBAL\MyCustomType
 ```
 
 Example 3 (xml):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -15402,6 +15842,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Config\DoctrineConfig;
 
@@ -15439,6 +15880,7 @@ return static function (DoctrineConfig $doctrine): void {
 **URL:** https://symfony.com/doc/7.4/doctrine/associations.html
 
 **Contents:**
+
 - How to Work with Doctrine Associations / Relations
 - The ManyToOne / OneToMany Association
 - Mapping the ManyToOne Relationship
@@ -15480,7 +15922,7 @@ The ManyToOne mapping shown earlier is required, But, this OneToMany is optional
 
 What is the ArrayCollection Stuff?
 
-The code inside __construct() is important: The $products property must be a collection object that implements Doctrine's Collection interface. In this case, an ArrayCollection object is used. This looks and acts almost exactly like an array, but has some added flexibility. Just imagine that it is an array and you'll be in good shape.
+The code inside \_\_construct() is important: The $products property must be a collection object that implements Doctrine's Collection interface. In this case, an ArrayCollection object is used. This looks and acts almost exactly like an array, but has some added flexibility. Just imagine that it is an array and you'll be in good shape.
 
 Your database is set up! Now, run the migrations like normal:
 
@@ -15557,6 +15999,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (typescript):
+
 ```typescript
 $ php bin/console make:entity Category
 
@@ -15578,6 +16021,7 @@ New property name (press <return> to stop adding fields):
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Category.php
 namespace App\Entity;
@@ -15600,6 +16044,7 @@ class Category
 ```
 
 Example 3 (sql):
+
 ```sql
 $ php bin/console make:entity
 
@@ -15638,6 +16083,7 @@ New property name (press <return> to stop adding fields):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Product.php
 namespace App\Entity;
@@ -15671,6 +16117,7 @@ class Product
 **URL:** https://symfony.com/doc/7.4/testing/database.html
 
 **Contents:**
+
 - How to Test a Doctrine Repository
 - Mocking a Doctrine Repository in Unit Tests
 - Functional Testing of a Doctrine Repository
@@ -15694,6 +16141,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Salary/SalaryCalculator.php
 namespace App\Salary;
@@ -15720,6 +16168,7 @@ class SalaryCalculator
 ```
 
 Example 2 (php):
+
 ```php
 // tests/Salary/SalaryCalculatorTest.php
 namespace App\Tests\Salary;
@@ -15759,6 +16208,7 @@ class SalaryCalculatorTest extends TestCase
 ```
 
 Example 3 (php):
+
 ```php
 // tests/Repository/ProductRepositoryTest.php
 namespace App\Tests\Repository;
@@ -15808,6 +16258,7 @@ class ProductRepositoryTest extends KernelTestCase
 **URL:** https://symfony.com/doc/7.4/doctrine/custom_dql_functions.html
 
 **Contents:**
+
 - How to Register custom DQL Functions
 
 Doctrine allows you to specify custom DQL functions. For more information on this topic, read Doctrine's cookbook article DQL User Defined Functions.
@@ -15825,22 +16276,24 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
-    orm:
-        # ...
-        dql:
-            string_functions:
-                test_string: App\DQL\StringFunction
-                second_string: App\DQL\SecondStringFunction
-            numeric_functions:
-                test_numeric: App\DQL\NumericFunction
-            datetime_functions:
-                test_datetime: App\DQL\DatetimeFunction
+  orm:
+    # ...
+    dql:
+      string_functions:
+        test_string: App\DQL\StringFunction
+        second_string: App\DQL\SecondStringFunction
+      numeric_functions:
+        test_numeric: App\DQL\NumericFunction
+      datetime_functions:
+        test_datetime: App\DQL\DatetimeFunction
 ```
 
 Example 2 (jsx):
+
 ```jsx
 <!-- config/packages/doctrine.xml -->
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -15866,6 +16319,7 @@ Example 2 (jsx):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/doctrine.php
 use App\DQL\DatetimeFunction;
@@ -15888,17 +16342,18 @@ return static function (DoctrineConfig $doctrine): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
-    orm:
-        # ...
-        entity_managers:
-            example_manager:
-                # Place your functions here
-                dql:
-                    datetime_functions:
-                        test_datetime: App\DQL\DatetimeFunction
+  orm:
+    # ...
+    entity_managers:
+      example_manager:
+        # Place your functions here
+        dql:
+          datetime_functions:
+            test_datetime: App\DQL\DatetimeFunction
 ```
 
 ---
@@ -15908,6 +16363,7 @@ doctrine:
 **URL:** https://symfony.com/doc/7.4/doctrine/multiple_entity_managers.html
 
 **Contents:**
+
 - How to Work with Multiple Entity Managers and Connections
 
 You can use multiple Doctrine entity managers or connections in a Symfony application. This is necessary if you are using different databases or even vendors with entirely different sets of entities. In other words, one entity manager that connects to one database will handle some entities while another entity manager that connects to another database might handle the rest. It is also possible to use multiple entity managers to manage a common set of entities, each with their own database connection strings or separate cache configuration.
@@ -15949,38 +16405,40 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/doctrine.yaml
 doctrine:
-    dbal:
-        connections:
-            default:
-                url: '%env(resolve:DATABASE_URL)%'
-            customer:
-                url: '%env(resolve:CUSTOMER_DATABASE_URL)%'
-        default_connection: default
-    orm:
-        default_entity_manager: default
-        entity_managers:
-            default:
-                connection: default
-                mappings:
-                    Main:
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Entity/Main'
-                        prefix: 'App\Entity\Main'
-                        alias: Main
-            customer:
-                connection: customer
-                mappings:
-                    Customer:
-                        is_bundle: false
-                        dir: '%kernel.project_dir%/src/Entity/Customer'
-                        prefix: 'App\Entity\Customer'
-                        alias: Customer
+  dbal:
+    connections:
+      default:
+        url: "%env(resolve:DATABASE_URL)%"
+      customer:
+        url: "%env(resolve:CUSTOMER_DATABASE_URL)%"
+    default_connection: default
+  orm:
+    default_entity_manager: default
+    entity_managers:
+      default:
+        connection: default
+        mappings:
+          Main:
+            is_bundle: false
+            dir: "%kernel.project_dir%/src/Entity/Main"
+            prefix: 'App\Entity\Main'
+            alias: Main
+      customer:
+        connection: customer
+        mappings:
+          Customer:
+            is_bundle: false
+            dir: "%kernel.project_dir%/src/Entity/Customer"
+            prefix: 'App\Entity\Customer'
+            alias: Customer
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/doctrine.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -16029,6 +16487,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/doctrine.php
 use Symfony\Config\DoctrineConfig;
@@ -16064,11 +16523,12 @@ return static function (DoctrineConfig $doctrine): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/prod/doctrine.yaml
 doctrine:
-    orm:
-        default_entity_manager: 'your default entity manager name'
+  orm:
+    default_entity_manager: "your default entity manager name"
 
 # ...
 ```
@@ -16080,6 +16540,7 @@ doctrine:
 **URL:** https://symfony.com/doc/7.4/form/data_transformers.html
 
 **Contents:**
+
 - How to Use Data Transformers
 - Example #1: Transforming Strings Form Data Tags from User Input to an Array
 - Example #2: Transforming an Issue Number into an Issue Entity
@@ -16123,7 +16584,7 @@ To cause a validation error, throw a TransformationFailedException. But the mess
 
 When null is passed to the transform() method, your transformer should return an equivalent value of the type it is transforming to (e.g. an empty string, 0 for integers or 0.0 for floats).
 
-Next, you need to use the IssueToNumberTransformer object inside of TaskType and add it to the issue field. No problem! Add a __construct() method and type-hint the new class:
+Next, you need to use the IssueToNumberTransformer object inside of TaskType and add it to the issue field. No problem! Add a \_\_construct() method and type-hint the new class:
 
 Whenever the transformer throws an exception, the invalid_message is shown to the user. Instead of showing the same message every time, you can set the end-user error message in the data transformer using the setInvalidMessage() method. It also allows you to include user values:
 
@@ -16174,6 +16635,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Form/Type/TaskType.php
 namespace App\Form\Type;
@@ -16203,6 +16665,7 @@ class TaskType extends AbstractType
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/Type/TaskType.php
 namespace App\Form\Type;
@@ -16237,6 +16700,7 @@ class TaskType extends AbstractType
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -16248,6 +16712,7 @@ $builder->add(
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/Type/TaskType.php
 namespace App\Form\Type;
@@ -16285,6 +16750,7 @@ class TaskType extends AbstractType
 **URL:** https://symfony.com/doc/7.4/form/create_custom_field_type.html
 
 **Contents:**
+
 - How to Create a Custom Form Field Type
 - Creating Form Types Based on Symfony Built-in Types
 - Creating Form Types Created From Scratch
@@ -16343,7 +16809,7 @@ Then, update the form_themes option to add this new template at the end of the l
 
 The last step is to create the actual Twig template that will render the type. The template contents depend on which HTML, CSS and JavaScript frameworks and libraries are used in your application:
 
-The first part of the Twig block name (e.g. postal_address) comes from the class name (PostalAddressType -> postal_address). This can be controlled by overriding the getBlockPrefix() method in PostalAddressType. The second part of the Twig block name (e.g. _row) defines which form type part is being rendered (row, widget, help, errors, etc.)
+The first part of the Twig block name (e.g. postal_address) comes from the class name (PostalAddressType -> postal_address). This can be controlled by overriding the getBlockPrefix() method in PostalAddressType. The second part of the Twig block name (e.g. \_row) defines which form type part is being rendered (row, widget, help, errors, etc.)
 
 The article about form themes explains the form fragment naming rules in detail. These are some examples of Twig block names for the postal address type:
 
@@ -16362,6 +16828,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Form/Type/ShippingType.php
 namespace App\Form\Type;
@@ -16391,6 +16858,7 @@ class ShippingType extends AbstractType
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/Type/OrderType.php
 namespace App\Form\Type;
@@ -16414,6 +16882,7 @@ class OrderType extends AbstractType
 ```
 
 Example 3 (php):
+
 ```php
 // src/Form/Type/PostalAddressType.php
 namespace App\Form\Type;
@@ -16429,6 +16898,7 @@ class PostalAddressType extends AbstractType
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/Type/PostalAddressType.php
 namespace App\Form\Type;
@@ -16469,6 +16939,7 @@ class PostalAddressType extends AbstractType
 **URL:** https://symfony.com/doc/7.4/components/property_access.html
 
 **Contents:**
+
 - The PropertyAccess Component
 - Installation
 - Usage
@@ -16514,21 +16985,21 @@ Consider the following PHP code:
 
 Given that $person is nullable, an object graph like comment.person.profile will trigger an exception when the $person property is null. The solution is to mark all nullable properties with the nullsafe operator (?):
 
-The getValue() method can also use the magic __get() method:
+The getValue() method can also use the magic \_\_get() method:
 
-When implementing the magic __get() method, you also need to implement __isset().
+When implementing the magic **get() method, you also need to implement **isset().
 
-Lastly, getValue() can use the magic __call() method, but you need to enable this feature by using PropertyAccessorBuilder:
+Lastly, getValue() can use the magic \_\_call() method, but you need to enable this feature by using PropertyAccessorBuilder:
 
-The __call() feature is disabled by default, you can enable it by calling enableMagicCall() see Enable other Features.
+The \_\_call() feature is disabled by default, you can enable it by calling enableMagicCall() see Enable other Features.
 
 The PropertyAccessor class can do more than just read an array, it can also write to an array. This can be achieved using the setValue() method:
 
-The setValue() method has the same features as the getValue() method. You can use setters, the magic __set() method or properties to set values:
+The setValue() method has the same features as the getValue() method. You can use setters, the magic \_\_set() method or properties to set values:
 
-You can also use __call() to set values but you need to enable the feature, see Enable other Features:
+You can also use \_\_call() to set values but you need to enable the feature, see Enable other Features:
 
-The __set() method support is enabled by default. See Enable other Features if you want to disable it.
+The \_\_set() method support is enabled by default. See Enable other Features if you want to disable it.
 
 The PropertyAccessor class allows updating the content of arrays stored in properties through adder and remover methods:
 
@@ -16557,11 +17028,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/property-access
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -16569,6 +17042,7 @@ $propertyAccessor = PropertyAccess::createPropertyAccessor();
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 $person = [
@@ -16580,6 +17054,7 @@ var_dump($propertyAccessor->getValue($person, '[age]')); // null
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 $propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
@@ -16605,6 +17080,7 @@ $value = $propertyAccessor->getValue($person, '[age?]');
 **URL:** https://symfony.com/doc/7.4/form/form_customization.html
 
 **Contents:**
+
 - How to Customize Form Rendering
 - Form Rendering Functions
 - Form Field Helpers
@@ -16626,13 +17102,13 @@ The form_row() function outputs the entire field contents, including the label, 
 
 The form_label(), form_widget() (the HTML input), form_help() and form_errors() Twig functions give you total control over how each form field is rendered, so you can fully customize them:
 
-If you're rendering each field manually, make sure you don't forget the _token field that is automatically added for CSRF protection.
+If you're rendering each field manually, make sure you don't forget the \_token field that is automatically added for CSRF protection.
 
 You can also use {{ form_rest(form) }} (recommended) to render any fields that aren't rendered manually. See the form_rest() documentation below for more information.
 
 Later in this article you can find the full reference of these Twig functions with more usage examples.
 
-The form_*() helpers shown in the previous section render different parts of the form field, including all its HTML elements. Some developers and designers struggle with this behavior, because it hides all the HTML elements in form themes which are not trivial to customize.
+The form\_\*() helpers shown in the previous section render different parts of the form field, including all its HTML elements. Some developers and designers struggle with this behavior, because it hides all the HTML elements in form themes which are not trivial to customize.
 
 That's why Symfony provides other Twig form helpers that render the value of each form field part without adding any HTML around it:
 
@@ -16709,6 +17185,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (sql):
+
 ```sql
 {# form is a variable passed from the controller via
   $this->render('...', ['form' => $form])
@@ -16717,6 +17194,7 @@ Example 1 (sql):
 ```
 
 Example 2 (jsx):
+
 ```jsx
 {{ form_start(form) }}
     <div class="my-custom-class-for-errors">
@@ -16735,6 +17213,7 @@ Example 2 (jsx):
 ```
 
 Example 3 (jsx):
+
 ```jsx
 <div class="form-control">
     <i class="fa fa-calendar"></i> {{ form_label(form.dueDate) }}
@@ -16749,6 +17228,7 @@ Example 3 (jsx):
 ```
 
 Example 4 (jsx):
+
 ```jsx
 <input
     name="{{ field_name(form.username) }}"
@@ -16774,6 +17254,7 @@ Example 4 (jsx):
 **URL:** https://symfony.com/doc/7.4/form/bootstrap5.html
 
 **Contents:**
+
 - Bootstrap 5 Form Theme
 - Error Messages
 - Checkboxes and Radios
@@ -16824,6 +17305,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (sql):
+
 ```sql
 {# templates/base.html.twig #}
 
@@ -16837,13 +17319,15 @@ Example 1 (sql):
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/twig.yaml
 twig:
-    form_themes: ['bootstrap_5_layout.html.twig']
+  form_themes: ["bootstrap_5_layout.html.twig"]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/twig.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -16863,6 +17347,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/twig.php
 use Symfony\Config\TwigConfig;
@@ -16881,6 +17366,7 @@ return static function(TwigConfig $twig): void {
 **URL:** https://symfony.com/doc/7.4/form/form_themes.html
 
 **Contents:**
+
 - How to Work with Form Themes
 - Symfony Built-In Form Themes
 - Applying Themes to all Forms
@@ -16934,11 +17420,11 @@ These fragment names follow the type_part pattern, where the type corresponds to
 
 A few examples of fragment names are:
 
-These fragment names follow the _id_part pattern, where the id corresponds to the field id attribute (e.g. product_description, user_age, etc) and the part corresponds to what is being rendered (e.g. label, widget, etc.)
+These fragment names follow the \_id_part pattern, where the id corresponds to the field id attribute (e.g. product_description, user_age, etc) and the part corresponds to what is being rendered (e.g. label, widget, etc.)
 
 The id attribute contains both the form name and the field name (e.g. product_price). The form name can be set manually or generated automatically based on your form type name (e.g. ProductType equates to product). If you're not sure what your form name is, look at the HTML code rendered for your form. You can also define this value explicitly with the block_name option:
 
-In this example, the fragment name will be _product_custom_name_widget instead of the default _product_name_widget.
+In this example, the fragment name will be \_product_custom_name_widget instead of the default \_product_name_widget.
 
 The block_prefix option allows form fields to define their own custom fragment name. This is mostly useful to customize some instances of the same field without having to create a custom form type:
 
@@ -16950,7 +17436,7 @@ You can also customize each entry of all collections with the following blocks:
 
 Finally, you can customize specific form collections instead of all of them. For example, consider the following complex example where a TaskManagerType has a collection of TaskListType which in turn has a collection of TaskType:
 
-Then you get all the following customizable blocks (where * can be replaced by row, widget, label, or help):
+Then you get all the following customizable blocks (where \* can be replaced by row, widget, label, or help):
 
 Each field type has a parent type (e.g. the parent type of textarea is text, and the parent type of text is form) and Symfony uses the fragment for the parent type if the base fragment doesn't exist.
 
@@ -16993,14 +17479,16 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/twig.yaml
 twig:
-    form_themes: ['bootstrap_5_horizontal_layout.html.twig']
-    # ...
+  form_themes: ["bootstrap_5_horizontal_layout.html.twig"]
+  # ...
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/twig.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -17019,6 +17507,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/twig.php
 use Symfony\Config\TwigConfig;
@@ -17033,6 +17522,7 @@ return static function (TwigConfig $twig): void {
 ```
 
 Example 4 (json):
+
 ```json
 {# this form theme will be applied only to the form of this template #}
 {% form_theme form 'foundation_5_layout.html.twig' %}
@@ -17049,6 +17539,7 @@ Example 4 (json):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/When.html
 
 **Contents:**
+
 - When
 - Basic Usage
 - Options
@@ -17116,6 +17607,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Model/Discount.php
 namespace App\Model;
@@ -17141,6 +17633,7 @@ class Discount
 ```
 
 Example 2 (php):
+
 ```php
 // src/Model/Discount.php
 namespace App\Model;
@@ -17166,26 +17659,25 @@ class Discount
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Model\Discount:
-    properties:
-        value:
-            - GreaterThan:
-                value: 0
-            - When:
-                expression: "this.getType() == 'percent'"
-                constraints:
-                    - LessThanOrEqual:
-                        value: 100
-                        message: "The value should be between 1 and 100!"
-                otherwise:
-                    - LessThan:
-                        value: 9999
-                        message: "The value should be less than 9999!"
+properties:
+value: - GreaterThan:
+value: 0 - When:
+expression: "this.getType() == 'percent'"
+constraints: - LessThanOrEqual:
+value: 100
+message: "The value should be between 1 and 100!"
+otherwise: - LessThan:
+value: 9999
+message: "The value should be less than 9999!"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -17226,6 +17718,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/form/data_mappers.html
 
 **Contents:**
+
 - When and How to Use Data Mappers
 - The Difference between Data Transformers and Mappers
 - Creating a Data Mapper
@@ -17267,6 +17760,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Painting/Color.php
 namespace App\Painting;
@@ -17298,6 +17792,7 @@ final class Color
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/ColorType.php
 namespace App\Form;
@@ -17354,6 +17849,7 @@ final class ColorType extends AbstractType implements DataMapperInterface
 ```
 
 Example 3 (php):
+
 ```php
 // src/Form/Type/ColorType.php
 namespace App\Form\Type;
@@ -17395,6 +17891,7 @@ final class ColorType extends AbstractType implements DataMapperInterface
 ```
 
 Example 4 (php):
+
 ```php
 public function buildForm(FormBuilderInterface $builder, array $options): void
 {
@@ -17426,6 +17923,7 @@ public function buildForm(FormBuilderInterface $builder, array $options): void
 **URL:** https://symfony.com/doc/7.4/form/create_form_type_extension.html
 
 **Contents:**
+
 - How to Create a Form Type Extension
 - Defining the Form Type Extension
 - Registering your Form Type Extension as a Service
@@ -17483,6 +17981,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Form/Extension/ImageTypeExtension.php
 namespace App\Form\Extension;
@@ -17504,11 +18003,13 @@ class ImageTypeExtension extends AbstractTypeExtension
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php bin/console debug:form
 ```
 
 Example 3 (php):
+
 ```php
 // src/Entity/Media.php
 namespace App\Entity;
@@ -17536,6 +18037,7 @@ class Media
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/Extension/ImageTypeExtension.php
 namespace App\Form\Extension;
@@ -17588,6 +18090,7 @@ class ImageTypeExtension extends AbstractTypeExtension
 **URL:** https://symfony.com/doc/7.4/form/type_guesser.html
 
 **Contents:**
+
 - Creating a custom Type Guesser
 - Create a PHPDoc Type Guesser
   - Guessing the Type
@@ -17637,6 +18140,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Form/TypeGuesser/PhpDocTypeGuesser.php
 namespace App\Form\TypeGuesser;
@@ -17666,6 +18170,7 @@ class PhpDocTypeGuesser implements FormTypeGuesserInterface
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/TypeGuesser/PhpDocTypeGuesser.php
 namespace App\Form\TypeGuesser;
@@ -17722,16 +18227,18 @@ class PhpDocTypeGuesser implements FormTypeGuesserInterface
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Form\TypeGuesser\PhpDocTypeGuesser:
-        tags: [form.type_guesser]
+  App\Form\TypeGuesser\PhpDocTypeGuesser:
+    tags: [form.type_guesser]
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -17755,6 +18262,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/form/bootstrap4.html
 
 **Contents:**
+
 - Bootstrap 4 Form Theme
 - Error Messages
 - Checkboxes and Radios
@@ -17782,7 +18290,7 @@ The Bootstrap 4 framework has done a good job making it accessible for functiona
 
 This does not mean that your entire website automatically complies with the full standard, but it does mean that you have come far in your work to create a design for all users.
 
-Bootstrap 4 has a feature called "`custom forms`_". You can enable that on your Symfony Form RadioType and CheckboxType by adding some classes to the label:
+Bootstrap 4 has a feature called "`custom forms`\_". You can enable that on your Symfony Form RadioType and CheckboxType by adding some classes to the label:
 
 Peruse our complete Symfony & PHP solutions catalog for your web development needs.
 
@@ -17791,6 +18299,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (sql):
+
 ```sql
 {# templates/base.html.twig #}
 
@@ -17804,13 +18313,15 @@ Example 1 (sql):
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/twig.yaml
 twig:
-    form_themes: ['bootstrap_4_layout.html.twig']
+  form_themes: ["bootstrap_4_layout.html.twig"]
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/twig.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -17830,6 +18341,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/twig.php
 use Symfony\Config\TwigConfig;
@@ -17848,6 +18360,7 @@ return static function (TwigConfig $twig): void {
 **URL:** https://symfony.com/doc/7.4/form/tailwindcss.html
 
 **Contents:**
+
 - Tailwind CSS Form Theme
 - Customization
   - Twig Form Functions
@@ -17874,6 +18387,7 @@ Take the exam at home
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {# ... #}
 {# this tag only applies to the forms defined in this template #}
@@ -17886,6 +18400,7 @@ Example 1 (json):
 ```
 
 Example 2 (css):
+
 ```css
 {{ form_row(form.title, {
     row_class: 'my row classes',
@@ -17898,6 +18413,7 @@ Example 2 (css):
 ```
 
 Example 3 (json):
+
 ```json
 {% use 'tailwind_2_layout.html.twig' %}
 
@@ -17936,6 +18452,7 @@ Example 3 (json):
 **URL:** https://symfony.com/doc/7.4/form/inherit_data_option.html
 
 **Contents:**
+
 - How to Reduce Code Duplication with "inherit_data"
 
 The inherit_data form field option can be very useful when you have some duplicated fields in different entities. For example, imagine you have two entities, a Company and a Customer:
@@ -17954,7 +18471,7 @@ Finally, make this work by adding the location form to your two original forms:
 
 That's it! You have extracted duplicated field definitions to a separate location form that you can reuse wherever you need it.
 
-Forms with the inherit_data option set cannot have *_SET_DATA event listeners.
+Forms with the inherit_data option set cannot have \*\_SET_DATA event listeners.
 
 Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 
@@ -17963,6 +18480,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Company.php
 namespace App\Entity;
@@ -17980,6 +18498,7 @@ class Company
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Customer.php
 namespace App\Entity;
@@ -17997,6 +18516,7 @@ class Customer
 ```
 
 Example 3 (php):
+
 ```php
 // src/Form/Type/CompanyType.php
 namespace App\Form\Type;
@@ -18017,6 +18537,7 @@ class CompanyType extends AbstractType
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/Type/CustomerType.php
 namespace App\Form\Type;
@@ -18043,6 +18564,7 @@ class CustomerType extends AbstractType
 **URL:** https://symfony.com/doc/7.4/form/use_empty_data.html
 
 **Contents:**
+
 - How to Configure empty Data for a Form Class
 - Option 1: Instantiate a new Class
 - Option 2: Provide a Closure
@@ -18072,6 +18594,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 public function index(): Response
 {
@@ -18088,6 +18611,7 @@ public function index(): Response
 ```
 
 Example 2 (php):
+
 ```php
 // src/Form/Type/BlogType.php
 namespace App\Form\Type;
@@ -18115,6 +18639,7 @@ class BlogType extends AbstractType
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -18137,6 +18662,7 @@ public function configureOptions(OptionsResolver $resolver): void
 **URL:** https://symfony.com/doc/7.4/testing/dom_crawler.html
 
 **Contents:**
+
 - The DOM Crawler
 - Traversing
 - Extracting Information
@@ -18160,6 +18686,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $newCrawler = $crawler->filter('input[type=submit]')
     ->last()
@@ -18169,6 +18696,7 @@ $newCrawler = $crawler->filter('input[type=submit]')
 ```
 
 Example 2 (php):
+
 ```php
 $crawler
     ->filter('h1')
@@ -18184,6 +18712,7 @@ $crawler
 ```
 
 Example 3 (swift):
+
 ```swift
 // returns the attribute value for the first node
 $crawler->attr('class');
@@ -18217,6 +18746,7 @@ $data = $crawler->each(function ($node, int $i): string {
 **URL:** https://symfony.com/doc/7.4/security/user_providers.html
 
 **Contents:**
+
 - User Providers
 - Entity User Provider
   - Using a Custom Query to Load the User
@@ -18263,25 +18793,27 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    providers:
-        users:
-            entity:
-                # the class of the entity that represents users
-                class: 'App\Entity\User'
-                # the property to query by - e.g. email, username, etc
-                property: 'email'
+  providers:
+    users:
+      entity:
+        # the class of the entity that represents users
+        class: 'App\Entity\User'
+        # the property to query by - e.g. email, username, etc
+        property: "email"
 
-                # optional: if you're using multiple Doctrine entity
-                # managers, this option defines which one to use
-                #manager_name: 'customer'
+        # optional: if you're using multiple Doctrine entity
+        # managers, this option defines which one to use
+        #manager_name: 'customer'
 
-    # ...
+  # ...
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -18309,6 +18841,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use App\Entity\User;
@@ -18326,6 +18859,7 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (php):
+
 ```php
 // src/Repository/UserRepository.php
 namespace App\Repository;
@@ -18361,6 +18895,7 @@ class UserRepository extends ServiceEntityRepository implements UserLoaderInterf
 **URL:** https://symfony.com/doc/7.4/testing/profiling.html
 
 **Contents:**
+
 - How to Use the Profiler in a Functional Test
 - Enabling the Profiler in Tests
 - Testing the Profiler Information
@@ -18388,15 +18923,17 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/test/web_profiler.yaml
 
 # ...
 framework:
-    profiler: { enabled: true, collect: false }
+  profiler: { enabled: true, collect: false }
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/test/web_profiler.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -18415,6 +18952,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/test/web_profiler.php
 use Symfony\Config\FrameworkConfig;
@@ -18429,6 +18967,7 @@ return static function (FrameworkConfig $framework): void {
 ```
 
 Example 4 (php):
+
 ```php
 // tests/Controller/LuckyControllerTest.php
 namespace App\Tests\Controller;
@@ -18475,6 +19014,7 @@ class LuckyControllerTest extends WebTestCase
 **URL:** https://symfony.com/doc/7.4/components/dom_crawler.html
 
 **Contents:**
+
 - The DomCrawler Component
 - Installation
 - Usage
@@ -18554,7 +19094,7 @@ You can define the default value to use if the node or attribute is empty by usi
 
 Extract attribute and/or node values from the list of nodes:
 
-Special attribute _text represents a node value, while _name represents the element name (the HTML tag name).
+Special attribute \_text represents a node value, while \_name represents the element name (the HTML tag name).
 
 Call an anonymous function on each node of the list:
 
@@ -18629,37 +19169,34 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/dom-crawler
 ```
 
 Example 2 (html):
-```html
-use Symfony\Component\DomCrawler\Crawler;
 
-$html = <<<'HTML'
+```html
+use Symfony\Component\DomCrawler\Crawler; $html = <<<'HTML'
 <!DOCTYPE html>
 <html>
-    <body>
-        <p class="message">Hello World!</p>
-        <p>Hello Crawler!</p>
-    </body>
+  <body>
+    <p class="message">Hello World!</p>
+    <p>Hello Crawler!</p>
+  </body>
 </html>
-HTML;
-
-$crawler = new Crawler($html);
-
-foreach ($crawler as $domElement) {
-    var_dump($domElement->nodeName);
-}
+HTML; $crawler = new Crawler($html); foreach ($crawler as $domElement) {
+var_dump($domElement->nodeName); }
 ```
 
 Example 3 (php):
+
 ```php
 $crawler = $crawler->filterXPath('descendant-or-self::body/p');
 ```
 
 Example 4 (php):
+
 ```php
 $crawler = $crawler->filter('body > p');
 ```
@@ -18671,6 +19208,7 @@ $crawler = $crawler->filter('body > p');
 **URL:** https://symfony.com/doc/7.4/testing/end_to_end.html
 
 **Contents:**
+
 - End-to-End Testing
 - Installation
   - Installing Web Drivers
@@ -18813,11 +19351,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/panther
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require --dev dbrekelmans/bdi
 
@@ -18825,6 +19365,7 @@ $ vendor/bin/bdi detect drivers
 ```
 
 Example 3 (julia):
+
 ```julia
 # Ubuntu
 $ apt-get install chromium-chromedriver firefox-geckodriver
@@ -18837,6 +19378,7 @@ $ choco install chromedriver selenium-gecko-driver
 ```
 
 Example 4 (jsx):
+
 ```jsx
 <!-- phpunit.dist.xml -->
 <extensions>
@@ -18854,6 +19396,7 @@ Example 4 (jsx):
 **URL:** https://symfony.com/doc/7.4/testing/insulating_clients.html
 
 **Contents:**
+
 - How to Test the Interaction of several Clients
 
 If you need to simulate an interaction between different clients (think of a chat for instance), create several clients:
@@ -18877,6 +19420,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\HttpFoundation\Response;
@@ -18897,6 +19441,7 @@ $this->assertRegExp('/Hello/', $sally->getResponse()->getContent());
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 use Symfony\Component\HttpFoundation\Response;
@@ -18922,6 +19467,7 @@ $this->assertRegExp('/Hello/', $sally->getResponse()->getContent());
 **URL:** https://symfony.com/doc/7.4/components/css_selector.html
 
 **Contents:**
+
 - The CssSelector Component
 - Installation
 - Usage
@@ -18960,7 +19506,7 @@ Pseudo-elements (:before, :after, :first-line, :first-letter) are not supported 
 
 Pseudo-classes are partially supported:
 
-The support for *:is and *:where was introduced in Symfony 7.1.
+The support for _:is and _:where was introduced in Symfony 7.1.
 
 Symfony Code Performance Profiling
 
@@ -18969,11 +19515,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/css-selector
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\CssSelector\CssSelectorConverter;
 
@@ -18982,6 +19530,7 @@ var_dump($converter->toXPath('div.item > h4 > a'));
 ```
 
 Example 3 (php):
+
 ```php
 descendant-or-self::div[@class and contains(concat(' ',normalize-space(@class), ' '), ' item ')]/h4/a
 ```
@@ -18993,6 +19542,7 @@ descendant-or-self::div[@class and contains(concat(' ',normalize-space(@class), 
 **URL:** https://symfony.com/doc/7.4/components/messenger.html
 
 **Contents:**
+
 - The Messenger Component
 - Installation
 - Concepts
@@ -19055,11 +19605,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/messenger
 ```
 
 Example 2 (php):
+
 ```php
 use App\Message\MyMessage;
 use App\MessageHandler\MyMessageHandler;
@@ -19079,6 +19631,7 @@ $bus->dispatch(new MyMessage(/* ... */));
 ```
 
 Example 3 (php):
+
 ```php
 namespace App\MessageHandler;
 
@@ -19094,6 +19647,7 @@ class MyMessageHandler
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\SerializerStamp;
@@ -19114,6 +19668,7 @@ $bus->dispatch(
 **URL:** https://symfony.com/doc/7.4/logging/monolog_email.html
 
 **Contents:**
+
 - How to Configure Monolog to Email Errors
 
 Support for emailing errors using Symfony mailer was added in MonologBundle 3.6.
@@ -19139,34 +19694,36 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/prod/monolog.yaml
 monolog:
-    handlers:
-        main:
-            type:         fingers_crossed
-            # 500 errors are logged at the critical level
-            action_level: critical
-            # to also log 400 level errors (but not 404's):
-            # action_level: error
-            # excluded_http_codes: [404]
-            handler:      deduplicated
-        deduplicated:
-            type:    deduplication
-            handler: symfony_mailer
-        symfony_mailer:
-            type:       symfony_mailer
-            from_email: 'error@example.com'
-            to_email:   'error@example.com'
-            # or list of recipients
-            # to_email:   ['dev1@example.com', 'dev2@example.com', ...]
-            subject:    'An Error Occurred! %%message%%'
-            level:      debug
-            formatter:  monolog.formatter.html
-            content_type: text/html
+  handlers:
+    main:
+      type: fingers_crossed
+      # 500 errors are logged at the critical level
+      action_level: critical
+      # to also log 400 level errors (but not 404's):
+      # action_level: error
+      # excluded_http_codes: [404]
+      handler: deduplicated
+    deduplicated:
+      type: deduplication
+      handler: symfony_mailer
+    symfony_mailer:
+      type: symfony_mailer
+      from_email: "error@example.com"
+      to_email: "error@example.com"
+      # or list of recipients
+      # to_email:   ['dev1@example.com', 'dev2@example.com', ...]
+      subject: "An Error Occurred! %%message%%"
+      level: debug
+      formatter: monolog.formatter.html
+      content_type: text/html
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/prod/monolog.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -19219,6 +19776,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/prod/monolog.php
 use Symfony\Config\MonologConfig;
@@ -19255,16 +19813,17 @@ return static function (MonologConfig $monolog): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/prod/monolog.yaml
 monolog:
-    handlers:
-        # ...
-        deduplicated:
-            type: deduplication
-            # the time in seconds during which duplicate entries are discarded (default: 60)
-            time: 10
-            handler: symfony_mailer
+  handlers:
+    # ...
+    deduplicated:
+      type: deduplication
+      # the time in seconds during which duplicate entries are discarded (default: 60)
+      time: 10
+      handler: symfony_mailer
 ```
 
 ---
@@ -19274,6 +19833,7 @@ monolog:
 **URL:** https://symfony.com/doc/7.4/logging/channels_handlers.html
 
 **Contents:**
+
 - How to Log Messages to different Files
 - Switching a Channel to a different Handler
 - Creating your own Channel
@@ -19316,6 +19876,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (swift):
+
 ```swift
 # config/packages/monolog.yaml
 when@prod:
@@ -19335,6 +19896,7 @@ when@prod:
 ```
 
 Example 2 (jsx):
+
 ```jsx
 <!-- config/packages/prod/monolog.xml-->
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -19366,6 +19928,7 @@ Example 2 (jsx):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/prod/monolog.php
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -19387,6 +19950,7 @@ return static function (MonologConfig $monolog, ContainerConfigurator $container
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # omit the 'channels' option to include all channels
 
@@ -19404,6 +19968,7 @@ channels: ['!foo', '!bar'] # Include all channels, except 'foo' and 'bar'
 **URL:** https://symfony.com/doc/7.4/reference/dic_tags.html
 
 **Contents:**
+
 - Built-in Symfony Service Tags
 - assets.package
 - auto_alias
@@ -19577,7 +20142,7 @@ The built-in IntrospectionProcessor can be used to add the file, the line, the c
 
 You can add a processor globally:
 
-If your service is not a callable (using __invoke()) you can add the method attribute in the tag to use a specific method.
+If your service is not a callable (using \_\_invoke()) you can add the method attribute in the tag to use a specific method.
 
 You can add also a processor for a specific handler by using the handler attribute:
 
@@ -19688,24 +20253,28 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ php bin/console debug:container --tags
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ php bin/console debug:container --tag=form.type
 ```
 
 Example 3 (yaml):
+
 ```yaml
 services:
-    App\Assets\AvatarPackage:
-        tags:
-            - { name: assets.package, package: avatars }
+  App\Assets\AvatarPackage:
+    tags:
+      - { name: assets.package, package: avatars }
 ```
 
 Example 4 (xml):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -19728,6 +20297,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/logging/processors.html
 
 **Contents:**
+
 - How to Add extra Data to Log Messages via a Processor
 - Adding a Session/Request Token
 - Registering Processors per Handler
@@ -19766,6 +20336,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Logger/SessionRequestProcessor.php
 namespace App\Logger;
@@ -19804,20 +20375,22 @@ class SessionRequestProcessor implements ProcessorInterface
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    monolog.formatter.session_request:
-        class: Monolog\Formatter\LineFormatter
-        arguments:
-            - "[%%datetime%%] [%%extra.token%%] %%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n"
+  monolog.formatter.session_request:
+    class: Monolog\Formatter\LineFormatter
+    arguments:
+      - "[%%datetime%%] [%%extra.token%%] %%channel%%.%%level_name%%: %%message%% %%context%% %%extra%%\n"
 
-    App\Logger\SessionRequestProcessor:
-        tags:
-            - { name: monolog.processor }
+  App\Logger\SessionRequestProcessor:
+    tags:
+      - { name: monolog.processor }
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -19844,6 +20417,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 use App\Logger\SessionRequestProcessor;
@@ -19865,6 +20439,7 @@ $container
 **URL:** https://symfony.com/doc/7.4/logging/formatter.html
 
 **Contents:**
+
 - How to Define a Custom Logging Formatter
 
 Each logging handler uses a Formatter to format the record before logging it. All Monolog handlers use an instance of Monolog\Formatter\LineFormatter by default but you can replace it. Your formatter must implement Monolog\Formatter\FormatterInterface.
@@ -19880,17 +20455,19 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/prod/monolog.yaml (and/or config/packages/dev/monolog.yaml)
 monolog:
-    handlers:
-        file:
-            type: stream
-            level: debug
-            formatter: 'monolog.formatter.json'
+  handlers:
+    file:
+      type: stream
+      level: debug
+      formatter: "monolog.formatter.json"
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/prod/monolog.xml (and/or config/packages/dev/monolog.xml) -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -19914,6 +20491,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/prod/monolog.php (and/or config/packages/dev/monolog.php)
 use Symfony\Config\MonologConfig;
@@ -19934,6 +20512,7 @@ return static function (MonologConfig $monolog): void {
 **URL:** https://symfony.com/doc/7.4/logging/handlers.html
 
 **Contents:**
+
 - Handlers
 - ElasticsearchLogstashHandler
 
@@ -19954,6 +20533,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (julia):
+
 ```julia
 # config/services.yaml
 services:
@@ -19971,6 +20551,7 @@ services:
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -19999,6 +20580,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/services.php
 use Monolog\Level;
@@ -20020,13 +20602,14 @@ $container->register(ElasticsearchLogstashHandler::class)
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/prod/monolog.yaml
 monolog:
-    handlers:
-        es:
-            type: service
-            id: Symfony\Bridge\Monolog\Handler\ElasticsearchLogstashHandler
+  handlers:
+    es:
+      type: service
+      id: Symfony\Bridge\Monolog\Handler\ElasticsearchLogstashHandler
 ```
 
 ---
@@ -20036,6 +20619,7 @@ monolog:
 **URL:** https://symfony.com/doc/7.4/logging/monolog_exclude_http_codes.html
 
 **Contents:**
+
 - How to Configure Monolog to Exclude Specific HTTP Codes from the Log
 
 Sometimes your logs become flooded with unwanted HTTP errors, for example, 403s and 404s. When using a fingers_crossed handler, you can exclude logging these HTTP codes based on the MonologBundle configuration:
@@ -20049,18 +20633,20 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/prod/monolog.yaml
 monolog:
-    handlers:
-        main:
-            # ...
-            type: fingers_crossed
-            handler: ...
-            excluded_http_codes: [403, 404, { 400: ['^/foo', '^/bar'] }]
+  handlers:
+    main:
+      # ...
+      type: fingers_crossed
+      handler: ...
+      excluded_http_codes: [403, 404, { 400: ["^/foo", "^/bar"] }]
 ```
 
 Example 2 (jsx):
+
 ```jsx
 <!-- config/packages/prod/monolog.xml -->
 <container xmlns="http://symfony.com/schema/dic/services"
@@ -20085,6 +20671,7 @@ Example 2 (jsx):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/prod/monolog.php
 use Symfony\Config\MonologConfig;
@@ -20108,6 +20695,7 @@ return static function (MonologConfig $monolog): void {
 **URL:** https://symfony.com/doc/7.4/components/mime.html
 
 **Contents:**
+
 - The Mime Component
 - Installation
 - Introduction
@@ -20178,11 +20766,13 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/mime
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Mime\Email;
 
@@ -20200,6 +20790,7 @@ $email = (new Email())
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 use Symfony\Bridge\Twig\Mime\BodyRenderer;
@@ -20218,6 +20809,7 @@ $renderer->render($email);
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ composer require twig/cssinliner-extra
 ```
@@ -20229,6 +20821,7 @@ $ composer require twig/cssinliner-extra
 **URL:** https://symfony.com/doc/7.4/components/options_resolver.html
 
 **Contents:**
+
 - The OptionsResolver Component
 - Installation
 - Usage
@@ -20280,7 +20873,7 @@ You can run additional checks on the options to make sure they were passed corre
 
 Defining type unions with the | syntax was introduced in Symfony 7.3.
 
-You can pass any type for which an is_<type>() function is defined in PHP. You may also pass fully qualified class or interface names (which is checked using instanceof). Additionally, you can validate all items in an array recursively by suffixing the type with [].
+You can pass any type for which an is\_<type>() function is defined in PHP. You may also pass fully qualified class or interface names (which is checked using instanceof). Additionally, you can validate all items in an array recursively by suffixing the type with [].
 
 If you pass an invalid option now, an InvalidOptionsException is thrown:
 
@@ -20379,11 +20972,13 @@ Become certified from home
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/options-resolver
 ```
 
 Example 2 (php):
+
 ```php
 class Mailer
 {
@@ -20397,6 +20992,7 @@ class Mailer
 ```
 
 Example 3 (php):
+
 ```php
 class Mailer
 {
@@ -20416,6 +21012,7 @@ class Mailer
 ```
 
 Example 4 (php):
+
 ```php
 class Mailer
 {
@@ -20440,6 +21037,7 @@ class Mailer
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Blank.html
 
 **Contents:**
+
 - Blank
 - Basic Usage
 - Options
@@ -20478,6 +21076,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (bash):
+
 ```bash
 if ('' !== $value && null !== $value) {
     // validation will fail
@@ -20485,6 +21084,7 @@ if ('' !== $value && null !== $value) {
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20499,15 +21099,17 @@ class Author
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        firstName:
-            - Blank: ~
+properties:
+firstName: - Blank: ~
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -20530,6 +21132,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/IsFalse.html
 
 **Contents:**
+
 - IsFalse
 - Basic Usage
 - Options
@@ -20568,6 +21171,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 protected string $state;
 
@@ -20580,6 +21184,7 @@ public function isStateInvalid(): bool
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20599,16 +21204,18 @@ class Author
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    getters:
-        stateInvalid:
-            - 'IsFalse':
-                message: You've entered an invalid state.
+getters:
+stateInvalid: - 'IsFalse':
+message: You've entered an invalid state.
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -20633,6 +21240,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/IsNull.html
 
 **Contents:**
+
 - IsNull
 - Basic Usage
 - Options
@@ -20667,6 +21275,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20681,15 +21290,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        firstName:
-            - 'IsNull': ~
+properties:
+firstName: - 'IsNull': ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -20706,6 +21317,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20731,6 +21343,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/IsTrue.html
 
 **Contents:**
+
 - IsTrue
 - Basic Usage
 - Options
@@ -20771,6 +21384,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20787,6 +21401,7 @@ class Author
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20808,16 +21423,18 @@ class Author
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    getters:
-        tokenValid:
-            - 'IsTrue':
-                message: The token is invalid.
+getters:
+tokenValid: - 'IsTrue':
+message: The token is invalid.
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -20842,6 +21459,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NotBlank.html
 
 **Contents:**
+
 - NotBlank
 - Basic Usage
 - Options
@@ -20888,6 +21506,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20902,15 +21521,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        firstName:
-            - NotBlank: ~
+properties:
+firstName: - NotBlank: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -20927,6 +21548,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -20952,6 +21574,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Charset.html
 
 **Contents:**
+
 - Charset
 - Basic Usage
 - Options
@@ -20993,6 +21616,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/FileDTO.php
 namespace App\Entity;
@@ -21007,16 +21631,18 @@ class FileDTO
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\FileDTO:
-    properties:
-        content:
-            - Charset:
-                charset: 'UTF-8'
+properties:
+content: - Charset:
+charset: 'UTF-8'
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21035,6 +21661,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/FileDTO.php
 namespace App\Entity;
@@ -21060,6 +21687,7 @@ class FileDTO
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Cidr.html
 
 **Contents:**
+
 - Cidr
 - Basic Usage
 - Options
@@ -21107,7 +21735,7 @@ type: string default: all
 
 This determines exactly how the CIDR notation is validated and can take one of IP version ranges.
 
-The IP range checks (e.g., *_private, *_reserved) validate only the IP address, not the entire netmask. To improve validation, you can set the {{ min }} value for the netmask. For example, the range 9.0.0.0/6 is considered *_public, but it also includes the 10.0.0.0/8 range, which is categorized as *_private.
+The IP range checks (e.g., _\_private, _\_reserved) validate only the IP address, not the entire netmask. To improve validation, you can set the {{ min }} value for the netmask. For example, the range 9.0.0.0/6 is considered _\_public, but it also includes the 10.0.0.0/8 range, which is categorized as _\_private.
 
 The support of all IP version ranges was introduced in Symfony 7.1.
 
@@ -21118,6 +21746,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/NetworkSettings.php
 namespace App\Entity;
@@ -21132,15 +21761,17 @@ class NetworkSettings
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\NetworkSettings:
-    properties:
-        cidrNotation:
-            - Cidr: ~
+properties:
+cidrNotation: - Cidr: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21157,6 +21788,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/NetworkSettings.php
 namespace App\Entity;
@@ -21182,6 +21814,7 @@ class NetworkSettings
 **URL:** https://symfony.com/doc/7.4/reference/constraints/CssColor.html
 
 **Contents:**
+
 - CssColor
 - Basic Usage
 - Options
@@ -21270,6 +21903,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Bulb.php
 namespace App\Entity;
@@ -21296,25 +21930,23 @@ class Bulb
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Bulb:
-    properties:
-        defaultColor:
-            - CssColor: ~
-        accentColor:
-            - CssColor:
-                formats: !php/const Symfony\Component\Validator\Constraints\CssColor::HEX_LONG
-                message: The accent color must be a 6-character hexadecimal color.
-        currentColor:
-            - CssColor:
-                formats:
-                    - !php/const Symfony\Component\Validator\Constraints\CssColor::BASIC_NAMED_COLORS
-                    - !php/const Symfony\Component\Validator\Constraints\CssColor::EXTENDED_NAMED_COLORS
-                message: The color "{{ value }}" is not a valid CSS color name.
+properties:
+defaultColor: - CssColor: ~
+accentColor: - CssColor:
+formats: !php/const Symfony\Component\Validator\Constraints\CssColor::HEX_LONG
+message: The accent color must be a 6-character hexadecimal color.
+currentColor: - CssColor:
+formats: - !php/const Symfony\Component\Validator\Constraints\CssColor::BASIC_NAMED_COLORS - !php/const Symfony\Component\Validator\Constraints\CssColor::EXTENDED_NAMED_COLORS
+message: The color "{{ value }}" is not a valid CSS color name.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21346,6 +21978,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Bulb.php
 namespace App\Entity;
@@ -21381,6 +22014,7 @@ class Bulb
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Email.html
 
 **Contents:**
+
 - Email
 - Basic Usage
 - Options
@@ -21431,6 +22065,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -21447,16 +22082,18 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        email:
-            - Email:
-                message: The email "{{ value }}" is not a valid email.
+properties:
+email: - Email:
+message: The email "{{ value }}" is not a valid email.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21475,6 +22112,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -21502,6 +22140,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/ExpressionSyntax.html
 
 **Contents:**
+
 - ExpressionSyntax
 - Basic Usage
 - Options
@@ -21539,6 +22178,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Order.php
 namespace App\Entity;
@@ -21558,18 +22198,19 @@ class Order
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Order:
-    properties:
-        promotion:
-            - ExpressionSyntax: ~
-        shippingOptions:
-            - ExpressionSyntax:
-                allowedVariables: ['user', 'shipping_centers']
+properties:
+promotion: - ExpressionSyntax: ~
+shippingOptions: - ExpressionSyntax:
+allowedVariables: ['user', 'shipping_centers']
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21594,6 +22235,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Student.php
 namespace App\Entity;
@@ -21623,6 +22265,7 @@ class Order
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Hostname.html
 
 **Contents:**
+
 - Hostname
 - Basic Usage
 - Options
@@ -21670,6 +22313,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/ServerSettings.php
 namespace App\Entity;
@@ -21684,16 +22328,18 @@ class ServerSettings
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\ServerSettings:
-    properties:
-        name:
-            - Hostname:
-                message: The server name must be a valid hostname.
+properties:
+name: - Hostname:
+message: The server name must be a valid hostname.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21712,6 +22358,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/ServerSettings.php
 namespace App\Entity;
@@ -21739,6 +22386,7 @@ class ServerSettings
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Ip.html
 
 **Contents:**
+
 - Ip
 - Basic Usage
 - Options
@@ -21778,7 +22426,7 @@ type: string default: 4
 
 This determines exactly how the IP address is validated. This option defines a lot of different possible values based on the ranges and the type of IP address that you want to allow/deny:
 
-The *_no_public, *_reserved and *_public ranges were introduced in Symfony 7.1.
+The _\_no_public, _\_reserved and \*\_public ranges were introduced in Symfony 7.1.
 
 Check Code Performance in Dev, Test, Staging & Production
 
@@ -21787,6 +22435,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -21801,15 +22450,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        ipAddress:
-            - Ip: ~
+properties:
+ipAddress: - Ip: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21826,6 +22477,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -21851,6 +22503,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Json.html
 
 **Contents:**
+
 - Json
 - Basic Usage
 - Options
@@ -21878,6 +22531,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Book.php
 namespace App\Entity;
@@ -21894,16 +22548,18 @@ class Book
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Book:
-    properties:
-        chapters:
-            - Json:
-                message: You've entered an invalid Json.
+properties:
+chapters: - Json:
+message: You've entered an invalid Json.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -21922,6 +22578,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Book.php
 namespace App\Entity;
@@ -21947,6 +22604,7 @@ class Book
 **URL:** https://symfony.com/doc/7.4/reference/constraints/MacAddress.html
 
 **Contents:**
+
 - MacAddress
 - Basic Usage
 - Options
@@ -21999,6 +22657,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Device.php
 namespace App\Entity;
@@ -22013,15 +22672,17 @@ class Device
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Device:
-    properties:
-        mac:
-            - MacAddress: ~
+properties:
+mac: - MacAddress: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22038,6 +22699,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Device.php
 namespace App\Entity;
@@ -22063,6 +22725,7 @@ class Device
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NoSuspiciousCharacters.html
 
 **Contents:**
+
 - NoSuspiciousCharacters
 - Basic Usage
 - Options
@@ -22125,6 +22788,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -22139,15 +22803,17 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        username:
-            - NoSuspiciousCharacters: ~
+properties:
+username: - NoSuspiciousCharacters: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22164,6 +22830,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -22187,6 +22854,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NotCompromisedPassword.html
 
 **Contents:**
+
 - NotCompromisedPassword
 - Basic Usage
 - Available Options
@@ -22237,6 +22905,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -22251,15 +22920,17 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        rawPassword:
-            - NotCompromisedPassword
+properties:
+rawPassword: - NotCompromisedPassword
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22276,6 +22947,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -22301,6 +22973,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Regex.html
 
 **Contents:**
+
 - Regex
 - Basic Usage
 - Options
@@ -22326,7 +22999,7 @@ It defines the validation group or groups of this constraint. Read more about va
 
 type: string|null default: null
 
-This option specifies the pattern to use in the HTML5 pattern attribute. You usually don't need to specify this option because by default, the constraint will convert the pattern given in the pattern option into an HTML5 compatible pattern. Notably, the delimiters are removed and the anchors are implicit (e.g. /^[a-z]+$/ becomes [a-z]+, and /[a-z]+/ becomes .*[a-z]+.*).
+This option specifies the pattern to use in the HTML5 pattern attribute. You usually don't need to specify this option because by default, the constraint will convert the pattern given in the pattern option into an HTML5 compatible pattern. Notably, the delimiters are removed and the anchors are implicit (e.g. /^[a-z]+$/ becomes [a-z]+, and /[a-z]+/ becomes ._[a-z]+._).
 
 However, there are some other incompatibilities between both patterns which cannot be fixed by the constraint. For instance, the HTML5 pattern attribute does not support flags. If you have a pattern like /^[a-z]+$/i, you need to specify the HTML5 compatible pattern in the htmlPattern option:
 
@@ -22363,6 +23036,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -22377,16 +23051,18 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        description:
-            - Regex:
-                pattern: '/^\w+/'
+properties:
+description: - Regex:
+pattern: '/^\w+/'
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22405,6 +23081,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -22432,6 +23109,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Twig.html
 
 **Contents:**
+
 - Twig Constraint
 - Basic Usage
 - Constraint Options
@@ -22465,6 +23143,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Bridge\Twig\Validator\Constraints\Twig;
 
@@ -22476,6 +23155,7 @@ class Template
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Page.php
 namespace App\Entity;
@@ -22490,15 +23170,17 @@ class Page
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Page:
-    properties:
-        templateCode:
-            - Symfony\Bridge\Twig\Validator\Constraints\Twig: ~
+properties:
+templateCode: - Symfony\Bridge\Twig\Validator\Constraints\Twig: ~
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22521,6 +23203,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Ulid.html
 
 **Contents:**
+
 - ULID
 - Basic Usage
 - Options
@@ -22569,6 +23252,7 @@ Become certified from home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/File.php
 namespace App\Entity;
@@ -22583,15 +23267,17 @@ class File
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\File:
-    properties:
-        identifier:
-            - Ulid: ~
+properties:
+identifier: - Ulid: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22608,6 +23294,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/File.php
 namespace App\Entity;
@@ -22633,6 +23320,7 @@ class File
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Url.html
 
 **Contents:**
+
 - Url
 - Basic Usage
 - Options
@@ -22676,9 +23364,9 @@ type: array|string default: ['http', 'https']
 
 The protocols considered to be valid for the URL. For example, if you also consider the ftp:// type URLs to be valid, redefine the protocols array, listing http, https, and also ftp.
 
-The value of this option can also be an asterisk (*) to allow all protocols:
+The value of this option can also be an asterisk (\*) to allow all protocols:
 
-Support for * in the protocols option was introduced in Symfony 7.4.
+Support for \* in the protocols option was introduced in Symfony 7.4.
 
 type: boolean default: false
 
@@ -22709,6 +23397,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -22723,15 +23412,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        bioUrl:
-            - Url: ~
+properties:
+bioUrl: - Url: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22748,6 +23439,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -22773,6 +23465,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/UserPassword.html
 
 **Contents:**
+
 - UserPassword
 - Basic Usage
 - Options
@@ -22811,6 +23504,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Form/Model/ChangePassword.php
 namespace App\Form\Model;
@@ -22827,16 +23521,18 @@ class ChangePassword
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Form\Model\ChangePassword:
-    properties:
-        oldPassword:
-            - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
-                message: 'Wrong value for your current password'
+properties:
+oldPassword: - Symfony\Component\Security\Core\Validator\Constraints\UserPassword:
+message: 'Wrong value for your current password'
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22857,6 +23553,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Form/Model/ChangePassword.php
 namespace App\Form\Model;
@@ -22887,6 +23584,7 @@ class ChangePassword
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Uuid.html
 
 **Contents:**
+
 - UUID
 - Basic Usage
 - Options
@@ -22938,6 +23636,7 @@ Online Sylius certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/File.php
 namespace App\Entity;
@@ -22952,15 +23651,17 @@ class File
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\File:
-    properties:
-        identifier:
-            - Uuid: ~
+properties:
+identifier: - Uuid: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -22977,6 +23678,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/File.php
 namespace App\Entity;
@@ -23002,6 +23704,7 @@ class File
 **URL:** https://symfony.com/doc/7.4/reference/constraints/WordCount.html
 
 **Contents:**
+
 - WordCount
 - Basic Usage
 - Options
@@ -23060,6 +23763,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/BlogPostDTO.php
 namespace App\Entity;
@@ -23074,17 +23778,19 @@ class BlogPostDTO
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\BlogPostDTO:
-    properties:
-        content:
-            - WordCount:
-                min: 100
-                max: 200
+properties:
+content: - WordCount:
+min: 100
+max: 200
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23104,6 +23810,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/BlogPostDTO.php
 namespace App\Entity;
@@ -23132,6 +23839,7 @@ class BlogPostDTO
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Yaml.html
 
 **Contents:**
+
 - Yaml
 - Basic Usage
 - Options
@@ -23173,6 +23881,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Report.php
 namespace App\Entity;
@@ -23189,16 +23898,18 @@ class Report
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Report:
-    properties:
-        customConfiguration:
-            - Yaml:
-                message: Your configuration doesn't have valid YAML syntax.
+properties:
+customConfiguration: - Yaml:
+message: Your configuration doesn't have valid YAML syntax.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23217,6 +23928,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Report.php
 namespace App\Entity;
@@ -23242,6 +23954,7 @@ class Report
 **URL:** https://symfony.com/doc/7.4/reference/constraints/DivisibleBy.html
 
 **Contents:**
+
 - DivisibleBy
 - Basic Usage
 - Options
@@ -23290,6 +24003,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Item.php
 namespace App\Entity;
@@ -23309,19 +24023,20 @@ class Item
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Item:
-    properties:
-        weight:
-            - DivisibleBy:
-                value: 0.25
-        quantity:
-            - DivisibleBy:
-                value: 5
+properties:
+weight: - DivisibleBy:
+value: 0.25
+quantity: - DivisibleBy:
+value: 5
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23345,6 +24060,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Item.php
 namespace App\Entity;
@@ -23374,6 +24090,7 @@ class Item
 **URL:** https://symfony.com/doc/7.4/reference/constraints/EqualTo.html
 
 **Contents:**
+
 - EqualTo
 - Basic Usage
 - Options
@@ -23424,6 +24141,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23443,19 +24161,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        firstName:
-            - EqualTo:
-                value: Mary
-        age:
-            - EqualTo:
-                value: 20
+properties:
+firstName: - EqualTo:
+value: Mary
+age: - EqualTo:
+value: 20
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23479,6 +24198,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23508,6 +24228,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/GreaterThan.html
 
 **Contents:**
+
 - GreaterThan
 - Basic Usage
 - Comparing Dates
@@ -23563,6 +24284,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23582,19 +24304,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        siblings:
-            - GreaterThan:
-                value: 5
-        age:
-            - GreaterThan:
-                value: 18
+properties:
+siblings: - GreaterThan:
+value: 5
+age: - GreaterThan:
+value: 18
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23618,6 +24341,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23647,6 +24371,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/GreaterThanOrEqual.html
 
 **Contents:**
+
 - GreaterThanOrEqual
 - Basic Usage
 - Comparing Dates
@@ -23702,6 +24427,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23721,19 +24447,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        siblings:
-            - GreaterThanOrEqual:
-                value: 5
-        age:
-            - GreaterThanOrEqual:
-                value: 18
+properties:
+siblings: - GreaterThanOrEqual:
+value: 5
+age: - GreaterThanOrEqual:
+value: 18
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23757,6 +24484,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23786,6 +24514,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/IdenticalTo.html
 
 **Contents:**
+
 - IdenticalTo
 - Basic Usage
 - Options
@@ -23836,6 +24565,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23855,19 +24585,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        firstName:
-            - IdenticalTo:
-                value: Mary
-        age:
-            - IdenticalTo:
-                value: 20
+properties:
+firstName: - IdenticalTo:
+value: Mary
+age: - IdenticalTo:
+value: 20
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -23891,6 +24622,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23920,6 +24652,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/LessThan.html
 
 **Contents:**
+
 - LessThan
 - Basic Usage
 - Comparing Dates
@@ -23975,6 +24708,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -23994,19 +24728,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        siblings:
-            - LessThan:
-                value: 5
-        age:
-            - LessThan:
-                value: 80
+properties:
+siblings: - LessThan:
+value: 5
+age: - LessThan:
+value: 80
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24030,6 +24765,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24059,6 +24795,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/LessThanOrEqual.html
 
 **Contents:**
+
 - LessThanOrEqual
 - Basic Usage
 - Comparing Dates
@@ -24114,6 +24851,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24133,19 +24871,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        siblings:
-            - LessThanOrEqual:
-                value: 5
-        age:
-            - LessThanOrEqual:
-                value: 80
+properties:
+siblings: - LessThanOrEqual:
+value: 5
+age: - LessThanOrEqual:
+value: 80
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24169,6 +24908,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24198,6 +24938,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NotEqualTo.html
 
 **Contents:**
+
 - NotEqualTo
 - Basic Usage
 - Options
@@ -24248,6 +24989,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24267,19 +25009,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        firstName:
-            - NotEqualTo:
-                value: Mary
-        age:
-            - NotEqualTo:
-                value: 15
+properties:
+firstName: - NotEqualTo:
+value: Mary
+age: - NotEqualTo:
+value: 15
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24303,6 +25046,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24332,6 +25076,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NotIdenticalTo.html
 
 **Contents:**
+
 - NotIdenticalTo
 - Basic Usage
 - Options
@@ -24382,6 +25127,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24401,19 +25147,20 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        firstName:
-            - NotIdenticalTo:
-                value: Mary
-        age:
-            - NotIdenticalTo:
-                value: 15
+properties:
+firstName: - NotIdenticalTo:
+value: Mary
+age: - NotIdenticalTo:
+value: 15
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24437,6 +25184,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24466,6 +25214,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Range.html
 
 **Contents:**
+
 - Range
 - Basic Usage
 - Date Ranges
@@ -24554,6 +25303,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Participant.php
 namespace App\Entity;
@@ -24572,18 +25322,20 @@ class Participant
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Participant:
-    properties:
-        height:
-            - Range:
-                min: 120
-                max: 180
-                notInRangeMessage: You must be between {{ min }}cm and {{ max }}cm tall to enter
+properties:
+height: - Range:
+min: 120
+max: 180
+notInRangeMessage: You must be between {{ min }}cm and {{ max }}cm tall to enter
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24604,6 +25356,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Participant.php
 namespace App\Entity;
@@ -24633,6 +25386,7 @@ class Participant
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Unique.html
 
 **Contents:**
+
 - Unique
 - Basic Usage
 - Options
@@ -24699,6 +25453,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24713,15 +25468,17 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        contactEmails:
-            - Unique: ~
+properties:
+contactEmails: - Unique: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24738,6 +25495,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -24763,6 +25521,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Negative.html
 
 **Contents:**
+
 - Negative
 - Basic Usage
 - Available Options
@@ -24797,6 +25556,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/TransferItem.php
 namespace App\Entity;
@@ -24811,15 +25571,17 @@ class TransferItem
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\TransferItem:
-    properties:
-        withdraw:
-            - Negative: ~
+properties:
+withdraw: - Negative: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24836,6 +25598,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/TransferItem.php
 namespace App\Entity;
@@ -24861,6 +25624,7 @@ class TransferItem
 **URL:** https://symfony.com/doc/7.4/reference/constraints/NegativeOrZero.html
 
 **Contents:**
+
 - NegativeOrZero
 - Basic Usage
 - Available Options
@@ -24895,6 +25659,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/TransferItem.php
 namespace App\Entity;
@@ -24909,15 +25674,17 @@ class UnderGroundGarage
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\UnderGroundGarage:
-    properties:
-        level:
-            - NegativeOrZero: ~
+properties:
+level: - NegativeOrZero: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -24934,6 +25701,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/UnderGroundGarage.php
 namespace App\Entity;
@@ -24959,6 +25727,7 @@ class UnderGroundGarage
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Positive.html
 
 **Contents:**
+
 - Positive
 - Basic Usage
 - Available Options
@@ -24993,6 +25762,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Employee.php
 namespace App\Entity;
@@ -25007,15 +25777,17 @@ class Employee
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Employee:
-    properties:
-        income:
-            - Positive: ~
+properties:
+income: - Positive: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25032,6 +25804,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Employee.php
 namespace App\Entity;
@@ -25057,6 +25830,7 @@ class Employee
 **URL:** https://symfony.com/doc/7.4/reference/constraints/PositiveOrZero.html
 
 **Contents:**
+
 - PositiveOrZero
 - Basic Usage
 - Available Options
@@ -25091,6 +25865,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -25105,15 +25880,17 @@ class Person
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Person:
-    properties:
-        siblings:
-            - PositiveOrZero: ~
+properties:
+siblings: - PositiveOrZero: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25130,6 +25907,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Person.php
 namespace App\Entity;
@@ -25155,6 +25933,7 @@ class Person
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Date.html
 
 **Contents:**
+
 - Date
 - Basic Usage
 - Options
@@ -25189,6 +25968,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -25203,15 +25983,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        birthday:
-            - Date: ~
+properties:
+birthday: - Date: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25228,6 +26010,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -25256,6 +26039,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/DateTime.html
 
 **Contents:**
+
 - DateTime
 - Basic Usage
 - Options
@@ -25297,6 +26081,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -25314,15 +26099,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        createdAt:
-            - DateTime: ~
+properties:
+createdAt: - DateTime: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25339,6 +26126,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -25367,6 +26155,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Time.html
 
 **Contents:**
+
 - Time
 - Basic Usage
 - Options
@@ -25408,6 +26197,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Event.php
 namespace App\Entity;
@@ -25425,15 +26215,17 @@ class Event
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Event:
-    properties:
-        startsAt:
-            - Time: ~
+properties:
+startsAt: - Time: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25450,6 +26242,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Event.php
 namespace App\Entity;
@@ -25478,6 +26271,7 @@ class Event
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Timezone.html
 
 **Contents:**
+
 - Timezone
 - Basic Usage
 - Options
@@ -25535,6 +26329,7 @@ Show your Sylius expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/UserSettings.php
 namespace App\Entity;
@@ -25549,15 +26344,17 @@ class UserSettings
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\UserSettings:
-    properties:
-        timezone:
-            - Timezone: ~
+properties:
+timezone: - Timezone: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25574,6 +26371,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/UserSettings.php
 namespace App\Entity;
@@ -25599,6 +26397,7 @@ class UserSettings
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Week.html
 
 **Contents:**
+
 - Week
 - Basic Usage
 - Options
@@ -25665,6 +26464,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/OnlineCourse.php
 namespace App\Entity;
@@ -25679,17 +26479,19 @@ class OnlineCourse
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\OnlineCourse:
-    properties:
-        startWeek:
-            - Week:
-                min: '2022-W01'
-                max: '2022-W20'
+properties:
+startWeek: - Week:
+min: '2022-W01'
+max: '2022-W20'
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25709,6 +26511,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/OnlineCourse.php
 namespace App\Entity;
@@ -25737,6 +26540,7 @@ class OnlineCourse
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Choice.html
 
 **Contents:**
+
 - Choice
 - Basic Usage
 - Supplying the Choices with a Callback Function
@@ -25821,6 +26625,7 @@ Show your Sylius expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -25840,20 +26645,21 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        city:
-            - Choice:
-                choices: [New York, Berlin, Tokyo]
-        genre:
-            - Choice:
-                choices:  [fiction, non-fiction]
-                message:  Choose a valid genre.
+properties:
+city: - Choice:
+choices: [New York, Berlin, Tokyo]
+genre: - Choice:
+choices: [fiction, non-fiction]
+message: Choose a valid genre.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25885,6 +26691,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -25918,6 +26725,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Country.html
 
 **Contents:**
+
 - Country
 - Basic Usage
 - Options
@@ -25957,6 +26765,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -25971,15 +26780,17 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        country:
-            - Country: ~
+properties:
+country: - Country: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -25996,6 +26807,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -26021,6 +26833,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Language.html
 
 **Contents:**
+
 - Language
 - Basic Usage
 - Options
@@ -26060,6 +26873,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -26074,15 +26888,17 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        preferredLanguage:
-            - Language: ~
+properties:
+preferredLanguage: - Language: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -26099,6 +26915,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -26124,6 +26941,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Locale.html
 
 **Contents:**
+
 - Locale
 - Basic Usage
 - Options
@@ -26133,7 +26951,7 @@ class User
 
 Validates that a value is a valid locale.
 
-The "value" for each locale is any of the ICU format locale IDs. For example, the two letter ISO 639-1 language code (e.g. fr), or the language code followed by an underscore (_) and the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France).
+The "value" for each locale is any of the ICU format locale IDs. For example, the two letter ISO 639-1 language code (e.g. fr), or the language code followed by an underscore (\_) and the ISO 3166-1 alpha-2 country code (e.g. fr_FR for French/France).
 
 The given locale values are canonicalized before validating them to avoid issues with wrong uppercase/lowercase values and to remove unneeded elements (e.g. FR-fr.utf8 will be validated as fr_FR).
 
@@ -26162,6 +26980,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -26178,16 +26997,18 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        locale:
-            - Locale:
-                canonicalize: true
+properties:
+locale: - Locale:
+canonicalize: true
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -26206,6 +27027,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -26233,6 +27055,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/reference/constraints/File.html
 
 **Contents:**
+
 - File
 - Basic Usage
 - Options
@@ -26421,6 +27244,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -26444,6 +27268,7 @@ class Author
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -26462,18 +27287,20 @@ class Author
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        bioFile:
-            - File:
-                maxSize: 1024k
-                extensions: [pdf]
-                extensionsMessage: Please upload a valid PDF
+properties:
+bioFile: - File:
+maxSize: 1024k
+extensions: [pdf]
+extensionsMessage: Please upload a valid PDF
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -26502,6 +27329,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Image.html
 
 **Contents:**
+
 - Image
 - Basic Usage
 - Options
@@ -26619,13 +27447,13 @@ The error message if the width of the image exceeds maxWidth.
 
 You can use the following parameters in this message:
 
-type: array or string default: image/*
+type: array or string default: image/\*
 
 You can find a list of existing image mime types on the IANA website.
 
 type: string default: This file is not a valid image.
 
-If all the values of the mimeTypes option are a subset of image/*, the error message will be instead: The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.
+If all the values of the mimeTypes option are a subset of image/\*, the error message will be instead: The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.
 
 You can use the following parameters in this message:
 
@@ -26680,6 +27508,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -26703,6 +27532,7 @@ class Author
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -26723,19 +27553,21 @@ class Author
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        headshot:
-            - Image:
-                minWidth: 200
-                maxWidth: 400
-                minHeight: 200
-                maxHeight: 400
+properties:
+headshot: - Image:
+minWidth: 200
+maxWidth: 400
+minHeight: 200
+maxHeight: 400
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -26763,6 +27595,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Video.html
 
 **Contents:**
+
 - Video
 - Basic Usage
 - Options
@@ -26806,7 +27639,7 @@ If set, the height of the video file must be less than or equal to this value in
 
 type: integer | float
 
-If set, the total number of pixels (width * height) of the video file must be less than or equal to this value.
+If set, the total number of pixels (width \* height) of the video file must be less than or equal to this value.
 
 type: integer | float
 
@@ -26814,7 +27647,7 @@ If set, the aspect ratio (width / height) of the video file must be less than or
 
 If set, the width of the video file must be less than or equal to this value in pixels.
 
-type: array or string default: video/*
+type: array or string default: video/\*
 
 See the File mimeTypes option for a description of this option and a list of common video MIME types.
 
@@ -26822,7 +27655,7 @@ If set, the height of the video file must be greater than or equal to this value
 
 type: integer | float
 
-If set, the total number of pixels (width * height) of the video file must be greater than or equal to this value.
+If set, the total number of pixels (width \* height) of the video file must be greater than or equal to this value.
 
 type: integer | float
 
@@ -26915,6 +27748,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/VideoContent.php
 namespace App\Entity;
@@ -26935,6 +27769,7 @@ class VideoContent
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/VideoContent.php
 namespace App\Entity;
@@ -26951,6 +27786,7 @@ class VideoContent
 ```
 
 Example 3 (php):
+
 ```php
 // src/Entity/VideoContent.php
 namespace App\Entity;
@@ -26973,6 +27809,7 @@ class VideoContent
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Bic.html
 
 **Contents:**
+
 - Bic
 - Basic Usage
 - Available Options
@@ -27033,6 +27870,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27047,15 +27885,17 @@ class Transaction
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Transaction:
-    properties:
-        businessIdentifierCode:
-            - Bic: ~
+properties:
+businessIdentifierCode: - Bic: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27072,6 +27912,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27095,6 +27936,7 @@ class Transaction
 **URL:** https://symfony.com/doc/7.4/reference/constraints/CardScheme.html
 
 **Contents:**
+
 - CardScheme
 - Basic Usage
 - Available Options
@@ -27136,6 +27978,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27153,17 +27996,19 @@ class Transaction
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Transaction:
-    properties:
-        cardNumber:
-            - CardScheme:
-                schemes: [VISA]
-                message: Your credit card number is invalid.
+properties:
+cardNumber: - CardScheme:
+schemes: [VISA]
+message: Your credit card number is invalid.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27185,6 +28030,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27213,6 +28059,7 @@ class Transaction
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Currency.html
 
 **Contents:**
+
 - Currency
 - Basic Usage
 - Options
@@ -27249,6 +28096,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Order.php
 namespace App\Entity;
@@ -27263,15 +28111,17 @@ class Order
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Order:
-    properties:
-        currency:
-            - Currency: ~
+properties:
+currency: - Currency: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27288,6 +28138,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Order.php
 namespace App\Entity;
@@ -27313,6 +28164,7 @@ class Order
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Iban.html
 
 **Contents:**
+
 - IBAN
 - Basic Usage
 - Options
@@ -27351,6 +28203,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27367,16 +28220,18 @@ class Transaction
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Transaction:
-    properties:
-        bankAccountNumber:
-            - Iban:
-                message: This is not a valid International Bank Account Number (IBAN).
+properties:
+bankAccountNumber: - Iban:
+message: This is not a valid International Bank Account Number (IBAN).
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27397,6 +28252,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27424,6 +28280,7 @@ class Transaction
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Isbn.html
 
 **Contents:**
+
 - Isbn
 - Basic Usage
 - Available Options
@@ -27486,6 +28343,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Book.php
 namespace App\Entity;
@@ -27503,17 +28361,19 @@ class Book
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Book:
-    properties:
-        isbn:
-            - Isbn:
-                type: isbn10
-                message: This value is not valid.
+properties:
+isbn: - Isbn:
+type: isbn10
+message: This value is not valid.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27533,6 +28393,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Book.php
 namespace App\Entity;
@@ -27561,6 +28422,7 @@ class Book
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Isin.html
 
 **Contents:**
+
 - Isin
 - Basic Usage
 - Options
@@ -27595,6 +28457,7 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/UnitAccount.php
 namespace App\Entity;
@@ -27609,15 +28472,17 @@ class UnitAccount
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\UnitAccount:
-    properties:
-        isin:
-            - Isin: ~
+properties:
+isin: - Isin: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27634,6 +28499,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/UnitAccount.php
 namespace App\Entity;
@@ -27659,6 +28525,7 @@ class UnitAccount
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Issn.html
 
 **Contents:**
+
 - Issn
 - Basic Usage
 - Options
@@ -27703,6 +28570,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Journal.php
 namespace App\Entity;
@@ -27717,15 +28585,17 @@ class Journal
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Journal:
-    properties:
-        issn:
-            - Issn: ~
+properties:
+issn: - Issn: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27742,6 +28612,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Journal.php
 namespace App\Entity;
@@ -27767,6 +28638,7 @@ class Journal
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Luhn.html
 
 **Contents:**
+
 - Luhn
 - Basic Usage
 - Options
@@ -27803,6 +28675,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27817,16 +28690,18 @@ class Transaction
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Transaction:
-    properties:
-        cardNumber:
-            - Luhn:
-                message: Please check your credit card number.
+properties:
+cardNumber: - Luhn:
+message: Please check your credit card number.
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27845,6 +28720,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Transaction.php
 namespace App\Entity;
@@ -27872,6 +28748,7 @@ class Transaction
 **URL:** https://symfony.com/doc/7.4/reference/constraints/DisableAutoMapping.html
 
 **Contents:**
+
 - DisableAutoMapping
 - Basic Usage
 - Options
@@ -27896,6 +28773,7 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Model/BookCollection.php
 namespace App\Model;
@@ -27919,14 +28797,16 @@ class BookCollection
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\BookCollection:
-    constraints:
-        - DisableAutoMapping: ~
+constraints: - DisableAutoMapping: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -27941,6 +28821,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/BookCollection.php
 namespace App\Entity;
@@ -27966,6 +28847,7 @@ class BookCollection
 **URL:** https://symfony.com/doc/7.4/reference/constraints/EnableAutoMapping.html
 
 **Contents:**
+
 - EnableAutoMapping
 - Basic Usage
 - Options
@@ -27990,6 +28872,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Model/BookCollection.php
 namespace App\Model;
@@ -28013,14 +28896,16 @@ class BookCollection
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\BookCollection:
-    constraints:
-        - EnableAutoMapping: ~
+constraints: - EnableAutoMapping: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28035,6 +28920,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/BookCollection.php
 namespace App\Entity;
@@ -28060,6 +28946,7 @@ class BookCollection
 **URL:** https://symfony.com/doc/7.4/reference/constraints/All.html
 
 **Contents:**
+
 - All
 - Basic Usage
 - Options
@@ -28092,6 +28979,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -28109,19 +28997,19 @@ class User
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        favoriteColors:
-            - All:
-                constraints:
-                    - NotBlank:  ~
-                    - Length:
-                        min: 5
+properties:
+favoriteColors: - All:
+constraints: - NotBlank: ~ - Length:
+min: 5
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28145,6 +29033,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -28173,6 +29062,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/reference/constraints/AtLeastOneOf.html
 
 **Contents:**
+
 - AtLeastOneOf
 - Basic Usage
 - Options
@@ -28218,6 +29108,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Student.php
 namespace App\Entity;
@@ -28243,27 +29134,23 @@ class Student
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Student:
-    properties:
-        password:
-            - AtLeastOneOf:
-                - Regex:
-                    pattern: '/#/'
-                - Length:
-                    min: 10
-        grades:
-            - AtLeastOneOf:
-                - Count:
-                    min: 3
-                - All:
-                    constraints:
-                        - GreaterThanOrEqual:
-                            value: 5
+properties:
+password: - AtLeastOneOf: - Regex:
+pattern: '/#/' - Length:
+min: 10
+grades: - AtLeastOneOf: - Count:
+min: 3 - All:
+constraints: - GreaterThanOrEqual:
+value: 5
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28305,6 +29192,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Student.php
 namespace App\Entity;
@@ -28344,6 +29232,7 @@ class Student
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Callback.html
 
 **Contents:**
+
 - Callback
 - Configuration
 - The Callback Method
@@ -28399,6 +29288,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -28417,15 +29307,17 @@ class Author
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    constraints:
-        - Callback:
-            callback: validate
+constraints: - Callback:
+callback: validate
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28442,6 +29334,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -28470,6 +29363,7 @@ class Author
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Cascade.html
 
 **Contents:**
+
 - Cascade
 - Basic Usage
 - Options
@@ -28499,6 +29393,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Model/BookCollection.php
 namespace App\Model;
@@ -28522,14 +29417,16 @@ class BookCollection
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\BookCollection:
-    constraints:
-        - Cascade: ~
+constraints: - Cascade: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28544,6 +29441,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/BookCollection.php
 namespace App\Entity;
@@ -28569,6 +29467,7 @@ class BookCollection
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Collection.html
 
 **Contents:**
+
 - Collection
 - Basic Usage
   - Presence and Absence of Fields
@@ -28645,6 +29544,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -28664,6 +29564,7 @@ class Author
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -28693,24 +29594,23 @@ class Author
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Author:
-    properties:
-        profileData:
-            - Collection:
-                fields:
-                    personal_email:
-                        - Email: ~
-                    short_bio:
-                        - NotBlank: ~
-                        - Length:
-                            max:   100
-                            maxMessage: Your short bio is too long!
-                allowMissingFields: true
+properties:
+profileData: - Collection:
+fields:
+personal_email: - Email: ~
+short_bio: - NotBlank: ~ - Length:
+max: 100
+maxMessage: Your short bio is too long!
+allowMissingFields: true
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28747,6 +29647,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Compound.html
 
 **Contents:**
+
 - Compound
 - Basic Usage
 - Options
@@ -28782,6 +29683,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Validator/Constraints/PasswordRequirements.php
 namespace App\Validator\Constraints;
@@ -28806,6 +29708,7 @@ class PasswordRequirements extends Compound
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/User.php
 namespace App\Entity;
@@ -28820,15 +29723,17 @@ class User
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\User:
-    properties:
-        plainPassword:
-            - App\Validator\Constraints\PasswordRequirements: ~
+properties:
+plainPassword: - App\Validator\Constraints\PasswordRequirements: ~
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28851,6 +29756,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Count.html
 
 **Contents:**
+
 - Count
 - Basic Usage
 - Options
@@ -28921,6 +29827,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Participant.php
 namespace App\Entity;
@@ -28940,19 +29847,21 @@ class Participant
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Participant:
-    properties:
-        emails:
-            - Count:
-                min: 1
-                max: 5
-                minMessage: 'You must specify at least one email'
-                maxMessage: 'You cannot specify more than {{ limit }} emails'
+properties:
+emails: - Count:
+min: 1
+max: 5
+minMessage: 'You must specify at least one email'
+maxMessage: 'You cannot specify more than {{ limit }} emails'
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -28974,6 +29883,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/Participant.php
 namespace App\Entity;
@@ -29004,6 +29914,7 @@ class Participant
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Expression.html
 
 **Contents:**
+
 - Expression
 - Basic Usage
 - Options
@@ -29073,6 +29984,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Model/BlogPost.php
 namespace App\Model;
@@ -29102,6 +30014,7 @@ class BlogPost
 ```
 
 Example 2 (php):
+
 ```php
 // src/Model/BlogPost.php
 namespace App\Model;
@@ -29119,16 +30032,18 @@ class BlogPost
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Model\BlogPost:
-    constraints:
-        - Expression:
-            expression: "this.getCategory() in ['php', 'symfony'] or !this.isTechnicalPost()"
-            message: "If this is a tech post, the category should be either php or symfony!"
+constraints: - Expression:
+expression: "this.getCategory() in ['php', 'symfony'] or !this.isTechnicalPost()"
+message: "If this is a tech post, the category should be either php or symfony!"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -29155,6 +30070,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Sequentially.html
 
 **Contents:**
+
 - Sequentially
 - Basic Usage
 - Options
@@ -29191,6 +30107,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Localization/Place.php
 namespace App\Localization;
@@ -29216,22 +30133,19 @@ class Place
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Localization\Place:
-    properties:
-        address:
-            - Sequentially:
-                - NotNull: ~
-                - Type:
-                    value: string
-                - Length: { min: 10 }
-                - Regex:
-                    pattern: !php/const App\Localization\Place::ADDRESS_REGEX
-                - App\Validator\Constraints\Geolocalizable: ~
+properties:
+address: - Sequentially: - NotNull: ~ - Type:
+value: string - Length: { min: 10 } - Regex:
+pattern: !php/const App\Localization\Place::ADDRESS_REGEX - App\Validator\Constraints\Geolocalizable: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -29260,6 +30174,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Localization/Place.php
 namespace App\Localization;
@@ -29294,6 +30209,7 @@ class Place
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Traverse.html
 
 **Contents:**
+
 - Traverse
 - Basic Usage
 - Options
@@ -29325,6 +30241,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/BookCollection.php
 namespace App\Entity;
@@ -29390,14 +30307,16 @@ class BookCollection implements \IteratorAggregate
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\BookCollection:
-    constraints:
-        - Traverse: ~
+constraints: - Traverse: ~
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/validator/validation.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -29412,6 +30331,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // src/Entity/BookCollection.php
 namespace App\Entity;
@@ -29437,6 +30357,7 @@ class BookCollection
 **URL:** https://symfony.com/doc/7.4/reference/constraints/Valid.html
 
 **Contents:**
+
 - Valid
 - Basic Usage
 - Options
@@ -29479,6 +30400,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Entity/Address.php
 namespace App\Entity;
@@ -29492,6 +30414,7 @@ class Address
 ```
 
 Example 2 (php):
+
 ```php
 // src/Entity/Author.php
 namespace App\Entity;
@@ -29507,6 +30430,7 @@ class Author
 ```
 
 Example 3 (php):
+
 ```php
 // src/Entity/Address.php
 namespace App\Entity;
@@ -29542,25 +30466,21 @@ class Author
 ```
 
 Example 4 (markdown):
+
 ```markdown
 # config/validator/validation.yaml
+
 App\Entity\Address:
-    properties:
-        street:
-            - NotBlank: ~
-        zipCode:
-            - NotBlank: ~
-            - Length:
-                max: 5
+properties:
+street: - NotBlank: ~
+zipCode: - NotBlank: ~ - Length:
+max: 5
 
 App\Entity\Author:
-    properties:
-        firstName:
-            - NotBlank: ~
-            - Length:
-                min: 4
-        lastName:
-            - NotBlank: ~
+properties:
+firstName: - NotBlank: ~ - Length:
+min: 4
+lastName: - NotBlank: ~
 ```
 
 ---
@@ -29570,6 +30490,7 @@ App\Entity\Author:
 **URL:** https://symfony.com/doc/7.4/messenger/custom-transport.html
 
 **Contents:**
+
 - How to Create Your own Messenger Transport
 - Create your Transport Factory
 - Register your Factory
@@ -29585,7 +30506,7 @@ The implementation above is not runnable code but illustrates how a TransportInt
 
 Before using your factory, you must register it. If you're using the default services.yaml configuration, this is already done for you, thanks to autoconfiguration. Otherwise, add the following:
 
-Within the framework.messenger.transports.* configuration, create your named transport using your own DSN:
+Within the framework.messenger.transports.\* configuration, create your named transport using your own DSN:
 
 In addition of being able to route your messages to the yours sender, this will give you access to the following services:
 
@@ -29596,6 +30517,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 use Symfony\Component\Messenger\Transport\Sender\SenderInterface;
@@ -29618,6 +30540,7 @@ class YourTransportFactory implements TransportFactoryInterface
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
@@ -29710,14 +30633,16 @@ class YourTransport implements TransportInterface
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    Your\Transport\YourTransportFactory:
-        tags: [messenger.transport_factory]
+  Your\Transport\YourTransportFactory:
+    tags: [messenger.transport_factory]
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -29741,6 +30666,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/rate_limiter.html
 
 **Contents:**
+
 - Rate Limiter
 - Rate Limiting Policies
   - Fixed Window Rate Limiter
@@ -29774,7 +30700,7 @@ As you can see, this removes the edges of the window and would prevent the 6th r
 
 To achieve this, the rate limit is approximated based on the current window and the previous window.
 
-For example: the limit is 5,000 requests per hour; a user made 4,000 requests the previous hour and 500 requests this hour. 15 minutes into the current hour (25% of the window) the hit count would be calculated as: 75% * 4,000 + 500 = 3,500. At this point in time the user can only do 1,500 more requests.
+For example: the limit is 5,000 requests per hour; a user made 4,000 requests the previous hour and 500 requests this hour. 15 minutes into the current hour (25% of the window) the hit count would be calculated as: 75% \* 4,000 + 500 = 3,500. At this point in time the user can only do 1,500 more requests.
 
 The math shows that the closer the last window is, the more the hit count of the last window will affect the current limit. This will make sure that a user can do 5,000 requests per hour but only if they are evenly spread out.
 
@@ -29855,27 +30781,30 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/rate-limiter
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/rate_limiter.yaml
 framework:
-    rate_limiter:
-        anonymous_api:
-            # use 'sliding_window' if you prefer that policy
-            policy: 'fixed_window'
-            limit: 100
-            interval: '60 minutes'
-        authenticated_api:
-            policy: 'token_bucket'
-            limit: 5000
-            rate: { interval: '15 minutes', amount: 500 }
+  rate_limiter:
+    anonymous_api:
+      # use 'sliding_window' if you prefer that policy
+      policy: "fixed_window"
+      limit: 100
+      interval: "60 minutes"
+    authenticated_api:
+      policy: "token_bucket"
+      limit: 5000
+      rate: { interval: "15 minutes", amount: 500 }
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/rate_limiter.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -29910,6 +30839,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/rate_limiter.php
 use Symfony\Config\FrameworkConfig;
@@ -29941,6 +30871,7 @@ return static function (FrameworkConfig $framework): void {
 **URL:** https://symfony.com/doc/7.4/components/process.html
 
 **Contents:**
+
 - The Process Component
 - Installation
 - Usage
@@ -30077,11 +31008,13 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/process
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -30098,6 +31031,7 @@ echo $process->getOutput();
 ```
 
 Example 3 (php):
+
 ```php
 $process = new Process(['ls', '-lsa']);
 $process->start();
@@ -30112,6 +31046,7 @@ foreach ($process as $type => $data) {
 ```
 
 Example 4 (php):
+
 ```php
 $process = new Process(['ls', '-lsa']);
 $process->start();
@@ -30128,6 +31063,7 @@ foreach ($iterator as $data) {
 **URL:** https://symfony.com/doc/7.4/components/validator.html
 
 **Contents:**
+
 - The Validator Component
 - Installation
 - Usage
@@ -30157,11 +31093,13 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/validator
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
@@ -30181,6 +31119,7 @@ if (0 !== count($violations)) {
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
@@ -30191,6 +31130,7 @@ if (0 !== count($violations->findByCodes(UniqueEntity::NOT_UNIQUE_ERROR))) {
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Validator\Validation;
 
@@ -30204,6 +31144,7 @@ $validator = Validation::createValidator();
 **URL:** https://symfony.com/doc/7.4/serializer/encoders.html
 
 **Contents:**
+
 - Serializer Encoders
 - The JsonEncoder
 - The CsvEncoder
@@ -30284,6 +31225,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (javascript):
+
 ```javascript
 $this->serializer->serialize($data, 'json', [
     'json_encode_options' => \JSON_PRESERVE_ZERO_FRACTION,
@@ -30291,11 +31233,13 @@ $this->serializer->serialize($data, 'json', [
 ```
 
 Example 2 (javascript):
+
 ```javascript
 $normalizedArray = ['foo' => [1, 2], 'bar' => true];
 ```
 
 Example 3 (xml):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <response>
@@ -30306,6 +31250,7 @@ Example 3 (xml):
 ```
 
 Example 4 (xml):
+
 ```xml
 ['foo' => ['@bar' => 'value', '#' => 'baz']];
 
@@ -30326,6 +31271,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/serializer/custom_context_builders.html
 
 **Contents:**
+
 - How to Create your Custom Context Builder
 - Creating a new Context Builder
 
@@ -30348,6 +31294,7 @@ Get your Sylius expertise recognized
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Serializer/ZeroDateTimeDenormalizer.php
 namespace App\Serializer;
@@ -30380,12 +31327,14 @@ final class ZeroDateTimeDenormalizer implements DenormalizerInterface, Denormali
 ```
 
 Example 2 (php):
+
 ```php
 $legacyData = '{"updatedAt": "0000-00-00"}';
 $serializer->deserialize($legacyData, MyModel::class, 'json', ['zero_datetime_to_null' => true]);
 ```
 
 Example 3 (php):
+
 ```php
 // src/Serializer/LegacyContextBuilder
 namespace App\Serializer;
@@ -30405,6 +31354,7 @@ final class LegacyContextBuilder implements ContextBuilderInterface
 ```
 
 Example 4 (php):
+
 ```php
 $legacyData = '{"updatedAt": "0000-00-00"}';
 
@@ -30422,6 +31372,7 @@ $serializer->deserialize($legacyData, MyModel::class, 'json', $context);
 **URL:** https://symfony.com/doc/7.4/serializer/streaming_json.html
 
 **Contents:**
+
 - Streaming JSON
 - Installation
 - Encoding Objects
@@ -30511,9 +31462,9 @@ When callables are not enough, you can use a service implementing the ValueTrans
 
 The getStreamValueType() method must return the value's type as it will appear in the JSON stream.
 
-The $options argument of the transform() method includes a special option called _current_object which gives access to the object holding the current property (or null if there's none).
+The $options argument of the transform() method includes a special option called \_current_object which gives access to the object holding the current property (or null if there's none).
 
-The _current_object option was introduced in Symfony 7.4.
+The \_current_object option was introduced in Symfony 7.4.
 
 To use this transformer in a class, configure the #[ValueTransformer] attribute:
 
@@ -30544,11 +31495,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/json-streamer
 ```
 
 Example 2 (php):
+
 ```php
 // src/Dto/Cat.php
 namespace App\Dto;
@@ -30561,6 +31514,7 @@ class Cat
 ```
 
 Example 3 (php):
+
 ```php
 namespace App\Dto;
 
@@ -30574,6 +31528,7 @@ class Cat
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/CatController.php
 namespace App\Controller;
@@ -30605,13 +31560,14 @@ class CatController
 **URL:** https://symfony.com/doc/7.4/serializer/custom_name_converter.html
 
 **Contents:**
+
 - How to Create your Custom Name Converter
 
 The Serializer Component uses name converters to transform the attribute names (e.g. from snake_case in JSON to CamelCase for PHP properties).
 
 Imagine you have the following object:
 
-And in the serialized form, all attributes must be prefixed by org_ like the following:
+And in the serialized form, all attributes must be prefixed by org\_ like the following:
 
 A custom name converter can handle such cases:
 
@@ -30621,7 +31577,7 @@ You can also implement AdvancedNameConverterInterface to access the current clas
 
 Then, configure the serializer to use your name converter:
 
-Now, when using the serializer in the application, all attributes will be prefixed by org_:
+Now, when using the serializer in the application, all attributes will be prefixed by org\_:
 
 Become certified from home
 
@@ -30630,6 +31586,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace App\Model;
 
@@ -30641,11 +31598,13 @@ class Company
 ```
 
 Example 2 (json):
+
 ```json
-{"org_name": "Acme Inc.", "org_address": "123 Main Street, Big City"}
+{ "org_name": "Acme Inc.", "org_address": "123 Main Street, Big City" }
 ```
 
 Example 3 (php):
+
 ```php
 namespace App\Serializer;
 
@@ -30668,12 +31627,13 @@ class OrgPrefixNameConverter implements NameConverterInterface
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/serializer.yaml
 framework:
-    serializer:
-        # pass the service ID of your name converter
-        name_converter: 'App\Serializer\OrgPrefixNameConverter'
+  serializer:
+    # pass the service ID of your name converter
+    name_converter: 'App\Serializer\OrgPrefixNameConverter'
 ```
 
 ---
@@ -30683,6 +31643,7 @@ framework:
 **URL:** https://symfony.com/doc/7.4/serializer/custom_normalizer.html
 
 **Contents:**
+
 - How to Create your Custom Normalizer
 - Creating a New Normalizer
 - Registering it in your Application
@@ -30696,15 +31657,15 @@ Before using this normalizer in a Symfony application it must be registered as a
 
 If you're not using autoconfigure, you have to tag the service with serializer.normalizer. You can also use this method to set a priority (higher means it's called earlier in the process):
 
-Both NormalizerInterface and DenormalizerInterface define a getSupportedTypes() method to declare which types they support and whether their supports*() result can be cached.
+Both NormalizerInterface and DenormalizerInterface define a getSupportedTypes() method to declare which types they support and whether their supports\*() result can be cached.
 
-This does not cache the actual normalization or denormalization result. It only caches the decision of whether a normalizer supports a given type, allowing the Serializer to skip unnecessary supports*() calls and improve performance.
+This does not cache the actual normalization or denormalization result. It only caches the decision of whether a normalizer supports a given type, allowing the Serializer to skip unnecessary supports\*() calls and improve performance.
 
-The getSupportedTypes() method should return an array where the keys represent the supported types, and the values indicate whether the result of the corresponding supports*() call can be cached. The array format is as follows:
+The getSupportedTypes() method should return an array where the keys represent the supported types, and the values indicate whether the result of the corresponding supports\*() call can be cached. The array format is as follows:
 
 Here is an example of how to use the getSupportedTypes() method:
 
-The supports*() method implementations should not assume that getSupportedTypes() has been called before.
+The supports\*() method implementations should not assume that getSupportedTypes() has been called before.
 
 Code consumes server resources. Blackfire tells you how
 
@@ -30713,6 +31674,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Serializer/TopicNormalizer.php
 namespace App\Serializer;
@@ -30759,18 +31721,20 @@ class TopicNormalizer implements NormalizerInterface
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    # ...
+  # ...
 
-    App\Serializer\TopicNormalizer:
-        tags:
-            # register the normalizer with a high priority (called earlier)
-            - { name: 'serializer.normalizer', priority: 500 }
+  App\Serializer\TopicNormalizer:
+    tags:
+      # register the normalizer with a high priority (called earlier)
+      - { name: "serializer.normalizer", priority: 500 }
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -30793,6 +31757,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/services.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -30819,6 +31784,7 @@ return function(ContainerConfigurator $container) {
 **URL:** https://symfony.com/doc/7.4/reference/formats/message_format.html
 
 **Contents:**
+
 - How to Translate Messages using the ICU MessageFormat
 - Using the ICU Message Format
 - Message Placeholders
@@ -30888,12 +31854,14 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # translations/messages+intl-icu.en.yaml
-say_hello: 'Hello {name}!'
+say_hello: "Hello {name}!"
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- translations/messages+intl-icu.en.xlf -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -30910,6 +31878,7 @@ Example 2 (xml):
 ```
 
 Example 3 (javascript):
+
 ```javascript
 // translations/messages+intl-icu.en.php
 return [
@@ -30918,6 +31887,7 @@ return [
 ```
 
 Example 4 (bash):
+
 ```bash
 // prints "Hello Fabien!"
 echo $translator->trans('say_hello', ['name' => 'Fabien']);
@@ -30933,6 +31903,7 @@ echo $translator->trans('say_hello', ['name' => 'Symfony']);
 **URL:** https://symfony.com/doc/7.4/reference/formats/xliff.html
 
 **Contents:**
+
 - The XLIFF format
 - Adding Notes to Translation Contents
 
@@ -30951,6 +31922,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (xml):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:2.0" version="2.0"
@@ -30978,6 +31950,7 @@ Example 1 (xml):
 **URL:** https://symfony.com/doc/7.4/security/impersonating_user.html
 
 **Contents:**
+
 - How to Impersonate a User
 - Knowing When Impersonation Is Active
 - Finding the Original User
@@ -30992,13 +31965,13 @@ User impersonation is not compatible with some authentication mechanisms (e.g. R
 
 Impersonating the user can be done by activating the switch_user firewall listener:
 
-To switch to another user, add a query string with the _switch_user parameter and the username (or whatever field our user provider uses to load users) as the value to the current URL:
+To switch to another user, add a query string with the \_switch_user parameter and the username (or whatever field our user provider uses to load users) as the value to the current URL:
 
 You can leverage the Twig function impersonation_path('thomas')
 
-Instead of adding a _switch_user query string parameter, you can pass the username in a custom HTTP header by adjusting the parameter setting. For example, to use X-Switch-User header (available in PHP as HTTP_X_SWITCH_USER) add this configuration:
+Instead of adding a \_switch_user query string parameter, you can pass the username in a custom HTTP header by adjusting the parameter setting. For example, to use X-Switch-User header (available in PHP as HTTP_X_SWITCH_USER) add this configuration:
 
-To switch back to the original user, use the special _exit username:
+To switch back to the original user, use the special \_exit username:
 
 You can leverage the Twig function impersonation_exit_path('/somewhere')
 
@@ -31014,7 +31987,7 @@ It works only in a stateful firewall.
 
 This feature allows you to control the redirection target route via target_route.
 
-If you need more control over user switching, you can use a security voter. First, configure switch_user to check for some new, custom attribute. This can be anything, but cannot start with ROLE_ (to enforce that only your voter will be called):
+If you need more control over user switching, you can use a security voter. First, configure switch*user to check for some new, custom attribute. This can be anything, but cannot start with ROLE* (to enforce that only your voter will be called):
 
 Then, create a voter class that responds to this role and includes whatever custom logic you want:
 
@@ -31037,18 +32010,20 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
+  # ...
 
-    firewalls:
-        main:
-            # ...
-            switch_user: true
+  firewalls:
+    main:
+      # ...
+      switch_user: true
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -31072,6 +32047,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Config\SecurityConfig;
@@ -31086,6 +32062,7 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 http://example.com/somewhere?_switch_user=thomas
 ```
@@ -31097,6 +32074,7 @@ http://example.com/somewhere?_switch_user=thomas
 **URL:** https://symfony.com/doc/7.4/security/remember_me.html
 
 **Contents:**
+
 - How to Add "Remember Me" Login Functionality
 - Activating the Remember Me System
   - Remember Me for Form Login
@@ -31120,11 +32098,11 @@ The remember_me setting contains many settings to configure the cookie created b
 
 Using the remember me cookie is not always appropriate (e.g. you should not use it on a shared PC). This is why by default, Symfony requires your users to opt-in to the remember me system via a request parameter.
 
-This request parameter is often set via a checkbox in the login form. This checkbox must have a name of _remember_me:
+This request parameter is often set via a checkbox in the login form. This checkbox must have a name of \_remember_me:
 
 Optionally, you can configure a custom name for this checkbox using the name setting under the remember_me section.
 
-If you implement the login via an API that uses JSON Login you can add a _remember_me key to the body of your POST request.
+If you implement the login via an API that uses JSON Login you can add a \_remember_me key to the body of your POST request.
 
 Optionally, you can configure a custom name for this key using the name setting under the remember_me section of your firewall.
 
@@ -31185,24 +32163,26 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
+  # ...
 
-    firewalls:
-        main:
-            # ...
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800 # 1 week in seconds
-                # by default, the feature is enabled by checking a
-                # checkbox in the login form (see below), uncomment the
-                # following line to always enable it.
-                #always_remember_me: true
+  firewalls:
+    main:
+      # ...
+      remember_me:
+        secret: "%kernel.secret%"
+        lifetime: 604800 # 1 week in seconds
+        # by default, the feature is enabled by checking a
+        # checkbox in the login form (see below), uncomment the
+        # following line to always enable it.
+        #always_remember_me: true
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -31235,6 +32215,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Config\SecurityConfig;
@@ -31256,6 +32237,7 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (jsx):
+
 ```jsx
 {# templates/security/login.html.twig #}
 <form method="post">
@@ -31277,6 +32259,7 @@ Example 4 (jsx):
 **URL:** https://symfony.com/doc/7.4/security/firewall_restriction.html
 
 **Contents:**
+
 - How to Restrict Firewalls to a Request
 - Restricting by Configuration
   - Restricting by Path
@@ -31313,18 +32296,20 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 
 # ...
 security:
-    firewalls:
-        secured_area:
-            pattern: ^/admin
-            # ...
+  firewalls:
+    secured_area:
+      pattern: ^/admin
+      # ...
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -31346,6 +32331,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Config\SecurityConfig;
@@ -31361,15 +32347,16 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 
 # ...
 security:
-    firewalls:
-        secured_area:
-            host: ^admin\.example\.com$
-            # ...
+  firewalls:
+    secured_area:
+      host: ^admin\.example\.com$
+      # ...
 ```
 
 ---
@@ -31379,6 +32366,7 @@ security:
 **URL:** https://symfony.com/doc/7.4/security/custom_authenticator.html
 
 **Contents:**
+
 - How to Write a Custom Authenticator
 - Security Passports
   - User Identifier
@@ -31468,6 +32456,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 $ php bin/console make:security:custom
 
@@ -31481,6 +32470,7 @@ $ php bin/console make:security:custom
 ```
 
 Example 2 (php):
+
 ```php
 // src/Security/ApiKeyAuthenticator.php
 namespace App\Security;
@@ -31547,18 +32537,19 @@ class ApiKeyAuthenticator extends AbstractAuthenticator
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-
-    # ...
-    firewalls:
-        main:
-            custom_authenticators:
-                - App\Security\ApiKeyAuthenticator
+  # ...
+  firewalls:
+    main:
+      custom_authenticators:
+        - App\Security\ApiKeyAuthenticator
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
@@ -31587,6 +32578,7 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/security/access_denied_handler.html
 
 **Contents:**
+
 - How to Customize Access Denied Responses
 - Customize the Unauthorized Response
 - Customize the Forbidden Response
@@ -31613,6 +32605,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Security/AuthenticationEntryPoint.php
 namespace App\Security;
@@ -31641,17 +32634,19 @@ class AuthenticationEntryPoint implements AuthenticationEntryPointInterface
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 firewalls:
-    # ...
+  # ...
 
-    main:
-        # ...
-        entry_point: App\Security\AuthenticationEntryPoint
+  main:
+    # ...
+    entry_point: App\Security\AuthenticationEntryPoint
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -31672,6 +32667,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/security.php
 use App\Security\AuthenticationEntryPoint;
@@ -31692,6 +32688,7 @@ return static function (SecurityConfig $security): void {
 **URL:** https://symfony.com/doc/7.4/reference/configuration/security.html
 
 **Contents:**
+
 - Security Configuration Reference (SecurityBundle)
 - access_denied_url
 - erase_credentials
@@ -31805,11 +32802,11 @@ type: boolean default: false
 
 If you'd like the user to be forwarded to the login form instead of being redirected, set this option to true.
 
-type: string default: _username
+type: string default: \_username
 
 This is the name of the username field of your login form. When you submit the form to check_path, the security system will look for a POST parameter with this name.
 
-type: string default: _password
+type: string default: \_password
 
 This is the name of the password field of your login form. When you submit the form to check_path, the security system will look for a POST parameter with this name.
 
@@ -31827,11 +32824,11 @@ type: string default: /
 
 The page users are redirected to when there is no previous page stored in the session (for example, when the users browse the login page directly).
 
-type: string default: _target_path
+type: string default: \_target_path
 
 When using a login form, if you include an HTML element to set the target path, this option lets you change the name of the HTML element itself.
 
-type: string default: _failure_path
+type: string default: \_failure_path
 
 When using a login form, if you include an HTML element to set the failure path, this option lets you change the name of the HTML element itself.
 
@@ -31851,7 +32848,7 @@ type: array default: []
 
 The Clear-Site-Data HTTP header clears browsing data (cookies, storage, cache) associated with the requesting website. It allows web developers to have more control over the data stored by a client browser for their origins.
 
-Allowed values are cache, cookies, storage and executionContexts. It's also possible to use * as a wildcard for all directives:
+Allowed values are cache, cookies, storage and executionContexts. It's also possible to use \* as a wildcard for all directives:
 
 type: boolean default: true
 
@@ -31871,7 +32868,7 @@ type: boolean default: null
 
 Set this option to true to enable CSRF protection in the logout process using Symfony's default CSRF token manager. Set also the csrf_token_manager option if you need to use a custom CSRF token manager.
 
-type: string default: _csrf_token
+type: string default: \_csrf_token
 
 The name of the parameter that stores the CSRF token value.
 
@@ -31921,11 +32918,11 @@ Users will still be fetched from the configured user provider. If you wish to fe
 
 type: string default: SSL_CLIENT_S_DN_Email
 
-The name of the $_SERVER parameter containing the user identifier used to load the user in Symfony. The default value is exposed by Apache.
+The name of the $\_SERVER parameter containing the user identifier used to load the user in Symfony. The default value is exposed by Apache.
 
 type: string default: SSL_CLIENT_S_DN
 
-If the user parameter is not available, the name of the $_SERVER parameter containing the full "distinguished name" of the certificate (exposed by e.g. Nginx).
+If the user parameter is not available, the name of the $\_SERVER parameter containing the full "distinguished name" of the certificate (exposed by e.g. Nginx).
 
 By default, Symfony identifies the value following emailAddress= in this parameter. This can be changed using the user_identifier option.
 
@@ -31939,7 +32936,7 @@ The service ID of the user provider that should be used by this authenticator.
 
 type: string default: REMOTE_USER
 
-The name of the $_SERVER parameter holding the user identifier.
+The name of the $\_SERVER parameter holding the user identifier.
 
 If your application uses multiple firewalls, you'll notice that if you're authenticated in one firewall, you're not automatically authenticated in another. In other words, the systems don't share a common "context": each firewall acts like a separate security system.
 
@@ -31968,15 +32965,19 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference security
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config security
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -31993,16 +32994,18 @@ class User implements UserInterface
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    access_decision_manager:
-        strategy: affirmative
-        allow_if_all_abstain: false
-        allow_if_equal_granted_denied: true
+  access_decision_manager:
+    strategy: affirmative
+    allow_if_all_abstain: false
+    allow_if_equal_granted_denied: true
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/security.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -32025,6 +33028,7 @@ return App::config([
 **URL:** https://symfony.com/doc/7.4/security/form_login.html
 
 **Contents:**
+
 - Customizing the Form Login Authenticator Responses
 - Redirecting after Success
   - Changing the default Page
@@ -32044,19 +33048,19 @@ Define the default_target_path option to change the page where the user is redir
 
 Define the always_use_default_target_path boolean option to ignore the previously requested URL and always redirect to the default page:
 
-The URL to redirect to after the login can be dynamically defined using the _target_path parameter of the GET or POST request. Its value must be a relative or absolute URL, not a Symfony route name.
+The URL to redirect to after the login can be dynamically defined using the \_target_path parameter of the GET or POST request. Its value must be a relative or absolute URL, not a Symfony route name.
 
 For GET, use a query string parameter:
 
 For POST, use a hidden form field:
 
-In case no previous URL was stored in the session and no _target_path parameter is included in the request, you may use the value of the HTTP_REFERER header instead, as this will often be the same. Define the use_referer boolean option to enable this behavior:
+In case no previous URL was stored in the session and no \_target_path parameter is included in the request, you may use the value of the HTTP_REFERER header instead, as this will often be the same. Define the use_referer boolean option to enable this behavior:
 
 The referrer URL is only used when it is different from the URL generated by the login_path route to avoid a redirection loop.
 
 After a failed login (e.g. an invalid username or password was submitted), the user is redirected back to the login form itself. Use the failure_path option to define a new target via a relative/absolute URL or a Symfony route name:
 
-This option can also be set via the _failure_path request parameter:
+This option can also be set via the \_failure_path request parameter:
 
 The name of the request attributes used to define the success and failure login redirects can be customized using the target_path_parameter and failure_path_parameter options of the firewall that defines the login form.
 
@@ -32069,19 +33073,21 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
+  # ...
 
-    firewalls:
-        main:
-            form_login:
-                # ...
-                default_target_path: after_login_route_name
+  firewalls:
+    main:
+      form_login:
+        # ...
+        default_target_path: after_login_route_name
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -32104,6 +33110,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Config\SecurityConfig;
@@ -32121,16 +33128,17 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
+  # ...
 
-    firewalls:
-        main:
-            form_login:
-                # ...
-                always_use_default_target_path: true
+  firewalls:
+    main:
+      form_login:
+        # ...
+        always_use_default_target_path: true
 ```
 
 ---
@@ -32140,11 +33148,12 @@ security:
 **URL:** https://symfony.com/doc/7.4/security/login_link.html
 
 **Contents:**
+
 - How to use Passwordless Login Link Authentication
 - Using the Login Link Authenticator
-  - 1) Configure the Login Link Authenticator
-  - 2) Generate the Login Link
-  - 3) Send the Login Link to the User
+  - 1. Configure the Login Link Authenticator
+  - 2. Generate the Login Link
+  - 3. Send the Login Link to the User
 - Important Considerations
   - Limit Login Link Lifetime
   - Invalidate Login Links
@@ -32238,17 +33247,19 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    firewalls:
-        main:
-            login_link:
-                check_route: login_check
-                signature_properties: ['id']
+  firewalls:
+    main:
+      login_link:
+        check_route: login_check
+        signature_properties: ["id"]
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
@@ -32271,6 +33282,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Config\SecurityConfig;
@@ -32285,6 +33297,7 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/SecurityController.php
 namespace App\Controller;
@@ -32309,15 +33322,16 @@ class SecurityController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/security/access_token.html
 
 **Contents:**
+
 - How to use Access Token Authentication
 - Using the Access Token Authenticator
-  - 1) Configure the Access Token Authenticator
-  - 2) Configure the Token Extractor (Optional)
-  - 3) Submit a Request
+  - 1. Configure the Access Token Authenticator
+  - 2. Configure the Token Extractor (Optional)
+  - 3. Submit a Request
 - Customizing the Success Handler
 - Using OpenID Connect (OIDC)
-  - 1) Configure the OidcUserInfoTokenHandler
-  - 2) Configure the OidcTokenHandler
+  - 1. Configure the OidcUserInfoTokenHandler
+  - 2. Configure the OidcTokenHandler
     - Configuring Multiple OIDC Discovery Endpoints
 
 Access tokens or API tokens are commonly used as authentication mechanism in API contexts. The access token is a string, obtained during authentication (using the application or an authorization server). The access token's role is to verify the user identity and receive consent before the token is issued.
@@ -32423,16 +33437,18 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    firewalls:
-        main:
-            access_token:
-                token_handler: App\Security\AccessTokenHandler
+  firewalls:
+    main:
+      access_token:
+        token_handler: App\Security\AccessTokenHandler
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
@@ -32453,6 +33469,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use App\Security\AccessTokenHandler;
@@ -32467,6 +33484,7 @@ return static function (SecurityConfig $security): void {
 ```
 
 Example 4 (php):
+
 ```php
 // src/Security/AccessTokenHandler.php
 namespace App\Security;
@@ -32506,6 +33524,7 @@ class AccessTokenHandler implements AccessTokenHandlerInterface
 **URL:** https://symfony.com/doc/7.4/security/voters.html
 
 **Contents:**
+
 - How to Use Voters to Check User Permissions
 - The Voter Interface
 - Setup: Checking for Access in a Controller
@@ -32592,6 +33611,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/PostController.php
 // ...
@@ -32603,6 +33623,7 @@ if ($post->getOwner() !== $this->getUser()) {
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -32616,6 +33637,7 @@ abstract class Voter implements VoterInterface
 ```
 
 Example 3 (php):
+
 ```php
 // src/Controller/PostController.php
 
@@ -32645,6 +33667,7 @@ class PostController extends AbstractController
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/PostController.php
 
@@ -32680,6 +33703,7 @@ class PostController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/security/access_control.html
 
 **Contents:**
+
 - How Does the Security access_control Work?
 - 1. Matching Options
 - 2. Access Enforcement
@@ -32698,7 +33722,7 @@ Take the following access_control entries as an example:
 
 For each incoming request, Symfony will decide which access_control to use based on the URI, the client's IP address, the incoming host name, and the request method. Remember, the first rule that matches is used, and if ip, port, host or method are not specified for an entry, that access_control will match any ip, port, host or method. See the following examples:
 
-Matching the URI is done without $_GET parameters. Deny access in PHP code if you want to disallow access based on $_GET parameter values.
+Matching the URI is done without $\_GET parameters. Deny access in PHP code if you want to disallow access based on $\_GET parameter values.
 
 Once Symfony has decided which access_control entry matches (if any), it then enforces access restrictions based on the roles, allow_if and requires_channel options:
 
@@ -32712,7 +33736,7 @@ Certain situations may arise when you need to have an access_control entry that 
 
 As you'll read in the explanation below the example, the ips option does not restrict to a specific IP address. Instead, using the ips key means that the access_control entry will only match this IP address, and users accessing it from a different IP address will continue down the access_control list.
 
-Here is an example of how you configure some example /internal* URL pattern so that it is only accessible by requests from the local server itself:
+Here is an example of how you configure some example /internal\* URL pattern so that it is only accessible by requests from the local server itself:
 
 Here is how it works when the path is /internal/something coming from the external IP address 10.0.0.1:
 
@@ -32720,7 +33744,7 @@ But if the same request comes from 127.0.0.1 or ::1 (the IPv6 loopback address):
 
 Once an access_control entry is matched, you can deny access via the roles key or use more complex logic with an expression in the allow_if key:
 
-In this case, when the user tries to access any URL starting with /_internal/secure, they will only be granted access if the IP address is 127.0.0.1 or a secure header, or if the user has the ROLE_ADMIN role.
+In this case, when the user tries to access any URL starting with /\_internal/secure, they will only be granted access if the IP address is 127.0.0.1 or a secure header, or if the user has the ROLE_ADMIN role.
 
 Internally allow_if triggers the built-in ExpressionVoter as like it was part of the attributes defined in the roles option.
 
@@ -32741,6 +33765,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (julia):
+
 ```julia
 # config/packages/security.yaml
 parameters:
@@ -32767,6 +33792,7 @@ security:
 ```
 
 Example 2 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -32810,6 +33836,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // config/packages/security.php
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -32872,15 +33899,20 @@ return static function (ContainerBuilder $container, SecurityConfig $security): 
 ```
 
 Example 4 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 security:
-    # ...
-    access_control:
-        #
-        # the 'ips' option supports IP addresses and subnet masks
-        - { path: '^/internal', roles: PUBLIC_ACCESS, ips: [127.0.0.1, ::1, 192.168.0.1/24] }
-        - { path: '^/internal', roles: ROLE_NO_ACCESS }
+  # ...
+  access_control:
+    #
+    # the 'ips' option supports IP addresses and subnet masks
+    - {
+        path: "^/internal",
+        roles: PUBLIC_ACCESS,
+        ips: [127.0.0.1, ::1, 192.168.0.1/24],
+      }
+    - { path: "^/internal", roles: ROLE_NO_ACCESS }
 ```
 
 ---
@@ -32890,6 +33922,7 @@ security:
 **URL:** https://symfony.com/doc/7.4/security/user_checkers.html
 
 **Contents:**
+
 - How to Create and Enable Custom User Checkers
 - Creating a Custom User Checker
 - Enabling the Custom User Checker
@@ -32918,6 +33951,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 namespace App\Security;
 
@@ -32962,19 +33996,21 @@ class UserChecker implements UserCheckerInterface
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/security.yaml
 
 # ...
 security:
-    firewalls:
-        main:
-            pattern: ^/
-            user_checker: App\Security\UserChecker
-            # ...
+  firewalls:
+    main:
+      pattern: ^/
+      user_checker: App\Security\UserChecker
+      # ...
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/security.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -32998,6 +34034,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/security.php
 use App\Security\UserChecker;
@@ -33020,6 +34057,7 @@ return static function (SecurityConfig $security): void {
 **URL:** https://symfony.com/doc/7.4/security/expressions.html
 
 **Contents:**
+
 - Using Expressions in Security Access Controls
 - Learn more
 
@@ -33062,6 +34100,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // src/Controller/MyController.php
 namespace App\Controller;
@@ -33090,6 +34129,7 @@ class MyController extends AbstractController
 ```
 
 Example 2 (php):
+
 ```php
 // src/Controller/MyController.php
 namespace App\Controller;
@@ -33121,6 +34161,7 @@ class MyController extends AbstractController
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -33137,6 +34178,7 @@ public function index(AuthorizationCheckerInterface $authorizationChecker): Resp
 ```
 
 Example 4 (php):
+
 ```php
 // src/Controller/MyController.php
 namespace App\Controller;
@@ -33167,6 +34209,7 @@ class MyController extends AbstractController
 **URL:** https://symfony.com/doc/7.4/frontend/create_ux_bundle.html
 
 **Contents:**
+
 - Create a UX bundle
 - composer.json file
 - Assets location
@@ -33195,7 +34238,7 @@ Add the following to your babel.config.js file (should be located next to your p
 
 To use your controller in a template (e.g. one defined in your bundle) you can use it like this:
 
-Don't forget to add symfony/stimulus-bundle:^2.9 as a composer dependency to use Twig stimulus_* functions.
+Don't forget to add symfony/stimulus-bundle:^2.9 as a composer dependency to use Twig stimulus\_\* functions.
 
 Controller Naming: In this example, the name of the PHP package is acme/feature and the name of the controller in package.json is slug. So, the full controller name for Stimulus will be acme--feature--slug, though with the stimulus_controller() function, you can use acme/feature/slug.
 
@@ -33210,60 +34253,64 @@ Show your Sylius expertise
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {
-    "keywords": ["symfony-ux"]
+  "keywords": ["symfony-ux"]
 }
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "name": "@acme/feature",
-    "version": "1.0.0",
-    "symfony": {
-        "controllers": {
-            "slug": {
-                "main": "dist/controller.js",
-                "fetch": "eager",
-                "enabled": true,
-                "autoimport": {
-                    "@acme/feature/dist/bootstrap4-theme.css": false,
-                    "@acme/feature/dist/bootstrap5-theme.css": true
-                }
-            }
-        },
-        "importmap": {
-            "@hotwired/stimulus": "^3.0.0",
-            "slugify": "^1.6.5"
+  "name": "@acme/feature",
+  "version": "1.0.0",
+  "symfony": {
+    "controllers": {
+      "slug": {
+        "main": "dist/controller.js",
+        "fetch": "eager",
+        "enabled": true,
+        "autoimport": {
+          "@acme/feature/dist/bootstrap4-theme.css": false,
+          "@acme/feature/dist/bootstrap5-theme.css": true
         }
+      }
     },
-    "peerDependencies": {
-        "@hotwired/stimulus": "^3.0.0",
-        "slugify": "^1.6.5"
+    "importmap": {
+      "@hotwired/stimulus": "^3.0.0",
+      "slugify": "^1.6.5"
     }
+  },
+  "peerDependencies": {
+    "@hotwired/stimulus": "^3.0.0",
+    "slugify": "^1.6.5"
+  }
 }
 ```
 
 Example 3 (json):
+
 ```json
 {
-    "scripts": {
-        "build": "babel src --extensions .ts -d dist"
-    },
-    "devDependencies": {
-        "@babel/cli": "^7.20.7",
-        "@babel/core": "^7.20.12",
-        "@babel/plugin-proposal-class-properties": "^7.18.6",
-        "@babel/preset-env": "^7.20.2",
-        "@babel/preset-typescript": "^7.18.6",
-        "@hotwired/stimulus": "^3.2.1",
-        "typescript": "^4.9.5"
-    }
+  "scripts": {
+    "build": "babel src --extensions .ts -d dist"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-typescript": "^7.18.6",
+    "@hotwired/stimulus": "^3.2.1",
+    "typescript": "^4.9.5"
+  }
 }
 ```
 
 Example 4 (json):
+
 ```json
 module.exports = {
     presets: [
@@ -33286,6 +34333,7 @@ module.exports = {
 **URL:** https://symfony.com/doc/7.4/frontend/custom_version_strategy.html
 
 **Contents:**
+
 - How to Use a Custom Version Strategy for Assets
 - Creating your Own Asset Version Strategy
   - Implement VersionStrategyInterface
@@ -33312,14 +34360,16 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (json):
+
 ```json
 {
-    "js/script.js": "f9c7afd05729f10f55b689f36bb20172",
-    "css/style.css": "91cd067f79a5839536b46c494c4272d8"
+  "js/script.js": "f9c7afd05729f10f55b689f36bb20172",
+  "css/style.css": "91cd067f79a5839536b46c494c4272d8"
 }
 ```
 
 Example 2 (php):
+
 ```php
 // src/Asset/VersionStrategy/GulpBusterVersionStrategy.php
 namespace App\Asset\VersionStrategy;
@@ -33370,16 +34420,18 @@ class GulpBusterVersionStrategy implements VersionStrategyInterface
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # config/services.yaml
 services:
-    App\Asset\VersionStrategy\GulpBusterVersionStrategy:
-        arguments:
-            - "%kernel.project_dir%/busters.json"
-            - "%%s?version=%%s"
+  App\Asset\VersionStrategy\GulpBusterVersionStrategy:
+    arguments:
+      - "%kernel.project_dir%/busters.json"
+      - "%%s?version=%%s"
 ```
 
 Example 4 (xml):
+
 ```xml
 <!-- config/services.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -33404,15 +34456,16 @@ Example 4 (xml):
 **URL:** https://symfony.com/doc/7.4/frontend/server-data.html
 
 **Contents:**
+
 - Passing Information from Twig to JavaScript
 
-In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-* attributes and reading them later in JavaScript. For example:
+In Symfony applications, you may find that you need to pass some dynamic data (e.g. user information) from Twig to your JavaScript code. One great way to pass dynamic configuration is by storing information in data-\* attributes and reading them later in JavaScript. For example:
 
 Fetch this in JavaScript:
 
 If you prefer to access data attributes via JavaScript's dataset property, the attribute names are converted from dash-style to camelCase. For example, data-number-of-reviews becomes dataset.numberOfReviews:
 
-There is no size limit for the value of the data-* attributes, so you can store any content. In Twig, use the html escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following:
+There is no size limit for the value of the data-\* attributes, so you can store any content. In Twig, use the html escaping strategy to avoid messing with HTML attributes. For example, if your User object has some getProfileData() method that returns an array, you could do the following:
 
 Show your Symfony expertise
 
@@ -33421,6 +34474,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (jsx):
+
 ```jsx
 <div class="js-user-rating"
     data-is-authenticated="{{ app.user ? 'true' : 'false' }}"
@@ -33431,15 +34485,17 @@ Example 1 (jsx):
 ```
 
 Example 2 (javascript):
+
 ```javascript
-document.addEventListener('DOMContentLoaded', function() {
-    const userRating = document.querySelector('.js-user-rating');
-    const isAuthenticated = userRating.getAttribute('data-is-authenticated');
-    const user = JSON.parse(userRating.getAttribute('data-user'));
+document.addEventListener("DOMContentLoaded", function () {
+  const userRating = document.querySelector(".js-user-rating");
+  const isAuthenticated = userRating.getAttribute("data-is-authenticated");
+  const user = JSON.parse(userRating.getAttribute("data-user"));
 });
 ```
 
 Example 3 (javascript):
+
 ```javascript
 // ...
 const isAuthenticated = userRating.dataset.isAuthenticated;
@@ -33447,6 +34503,7 @@ const user = JSON.parse(userRating.dataset.user);
 ```
 
 Example 4 (jsx):
+
 ```jsx
 <div data-user-profile="{{ app.user ? app.user.profileData|json_encode|e('html') }}">
     <!-- ... -->
@@ -33460,6 +34517,7 @@ Example 4 (jsx):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/simple-example.html
 
 **Contents:**
+
 - Encore: Setting up your Project
 - Configuring Encore/Webpack
 - Requiring JavaScript Modules
@@ -33499,7 +34557,7 @@ That's it! When you refresh your page, all of the JavaScript from assets/app.js 
 
 The encore_entry_link_tags() and encore_entry_script_tags() functions read from a public/build/entrypoints.json file that's generated by Encore to know the exact filename(s) to render. This file is especially useful because you can enable versioning or point assets to a CDN without making any changes to your template: the paths in entrypoints.json will always be the final, correct paths. And if you use splitEntryChunks() (where Webpack splits the output into even more files), all the necessary script and link tags will render automatically.
 
-If you are not using Symfony you won't have the encore_entry_* functions available. Instead, you can point directly to the final built files or write code to parse entrypoints.json manually. The entrypoints file is needed only if you're using certain optional features, like splitEntryChunks().
+If you are not using Symfony you won't have the encore*entry*\* functions available. Instead, you can point directly to the final built files or write code to parse entrypoints.json manually. The entrypoints file is needed only if you're using certain optional features, like splitEntryChunks().
 
 The defer attribute on the script tags delays the execution of the JavaScript until the page loads (similar to putting the script at the bottom of the page). The ability to always add this attribute was introduced in WebpackEncoreBundle 1.9.0 and is automatically enabled in that bundle's recipe in the config/packages/webpack_encore.yaml file. See WebpackEncoreBundle Configuration for more details.
 
@@ -33582,6 +34640,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // assets/app.js
 // ...
@@ -33590,26 +34649,27 @@ import './styles/app.css';
 ```
 
 Example 2 (javascript):
+
 ```javascript
 // webpack.config.js
-const Encore = require('@symfony/webpack-encore');
+const Encore = require("@symfony/webpack-encore");
 
 Encore
-    // directory where compiled assets will be stored
-    .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
-    .setPublicPath('/build')
+  // directory where compiled assets will be stored
+  .setOutputPath("public/build/")
+  // public path used by the web server to access the output path
+  .setPublicPath("/build")
 
-    .addEntry('app', './assets/app.js')
+  .addEntry("app", "./assets/app.js")
 
-    // uncomment this if you want use jQuery in the following example
-    .autoProvidejQuery()
-;
+  // uncomment this if you want use jQuery in the following example
+  .autoProvidejQuery();
 
 // ...
 ```
 
 Example 3 (sql):
+
 ```sql
 # compile assets and automatically re-compile when files change
 $ npm run watch
@@ -33625,32 +34685,29 @@ $ npm run build
 ```
 
 Example 4 (html):
+
 ```html
 {# templates/base.html.twig #}
 <!DOCTYPE html>
 <html>
-    <head>
-        <!-- ... -->
+  <head>
+    <!-- ... -->
 
-        {% block stylesheets %}
-            {# 'app' must match the first argument to addEntry() in webpack.config.js #}
-            {{ encore_entry_link_tags('app') }}
+    {% block stylesheets %} {# 'app' must match the first argument to addEntry()
+    in webpack.config.js #} {{ encore_entry_link_tags('app') }}
 
-            <!-- Renders a link tag (if your module requires any CSS)
+    <!-- Renders a link tag (if your module requires any CSS)
                  <link rel="stylesheet" href="/build/app.css"> -->
-        {% endblock %}
+    {% endblock %} {% block javascripts %} {{ encore_entry_script_tags('app') }}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-
-            <!-- Renders app.js & a webpack runtime.js file
+    <!-- Renders app.js & a webpack runtime.js file
                 <script src="/build/runtime.js" defer></script>
                 <script src="/build/app.js" defer></script>
                 See note below about the "defer" attribute -->
-        {% endblock %}
-    </head>
+    {% endblock %}
+  </head>
 
-    <!-- ... -->
+  <!-- ... -->
 </html>
 ```
 
@@ -33661,6 +34718,7 @@ Example 4 (html):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/css-preprocessors.html
 
 **Contents:**
+
 - CSS Preprocessors: Sass, etc. with Webpack Encore
 
 To use the Sass, LESS or Stylus pre-processors, enable the one you want in webpack.config.js:
@@ -33676,6 +34734,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // webpack.config.js
 // ...
@@ -33703,6 +34762,7 @@ Encore
 **URL:** https://symfony.com/doc/7.4/frontend/encore/postcss.html
 
 **Contents:**
+
 - PostCSS and autoprefixing (postcss-loader) with Webpack Encore
 - Adding browserslist to package.json
 
@@ -33731,6 +34791,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // webpack.config.js
 
@@ -33741,24 +34802,28 @@ Example 1 (unknown):
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ npm install autoprefixer --save-dev
 ```
 
 Example 3 (css):
+
 ```css
 module.exports = {
-    plugins: {
-        // include whatever plugins you want
+  plugins: {
+    // include whatever plugins you want
         // but make sure you install these via npm!
 
         // add browserslist config to package.json (see below)
-        autoprefixer: {}
+        autoprefixer: {
     }
+  }
 }
 ```
 
 Example 4 (javascript):
+
 ```javascript
 // webpack.config.js
 + const path = require('path');
@@ -33781,6 +34846,7 @@ Example 4 (javascript):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/reactjs.html
 
 **Contents:**
+
 - Enabling React.js with Webpack Encore
 
 Do you prefer video tutorials? Check out the React.js screencast series.
@@ -33802,11 +34868,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ npm install react react-dom prop-types --save
 ```
 
 Example 2 (unknown):
+
 ```unknown
 // webpack.config.js
   // ...
@@ -33824,6 +34892,7 @@ Example 2 (unknown):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/vuejs.html
 
 **Contents:**
+
 - Enabling Vue.js (vue-loader) with Webpack Encore
 - Runtime Compiler Build
 - Hot Module Replacement (HMR)
@@ -33882,6 +34951,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // webpack.config.js
   // ...
@@ -33895,17 +34965,19 @@ Example 1 (unknown):
 ```
 
 Example 2 (jsx):
+
 ```jsx
 new Vue({
-    template: '<div>{{ hi }}</div>'
-})
+  template: "<div>{{ hi }}</div>",
+});
 
 new Vue({
-    el: '#app', // where <div id="app"> in your DOM contains the Vue template
+  el: "#app", // where <div id="app"> in your DOM contains the Vue template
 });
 ```
 
 Example 3 (css):
+
 ```css
 // webpack.config.js
 // ...
@@ -33918,6 +34990,7 @@ Encore
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ npm run dev-server
 ```
@@ -33929,6 +35002,7 @@ $ npm run dev-server
 **URL:** https://symfony.com/doc/7.4/frontend/encore/copy-files.html
 
 **Contents:**
+
 - Copying & Referencing Images with Webpack Encore
 - Referencing Images from Inside a Webpacked JavaScript File
 - Referencing Image files from a Template
@@ -33956,17 +35030,19 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (jsx):
+
 ```jsx
 // assets/app.js
 
 // returns the final, public path to this file
 // path is relative to this file - e.g. assets/images/logo.png
-import logoPath from '../images/logo.png';
+import logoPath from "../images/logo.png";
 
 let html = `<img src="${logoPath}" alt="ACME logo">`;
 ```
 
 Example 2 (json):
+
 ```json
 // webpack.config.js
 
@@ -33989,6 +35065,7 @@ Example 2 (json):
 ```
 
 Example 3 (jsx):
+
 ```jsx
 {# assets/images/logo.png was copied to public/build/images/logo.png #}
 <img src="{{ asset('build/images/logo.png') }}" alt="ACME logo">
@@ -34004,6 +35081,7 @@ Example 3 (jsx):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/babel.html
 
 **Contents:**
+
 - Configuring Babel with Encore
 - Configuring Browser Targets
 - Creating a .babelrc File
@@ -34029,6 +35107,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (powershell):
+
 ```powershell
 // webpack.config.js
 // ...
@@ -34056,24 +35135,26 @@ Encore
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # On Unix run this command. On Windows, clear this directory manually
+
 $ rm -rf node_modules/.cache/babel-loader/
 ```
 
 Example 3 (javascript):
+
 ```javascript
 // webpack.config.js
 // ...
 
 Encore
-    // ...
+  // ...
 
-    .configureBabelPresetEnv((config) => {
-        config.useBuiltIns = 'usage';
-        config.corejs = 3;
-    })
-;
+  .configureBabelPresetEnv((config) => {
+    config.useBuiltIns = "usage";
+    config.corejs = 3;
+  });
 ```
 
 ---
@@ -34083,6 +35164,7 @@ Encore
 **URL:** https://symfony.com/doc/7.4/frontend/encore/sourcemaps.html
 
 **Contents:**
+
 - Enabling Source Maps with Webpack Encore
 
 Source maps allow browsers to access the original code related to some asset (e.g. the Sass code that was compiled to CSS or the TypeScript code that was compiled to JavaScript). Source maps are useful for debugging purposes but unnecessary when executing the application in production.
@@ -34096,6 +35178,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // webpack.config.js
 // ...
@@ -34114,6 +35197,7 @@ Encore
 **URL:** https://symfony.com/doc/7.4/frontend/encore/typescript.html
 
 **Contents:**
+
 - Enabling TypeScript (ts-loader) with Webpack Encore
 
 Want to use TypeScript? No problem! First, enable it:
@@ -34135,6 +35219,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // webpack.config.js
 
@@ -34153,6 +35238,7 @@ Example 1 (unknown):
 ```
 
 Example 2 (r):
+
 ```r
 // webpack.config.js
   Encore
@@ -34178,6 +35264,7 @@ Example 2 (r):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/versioning.html
 
 **Contents:**
+
 - Asset Versioning with Webpack Encore
 - Loading Assets from entrypoints.json & manifest.json
 - Troubleshooting
@@ -34209,6 +35296,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 // webpack.config.js
 
@@ -34220,24 +35308,27 @@ Example 1 (unknown):
 ```
 
 Example 2 (json):
+
 ```json
 {
-    "build/app.js": "/build/app.123abc.js",
-    "build/dashboard.css": "/build/dashboard.a4bf2d.css",
-    "build/images/logo.png": "/build/images/logo.3eed42.png"
+  "build/app.js": "/build/app.123abc.js",
+  "build/dashboard.css": "/build/dashboard.a4bf2d.css",
+  "build/images/logo.png": "/build/images/logo.3eed42.png"
 }
 ```
 
 Example 3 (yaml):
+
 ```yaml
 # this file is added automatically when installing Encore with Symfony Flex
 # config/packages/assets.yaml
 framework:
-    assets:
-        json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
+  assets:
+    json_manifest_path: "%kernel.project_dir%/public/build/manifest.json"
 ```
 
 Example 4 (jsx):
+
 ```jsx
 <img src="{{ asset('build/images/logo.png') }}" alt="ACME logo">
 ```
@@ -34249,6 +35340,7 @@ Example 4 (jsx):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/cdn.html
 
 **Contents:**
+
 - Using a CDN with Webpack Encore
 
 Are you deploying to a CDN? That's awesome :) Once you've made sure that your built files are uploaded to the CDN, configure it in Encore:
@@ -34270,6 +35362,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (json):
+
 ```json
 // webpack.config.js
   // ...
@@ -34298,6 +35391,7 @@ Example 1 (json):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/code-splitting.html
 
 **Contents:**
+
 - Async Code Splitting with Webpack Encore
 
 When you require/import a JavaScript or CSS module, Webpack compiles that code into the final JavaScript or CSS file. Usually, that's exactly what you want. But what if you only need to use a piece of code under certain conditions? For example, what if you want to use video.js to play a video, but only once a user has clicked a link:
@@ -34317,6 +35411,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (julia):
+
 ```julia
 // assets/app.js
 
@@ -34331,22 +35426,24 @@ $('.js-open-video').on('click', function() {
 ```
 
 Example 2 (javascript):
+
 ```javascript
 // assets/app.js
 
-import $ from 'jquery';
+import $ from "jquery";
 
-$('.js-open-video').on('click', function() {
-    // you could start a loading animation here
+$(".js-open-video").on("click", function () {
+  // you could start a loading animation here
 
-    // use import() as a function - it returns a Promise
-    import('./components/VideoPlayer').then(({ default: VideoPlayer }) => {
-        // you could stop a loading animation here
+  // use import() as a function - it returns a Promise
+  import("./components/VideoPlayer")
+    .then(({ default: VideoPlayer }) => {
+      // you could stop a loading animation here
 
-        // use the larger VideoPlayer module
-        const player = new VideoPlayer('some-element');
-
-    }).catch(error => 'An error occurred while loading the component');
+      // use the larger VideoPlayer module
+      const player = new VideoPlayer("some-element");
+    })
+    .catch((error) => "An error occurred while loading the component");
 });
 ```
 
@@ -34357,6 +35454,7 @@ $('.js-open-video').on('click', function() {
 **URL:** https://symfony.com/doc/7.4/frontend/encore/split-chunks.html
 
 **Contents:**
+
 - Preventing Duplication by "Splitting" Shared Code with Webpack Encore
 - Controlling how Assets are Split
 
@@ -34377,6 +35475,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (python):
+
 ```python
 // webpack.config.js
   Encore
@@ -34392,6 +35491,7 @@ Example 1 (python):
 ```
 
 Example 2 (jsx):
+
 ```jsx
 {#
     May now render multiple script tags:
@@ -34403,6 +35503,7 @@ Example 2 (jsx):
 ```
 
 Example 3 (r):
+
 ```r
 // webpack.config.js
   Encore
@@ -34422,6 +35523,7 @@ Example 3 (r):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/url-loader.html
 
 **Contents:**
+
 - Inlining Images & Fonts in CSS with Webpack Encore
 
 A simple technique to improve the performance of web applications is to reduce the number of HTTP requests inlining small files as base64 encoded URLs in the generated CSS files.
@@ -34437,6 +35539,7 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (css):
+
 ```css
 // webpack.config.js
 // ...
@@ -34463,6 +35566,7 @@ Encore
 **URL:** https://symfony.com/doc/7.4/frontend/encore/bootstrap.html
 
 **Contents:**
+
 - Using Bootstrap CSS & JS with Webpack Encore
 - Importing Bootstrap Styles
 - Importing Bootstrap JavaScript
@@ -34492,11 +35596,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ npm install bootstrap --save-dev
 ```
 
 Example 2 (swift):
+
 ```swift
 // assets/styles/global.scss
 
@@ -34508,12 +35614,15 @@ $primary: darken(#428bca, 20%);
 ```
 
 Example 3 (markdown):
+
 ```markdown
 # (jQuery is only required in versions prior to Bootstrap 5)
+
 $ npm install jquery @popperjs/core --save-dev
 ```
 
 Example 4 (swift):
+
 ```swift
 // app.js
 
@@ -34538,6 +35647,7 @@ $(document).ready(function() {
 **URL:** https://symfony.com/doc/7.4/frontend/encore/legacy-applications.html
 
 **Contents:**
+
 - jQuery Plugins and Legacy Applications with Webpack Encore
 - Fixing jQuery Plugins that Expect jQuery to be Global
 - Accessing jQuery from outside of Webpack JavaScript Files
@@ -34573,18 +35683,21 @@ Take the exam at home
 **Examples:**
 
 Example 1 (javascript):
+
 ```javascript
 // this loads jquery, but does *not* set a global $ or jQuery variable
-const $ = require('jquery');
+const $ = require("jquery");
 ```
 
 Example 2 (unknown):
+
 ```unknown
 Uncaught ReferenceError: $ is not defined at [...]
 Uncaught ReferenceError: jQuery is not defined at [...]
 ```
 
 Example 3 (unknown):
+
 ```unknown
 // webpack.config.js
   Encore
@@ -34594,6 +35707,7 @@ Example 3 (unknown):
 ```
 
 Example 4 (yaml):
+
 ```yaml
 Encore
     // you can use this method to provide other common global variables,
@@ -34614,6 +35728,7 @@ Encore
 **URL:** https://symfony.com/doc/7.4/frontend/encore/dev-server.html
 
 **Contents:**
+
 - Using webpack-dev-server and HMR
 - dev-server Options
 - Enabling HTTPS using the Symfony Web Server
@@ -34656,16 +35771,19 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ npm run dev-server
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ npm run dev-server -- --port 9000
 ```
 
 Example 3 (css):
+
 ```css
 // webpack.config.js
 // ...
@@ -34686,6 +35804,7 @@ Encore
 ```
 
 Example 4 (javascript):
+
 ```javascript
 // webpack.config.js
   // ...
@@ -34711,6 +35830,7 @@ Example 4 (javascript):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/custom-loaders-plugins.html
 
 **Contents:**
+
 - Adding Custom Loaders & Plugins with Webpack Encore
 - Adding Custom Loaders
 - Adding Custom Plugins
@@ -34730,6 +35850,7 @@ Show your Symfony expertise
 **Examples:**
 
 Example 1 (css):
+
 ```css
 Encore
     // ...
@@ -34738,6 +35859,7 @@ Encore
 ```
 
 Example 2 (css):
+
 ```css
 Encore
     // ...
@@ -34758,6 +35880,7 @@ Encore
 ```
 
 Example 3 (javascript):
+
 ```javascript
 // webpack.config.js
 + var webpack = require('webpack');
@@ -34779,6 +35902,7 @@ Example 3 (javascript):
 **URL:** https://symfony.com/doc/7.4/frontend/encore/advanced-config.html
 
 **Contents:**
+
 - Advanced Webpack Config
 - Configuring Watching Options and Polling
 - Defining Multiple Webpack Configurations
@@ -34805,7 +35929,7 @@ Next, define the output directories of each build:
 
 Also define the asset manifests for each build:
 
-Finally, use the third optional parameter of the encore_entry_*_tags() functions to specify which build to use:
+Finally, use the third optional parameter of the encore*entry*\*\_tags() functions to specify which build to use:
 
 When you render two or more templates in the same request, such as two emails, you should call the reset() method on the EntrypointLookupInterface interface. To do this, inject the EntrypointLookupInterface interface:
 
@@ -34852,10 +35976,11 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (javascript):
+
 ```javascript
 // webpack.config.js
 
-const Encore = require('@symfony/webpack-encore');
+const Encore = require("@symfony/webpack-encore");
 
 // ... all Encore config here
 
@@ -34863,13 +35988,14 @@ const Encore = require('@symfony/webpack-encore');
 const config = Encore.getWebpackConfig();
 
 // add an extension
-config.resolve.extensions.push('json');
+config.resolve.extensions.push("json");
 
 // export the final config
 module.exports = config;
 ```
 
 Example 2 (unknown):
+
 ```unknown
 // webpack.config.js
 // ...
@@ -34882,6 +36008,7 @@ config.resolve.extensions.push('json');
 ```
 
 Example 3 (r):
+
 ```r
 Encore.configureWatchOptions(function(watchOptions) {
     // enable polling and check for changes every 250ms
@@ -34891,42 +36018,39 @@ Encore.configureWatchOptions(function(watchOptions) {
 ```
 
 Example 4 (typescript):
+
 ```typescript
 // define the first configuration
-Encore
-    .setOutputPath('public/build/first_build/')
-    .setPublicPath('/build/first_build')
-    .addEntry('app', './assets/app.js')
-    .addStyleEntry('global', './assets/styles/global.scss')
-    .enableSassLoader()
-    .autoProvidejQuery()
-    .enableSourceMaps(!Encore.isProduction())
-;
+Encore.setOutputPath("public/build/first_build/")
+  .setPublicPath("/build/first_build")
+  .addEntry("app", "./assets/app.js")
+  .addStyleEntry("global", "./assets/styles/global.scss")
+  .enableSassLoader()
+  .autoProvidejQuery()
+  .enableSourceMaps(!Encore.isProduction());
 
 // build the first configuration
 const firstConfig = Encore.getWebpackConfig();
 
 // Set a unique name for the config (needed later!)
-firstConfig.name = 'firstConfig';
+firstConfig.name = "firstConfig";
 
 // reset Encore to build the second config
 Encore.reset();
 
 // define the second configuration
-Encore
-    .setOutputPath('public/build/second_build/')
-    .setPublicPath('/build/second_build')
-    .addEntry('mobile', './assets/mobile.js')
-    .addStyleEntry('mobile', './assets/styles/mobile.less')
-    .enableLessLoader()
-    .enableSourceMaps(!Encore.isProduction())
-;
+Encore.setOutputPath("public/build/second_build/")
+  .setPublicPath("/build/second_build")
+  .addEntry("mobile", "./assets/mobile.js")
+  .addStyleEntry("mobile", "./assets/styles/mobile.less")
+  .enableLessLoader()
+  .enableSourceMaps(!Encore.isProduction());
 
 // build the second configuration
 const secondConfig = Encore.getWebpackConfig();
 
 // Set a unique name for the config (needed later!)
-secondConfig.name = 'secondConfig';
+secondConfig.name = "secondConfig";
 
 // export the final configuration as an array of multiple configurations
 module.exports = [firstConfig, secondConfig];
@@ -34939,6 +36063,7 @@ module.exports = [firstConfig, secondConfig];
 **URL:** https://symfony.com/doc/7.4/frontend/encore/virtual-machine.html
 
 **Contents:**
+
 - Using Encore in a Virtual Machine
 - File Watching Issues
 - Development Server Issues
@@ -34975,18 +36100,20 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (javascript):
+
 ```javascript
 // webpack.config.js
 
 // ...
 
 // will be applied for `encore dev --watch` and `encore dev-server` commands
-Encore.configureWatchOptions(watchOptions => {
-    watchOptions.poll = 250; // check for changes every 250 milliseconds
+Encore.configureWatchOptions((watchOptions) => {
+  watchOptions.poll = 250; // check for changes every 250 milliseconds
 });
 ```
 
 Example 2 (julia):
+
 ```julia
 GET http://localhost:8080/build/vendors~app.css net::ERR_CONNECTION_REFUSED
 GET http://localhost:8080/build/runtime.js net::ERR_CONNECTION_REFUSED
@@ -34994,6 +36121,7 @@ GET http://localhost:8080/build/runtime.js net::ERR_CONNECTION_REFUSED
 ```
 
 Example 3 (json):
+
 ```json
 {
       ...
@@ -35006,6 +36134,7 @@ Example 3 (json):
 ```
 
 Example 4 (julia):
+
 ```julia
 GET http://app.vm:8080/build/vendors~app.css net::ERR_CONNECTION_REFUSED
 GET http://app.vm:8080/build/runtime.js net::ERR_CONNECTION_REFUSED
@@ -35018,6 +36147,7 @@ GET http://app.vm:8080/build/runtime.js net::ERR_CONNECTION_REFUSED
 **URL:** https://symfony.com/doc/7.4/frontend/encore/faq.html
 
 **Contents:**
+
 - WebpackEncore: FAQ and Common Issues
 - How Do I Deploy My Encore Assets?
 - Do I Need to Install Node.js on My Production Server?
@@ -35031,7 +36161,7 @@ GET http://app.vm:8080/build/runtime.js net::ERR_CONNECTION_REFUSED
 
 There are two important things to remember when deploying your assets.
 
-1) Compile Assets for Production
+1. Compile Assets for Production
 
 Optimize your assets for production by running:
 
@@ -35039,7 +36169,7 @@ That will minify your assets and make other performance optimizations. Yay!
 
 But, what server should you run this command on? That depends on how you deploy. For example, you could execute this locally (or on a build server), and use rsync or something else to transfer the generated files to your production server. Or, you could put your files on your production server first (e.g. via git pull) and then run this command on production (ideally, before traffic hits your code). In this case, you'll need to install Node.js on your production server.
 
-2) Only Deploy the Built Assets
+2. Only Deploy the Built Assets
 
 The only files that need to be deployed to your production servers are the final, built assets (e.g. the public/build directory). You do not need to install Node.js, deploy webpack.config.js, the node_modules directory or even your source asset files, unless you plan on running encore production on your production machine. Once your assets are built, these are the only thing that need to live on the production server.
 
@@ -35084,38 +36214,45 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ ./node_modules/.bin/encore production
 ```
 
 Example 2 (markdown):
+
 ```markdown
 /node_modules/
+
 # whatever path you're passing to Encore.setOutputPath()
+
 /public/build
 ```
 
 Example 3 (markdown):
+
 ```markdown
 // webpack.config.js
-  Encore
-      // ...
+Encore
+// ...
 
       .setOutputPath('public/build/')
 
 -     .setPublicPath('/build')
-+     // this is your *true* public path
-+     .setPublicPath('/myAppSubdir/build')
 
-+     // this is now needed so that your manifest.json keys are still `build/foo.js`
-+     // (which is a file that's used by Symfony's `asset()` function)
-+     .setManifestKeyPrefix('build')
+*     // this is your *true* public path
+*     .setPublicPath('/myAppSubdir/build')
+
+*     // this is now needed so that your manifest.json keys are still `build/foo.js`
+*     // (which is a file that's used by Symfony's `asset()` function)
+*     .setManifestKeyPrefix('build')
   ;
 ```
 
 Example 4 (javascript):
+
 ```javascript
-require('respond.js');
+require("respond.js");
 ```
 
 ---
@@ -35125,6 +36262,7 @@ require('respond.js');
 **URL:** https://symfony.com/doc/7.4/components/browser_kit.html
 
 **Contents:**
+
 - The BrowserKit Component
 - Installation
 - Basic Usage
@@ -35178,7 +36316,7 @@ The AbstractBrowser is also capable of submitting forms. First, select the form 
 
 If you need the Form object that provides access to the form properties (e.g. $form->getUri(), $form->getValues(), $form->getFields()), use this other method:
 
-The optional HTTP headers passed to the request() method follow the FastCGI request format (uppercase, underscores instead of dashes and prefixed with HTTP_). Before saving those headers to the request, they are lower-cased, with HTTP_ stripped, and underscores converted into dashes.
+The optional HTTP headers passed to the request() method follow the FastCGI request format (uppercase, underscores instead of dashes and prefixed with HTTP*). Before saving those headers to the request, they are lower-cased, with HTTP* stripped, and underscores converted into dashes.
 
 If you're making a request to an application that has special rules about header capitalization or punctuation, override the getHeaders() method, which must return an associative array of headers:
 
@@ -35190,7 +36328,7 @@ You can also create cookies and add them to a cookie jar that can be injected in
 
 Requests can include cookies. To do so, use the serverParameters argument of the request() method to set the Cookie header value:
 
-All HTTP headers set with the serverParameters argument must be prefixed by HTTP_.
+All HTTP headers set with the serverParameters argument must be prefixed by HTTP\_.
 
 The client stores all your requests allowing you to go back and forward in your history:
 
@@ -35217,11 +36355,13 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/browser-kit
 ```
 
 Example 2 (php):
+
 ```php
 namespace Acme;
 
@@ -35240,6 +36380,7 @@ class Client extends AbstractBrowser
 ```
 
 Example 3 (php):
+
 ```php
 use Acme\Client;
 
@@ -35248,6 +36389,7 @@ $crawler = $client->request('GET', '/');
 ```
 
 Example 4 (php):
+
 ```php
 use Acme\Client;
 
@@ -35263,6 +36405,7 @@ $crawler = $client->jsonRequest('GET', '/', ['some_parameter' => 'some_value']);
 **URL:** https://symfony.com/doc/7.4/components/phpunit_bridge.html
 
 **Contents:**
+
 - The PHPUnit Bridge
 - Installation
 - Usage
@@ -35398,7 +36541,7 @@ The SymfonyExtension class for PHPUnit 10+ was introduced in Symfony 7.2.
 
 For older PHPUnit versions, register the listener instead:
 
-If you don't want to use the @group time-sensitive annotation, you can register the ClockMock class manually by calling ClockMock::register(__CLASS__) and ClockMock::withClockMock(true) before the test and ClockMock::withClockMock(false) after the test.
+If you don't want to use the @group time-sensitive annotation, you can register the ClockMock class manually by calling ClockMock::register(**CLASS**) and ClockMock::withClockMock(true) before the test and ClockMock::withClockMock(false) after the test.
 
 As a result, the following is guaranteed to work and is no longer a transient test:
 
@@ -35479,11 +36622,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/phpunit-bridge
 ```
 
 Example 2 (typescript):
+
 ```typescript
 <!-- https://phpunit.de/manual/6.0/en/appendixes.configuration.html -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -35499,12 +36644,14 @@ Example 2 (typescript):
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ cd my-project/
 $ ./vendor/bin/simple-phpunit
 ```
 
 Example 4 (sql):
+
 ```sql
 $ ./vendor/bin/simple-phpunit
   PHPUnit by Sebastian Bergmann.
@@ -35530,6 +36677,7 @@ $ ./vendor/bin/simple-phpunit
 **URL:** https://symfony.com/doc/7.4/components/form.html
 
 **Contents:**
+
 - The Form Component
 - Installation
 - Configuration
@@ -35561,7 +36709,7 @@ For a working example, see https://github.com/webmozart/standalone-forms
 
 To process form data, you'll need to call the handleRequest() method:
 
-Internally, this uses a NativeRequestHandler object to read data off of the correct PHP superglobals (i.e. $_POST or $_GET) based on the HTTP method configured on the form (POST is default).
+Internally, this uses a NativeRequestHandler object to read data off of the correct PHP superglobals (i.e. $\_POST or $\_GET) based on the HTTP method configured on the form (POST is default).
 
 If you need more control over exactly when your form is submitted or which data is passed to it, use the submit() method to handle form submissions.
 
@@ -35579,7 +36727,7 @@ The following snippet adds CSRF protection to the form factory:
 
 Support for passing requests to the constructor of the RequestStack class was introduced in Symfony 7.2.
 
-Internally, this extension will automatically add a hidden field to every form (called _token by default) whose value is automatically generated by the CSRF generator and validated when binding the form.
+Internally, this extension will automatically add a hidden field to every form (called \_token by default) whose value is automatically generated by the CSRF generator and validated when binding the form.
 
 If you're not using the HttpFoundation component, you can use NativeSessionTokenStorage instead, which relies on PHP's native session handling:
 
@@ -35645,7 +36793,7 @@ By default, a form is submitted to the same URI that rendered the form with an H
 
 To handle form submissions, use the handleRequest() method:
 
-The form's createView() method should be called after handleRequest() is called. Otherwise, when using form events, changes done in the *_SUBMIT events won't be applied to the view (like validation errors).
+The form's createView() method should be called after handleRequest() is called. Otherwise, when using form events, changes done in the \*\_SUBMIT events won't be applied to the view (like validation errors).
 
 This defines a common form "workflow", which contains 3 different possibilities:
 
@@ -35674,11 +36822,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/form
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Form\Forms;
 
@@ -35686,11 +36836,13 @@ $formFactory = Forms::createFormFactory();
 ```
 
 Example 3 (php):
+
 ```php
 $form->handleRequest();
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Form\Extension\HttpFoundation\HttpFoundationExtension;
 use Symfony\Component\Form\Forms;
@@ -35707,6 +36859,7 @@ $formFactory = Forms::createFormFactoryBuilder()
 **URL:** https://symfony.com/doc/7.4/html_sanitizer.html
 
 **Contents:**
+
 - HTML Sanitizer
 - Installation
 - Basic Usage
@@ -35783,11 +36936,13 @@ Get your Symfony expertise recognized
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/html-sanitizer
 ```
 
 Example 2 (php):
+
 ```php
 // src/Controller/BlogPostController.php
 namespace App\Controller;
@@ -35808,6 +36963,7 @@ class BlogPostController extends AbstractController
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\HtmlSanitizer\HtmlSanitizer;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerConfig;
@@ -35824,17 +36980,22 @@ $safePostContents = $htmlSanitizer->sanitize($unsafePostContents);
 ```
 
 Example 4 (html):
+
 ```html
-// tags not allowed in <head> will be removed
-$safeInput = $htmlSanitizer->sanitizeFor('head', $userInput);
-
-// encodes the returned HTML using HTML entities
-$safeInput = $htmlSanitizer->sanitizeFor('title', $userInput);
-$safeInput = $htmlSanitizer->sanitizeFor('textarea', $userInput);
-
-// uses the <body> context, removing tags only allowed in <head>
-$safeInput = $htmlSanitizer->sanitizeFor('body', $userInput);
-$safeInput = $htmlSanitizer->sanitizeFor('section', $userInput);
+// tags not allowed in
+<head>
+  will be removed $safeInput = $htmlSanitizer->sanitizeFor('head', $userInput);
+  // encodes the returned HTML using HTML entities $safeInput =
+  $htmlSanitizer->sanitizeFor('title', $userInput); $safeInput =
+  $htmlSanitizer->sanitizeFor('textarea', $userInput); // uses the
+  <body>
+    context, removing tags only allowed in
+    <head>
+      $safeInput = $htmlSanitizer->sanitizeFor('body', $userInput); $safeInput =
+      $htmlSanitizer->sanitizeFor('section', $userInput);
+    </head>
+  </body>
+</head>
 ```
 
 ---
@@ -35844,6 +37005,7 @@ $safeInput = $htmlSanitizer->sanitizeFor('section', $userInput);
 **URL:** https://symfony.com/doc/7.4/reference/configuration/web_profiler.html
 
 **Contents:**
+
 - Profiler Configuration Reference (WebProfilerBundle)
 - excluded_ajax_paths
 - intercept_redirects
@@ -35857,7 +37019,7 @@ When using XML, you must use the http://symfony.com/schema/dic/webprofiler names
 
 The web debug toolbar is not available for responses of type StreamedResponse.
 
-type: string default: ^/((index|app(_[\w]+)?)\.php/)?_wdt
+type: string default: ^/((index|app(\_[\w]+)?)\.php/)?\_wdt
 
 When the toolbar logs AJAX requests, it matches their URLs against this regular expression. If the URL matches, the request is not displayed in the toolbar. This is useful when the application makes lots of AJAX requests, or if they are heavy and you want to exclude some of them.
 
@@ -35884,11 +37046,14 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference web_profiler
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config web_profiler
 ```
 
@@ -35899,6 +37064,7 @@ $ php bin/console debug:config web_profiler
 **URL:** https://symfony.com/doc/7.4/reference/attributes.html
 
 **Contents:**
+
 - Symfony Attributes Overview
 - Doctrine Bridge
 - Command
@@ -35927,6 +37093,7 @@ Be safe against critical risks to your projects and businesses
 **URL:** https://symfony.com/doc/7.4/components/psr7.html
 
 **Contents:**
+
 - The PSR-7 Bridge
 - Installation
 - Usage
@@ -35958,16 +37125,19 @@ Take the exam at home
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/psr-http-message-bridge
 ```
 
 Example 2 (unknown):
+
 ```unknown
 $ composer require nyholm/psr7
 ```
 
 Example 3 (php):
+
 ```php
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -35982,6 +37152,7 @@ $psrRequest = $psrHttpFactory->createRequest($symfonyRequest);
 ```
 
 Example 4 (php):
+
 ```php
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
@@ -36001,6 +37172,7 @@ $psrResponse = $psrHttpFactory->createResponse($symfonyResponse);
 **URL:** https://symfony.com/doc/7.4/reference/configuration/debug.html
 
 **Contents:**
+
 - Debug Configuration Reference (DebugBundle)
 - dump_destination
 - max_items
@@ -36043,26 +37215,33 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference debug
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config debug
 
 # displays the config values used by your application and replaces the
+
 # environment variables with their actual values
+
 $ php bin/console debug:config --resolve-env debug
 ```
 
 Example 2 (yaml):
+
 ```yaml
 # config/packages/debug.yaml
 debug:
-    dump_destination: php://stderr
+  dump_destination: php://stderr
 ```
 
 Example 3 (xml):
+
 ```xml
 <!-- config/packages/debug.xml -->
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -36078,6 +37257,7 @@ Example 3 (xml):
 ```
 
 Example 4 (php):
+
 ```php
 // config/packages/debug.php
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
@@ -36096,6 +37276,7 @@ return static function (ContainerConfigurator $container): void {
 **URL:** https://symfony.com/doc/7.4/reference/configuration/monolog.html
 
 **Contents:**
+
 - Logging Configuration Reference (MonologBundle)
 
 The MonologBundle integrates the Monolog logging library in Symfony applications. All these options are configured under the monolog key in your application configuration.
@@ -36113,11 +37294,14 @@ Get your Symfony expertise recognized
 **Examples:**
 
 Example 1 (markdown):
+
 ```markdown
 # displays the default config values defined by Symfony
+
 $ php bin/console config:dump-reference monolog
 
 # displays the actual config values used by your application
+
 $ php bin/console debug:config monolog
 ```
 
@@ -36128,6 +37312,7 @@ $ php bin/console debug:config monolog
 **URL:** https://symfony.com/doc/7.4/components/config/caching.html
 
 **Contents:**
+
 - Caching based on Resources
 
 When all configuration resources are loaded, you may want to process the configuration values and combine them all in one file. This file acts like a cache. Its contents don't have to be regenerated every time the application runs – only when the configuration resources are modified.
@@ -36149,6 +37334,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Resource\FileResource;
@@ -36182,6 +37368,7 @@ require $cachePath;
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\Resource\FileResource;
@@ -36199,6 +37386,7 @@ $userMatcherCache = new ConfigCache($cachePath, true, '/my/absolute/path/to/cach
 **URL:** https://symfony.com/doc/7.4/components/config/definition.html
 
 **Contents:**
+
 - Defining and Processing Configuration Values
 - Validating Configuration Values
 - Defining a Hierarchy of Configuration Values Using the TreeBuilder
@@ -36328,7 +37516,7 @@ The example results in the following:
 
 When the config files are processed they are first normalized, then merged and finally the tree is used to validate the resulting array. The normalization process is used to remove some of the differences that result from different configuration formats, mainly the differences between YAML and XML.
 
-The separator used in keys is typically _ in YAML and - in XML. For example, auto_connect in YAML and auto-connect in XML. The normalization would make both of these auto_connect.
+The separator used in keys is typically \_ in YAML and - in XML. For example, auto_connect in YAML and auto-connect in XML. The normalization would make both of these auto_connect.
 
 The target key will not be altered if it's mixed like foo-bar_moo or if it already exists.
 
@@ -36377,25 +37565,27 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (yaml):
+
 ```yaml
 database:
-    auto_connect: true
-    default_connection: mysql
-    connections:
-        mysql:
-            host:     localhost
-            driver:   mysql
-            username: user
-            password: pass
-        sqlite:
-            host:     localhost
-            driver:   sqlite
-            memory:   true
-            username: user
-            password: pass
+  auto_connect: true
+  default_connection: mysql
+  connections:
+    mysql:
+      host: localhost
+      driver: mysql
+      username: user
+      password: pass
+    sqlite:
+      host: localhost
+      driver: sqlite
+      memory: true
+      username: user
+      password: pass
 ```
 
 Example 2 (php):
+
 ```php
 namespace Acme\DatabaseConfiguration;
 
@@ -36417,6 +37607,7 @@ class DatabaseConfiguration implements ConfigurationInterface
 ```
 
 Example 3 (php):
+
 ```php
 $rootNode
     ->children()
@@ -36437,6 +37628,7 @@ $rootNode
 ```
 
 Example 4 (php):
+
 ```php
 $rootNode
     ->children()
@@ -36460,6 +37652,7 @@ $rootNode
 **URL:** https://symfony.com/doc/7.4/components/config/resources.html
 
 **Contents:**
+
 - Loading Resources
 - Locating Resources
 - Resource Loaders
@@ -36484,6 +37677,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Config\FileLocator;
 
@@ -36494,6 +37688,7 @@ $yamlUserFiles = $fileLocator->locate('users.yaml', null, false);
 ```
 
 Example 2 (php):
+
 ```php
 namespace Acme\Config\Loader;
 
@@ -36524,6 +37719,7 @@ class YamlUserLoader extends FileLoader
 ```
 
 Example 3 (php):
+
 ```php
 use Acme\Config\Loader\YamlUserLoader;
 use Symfony\Component\Config\Loader\DelegatingLoader;
@@ -36544,6 +37740,7 @@ $delegatingLoader->load(__DIR__.'/users.yaml');
 **URL:** https://symfony.com/doc/7.4/components/dependency_injection.html
 
 **Contents:**
+
 - The DependencyInjection Component
 - Installation
 - Basic Usage
@@ -36611,11 +37808,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/dependency-injection
 ```
 
 Example 2 (php):
+
 ```php
 class Mailer
 {
@@ -36631,6 +37830,7 @@ class Mailer
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -36639,6 +37839,7 @@ $container->register('mailer', 'Mailer');
 ```
 
 Example 4 (php):
+
 ```php
 class Mailer
 {
@@ -36658,6 +37859,7 @@ class Mailer
 **URL:** https://symfony.com/doc/7.4/components/dependency_injection/workflow.html
 
 **Contents:**
+
 - Container Building Workflow
 - Working with a Cached Container
 - Application-level Configuration
@@ -36694,6 +37896,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **URL:** https://symfony.com/doc/7.4/components/event_dispatcher/generic_event.html
 
 **Contents:**
+
 - The Generic Event Object
 
 The base Event class provided by the EventDispatcher component is deliberately sparse to allow the creation of API specific event objects by inheritance using OOP. This allows for elegant and readable code in complex applications.
@@ -36715,6 +37918,7 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -36733,6 +37937,7 @@ class FooListener
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -36756,6 +37961,7 @@ class FooListener
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -36778,6 +37984,7 @@ class FooListener
 **URL:** https://symfony.com/doc/7.4/components/event_dispatcher/immutable_dispatcher.html
 
 **Contents:**
+
 - The Immutable Event Dispatcher
 
 The ImmutableEventDispatcher is a locked or frozen event dispatcher. The dispatcher cannot register new listeners or subscribers.
@@ -36799,6 +38006,7 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -36812,6 +38020,7 @@ $dispatcher->addListener('foo.action', function (Event $event): void {
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\ImmutableEventDispatcher;
 // ...
@@ -36826,6 +38035,7 @@ $immutableDispatcher = new ImmutableEventDispatcher($dispatcher);
 **URL:** https://symfony.com/doc/7.4/components/event_dispatcher/traceable_dispatcher.html
 
 **Contents:**
+
 - The Traceable Event Dispatcher
 
 The TraceableEventDispatcher is an event dispatcher that wraps any other event dispatcher and can then be used to determine which event listeners have been called by the dispatcher. Pass the event dispatcher to be wrapped and an instance of the Stopwatch to its constructor:
@@ -36841,6 +38051,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -36855,6 +38066,7 @@ $traceableEventDispatcher = new TraceableEventDispatcher(
 ```
 
 Example 2 (php):
+
 ```php
 // ...
 
@@ -36873,6 +38085,7 @@ $traceableEventDispatcher->dispatch($event, 'event.the_name');
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 
@@ -36887,6 +38100,7 @@ $notCalledListeners = $traceableEventDispatcher->getNotCalledListeners();
 **URL:** https://symfony.com/doc/7.4/components/finder.html
 
 **Contents:**
+
 - The Finder Component
 - Installation
 - Usage
@@ -36914,7 +38128,7 @@ The location is the only mandatory criteria. It tells the finder which directory
 
 Search in several locations by chaining calls to in():
 
-Use * as a wildcard character to search in the directories matching a pattern (each pattern has to resolve to at least one directory path):
+Use \* as a wildcard character to search in the directories matching a pattern (each pattern has to resolve to at least one directory path):
 
 Exclude directories from matching with the exclude() method:
 
@@ -36978,7 +38192,7 @@ Restrict by a size range by chaining calls or passing an array:
 
 The comparison operator can be any of the following: >, >=, <, <=, ==, !=.
 
-The target value may use magnitudes of kilobytes (k, ki), megabytes (m, mi), or gigabytes (g, gi). Those suffixed with an i use the appropriate 2**n version in accordance with the IEC standard.
+The target value may use magnitudes of kilobytes (k, ki), megabytes (m, mi), or gigabytes (g, gi). Those suffixed with an i use the appropriate 2\*\*n version in accordance with the IEC standard.
 
 Find files by last modified dates with the date() method:
 
@@ -37012,7 +38226,7 @@ You can also define your own sorting algorithm with the sort() method:
 
 You can reverse any sorting by using the reverseSorting() method:
 
-Notice that the sort* methods need to get all matching elements to do their jobs. For large iterators, it is slow.
+Notice that the sort\* methods need to get all matching elements to do their jobs. For large iterators, it is slow.
 
 A Finder instance is an IteratorAggregate PHP class. So, in addition to iterating over the Finder results with foreach, you can also convert it to an array with the iterator_to_array function, or get the number of items with iterator_count.
 
@@ -37027,11 +38241,13 @@ Become certified from home
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/finder
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Finder\Finder;
 
@@ -37053,6 +38269,7 @@ foreach ($finder as $file) {
 ```
 
 Example 3 (php):
+
 ```php
 $finder = new Finder();
 // first, configure the common options for the following searches
@@ -37070,6 +38287,7 @@ foreach ((clone $finder)->name('partial_*')->name('plugin_*') as $file) {
 ```
 
 Example 4 (php):
+
 ```php
 $finder->in(__DIR__);
 ```
@@ -37081,6 +38299,7 @@ $finder->in(__DIR__);
 **URL:** https://symfony.com/doc/7.4/components/intl.html
 
 **Contents:**
+
 - The Intl Component
 - Installation
 - Accessing ICU Data
@@ -37187,11 +38406,13 @@ Put the code quality back at the heart of your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/intl
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Intl\Languages;
 
@@ -37213,6 +38434,7 @@ $language = Languages::getAlpha3Name('fra');
 ```
 
 Example 3 (php):
+
 ```php
 $languages = Languages::getNames('de');
 // => ['ab' => 'Abchasisch', 'ace' => 'Aceh', ...]
@@ -37228,6 +38450,7 @@ $language = Languages::getAlpha3Name('fra', 'de');
 ```
 
 Example 4 (php):
+
 ```php
 $isValidLanguage = Languages::exists($languageCode);
 ```
@@ -37239,6 +38462,7 @@ $isValidLanguage = Languages::exists($languageCode);
 **URL:** https://symfony.com/doc/7.4/components/json_path.html
 
 **Contents:**
+
 - The JsonPath Component
 - Installation
 - Usage
@@ -37323,11 +38547,13 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/json-path
 ```
 
 Example 2 (json):
+
 ```json
 use Symfony\Component\JsonPath\JsonCrawler;
 
@@ -37374,6 +38600,7 @@ $crawler = new JsonCrawler($json);
 ```
 
 Example 3 (php):
+
 ```php
 // get the title of the first book in the store
 $titles = $crawler->find('$.store.book[0].title');
@@ -37382,6 +38609,7 @@ $titles = $crawler->find('$.store.book[0].title');
 ```
 
 Example 4 (php):
+
 ```php
 // this is equivalent to the previous example
 $titles = $crawler->find('$["store"]["book"][0]["title"]');
@@ -37400,6 +38628,7 @@ $titles = $crawler->find('$["store"].book[0].title');
 **URL:** https://symfony.com/doc/7.4/components/semaphore.html
 
 **Contents:**
+
 - The Semaphore Component
 - Installation
 - Usage
@@ -37427,11 +38656,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/semaphore
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Semaphore\SemaphoreFactory;
 use Symfony\Component\Semaphore\Store\RedisStore;
@@ -37444,6 +38675,7 @@ $factory = new SemaphoreFactory($store);
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 $semaphore = $factory->createSemaphore('pdf-invoice-generation', 2);
@@ -37463,6 +38695,7 @@ if ($semaphore->acquire()) {
 **URL:** https://symfony.com/doc/7.4/components/type_info.html
 
 **Contents:**
+
 - The TypeInfo Component
 - Installation
 - Usage
@@ -37520,11 +38753,13 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/type-info
 ```
 
 Example 2 (yaml):
+
 ```yaml
 use Symfony\Component\TypeInfo\Type;
 
@@ -37536,6 +38771,7 @@ Type::intersection(Type::object(\Stringable::class), Type::object(\Iterator::cla
 ```
 
 Example 3 (yaml):
+
 ```yaml
 Type::fromValue(1.1);   // same as Type::float()
 Type::fromValue('...'); // same as Type::string()
@@ -37543,6 +38779,7 @@ Type::fromValue(false); // same as Type::false()
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\TypeInfo\Type;
 use Symfony\Component\TypeInfo\TypeResolver\TypeResolver;
@@ -37583,6 +38820,7 @@ $isValueNullable = $type->getCollectionValueType()->isNullable();
 **URL:** https://symfony.com/doc/7.4/components/validator/metadata.html
 
 **Contents:**
+
 - Metadata
 - Properties
 - Getters
@@ -37611,6 +38849,7 @@ Save your teams and projects before they sink
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // ...
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37632,6 +38871,7 @@ class Author
 ```
 
 Example 2 (php):
+
 ```php
 public function isPasswordSafe(): bool
 {
@@ -37640,6 +38880,7 @@ public function isPasswordSafe(): bool
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37657,6 +38898,7 @@ class Author
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
@@ -37674,6 +38916,7 @@ public function validate(ExecutionContextInterface $context): void
 **URL:** https://symfony.com/doc/7.4/components/validator/resources.html
 
 **Contents:**
+
 - Loading Resources
 - The StaticMethodLoader
 - The File Loaders
@@ -37720,7 +38963,7 @@ All the loaders and the cache are passed to an instance of LazyLoadingMetadataFa
 
 You can also use a custom metadata factory implementation by creating a class which implements MetadataFactoryInterface. You can set this custom implementation using setMetadataFactory():
 
-Since you are using a custom metadata factory, you can't configure loaders and caches using the add*Mapping() methods anymore. You now have to inject them into your custom metadata factory yourself.
+Since you are using a custom metadata factory, you can't configure loaders and caches using the add\*Mapping() methods anymore. You now have to inject them into your custom metadata factory yourself.
 
 Take the exam at home
 
@@ -37729,6 +38972,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 use Symfony\Component\Validator\Validation;
 
@@ -37738,6 +38982,7 @@ $validator = Validation::createValidatorBuilder()
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
@@ -37758,6 +39003,7 @@ class User
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Validator\Validation;
 
@@ -37767,6 +39013,7 @@ $validator = Validation::createValidatorBuilder()
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Validator\Constraints as Assert;
 // ...
@@ -37785,6 +39032,7 @@ class User
 **URL:** https://symfony.com/doc/7.4/components/var_exporter.html
 
 **Contents:**
+
 - The VarExporter Component
 - Installation
 - Exporting/Serializing Variables
@@ -37853,11 +39101,13 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev symfony/var-exporter
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\VarExporter\VarExporter;
 
@@ -37870,6 +39120,7 @@ $regeneratedVariable = require 'exported.php';
 ```
 
 Example 3 (php):
+
 ```php
 abstract class AbstractClass
 {
@@ -37893,6 +39144,7 @@ class ConcreteClass extends AbstractClass
 ```
 
 Example 4 (swift):
+
 ```swift
 return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
     $o = [
@@ -37921,6 +39173,7 @@ return \Symfony\Component\VarExporter\Internal\Hydrator::hydrate(
 **URL:** https://symfony.com/doc/7.4/components/workflow.html
 
 **Contents:**
+
 - The Workflow Component
 - Installation
 - Creating a Workflow
@@ -37953,11 +39206,13 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/workflow
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\Workflow\DefinitionBuilder;
 use Symfony\Component\Workflow\MarkingStore\MethodMarkingStore;
@@ -37980,6 +39235,7 @@ $workflow = new Workflow($definition, $marking);
 ```
 
 Example 3 (php):
+
 ```php
 // ...
 // Consider that $blogPost is in place "draft" by default
@@ -37995,6 +39251,7 @@ $workflow->getEnabledTransitions($blogPost); // $blogPost can perform transition
 ```
 
 Example 4 (php):
+
 ```php
 // ...
 $blogPost = new BlogPost();
@@ -38010,6 +39267,7 @@ $workflow->getMarking($blogPost);
 **URL:** https://symfony.com/doc/7.4/create_framework/index.html
 
 **Contents:**
+
 - Create your own PHP Framework
 
 Symfony Code Performance Profiling
@@ -38023,6 +39281,7 @@ Show your Sylius expertise
 **URL:** https://symfony.com/doc/7.4/create_framework/http_foundation.html
 
 **Contents:**
+
 - The HttpFoundation Component
 - Going OOP with the HttpFoundation Component
 
@@ -38052,7 +39311,7 @@ Writing web code is about interacting with HTTP. So, the fundamental principles 
 
 The HTTP specification describes how a client (a browser for instance) interacts with a server (our application via a web server). The dialog between the client and the server is specified by well-defined messages, requests and responses: the client sends a request to the server and based on this request, the server returns a response.
 
-In PHP, the request is represented by global variables ($_GET, $_POST, $_FILE, $_COOKIE, $_SESSION...) and the response is generated by functions (echo, header, setcookie, ...).
+In PHP, the request is represented by global variables ($\_GET, $\_POST, $\_FILE, $\_COOKIE, $\_SESSION...) and the response is generated by functions (echo, header, setcookie, ...).
 
 The first step towards better code is probably to use an Object-Oriented approach; that's the main goal of the Symfony HttpFoundation component: replacing the default PHP global variables and functions by an Object-Oriented layer.
 
@@ -38090,7 +39349,7 @@ It works perfectly fine until you add a reverse proxy in front of the production
 
 Using the Request::getClientIp() method would have given you the right behavior from day one (and it would have covered the case where you have chained proxies):
 
-And there is an added benefit: it is secure by default. What does it mean? The $_SERVER['HTTP_X_FORWARDED_FOR'] value cannot be trusted as it can be manipulated by the end user when there is no proxy. So, if you are using this code in production without a proxy, it becomes trivially easy to abuse your system. That's not the case with the getClientIp() method as you must explicitly trust your reverse proxies by calling setTrustedProxies():
+And there is an added benefit: it is secure by default. What does it mean? The $\_SERVER['HTTP_X_FORWARDED_FOR'] value cannot be trusted as it can be manipulated by the end user when there is no proxy. So, if you are using this code in production without a proxy, it becomes trivially easy to abuse your system. That's not the case with the getClientIp() method as you must explicitly trust your reverse proxies by calling setTrustedProxies():
 
 So, the getClientIp() method works securely in all circumstances. You can use it in all your projects, whatever the configuration is, it will behave correctly and safely. That's one of the goals of using a framework. If you were to write a framework from scratch, you would have to think about all these cases by yourself. Why not use a technology that already works?
 
@@ -38109,6 +39368,7 @@ Be safe against critical risks to your projects and businesses
 **Examples:**
 
 Example 1 (c):
+
 ```c
 // framework/index.php
 $name = $_GET['name'];
@@ -38117,6 +39377,7 @@ printf('Hello %s', $name);
 ```
 
 Example 2 (swift):
+
 ```swift
 // framework/index.php
 $name = $_GET['name'] ?? 'World';
@@ -38125,6 +39386,7 @@ printf('Hello %s', $name);
 ```
 
 Example 3 (swift):
+
 ```swift
 $name = $_GET['name'] ?? 'World';
 
@@ -38134,6 +39396,7 @@ printf('Hello %s', htmlspecialchars($name, ENT_QUOTES, 'UTF-8'));
 ```
 
 Example 4 (php):
+
 ```php
 // framework/test.php
 use PHPUnit\Framework\TestCase;
@@ -38160,6 +39423,7 @@ class IndexTest extends TestCase
 **URL:** https://symfony.com/doc/7.4/object_mapper.html
 
 **Contents:**
+
 - Object Mapper
 - Installation
 - Usage
@@ -38288,11 +39552,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/object-mapper
 ```
 
 Example 2 (php):
+
 ```php
 // src/Controller/UserController.php
 namespace App\Controller;
@@ -38318,6 +39584,7 @@ class UserController extends AbstractController
 ```
 
 Example 3 (php):
+
 ```php
 use App\Dto\ProductInput;
 use App\Entity\Product;
@@ -38336,6 +39603,7 @@ $product = $mapper->map($productInput, Product::class);
 ```
 
 Example 4 (php):
+
 ```php
 use App\Dto\ProductUpdateInput;
 use App\Entity\Product;
@@ -38360,6 +39628,7 @@ $mapper->map($updateInput, $product);
 **URL:** https://symfony.com/doc/7.4/emoji.html
 
 **Contents:**
+
 - Working with Emojis
 - Emoji Transliteration
 - Transliterating Emoji Text Short Codes
@@ -38417,17 +39686,21 @@ No stress: we've got you covered with our 116 automated quality checks of your c
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/emoji
 ```
 
 Example 2 (markdown):
+
 ```markdown
 # adjust the path to the 'compress' binary based on your application installation
+
 $ php ./vendor/symfony/emoji/Resources/bin/compress
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\Emoji\EmojiTransliterator;
 
@@ -38443,6 +39716,7 @@ $transliterator->transliterate('Menus with 🍕 or 🍝');
 ```
 
 Example 4 (php):
+
 ```php
 $transliterator = EmojiTransliterator::create('emoji-github');
 $transliterator->transliterate('Teenage 🐢 really love 🍕');
@@ -38456,6 +39730,7 @@ $transliterator->transliterate('Teenage 🐢 really love 🍕');
 **URL:** https://symfony.com/doc/7.4/create_framework/front_controller.html
 
 **Contents:**
+
 - The Front Controller
 
 Up until now, our application is simplistic as there is only one page. To spice things up a little bit, let's go crazy and add another page that says goodbye:
@@ -38517,6 +39792,7 @@ Be trained by SensioLabs experts (2 to 6 day sessions -- French or English).
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // framework/bye.php
 require_once __DIR__.'/vendor/autoload.php';
@@ -38531,6 +39807,7 @@ $response->send();
 ```
 
 Example 2 (php):
+
 ```php
 // framework/init.php
 require_once __DIR__.'/vendor/autoload.php';
@@ -38543,6 +39820,7 @@ $response = new Response();
 ```
 
 Example 3 (php):
+
 ```php
 // framework/index.php
 require_once __DIR__.'/init.php';
@@ -38554,6 +39832,7 @@ $response->send();
 ```
 
 Example 4 (php):
+
 ```php
 // framework/bye.php
 require_once __DIR__.'/init.php';
@@ -38569,6 +39848,7 @@ $response->send();
 **URL:** https://symfony.com/doc/7.4/create_framework/routing.html
 
 **Contents:**
+
 - The Routing Component
 
 Before we start diving into the Routing component, let's refactor our current framework just a little to make templates even more readable:
@@ -38591,7 +39871,7 @@ Read the Routing documentation to learn more about its many features like URL ge
 
 Based on the information stored in the RouteCollection instance, a UrlMatcher instance can match URL paths:
 
-The match() method takes a request path and returns an array of attributes (notice that the matched route is automatically stored under the special _route attribute):
+The match() method takes a request path and returns an array of attributes (notice that the matched route is automatically stored under the special \_route attribute):
 
 Even if we don't strictly need the request context in our examples, it is used in real-world applications to enforce method requirements and more.
 
@@ -38620,6 +39900,7 @@ Get your Symfony expertise recognized
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // example.com/web/front.php
 require_once __DIR__.'/../vendor/autoload.php';
@@ -38648,17 +39929,20 @@ $response->send();
 ```
 
 Example 2 (swift):
+
 ```swift
 <!-- example.com/src/pages/hello.php -->
 Hello <?= htmlspecialchars($name ?? 'World', ENT_QUOTES, 'UTF-8') ?>
 ```
 
 Example 3 (unknown):
+
 ```unknown
 $ composer require symfony/routing
 ```
 
 Example 4 (php):
+
 ```php
 use Symfony\Component\Routing\RouteCollection;
 
@@ -38672,6 +39956,7 @@ $routes = new RouteCollection();
 **URL:** https://symfony.com/doc/7.4/create_framework/templating.html
 
 **Contents:**
+
 - Templating
 
 The astute reader has noticed that our framework hardcodes the way specific "code" (the templates) is run. For simple pages like the ones we have created so far, that's not a problem, but if you want to add more logic, you would be forced to put the logic into the template itself, which is probably not a good idea, especially if you still have the separation of concerns principle in mind.
@@ -38686,7 +39971,7 @@ You can now create the render_template() function, a generic controller that ren
 
 As render_template is used as an argument to the PHP call_user_func() function, we can replace it with any valid PHP callbacks. This allows us to use a function, an anonymous function or a method of a class as a controller... your choice.
 
-As a convention, for each route, the associated controller is configured via the _controller route attribute:
+As a convention, for each route, the associated controller is configured via the \_controller route attribute:
 
 A route can now be associated with any controller and within a controller, you can still use the render_template() to render a template:
 
@@ -38707,6 +39992,7 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // example.com/web/front.php
 
@@ -38722,6 +40008,7 @@ try {
 ```
 
 Example 2 (php):
+
 ```php
 function render_template(Request $request): Response
 {
@@ -38734,6 +40021,7 @@ function render_template(Request $request): Response
 ```
 
 Example 3 (php):
+
 ```php
 $routes->add('hello', new Routing\Route('/hello/{name}', [
     'name' => 'World',
@@ -38751,6 +40039,7 @@ try {
 ```
 
 Example 4 (javascript):
+
 ```javascript
 $routes->add('hello', new Routing\Route('/hello/{name}', [
     'name' => 'World',
@@ -38767,6 +40056,7 @@ $routes->add('hello', new Routing\Route('/hello/{name}', [
 **URL:** https://symfony.com/doc/7.4/create_framework/separation_of_concerns.html
 
 **Contents:**
+
 - The Separation of Concerns
 
 One down-side of our framework right now is that we need to copy and paste the code in front.php each time we create a new website. 60 lines of code is not that much, but it would be nice if we could wrap this code into a proper class. It would bring us better reusability and easier testing to name just a few benefits.
@@ -38800,6 +40090,7 @@ Take the exam at home
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // example.com/src/Simplex/Framework.php
 namespace Simplex;
@@ -38841,6 +40132,7 @@ class Framework
 ```
 
 Example 2 (php):
+
 ```php
 // example.com/web/front.php
 
@@ -38861,16 +40153,18 @@ $response->send();
 ```
 
 Example 3 (json):
+
 ```json
 {
-    "...": "...",
-    "autoload": {
-        "psr-4": { "": "src/" }
-    }
+  "...": "...",
+  "autoload": {
+    "psr-4": { "": "src/" }
+  }
 }
 ```
 
 Example 4 (php):
+
 ```php
 // example.com/src/Calendar/Controller/LeapYearController.php
 namespace Calendar\Controller;
@@ -38900,6 +40194,7 @@ class LeapYearController
 **URL:** https://symfony.com/doc/7.4/create_framework/unit_testing.html
 
 **Contents:**
+
 - Unit Testing
 
 You might have noticed some subtle but important bugs in the framework built in the previous chapter. When creating a framework, you must be sure that it behaves as advertised. If not, all the applications based on it will exhibit the same bugs. The good news is that whenever you fix a bug, you are fixing a bunch of applications too.
@@ -38945,11 +40240,13 @@ Make sure your project is risk free
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require --dev phpunit/phpunit:^11.0
 ```
 
 Example 2 (xml):
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
@@ -38974,6 +40271,7 @@ Example 2 (xml):
 ```
 
 Example 3 (php):
+
 ```php
 // example.com/src/Simplex/Framework.php
 namespace Simplex;
@@ -38999,6 +40297,7 @@ class Framework
 ```
 
 Example 4 (php):
+
 ```php
 // example.com/tests/Simplex/Tests/FrameworkTest.php
 namespace Simplex\Tests;
@@ -39051,6 +40350,7 @@ class FrameworkTest extends TestCase
 **URL:** https://symfony.com/doc/7.4/create_framework/event_dispatcher.html
 
 **Contents:**
+
 - The EventDispatcher Component
 
 Our framework is still missing a major characteristic of any good framework: extensibility. Being extensible means that the developer should be able to hook into the framework life cycle to modify the way the request is handled.
@@ -39104,11 +40404,13 @@ The life jacket for your team and your project
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/event-dispatcher
 ```
 
 Example 2 (php):
+
 ```php
 // example.com/src/Simplex/Framework.php
 namespace Simplex;
@@ -39157,6 +40459,7 @@ class Framework
 ```
 
 Example 3 (php):
+
 ```php
 // example.com/src/Simplex/ResponseEvent.php
 namespace Simplex;
@@ -39186,6 +40489,7 @@ class ResponseEvent extends Event
 ```
 
 Example 4 (php):
+
 ```php
 // example.com/web/front.php
 require_once __DIR__.'/../vendor/autoload.php';
@@ -39224,6 +40528,7 @@ $response->send();
 **URL:** https://symfony.com/doc/7.4/create_framework/dependency_injection.html
 
 **Contents:**
+
 - The DependencyInjection Component
 
 In the previous chapter, we emptied the Simplex\Framework class by extending the HttpKernel class from the eponymous component. Seeing this empty class, you might be tempted to move some code from the front controller to it:
@@ -39279,6 +40584,7 @@ Peruse our complete Symfony & PHP solutions catalog for your web development nee
 **Examples:**
 
 Example 1 (php):
+
 ```php
 // example.com/src/Simplex/Framework.php
 namespace Simplex;
@@ -39313,6 +40619,7 @@ class Framework extends HttpKernel\HttpKernel
 ```
 
 Example 2 (php):
+
 ```php
 // example.com/web/front.php
 require_once __DIR__.'/../vendor/autoload.php';
@@ -39328,12 +40635,14 @@ $framework->handle($request)->send();
 ```
 
 Example 3 (unknown):
+
 ```unknown
 ini_set('display_errors', 1);
 error_reporting(-1);
 ```
 
 Example 4 (unknown):
+
 ```unknown
 $ composer require symfony/dependency-injection
 ```
@@ -39345,6 +40654,7 @@ $ composer require symfony/dependency-injection
 **URL:** https://symfony.com/doc/7.4/string.html
 
 **Contents:**
+
 - Creating and Manipulating Strings
 - What is a String?
 - Usage
@@ -39441,11 +40751,13 @@ Online Symfony certification, take it now!
 **Examples:**
 
 Example 1 (unknown):
+
 ```unknown
 $ composer require symfony/string
 ```
 
 Example 2 (php):
+
 ```php
 use Symfony\Component\String\UnicodeString;
 
@@ -39462,6 +40774,7 @@ if ($content->ignoreCase()->startsWith('नमस्ते')) {
 ```
 
 Example 3 (php):
+
 ```php
 use Symfony\Component\String\ByteString;
 use Symfony\Component\String\CodePointString;
@@ -39474,6 +40787,7 @@ $baz = new UnicodeString('hello');
 ```
 
 Example 4 (php):
+
 ```php
 $contents = ByteString::wrap(['hello', 'world']);        // $contents = ByteString[]
 $contents = UnicodeString::wrap(['I', '❤️', 'Symfony']); // $contents = UnicodeString[]
