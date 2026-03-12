@@ -205,11 +205,23 @@ async (page) => {
     // --- Extract Ad Content ---
     const content = {};
 
-    // Ad text (main paragraph with links)
-    const adTextParagraph = document.querySelector('main p');
-    if (adTextParagraph) {
-      content.ad_text = getText(adTextParagraph);
+    // Ad text - find paragraph after "Promoted" label that contains the actual ad copy
+    // The ad text paragraph typically contains hashtags or links
+    const mainElement = document.querySelector('main');
+    const allMainParagraphs = mainElement ? Array.from(mainElement.querySelectorAll('p')) : [];
+
+    // Find the ad text paragraph - it's usually a longer paragraph with links/hashtags
+    // Skip "Promoted" and short labels
+    let adTextParagraph = null;
+    for (const p of allMainParagraphs) {
+      const text = p.textContent.trim();
+      // Ad text is usually longer than 50 chars or contains hashtags
+      if (text.length > 50 || p.querySelector('a[href*="hashtag"]')) {
+        adTextParagraph = p;
+        break;
+      }
     }
+    content.ad_text = adTextParagraph ? getText(adTextParagraph) : null;
 
     // CTA/landing page link
     const ctaLinks = Array.from(document.querySelectorAll('a[href*="lnkd.in"]'));
@@ -219,9 +231,15 @@ async (page) => {
     content.hashtags = Array.from(document.querySelectorAll('a[href*="hashtag"]'))
       .map(a => a.textContent);
 
-    // Creative URLs (images/videos)
+    // Creative URLs (images/videos) - filter out small icons and logos, and profile images
     const images = Array.from(document.querySelectorAll('img'))
-      .filter(img => img.src && !img.src.includes('logo'))
+      .filter(img => {
+        if (!img.src) return false;
+        if (img.src.includes('logo')) return false;
+        if (img.src.includes('ad_library_ad_preview_advertiser_image')) return false;
+        if (img.naturalWidth && img.naturalWidth < 100) return false;
+        return true;
+      })
       .map(img => img.src);
     const videos = Array.from(document.querySelectorAll('video'))
       .map(v => v.src);
@@ -241,13 +259,15 @@ async (page) => {
         .find(p => /^[\d<].*k.*$/.test(p.textContent.trim()));
       impressions.total_range = getText(totalEl);
 
-      // Countries
-      const countryItems = Array.from(section.querySelectorAll('li, [role="listitem"]'));
+      // Countries - Look for list items with aria-label or in Impressions section
+      const countryItems = Array.from(section.querySelectorAll('[role="listitem"]'));
       impressions.by_country = countryItems.map(item => {
-        const label = item.getAttribute('aria-label') || item.textContent;
-        const match = label?.match(/(.+?), impressions (.+%)/);
-        if (match) {
-          return { country: match[1].trim(), percentage: match[2].trim() };
+        const label = item.getAttribute('aria-label');
+        if (label) {
+          const match = label.match(/(.+?), impressions (.+%)/);
+          if (match) {
+            return { country: match[1].trim(), percentage: match[2].trim() };
+          }
         }
         return null;
       }).filter(Boolean);
