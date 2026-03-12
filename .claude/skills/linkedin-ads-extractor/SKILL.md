@@ -307,6 +307,15 @@ async (page) => {
       }
 
       // Targeting details table
+      // Helper to detect boolean status from li-icon elements
+      // LinkedIn uses <li-icon type="check"> for true, <li-icon type="minus"> for false
+      const getIconBoolean = (cell) => {
+        const icon = cell?.querySelector('li-icon');
+        if (!icon) return false;
+        const type = icon.getAttribute('type');
+        return type === 'check';
+      };
+
       const table = section.querySelector('table');
       if (table) {
         targeting.details = [];
@@ -318,8 +327,8 @@ async (page) => {
             if (parameter && parameter !== 'Targeting parameter') {
               targeting.details.push({
                 parameter,
-                targeted: !!cells[1]?.querySelector('img'),
-                excluded: !!cells[2]?.querySelector('img')
+                targeted: getIconBoolean(cells[1]),
+                excluded: getIconBoolean(cells[2])
               });
             }
           }

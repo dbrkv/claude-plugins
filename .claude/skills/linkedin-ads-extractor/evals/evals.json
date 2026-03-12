@@ -165,6 +165,87 @@
     },
     {
       "id": 3,
+      "name": "Targeting Details Boolean Detection",
+      "description": "Test correct detection of li-icon type='check' (true) vs type='minus' (false) in targeting details table",
+      "prompt": "Extract data from this LinkedIn ad: https://www.linkedin.com/ad-library/detail/1147098174",
+      "expected_output": {
+        "file": "linkedin_ad_1147098174.json",
+        "assertions": [
+          {
+            "type": "json_valid",
+            "description": "Output must be valid JSON"
+          },
+          {
+            "type": "field_value",
+            "path": "ads[0].ad_id",
+            "expected_value": "1147098174",
+            "description": "Ad ID should be 1147098174"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].targeting",
+            "description": "Targeting section must exist"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].targeting.details",
+            "description": "Targeting details array must exist"
+          },
+          {
+            "type": "field_type",
+            "path": "ads[0].targeting.details",
+            "expected_type": "array",
+            "description": "Targeting details must be an array"
+          },
+          {
+            "type": "array_min_length",
+            "path": "ads[0].targeting.details",
+            "min_length": 1,
+            "description": "At least one targeting parameter must be extracted"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].targeting.details[0].parameter",
+            "description": "Each targeting detail must have a parameter name"
+          },
+          {
+            "type": "field_type",
+            "path": "ads[0].targeting.details[0].targeted",
+            "expected_type": "boolean",
+            "description": "Targeted field must be a boolean"
+          },
+          {
+            "type": "field_type",
+            "path": "ads[0].targeting.details[0].excluded",
+            "expected_type": "boolean",
+            "description": "Excluded field must be a boolean"
+          },
+          {
+            "type": "script_check",
+            "script": "data.ads[0].targeting.details.some(d => d.targeted === true)",
+            "description": "At least one parameter should have targeted=true (check icon detected)"
+          },
+          {
+            "type": "script_check",
+            "script": "data.ads[0].targeting.details.some(d => d.targeted === false || d.excluded === true)",
+            "description": "At least one parameter should have targeted=false or excluded=true (minus icon detected)"
+          },
+          {
+            "type": "field_not_contains",
+            "path": "ads[0].targeting.details",
+            "not_expected": "img",
+            "description": "Targeting details should NOT contain img references (must use li-icon detection)"
+          }
+        ]
+      },
+      "success_criteria": {
+        "icon_type_detection": true,
+        "check_icon_true": true,
+        "minus_icon_false": true
+      }
+    },
+    {
+      "id": 4,
       "name": "Extract Multiple Ads from Search",
       "description": "Test extraction of multiple ads from a search results page",
       "prompt": "Extract the first 3 ads from this LinkedIn Ad Library search: https://www.linkedin.com/ad-library/search?accountOwner=payoneer&payer=Payoneer",
