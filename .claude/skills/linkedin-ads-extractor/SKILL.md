@@ -52,7 +52,7 @@ After each scroll:
 1. Wait 2-3 seconds for content to load using `mcp__playwright__browser_wait_for`
 2. Take a new snapshot to capture newly loaded ads
 
-### Step 4: Collect Ad URLs
+### Step 4: Collect Ad URLs & Initialize Tracking
 
 From the final snapshot, extract all ad detail URLs. Each ad card should contain a link to the detail page:
 
@@ -60,41 +60,74 @@ From the final snapshot, extract all ad detail URLs. Each ad card should contain
 https://www.linkedin.com/ad-library/detail/<ad-id>
 ```
 
-Store these URLs in a list for processing.
+**CRITICAL: Create a tracking array with explicit status for each URL:**
 
-### Step 4.5: Progress Tracking Setup (CRITICAL)
+```json
+{
+  "url_tracking": [
+    { "index": 1, "url": "https://www.linkedin.com/ad-library/detail/abc123", "status": "pending", "ad_data": null, "error": null },
+    { "index": 2, "url": "https://www.linkedin.com/ad-library/detail/def456", "status": "pending", "ad_data": null, "error": null },
+    { "index": 3, "url": "https://www.linkedin.com/ad-library/detail/ghi789", "status": "pending", "ad_data": null, "error": null }
+    // ... continue for ALL URLs
+  ],
+  "stats": {
+    "total": 0,
+    "pending": 0,
+    "in_progress": 0,
+    "completed": 0,
+    "failed": 0
+  }
+}
+```
 
-**Before starting ad detail extraction, establish progress tracking:**
+**After creating the tracking array:**
+1. Log: `"TRACKING INITIALIZED: [X] URLs to process"`
+2. Update `stats.total` and `stats.pending` to match the count
+3. You MUST process URLs in order: index 1, then 2, then 3, etc.
 
-1. **Calculate total to process**
-   - Count URLs in the collected list
-   - Log: "Found X ad URLs to process"
+### Step 5: Extract Detailed Ad Information (EXPLICIT LOOP)
 
-2. **Set up progress logging**
-   - Will log progress every 5 ads: "Processing ad X of Y (Z%)"
-   - Will save intermediate results every 10 ads
+**CRITICAL: You must iterate through `url_tracking` array and process EVERY entry where `status: "pending"`.**
 
-3. **Initialize counters**
-   - successful_extractions = 0
-   - failed_extractions = 0
+**LOOP INSTRUCTIONS - FOLLOW EXACTLY:**
 
-**CRITICAL: You MUST process ALL collected URLs unless the user explicitly requests a subset.**
+```
+WHILE stats.pending > 0:
+  1. Find first URL where status == "pending"
+  2. Set status to "in_progress"
+  3. Log: "▶ Processing [INDEX] of [TOTAL] ([PERCENTAGE]%) - [URL]"
+  4. Navigate to URL
+  5. Extract ad data
+  6. IF successful:
+     - Set status to "completed"
+     - Store extracted data in ad_data field
+     - stats.completed++
+  7. IF failed:
+     - Set status to "failed"
+     - Store error message in error field
+     - stats.failed++
+  8. stats.pending--
+  9. Log: "✓ Completed [INDEX] - [completed/total] done, [pending] remaining"
+  10. IF stats.completed % 10 == 0: Save checkpoint file
+  11. Continue to next pending URL
+```
 
-### Step 5: Extract Detailed Ad Information (PROCESS ALL URLS)
+**PROGRESS LOGGING (REQUIRED for each URL):**
+- START: `"▶ Processing [X] of [TOTAL] ([Z%])"`
+- END: `"✓ Completed [X] - [done/total] done, [remaining] remaining"`
 
-**CRITICAL: Process EVERY collected ad URL systematically. Do NOT stop early.**
+**CHECKPOINT SAVES:**
+- Every 10 completed extractions, write `linkedin_ads_checkpoint_[timestamp].json`
+- Include current `url_tracking` array with all statuses
+- This allows resuming if interrupted
 
-For each ad URL in the collected list (iterate through ALL):
+**FORBIDDEN ACTIONS:**
+- ❌ You may NOT stop while `stats.pending > 0`
+- ❌ You may NOT skip URLs
+- ❌ You may NOT decide "representative sample is enough"
+- ❌ You may NOT leave any URL with `status: "pending"` at the end
 
-1. **Log progress** (REQUIRED):
-   ```
-   "Processing ad [X] of [TOTAL] ([PERCENTAGE]%)"
-   ```
-   Log this at the START of processing each ad.
-
-2. **Navigate to ad detail page** using `mcp__playwright__browser_navigate`
-3. **Capture page snapshot** using `mcp__playwright__browser_snapshot`
-4. **Extract structured data** from the snapshot:
+**Start processing the first URL (index 1) now:**
 
 #### A. About the Ad Section
 
@@ -239,103 +272,97 @@ Extract each parameter and mark targeted/excluded as boolean (true if icon prese
 }
 ```
 
-5. **Increment counter**:
-   - If extraction successful: successful_extractions++
-   - If extraction failed: failed_extractions++, log error, continue to next
-
-6. **Save checkpoint every 10 ads**:
-   - Write intermediate JSON to file
-   - Log: "Checkpoint saved: [X]/[TOTAL] ads processed"
-
-7. **Continue to next URL** - Do NOT stop until all URLs are processed
-
-### Handling Large Datasets
+### Handling Large Datasets (50+ URLs)
 
 **If more than 50 URLs collected:**
 
 1. **Process in batches of 20 ads**
-   - After each batch, log: "Batch complete: [X] ads processed"
-   - Brief pause (2-3 seconds) between batches
+   - After each batch, log: "Batch complete: [X] ads processed, [Y] remaining"
+   - Brief pause (2-3 seconds) between batches using `mcp__playwright__browser_wait_for`
 
 2. **Checkpoint after each batch**
-   - Save intermediate results
+   - Save intermediate results with current `url_tracking` state
    - Allows resuming if interrupted
 
-3. **Continue until all batches complete**
+3. **Continue until `stats.pending == 0`**
 
-### Step 6: Structure the Output
+### Step 6: Final Output Structure
 
-Organize all extracted data into this JSON structure:
+**When `stats.pending == 0` (ALL URLs processed), create final output:**
 
 ```json
 {
   "search_metadata": {
     "search_url": "<original-url>",
     "extraction_date": "<ISO-timestamp>",
-    "total_ads_found": <number>,
-    "urls_collected": <number>,
-    "urls_processed": <number>,
-    "successful_extractions": <number>,
-    "failed_extractions": <number>,
-    "completion_rate": "<percentage>"
+    "total_urls": 72,
+    "successful_extractions": 68,
+    "failed_extractions": 4,
+    "completion_rate": "100%",
+    "success_rate": "94.4%"
+  },
+  "stats": {
+    "total": 72,
+    "pending": 0,
+    "completed": 68,
+    "failed": 4
   },
   "ads": [
     {
-      "ad_id": "<id>",
-      "url": "<detail-page-url>",
-      "about": {
-        "advertiser": "<company>",
-        "advertiser_url": "<linkedin_url>",
-        "paid_for_by": "<company>",
-        "format": "<Single Image Ad|Video Ad|Carousel Ad|etc>",
-        "creative_urls": ["<url1>", "<url2>"],
-        "ad_text": "<complete_ad_text_after_expansion>",
-        "cta": "<text>",
-        "landing_page": "<url>",
-        "run_start_date": "<YYYY-MM-DD or null>",
-        "run_end_date": "<YYYY-MM-DD or null or 'Present'>"
-      },
-      "impressions": {
-        "total_range": "<range_string>",
-        "by_country": [
-          {
-            "country": "<country_name>",
-            "percentage": "<percentage_string>"
-          }
-        ]
-      },
-      "targeting": {
-        "languages": ["<language_1>"],
-        "locations": ["<location_1>", "<location_2>"],
-        "details": [
-          {
-            "parameter": "<parameter_name>",
-            "targeted": <boolean>,
-            "excluded": <boolean>
-          }
-        ]
+      "index": 1,
+      "url": "https://www.linkedin.com/ad-library/detail/abc123",
+      "status": "completed",
+      "ad_data": {
+        "ad_id": "abc123",
+        "about": {
+          "advertiser": "<company>",
+          "advertiser_url": "<linkedin_url>",
+          "paid_for_by": "<company>",
+          "format": "<Single Image Ad|Video Ad|Carousel Ad|etc>",
+          "creative_urls": ["<url1>", "<url2>"],
+          "ad_text": "<complete_ad_text_after_expansion>",
+          "cta": "<text>",
+          "landing_page": "<url>",
+          "run_start_date": "<YYYY-MM-DD or null>",
+          "run_end_date": "<YYYY-MM-DD or null or 'Present'>"
+        },
+        "impressions": {
+          "total_range": "<range_string>",
+          "by_country": [
+            { "country": "<country_name>", "percentage": "<percentage_string>" }
+          ]
+        },
+        "targeting": {
+          "languages": ["<language_1>"],
+          "locations": ["<location_1>", "<location_2>"],
+          "details": [
+            { "parameter": "<parameter_name>", "targeted": true, "excluded": false }
+          ]
+        }
       }
     }
   ],
   "failed_ads": [
     {
-      "url": "<failed-url>",
-      "error": "<error-message>"
+      "index": 5,
+      "url": "https://www.linkedin.com/ad-library/detail/xyz999",
+      "status": "failed",
+      "error": "Page timeout - element not found"
     }
   ],
-  "all_ad_urls": [
-    "<url1>",
-    "<url2>"
+  "url_tracking": [
+    { "index": 1, "url": "...", "status": "completed" },
+    { "index": 2, "url": "...", "status": "completed" },
+    { "index": 3, "url": "...", "status": "failed", "error": "..." }
   ]
 }
 ```
 
-**IMPORTANT:**
-- `urls_collected` = total URLs found
-- `urls_processed` = URLs attempted
-- `successful_extractions` = ads with full details extracted
-- `failed_extractions` = URLs that failed processing
-- `completion_rate` = (successful / collected) * 100
+**VERIFICATION BEFORE FINALIZING:**
+- Check that `stats.pending == 0` - if not, you are NOT done
+- Check that `url_tracking` has no entries with `status: "pending"`
+- Check that `ads` array length equals `stats.completed`
+- Check that `failed_ads` array length equals `stats.failed`
 
 ### Step 7: Save Results
 
@@ -347,21 +374,21 @@ Save the structured JSON to a file:
 ## Critical Implementation Rules
 
 ### Must-Do Actions (REQUIRED)
-1. ✅ **Parse the snapshot YAML carefully** - all data is in the snapshot structure
-2. ✅ **Click "…see more" button** if present to get full ad text
-3. ✅ **Click "Show more" button** in Impressions section if present to get all countries
-4. ✅ **Click "x others" buttons** in targeting section if present to get complete lists
-5. ✅ **Wait for content to load** after clicking expand buttons (1-2 seconds)
-6. ✅ **Take new snapshot** after each expansion to capture revealed content
-7. ✅ **Handle missing country data** - some ads (< 1k impressions) have NO country breakdown
-8. ✅ **Use arrays** for languages and locations (even if only 1 item)
-9. ✅ **DO NOT create "by_date" field** - Impressions are country-based only
-10. ✅ **Include the ad detail URL** in the output for reference
-11. ✅ **Process ALL collected URLs** - Do NOT stop early unless explicitly instructed
-12. ✅ **Log progress every 5 ads** - "Processing ad X of Y (Z%)"
-13. ✅ **Save checkpoints every 10 ads** - Intermediate saves for large datasets
-14. ✅ **Track success/failure counts** - Maintain accurate extraction counters
-15. ✅ **Report completion rate** - Final metadata must show what percentage was processed
+1. ✅ **Create `url_tracking` array** - Initialize with ALL URLs before processing any
+2. ✅ **Process URLs in order** - index 1, then 2, then 3, etc.
+3. ✅ **Update status for each URL** - Set to "in_progress" → "completed" or "failed"
+4. ✅ **Continue while `stats.pending > 0`** - Loop must not exit early
+5. ✅ **Log progress for each URL** - "▶ Processing X of Y (Z%)"
+6. ✅ **Save checkpoints every 10 ads** - Intermediate saves with current tracking state
+7. ✅ **Parse the snapshot YAML carefully** - all data is in the snapshot structure
+8. ✅ **Click "…see more" button** if present to get full ad text
+9. ✅ **Click "Show more" button** in Impressions section if present to get all countries
+10. ✅ **Click "x others" buttons** in targeting section if present to get complete lists
+11. ✅ **Wait for content to load** after clicking expand buttons (1-2 seconds)
+12. ✅ **Take new snapshot** after each expansion to capture revealed content
+13. ✅ **Handle missing country data** - some ads (< 1k impressions) have NO country breakdown
+14. ✅ **Use arrays** for languages and locations (even if only 1 item)
+15. ✅ **DO NOT create "by_date" field** - Impressions are country-based only
 
 ### Error Handling
 - If "Show more" button not found, extract visible countries only (or empty array if none)
@@ -426,6 +453,14 @@ Save the structured JSON to a file:
 - **Snapshot parsing**: The snapshot YAML contains ALL the data - parse it carefully
 
 ### Common Mistakes to Avoid
+- ❌ **CRITICAL: Not creating `url_tracking` array before processing** (must initialize first!)
+- ❌ **CRITICAL: Stopping while `stats.pending > 0`** (MUST process ALL URLs)
+- ❌ **CRITICAL: Leaving URLs with `status: "pending"`** (all must be completed or failed)
+- ❌ Not updating URL status after processing (must set to completed/failed)
+- ❌ Processing URLs out of order (process index 1, 2, 3... in sequence)
+- ❌ Not logging progress for each URL (user has no visibility)
+- ❌ Not saving checkpoints every 10 ads (data lost if interrupted)
+- ❌ Deciding "representative sample" is sufficient (process EVERYTHING)
 - ❌ Not parsing the snapshot YAML carefully (all data is there!)
 - ❌ Not clicking "Show more" in Impressions (only extracts 4 countries instead of 60+)
 - ❌ Not clicking "…see more" for ad text (extracts truncated text)
@@ -433,23 +468,23 @@ Save the structured JSON to a file:
 - ❌ Creating "by_date" field in impressions (does not exist in LinkedIn Ad Library)
 - ❌ Not handling ads with < 1k impressions (they have NO country data)
 - ❌ Not using arrays for languages/locations (should always be arrays)
-- ❌ Not including the ad URL in the output
-- ❌ Stopping early after processing only a few ads (process ALL URLs)
-- ❌ Not logging progress during long extractions (user has no visibility)
-- ❌ Misleading metadata where `ads_scraped` != actual extractions (be accurate)
-- ❌ No checkpoint saves (data lost if extraction interrupted)
-- ❌ Deciding "representative sample" is sufficient without user approval
 
 ## Output Files
 
-- `linkedin_ads_<company>_<timestamp>.json` - Full structured data
+- `linkedin_ads_<company>_<timestamp>.json` - Full structured data with url_tracking
+- `linkedin_ads_checkpoint_<timestamp>.json` - Intermediate saves (every 10 ads)
 - `linkedin_ads_<company>_<timestamp>.csv` - Tabular format (optional, if requested)
 
 ## Verification Checklist
 
 After extraction, verify:
+- [ ] **CRITICAL: `stats.pending == 0`** - NO URLs left unprocessed
+- [ ] **CRITICAL: `url_tracking` has no `status: "pending"` entries**
+- [ ] **CRITICAL: `ads` array length == `stats.completed`**
+- [ ] **CRITICAL: `failed_ads` array length == `stats.failed`**
 - [ ] JSON is valid and parseable
 - [ ] Each ad includes the detail page URL
+- [ ] Each ad includes its index from url_tracking
 - [ ] Ad text is complete (not truncated with "…")
 - [ ] `impressions.by_country` array exists (may be empty for low-impression ads)
 - [ ] If country data exists, `by_country` has more than 4 entries (proves "Show more" was clicked)
