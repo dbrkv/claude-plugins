@@ -108,7 +108,7 @@ WHILE stats.pending > 0:
      - stats.failed++
   8. stats.pending--
   9. Log: "✓ Completed [INDEX] - [completed/total] done, [pending] remaining"
-  10. IF stats.completed % 10 == 0: Save checkpoint file
+  10. Save checkpoint file after each ad: linkedin_ads_progress_[timestamp].json
   11. Continue to next pending URL
 ```
 
@@ -117,9 +117,9 @@ WHILE stats.pending > 0:
 - END: `"✓ Completed [X] - [done/total] done, [remaining] remaining"`
 
 **CHECKPOINT SAVES:**
-- Every 10 completed extractions, write `linkedin_ads_checkpoint_[timestamp].json`
-- Include current `url_tracking` array with all statuses
-- This allows resuming if interrupted
+- After EACH ad extraction (success or fail), update `linkedin_ads_progress.json`
+- This ensures no data is lost if extraction is interrupted
+- File shows real-time progress with current `url_tracking` state
 
 **FORBIDDEN ACTIONS:**
 - ❌ You may NOT stop while `stats.pending > 0`
@@ -280,9 +280,9 @@ Extract each parameter and mark targeted/excluded as boolean (true if icon prese
    - After each batch, log: "Batch complete: [X] ads processed, [Y] remaining"
    - Brief pause (2-3 seconds) between batches using `mcp__playwright__browser_wait_for`
 
-2. **Checkpoint after each batch**
-   - Save intermediate results with current `url_tracking` state
-   - Allows resuming if interrupted
+2. **Progress file updated after each ad**
+   - Save results after every single ad extraction
+   - Allows resuming if interrupted with no data loss
 
 3. **Continue until `stats.pending == 0`**
 
@@ -379,7 +379,7 @@ Save the structured JSON to a file:
 3. ✅ **Update status for each URL** - Set to "in_progress" → "completed" or "failed"
 4. ✅ **Continue while `stats.pending > 0`** - Loop must not exit early
 5. ✅ **Log progress for each URL** - "▶ Processing X of Y (Z%)"
-6. ✅ **Save checkpoints every 10 ads** - Intermediate saves with current tracking state
+6. ✅ **Save progress after EACH ad** - Update JSON file after every extraction
 7. ✅ **Parse the snapshot YAML carefully** - all data is in the snapshot structure
 8. ✅ **Click "…see more" button** if present to get full ad text
 9. ✅ **Click "Show more" button** in Impressions section if present to get all countries
