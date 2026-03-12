@@ -97,19 +97,20 @@ WHILE stats.pending > 0:
   2. Set status to "in_progress"
   3. Log: "▶ Processing [INDEX] of [TOTAL] ([PERCENTAGE]%) - [URL]"
   4. Navigate to URL
-  5. Extract ad data
-  6. IF successful:
+  5. Expand all content (see 5.2 below)
+  6. Run extraction script (see 5.3 below)
+  7. IF successful:
      - Set status to "completed"
      - Store extracted data in ad_data field
      - stats.completed++
-  7. IF failed:
+  8. IF failed:
      - Set status to "failed"
      - Store error message in error field
      - stats.failed++
-  8. stats.pending--
-  9. Log: "✓ Completed [INDEX] - [completed/total] done, [pending] remaining"
-  10. Save checkpoint file after each ad: linkedin_ads_progress_[timestamp].json
-  11. Continue to next pending URL
+  9. stats.pending--
+  10. Log: "✓ Completed [INDEX] - [completed/total] done, [pending] remaining"
+  11. Save checkpoint file after each ad: linkedin_ads_progress_[timestamp].json
+  12. Continue to next pending URL
 ```
 
 **PROGRESS LOGGING (REQUIRED for each URL):**
@@ -129,204 +130,206 @@ WHILE stats.pending > 0:
 
 **Start processing the first URL (index 1) now:**
 
-#### A. About the Ad Section
+#### 5.1 Navigate and Initial Snapshot
 
-Parse the snapshot YAML to extract:
+1. Navigate to the ad URL using `mcp__playwright__browser_navigate`
+2. Wait 1 second using `mcp__playwright__browser_wait_for({ time: 1 })`
+3. Take a snapshot using `mcp__playwright__browser_snapshot`
 
-**Example snapshot structure for About the ad section:**
-```yaml
-- heading "About the ad" [level=2]
-- generic:
-    - paragraph: Video Ad              # <-- THIS IS THE FORMAT
-    - generic:
-        - generic: Advertiser
-        - link: PayU
-    - paragraph: Paid for by PayU Payments Private Limited
-```
+#### 5.2 Expand All Content
 
-The format is always a short paragraph like "Video Ad", "Single Image Ad", etc. - NOT the long ad copy text.
+**CRITICAL: First expand all content, THEN run extraction script**
 
-**How to extract from snapshot:**
-- **Ad ID**: Extract from the page URL (last segment)
-- **Advertiser**: Look for text after "Advertiser" heading or in the company link
-- **Format**: Look for a paragraph directly under "About the ad" heading containing "Video Ad", "Single Image Ad", "Carousel Ad", "Document Ad", "Text Ad", etc. This is NOT the ad text - it's a short type label.
-- **Paid for by**: Look for "Paid for by" text
-- **Run dates**: Look for "Ran from [date] to [date]" pattern. May not exist on all ads - set to null if not found.
-- **Ad text**: Extract from the paragraph in the ad preview section
-- **Creative URLs**: Extract URLs from image/video links
-- **Landing page**: Extract from headline link or CTA button
+From the snapshot, check for and click expand buttons in this order:
 
-**CRITICAL: Expand Truncated Ad Text**
-1. Look for a button with text "…see more" in the snapshot
-2. If found, click it:
-   ```
-   mcp__playwright__browser_click({
-     ref: "<button_ref>",
-     element: "…see more button"
-   })
-   ```
-3. Wait 1 second: `mcp__playwright__browser_wait_for({ time: 1 })`
-4. Take a new snapshot to capture the full text
-5. Extract the complete ad text from the new snapshot
+**A. Expand Ad Text:**
+- Look for button with text "…see more" in the snapshot
+- If found, click it using `mcp__playwright__browser_click` and wait 1 second
 
-#### B. Impressions Section
+**B. Expand Impressions (if section exists):**
+- Look for heading "Ad Impressions" in the snapshot
+- If the section exists, look for button "Show more" within that section
+- If found, click it and wait 2 seconds
 
-**CRITICAL: Sections May Not Exist**
+**C. Expand Targeting (if section exists):**
+- Look for heading "Ad Targeting" in the snapshot
+- If the section exists, look for buttons matching pattern "\d+ others" (e.g., "1 others", "5 others")
+- Click each such button and wait 1 second
 
-LinkedIn Ad Library pages vary. Some ads have full data (Impressions, Targeting, Run dates), others don't.
+#### 5.3 Run Extraction Script
 
-Before extracting each section, CHECK IF IT EXISTS in the snapshot:
-- Look for headings like "Impressions", "Targeting", "Ad run dates"
-- If heading NOT found, set fields to null/empty and continue
-- DO NOT fail the entire extraction if sections are missing
+After expanding all content, run the extraction script using `mcp__playwright__browser_run_code`:
 
-**CRITICAL: Three Possible Scenarios**
+```javascript
+async (page) => {
+  return await page.evaluate(() => {
+    // Helper function
+    const getText = (el) => el?.textContent?.trim() || null;
 
-**Scenario 0: No Impressions Section**
-Some ads have NO Impressions section at all (common for newer or certain ad types).
+    // Extract Ad ID from URL
+    const adId = window.location.pathname.split('/').pop();
 
-In this case:
-```json
-"impressions": null
-```
-OR if you want to indicate section was checked:
-```json
-"impressions": {
-  "total_range": null,
-  "by_country": null,
-  "section_not_available": true
+    // --- Extract About Section (Always Present) ---
+    const about = {};
+
+    // Format: First paragraph in About section
+    const aboutHeading = Array.from(document.querySelectorAll('h2'))
+      .find(h => h.textContent.includes('About the ad'));
+    if (aboutHeading) {
+      const aboutSection = aboutHeading.parentElement.parentElement;
+      const firstParagraph = aboutSection.querySelector('p');
+      about.format = getText(firstParagraph);
+    }
+
+    // Advertiser
+    const advertiserLink = document.querySelector('a[href*="ad_library_about_ad_advertiser"]');
+    about.advertiser = getText(advertiserLink);
+    about.advertiser_url = advertiserLink?.href || null;
+
+    // Paid for by
+    const allParagraphs = Array.from(document.querySelectorAll('p'));
+    const paidForByEl = allParagraphs.find(p => p.textContent.includes('Paid for by'));
+    about.paid_for_by = paidForByEl?.textContent?.replace('Paid for by', '').trim() || null;
+
+    // Run dates
+    const runDatesEl = allParagraphs.find(p => p.textContent.includes('Ran from'));
+    if (runDatesEl) {
+      const match = runDatesEl.textContent.match(/Ran from (.+?) to (.+)/);
+      about.run_start_date = match ? match[1] : null;
+      about.run_end_date = match ? match[2] : null;
+    } else {
+      about.run_start_date = null;
+      about.run_end_date = null;
+    }
+
+    // --- Extract Ad Content ---
+    const content = {};
+
+    // Ad text (main paragraph with links)
+    const adTextParagraph = document.querySelector('main p');
+    if (adTextParagraph) {
+      content.ad_text = getText(adTextParagraph);
+    }
+
+    // CTA/landing page link
+    const ctaLinks = Array.from(document.querySelectorAll('a[href*="lnkd.in"]'));
+    content.landing_page = ctaLinks[ctaLinks.length - 1]?.href || null;
+
+    // Hashtags
+    content.hashtags = Array.from(document.querySelectorAll('a[href*="hashtag"]'))
+      .map(a => a.textContent);
+
+    // Creative URLs (images/videos)
+    const images = Array.from(document.querySelectorAll('img'))
+      .filter(img => img.src && !img.src.includes('logo'))
+      .map(img => img.src);
+    const videos = Array.from(document.querySelectorAll('video'))
+      .map(v => v.src);
+    content.creative_urls = [...images, ...videos];
+
+    // --- Extract Impressions (Optional) ---
+    let impressions = null;
+    const impressionsHeading = Array.from(document.querySelectorAll('h2'))
+      .find(h => h.textContent.includes('Ad Impressions'));
+
+    if (impressionsHeading) {
+      impressions = {};
+      const section = impressionsHeading.parentElement.parentElement;
+
+      // Total impressions
+      const totalEl = Array.from(section.querySelectorAll('p'))
+        .find(p => /^[\d<].*k.*$/.test(p.textContent.trim()));
+      impressions.total_range = getText(totalEl);
+
+      // Countries
+      const countryItems = Array.from(section.querySelectorAll('li, [role="listitem"]'));
+      impressions.by_country = countryItems.map(item => {
+        const label = item.getAttribute('aria-label') || item.textContent;
+        const match = label?.match(/(.+?), impressions (.+%)/);
+        if (match) {
+          return { country: match[1].trim(), percentage: match[2].trim() };
+        }
+        return null;
+      }).filter(Boolean);
+
+      if (impressions.by_country.length === 0) {
+        impressions.by_country = null;
+      }
+    }
+
+    // --- Extract Targeting (Optional) ---
+    let targeting = null;
+    const targetingHeading = Array.from(document.querySelectorAll('h2'))
+      .find(h => h.textContent.includes('Ad Targeting'));
+
+    if (targetingHeading) {
+      targeting = {};
+      const section = targetingHeading.parentElement.parentElement;
+
+      // Language
+      const langHeading = Array.from(section.querySelectorAll('h3'))
+        .find(h => h.textContent.includes('Language'));
+      if (langHeading) {
+        const langText = langHeading.nextElementSibling?.textContent ||
+                         langHeading.parentElement?.querySelector('div > div')?.textContent;
+        const langMatch = langText?.match(/Targeting includes (.+)/);
+        targeting.languages = langMatch ? [langMatch[1].trim()] : null;
+      }
+
+      // Location
+      const locHeading = Array.from(section.querySelectorAll('h3'))
+        .find(h => h.textContent.includes('Location'));
+      if (locHeading) {
+        const locText = locHeading.nextElementSibling?.textContent ||
+                        locHeading.parentElement?.querySelector('div > div')?.textContent;
+        const locMatch = locText?.match(/Targeting includes (.+)/);
+        targeting.locations = locMatch ? [locMatch[1].trim()] : null;
+      }
+
+      // Targeting details table
+      const table = section.querySelector('table');
+      if (table) {
+        targeting.details = [];
+        const rows = table.querySelectorAll('tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          if (cells.length >= 3) {
+            const parameter = getText(cells[0]);
+            if (parameter && parameter !== 'Targeting parameter') {
+              targeting.details.push({
+                parameter,
+                targeted: !!cells[1]?.querySelector('img'),
+                excluded: !!cells[2]?.querySelector('img')
+              });
+            }
+          }
+        });
+        if (targeting.details.length === 0) {
+          targeting.details = null;
+        }
+      }
+    }
+
+    return {
+      ad_id: adId,
+      about,
+      content,
+      impressions,
+      targeting
+    };
+  });
 }
 ```
 
-**Scenario 1: Low Impressions (< 1k)**
-Some ads show:
-- "Total Impressions: < 1k"
-- "Impression data by country may take up to 48 hours to update"
-- NO country breakdown available
+#### 5.4 Store Result
 
-In this case, extract:
-```json
-"impressions": {
-  "total_range": "< 1k",
-  "by_country": []
-}
-```
+Store the returned JSON in the `ad_data` field of the tracking entry. The extraction script returns structured data with:
 
-**Scenario 2: Higher Impressions (30k-50k, etc.)**
-These ads show:
-- "Total Impressions: [range]"
-- Country breakdown with 4 countries initially visible
-- "Show more" button to reveal all countries
-
-**Extraction steps:**
-1. Extract "Total Impressions" value (e.g., "30k-50k")
-2. Look for a "Show more" button in the Impressions section
-3. If found, click it:
-   ```
-   mcp__playwright__browser_click({
-     ref: "<show_more_button_ref>",
-     element: "Show more button in Impressions section"
-   })
-   ```
-4. Wait 2 seconds for content to load
-5. Take a new snapshot
-6. Parse ALL countries from the list (will show 60+ countries after clicking)
-
-**How to parse countries from snapshot:**
-Look for list items with pattern like:
-```yaml
-- listitem:
-    - generic "Germany, impressions 98%":
-        - generic:
-            - paragraph: Germany
-            - progressbar
-          - paragraph: 98%
-```
-
-Extract country name and percentage for each item.
-
-**Example output:**
-```json
-"impressions": {
-  "total_range": "30k-50k",
-  "by_country": [
-    { "country": "Germany", "percentage": "98%" },
-    { "country": "India", "percentage": "< 1%" },
-    { "country": "Brazil", "percentage": "< 1%" }
-    // ... 60+ countries after clicking "Show more"
-  ]
-}
-```
-
-**DO NOT create a "by_date" field - LinkedIn Ad Library does NOT provide date-based impressions.**
-
-#### C. Ad Targeting Section
-
-**CRITICAL: Targeting Section May Not Exist**
-
-Before extracting targeting data, check if the "Targeting" heading exists in the snapshot.
-
-If NOT found:
-```json
-"targeting": null
-```
-OR:
-```json
-"targeting": {
-  "languages": null,
-  "locations": null,
-  "details": null,
-  "section_not_available": true
-}
-```
-
-**Extract Targeting Data:**
-
-**Languages:**
-- Look for "Language" heading
-- Extract text like "Targeting includes English"
-- Parse the language name(s)
-
-**Locations:**
-- Look for "Location" heading
-- Extract text like "Targeting includes Germany" or "Targeting includes Flemish Brabant, Limburg and"
-- **If you see a button with text like "1 others", "2 others", etc., click it!**
-  ```
-  mcp__playwright__browser_click({
-    ref: "<others_button_ref>",
-    element: "x others button in Location field"
-  })
-  ```
-- Wait 1 second and take a new snapshot
-- Extract the complete list after expansion
-
-**Targeting Details Table:**
-Parse the table with columns: "Targeting parameter", "Targeted", "Excluded"
-
-Look for rows like:
-```yaml
-- row "Audience":
-    - cell "Audience":
-        - paragraph: Audience
-    - cell:
-        - img  # checkmark if targeted
-    - cell:
-        - img  # X if excluded
-```
-
-Extract each parameter and mark targeted/excluded as boolean (true if icon present).
-
-**Example output:**
-```json
-"targeting": {
-  "languages": ["English"],
-  "locations": ["Flemish Brabant", "Limburg", "Antwerp"],
-  "details": [
-    { "parameter": "Audience", "targeted": true, "excluded": false },
-    { "parameter": "Demographic", "targeted": false, "excluded": true }
-  ]
-}
-```
+- `ad_id`: Extracted from URL
+- `about`: Format, advertiser, paid_for_by, run dates (null if not available)
+- `content`: Ad text, landing page, hashtags, creative URLs
+- `impressions`: Total range and country breakdown (null if section doesn't exist)
+- `targeting`: Languages, locations, and details table (null if section doesn't exist)
 
 ### Handling Large Datasets (50+ URLs)
 
@@ -436,13 +439,13 @@ Save the structured JSON to a file:
 4. ✅ **Continue while `stats.pending > 0`** - Loop must not exit early
 5. ✅ **Log progress for each URL** - "▶ Processing X of Y (Z%)"
 6. ✅ **Save progress after EACH ad** - Update JSON file after every extraction
-7. ✅ **Parse the snapshot YAML carefully** - all data is in the snapshot structure
+7. ✅ **Expand all content FIRST** - Click expand buttons BEFORE running extraction script
 8. ✅ **Click "…see more" button** if present to get full ad text
 9. ✅ **Click "Show more" button** in Impressions section if present to get all countries
 10. ✅ **Click "x others" buttons** in targeting section if present to get complete lists
 11. ✅ **Wait for content to load** after clicking expand buttons (1-2 seconds)
-12. ✅ **Take new snapshot** after each expansion to capture revealed content
-13. ✅ **Handle missing country data** - some ads (< 1k impressions) have NO country breakdown
+12. ✅ **Run extraction script via browser_run_code** - Use the embedded JavaScript
+13. ✅ **Handle missing sections** - impressions/targeting will be null if not present
 14. ✅ **Use arrays** for languages and locations (even if only 1 item)
 15. ✅ **DO NOT create "by_date" field** - Impressions are country-based only
 
@@ -465,41 +468,60 @@ Save the structured JSON to a file:
 | Show more countries | "Show more" | When present in Impressions section (after country list) |
 | Expand targeting | "\d+ others" (e.g., "1 others", "2 others") | When present in Language/Location fields |
 
-## Example: Parsing Snapshot Data
+## Extraction Script Output Structure
 
-**Example snapshot structure:**
-```yaml
-- paragraph [ref=e39]:
-  - text: "Stel je voor dat je planning geen dagelijkse stress meer is..."
-  - link "https://lnkd.in/eS7Ry9PP" [ref=e40]
-- button "…see more" [ref=e41]
+The JavaScript extraction script returns structured JSON directly:
+
+```json
+{
+  "ad_id": "1132205244",
+  "about": {
+    "format": "Single Image Ad",
+    "advertiser": "PayU",
+    "advertiser_url": "https://www.linkedin.com/...",
+    "paid_for_by": "Brand Kolektyw sp. z o.o.",
+    "run_start_date": "Jan 28, 2026",
+    "run_end_date": "Jan 31, 2026"
+  },
+  "content": {
+    "ad_text": "Complete ad text after expansion...",
+    "landing_page": "https://lnkd.in/...",
+    "hashtags": ["#payments", "#fintech"],
+    "creative_urls": ["https://media.licdn.com/..."]
+  },
+  "impressions": {
+    "total_range": "10k-20k",
+    "by_country": [
+      { "country": "Poland", "percentage": "100%" }
+    ]
+  },
+  "targeting": {
+    "languages": ["English"],
+    "locations": ["Poland"],
+    "details": [
+      { "parameter": "Audience", "targeted": true, "excluded": false }
+    ]
+  }
+}
 ```
 
-**Extraction:**
-- Full text is in the `text` field
-- If button "…see more" exists, click it first, then extract full text from new snapshot
-
-**Example country data:**
-```yaml
-- paragraph: Total Impressions
-- paragraph: 30k-50k
-- list:
-  - listitem:
-      - generic "Germany, impressions 98%":
-          - generic:
-              - paragraph: Germany
-            - paragraph: 98%
+**When sections don't exist**, they return `null`:
+```json
+{
+  "ad_id": "1137287224",
+  "about": { ... },
+  "content": { ... },
+  "impressions": null,
+  "targeting": null
+}
 ```
-
-**Extraction:**
-- Total: "30k-50k"
-- Countries: Extract from each listitem - country name and percentage
 
 ## Important Notes
 
 ### Playwright MCP Tools to Use
 - `mcp__playwright__browser_navigate` - Navigate to URLs
-- `mcp__playwright__browser_snapshot` - Capture page structure (CRITICAL - all data comes from here)
+- `mcp__playwright__browser_snapshot` - Capture page structure to detect expand buttons
+- `mcp__playwright__browser_run_code` - Execute JavaScript extraction script (CRITICAL - returns structured data)
 - `mcp__playwright__browser_evaluate` - Execute JavaScript for scrolling
 - `mcp__playwright__browser_wait_for` - Wait for content to load
 - `mcp__playwright__browser_navigate_back` - Return to previous page
@@ -508,9 +530,9 @@ Save the structured JSON to a file:
 ### Handling Challenges
 - **Infinite scroll**: Always scroll 3 times to load more content
 - **Dynamic content**: Use wait_for after each scroll
-- **Missing country data**: Some ads have < 1k impressions and NO country breakdown - handle gracefully
-- **Expandable content**: ALWAYS click "…see more", "Show more", and "x others" buttons when present
-- **Snapshot parsing**: The snapshot YAML contains ALL the data - parse it carefully
+- **Missing sections**: Some ads have NO Impressions/Targeting sections - extraction script returns null
+- **Expandable content**: ALWAYS click "…see more", "Show more", and "x others" buttons BEFORE running extraction script
+- **Extraction order**: Expand all content first, THEN run extraction script
 
 ### Common Mistakes to Avoid
 - ❌ **CRITICAL: Not creating `url_tracking` array before processing** (must initialize first!)
@@ -519,9 +541,9 @@ Save the structured JSON to a file:
 - ❌ Not updating URL status after processing (must set to completed/failed)
 - ❌ Processing URLs out of order (process index 1, 2, 3... in sequence)
 - ❌ Not logging progress for each URL (user has no visibility)
-- ❌ Not saving checkpoints every 10 ads (data lost if interrupted)
+- ❌ Not saving checkpoints after each ad (data lost if interrupted)
 - ❌ Deciding "representative sample" is sufficient (process EVERYTHING)
-- ❌ Not parsing the snapshot YAML carefully (all data is there!)
+- ❌ Running extraction script BEFORE expanding content (must expand first!)
 - ❌ Not clicking "Show more" in Impressions (only extracts 4 countries instead of 60+)
 - ❌ Not clicking "…see more" for ad text (extracts truncated text)
 - ❌ Not clicking "x others" in targeting (misses complete language/location lists)
@@ -546,10 +568,8 @@ After extraction, verify:
 - [ ] Each ad includes the detail page URL
 - [ ] Each ad includes its index from url_tracking
 - [ ] Ad text is complete (not truncated with "…")
-- [ ] `impressions.by_country` array exists (may be empty for low-impression ads)
+- [ ] `impressions` is either null or has `total_range` and `by_country`
 - [ ] If country data exists, `by_country` has more than 4 entries (proves "Show more" was clicked)
-- [ ] `impressions.total_range` is present
 - [ ] No `impressions.by_date` field exists
-- [ ] `targeting.languages` is an array
-- [ ] `targeting.locations` is an array
-- [ ] All available data from the snapshot was extracted
+- [ ] `targeting` is either null or has `languages` and `locations` as arrays
+- [ ] Missing sections return null (not empty objects)
