@@ -1,0 +1,23 @@
+{
+  "skill_name": "linkedin-ads-library-extractor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Extract ads from this LinkedIn Ad Library URL: https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise. Get the first page of ads only.",
+      "expected_output": "A JSON file containing extracted ad data including advertiser names, ad types, headlines, descriptions, and detail URLs for ads visible on the first page.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I want to analyze Wise's advertising on LinkedIn. Can you scrape their ad library and get info about all their ads? Limit to 2 pages of results.",
+      "expected_output": "A JSON file with ad data from Wise showing their ad campaigns including targeting info, impressions, and destination URLs.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Go to https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise and extract the following for each ad: advertiser name, ad headline, destination URL, and targeting parameters. Get 3 pages of results.",
+      "expected_output": "A JSON file with the specified fields extracted from ads across 3 pages of results.",
+      "files": []
+    }
+  ]
+}
