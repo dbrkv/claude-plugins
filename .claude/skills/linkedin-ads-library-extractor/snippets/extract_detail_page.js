@@ -6,22 +6,25 @@
  * Returns an object with all available detail page information
  */
 async (page) => {
-  // First, expand any "X others" buttons to reveal full targeting info
+  // CRITICAL: First, expand ALL "X others" buttons to reveal full targeting info
+  // These can appear in ANY targeting category (Language, Location, Job, etc.)
   try {
     const othersButtons = await page.getByRole('button', { name: /\d+\s+others?/i }).all();
     for (const button of othersButtons) {
       try {
         await button.click();
-        await page.waitForTimeout(100);
+        await page.waitForTimeout(150);
       } catch (e) {
-        // Individual button failures are OK
+        // Continue even if a button fails
       }
     }
+    // Wait for all expanded content to render
+    await page.waitForTimeout(300);
   } catch (e) {
     // No "others" buttons - continue
   }
 
-  // Expand any "See more" for descriptions
+  // Also expand "see more" for descriptions
   try {
     const seeMoreButtons = await page.getByRole('button', { name: /see more/i }).all();
     for (const button of seeMoreButtons) {
@@ -36,10 +39,9 @@ async (page) => {
     // No see more buttons - continue
   }
 
-  // Wait for expanded content to render
   await page.waitForTimeout(200);
 
-  // Extract all detail page data
+  // Extract using evaluate for DOM access with heading-based navigation
   const adData = await page.evaluate(() => {
     const result = {
       full_ad_description: null,
@@ -48,107 +50,126 @@ async (page) => {
       paid_for_by: null,
       ad_duration: null,
       total_impressions: null,
-      targeting_info: {}
+      targeting_info: {
+        language: null,
+        location: null,
+        raw: []
+      }
     };
 
-    // Extract full ad description
-    const descSelectors = [
-      '[data-anonymize="ad-description"]',
-      '.ad-description-full',
-      '[data-testid="ad-description"]',
-      'p[class*="description"]'
-    ];
-    for (const selector of descSelectors) {
-      const el = document.querySelector(selector);
-      if (el && el.textContent.trim()) {
-        result.full_ad_description = el.textContent.trim();
-        break;
+    // Helper to find section by h2 heading text
+    function findSectionByHeading(headingText) {
+      const headings = document.querySelectorAll('h2');
+      for (const h of headings) {
+        if (h.textContent.trim().toLowerCase().includes(headingText.toLowerCase())) {
+          return h.parentElement;
+        }
+      }
+      return null;
+    }
+
+    // Extract Ad Impressions using heading-based navigation
+    const impressionsSection = findSectionByHeading('Ad Impressions');
+    if (impressionsSection) {
+      // Find "Total Impressions" text, then get the next paragraph's value
+      const paragraphs = impressionsSection.querySelectorAll('p');
+      for (let i = 0; i < paragraphs.length - 1; i++) {
+        if (paragraphs[i].textContent.includes('Total Impressions')) {
+          result.total_impressions = paragraphs[i + 1].textContent.trim();
+          break;
+        }
       }
     }
 
-    // Extract destination URL
-    const urlSelectors = [
-      'a[href*="linkedin.com/ad/"]',
-      '[data-testid="destination-url"]',
-      'a[class*="destination"]'
-    ];
-    for (const selector of urlSelectors) {
-      const el = document.querySelector(selector);
-      if (el && el.href) {
-        result.destination_url = el.href;
-        break;
-      }
-    }
-
-    // Also check for URL displayed as text (not clickable)
-    const urlTextSelectors = [
-      '[data-testid="destination-url-text"]',
-      'span[class*="destination-url"]'
-    ];
-    for (const selector of urlTextSelectors) {
-      const el = document.querySelector(selector);
-      if (el && el.textContent.trim()) {
-        result.destination_url = el.textContent.trim();
-        break;
-      }
-    }
-
-    // Extract "About the ad" section information
-    const aboutSection = document.querySelector('[data-testid="about-the-ad"], section[class*="about"]');
-    if (aboutSection) {
-      // Ad format
-      const formatEl = aboutSection.querySelector('[data-anonymize="ad-format"]');
-      if (formatEl) {
-        result.ad_format = formatEl.textContent.trim();
-      }
-
-      // Paid for by
-      const paidEl = aboutSection.querySelector('[data-anonymize="paid-by"]');
-      if (paidEl) {
-        result.paid_for_by = paidEl.textContent.trim();
-      }
-
-      // Duration
-      const durationEl = aboutSection.querySelector('[data-anonymize="ad-duration"], [data-testid="ad-duration"]');
-      if (durationEl) {
-        result.ad_duration = durationEl.textContent.trim();
-      }
-
-      // Impressions
-      const impressionsEl = aboutSection.querySelector('[data-anonymize="impressions"], [data-testid="impressions"]');
-      if (impressionsEl) {
-        result.total_impressions = impressionsEl.textContent.trim();
-      }
-    }
-
-    // Extract targeting information
-    const targetingSection = document.querySelector('[data-testid="targeting-section"], section[class*="targeting"]');
+    // Extract Ad Targeting using heading-based navigation
+    const targetingSection = findSectionByHeading('Ad Targeting');
     if (targetingSection) {
-      const targetingItems = targetingSection.querySelectorAll('[data-anonymize*="targeting"], [data-testid*="targeting"]');
+      // Find h3 headings for each targeting category
+      const h3s = targetingSection.querySelectorAll('h3');
+      h3s.forEach(h3 => {
+        const category = h3.textContent.trim().toLowerCase();
+        const valueEl = h3.nextElementSibling;
+        if (valueEl) {
+          const value = valueEl.textContent.trim();
+          // Remove "Targeting includes" prefix
+          const cleanValue = value.replace(/^Targeting includes\s+/i, '');
 
-      targetingItems.forEach(item => {
-        const label = item.querySelector('[data-anonymize="label"], span[class*="label"]');
-        const value = item.querySelector('[data-anonymize="value"], span[class*="value"]');
-
-        if (label && value) {
-          const labelText = label.textContent.trim().toLowerCase().replace(/\s+/g, '_');
-          result.targeting_info[labelText] = value.textContent.trim();
+          if (category.includes('language')) {
+            result.targeting_info.language = cleanValue;
+          } else if (category.includes('location')) {
+            result.targeting_info.location = cleanValue;
+          }
+          result.targeting_info.raw.push({ category: h3.textContent.trim(), value: cleanValue });
         }
       });
+    }
 
-      // If no structured targeting found, try extracting all text from section
-      if (Object.keys(result.targeting_info).length === 0) {
-        const sectionText = targetingSection.textContent.trim();
-        result.targeting_info = { raw: sectionText };
+    // Extract About the ad section
+    const aboutSection = findSectionByHeading('About the ad');
+    if (aboutSection) {
+      const paragraphs = aboutSection.querySelectorAll('p');
+      paragraphs.forEach(p => {
+        const text = p.textContent.trim();
+        if (text.startsWith('Paid for by')) {
+          result.paid_for_by = text;
+        } else if (text.match(/^Ran from/)) {
+          result.ad_duration = text;
+        } else if (text.match(/^(Single Image|Video|Message|Article|Document)/)) {
+          result.ad_format = text;
+        }
+      });
+    }
+
+    // Extract destination URL from links (look for utm parameters or external links)
+    const links = document.querySelectorAll('a[href*="utm"], a[href^="http"]:not([href*="linkedin.com"])');
+    if (links.length > 0) {
+      result.destination_url = links[0].href;
+    }
+
+    // Also try extracting URL from displayed text
+    const urlText = document.body.innerHTML.match(/href="(https?:\/\/[^"]*(?:utm|destination)[^"]*)"/);
+    if (urlText && !result.destination_url) {
+      result.destination_url = urlText[1];
+    }
+
+    // Extract full description - try multiple approaches
+    // First try p with dir="ltr" (common for ad descriptions)
+    const descEl = document.querySelector('p[dir="ltr"]');
+    if (descEl && descEl.textContent.trim().length > 20) {
+      result.full_ad_description = descEl.textContent.trim();
+    }
+
+    // Fallback: look for data-testid or other selectors
+    if (!result.full_ad_description) {
+      const altDescSelectors = [
+        '[data-testid="ad-description"]',
+        '[data-anonymize="ad-description"]',
+        '.ad-description-full',
+        'p[class*="description"]'
+      ];
+      for (const selector of altDescSelectors) {
+        const el = document.querySelector(selector);
+        if (el && el.textContent.trim().length > 20) {
+          result.full_ad_description = el.textContent.trim();
+          break;
+        }
       }
     }
 
-    // Try alternative approach if above didn't work
+    // Last resort: look for long paragraph text in the ad content area
     if (!result.full_ad_description) {
-      const bodyText = document.body.textContent;
-      const match = bodyText.match(/About the ad[:\s]+([^]{0,500})/i);
-      if (match && match[1]) {
-        result.full_ad_description = match[1].trim();
+      const allParagraphs = document.querySelectorAll('p');
+      for (const p of allParagraphs) {
+        const text = p.textContent.trim();
+        // Look for paragraphs that are reasonably long and don't match other patterns
+        if (text.length > 30 &&
+            !text.startsWith('Paid for by') &&
+            !text.startsWith('Ran from') &&
+            !text.includes('Targeting includes') &&
+            !text.includes('Total Impressions')) {
+          result.full_ad_description = text;
+          break;
+        }
       }
     }
 

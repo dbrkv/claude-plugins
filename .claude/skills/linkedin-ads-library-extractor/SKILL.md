@@ -37,9 +37,10 @@ When visiting each ad's detail page, extract additional information:
 5. **ad_duration**: When the ad ran (e.g., "Ran from Mar 10, 2026 to Mar 10, 2026")
 6. **total_impressions**: The total impressions shown (e.g., "< 1k")
 7. **targeting_info**: Any targeting information available:
-   - **language**: Language targeting
-   - **location**: Location targeting
-   - Other targeting parameters if visible
+   - **language**: Language targeting (e.g., "English, Spanish and French")
+   - **location**: Location targeting (e.g., "Flemish Brabant, Limburg and Antwerp")
+   - **raw**: Array of all targeting categories with values `[{ category, value }, ...]`
+   - Note: "X others" buttons are automatically clicked to reveal full targeting lists
 
 ## Process
 
@@ -136,8 +137,12 @@ Only if `include_detail_pages=true`, visit individual ad detail pages for additi
       "ad_duration": "Ran from Mar 10, 2026 to Mar 10, 2026",
       "total_impressions": "< 1k",
       "targeting_info": {
-        "language": "Targeting includes English",
-        "location": "Targeting includes Flemish Brabant, Limburg and 1 others"
+        "language": "English, Spanish and French",
+        "location": "Flemish Brabant, Limburg and Antwerp",
+        "raw": [
+          { "category": "Language", "value": "English, Spanish and French" },
+          { "category": "Location", "value": "Flemish Brabant, Limburg and Antwerp" }
+        ]
       }
     }
   ]
@@ -208,9 +213,12 @@ Usage: `browser_run_code` with the content of this snippet
 
 ### `snippets/extract_detail_page.js`
 Extracts complete ad data from an individual ad's detail page. Handles:
-- Clicking "X others" buttons to reveal full targeting info
+- **Clicking ALL "X others" buttons** (in ANY targeting category) to reveal full targeting info before extraction
+- **Heading-based navigation** to find "Ad Impressions", "Ad Targeting", and "About the ad" sections
 - Extracting full description, destination URL, format, paid for by, duration, impressions
-- Returning structured JSON object with all detail page fields
+- Parsing targeting categories via h3 headings (Language, Location, etc.)
+- Removing "Targeting includes" prefix from targeting values
+- Returning structured JSON object with all detail page fields including `targeting_info.raw` array
 
 Usage: `browser_run_code` with the content of this snippet
 
