@@ -1,0 +1,46 @@
+{
+  "skill_name": "linkedin-ads-extractor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Extract LinkedIn ads from this URL: https://www.linkedin.com/ad-library/search?accountOwner=payoneer&payer=Payoneer",
+      "expected_output": "A JSON file containing structured data about LinkedIn ads from Payoneer, including ad count, ad details (about, impressions, targeting), saved as linkedin_ads_payoneer_<timestamp>.json",
+      "files": [],
+      "expectations": [
+        "The output is a valid JSON file",
+        "The JSON contains a search_metadata section with total_ads_found",
+        "The JSON contains an ads array with at least one ad",
+        "Each ad has structured data including 'about', 'impressions', and 'targeting' sections",
+        "The skill used Playwright MCP tools (browser_navigate, browser_snapshot, etc.)",
+        "The skill scrolled the page 3 times to load more ads",
+        "The ad detail pages were visited and data was extracted"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need to analyze competitor ads. Go to https://www.linkedin.com/ad-library/search?accountOwner=microsoft&payer=Microsoft and extract all the ad data you can find. I'm particularly interested in the targeting criteria they use.",
+      "expected_output": "A comprehensive JSON file with Microsoft LinkedIn ads data, with detailed targeting information for each ad",
+      "files": [],
+      "expectations": [
+        "The output is a valid JSON file with Microsoft ads data",
+        "The targeting section is populated with available data (locations, job titles, industries, etc.)",
+        "Multiple ads were extracted (not just one)",
+        "The skill navigated to individual ad detail pages",
+        "The JSON structure follows the expected schema with about/impressions/targeting sections"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Extract LinkedIn advertising data from https://www.linkedin.com/ad-library/search?accountOwner=google&payer=Google. Make sure to get the ad creative URLs and landing pages.",
+      "expected_output": "JSON file with Google LinkedIn ads including creative URLs and landing page information",
+      "files": [],
+      "expectations": [
+        "The output is a valid JSON file",
+        "Creative URLs are extracted and included in the 'about' section",
+        "Landing page URLs are captured",
+        "The skill properly handled the infinite scroll",
+        "Data is structured according to the expected format"
+      ]
+    }
+  ]
+}
