@@ -3,20 +3,11 @@
   "evals": [
     {
       "id": 1,
-      "name": "Extract LinkedIn Ads - Payoneer",
-      "description": "Test extraction of LinkedIn ads from Payoneer search results with complete country and targeting data",
-      "prompt": "Extract LinkedIn ads from this URL: https://www.linkedin.com/ad-library/search?accountOwner=payoneer&payer=Payoneer",
+      "name": "Extract Single Ad with Low Impressions",
+      "description": "Test extraction of an ad with < 1k impressions (no country breakdown available)",
+      "prompt": "Extract data from this single LinkedIn ad: https://www.linkedin.com/ad-library/detail/1365413366",
       "expected_output": {
-        "file": "linkedin_ads_payoneer_<timestamp>.json",
-        "structure": {
-          "search_metadata": {
-            "search_url": "string",
-            "total_ads_found": "number",
-            "extraction_date": "ISO-timestamp",
-            "ads_scraped": "number"
-          },
-          "ads": "array"
-        },
+        "file": "linkedin_ad_1365413366.json",
         "assertions": [
           {
             "type": "json_valid",
@@ -24,50 +15,24 @@
           },
           {
             "type": "field_exists",
-            "path": "search_metadata",
-            "description": "search_metadata field must exist"
-          },
-          {
-            "type": "field_exists",
-            "path": "search_metadata.search_url",
-            "description": "search_url must be recorded"
-          },
-          {
-            "type": "field_type",
-            "path": "search_metadata.total_ads_found",
-            "expected_type": "number",
-            "description": "total_ads_found must be a number"
-          },
-          {
-            "type": "field_type",
-            "path": "search_metadata.ads_scraped",
-            "expected_type": "number",
-            "description": "ads_scraped must be a number"
-          },
-          {
-            "type": "field_exists",
-            "path": "ads",
-            "description": "ads array must exist"
-          },
-          {
-            "type": "array_not_empty",
-            "path": "ads",
-            "description": "At least one ad must be extracted"
-          },
-          {
-            "type": "field_exists",
             "path": "ads[0].ad_id",
-            "description": "Each ad must have an ad_id"
+            "description": "Ad ID must be extracted"
+          },
+          {
+            "type": "field_value",
+            "path": "ads[0].ad_id",
+            "expected_value": "1365413366",
+            "description": "Ad ID should be 1365413366"
           },
           {
             "type": "field_exists",
-            "path": "ads[0].about",
-            "description": "Each ad must have about section"
+            "path": "ads[0].url",
+            "description": "Ad URL must be included"
           },
           {
             "type": "field_exists",
             "path": "ads[0].about.advertiser",
-            "description": "Advertiser name must be extracted"
+            "description": "Advertiser must be extracted"
           },
           {
             "type": "field_exists",
@@ -76,8 +41,14 @@
           },
           {
             "type": "field_exists",
-            "path": "ads[0].impressions",
-            "description": "Impressions section must exist"
+            "path": "ads[0].about.ad_text",
+            "description": "Ad text must be extracted"
+          },
+          {
+            "type": "field_not_contains",
+            "path": "ads[0].about.ad_text",
+            "not_expected": "…",
+            "description": "Ad text should NOT end with ellipsis (must be expanded)"
           },
           {
             "type": "field_exists",
@@ -87,19 +58,88 @@
           {
             "type": "field_exists",
             "path": "ads[0].impressions.by_country",
-            "description": "Country breakdown must exist (NOT by_date)"
-          },
-          {
-            "type": "array_min_length",
-            "path": "ads[0].impressions.by_country",
-            "min_length": 5,
-            "description": "Must extract more than 4 countries (proves 'Show more' was clicked)"
+            "description": "by_country array must exist"
           },
           {
             "type": "field_type",
             "path": "ads[0].impressions.by_country",
             "expected_type": "array",
             "description": "by_country must be an array"
+          },
+          {
+            "type": "field_not_exists",
+            "path": "ads[0].impressions.by_date",
+            "description": "by_date should NOT exist"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].targeting",
+            "description": "Targeting section must exist"
+          },
+          {
+            "type": "field_type",
+            "path": "ads[0].targeting.languages",
+            "expected_type": "array",
+            "description": "Languages must be an array"
+          },
+          {
+            "type": "field_type",
+            "path": "ads[0].targeting.locations",
+            "expected_type": "array",
+            "description": "Locations must be an array"
+          },
+          {
+            "type": "array_min_length",
+            "path": "ads[0].targeting.locations",
+            "min_length": 3,
+            "description": "Locations should have at least 3 items (proves 'x others' button was clicked)"
+          }
+        ]
+      },
+      "success_criteria": {
+        "ad_text_complete": true,
+        "locations_expanded": true,
+        "country_data_handled": true
+      }
+    },
+    {
+      "id": 2,
+      "name": "Extract Single Ad with High Impressions",
+      "description": "Test extraction of an ad with 30k-50k impressions (with country breakdown)",
+      "prompt": "Extract data from this LinkedIn ad: https://www.linkedin.com/ad-library/detail/1180600313",
+      "expected_output": {
+        "file": "linkedin_ad_1180600313.json",
+        "assertions": [
+          {
+            "type": "json_valid",
+            "description": "Output must be valid JSON"
+          },
+          {
+            "type": "field_value",
+            "path": "ads[0].ad_id",
+            "expected_value": "1180600313",
+            "description": "Ad ID should be 1180600313"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].about.advertiser",
+            "description": "Advertiser must be extracted"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].impressions.total_range",
+            "description": "Total impressions must be extracted"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].impressions.by_country",
+            "description": "Country breakdown must exist"
+          },
+          {
+            "type": "array_min_length",
+            "path": "ads[0].impressions.by_country",
+            "min_length": 10,
+            "description": "Must have at least 10 countries (proves 'Show more' was clicked)"
           },
           {
             "type": "field_exists",
@@ -114,62 +154,22 @@
           {
             "type": "field_not_exists",
             "path": "ads[0].impressions.by_date",
-            "description": "by_date field should NOT exist (removed from schema)"
-          },
-          {
-            "type": "field_exists",
-            "path": "ads[0].targeting",
-            "description": "Targeting section must exist"
-          },
-          {
-            "type": "field_type",
-            "path": "ads[0].targeting.languages",
-            "expected_type": "array",
-            "description": "Languages must be an array"
-          },
-          {
-            "type": "field_type",
-            "path": "ads[0].targeting.locations",
-            "expected_type": "array",
-            "description": "Locations must be an array"
-          },
-          {
-            "type": "field_exists",
-            "path": "ads[0].targeting.details",
-            "description": "Targeting details must exist"
+            "description": "by_date should NOT exist"
           }
         ]
       },
       "success_criteria": {
-        "min_ads_extracted": 1,
-        "min_countries_per_ad": 5,
-        "all_ads_have_impressions": true,
-        "all_ads_have_targeting": true,
         "show_more_clicked": true,
-        "by_date_not_present": true
-      },
-      "expectations": [
-        "The output is a valid JSON file",
-        "The JSON contains a search_metadata section with total_ads_found",
-        "The JSON contains an ads array with at least one ad",
-        "Each ad has structured data including 'about', 'impressions', and 'targeting' sections",
-        "The skill used Playwright MCP tools (browser_navigate, browser_snapshot, etc.)",
-        "The skill scrolled the page 3 times to load more ads",
-        "The ad detail pages were visited and data was extracted",
-        "The 'Show more' button was clicked in Impressions section to reveal all countries",
-        "The impressions.by_country array contains more than 4 countries",
-        "No 'by_date' field exists in impressions (country-based only)",
-        "The 'x others' buttons were clicked in targeting section if present",
-        "Languages and locations are arrays (not strings)"
-      ]
+        "country_data_complete": true
+      }
     },
     {
-      "id": 2,
-      "name": "Extract LinkedIn Ads - Microsoft",
-      "description": "Test extraction with detailed targeting information from Microsoft ads",
-      "prompt": "I need to analyze competitor ads. Go to https://www.linkedin.com/ad-library/search?accountOwner=microsoft&payer=Microsoft and extract all the ad data you can find. I'm particularly interested in the targeting criteria they use.",
+      "id": 3,
+      "name": "Extract Multiple Ads from Search",
+      "description": "Test extraction of multiple ads from a search results page",
+      "prompt": "Extract the first 3 ads from this LinkedIn Ad Library search: https://www.linkedin.com/ad-library/search?accountOwner=payoneer&payer=Payoneer",
       "expected_output": {
-        "file": "linkedin_ads_microsoft_<timestamp>.json",
+        "file": "linkedin_ads_payoneer.json",
         "assertions": [
           {
             "type": "json_valid",
@@ -177,194 +177,125 @@
           },
           {
             "type": "field_exists",
-            "path": "ads[0].targeting",
-            "description": "Targeting section must exist"
+            "path": "search_metadata",
+            "description": "Search metadata must exist"
           },
           {
-            "type": "field_type",
-            "path": "ads[0].targeting.languages",
-            "expected_type": "array",
-            "description": "Languages must be an array"
+            "type": "field_exists",
+            "path": "search_metadata.search_url",
+            "description": "Search URL must be recorded"
           },
           {
-            "type": "field_type",
-            "path": "ads[0].targeting.locations",
-            "expected_type": "array",
-            "description": "Locations must be an array"
+            "type": "field_exists",
+            "path": "search_metadata.total_ads_found",
+            "description": "Total ads count must be recorded"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads",
+            "description": "Ads array must exist"
           },
           {
             "type": "array_min_length",
-            "path": "ads[0].impressions.by_country",
-            "min_length": 5,
-            "description": "Must have more than 4 countries (Show more was clicked)"
+            "path": "ads",
+            "min_length": 3,
+            "description": "At least 3 ads must be extracted"
           },
           {
-            "type": "field_not_exists",
-            "path": "ads[0].impressions.by_date",
-            "description": "by_date should not exist"
+            "type": "field_exists",
+            "path": "ads[0].url",
+            "description": "Each ad must have URL"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].about",
+            "description": "Each ad must have about section"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].impressions",
+            "description": "Each ad must have impressions section"
+          },
+          {
+            "type": "field_exists",
+            "path": "ads[0].targeting",
+            "description": "Each ad must have targeting section"
           }
         ]
       },
       "success_criteria": {
         "multiple_ads_extracted": true,
-        "detailed_targeting": true,
-        "show_more_clicked": true
-      },
-      "expectations": [
-        "The output is a valid JSON file with Microsoft ads data",
-        "The targeting section is populated with available data (locations, languages, details)",
-        "Multiple ads were extracted (not just one)",
-        "The skill navigated to individual ad detail pages",
-        "The JSON structure follows the expected schema with about/impressions/targeting sections",
-        "The 'Show more' button was clicked for impressions",
-        "Country data is in by_country array (not by_date)"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Extract LinkedIn Ads - Google with Creatives",
-      "description": "Test extraction of creative URLs and landing pages",
-      "prompt": "Extract LinkedIn advertising data from https://www.linkedin.com/ad-library/search?accountOwner=google&payer=Google. Make sure to get the ad creative URLs and landing pages.",
-      "expected_output": {
-        "file": "linkedin_ads_google_<timestamp>.json",
-        "assertions": [
-          {
-            "type": "json_valid",
-            "description": "Output must be valid JSON"
-          },
-          {
-            "type": "field_exists",
-            "path": "ads[0].about.creative_urls",
-            "description": "Creative URLs must be extracted"
-          },
-          {
-            "type": "field_type",
-            "path": "ads[0].about.creative_urls",
-            "expected_type": "array",
-            "description": "Creative URLs must be an array"
-          },
-          {
-            "type": "field_exists",
-            "path": "ads[0].impressions.by_country",
-            "description": "Country-based impressions must exist"
-          },
-          {
-            "type": "array_min_length",
-            "path": "ads[0].impressions.by_country",
-            "min_length": 5,
-            "description": "More than 4 countries extracted"
-          },
-          {
-            "type": "field_not_exists",
-            "path": "ads[0].impressions.by_date",
-            "description": "by_date should not exist"
-          }
-        ]
-      },
-      "success_criteria": {
-        "creative_urls_extracted": true,
-        "landing_pages_captured": true,
-        "country_data_complete": true
-      },
-      "expectations": [
-        "The output is a valid JSON file",
-        "Creative URLs are extracted and included in the 'about' section",
-        "Landing page URLs are captured",
-        "The skill properly handled the infinite scroll",
-        "Data is structured according to the expected format",
-        "The 'Show more' button was clicked for complete country data",
-        "Country data uses by_country array (not by_date)"
-      ]
+        "all_ads_complete": true
+      }
     }
   ],
   "validation_rules": {
+    "snapshot_parsing": {
+      "description": "All data must be extracted from the Playwright snapshot YAML structure"
+    },
+    "expansion_buttons": {
+      "see_more_text": "Click '…see more' button if present in ad preview",
+      "show_more_countries": "Click 'Show more' button if present in Impressions section",
+      "x_others_targeting": "Click 'x others' buttons if present in Language/Location fields"
+    },
     "impressions": {
-      "must_have_by_country": true,
-      "must_not_have_by_date": true,
-      "min_countries": 5,
-      "show_more_required": true,
-      "description": "Impressions must use country-based structure (by_country array), NOT date-based (by_date). The 'Show more' button must be clicked to extract all 60+ countries, not just the initial 4."
+      "low_impressions": "Ads with < 1k impressions have NO country breakdown - use empty array",
+      "high_impressions": "Ads with higher impressions have country breakdown - extract ALL countries after clicking 'Show more'",
+      "no_by_date": "NEVER create by_date field - LinkedIn only provides country-based data"
     },
-    "targeting": {
-      "languages_must_be_array": true,
-      "locations_must_be_array": true,
-      "expand_others_buttons": true,
-      "description": "Languages and locations must be arrays. The 'x others' buttons must be clicked to reveal complete lists."
-    },
-    "about": {
-      "advertiser_required": true,
-      "format_required": true,
-      "expand_see_more": true,
-      "creative_urls_array": true,
-      "description": "Advertiser and format are required. The '…see more' button must be clicked to expand truncated ad text. Creative URLs must be an array."
+    "output_structure": {
+      "include_url": "Always include the ad detail URL in output",
+      "arrays_required": "Languages and locations must always be arrays",
+      "complete_text": "Ad text must be complete (not truncated)"
     }
   },
   "test_scenarios": [
     {
-      "scenario": "Show more button not found",
-      "description": "If 'Show more' button is not present in Impressions section, extract visible countries only",
-      "expected_behavior": "Extract 4 visible countries and log warning, don't fail extraction",
-      "validation": {
-        "min_countries": 4,
-        "log_warning": true,
-        "continue_extraction": true
-      }
+      "scenario": "Ad with < 1k impressions",
+      "description": "Low impression ads show message about data not being available yet",
+      "expected_behavior": "Extract total_range as '< 1k' and by_country as empty array []"
     },
     {
-      "scenario": "x others button not found",
-      "description": "If 'x others' button is not present in targeting, extract visible items only",
-      "expected_behavior": "Extract visible languages/locations as arrays and continue",
-      "validation": {
-        "languages_is_array": true,
-        "locations_is_array": true,
-        "continue_extraction": true
-      }
+      "scenario": "Ad with high impressions",
+      "description": "High impression ads show country breakdown with 'Show more' button",
+      "expected_behavior": "Click 'Show more' to reveal 60+ countries, extract all of them"
     },
     {
-      "scenario": "See more text not found",
-      "description": "If '…see more' button is not present, extract visible text only",
-      "expected_behavior": "Extract visible ad text and continue",
-      "validation": {
-        "ad_text_present": true,
-        "continue_extraction": true
-      }
+      "scenario": "Truncated ad text",
+      "description": "Ad text shows '…see more' button",
+      "expected_behavior": "Click button to expand, extract full text from new snapshot"
     },
     {
-      "scenario": "Individual ad extraction fails",
-      "description": "If one ad fails to extract, continue with remaining ads",
-      "expected_behavior": "Log error for failed ad, continue extraction, save successful ads",
-      "validation": {
-        "continue_on_error": true,
-        "save_successful_ads": true,
-        "log_errors": true
-      }
+      "scenario": "Hidden targeting locations",
+      "description": "Location field shows 'x others' button",
+      "expected_behavior": "Click button to expand, extract all locations from new snapshot"
     }
   ],
-  "common_mistakes_to_avoid": [
+  "common_mistakes": [
     {
-      "mistake": "Not clicking 'Show more' button",
+      "mistake": "Not parsing snapshot YAML",
+      "impact": "All data is in the snapshot - if not parsing carefully, data will be missed",
+      "detection": "Output has null/missing values when snapshot clearly contains the data"
+    },
+    {
+      "mistake": "Not clicking 'Show more' for countries",
       "impact": "Only 4 countries extracted instead of 60+",
-      "detection": "by_country array has 4 or fewer entries"
+      "detection": "by_country array has 4 or fewer entries for high-impression ads"
     },
     {
-      "mistake": "Creating 'by_date' field",
-      "impact": "Incorrect schema - LinkedIn uses country-based impressions",
-      "detection": "impressions.by_date field exists"
+      "mistake": "Not clicking '…see more' for text",
+      "impact": "Truncated ad text with ellipsis",
+      "detection": "ad_text ends with '…' or is very short"
     },
     {
-      "mistake": "Not clicking '…see more' for ad text",
-      "impact": "Truncated ad text extracted",
-      "detection": "Ad text ends with '…' or is very short"
+      "mistake": "Not handling low-impression ads",
+      "impact": "Error or missing data for ads with < 1k impressions",
+      "detection": "Extraction fails or by_country is missing for ads with '< 1k' total"
     },
     {
-      "mistake": "Not using arrays for languages/locations",
-      "impact": "Incorrect data structure",
-      "detection": "languages or locations is not an array type"
-    },
-    {
-      "mistake": "Not clicking 'x others' buttons",
-      "impact": "Incomplete targeting lists",
-      "detection": "Only 1-2 items in languages/locations when 'x others' was present"
+      "mistake": "Creating by_date field",
+      "impact": "Incorrect schema - LinkedIn doesn't provide date-based impressions",
+      "detection": "impressions.by_date field exists in output"
     }
   ]
 }
