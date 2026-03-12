@@ -133,12 +133,25 @@ WHILE stats.pending > 0:
 
 Parse the snapshot YAML to extract:
 
+**Example snapshot structure for About the ad section:**
+```yaml
+- heading "About the ad" [level=2]
+- generic:
+    - paragraph: Video Ad              # <-- THIS IS THE FORMAT
+    - generic:
+        - generic: Advertiser
+        - link: PayU
+    - paragraph: Paid for by PayU Payments Private Limited
+```
+
+The format is always a short paragraph like "Video Ad", "Single Image Ad", etc. - NOT the long ad copy text.
+
 **How to extract from snapshot:**
 - **Ad ID**: Extract from the page URL (last segment)
 - **Advertiser**: Look for text after "Advertiser" heading or in the company link
-- **Format**: Look for "Single Image Ad", "Video Ad", "Carousel Ad", etc.
+- **Format**: Look for a paragraph directly under "About the ad" heading containing "Video Ad", "Single Image Ad", "Carousel Ad", "Document Ad", "Text Ad", etc. This is NOT the ad text - it's a short type label.
 - **Paid for by**: Look for "Paid for by" text
-- **Run dates**: Look for "Ran from [date] to [date]" pattern
+- **Run dates**: Look for "Ran from [date] to [date]" pattern. May not exist on all ads - set to null if not found.
 - **Ad text**: Extract from the paragraph in the ad preview section
 - **Creative URLs**: Extract URLs from image/video links
 - **Landing page**: Extract from headline link or CTA button
@@ -158,7 +171,32 @@ Parse the snapshot YAML to extract:
 
 #### B. Impressions Section
 
-**CRITICAL: Two Possible Scenarios**
+**CRITICAL: Sections May Not Exist**
+
+LinkedIn Ad Library pages vary. Some ads have full data (Impressions, Targeting, Run dates), others don't.
+
+Before extracting each section, CHECK IF IT EXISTS in the snapshot:
+- Look for headings like "Impressions", "Targeting", "Ad run dates"
+- If heading NOT found, set fields to null/empty and continue
+- DO NOT fail the entire extraction if sections are missing
+
+**CRITICAL: Three Possible Scenarios**
+
+**Scenario 0: No Impressions Section**
+Some ads have NO Impressions section at all (common for newer or certain ad types).
+
+In this case:
+```json
+"impressions": null
+```
+OR if you want to indicate section was checked:
+```json
+"impressions": {
+  "total_range": null,
+  "by_country": null,
+  "section_not_available": true
+}
+```
 
 **Scenario 1: Low Impressions (< 1k)**
 Some ads show:
@@ -223,6 +261,24 @@ Extract country name and percentage for each item.
 **DO NOT create a "by_date" field - LinkedIn Ad Library does NOT provide date-based impressions.**
 
 #### C. Ad Targeting Section
+
+**CRITICAL: Targeting Section May Not Exist**
+
+Before extracting targeting data, check if the "Targeting" heading exists in the snapshot.
+
+If NOT found:
+```json
+"targeting": null
+```
+OR:
+```json
+"targeting": {
+  "languages": null,
+  "locations": null,
+  "details": null,
+  "section_not_available": true
+}
+```
 
 **Extract Targeting Data:**
 
@@ -391,6 +447,10 @@ Save the structured JSON to a file:
 15. ✅ **DO NOT create "by_date" field** - Impressions are country-based only
 
 ### Error Handling
+- If Impressions section heading not found, set impressions to null and continue
+- If Targeting section heading not found, set targeting to null and continue
+- If run dates not found, set to null and continue
+- Never fail an extraction just because optional sections are missing
 - If "Show more" button not found, extract visible countries only (or empty array if none)
 - If "…see more" button not found, extract visible text only
 - If "x others" buttons not found, extract visible language/location only
