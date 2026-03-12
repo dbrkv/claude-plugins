@@ -3,20 +3,44 @@
   "evals": [
     {
       "id": 1,
-      "prompt": "Extract ads from this LinkedIn Ad Library URL: https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise. Get the first page of ads only.",
-      "expected_output": "A JSON file containing extracted ad data including advertiser names, ad types, headlines, descriptions, and detail URLs for ads visible on the first page.",
+      "name": "List-view-only extraction (fast mode)",
+      "prompt": "Extract ads from this LinkedIn Ad Library URL: https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise. Use list-view-only mode (no detail pages) and get the first page of ads.",
+      "expected_output": "A JSON file containing extracted ad data including advertiser names, ad types, headlines, descriptions, and detail URLs for ads visible on the first page. Should complete in 5-10 seconds without opening any detail page tabs.",
       "files": []
     },
     {
       "id": 2,
-      "prompt": "I want to analyze Wise's advertising on LinkedIn. Can you scrape their ad library and get info about all their ads? Limit to 2 pages of results.",
-      "expected_output": "A JSON file with ad data from Wise showing their ad campaigns including targeting info, impressions, and destination URLs.",
+      "name": "Detail page extraction (full mode)",
+      "prompt": "Extract ads from this LinkedIn Ad Library URL: https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise. Include detail page data (destination URLs, full impressions, detailed targeting). Limit to 1 page.",
+      "expected_output": "A JSON file with complete ad data including destination URLs, paid_for_by, ad_duration, total_impressions, and full targeting_info for each ad.",
       "files": []
     },
     {
       "id": 3,
-      "prompt": "Go to https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise and extract the following for each ad: advertiser name, ad headline, destination URL, and targeting parameters. Get 3 pages of results.",
-      "expected_output": "A JSON file with the specified fields extracted from ads across 3 pages of results.",
+      "name": "Multi-page extraction with deduplication",
+      "prompt": "Extract 3 pages of ads from https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise. Use list-view-only mode for speed.",
+      "expected_output": "A JSON file with ads from 3 pages of results. Verify that duplicate ads (same ad appearing across scroll loads) are properly deduplicated - each ad ID should appear only once.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "Full extraction with detail pages",
+      "prompt": "I want to analyze Wise's advertising on LinkedIn. Extract 2 pages of ads from https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise including all detail page information (destination URLs, targeting, impressions).",
+      "expected_output": "A JSON file with ad data from 2 pages showing complete ad campaigns including targeting info, impressions, destination URLs, and all other detail page fields.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "Specific fields extraction",
+      "prompt": "Go to https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise and extract the following for each ad: advertiser name, ad headline, destination URL, and targeting parameters. Get 2 pages of results with detail pages.",
+      "expected_output": "A JSON file with the specified fields extracted from ads across 2 pages of results, including destination URLs and targeting parameters from detail pages.",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "Rapid list-view benchmark",
+      "prompt": "Benchmark the list-view-only extraction speed. Extract 5 pages of ads from https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise without visiting any detail pages. Report the time taken.",
+      "expected_output": "A JSON file with ads from 5 pages. Should complete in approximately 25-50 seconds (5-10 seconds per page). Report should include timing information.",
       "files": []
     }
   ]

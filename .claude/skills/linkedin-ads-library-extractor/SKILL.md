@@ -13,6 +13,7 @@ You are a specialized skill for extracting information from the LinkedIn Ad Libr
 You will receive:
 - **url**: A LinkedIn Ad Library search URL (e.g., `https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise`)
 - **max_pages**: (Optional) Maximum number of pages to scroll/load. Default is 10 pages.
+- **include_detail_pages**: (Optional) Whether to visit individual ad detail pages. Default is false for faster extraction. Set to true only if you need fields not available in list view (destination URLs, full impressions data, detailed targeting).
 
 ## What to Extract
 
@@ -41,28 +42,58 @@ When visiting each ad's detail page, extract additional information:
 
 ## Process
 
+This skill uses a **two-pass approach** for optimal performance:
+
+### Pass 1: Fast List-View Extraction (Default)
+Extract all available data from the list view without visiting detail pages. This is 3-10x faster.
+
+### Pass 2: Detail Page Enrichment (Optional)
+Only if `include_detail_pages=true`, visit individual ad detail pages for additional fields not available in list view.
+
+### Step-by-Step Workflow
+
 1. **Navigate to the provided URL** using the Playwright browser MCP
 
-2. **Extract the total ad count** from the heading (e.g., "2,529 ads match your search criteria")
+2. **Initialize tracking**:
+   - Create an empty Set for deduplication: `seenAdIds = new Set()`
+   - Initialize empty array: `allAds = []`
 
-3. **Extract ads from the visible page**:
-   - Take a snapshot to identify all ad elements
-   - For each ad list item, extract the basic information listed above
-   - Collect the "View details" link URL for each ad
+3. **Extract the total ad count** from the heading (e.g., "2,529 ads match your search criteria")
 
-4. **Visit each ad detail page** to get additional information:
-   - For each ad, open its detail page in a new tab
-   - Extract the additional information from the detail page
-   - Close the tab and return to the search results
+4. **For each page** (up to max_pages):
 
-5. **Handle pagination**:
-   - LinkedIn Ad Library uses infinite scroll, not traditional pagination
-   - Scroll down to trigger loading more ads
-   - Wait for new ads to load
-   - Repeat extraction for newly loaded ads
-   - Continue until max_pages is reached or no more ads load
+   a. **Extract ads from current view** using the bundled snippet:
+   ```
+   Run the JavaScript from `snippets/extract_ads_from_list_view.js` via `browser_run_code`
+   This returns all visible ads with their IDs, advertiser names, types, headlines, descriptions, and detail URLs
+   ```
 
-6. **Output the results** in JSON format to a file named `linkedin_ads_data.json`:
+   b. **Deduplicate ads**:
+   ```
+   For each ad returned:
+     if ad.id is not in seenAdIds:
+       add to allAds array
+       add ad.id to seenAdIds
+   ```
+
+   c. **If include_detail_pages=true** and there are new ads:
+   ```
+   For each new ad (not previously processed):
+     1. Use browser_tabs to open a new tab
+     2. Navigate to the ad's detail_url
+     3. Run `snippets/extract_detail_page.js` via browser_run_code
+     4. Merge the returned detail data into the ad object
+     5. Close the detail tab and return to search results
+   ```
+
+   d. **Scroll to load more** using the bundled snippet:
+   ```
+   Run the JavaScript from `snippets/scroll_and_wait.js` via `browser_run_code`
+   If hasMore=false, break the loop (end of results)
+   If newAdCount=0 for 3 consecutive scrolls, break (no more content)
+   ```
+
+5. **Output the results** in JSON format to a file named `linkedin_ads_data.json`:
 
 ```json
 {
@@ -92,24 +123,78 @@ When visiting each ad's detail page, extract additional information:
 
 ## Important Notes
 
+- **Use bundled snippets**: Always use the JavaScript snippets in `snippets/` directory via `browser_run_code` for efficient extraction
+- **List view is fast**: Default mode (without detail pages) extracts ~5-10 seconds per page
+- **Detail pages are slow**: Only use `include_detail_pages=true` when you need destination URLs, full impressions data, or detailed targeting info
+- **Deduplication is automatic**: The Set-based tracking prevents duplicate ads across scroll loads
+- **Expand buttons are handled**: Snippets automatically click "See more" and "X others" buttons
 - **Be patient with page loads**: LinkedIn pages can take time to load, especially with infinite scroll
 - **Handle dynamic content**: Ads load asynchronously, so wait for content to appear before extracting
 - **Rate limiting**: Don't navigate too quickly between pages to avoid being flagged
 - **Incomplete data**: Some fields may not be available for all ads; use null or empty string for missing data
 - **Multiple tabs**: When visiting detail pages, use tab management to avoid losing the search results page
-- **Snapshot first**: Always take a snapshot before attempting to extract data to get the latest DOM structure
 
 ## Error Handling
 
+Use per-ad error handling to ensure extraction continues even if individual ads fail:
+
+```javascript
+// For each ad, wrap extraction in try-catch
+try {
+  // Extract ad data
+} catch (error) {
+  // Log the error but continue with other ads
+  console.error(`Failed to extract ad ${adId}: ${error.message}`);
+  // Add partial data with error annotation
+  allAds.push({
+    id: adId,
+    error: error.message,
+    // Include any partial data collected
+  });
+}
+```
+
 If you encounter issues:
-- If a detail page fails to load, skip that ad and note it in the output
-- If scrolling doesn't load new ads after several attempts, consider it the end of results
+- If a detail page fails to load, skip that ad and note it in the output with error details
+- If scrolling doesn't load new ads after 3 consecutive attempts, consider it the end of results
 - If the page structure changes significantly, inform the user about the issue
+- If snippets fail to execute, fall back to manual snapshot-based extraction
 
 ## Output File
 
 Save the final JSON output to `linkedin_ads_data.json` in the current working directory. Report to the user:
 - Total ads found (from the page header)
-- Number of ads actually extracted
+- Number of ads actually extracted (unique ads after deduplication)
+- Pages processed
+- Extraction mode used (list-view-only or with detail pages)
 - Path to the output file
-- Any issues encountered during extraction
+- Any issues or errors encountered during extraction
+
+## Bundled Resources
+
+This skill includes reusable JavaScript snippets in the `snippets/` directory:
+
+### `snippets/extract_ads_from_list_view.js`
+Extracts all visible ads from the current list view in one efficient call. Handles:
+- Clicking "See more" buttons to expand truncated content
+- Extracting advertiser name, ad type, headline, description, and detail URL
+- Returning structured JSON array of ad objects
+
+Usage: `browser_run_code` with the content of this snippet
+
+### `snippets/extract_detail_page.js`
+Extracts complete ad data from an individual ad's detail page. Handles:
+- Clicking "X others" buttons to reveal full targeting info
+- Extracting full description, destination URL, format, paid for by, duration, impressions
+- Returning structured JSON object with all detail page fields
+
+Usage: `browser_run_code` with the content of this snippet
+
+### `snippets/scroll_and_wait.js`
+Scrolls to bottom and waits for new content to load. Handles:
+- Scrolling to bottom of page
+- Waiting for loading indicators
+- Detecting new ad count
+- Determining if more content is available
+
+Usage: `browser_run_code` with the content of this snippet
