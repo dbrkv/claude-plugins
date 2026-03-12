@@ -62,13 +62,39 @@ https://www.linkedin.com/ad-library/detail/<ad-id>
 
 Store these URLs in a list for processing.
 
-### Step 5: Extract Detailed Ad Information
+### Step 4.5: Progress Tracking Setup (CRITICAL)
 
-For each ad URL collected:
+**Before starting ad detail extraction, establish progress tracking:**
 
-1. **Navigate to ad detail page** using `mcp__playwright__browser_navigate`
-2. **Capture page snapshot** using `mcp__playwright__browser_snapshot`
-3. **Extract structured data** from the snapshot:
+1. **Calculate total to process**
+   - Count URLs in the collected list
+   - Log: "Found X ad URLs to process"
+
+2. **Set up progress logging**
+   - Will log progress every 5 ads: "Processing ad X of Y (Z%)"
+   - Will save intermediate results every 10 ads
+
+3. **Initialize counters**
+   - successful_extractions = 0
+   - failed_extractions = 0
+
+**CRITICAL: You MUST process ALL collected URLs unless the user explicitly requests a subset.**
+
+### Step 5: Extract Detailed Ad Information (PROCESS ALL URLS)
+
+**CRITICAL: Process EVERY collected ad URL systematically. Do NOT stop early.**
+
+For each ad URL in the collected list (iterate through ALL):
+
+1. **Log progress** (REQUIRED):
+   ```
+   "Processing ad [X] of [TOTAL] ([PERCENTAGE]%)"
+   ```
+   Log this at the START of processing each ad.
+
+2. **Navigate to ad detail page** using `mcp__playwright__browser_navigate`
+3. **Capture page snapshot** using `mcp__playwright__browser_snapshot`
+4. **Extract structured data** from the snapshot:
 
 #### A. About the Ad Section
 
@@ -213,6 +239,30 @@ Extract each parameter and mark targeted/excluded as boolean (true if icon prese
 }
 ```
 
+5. **Increment counter**:
+   - If extraction successful: successful_extractions++
+   - If extraction failed: failed_extractions++, log error, continue to next
+
+6. **Save checkpoint every 10 ads**:
+   - Write intermediate JSON to file
+   - Log: "Checkpoint saved: [X]/[TOTAL] ads processed"
+
+7. **Continue to next URL** - Do NOT stop until all URLs are processed
+
+### Handling Large Datasets
+
+**If more than 50 URLs collected:**
+
+1. **Process in batches of 20 ads**
+   - After each batch, log: "Batch complete: [X] ads processed"
+   - Brief pause (2-3 seconds) between batches
+
+2. **Checkpoint after each batch**
+   - Save intermediate results
+   - Allows resuming if interrupted
+
+3. **Continue until all batches complete**
+
 ### Step 6: Structure the Output
 
 Organize all extracted data into this JSON structure:
@@ -221,9 +271,13 @@ Organize all extracted data into this JSON structure:
 {
   "search_metadata": {
     "search_url": "<original-url>",
-    "total_ads_found": <number>,
     "extraction_date": "<ISO-timestamp>",
-    "ads_scraped": <number>
+    "total_ads_found": <number>,
+    "urls_collected": <number>,
+    "urls_processed": <number>,
+    "successful_extractions": <number>,
+    "failed_extractions": <number>,
+    "completion_rate": "<percentage>"
   },
   "ads": [
     {
@@ -262,9 +316,26 @@ Organize all extracted data into this JSON structure:
         ]
       }
     }
+  ],
+  "failed_ads": [
+    {
+      "url": "<failed-url>",
+      "error": "<error-message>"
+    }
+  ],
+  "all_ad_urls": [
+    "<url1>",
+    "<url2>"
   ]
 }
 ```
+
+**IMPORTANT:**
+- `urls_collected` = total URLs found
+- `urls_processed` = URLs attempted
+- `successful_extractions` = ads with full details extracted
+- `failed_extractions` = URLs that failed processing
+- `completion_rate` = (successful / collected) * 100
 
 ### Step 7: Save Results
 
@@ -286,6 +357,11 @@ Save the structured JSON to a file:
 8. ✅ **Use arrays** for languages and locations (even if only 1 item)
 9. ✅ **DO NOT create "by_date" field** - Impressions are country-based only
 10. ✅ **Include the ad detail URL** in the output for reference
+11. ✅ **Process ALL collected URLs** - Do NOT stop early unless explicitly instructed
+12. ✅ **Log progress every 5 ads** - "Processing ad X of Y (Z%)"
+13. ✅ **Save checkpoints every 10 ads** - Intermediate saves for large datasets
+14. ✅ **Track success/failure counts** - Maintain accurate extraction counters
+15. ✅ **Report completion rate** - Final metadata must show what percentage was processed
 
 ### Error Handling
 - If "Show more" button not found, extract visible countries only (or empty array if none)
@@ -358,6 +434,11 @@ Save the structured JSON to a file:
 - ❌ Not handling ads with < 1k impressions (they have NO country data)
 - ❌ Not using arrays for languages/locations (should always be arrays)
 - ❌ Not including the ad URL in the output
+- ❌ Stopping early after processing only a few ads (process ALL URLs)
+- ❌ Not logging progress during long extractions (user has no visibility)
+- ❌ Misleading metadata where `ads_scraped` != actual extractions (be accurate)
+- ❌ No checkpoint saves (data lost if extraction interrupted)
+- ❌ Deciding "representative sample" is sufficient without user approval
 
 ## Output Files
 
