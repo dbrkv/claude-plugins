@@ -12,7 +12,8 @@ You are a specialized skill for extracting information from the LinkedIn Ad Libr
 
 You will receive:
 - **url**: A LinkedIn Ad Library search URL (e.g., `https://www.linkedin.com/ad-library/search?accountOwner=wise&payer=wise`)
-- **max_pages**: (Optional) Maximum number of pages to scroll/load. Default is 10 pages.
+- **max_scrolls**: (Optional) Maximum number of scrolls to perform. Default is 3. LinkedIn has infinite scroll, so this prevents endless extraction.
+- **max_ads**: (Optional) Maximum total ads to collect. Default is 50. Stops extraction once this many unique ads are collected.
 - **include_detail_pages**: (Optional) Whether to visit individual ad detail pages. Default is false for faster extraction. Set to true only if you need fields not available in list view (destination URLs, full impressions data, detailed targeting).
 
 ## What to Extract
@@ -57,10 +58,17 @@ Only if `include_detail_pages=true`, visit individual ad detail pages for additi
 2. **Initialize tracking**:
    - Create an empty Set for deduplication: `seenAdIds = new Set()`
    - Initialize empty array: `allAds = []`
+   - Set scroll counter: `scrollCount = 0`
+   - Track consecutive empty scrolls: `emptyScrollCount = 0`
 
 3. **Extract the total ad count** from the heading (e.g., "2,529 ads match your search criteria")
 
-4. **For each page** (up to max_pages):
+4. **Loop until limits are reached**:
+   - Stop if `scrollCount >= max_scrolls`
+   - Stop if `allAds.length >= max_ads`
+   - Stop if no more content loads
+
+   For each iteration:
 
    a. **Extract ads from current view** using the bundled snippet:
    ```
@@ -76,7 +84,13 @@ Only if `include_detail_pages=true`, visit individual ad detail pages for additi
        add ad.id to seenAdIds
    ```
 
-   c. **If include_detail_pages=true** and there are new ads:
+   c. **Check if we've hit the ad limit**:
+   ```
+   If allAds.length >= max_ads:
+     break the loop (we have enough ads)
+   ```
+
+   d. **If include_detail_pages=true** and there are new ads:
    ```
    For each new ad (not previously processed):
      1. Use browser_tabs to open a new tab
@@ -86,11 +100,20 @@ Only if `include_detail_pages=true`, visit individual ad detail pages for additi
      5. Close the detail tab and return to search results
    ```
 
-   d. **Scroll to load more** using the bundled snippet:
+   e. **Scroll to load more** using the bundled snippet:
    ```
    Run the JavaScript from `snippets/scroll_and_wait.js` via `browser_run_code`
-   If hasMore=false, break the loop (end of results)
-   If newAdCount=0 for 3 consecutive scrolls, break (no more content)
+   Increment scrollCount
+
+   If endOfResults=true:
+     break the loop (reached end of results)
+
+   If newAdCount=0:
+     increment emptyScrollCount
+     If emptyScrollCount >= 3:
+       break the loop (no more content loading)
+   Else:
+     reset emptyScrollCount to 0
    ```
 
 5. **Output the results** in JSON format to a file named `linkedin_ads_data.json`:
@@ -123,8 +146,9 @@ Only if `include_detail_pages=true`, visit individual ad detail pages for additi
 
 ## Important Notes
 
+- **LinkedIn has infinite scroll**: The page will keep loading ads indefinitely. Always use `max_scrolls` and/or `max_ads` to limit extraction. Default limits are 3 scrolls and 50 ads.
 - **Use bundled snippets**: Always use the JavaScript snippets in `snippets/` directory via `browser_run_code` for efficient extraction
-- **List view is fast**: Default mode (without detail pages) extracts ~5-10 seconds per page
+- **List view is fast**: Default mode (without detail pages) extracts ~5-10 seconds per scroll
 - **Detail pages are slow**: Only use `include_detail_pages=true` when you need destination URLs, full impressions data, or detailed targeting info
 - **Deduplication is automatic**: The Set-based tracking prevents duplicate ads across scroll loads
 - **Expand buttons are handled**: Snippets automatically click "See more" and "X others" buttons
@@ -196,5 +220,9 @@ Scrolls to bottom and waits for new content to load. Handles:
 - Waiting for loading indicators
 - Detecting new ad count
 - Determining if more content is available
+- Detecting end-of-results messages
+- Respecting max_ads limit
 
-Usage: `browser_run_code` with the content of this snippet
+Returns: Object with `newAdCount`, `hasMore`, `totalAds`, `endOfResults`, and `hitAdLimit`
+
+Usage: `browser_run_code` with the content of this snippet. The caller should track scroll count and stop when limits are reached.

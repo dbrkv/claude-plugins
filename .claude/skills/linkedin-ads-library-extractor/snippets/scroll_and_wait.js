@@ -2,15 +2,38 @@
  * Scroll to bottom of page and wait for new content to load in LinkedIn Ad Library
  * This should be run via Playwright MCP's browser_run_code tool
  *
+ * IMPORTANT: LinkedIn Ad Library has near-infinite scroll. Always use a scroll limit!
+ *
+ * Parameters (set via inline replacement before calling):
+ *   - maxScrolls: Maximum number of scrolls to perform (default: 3)
+ *   - maxAds: Maximum total ads to collect (default: 50)
+ *
  * Returns: Object with:
  *   - newAdCount: Number of new ad elements detected after scroll
  *   - hasMore: Boolean indicating if more content appears to be available
+ *   - scrollNumber: Current scroll count
+ *   - hitScrollLimit: Boolean indicating if max scroll limit was reached
+ *   - hitAdLimit: Boolean indicating if max ad limit was reached
+ *   - totalAds: Total ads collected so far
  */
-async (page) => {
+async (page, maxScrolls = 3, maxAds = 50) => {
   // Count ads before scroll
   const adsBefore = await page.evaluate(() => {
     return document.querySelectorAll('[data-urn*="ad"]').length;
   });
+
+  // Check if we've already hit the ad limit before scrolling
+  if (adsBefore >= maxAds) {
+    return {
+      newAdCount: 0,
+      hasMore: false,
+      scrollNumber: 0,
+      hitScrollLimit: false,
+      hitAdLimit: true,
+      totalAds: adsBefore,
+      message: `Reached ad limit of ${maxAds}`
+    };
+  }
 
   // Scroll to bottom
   await page.evaluate(() => {
@@ -49,22 +72,23 @@ async (page) => {
 
   const newAdCount = adsAfter - adsBefore;
 
-  // Check if there's more content to load by looking for:
-  // 1. "End of results" message
-  // 2. Loading indicator still present
-  // 3. Scroll position near bottom
-  const hasMore = await page.evaluate(() => {
-    const endMessage = document.body.textContent.includes('end of results') ||
-                       document.body.textContent.includes('no more ads');
-    const isLoading = document.querySelectorAll('[data-testid="loading"], .spinner, [class*="loading"]').length > 0;
-    const nearBottom = window.scrollY + window.innerHeight >= document.body.scrollHeight - 100;
-
-    return !endMessage && (isLoading || !nearBottom);
+  // Check for end-of-results indicators
+  const endOfResults = await page.evaluate(() => {
+    const endMessages = ['end of results', 'no more ads', 'that\'s all', 'no more results'];
+    const bodyText = document.body.textContent.toLowerCase();
+    return endMessages.some(msg => bodyText.includes(msg));
   });
+
+  // Check if there's more content to load
+  const hasMore = !endOfResults && adsAfter < maxAds;
 
   return {
     newAdCount,
     hasMore,
-    totalAds: adsAfter
+    scrollNumber: 1,
+    hitScrollLimit: false, // Caller should track scroll count
+    hitAdLimit: adsAfter >= maxAds,
+    totalAds: adsAfter,
+    endOfResults
   };
 }
