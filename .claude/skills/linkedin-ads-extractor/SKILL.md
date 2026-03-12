@@ -70,7 +70,7 @@ For each ad URL collected:
 2. **Capture page snapshot** using `mcp__playwright__browser_snapshot`
 3. **Extract structured data** from the snapshot:
 
-#### About the Ad Section
+#### A. About the Ad Section
 - **Ad ID** - From URL or page
 - **Advertiser/Payer** - Company name
 - **Ad Format** - (Single image, Video, Carousel, Text, etc.)
@@ -82,25 +82,101 @@ For each ad URL collected:
 - **Ad Status** - (Active, Inactive, etc.)
 - **Run Dates** - Start and end dates if available
 
-#### Impressions Section
-- **Total Impressions** - Number of times ad was shown
-- **Impressions by Date Range** - If available
-- **Reach** - Number of unique users (if available)
+**CRITICAL: Expand Truncated Ad Text**
+- If you see a "…see more" button or link in the ad text, you MUST click it to expand the full text
+- Use `mcp__playwright__browser_click` to click the "…see more" button
+- Wait 1 second for content to load
+- Take a new snapshot to capture the full ad text
+- Extract the complete ad text after expansion
 
-#### Ad Targeting Section
-- **Location/Geography** - Targeted countries, regions, cities
-- **Demographics** - Age ranges, gender
-- **Job Titles** - Targeted professional roles
-- **Industries** - Targeted industry sectors
-- **Company Size** - Employee count ranges
-- **Seniority Levels** - Entry, Manager, Director, VP, C-level
-- **Skills** - Targeted professional skills
-- **Interests** - Targeted member interests
-- **Education** - Targeted degrees, fields of study, universities
-- **Member Groups** - LinkedIn groups targeted
-- **Custom Audiences** - If applicable
+#### B. Impressions Section (CRITICAL - Country-Based, NOT Date-Based)
 
-4. **Return to search results** using `mcp__playwright__browser_navigate_back` or store URL and navigate back to main search
+**IMPORTANT: The Impressions section shows country-based data, NOT date-based breakdown.**
+
+1. **Extract Total Impressions Range**
+   - Look for a range value like "30k-50k", "100k-150k", "< 1k"
+   - This represents the total impressions across all countries
+
+2. **MUST CLICK "Show more" Button to Reveal All Countries**
+   - The Impressions section initially shows only ~4 countries
+   - Look for a button with text "Show more" in the Impressions section
+   - Click it using:
+   ```
+   mcp__playwright__browser_click({
+     ref: "<button_ref>",
+     element: "Show more button in Impressions section"
+   })
+   ```
+   - Wait 2 seconds for content to load
+   - Take a new snapshot to capture all revealed countries
+   - After clicking, the button changes to "Show less" and reveals 60+ countries
+
+3. **Extract Complete Country List**
+   - Country name (e.g., "Germany", "United States", "India")
+   - Percentage of total impressions (e.g., "98%", "< 1%", "2%")
+   - Extract ALL countries visible after clicking "Show more"
+
+**Example Impressions Data Structure:**
+```json
+"impressions": {
+  "total_range": "30k-50k",
+  "by_country": [
+    { "country": "Germany", "percentage": "98%" },
+    { "country": "India", "percentage": "< 1%" },
+    { "country": "United States", "percentage": "< 1%" }
+    // ... 60+ countries after clicking "Show more"
+  ]
+}
+```
+
+**DO NOT create a "by_date" field - this does not exist in LinkedIn Ad Library.**
+
+#### C. Ad Targeting Section
+
+**CRITICAL: Expand Hidden Items in Language and Location Fields**
+
+1. **Look for "x others" Buttons**
+   - In the Language and Location fields, look for buttons with text matching the pattern `\d+ others`
+   - Examples: "1 others", "2 others", "5 others"
+   - These buttons indicate additional items that are hidden
+
+2. **Click Each "x others" Button**
+   - For each "x others" button found:
+   ```
+   mcp__playwright__browser_click({
+     ref: "<button_ref>",
+     element: "x others button in targeting section"
+   })
+   ```
+   - Wait 1 second for inline text expansion
+   - The hidden items will be revealed inline
+
+3. **Take New Snapshot After Expansions**
+   - After clicking all "x others" buttons, take a new snapshot
+   - Extract the complete lists of languages and locations
+
+4. **Extract Targeting Data**
+   - **Languages**: Full list of targeted languages (as array)
+   - **Locations**: Full list of targeted locations (as array)
+   - **Targeting Details Table**:
+     - Parameter name (e.g., "Audience", "Age", "Gender")
+     - Targeted status (boolean - checkmark present)
+     - Excluded status (boolean - X mark present)
+
+**Example Targeting Data Structure:**
+```json
+"targeting": {
+  "languages": ["English", "Spanish", "German"],
+  "locations": ["Germany", "France", "United Kingdom"],
+  "details": [
+    { "parameter": "Audience", "targeted": true, "excluded": false },
+    { "parameter": "Age", "targeted": true, "excluded": false },
+    { "parameter": "Gender", "targeted": false, "excluded": true }
+  ]
+}
+```
+
+4. **Return to search results** using `mcp__playwright__browser_navigate_back`
 
 ### Step 6: Structure the Output
 
@@ -119,35 +195,35 @@ Organize all extracted data into a structured JSON format:
       "ad_id": "<id>",
       "about": {
         "advertiser": "<company>",
-        "format": "<format>",
+        "advertiser_url": "<linkedin_url>",
+        "paid_for_by": "<company>",
+        "format": "<Single Image Ad|Video Ad|Carousel Ad|etc>",
         "creative_urls": ["<url1>", "<url2>"],
-        "headline": "<text>",
-        "description": "<text>",
+        "ad_text": "<complete_ad_text_after_expansion>",
         "cta": "<text>",
         "landing_page": "<url>",
-        "status": "<status>",
-        "start_date": "<date>",
-        "end_date": "<date>"
+        "run_start_date": "<YYYY-MM-DD or null>",
+        "run_end_date": "<YYYY-MM-DD or null or 'Present'>"
       },
       "impressions": {
-        "total": <number>,
-        "by_date": [
-          {"date": "<date>", "impressions": <number>}
+        "total_range": "<range_string>",
+        "by_country": [
+          {
+            "country": "<country_name>",
+            "percentage": "<percentage_string>"
+          }
         ]
       },
       "targeting": {
-        "locations": ["<location1>", "<location2>"],
-        "demographics": {
-          "age_ranges": ["<range1>"],
-          "gender": ["<gender>"]
-        },
-        "job_titles": ["<title1>"],
-        "industries": ["<industry1>"],
-        "company_sizes": ["<size1>"],
-        "seniority": ["<level1>"],
-        "skills": ["<skill1>"],
-        "interests": ["<interest1>"],
-        "education": ["<edu1>"]
+        "languages": ["<language_1>", "<language_2>"],
+        "locations": ["<location_1>", "<location_2>"],
+        "details": [
+          {
+            "parameter": "<parameter_name>",
+            "targeted": <boolean>,
+            "excluded": <boolean>
+          }
+        ]
       }
     }
   ]
@@ -161,6 +237,35 @@ Save the structured JSON to a file:
 - Also create a CSV version for easier analysis if requested
 - Store in the current working directory
 
+## Critical Implementation Rules
+
+### Must-Do Actions (REQUIRED)
+1. ✅ **Click "Show more" button** in Impressions section BEFORE extracting countries
+2. ✅ **Click "…see more" button** for full ad text if truncated
+3. ✅ **Click "x others" buttons** in Ad Targeting section (Language/Location fields) to reveal full lists
+4. ✅ **Wait for content to load** after clicking expand buttons (1-3 seconds)
+5. ✅ **Take new snapshot** after expanding to capture revealed content
+6. ✅ **Handle range values** for impressions (e.g., "30k-50k", "< 1k")
+7. ✅ **Parse percentages** from country data (e.g., "98%", "< 1%")
+8. ✅ **Extract full lists** from Language and Location after expansion
+9. ✅ **Use arrays** for languages and locations (even if only 1 item)
+10. ✅ **DO NOT create "by_date" field** - Impressions are country-based only
+
+### Error Handling
+- If "Show more" button not found, extract visible countries only and log warning
+- If "…see more" button not found, extract visible text only
+- If "x others" buttons not found, extract visible language/location only
+- Log missing data fields with `null` values
+- Continue processing if individual ad fails (don't stop entire extraction)
+- Capture screenshots for debugging if critical errors occur
+
+### Button Detection Patterns
+| Button Type | Location | Text Pattern | Action |
+|------------|----------|--------------|--------|
+| Show more countries | Impressions section | "Show more" | Click to reveal 60+ countries |
+| See more text | Ad preview section | "…see more" | Click to expand full ad text |
+| Show more targeting | Targeting section | `\d+ others` (regex) | Click to expand language/location lists |
+
 ## Important Notes
 
 ### Playwright MCP Tools to Use
@@ -169,7 +274,7 @@ Save the structured JSON to a file:
 - `mcp__playwright__browser_evaluate` - Execute JavaScript for scrolling
 - `mcp__playwright__browser_wait_for` - Wait for content to load
 - `mcp__playwright__browser_navigate_back` - Return to previous page
-- `mcp__playwright__browser_click` - Click elements if needed
+- `mcp__playwright__browser_click` - Click expand buttons ("Show more", "…see more", "x others")
 
 ### Handling Challenges
 - **Infinite scroll**: Always scroll 3 times to load more content
@@ -177,11 +282,14 @@ Save the structured JSON to a file:
 - **Multiple pages**: Handle pagination if present
 - **Missing data**: Use `null` or empty arrays for unavailable fields
 - **Rate limiting**: If page loads slowly, increase wait times
+- **Expandable content**: ALWAYS click "Show more", "…see more", and "x others" buttons
 
-### Error Handling
-- If an ad detail page fails to load, skip it and continue
-- Log any errors encountered during extraction
-- Always attempt to capture as much data as possible
+### Common Mistakes to Avoid
+- ❌ NOT clicking "Show more" in Impressions (only extracts 4 countries instead of 60+)
+- ❌ NOT clicking "…see more" for ad text (extracts truncated text)
+- ❌ NOT clicking "x others" in targeting (misses complete language/location lists)
+- ❌ Creating "by_date" field in impressions (does not exist in LinkedIn Ad Library)
+- ❌ Not using arrays for languages/locations (should always be arrays)
 
 ## Example Usage
 
@@ -196,10 +304,26 @@ Extract LinkedIn ads from this URL: https://www.linkedin.com/ad-library/search?a
 3. Scroll 3 times to load more ads
 4. Collect all visible ad detail URLs
 5. Visit each ad detail page
-6. Extract all available structured data
-7. Save to JSON file
+6. **Click "…see more" if present to expand ad text**
+7. **Click "Show more" in Impressions to reveal all 60+ countries**
+8. **Click "x others" in targeting to reveal complete language/location lists**
+9. Extract all available structured data
+10. Save to JSON file
 
 ## Output Files
 
 - `linkedin_ads_<company>_<timestamp>.json` - Full structured data
 - `linkedin_ads_<company>_<timestamp>.csv` - Tabular format (optional, if requested)
+
+## Verification Checklist
+
+After extraction, verify:
+- [ ] JSON is valid and parseable
+- [ ] `impressions.by_country` array exists and contains multiple countries
+- [ ] `impressions.by_country` has more than 4 entries (proves "Show more" was clicked)
+- [ ] `impressions.total_range` is present
+- [ ] No `impressions.by_date` field exists (removed from schema)
+- [ ] Each country entry has `country` and `percentage` fields
+- [ ] `targeting.languages` is an array (even if only 1 language)
+- [ ] `targeting.locations` is an array (even if only 1 location)
+- [ ] If "x others" buttons were present, arrays contain more than initial visible items
